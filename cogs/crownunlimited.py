@@ -575,9 +575,9 @@ class CrownUnlimited(commands.Cog):
                     oguild = universe_selection['OGUILD']
                 else:
                     oguild = "PCG"
-
+            
             await battle_commands(self, ctx, mode, universe, selected_universe, None, oguild, crestlist, crestsearch,
-                                  private_channel, sowner, oteam, ofam, currentopponent, companion, cteam, cfam, None, user, None, None, None)
+                            private_channel, sowner, oteam, ofam, currentopponent, companion, cteam, cfam, None, user, None, None, None)
         except Exception as ex:
             trace = []
             tb = ex.__traceback__
@@ -808,10 +808,6 @@ class CrownUnlimited(commands.Cog):
                 'trace': trace
             }))
             return
-
-
-
-
 
     @cog_ext.cog_slash(description="Arena Battle!",
                     options=[
@@ -1410,10 +1406,10 @@ class CrownUnlimited(commands.Cog):
                     o_attack = o_attack - int(((o_card_passive / 100) * o_defense))
                 elif o_card_passive_type == 'BZRK':
                     o_attack = o_attack + int(((o_card_passive / 100) * o_health))
-                    o_health = o_health - int((o_attack))
+                    o_health = o_health - int(((o_card_passive / 100) * o_health))
                 elif o_card_passive_type == 'CRYSTAL':
                     o_defense = o_defense + int(((o_card_passive / 100) * o_health))
-                    o_health = o_health - int((o_defense))
+                    o_health = o_health - int(((o_card_passive / 100) * o_health))
                 elif o_card_passive_type == 'GROWTH':
                     o_attack = o_attack + int(((o_card_passive / 100) * o_attack))
                     o_defense = o_defense + int(((o_card_passive / 100) * o_defense))
@@ -1484,10 +1480,10 @@ class CrownUnlimited(commands.Cog):
                         o_attack = o_attack - int(((o_title_passive_value / 100) * o_defense))
                     elif o_title_passive_type == 'BZRK':
                         o_attack = o_attack + int(((o_title_passive_value / 100) * o_health))
-                        o_health = o_health - int((o_attack))
+                        o_health = o_health - int(((o_title_passive_value / 100) * o_health))
                     elif o_title_passive_type == 'CRYSTAL':
                         o_defense = o_defense + int(((o_title_passive_value / 100) * o_health))
-                        o_health = o_health - int((o_defense))
+                        o_health = o_health - int(((o_title_passive_value / 100) * o_health))
                     elif o_title_passive_type == 'GROWTH':
                         o_attack = o_attack + int((o_title_passive_value / 100) * o_attack)
                         o_defense = o_defense + int((o_title_passive_value / 100) * o_defense)
@@ -1556,10 +1552,10 @@ class CrownUnlimited(commands.Cog):
                     o_attack = o_attack - int(((oarm_passive_value / 100) * o_defense))
                 elif oarm_passive_type == 'BZRK':
                     o_attack = o_attack + int(((oarm_passive_value / 100) * o_health))
-                    o_health = o_health - int((o_attack))
+                    o_health = o_health - int(((oarm_passive_value / 100) * o_health))
                 elif oarm_passive_type == 'CRYSTAL':
                     o_defense = o_defense + int(((oarm_passive_value / 100) * o_health))
-                    o_health = o_health - int((o_defense))
+                    o_health = o_health - int(((oarm_passive_value / 100) * o_health))
                 elif oarm_passive_type == 'GROWTH':
                     o_attack = o_attack + int((oarm_passive_value / 100) * o_attack)
                     o_defense = o_defense + int((oarm_passive_value / 100) * o_defense)
@@ -1628,10 +1624,10 @@ class CrownUnlimited(commands.Cog):
                     t_attack = t_attack - int((tarm_passive_value / 100) * t_defense)
                 elif tarm_passive_type == 'BZRK':
                     t_attack = t_attack + int((tarm_passive_value / 100) * t_health)
-                    t_health = t_health - int((t_attack))
+                    t_health = t_health - int((tarm_passive_value / 100) * t_health)
                 elif tarm_passive_type == 'CRYSTAL':
                     t_defense = t_defense + int((tarm_passive_value / 100) * t_health)
-                    t_health = t_health - int(t_defense)
+                    t_health = t_health - int((tarm_passive_value / 100) * t_health)
                 elif tarm_passive_type == 'GROWTH':
                     t_attack = t_attack + int((tarm_passive_value / 100) * t_attack)
                     t_defense = t_defense + int((tarm_passive_value / 100) * t_defense)
@@ -1704,10 +1700,10 @@ class CrownUnlimited(commands.Cog):
                     t_attack = t_attack - int((t_card_passive / 100) * t_defense)
                 elif t_card_passive_type == 'BZRK':
                     t_attack = t_attack + int(((t_card_passive / 100) * t_health))
-                    t_health = t_health - int((t_attack))
+                    t_health = t_health - int(((t_card_passive / 100) * t_health))
                 elif t_card_passive_type == 'CRYSTAL':
                     t_defense = t_defense + int((t_card_passive / 100) * t_health)
-                    t_health = t_health - int(t_defense)
+                    t_health = t_health - int((t_card_passive / 100) * t_health)
                 elif t_card_passive_type == 'GROWTH':
                     t_attack = t_attack + int((t_card_passive / 100) * t_attack)
                     t_defense = t_defense + int((t_card_passive / 100) * t_defense)
@@ -1778,10 +1774,10 @@ class CrownUnlimited(commands.Cog):
                         t_attack = t_attack - int(((t_title_passive_value / 100) * t_defense))
                     elif t_title_passive_type == 'BZRK':
                         t_attack = t_attack + int(((t_title_passive_value / 100) * t_health))
-                        t_health = t_health - int((t_attack))
+                        t_health = t_health - int(((t_title_passive_value / 100) * t_health))
                     elif t_title_passive_type == 'CRYSTAL':
                         t_defense = t_defense + int(((t_title_passive_value / 100) * t_health))
-                        t_health = t_health - int(t_defense)
+                        t_health = t_health - int(((t_title_passive_value / 100) * t_health))
                     elif t_title_passive_type == 'GROWTH':
                         tt_attack = t_attack + int(((t_title_passive_value / 100) * t_attack))
                         t_defense = t_defense + int(((t_title_passive_value / 100) * t_defense))
@@ -3409,7 +3405,7 @@ class CrownUnlimited(commands.Cog):
                                             t_attack = round(t_attack - dmg['DMG'])
                                         elif enh_type == 'BZRK':
                                             t_health = round(t_health - dmg['DMG'])
-                                            t_attack = round(t_attack + (.75 * dmg['DMG']))
+                                            t_attack = round(t_attack + (dmg['DMG']))
                                         elif enh_type == 'CRYSTAL':
                                             t_health = round(t_health - dmg['DMG'])
                                             t_defense = round(t_defense + dmg['DMG'])
@@ -3488,14 +3484,14 @@ class CrownUnlimited(commands.Cog):
                                                     if tarm_barrier_active:
                                                         tarm_barrier_active=False
                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                    await button_ctx.send(embed=embedVar)
+                                                    await private_channel.send(embed=embedVar)
                                                     oarm_shield_active = False
                                                 else:
                                                     embedVar = discord.Embed(title=f"{o_card.upper()} Activates **Shield** 🌐", description=f"{t_card} strikes the **Shield** for **{dmg['DMG']} DMG!**\n **{oshield_value} Shield** Left!", colour=0xe91e63)
                                                     if tarm_barrier_active:
                                                         tarm_barrier_active=False
                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                    await button_ctx.send(embed=embedVar)
+                                                    await private_channel.send(embed=embedVar)
                                         elif oarm_barrier_active:
                                             if obarrier_count >1:
                                                 o_health = o_health 
@@ -3503,7 +3499,7 @@ class CrownUnlimited(commands.Cog):
                                                 if tarm_barrier_active:
                                                     tarm_barrier_active=False
                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                await button_ctx.send(embed=embedVar)
+                                                await private_channel.send(embed=embedVar)
                                                 obarrier_count = obarrier_count - 1
                                             elif obarrier_count==1:
                                                 embedVar = discord.Embed(title=f"{o_card.upper()}'s **Barrier** Broken!", description=f"{t_card} destroys the **Barrier**", colour=0xe91e63)
@@ -3511,7 +3507,7 @@ class CrownUnlimited(commands.Cog):
                                                 if tarm_barrier_active:
                                                     tarm_barrier_active=False
                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                await button_ctx.send(embed=embedVar)
+                                                await private_channel.send(embed=embedVar)
                                                 oarm_barrier_active = False
                                         elif oarm_parry_active:
                                             if oparry_count > 1:
@@ -3523,7 +3519,7 @@ class CrownUnlimited(commands.Cog):
                                                 if tarm_barrier_active:
                                                     tarm_barrier_active=False
                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                await button_ctx.send(embed=embedVar)
+                                                await private_channel.send(embed=embedVar)
                                                 
                                             elif oparry_count==1:
                                                 oparry_damage = round(dmg['DMG'] / 2)
@@ -3535,7 +3531,7 @@ class CrownUnlimited(commands.Cog):
                                                 if tarm_barrier_active:
                                                     tarm_barrier_active=False
                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                await button_ctx.send(embed=embedVar)
+                                                await private_channel.send(embed=embedVar)
                                                 oarm_parry_active = False
                                         else:
                                             o_health = o_health - int(dmg['DMG'])
@@ -4116,10 +4112,10 @@ class CrownUnlimited(commands.Cog):
                 o_attack = o_attack - int(((o_card_passive / 100) * o_defense))
             elif o_card_passive_type == 'BZRK':
                 o_attack = o_attack + int(((o_card_passive / 100) * o_health))
-                o_health = o_health - int((o_attack))
+                o_health = o_health - int(((o_card_passive / 100) * o_health))
             elif o_card_passive_type == 'CRYSTAL':
                 o_defense = o_defense + int(((o_card_passive / 100) * o_health))
-                o_health = o_health - int((o_attack))
+                o_health = o_health - int(((o_card_passive / 100) * o_health))
             elif o_card_passive_type == 'GROWTH':
                 o_attack = o_attack + int(((o_card_passive / 100) * o_attack))
                 o_defense = o_defense + int(((o_card_passive / 100) * o_defense))
@@ -4190,10 +4186,10 @@ class CrownUnlimited(commands.Cog):
                     o_attack = o_attack - int(((o_title_passive_value / 100) * o_defense))
                 elif o_title_passive_type == 'BZRK':
                     o_attack = o_attack + int(((o_title_passive_value / 100) * o_health))
-                    o_health = o_health - int((o_attack))
+                    o_attack = o_attack + int(((o_title_passive_value / 100) * o_health))
                 elif o_title_passive_type == 'CRYSTAL':
                     o_defense = o_defense + int(((o_title_passive_value / 100) * o_health))
-                    o_health = o_health - int((o_defense))
+                    o_health = o_health - int(((o_title_passive_value / 100) * o_health))
                 elif o_title_passive_type == 'GROWTH':
                     o_attack = o_attack + int((o_title_passive_value / 100) * o_attack)
                     o_defense = o_defense + int((o_title_passive_value / 100) * o_defense)
@@ -4331,10 +4327,10 @@ class CrownUnlimited(commands.Cog):
                 t_attack = t_attack - int((t_card_passive / 100) * t_defense)
             elif t_card_passive_type == 'BZRK':
                 t_attack = t_attack + int(((t_card_passive / 100) * t_health))
-                t_health = t_health - int((t_attack))
+                t_attack = t_attack + int(((t_card_passive / 100) * t_health))
             elif t_card_passive_type == 'CRYSTAL':
                 t_defense = t_defense + int((t_card_passive / 100) * t_health)
-                t_health = t_health - int(t_defense)
+                t_health = t_health - int((t_card_passive / 100) * t_health)
             elif t_card_passive_type == 'GROWTH':
                 t_attack = t_attack + int(((t_card_passive / 100) * t_max_health))
                 t_defense = t_defense + int((t_card_passive / 100) * t_defense)
@@ -4405,10 +4401,10 @@ class CrownUnlimited(commands.Cog):
                     t_attack = t_attack - int(((t_title_passive_value / 100) * t_defense))
                 elif t_title_passive_type == 'BZRK':
                     t_attack = t_attack + int(((t_title_passive_value / 100) * t_health))
-                    t_health = t_health - int((t_attack))
+                    t_attack = t_attack + int(((t_title_passive_value / 100) * t_health))
                 elif t_title_passive_type == 'CRYSTAL':
                     t_defense = t_defense + int(((t_title_passive_value / 100) * t_health))
-                    t_health = t_health - int(t_defense)
+                    t_health = t_health - int(((t_title_passive_value / 100) * t_health))
                 elif t_title_passive_type == 'GROWTH':
                     tt_attack = t_attack + int(((t_title_passive_value / 100) * t_attack))
                     t_defense = t_defense + int(((t_title_passive_value / 100) * t_defense))
@@ -5388,7 +5384,7 @@ class CrownUnlimited(commands.Cog):
                                         if oarm_barrier_active:
                                             oarm_barrier_active=False
                                             embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                        await ctx.send(embed=embedVar)
+                                        await button_ctx.send(embed=embedVar)
                                         turn_total = turn_total + 1
                                         turn = 1
                                     else:
@@ -8654,10 +8650,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 c_attack = c_attack - int(((c_card_passive / 100) * c_defense))
             elif c_card_passive_type == 'BZRK':
                 c_attack = c_attack + int(((c_card_passive / 100) * c_health))
-                c_health = c_health - int((c_attack))
+                c_health = c_health - int(((c_card_passive / 100) * c_health))
             elif c_card_passive_type == 'CRYSTAL':
                 c_defense = c_defense + int(((c_card_passive / 100) * c_health))
-                c_health = c_health - int((c_defense))
+                c_health = c_health - int(((c_card_passive / 100) * c_health))
             elif c_card_passive_type == 'GROWTH':
                 c_attack = c_attack + int(((c_card_passive / 50) * c_max_health))
                 c_defense = c_defense + int(((c_card_passive / 50) * c_max_health))
@@ -8746,10 +8742,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                     c_attack = c_attack - int(((c_title_passive_value / 100) * c_defense))
                 elif c_title_passive_type == 'BZRK':
                     c_attack = c_attack + int(((c_title_passive_value / 100) * c_health))
-                    c_health = c_health - int((c_attack))
+                    c_health = c_health - int(((c_title_passive_value / 100) * c_health))
                 elif c_title_passive_type == 'CRYSTAL':
                     c_defense = c_defense + int(((c_title_passive_value / 100) * c_health))
-                    c_health = c_health - int((c_defense))
+                    c_health = c_health - int(((c_title_passive_value / 100) * c_health))
                 elif c_title_passive_type == 'GROWTH':
                     c_attack = c_attack + int(((c_title_passive_value / 50) * c_max_health))
                     c_defense = c_defense + int(((c_title_passive_value / 50) * c_max_health))
@@ -8904,10 +8900,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             o_attack = o_attack - int(((o_card_passive / 100) * o_defense))
         elif o_card_passive_type == 'BZRK':
             o_attack = o_attack + int(((o_card_passive / 100) * o_health))
-            o_health = o_health - int((o_attack))
+            o_health = o_health - int(((o_card_passive / 100) * o_health))
         elif o_card_passive_type == 'CRYSTAL':
             o_defense = o_defense + int(((o_card_passive / 100) * o_health))
-            o_health = o_health - int((o_defense))
+            o_health = o_health - int(((o_card_passive / 100) * o_health))
         elif o_card_passive_type == 'GROWTH':
             o_attack = o_attack + int(((o_card_passive / 50) * o_max_health))
             o_defense = o_defense + int(((o_card_passive / 50) * o_max_health))
@@ -8995,10 +8991,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 o_attack = o_attack - int(((o_title_passive_value / 100) * o_defense))
             elif o_title_passive_type == 'BZRK':
                 o_attack = o_attack + int(((o_title_passive_value / 100) * o_health))
-                o_health = o_health - int((o_attack))
+                o_health = o_health - int(((o_title_passive_value / 100) * o_health))
             elif o_title_passive_type == 'CRYSTAL':
                 o_defense = o_defense + int(((o_title_passive_value / 100) * o_health))
-                o_health = o_health - int((o_defense))
+                o_health = o_health - int(((o_title_passive_value / 100) * o_health))
             elif o_title_passive_type == 'GROWTH':
                 o_attack = o_attack + int((o_title_passive_value / 50) * o_max_health)
                 o_defense = o_defense + int((o_title_passive_value / 50) * o_max_health)
@@ -9156,10 +9152,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             t_attack = t_attack - int((t_card_passive / 100) * t_defense)
         elif t_card_passive_type == 'BZRK':
             t_attack = t_attack + int(((t_card_passive / 100) * t_health))
-            t_health = t_health - int((t_attack))
+            t_health = t_health - int(((t_card_passive / 100) * t_health))
         elif t_card_passive_type == 'CRYSTAL':
             t_defense = t_defense + int((t_card_passive / 100) * t_health)
-            t_health = t_health - int(t_defense)
+            t_health = t_health - int((t_card_passive / 100) * t_health)
         elif t_card_passive_type == 'GROWTH':
             t_attack = t_attack + int((t_card_passive / 50) * t_max_health)
             t_defense = t_defense + int((t_card_passive / 50) * t_max_health)
@@ -9258,10 +9254,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 t_attack = t_attack - int(((t_title_passive_value / 100) * t_defense))
             elif t_title_passive_type == 'BZRK':
                 t_attack = t_attack + int(((t_title_passive_value / 100) * t_health))
-                t_health = t_health - int((t_attack))
+                t_health = t_health - int(((t_title_passive_value / 100) * t_health))
             elif t_title_passive_type == 'CRYSTAL':
                 t_defense = t_defense + int(((t_title_passive_value / 100) * t_health))
-                t_health = t_health - int(t_defense)
+                t_health = t_health - int(((t_title_passive_value / 100) * t_health))
             elif t_title_passive_type == 'GROWTH':
                 t_attack = t_attack + int(((t_title_passive_value / 50) * t_max_health))
                 t_defense = t_defense + int(((t_title_passive_value / 50) * t_max_health))
@@ -10232,15 +10228,56 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
     }
 
     if mode in C_MODES:
-        overwrites = {
-            guild.default_role: discord.PermissionOverwrite(read_messages=True, manage_channels=False,
-                                                            kick_members=False, mention_everyone=False,
-                                                            read_message_history=True, send_messages=False,
-                                                            view_channel=True),
-            guild.me: discord.PermissionOverwrite(read_messages=True),
-            ctx.author: discord.PermissionOverwrite(read_messages=True, send_messages=True),
-            user: discord.PermissionOverwrite(read_messages=True, send_messages=True),
-        }
+        await user.send(f"{sowner['NAME']} needs your help! React in server to join their Coop Tale!!")
+        coop_buttons = [
+                    manage_components.create_button(
+                        style=ButtonStyle.green,
+                        label="Join Battle!",
+                        custom_id="yes"
+                    ),
+                    manage_components.create_button(
+                        style=ButtonStyle.red,
+                        label="Decline",
+                        custom_id="no"
+                    )
+                ]
+        coop_buttons_action_row = manage_components.create_actionrow(*coop_buttons)
+        await ctx.send(f"{user.mention} Do you accept the **Coop Invite**?", components=[coop_buttons_action_row])
+        def check(button_ctx):
+            return button_ctx.author == user
+        try:
+            button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[coop_buttons_action_row], timeout=120, check=check)
+
+            if button_ctx.custom_id == "no":
+                await button_ctx.send("Coop **Declined**")
+                self.stop = True
+                return
+            if button_ctx.custom_id == "yes":
+                overwrites = {
+                    guild.default_role: discord.PermissionOverwrite(read_messages=True, manage_channels=False,
+                                                                    kick_members=False, mention_everyone=False,
+                                                                    read_message_history=True, send_messages=False,
+                                                                    view_channel=True),
+                    guild.me: discord.PermissionOverwrite(read_messages=True),
+                    ctx.author: discord.PermissionOverwrite(read_messages=True, send_messages=True),
+                    user: discord.PermissionOverwrite(read_messages=True, send_messages=True),
+                }
+        except Exception as ex:
+            trace = []
+            tb = ex.__traceback__
+            while tb is not None:
+                trace.append({
+                    "filename": tb.tb_frame.f_code.co_filename,
+                    "name": tb.tb_frame.f_code.co_name,
+                    "lineno": tb.tb_lineno
+                })
+                tb = tb.tb_next
+            print(str({
+                'type': type(ex).__name__,
+                'message': str(ex),
+                'trace': trace
+            }))
+            return
     if oteam != 'PCG':
         team_info = db.queryTeam({'TNAME': oteam})
         guildname = team_info['GUILD']
@@ -13400,7 +13437,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 t_attack = round(t_attack - dmg['DMG'])
                                             elif enh_type == 'BZRK':
                                                 t_health = round(t_health - dmg['DMG'])
-                                                t_attack = round(t_attack + (.75 * dmg['DMG']))
+                                                t_attack = round(t_attack + (dmg['DMG']))
                                             elif enh_type == 'CRYSTAL':
                                                 t_health = round(t_health - dmg['DMG'])
                                                 t_defense = round(t_defense + dmg['DMG'])
@@ -16529,7 +16566,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_attack = round(t_attack - dmg['DMG'])
                                                 elif enh_type == 'BZRK':
                                                     t_health = round(t_health - dmg['DMG'])
-                                                    t_attack = round(t_attack + (.75 * dmg['DMG']))
+                                                    t_attack = round(t_attack + (dmg['DMG']))
                                                 elif enh_type == 'CRYSTAL':
                                                     t_health = round(t_health - dmg['DMG'])
                                                     t_defense = round(t_defense + dmg['DMG'])
@@ -16739,7 +16776,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_attack = round(t_attack - dmg['DMG'])
                                                 elif enh_type == 'BZRK':
                                                     t_health = round(t_health - dmg['DMG'])
-                                                    t_attack = round(t_attack + (.75 * dmg['DMG']))
+                                                    t_attack = round(t_attack + (dmg['DMG']))
                                                 elif enh_type == 'CRYSTAL':
                                                     t_health = round(t_health - dmg['DMG'])
                                                     t_defense = round(t_defense + dmg['DMG'])
@@ -16829,14 +16866,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                            await button_ctx.send(embed=embedVar)
+                                                            await private_channel.send(embed=embedVar)
                                                             oarm_shield_active = False
                                                         else:
                                                             embedVar = discord.Embed(title=f"{o_card.upper()} Activates **Shield** 🌐", description=f"{t_card} strikes the **Shield** for **{dmg['DMG']} DMG!**\n **{oshield_value} Shield** Left!", colour=0xe91e63)
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                            await button_ctx.send(embed=embedVar)
+                                                            await private_channel.send(embed=embedVar)
 
                                                 elif oarm_barrier_active:
                                                     if obarrier_count >1:
@@ -16845,7 +16882,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if tarm_barrier_active:
                                                             tarm_barrier_active=False
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                        await button_ctx.send(embed=embedVar)
+                                                        await private_channel.send(embed=embedVar)
                                                         obarrier_count = obarrier_count - 1
                                                     elif obarrier_count==1:
                                                         embedVar = discord.Embed(title=f"{o_card.upper()}'s **Barrier** Broken!", description=f"{t_card} destroys the **Barrier**", colour=0xe91e63)
@@ -16853,7 +16890,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if tarm_barrier_active:
                                                             tarm_barrier_active=False
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                        await button_ctx.send(embed=embedVar)
+                                                        await private_channel.send(embed=embedVar)
                                                         oarm_barrier_active = False
                                                 elif oarm_parry_active:
                                                     if oparry_count > 1:
@@ -16865,7 +16902,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if tarm_barrier_active:
                                                             tarm_barrier_active=False
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                        await button_ctx.send(embed=embedVar)
+                                                        await private_channel.send(embed=embedVar)
                                                         
                                                     elif oparry_count==1:
                                                         oparry_damage = round(dmg['DMG'] / 2)
@@ -16876,7 +16913,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         oparry_count = oparry_count - 1
                                                         if tarm_barrier_active:
                                                             tarm_barrier_active=False
-                                                            embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
+                                                            private_channel.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                         await button_ctx.send(embed=embedVar)
                                                         oarm_parry_active = False
                                                 else:
@@ -16885,16 +16922,16 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                                         if tarm_barrier_active:
                                                             tarm_barrier_active=False
-                                                            embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
+                                                            private_channel.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                         await private_channel.send(embed=embedVar)
                                                 if o_health <= 0:
                                                     if o_final_stand == True:
                                                         if mode not in AUTO_BATTLE_modes:
                                                             embedVar = discord.Embed(title=f"{o_card.upper()}'s LAST STAND", description=f"{o_card} FINDS RESOLVE", colour=0xe91e63)
-                                                            embedVar.add_field(name=f"{o_card} resolved and continues to fight", value="All stats & stamina increased")
+                                                            private_channel.add_field(name=f"{o_card} resolved and continues to fight", value="All stats & stamina increased")
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
-                                                                embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
+                                                                private_channel.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                             await private_channel.send(embed=embedVar)
                                                         o_health = int(.75 * (o_attack + o_defense))
                                                         o_attack = o_attack + (.50 * o_attack)
@@ -16951,7 +16988,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 t_attack = round(t_attack - dmg['DMG'])
                                             elif enh_type == 'BZRK':
                                                 t_health = round(t_health - dmg['DMG'])
-                                                t_attack = round(t_attack + (.75 * dmg['DMG']))
+                                                t_attack = round(t_attack + (dmg['DMG']))
                                             elif enh_type == 'CRYSTAL':
                                                 t_health = round(t_health - dmg['DMG'])
                                                 t_defense = round(t_defense + dmg['DMG'])
@@ -18136,14 +18173,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if carm_barrier_active:
                                                                 carm_barrier_active=False
                                                                 embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                            await button_ctx.send(embed=embedVar)
+                                                            await private_channel.send(embed=embedVar)
                                                             tarm_shield_active = False
                                                         else:
                                                             embedVar = discord.Embed(title=f"{t_card.upper()} Activates **Shield** 🌐", description=f"{c_card} strikes the **Shield** for **{dmg['DMG']} DMG!**\n **{tshield_value} Shield** Left!", colour=0xe91e63)
                                                             if carm_barrier_active:
                                                                 carm_barrier_active=False
                                                                 embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                            await button_ctx.send(embed=embedVar)
+                                                            await private_channel.send(embed=embedVar)
 
                                                 elif tarm_barrier_active:
                                                     if tbarrier_count >1:
@@ -18152,7 +18189,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if carm_barrier_active:
                                                             carm_barrier_active=False
                                                             embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                        await button_ctx.send(embed=embedVar)
+                                                        await private_channel.send(embed=embedVar)
                                                         tbarrier_count = tbarrier_count - 1
                                                     elif tbarrier_count==1:
                                                         embedVar = discord.Embed(title=f"{t_card.upper()}'s **Barrier** Broken!", description=f"{c_card} destroys the **Barrier**", colour=0xe91e63)
@@ -18160,7 +18197,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if carm_barrier_active:
                                                             carm_barrier_active=False
                                                             embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                        await button_ctx.send(embed=embedVar)
+                                                        await private_channel.send(embed=embedVar)
                                                         tarm_barrier_active = False
                                                 elif tarm_parry_active:
                                                     if tparry_count > 1:
@@ -18173,7 +18210,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if carm_barrier_active:
                                                             carm_barrier_active=False
                                                             embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                        await button_ctx.send(embed=embedVar)
+                                                        await private_channel.send(embed=embedVar)
                                                         
                                                     elif tparry_count==1:
                                                         t_health = t_health
@@ -18186,7 +18223,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if carm_barrier_active:
                                                             carm_barrier_active=False
                                                             embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                        await button_ctx.send(embed=embedVar)
+                                                        await private_channel.send(embed=embedVar)
                                                         tarm_parry_active = False
                                                 else:
                                                     t_health = t_health - dmg['DMG']
@@ -18990,7 +19027,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if carm_barrier_active:
                                                             carm_barrier_active=False
                                                             embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                        await button_ctx.send(embed=embedVar)
+                                                        await private_channel.send(embed=embedVar)
                                                     elif tarm_shield_active:
                                                         if tshield_value > 0:
                                                             tshield_value = tshield_value -dmg['DMG']
@@ -19000,14 +19037,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if carm_barrier_active:
                                                                     carm_barrier_active=False
                                                                     embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                await button_ctx.send(embed=embedVar)
+                                                                await private_channel.send(embed=embedVar)
                                                                 tarm_shield_active = False
                                                             else:
                                                                 embedVar = discord.Embed(title=f"{t_card.upper()} Activates **Shield** 🌐", description=f"{c_card} strikes the **Shield** for **{dmg['DMG']} DMG!**\n **{tshield_value} Shield** Left!", colour=0xe91e63)
                                                                 if carm_barrier_active:
                                                                     carm_barrier_active=False
                                                                     embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                await button_ctx.send(embed=embedVar)
+                                                                await private_channel.send(embed=embedVar)
 
                                                     elif tarm_barrier_active:
                                                         if tbarrier_count >1:
@@ -19016,7 +19053,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if carm_barrier_active:
                                                                 carm_barrier_active=False
                                                                 embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                            await button_ctx.send(embed=embedVar)
+                                                            await private_channel.send(embed=embedVar)
                                                             tbarrier_count = tbarrier_count - 1
                                                         elif tbarrier_count==1:
                                                             embedVar = discord.Embed(title=f"{t_card.upper()}'s **Barrier** Broken!", description=f"{c_card} destroys the **Barrier**", colour=0xe91e63)
@@ -19024,7 +19061,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if carm_barrier_active:
                                                                 carm_barrier_active=False
                                                                 embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                            await button_ctx.send(embed=embedVar)
+                                                            await private_channel.send(embed=embedVar)
                                                             tarm_barrier_active = False
                                                     elif tarm_parry_active:
                                                         if tparry_count > 1:
@@ -19037,7 +19074,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if carm_barrier_active:
                                                                 carm_barrier_active=False
                                                                 embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                            await button_ctx.send(embed=embedVar)
+                                                            await private_channel.send(embed=embedVar)
                                                             
                                                         elif tparry_count==1:
                                                             t_health = t_health
@@ -19050,15 +19087,15 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if carm_barrier_active:
                                                                 carm_barrier_active=False
                                                                 embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                            await button_ctx.send(embed=embedVar)
+                                                            await private_channel.send(embed=embedVar)
                                                             tarm_parry_active = False
                                                     else:
                                                         t_health = t_health - dmg['DMG']
-                                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
+                                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=0xe91e63)
                                                         if carm_barrier_active:
                                                             carm_barrier_active=False
                                                             embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                        await button_ctx.send(embed=embedVar)
+                                                        await private_channel.send(embed=embedVar)
                                                     if t_health <= 0:
                                                         if t_final_stand==True:
                                                             embedVar = discord.Embed(title=f"{t_card.upper()}'s LAST STAND", description=f"{t_card} FINDS RESOLVE", colour=0xe91e63)
@@ -19066,7 +19103,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if carm_barrier_active:
                                                                 carm_barrier_active=False
                                                                 embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                            await button_ctx.send(embed=embedVar)
+                                                            await private_channel.send(embed=embedVar)
                                                             t_health = int(.75 * (t_attack + t_defense))
                                                             
                                                             t_used_resolve = True
@@ -19966,7 +20003,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_attack = round(t_attack - dmg['DMG'])
                                                 elif enh_type == 'BZRK':
                                                     t_health = round(t_health - dmg['DMG'])
-                                                    t_attack = round(t_attack + (.75 * dmg['DMG']))
+                                                    t_attack = round(t_attack + (dmg['DMG']))
                                                 elif enh_type == 'CRYSTAL':
                                                     t_health = round(t_health - dmg['DMG'])
                                                     t_defense = round(t_defense + dmg['DMG'])
@@ -20053,14 +20090,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                            await button_ctx.send(embed=embedVar)
+                                                            await private_channel.send(embed=embedVar)
                                                             oarm_shield_active = False
                                                         else:
                                                             embedVar = discord.Embed(title=f"{o_card.upper()} Activates **Shield** 🌐", description=f"{t_card} strikes the **Shield** for **{dmg['DMG']} DMG!**\n **{oshield_value} Shield** Left!", colour=0xe91e63)
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                            await button_ctx.send(embed=embedVar)
+                                                            await private_channel.send(embed=embedVar)
 
                                                 elif oarm_barrier_active:
                                                     if obarrier_count >1:
@@ -20069,7 +20106,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if tarm_barrier_active:
                                                             tarm_barrier_active=False
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                        await button_ctx.send(embed=embedVar)
+                                                        await private_channel.send(embed=embedVar)
                                                         obarrier_count = obarrier_count - 1
                                                     elif obarrier_count==1:
                                                         embedVar = discord.Embed(title=f"{o_card.upper()}'s **Barrier** Broken!", description=f"{t_card} destroys the **Barrier**", colour=0xe91e63)
@@ -20077,7 +20114,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if tarm_barrier_active:
                                                             tarm_barrier_active=False
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                        await button_ctx.send(embed=embedVar)
+                                                        await private_channel.send(embed=embedVar)
                                                         oarm_barrier_active = False
                                                 elif oarm_parry_active:
                                                     if oparry_count > 1:
@@ -20089,7 +20126,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if tarm_barrier_active:
                                                             tarm_barrier_active=False
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                        await button_ctx.send(embed=embedVar)
+                                                        await private_channel.send(embed=embedVar)
                                                         
                                                     elif oparry_count==1:
                                                         oparry_damage = round(dmg['DMG'] / 2)
@@ -20101,7 +20138,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if tarm_barrier_active:
                                                             tarm_barrier_active=False
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                        await button_ctx.send(embed=embedVar)
+                                                        await private_channel.send(embed=embedVar)
                                                         oarm_parry_active = False
                                                 else:
                                                     o_health = o_health - int(dmg['DMG'])
@@ -20171,7 +20208,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_attack = round(t_attack - dmg['DMG'])
                                                 elif enh_type == 'BZRK':
                                                     t_health = round(t_health - dmg['DMG'])
-                                                    t_attack = round(t_attack + (.75 * dmg['DMG']))
+                                                    t_attack = round(t_attack + (dmg['DMG']))
                                                 elif enh_type == 'CRYSTAL':
                                                     t_health = round(t_health - dmg['DMG'])
                                                     t_defense = round(t_defense + dmg['DMG'])
@@ -20258,14 +20295,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                            await button_ctx.send(embed=embedVar)
+                                                            await private_channel.send(embed=embedVar)
                                                             carm_shield_active = False
                                                         else:
                                                             embedVar = discord.Embed(title=f"{c_card.upper()} Activates **Shield** 🌐", description=f"{t_card} strikes the **Shield** for **{dmg['DMG']} DMG!**\n **{cshield_value} Shield** Left!", colour=0xe91e63)
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                            await button_ctx.send(embed=embedVar)
+                                                            await private_channel.send(embed=embedVar)
 
                                                 elif carm_barrier_active:
                                                     if cbarrier_count >1:
@@ -20274,7 +20311,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if tarm_barrier_active:
                                                             tarm_barrier_active=False
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                        await button_ctx.send(embed=embedVar)
+                                                        await private_channel.send(embed=embedVar)
                                                         cbarrier_count = cbarrier_count - 1
                                                     elif cbarrier_count==1:
                                                         embedVar = discord.Embed(title=f"{c_card.upper()}'s **Barrier** Broken!", description=f"{t_card} destroys the **Barrier**", colour=0xe91e63)
@@ -20282,7 +20319,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if tarm_barrier_active:
                                                             tarm_barrier_active=False
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                        await button_ctx.send(embed=embedVar)
+                                                        await private_channel.send(embed=embedVar)
                                                         carm_barrier_active = False
                                                 elif carm_parry_active:
                                                     if cparry_count > 1:
@@ -20295,7 +20332,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if tarm_barrier_active:
                                                             tarm_barrier_active=False
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!**")
-                                                        await button_ctx.send(embed=embedVar)
+                                                        await private_channel.send(embed=embedVar)
                                                         
                                                     elif cparry_count==1:
                                                         c_health = c_health
@@ -20308,7 +20345,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if tarm_barrier_active:
                                                             tarm_barrier_active=False
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                        await button_ctx.send(embed=embedVar)
+                                                        await private_channel.send(embed=embedVar)
                                                         carm_parry_active = False
                                                 else:
                                                     c_health = c_health - int(dmg['DMG'])
@@ -20505,6 +20542,32 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                     embedVar = discord.Embed(title=f":zap: **{t_card}** wins the match!\n\nWill you play again?",
                                              description=f"The game lasted {turn_total} rounds.\n**{t_card} says**\n`{t_win_description}`",
                                              colour=0x1abc9c)
+                    if mode in co_op_modes and mode not in ai_co_op_modes:
+                        teammates = False
+                        fam_members =False
+                        stat_bonus = 0
+                        hlt_bonus = 0 
+                        if o_user['TEAM'] == c_user['TEAM'] and o_user['TEAM'] != 'PCG':
+                            teammates=True
+                            stat_bonus=10
+                        if o_user['FAMILY'] == c_user['FAMILY'] and o_user['FAMILY'] != 'PCG':
+                            fam_members=True
+                            hlt_bonus=50
+                        
+                        if teammates==True:
+                            bonus_message = f"Guild **{o_user['TEAM']}**: Bonus 🗡️**+{stat_bonus}** 🛡️**+{stat_bonus}**"
+                            if fam_members==True:
+                                bonus_message = f"Guild **{o_user['TEAM']}**: Bonus ❤️**+{hlt_bonus}**\nFamily {o_user['FAMILY']} Bonus: 🗡️**+{stat_bonus}**\🛡️**+{stat_bonus}**"
+                        elif fam_members==True:
+                                bonus_message = f"Family **{o_user['FAMILY']}**: Bonus ❤️**+{hlt_bonus}**"
+                        else:
+                            bonus_message = f"Join a Guild or Create a Family for Coop Bonuses!"
+                            
+                        embedVar = discord.Embed(title=f":zap: **{t_card}** wins the match!\n\n**{c_user['NAME']}** will you assist again?",
+                                             description=f"The game lasted {turn_total} rounds.\n**{t_card} says**\n`{t_win_description}`",
+                                             colour=0x1abc9c)
+                        embedVar.add_field(name="**Co-Op Bonus**",
+                                           value=f"{bonus_message}")
                     if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
                         embedVar.set_footer(text=f"Battle Time: {gameClock[2]} Seconds.")
                     elif int(gameClock[0]) == 0:

@@ -94,6 +94,8 @@ CROWN_UNLIMITED_COMMANDS = textwrap.dedent(f"""\
 **/savepreset**: Save your current build as preset
 **/shop**: Open shop
 **/balance**: View Balance
+**/craft**: Open Crafting
+**/gems**: View Gems
 **/cards**: Open your list of Cards
 **/titles**: Open your list of Titles
 **/arms**: Open your list of Arms
