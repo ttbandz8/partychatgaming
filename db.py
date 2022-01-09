@@ -1771,14 +1771,10 @@ def createTrade(trade):
     except:
         return "Cannot create Trade."
 
-def updateTrade(trade, new_value):
+def updateTrade(trade_query, new_value):
     try:
-        tradeexists = trade_exists({'MERCHANT': trade['MERCHANT'], 'BUYER': trade['BUYER'], 'OPEN': trade['OPEN']})
-        if tradeexists:
-            trade_col.update_one(trade, new_value)
-            return True
-        else:
-            return False
+        trade_col.update_one(trade_query, new_value)
+        return True
     except:
         return False
 

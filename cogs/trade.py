@@ -544,7 +544,7 @@ class Trade(commands.Cog):
                            )
                        ]
         , guild_ids=main.guild_ids)
-    async def tradecoins(self, ctx: SlashContext, mode : str, amount : int):            
+    async def tradecoins(self, ctx: SlashContext, mode: str, amount: int):            
         try:
             x = amount
             trade_mode = mode
@@ -575,19 +575,19 @@ class Trade(commands.Cog):
             if mvalidation == True or bvalidation ==True:    #If user is valid and has vault
                 if item == 'P':
                     int_coins = int(x)
-                    coins = abs(int_coins)
+                    coins = round(int_coins)
                     bank = vault['BALANCE']
                     if mode == 'add':
                         if bank >= int(x):
                             await main.curse(coins, ctx.author)
                             if mvalidation ==True:
-                                trade_query = {'MERCHANT' : str(ctx.author), 'BUYER' : str(mtrade['BUYER']), 'OPEN' : True}
+                                trade_query = {'MERCHANT' : str(ctx.author), 'BUYER': str(mtrade['BUYER']), 'OPEN' : True}
                                 update_query = {"$inc" : {'MCOIN': int(coins)}}
-                                resp = db.updateTrade(mtrade, update_query)
+                                resp = db.updateTrade(trade_query, update_query)
                             elif bvalidation==True:
-                                trade_query = {'MERCHANT' : str(btrade['MERCHANT']),'BUYER' : str(ctx.author), 'OPEN' : True}
+                                trade_query = {'MERCHANT' : str(btrade['MERCHANT']),'BUYER': str(ctx.author), 'OPEN' : True}
                                 update_query = {"$inc" : {'BCOIN': int(coins)}}
-                                resp = db.updateTrade(btrade, update_query)
+                                resp = db.updateTrade(trade_query, update_query)
                             else:
                                 return
                         else:
