@@ -99,7 +99,7 @@ class TEAMS():
 
 @dataclass(frozen=True, order=True)
 class ARENA():
-    TYPE: int = field(default_factory=lambda: 0)
+    OWNER: str = field(default_factory=lambda: '')
     ACTIVE: bool = field(default_factory=lambda: False)
     READY: bool = field(default_factory=lambda: False)
     SUBBED_PLAYER: bool = field(default_factory=lambda: False)
@@ -108,7 +108,10 @@ class ARENA():
     IS_FULL: bool = field(default_factory=lambda: False)
     WINNER: str = field(default_factory=lambda: '')
     LOSER: str = field(default_factory=lambda: '')
-    TEAMS: list[str] = field(default_factory=lambda: [])
+    GUILD1: str = field(default_factory=lambda: '')
+    GUILD2: str = field(default_factory=lambda: '')
+    GUILD1_MEMBERS: list[str] = field(default_factory=lambda: [])
+    GUILD2_MEMBERS: list[str] = field(default_factory=lambda: [])
     TIMESTAMP: str = now
 
 

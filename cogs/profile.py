@@ -2628,7 +2628,6 @@ class Profile(commands.Cog):
                         else:
                             await button_ctx.send(f"{response['MESSAGE']}")
                             self.stop = True
-
                 else:
                     await ctx.send("This is not your Craft.")
 
