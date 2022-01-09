@@ -47,12 +47,12 @@ BOT_COMMANDS = textwrap.dedent(f"""\
 
 **Guild Commands**
 **/guild guild name**: Guild lookup
-**/createteam game guild name**: Create guild 
-**/deleteteam**: Delete guild
+**/createguild guild name**: Create guild 
+**/deleteguild**: Delete guild
 **/recruit @player**: Add player to guild
 **/deletemember @player**: Delete guild member
 **/apply @player**: Apply for owners guild 
-**/leaveteam guild**: Leave Guild
+**/leaveguild guild**: Leave Guild
 **/pay @player amount**: Send Guild Members coin (Owner Onlu)
 **/donate amount guild name**: Donate coin to Guild Bank
 
@@ -107,6 +107,7 @@ CROWN_UNLIMITED_COMMANDS = textwrap.dedent(f"""\
 **PvP Commands**
 **/battle @player**: Challenge another Player
 **/raid association**: Raid another Association
+**/arena**: Create PVP Arena
 
 **Tutorial Bot Commands**
 **/battle @Senpai**: Tutorial Bot
@@ -116,8 +117,9 @@ CROWN_UNLIMITED_COMMANDS = textwrap.dedent(f"""\
 **/crown**: Crown Unlimited Help Book
 
 **Story Commands**
-**/forcequit**: Leave current tale, dungeon, or boss fight
+**/forcequit**: Close Story Mode Private Channel.
 **/universes**: Show List Of Crown Universes
+**/viewuniverse universe**: Show Expanded Universe Details
 **/tales**: Opens Crown Tales Story Mode Menu
 **/coop**: Opens Crown Tales CO-OP Story Mode Menu
 **/duo**: Opens Crown Tales Duo Story Mode Menu
@@ -126,7 +128,8 @@ CROWN_UNLIMITED_COMMANDS = textwrap.dedent(f"""\
 """)
 CTAP_COMMANDS = textwrap.dedent(f"""\
 **Card Commands**
-**/cards universe**: View Universe Card List
+**/cards**: Open your list of Cards
+**/cardlist universe**: View Universe Card List
 **/viewcard**: Preview Card 
 **/equipcard card**: Equip card
 **/analysis card**: View Card Statistics and Optimal Builds
@@ -135,16 +138,19 @@ CTAP_COMMANDS = textwrap.dedent(f"""\
 **/viewboss boss**:Show Boss Description
 
 **Title Commands**
+**/titles**: Open your list of Titles
 **/titlelist universe**: View Universe Title List
 **/viewtitle**: Preview Title
 **/equiptitle title**: - Equip title
 
 **Arm Commands**
+**/arms**: Open your list of Arms
 **/armlist universe**: View Universe Arm List
 **/viewarm**: Preview Arm
 **/equiparm arm**: Equip arm
 
 **Summon Commands**
+**/summons**: Open your list of Summons
 **/summonlist universe**: View Universe Pet List
 **/viewsummon** Preview Pet
 **/equipsummon pet**: Equip pet

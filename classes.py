@@ -74,7 +74,7 @@ class GUILD():
     SWORDS: list[str] = field(default_factory=lambda: [])
     STREAK: int = field(default_factory=lambda: 0)
     BANK: int = field(default_factory=lambda: 0)
-    BOUNTY: int = field(default_factory=lambda: 1000)
+    BOUNTY: int = field(default_factory=lambda: 500000)
     CREST: list[str] = field(default_factory=lambda: ['Unbound'])
     HALL: str = field(default_factory=lambda: 'Mine')
     TIMESTAMP: str = now
@@ -143,7 +143,7 @@ class HALL():
     MULT: float = field(default_factory=lambda: 1.0)
     SPLIT: float = field(default_factory=lambda: 1.0)
     DEFENSE: float = field(default_factory=lambda: 1.0)
-    FEE: int = field(default_factory=lambda: 1000)
+    FEE: int = field(default_factory=lambda: 100000)
     AVAILABLE: bool = field(default_factory=lambda: False)
     TIMESTAMP: str = now
 

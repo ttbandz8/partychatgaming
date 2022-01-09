@@ -3822,7 +3822,7 @@ class CrownUnlimited(commands.Cog):
             }))
             return
 
-    @cog_ext.cog_slash(description="Start a Association Raid", guild_ids=main.guild_ids)
+    @cog_ext.cog_slash(description="Start an Association Raid", guild_ids=main.guild_ids)
     async def raid(self, ctx: SlashContext, guild: str):
         try:
             guildname = guild
@@ -4500,7 +4500,11 @@ class CrownUnlimited(commands.Cog):
                     t_health = t_title_passive_value
                     o_health = t_title_passive_value
 
+<<<<<<< HEAD
         # Arm Passive Player 2
+=======
+            # Arm Passive Player 2
+>>>>>>> 16e9c561a8733d15d9e235ceff875424b8e99f14
             tarm_passive_type = list(tarm_passive.keys())[0]
             tarm_passive_value = list(tarm_passive.values())[0]
             tarm_shield_active = False
@@ -6271,7 +6275,7 @@ class CrownUnlimited(commands.Cog):
                 bounty = guild_info['BOUNTY']
                 bonus = guild_info['STREAK']
                 total_bounty = (bounty + ((bonus / 100) * bounty))
-                wage = .10 * total_bounty
+                wage = .50 * total_bounty
 
                 await curse(3, str(ctx.author))
                 await bless(8, t_user)
@@ -6324,7 +6328,7 @@ class CrownUnlimited(commands.Cog):
                 winbonus = int(((bonus / 100) * bounty))
                 if winbonus == 0:
                     winbonus = bounty
-                wage = int(total_bounty / 3)
+                wage = int(total_bounty)
                 endmessage = ":yen: SHIELD BOUNTY CLAIMED"
                 if title_match_active:
                     if shield_test_active:
