@@ -39,32 +39,84 @@ class Family(commands.Cog):
             await ctx.send(m.USER_IN_FAMILY, delete_after=3)
         else:
             family_query = {'HEAD': str(ctx.author)}
-            accept = await ctx.send(f"Do you want to propose to {player.mention}?".format(self), delete_after=10)
-            for emoji in emojis:
-                await accept.add_reaction(emoji)
+            
+            trade_buttons = [
+                manage_components.create_button(
+                    style=ButtonStyle.green,
+                    label="Propose!",
+                    custom_id="yes"
+                ),
+                manage_components.create_button(
+                    style=ButtonStyle.blue,
+                    label="No",
+                    custom_id="no"
+                )
+            ]
+            trade_buttons_action_row = manage_components.create_actionrow(*trade_buttons)
+            await button_ctx.send(f"Do you want to propose to **{player.mention}**?", components=[trade_buttons_action_row])
+            
+            def check(button_ctx):
+                return button_ctx.author == ctx.author
 
-            def check(reaction, user):
-                return user == ctx.author and str(reaction.emoji) == '👍'
-
+            
             try:
-                confirmed1 = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
-                await main.DM(ctx, player, f"{ctx.author.mention}" + f" proposed to you !" + f" React in server to join their family" )
-                accept = await ctx.send(f"{player.mention}" +f" do you accept the proposal?".format(self), delete_after=10)
-                for emoji in emojis:
-                    await accept.add_reaction(emoji)
+                button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[trade_buttons_action_row], timeout=120, check=check)
+                if button_ctx.custom_id == "no":
+                        await button_ctx.send("No **Proposal**")
+                        self.stop = True
+                if button_ctx.custom_id == "yes":
+                    await main.DM(ctx, player, f"{ctx.author.mention}" + f" proposed to you !" + f" React in server to join their family" )
+                    await ctx.send(f"{player.mention}" +f" do you accept the proposal?".format(self), delete_after=10)
+                    trade_buttons = [
+                        manage_components.create_button(
+                            style=ButtonStyle.green,
+                            label="Lets Get Married!",
+                            custom_id="yes"
+                        ),
+                        manage_components.create_button(
+                            style=ButtonStyle.blue,
+                            label="No",
+                            custom_id="no"
+                        )
+                    ]
+                    trade_buttons_action_row = manage_components.create_actionrow(*trade_buttons)
+                    await button_ctx.send(f"**{player.mention}** do you accept the proposal?".format(self), components=[trade_buttons_action_row])
+                    
+                    def check(button_ctx):
+                        return button_ctx.author == player
 
-                def check(reaction, partner):
-                    return partner == player and str(reaction.emoji) == '👍'
-
-                try:
-                    confirmed2 = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
-                    response = db.createFamily(data.newFamily(family_query), str(ctx.author))
-                    await ctx.send(response)
-                    newvalue = {'$set': {'PARTNER': str(player)}}
-                    nextresponse = db.addFamilyMember(family_query, newvalue, str(ctx.author), str(player))
-                    await ctx.send(nextresponse)
-                except:
-                    await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=3)
+                    
+                    try:
+                        button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[trade_buttons_action_row], timeout=120, check=check)
+                        if button_ctx.custom_id == "no":
+                                await button_ctx.send("**Proposal Denied**")
+                                self.stop = True
+                        if button_ctx.custom_id == "yes":
+                            try:
+                                response = db.createFamily(data.newFamily(family_query), str(ctx.author))
+                                await ctx.send(response)
+                                newvalue = {'$set': {'PARTNER': str(player)}}
+                                nextresponse = db.addFamilyMember(family_query, newvalue, str(ctx.author), str(player))
+                                await ctx.send(nextresponse)
+                            except:
+                                await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=3)
+                    except Exception as ex:
+                        trace = []
+                        tb = ex.__traceback__
+                        while tb is not None:
+                            trace.append({
+                                "filename": tb.tb_frame.f_code.co_filename,
+                                "name": tb.tb_frame.f_code.co_name,
+                                "lineno": tb.tb_lineno
+                            })
+                            tb = tb.tb_next
+                        print(str({
+                            'type': type(ex).__name__,
+                            'message': str(ex),
+                            'trace': trace
+                        }))
+                        await ctx.send(f"ERROR:\nTYPE: {type(ex).__name__}\nMESSAGE: {str(ex)}\nLINE: {trace} ")
+                        return
             except:
                 print("No proposal Sent") 
 
