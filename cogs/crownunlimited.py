@@ -595,12 +595,12 @@ class CrownUnlimited(commands.Cog):
             }))
             return
 
-
     @cog_ext.cog_slash(description="Operate Arena", guild_ids=main.guild_ids)
     async def checkarena(self, ctx, owner: User):
         try:
             arena = db.queryArena({"OWNER": str(owner), "ACTIVE": True})
             if arena:
+                owner = arena['OWNER']
                 private_channel = ctx
                 opponent_entered = False
                 singles = arena['SINGLES']
@@ -615,12 +615,13 @@ class CrownUnlimited(commands.Cog):
                 guild2 = arena['GUILD2']
                 description_tip = ""
                 guild1_team_members = []
+                guild1_ready_player = arena['GUILD1_MEMBERS'][0]['NAME']
                 for member in arena['GUILD1_MEMBERS']:
-                    guild1_team_members.append(f'**{member["NAME"]}:** W/{str(member["WINS"])} L/{str(member["LOSSES"])}')
+                    guild1_team_members.append(f'**{member["NAME"]}:** ❌ {str(member["STRIKES"])}')
                 guild2_team_members = []
                 guild2_team = arena['GUILD2_MEMBERS']
                 for member in arena['GUILD2_MEMBERS']:
-                    guild2_team_members.append(f'**{member["NAME"]}:** W/{str(member["WINS"])} L/{str(member["LOSSES"])}')
+                    guild2_team_members.append(f'**{member["NAME"]}:** ❌ {str(member["STRIKES"])}')
                 g1_mems = "\n".join(guild1_team_members)
                 g2_mems = "\n".join(guild2_team_members)
                 g1_count = len(guild1_team_members)
@@ -655,6 +656,7 @@ class CrownUnlimited(commands.Cog):
 
 
                 if opponent_entered:
+                    guild2_ready_player = arena['GUILD2_MEMBERS'][0]['NAME']
                     guild2_owner = guild2_team[0]['NAME']
                     embedVar2 = discord.Embed(title= f"{guild2_owner}", description=textwrap.dedent(f"""
                     🎭 {description_tip}
@@ -667,10 +669,12 @@ class CrownUnlimited(commands.Cog):
                 if singles and not opponent_entered:
                     buttons = [
                         manage_components.create_button(style=3, label="Join Arena", custom_id="join_arena_singles"),
+                        manage_components.create_button(style=3, label="Delete Arena", custom_id="delete_arena_singles"),
                     ]
                 if singles and opponent_entered:
                     buttons = [
                         manage_components.create_button(style=3, label="Start Arena Match", custom_id="start_singles"),
+                        manage_components.create_button(style=3, label="Delete Arena", custom_id="delete_arena_singles"),
                     ]
                     
 
@@ -678,7 +682,7 @@ class CrownUnlimited(commands.Cog):
 
                 async def custom_function(self, button_ctx):
                     if button_ctx.author == ctx.author:
-                        owner = str(button_ctx.origin_message.embeds[0].title)
+                        player = str(button_ctx.origin_message.embeds[0].title)
                         if button_ctx.custom_id == "join_arena_singles":
                             owns_arena_already = db.queryArena({"OWNER": str(ctx.author), "ACTIVE": True})
                             if owns_arena_already:
@@ -710,9 +714,9 @@ class CrownUnlimited(commands.Cog):
                                         await button_ctx.send("Player not joined. ")
                                         self.stop = True
                                     if button_ctx.custom_id == "yes":
-                                        query = {'OWNER': str(owner)}
+                                        query = {'OWNER': str(owner), "ACTIVE": True}
                                         update_query = {
-                                            '$push': {"GUILD2_MEMBERS": {"NAME": str(ctx.author), "POSITION": 1, "WINS": 0, "LOSSES": 0}},
+                                            '$push': {"GUILD2_MEMBERS": {"NAME": str(ctx.author), "POSITION": 1, "STRIKES": 0}},
                                             '$set': {"IS_FULL": True, "READY": True}
                                             }
                                         res = db.updateArenaNoFilter(query, update_query)
@@ -741,8 +745,8 @@ class CrownUnlimited(commands.Cog):
                                     self.stop = True
                                     return
                                 mode = "PVP"
-                                sowner = db.queryUser({'DISNAME': str(owner)})
-                                opponent = db.queryUser({'DISNAME': str(guild2_owner)})
+                                sowner = db.queryUser({'DISNAME': str(guild1_ready_player)})
+                                opponent = db.queryUser({'DISNAME': str(guild2_ready_player)})
                                 oteam = sowner['TEAM']
                                 tteam = opponent['TEAM']
                                 oteam_info = db.queryTeam({'TNAME':str(oteam)})
@@ -781,8 +785,63 @@ class CrownUnlimited(commands.Cog):
                                     'trace': trace
                                 }))
                                 return
+                        elif button_ctx.custom_id == "delete_arena_singles":
+                            if str(button_ctx.author) != str(owner):
+                                await button_ctx.send("Arena Owner only command.")
+                                self.stop = True
+                                return
+
+                            accept_buttons = [
+                                manage_components.create_button(
+                                    style=ButtonStyle.green,
+                                    label="Yes",
+                                    custom_id="yes"
+                                ),
+                                manage_components.create_button(
+                                    style=ButtonStyle.blue,
+                                    label="No",
+                                    custom_id="no"
+                                )
+                            ]
+                            accept_buttons_action_row = manage_components.create_actionrow(*accept_buttons)
+                            await button_ctx.send(f"Are you sure you want to delete your Arena?", components=[accept_buttons_action_row])
+
+                            def check(button_ctx):
+                                return str(button_ctx.author) == str(owner)
+
+                            try:
+                                button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[accept_buttons_action_row], timeout=120, check=check)
+                                if button_ctx.custom_id == "no":
+                                    await button_ctx.send("Aborted.")
+                                    self.stop = True
+                                if button_ctx.custom_id == "yes":
+                                    query = {'OWNER': str(owner)}
+                                    update_query = {
+                                        '$set': {"ACTIVE": False}
+                                        }
+                                    res = db.updateArenaNoFilter(query, update_query)
+                                    await button_ctx.send("You have been added successfully cancelled your Arena.")
+                                    self.stop = True        
+                            except Exception as ex:
+                                trace = []
+                                tb = ex.__traceback__
+                                while tb is not None:
+                                    trace.append({
+                                        "filename": tb.tb_frame.f_code.co_filename,
+                                        "name": tb.tb_frame.f_code.co_name,
+                                        "lineno": tb.tb_lineno
+                                    })
+                                    tb = tb.tb_next
+                                print(str({
+                                    'PLAYER': str(ctx.author),
+                                    'type': type(ex).__name__,
+                                    'message': str(ex),
+                                    'trace': trace
+                                }))
+                        
+                    
                     else:
-                        await ctx.send("This is not your Craft.")
+                        await ctx.send("This is not your Arena Menu.")
 
 
                 await Paginator(bot=self.bot, useQuitButton=True, disableAfterTimeout=True, ctx=ctx, pages=embed_list, timeout=60, customActionRow=[
@@ -838,7 +897,7 @@ class CrownUnlimited(commands.Cog):
             player = db.queryUser({"DISNAME": str(ctx.author)})
             association = player['GUILD']
             guild = player['TEAM']
-            has_arena_open = db.queryArena({"OWNER": str(ctx.author)})
+            has_arena_open = db.queryArena({"OWNER": str(ctx.author), "ACTIVE": True})
 
             if has_arena_open:
                 await ctx.send("You already have an open arena.")
@@ -851,7 +910,7 @@ class CrownUnlimited(commands.Cog):
                     "ACTIVE": True, 
                     "GUILD1": "N/A",
                     "GUILD2": "N/A",
-                    "GUILD1_MEMBERS": [{"NAME": str(ctx.author), "POSITION": 1, "WINS": 0, "LOSSES": 0}],
+                    "GUILD1_MEMBERS": [{"NAME": str(ctx.author), "POSITION": 1, "STRIKES": 0}],
                     "GUILD2_MEMBERS": []
                     }
                 response = db.createArena(data.newArena(query))
@@ -864,7 +923,7 @@ class CrownUnlimited(commands.Cog):
                     "ACTIVE": True, 
                     "GUILD1": str(guild),
                     "GUILD2": "N/A",
-                    "GUILD1_MEMBERS": [{"NAME": str(ctx.author), "POSITION": 1, "WINS": 0, "LOSSES": 0}],
+                    "GUILD1_MEMBERS": [{"NAME": str(ctx.author), "POSITION": 1, "STRIKES": 0}],
                     "GUILD2_MEMBERS": []
                     }
                 response = db.createArena(data.newArena(query))
@@ -876,7 +935,7 @@ class CrownUnlimited(commands.Cog):
                     "ACTIVE": True, 
                     "GUILD1": "N/A",
                     "GUILD2": "N/A",
-                    "GUILD1_MEMBERS": [{"NAME": str(ctx.author), "POSITION": 1, "WINS": 0, "LOSSES": 0}],
+                    "GUILD1_MEMBERS": [{"NAME": str(ctx.author), "POSITION": 1, "STRIKES": 0}],
                     "GUILD2_MEMBERS": []
                     }
                 response = db.createArena(data.newArena(query))  
@@ -20421,20 +20480,32 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             arena = db.queryArena({"OWNER": str(arena_owner), "ACTIVE": True})
                             guild1_lost = False
                             for member in arena['GUILD1_MEMBERS']:
-                                if member['NAME'] == sowner['DISNAME'] and member['LOSSES'] == 1:
+                                if member['NAME'] == sowner['DISNAME'] and member['STRIKES'] == 1:
                                     guild1_lost = True
                             guild2_lost = False
                             for member in arena['GUILD2_MEMBERS']:
-                                if member['NAME'] == opponent['DISNAME'] and member['LOSSES'] == 1:
+                                if member['NAME'] == opponent['DISNAME'] and member['STRIKES'] == 1:
                                     guild2_lost = True
                             if guild1_lost:
-                                query = {'OWNER': sowner['DISNAME']}
+                                query = {'OWNER': sowner['DISNAME'], "ACTIVE": True}
                                 update_query = {
-                                    '$inc': {'GUILD1_MEMBERS.$[type].' + 'LOSSES': 1},
+                                    '$inc': {'GUILD1_MEMBERS.$[type].' + 'STRIKES': 1},
                                     '$set': {'ACTIVE': False, "WINNER": str(opponent['DISNAME']), "LOSER": str(sowner['DISNAME'])}
                                     }
                                 filter_query = [{'type.' + "NAME": str(sowner['DISNAME'])}]
-                                res = db.updateArenaNoFilter(query, update_query, filter_query)
+                                res = db.updateArena(query, update_query, filter_query)
+                                await bless(5000, str(tuser))
+                                await ctx.send(f"{ouser.mention} has won the 1v1!")
+                            else:
+                                query = {'OWNER': sowner['DISNAME'], "ACTIVE": True}
+                                update_query = {
+                                    '$inc': {'GUILD1_MEMBERS.$[type].' + 'STRIKES': 1}
+                                    }
+                                filter_query = [{'type.' + "NAME": str(sowner['DISNAME'])}]
+                                res = db.updateArena(query, update_query, filter_query)
+                                print("This oneee")
+                                await ctx.send(f"{tuser.mention} ❌")
+
      
 
                         embedVar = discord.Embed(title=f":zap: VICTORY\n**{t_card}** ",
@@ -20630,6 +20701,38 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 await curseteam(15, tteam)
                                 await teamloss(tteam)
                                 await curseguild(30, tguild)
+
+
+                        if arena_flag and arena_type == "SINGLES":
+                            arena = db.queryArena({"OWNER": str(arena_owner), "ACTIVE": True})
+                            guild1_lost = False
+                            for member in arena['GUILD1_MEMBERS']:
+                                if member['NAME'] == sowner['DISNAME'] and member['STRIKES'] == 1:
+                                    guild1_lost = True
+                            guild2_lost = False
+                            for member in arena['GUILD2_MEMBERS']:
+                                if member['NAME'] == opponent['DISNAME'] and member['STRIKES'] == 1:
+                                    guild2_lost = True
+                            if guild2_lost:
+                                query = {'OWNER': sowner['DISNAME'], 'ACTIVE': True}
+                                update_query = {
+                                    '$inc': {'GUILD2_MEMBERS.$[type].' + 'STRIKES': 1},
+                                    '$set': {'ACTIVE': False, "WINNER": str(sowner['DISNAME']), "LOSER": str(opponent['DISNAME'])}
+                                    }
+                                filter_query = [{'type.' + "NAME": str(opponent['DISNAME'])}]
+                                res = db.updateArena(query, update_query, filter_query)
+                                await bless(5000, str(ouser))
+                                await ctx.send(f"{tuser.mention} has won the 1v1!")
+                            else:
+                                query = {'OWNER': sowner['DISNAME'], 'ACTIVE': True}
+                                update_query = {
+                                    '$inc': {'GUILD2_MEMBERS.$[type].' + 'STRIKES': 1}
+                                    }
+                                filter_query = [{'type.' + "NAME": str(opponent['DISNAME'])}]
+                                res = db.updateArena(query, update_query, filter_query)
+                                
+                                await ctx.send(f"{ouser.mention} ❌")
+
                         match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']),
                                                 str(oarm['ARM']), "N/A", "PVP", o['EXCLUSIVE'])
                         embedVar = discord.Embed(title=f":zap: VICTORY\n**{o_card} says**\n{o_win_description}",
