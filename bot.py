@@ -1256,11 +1256,11 @@ async def trinketshop(ctx):
    Purchase Experience Boosts
    *Experience Boost Applied to Current Equipped Card*
 
-   🔋 1️⃣ **1,500EXP** for :coin: **50,000**
+   🔋 1️⃣ **1,500EXP** for :coin: **80,000**
    
-   🔋 2️⃣ **4,500EXP** for :dollar: **140,000**
+   🔋 2️⃣ **4,500EXP** for :dollar: **340,000**
 
-   🔋 3️⃣ **15,000EXP** for :moneybag: **400,000**
+   🔋 3️⃣ **15,000EXP** for :moneybag: **650,000**
 
    ⚒️ 4️⃣ **25 Durability** for :moneybag: **10,000**
 
@@ -1284,16 +1284,16 @@ async def trinketshop(ctx):
       exp_boost_buttons = ["1", "2", "3"]
       if button_ctx.custom_id == "1":
          levels_gained = 10
-         price = 50000
+         price = 80000
       if button_ctx.custom_id == "2":
          levels_gained = 30
-         price = 140000
+         price = 340000
       if button_ctx.custom_id == "3":
          levels_gained = 100
-         price=400000
+         price=650000
       if button_ctx.custom_id == "5":
          levels_gained = 25
-         price=10000
+         price=25000
 
 
       if button_ctx.custom_id == "cancel":
