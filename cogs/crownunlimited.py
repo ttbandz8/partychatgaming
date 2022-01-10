@@ -1,5 +1,5 @@
 from operator import floordiv
-from discord import message
+from discord import guild, message
 from cogs.lobbies import Lobbies
 import time
 from re import T
@@ -489,7 +489,7 @@ class CrownUnlimited(commands.Cog):
 
             await battle_commands(self, ctx, mode, universe, selected_universe, completed_universes, oguild, crestlist,
                                   crestsearch, private_channel, sowner, oteam, ofam, currentopponent, cowner, cteam, cfam, deckNumber,
-                                  None)
+                                  None, None, None, None)
         except Exception as ex:
             trace = []
             tb = ex.__traceback__
@@ -577,7 +577,7 @@ class CrownUnlimited(commands.Cog):
                     oguild = "PCG"
             
             await battle_commands(self, ctx, mode, universe, selected_universe, None, oguild, crestlist, crestsearch,
-                            private_channel, sowner, oteam, ofam, currentopponent, companion, cteam, cfam, None, user)
+                            private_channel, sowner, oteam, ofam, currentopponent, companion, cteam, cfam, None, user, None, None, None)
         except Exception as ex:
             trace = []
             tb = ex.__traceback__
@@ -595,71 +595,353 @@ class CrownUnlimited(commands.Cog):
             }))
             return
 
+    @cog_ext.cog_slash(description="Operate Arena", guild_ids=main.guild_ids)
+    async def checkarena(self, ctx, owner: User):
+        try:
+            arena = db.queryArena({"OWNER": str(owner), "ACTIVE": True})
+            if arena:
+                owner = arena['OWNER']
+                private_channel = ctx
+                opponent_entered = False
+                singles = arena['SINGLES']
+                guild_war = arena['GUILD_WAR']
+                subbed = arena['SUBBED_PLAYER']
+                active = arena['ACTIVE']
+                ready = arena['READY']
+                is_full = arena['IS_FULL']
+                winner = arena['WINNER']
+                loser = arena['LOSER']
+                guild1 = arena['GUILD1']
+                guild2 = arena['GUILD2']
+                description_tip = ""
+                guild1_team_members = []
+                guild1_ready_player = arena['GUILD1_MEMBERS'][0]['NAME']
+                for member in arena['GUILD1_MEMBERS']:
+                    guild1_team_members.append(f'**{member["NAME"]}:** ❌ {str(member["STRIKES"])}')
+                guild2_team_members = []
+                guild2_team = arena['GUILD2_MEMBERS']
+                for member in arena['GUILD2_MEMBERS']:
+                    guild2_team_members.append(f'**{member["NAME"]}:** ❌ {str(member["STRIKES"])}')
+                g1_mems = "\n".join(guild1_team_members)
+                g2_mems = "\n".join(guild2_team_members)
+                g1_count = len(guild1_team_members)
+                g2_count = len(guild2_team_members)
+                warning = ""
+                vs = f"**{str(g1_count)}** vs **{str(g2_count)}**"
+                if guild_war and g1_count != g2_count:
+                    warning = "\n**Warning!** You must have equal members to begin."
+                elif guild_war and g1_count == g2_count:
+                    warning = f"\n**{str(g1_count)}** vs **{str(g2_count)}**"
+                buttons = []
+                embed_list = []
+                if singles:
+                    description_tip = "*1v1 best out of 3 Arena*"
+                else:
+                    description_tip = f"*Open Arena!*"
+                
+                if guild_war:
+                    description_tip = f"*Guild War*{warning}"
+
+                if guild2_team_members:
+                    opponent_entered = True
+
+
+
+                embedVar = discord.Embed(title= f"{str(owner)}", description=textwrap.dedent(f"""
+                🎭 {description_tip}
+                
+                {g1_mems}
+                """), colour=0x7289da)
+                embed_list.append(embedVar)
+
+
+                if opponent_entered:
+                    guild2_ready_player = arena['GUILD2_MEMBERS'][0]['NAME']
+                    guild2_owner = guild2_team[0]['NAME']
+                    embedVar2 = discord.Embed(title= f"{guild2_owner}", description=textwrap.dedent(f"""
+                    🎭 {description_tip}
+                    
+                    {g2_mems}
+                    """), colour=0x7289da)
+                    embed_list.append(embedVar2)
+                
+                ### Button Layouts ###
+                if singles and not opponent_entered:
+                    buttons = [
+                        manage_components.create_button(style=3, label="Join Arena", custom_id="join_arena_singles"),
+                        manage_components.create_button(style=3, label="Delete Arena", custom_id="delete_arena_singles"),
+                    ]
+                if singles and opponent_entered:
+                    buttons = [
+                        manage_components.create_button(style=3, label="Start Arena Match", custom_id="start_singles"),
+                        manage_components.create_button(style=3, label="Delete Arena", custom_id="delete_arena_singles"),
+                    ]
+                    
+
+                custom_action_row = manage_components.create_actionrow(*buttons)
+
+                async def custom_function(self, button_ctx):
+                    if button_ctx.author == ctx.author:
+                        player = str(button_ctx.origin_message.embeds[0].title)
+                        if button_ctx.custom_id == "join_arena_singles":
+                            owns_arena_already = db.queryArena({"OWNER": str(ctx.author), "ACTIVE": True})
+                            if owns_arena_already:
+                                await button_ctx.send("You already have an open arena.")
+                                self.stop = True
+                                return
+                            else:
+                                accept_buttons = [
+                                    manage_components.create_button(
+                                        style=ButtonStyle.green,
+                                        label="Yes",
+                                        custom_id="yes"
+                                    ),
+                                    manage_components.create_button(
+                                        style=ButtonStyle.blue,
+                                        label="No",
+                                        custom_id="no"
+                                    )
+                                ]
+                                accept_buttons_action_row = manage_components.create_actionrow(*accept_buttons)
+                                await button_ctx.send(f"Can {ctx.author.mention} join your arena?", components=[accept_buttons_action_row])
+
+                                def check(button_ctx):
+                                    return str(button_ctx.author) == str(owner)
+
+                                try:
+                                    button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[accept_buttons_action_row], timeout=120, check=check)
+                                    if button_ctx.custom_id == "no":
+                                        await button_ctx.send("Player not joined. ")
+                                        self.stop = True
+                                    if button_ctx.custom_id == "yes":
+                                        query = {'OWNER': str(owner), "ACTIVE": True}
+                                        update_query = {
+                                            '$push': {"GUILD2_MEMBERS": {"NAME": str(ctx.author), "POSITION": 1, "STRIKES": 0}},
+                                            '$set': {"IS_FULL": True, "READY": True}
+                                            }
+                                        res = db.updateArenaNoFilter(query, update_query)
+                                        await button_ctx.send("You have been added successfully to the Arena.")
+                                        self.stop = True        
+                                except Exception as ex:
+                                    trace = []
+                                    tb = ex.__traceback__
+                                    while tb is not None:
+                                        trace.append({
+                                            "filename": tb.tb_frame.f_code.co_filename,
+                                            "name": tb.tb_frame.f_code.co_name,
+                                            "lineno": tb.tb_lineno
+                                        })
+                                        tb = tb.tb_next
+                                    print(str({
+                                        'PLAYER': str(ctx.author),
+                                        'type': type(ex).__name__,
+                                        'message': str(ex),
+                                        'trace': trace
+                                    }))
+                        elif button_ctx.custom_id == "start_singles":
+                            try:
+                                if str(button_ctx.author) != str(owner):
+                                    await button_ctx.send("Arena Owner must start the match.")
+                                    self.stop = True
+                                    return
+                                mode = "PVP"
+                                sowner = db.queryUser({'DISNAME': str(guild1_ready_player)})
+                                opponent = db.queryUser({'DISNAME': str(guild2_ready_player)})
+                                oteam = sowner['TEAM']
+                                tteam = opponent['TEAM']
+                                oteam_info = db.queryTeam({'TNAME':str(oteam)})
+                                tteam_info = db.queryTeam({'TNAME':str(tteam)})
+                                if oteam_info:
+                                    oguild = oteam_info['GUILD']
+                                else:
+                                    oguild ="PCG"
+                                if tteam_info:
+                                    tguild = tteam_info['GUILD']
+                                else:
+                                    tguild ="PCG"
+
+                                o = db.queryCard({'NAME': sowner['CARD']})
+                                otitle = db.queryTitle({'TITLE': sowner['TITLE']})
+
+                                t = db.queryCard({'NAME': opponent['CARD']})
+                                ttitle = db.queryTitle({'TITLE': opponent['TITLE']})
+                                await button_ctx.send("Arena match starting!")                    
+                                await battle_commands(self, ctx, mode, None, None, None, oguild, None, None, private_channel, sowner,
+                                                    oteam, None, opponent, tteam, tguild, None, None, None, True, owner, "SINGLES")
+                            except Exception as ex:
+                                trace = []
+                                tb = ex.__traceback__
+                                while tb is not None:
+                                    trace.append({
+                                        "filename": tb.tb_frame.f_code.co_filename,
+                                        "name": tb.tb_frame.f_code.co_name,
+                                        "lineno": tb.tb_lineno
+                                    })
+                                    tb = tb.tb_next
+                                print(str({
+                                    'PLAYER': str(ctx.author),
+                                    'type': type(ex).__name__,
+                                    'message': str(ex),
+                                    'trace': trace
+                                }))
+                                return
+                        elif button_ctx.custom_id == "delete_arena_singles":
+                            if str(button_ctx.author) != str(owner):
+                                await button_ctx.send("Arena Owner only command.")
+                                self.stop = True
+                                return
+
+                            accept_buttons = [
+                                manage_components.create_button(
+                                    style=ButtonStyle.green,
+                                    label="Yes",
+                                    custom_id="yes"
+                                ),
+                                manage_components.create_button(
+                                    style=ButtonStyle.blue,
+                                    label="No",
+                                    custom_id="no"
+                                )
+                            ]
+                            accept_buttons_action_row = manage_components.create_actionrow(*accept_buttons)
+                            await button_ctx.send(f"Are you sure you want to delete your Arena?", components=[accept_buttons_action_row])
+
+                            def check(button_ctx):
+                                return str(button_ctx.author) == str(owner)
+
+                            try:
+                                button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[accept_buttons_action_row], timeout=120, check=check)
+                                if button_ctx.custom_id == "no":
+                                    await button_ctx.send("Aborted.")
+                                    self.stop = True
+                                if button_ctx.custom_id == "yes":
+                                    query = {'OWNER': str(owner)}
+                                    update_query = {
+                                        '$set': {"ACTIVE": False}
+                                        }
+                                    res = db.updateArenaNoFilter(query, update_query)
+                                    await button_ctx.send("You have been added successfully cancelled your Arena.")
+                                    self.stop = True        
+                            except Exception as ex:
+                                trace = []
+                                tb = ex.__traceback__
+                                while tb is not None:
+                                    trace.append({
+                                        "filename": tb.tb_frame.f_code.co_filename,
+                                        "name": tb.tb_frame.f_code.co_name,
+                                        "lineno": tb.tb_lineno
+                                    })
+                                    tb = tb.tb_next
+                                print(str({
+                                    'PLAYER': str(ctx.author),
+                                    'type': type(ex).__name__,
+                                    'message': str(ex),
+                                    'trace': trace
+                                }))
+                        
+                    
+                    else:
+                        await ctx.send("This is not your Arena Menu.")
+
+
+                await Paginator(bot=self.bot, useQuitButton=True, disableAfterTimeout=True, ctx=ctx, pages=embed_list, timeout=60, customActionRow=[
+                    custom_action_row,
+                    custom_function,
+                ]).run()  
+            else:
+                await ctx.send("No arena available.")
+        except Exception as ex:
+            trace = []
+            tb = ex.__traceback__
+            while tb is not None:
+                trace.append({
+                    "filename": tb.tb_frame.f_code.co_filename,
+                    "name": tb.tb_frame.f_code.co_name,
+                    "lineno": tb.tb_lineno
+                })
+                tb = tb.tb_next
+            print(str({
+                'PLAYER': str(ctx.author),
+                'type': type(ex).__name__,
+                'message': str(ex),
+                'trace': trace
+            }))
+            return
 
     @cog_ext.cog_slash(description="Arena Battle!",
-                       options=[
-                           create_option(
-                               name="mode",
-                               description="Arena Mode",
-                               option_type=3,
-                               required=True,
-                               choices=[
-                                   create_choice(
-                                       name="1v1",
-                                       value="SINGLES"
-                                   ),
-                                   create_choice(
-                                       name="Team Battle",
-                                       value="TEAMS"
-                                   ),
-                                   create_choice(
-                                       name="Guild War",
-                                       value="GUILD_WAR"
-                                   ),
-                               ]
-                           )
-                       ]
+                    options=[
+                        create_option(
+                            name="mode",
+                            description="Arena Mode",
+                            option_type=3,
+                            required=True,
+                            choices=[
+                                create_choice(
+                                    name="1v1",
+                                    value="SINGLES"
+                                ),
+                                create_choice(
+                                    name="Team Battle",
+                                    value="TEAMS"
+                                ),
+                                create_choice(
+                                    name="Guild War",
+                                    value="GUILD_WAR"
+                                ),
+                            ]
+                        )
+                    ]
         , guild_ids=main.guild_ids)
-    async def arena(self, ctx: SlashContext, mode: str, opponent: User):
-        battle_buttons = [
-            manage_components.create_button(
-                style=ButtonStyle.blue,
-                label="Yes",
-                custom_id="Yes"
-            ),
-            manage_components.create_button(
-                style=ButtonStyle.red,
-                label="No",
-                custom_id="No"
-            )
-        ]
-        battle_buttons_action_row = manage_components.create_actionrow(*battle_buttons)
-        await ctx.send(f"{opponent.mention}, ready to enter the Arena?", components=[battle_buttons_action_row])
-
-        def check(button_ctx):
-            return button_ctx.author == ctx.author
-
+    async def arena(self, ctx: SlashContext, mode: str):
         try:
-            button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[
-                battle_buttons_action_row], timeout=120, check=check)
+            player = db.queryUser({"DISNAME": str(ctx.author)})
+            association = player['GUILD']
+            guild = player['TEAM']
+            has_arena_open = db.queryArena({"OWNER": str(ctx.author), "ACTIVE": True})
 
-            if button_ctx.custom_id == "No":
-                await button_ctx.send("Arena Declined. ")
+            if has_arena_open:
+                await ctx.send("You already have an open arena.")
                 return
 
-            if button_ctx.custom_id == "Yes":
+            if mode == "SINGLES":
+                query = {
+                    "OWNER": str(ctx.author),
+                    "SINGLES": True, 
+                    "ACTIVE": True, 
+                    "GUILD1": "N/A",
+                    "GUILD2": "N/A",
+                    "GUILD1_MEMBERS": [{"NAME": str(ctx.author), "POSITION": 1, "STRIKES": 0}],
+                    "GUILD2_MEMBERS": []
+                    }
+                response = db.createArena(data.newArena(query))
+                await ctx.send("**1v1 Arena** has been opened.")
+                
+            elif mode == "GUILD_WAR":
+                query = {
+                    "OWNER": str(ctx.author),
+                    "GUILD_WAR": True, 
+                    "ACTIVE": True, 
+                    "GUILD1": str(guild),
+                    "GUILD2": "N/A",
+                    "GUILD1_MEMBERS": [{"NAME": str(ctx.author), "POSITION": 1, "STRIKES": 0}],
+                    "GUILD2_MEMBERS": []
+                    }
+                response = db.createArena(data.newArena(query))
+                await ctx.send("**Guild War Arena** has been opened.")
+                
+            else:
+                query = {
+                    "OWNER": str(ctx.author),
+                    "ACTIVE": True, 
+                    "GUILD1": "N/A",
+                    "GUILD2": "N/A",
+                    "GUILD1_MEMBERS": [{"NAME": str(ctx.author), "POSITION": 1, "STRIKES": 0}],
+                    "GUILD2_MEMBERS": []
+                    }
+                response = db.createArena(data.newArena(query))  
+                await ctx.send("**Open Arena** has been opened.")
 
-                if mode == "SINGLES":
-                    response = db.createArena(data.newArena({}))
-                    
-                elif mode == "GUILD_WAR":
-                    response = db.createArena(data.newArena({}))
-                    
-                else:
-                    response = db.createArena(data.newArena({}))   
-
-                await button_ctx.send("Arena solidified.")
-                return
+            return             
         except Exception as ex:
             trace = []
             tb = ex.__traceback__
@@ -679,32 +961,32 @@ class CrownUnlimited(commands.Cog):
             return
 
     @cog_ext.cog_slash(description="Conquer Tales to Unlock New Universes!",
-                       options=[
-                           create_option(
-                               name="mode",
-                               description="Difficulty Level",
-                               option_type=3,
-                               required=True,
-                               choices=[
-                                   create_choice(
-                                       name="Auto Battler",
-                                       value="ATales"
-                                   ),
-                                   create_choice(
-                                       name="Tales (Normal)",
-                                       value="Tales"
-                                   ),
-                                   create_choice(
-                                       name="Dungeon (Hard)",
-                                       value="Dungeon"
-                                   ),
-                                   create_choice(
-                                       name="Boss Battle (Extreme)",
-                                       value="Boss"
-                                   ),
-                               ]
-                           )
-                       ]
+                    options=[
+                        create_option(
+                            name="mode",
+                            description="Difficulty Level",
+                            option_type=3,
+                            required=True,
+                            choices=[
+                                create_choice(
+                                    name="Auto Battler",
+                                    value="ATales"
+                                ),
+                                create_choice(
+                                    name="Tales (Normal)",
+                                    value="Tales"
+                                ),
+                                create_choice(
+                                    name="Dungeon (Hard)",
+                                    value="Dungeon"
+                                ),
+                                create_choice(
+                                    name="Boss Battle (Extreme)",
+                                    value="Boss"
+                                ),
+                            ]
+                        )
+                    ]
         , guild_ids=main.guild_ids)
     async def tales(self, ctx: SlashContext, mode: str):
         U_modes = ['ATales', 'Tales', 'CTales', 'DTales', 'tales']
@@ -740,11 +1022,11 @@ class CrownUnlimited(commands.Cog):
 
             if mode in B_MODES:
                 await battle_commands(self, ctx, mode, universe, selected_universe, None, oguild, crestlist,
-                                      crestsearch, private_channel, sowner, oteam, ofam, None, None, None, None, None, None)
+                                    crestsearch, private_channel, sowner, oteam, ofam, None, None, None, None, None, None, None, None, None)
             else:
                 await battle_commands(self, ctx, mode, universe, selected_universe, completed_universes, oguild,
-                                      crestlist, crestsearch, private_channel, sowner, oteam, ofam, currentopponent, None, None, None,
-                                      None, None)
+                                    crestlist, crestsearch, private_channel, sowner, oteam, ofam, currentopponent, None, None, None,
+                                    None, None, None, None, None)
         except Exception as ex:
             trace = []
             tb = ex.__traceback__
@@ -824,7 +1106,7 @@ class CrownUnlimited(commands.Cog):
             embedVar = discord.Embed(title=f":new_moon: Abyss Floor {floor}", colour=000000)
             if banned_cards:
                 embedVar.add_field(name=":flower_playing_cards: Banned Cards", value="\n".join(banned_cards),
-                                   inline=True)
+                                inline=True)
             if banned_titles:
                 embedVar.add_field(name=":reminder_ribbon: Banned Titles", value="\n".join(banned_titles), inline=True)
             if banned_arms:
@@ -834,10 +1116,10 @@ class CrownUnlimited(commands.Cog):
 
             if banned_universes:
                 embedVar.add_field(name=":ringed_planet: Banned Universes", value="\n".join(banned_universes),
-                                   inline=True)
+                                inline=True)
             if banned_universe_tiers:
                 embedVar.add_field(name=":white_flower: Banned Universe Tiers", value="\n".join(tier_conversion),
-                                   inline=True)
+                                inline=True)
 
             await private_channel.send(embed=embedVar, components=[abyss_buttons_action_row])
 
@@ -881,7 +1163,7 @@ class CrownUnlimited(commands.Cog):
                             ctx.author: discord.PermissionOverwrite(read_messages=True, send_messages=True),
                         }
                         private_channel = await guild.create_text_channel(f'{str(ctx.author)}-ABYSS',
-                                                                          overwrites=overwrites)
+                                                                        overwrites=overwrites)
                         await button_ctx.send(f"{ctx.author.mention} Abyss has been opened for you. Good luck!")
                 elif button_ctx.custom_id == "No":
                     await button_ctx.send("Leaving the Abyss...")
@@ -1655,13 +1937,13 @@ class CrownUnlimited(commands.Cog):
                         o_defense = int(o_defense / 2)
                     if o_universe == "Death Note" and turn_total == 0:
                         embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death 📓",
-                                                 description=f"**{o_card} says**\nYou will die in 50  turns...",
-                                                 colour=0xe91e63)
+                                                description=f"**{o_card} says**\nYou will die in 50  turns...",
+                                                colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                     if t_universe == 'Death Note' and turn_total == 0:
                         embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death 📓",
-                                                 description=f"**{t_card} says**\nYou will die in 50  turns...",
-                                                 colour=0xe91e63)
+                                                description=f"**{t_card} says**\nYou will die in 50  turns...",
+                                                colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                     if o_attack <= 25:
                         o_attack = 25
@@ -1690,8 +1972,8 @@ class CrownUnlimited(commands.Cog):
                                 o_defense = o_defense * 2
                                 o_attack = o_attack * 2
                                 embedVar = discord.Embed(title=f"{o_card.upper()}'s Devilization",
-                                                         description=f"**{o_card}** Doubles ATK and DEF",
-                                                         colour=0xe91e63)
+                                                        description=f"**{o_card}** Doubles ATK and DEF",
+                                                        colour=0xe91e63)
                                 await private_channel.send(embed=embedVar)
 
                     elif o_health <= (o_max_health * .50):
@@ -1703,8 +1985,8 @@ class CrownUnlimited(commands.Cog):
                                 o_defense = o_defense * 2
                                 o_attack = o_attack * 2
                                 embedVar = discord.Embed(title=f"{o_card.upper()}'s Devilization",
-                                                         description=f"**{o_card}** Doubles ATK and DEF",
-                                                         colour=0xe91e63)
+                                                        description=f"**{o_card}** Doubles ATK and DEF",
+                                                        colour=0xe91e63)
                                 await private_channel.send(embed=embedVar)
                     elif o_health <= (o_max_health * .75):
                         embed_color_o = 0xf1c40f
@@ -1757,8 +2039,8 @@ class CrownUnlimited(commands.Cog):
                         # Resolve Check and Calculation
                         if not o_used_resolve and o_used_focus and o_universe == "Digimon":  # Digimon Universal Trait
                             embedVar = discord.Embed(title=f"{o_card} STRENGTHENED RESOLVE :zap:",
-                                                     description=f"**{o_card} says**\n{o_resolve_description}",
-                                                     colour=0xe91e63)
+                                                    description=f"**{o_card} says**\n{o_resolve_description}",
+                                                    colour=0xe91e63)
                             embedVar.add_field(name=f"Transformation: Digivolve", value="On Focus you Resolve.")
                             await private_channel.send(embed=embedVar)
                             # fortitude or luck is based on health
@@ -1781,7 +2063,7 @@ class CrownUnlimited(commands.Cog):
 
                         elif o_universe == "League Of Legends":
                             embedVar = discord.Embed(title=f"Turret Shot hits {t_card} for **30** Damage 💥",
-                                                     colour=0xe91e63)
+                                                    colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_health = round(t_health - 30)
 
@@ -1794,7 +2076,7 @@ class CrownUnlimited(commands.Cog):
 
                         elif o_universe == "Attack On Titan":
                             embedVar = discord.Embed(title=f"Rally! **{o_card}** Increased Max Health ❤️",
-                                                     colour=0xe91e63)
+                                                    colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             o_max_health = round(o_max_health + 100)
 
@@ -1806,7 +2088,7 @@ class CrownUnlimited(commands.Cog):
                         elif o_universe == "Death Note":
                             if turn_total >= 50:
                                 embedVar = discord.Embed(title=f"{t_card.upper()}'s' Scheduled Death 📓",
-                                                         description=f"**{o_card} says**\n**Delete**", colour=0xe91e63)
+                                                        description=f"**{o_card} says**\n**Delete**", colour=0xe91e63)
                                 embedVar.add_field(name=f"{t_card} had a heart attack and died", value=f"Death....")
                                 await private_channel.send(embed=embedVar)
                                 t_health = 0
@@ -1821,7 +2103,7 @@ class CrownUnlimited(commands.Cog):
 
                         elif t_universe == "7ds":
                             embedVar = discord.Embed(title=f"Increase Power Level! {t_card} Increased Stamina 🌀",
-                                                     colour=0xe91e63)
+                                                    colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_stamina = t_stamina + 60
 
@@ -1856,8 +2138,8 @@ class CrownUnlimited(commands.Cog):
 
                         # UNIVERSE CARD
                         player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve,
-                                                 otitle, o_used_focus, o_attack, o_defense, turn_total, ap1, ap2, ap3,
-                                                 enh1, enh_name, ocard_lvl, t_defense)
+                                                otitle, o_used_focus, o_attack, o_defense, turn_total, ap1, ap2, ap3,
+                                                enh1, enh_name, ocard_lvl, t_defense)
                         # await private_channel.send(file=player_1_card)
 
                         if o_used_focus and o_used_resolve:
@@ -1934,11 +2216,11 @@ class CrownUnlimited(commands.Cog):
 
                         try:
                             button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot,
-                                                                                                      components=[
-                                                                                                          battle_action_row,
-                                                                                                          util_action_row],
-                                                                                                      timeout=45,
-                                                                                                      check=check)
+                                                                                                    components=[
+                                                                                                        battle_action_row,
+                                                                                                        util_action_row],
+                                                                                                    timeout=45,
+                                                                                                    check=check)
 
                             # calculate data based on selected move
                             if button_ctx.custom_id == "q" or button_ctx.custom_id == "Q":
@@ -1955,27 +2237,27 @@ class CrownUnlimited(commands.Cog):
                             if button_ctx.custom_id == "1":
 
                                 dmg = damage_cal(o_universe, o_card, o_1, o_attack, o_defense, t_defense, o_stamina,
-                                                 o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack,
-                                                 o_special_move_description, turn_total, ocard_lvl_ap_buff)
+                                                o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack,
+                                                o_special_move_description, turn_total, ocard_lvl_ap_buff)
                             elif button_ctx.custom_id == "2":
 
                                 dmg = damage_cal(o_universe, o_card, o_2, o_attack, o_defense, t_defense, o_stamina,
-                                                 o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack,
-                                                 o_special_move_description, turn_total, ocard_lvl_ap_buff)
+                                                o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack,
+                                                o_special_move_description, turn_total, ocard_lvl_ap_buff)
                             elif button_ctx.custom_id == "3":
 
                                 dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_stamina,
-                                                 o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack,
-                                                 o_special_move_description, turn_total, ocard_lvl_ap_buff)
+                                                o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack,
+                                                o_special_move_description, turn_total, ocard_lvl_ap_buff)
                                 if o_gif != "N/A":
                                     await private_channel.send(f"{o_gif}")
                             elif button_ctx.custom_id == "4":
                                 o_enhancer_used = True
 
                                 dmg = damage_cal(o_universe, o_card, o_enhancer, o_attack, o_defense, t_defense,
-                                                 o_stamina, o_enhancer_used, o_health, t_health, t_stamina,
-                                                 o_max_health, t_attack, o_special_move_description, turn_total,
-                                                 ocard_lvl_ap_buff)
+                                                o_stamina, o_enhancer_used, o_health, t_health, t_stamina,
+                                                o_max_health, t_attack, o_special_move_description, turn_total,
+                                                ocard_lvl_ap_buff)
                                 o_enhancer_used = False
                             elif button_ctx.custom_id == "5":
                                 # fortitude or luck is based on health
@@ -1999,10 +2281,10 @@ class CrownUnlimited(commands.Cog):
                                         o_used_resolve = True
                                         o_pet_used = False
                                         embedVar = discord.Embed(title=f"{o_card.upper()} PLUS ULTRAAA",
-                                                                 description=f"**{o_card} says**\n{o_resolve_description}",
-                                                                 colour=0xe91e63)
+                                                                description=f"**{o_card} says**\n{o_resolve_description}",
+                                                                colour=0xe91e63)
                                         embedVar.add_field(name=f"Transformation: Plus Ultra",
-                                                           value="You do not lose a turn after you Resolve.")
+                                                        value="You do not lose a turn after you Resolve.")
                                         await button_ctx.send(embed=embedVar)
 
                                         turn_total = turn_total + 1
@@ -2027,10 +2309,10 @@ class CrownUnlimited(commands.Cog):
                                         health_boost = 100 * o_focus_count
                                         o_health = o_health + health_boost
                                         embedVar = discord.Embed(title=f"{o_card.upper()} Titan Mode",
-                                                                 description=f"**{o_card} says**\n{o_resolve_description}",
-                                                                 colour=0xe91e63)
+                                                                description=f"**{o_card} says**\n{o_resolve_description}",
+                                                                colour=0xe91e63)
                                         embedVar.add_field(name=f"Transformation Complete",
-                                                           value=f"Health increased by **{health_boost}**!")
+                                                        value=f"Health increased by **{health_boost}**!")
                                         await button_ctx.send(embed=embedVar)
 
                                         turn_total = turn_total + 1
@@ -2055,10 +2337,10 @@ class CrownUnlimited(commands.Cog):
                                         o_used_resolve = True
                                         o_pet_used = False
                                         embedVar = discord.Embed(title=f"{o_card} STRENGTHENED RESOLVE :zap:",
-                                                                 description=f"**{o_card} says**\n{o_resolve_description}",
-                                                                 colour=0xe91e63)
+                                                                description=f"**{o_card} says**\n{o_resolve_description}",
+                                                                colour=0xe91e63)
                                         embedVar.add_field(name=f"Transformation: Bankai",
-                                                           value="Gain double Attack on Resolve.")
+                                                        value="Gain double Attack on Resolve.")
                                         await button_ctx.send(embed=embedVar)
                                         turn_total = turn_total + 1
                                         turn = 1
@@ -2080,10 +2362,10 @@ class CrownUnlimited(commands.Cog):
                                         o_used_resolve = True
                                         o_pet_used = False
                                         embedVar = discord.Embed(title=f"{o_card} STRENGTHENED RESOLVE :zap:",
-                                                                 description=f"**{o_card} says**\n{o_resolve_description}",
-                                                                 colour=0xe91e63)
+                                                                description=f"**{o_card} says**\n{o_resolve_description}",
+                                                                colour=0xe91e63)
                                         embedVar.add_field(name=f"Transformation: Ascension",
-                                                           value="On Resolve Refill Health.")
+                                                        value="On Resolve Refill Health.")
                                         await button_ctx.send(embed=embedVar)
                                         turn_total = turn_total + 1
                                         turn = 1
@@ -2104,15 +2386,15 @@ class CrownUnlimited(commands.Cog):
                                         o_defense = round(o_defense - o_resolve_defense)
 
                                         dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense,
-                                                         o_stamina, o_enhancer_used, o_health, t_health, t_stamina,
-                                                         o_max_health, t_attack, o_special_move_description, turn_total,
-                                                         ocard_lvl_ap_buff)
+                                                        o_stamina, o_enhancer_used, o_health, t_health, t_stamina,
+                                                        o_max_health, t_attack, o_special_move_description, turn_total,
+                                                        ocard_lvl_ap_buff)
                                         t_health = t_health - dmg['DMG']
                                         embedVar = discord.Embed(
                                             title=f"{o_card} STRENGTHENED RESOLVE :zap:\n\n{dmg['MESSAGE']}",
                                             description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
                                         embedVar.add_field(name=f"Transformation: Command Seal",
-                                                           value="On Resolve, Strike with Ultimate, then Focus.")
+                                                        value="On Resolve, Strike with Ultimate, then Focus.")
                                         await button_ctx.send(embed=embedVar)
                                         # o_stamina = 0
                                         o_used_resolve = True
@@ -2137,10 +2419,10 @@ class CrownUnlimited(commands.Cog):
                                         o_used_resolve = True
                                         o_pet_used = False
                                         embedVar = discord.Embed(title=f"{o_card} STRENGTHENED RESOLVE :zap:",
-                                                                 description=f"**{o_card} says**\n{o_resolve_description}",
-                                                                 colour=0xe91e63)
+                                                                description=f"**{o_card} says**\n{o_resolve_description}",
+                                                                colour=0xe91e63)
                                         embedVar.add_field(name=f"Transformation: Evolution",
-                                                           value="When you Resolve you do not lose Defense.")
+                                                        value="When you Resolve you do not lose Defense.")
                                         await button_ctx.send(embed=embedVar)
                                         turn_total = turn_total + 1
                                         turn = 1
@@ -2164,24 +2446,24 @@ class CrownUnlimited(commands.Cog):
                                         if o_universe == "League Of Legends":
                                             t_health = t_health - (30 * (o_focus_count + t_focus_count))
                                             embedVar = discord.Embed(title=f"{o_card.upper()} PENTA KILL!",
-                                                                     description=f"**{o_card} says**\n{o_resolve_description}",
-                                                                     colour=0xe91e63)
+                                                                    description=f"**{o_card} says**\n{o_resolve_description}",
+                                                                    colour=0xe91e63)
                                             embedVar.add_field(name=f"Nexus Destroyed",
-                                                               value=f"**{o_card}** dealt **{(30 * (o_focus_count + t_focus_count))}** damage.")
+                                                            value=f"**{o_card}** dealt **{(30 * (o_focus_count + t_focus_count))}** damage.")
                                         else:
                                             embedVar = discord.Embed(title=f"{o_card} STRENGTHENED RESOLVE :zap:",
-                                                                     description=f"**{o_card} says**\n{o_resolve_description}",
-                                                                     colour=0xe91e63)
+                                                                    description=f"**{o_card} says**\n{o_resolve_description}",
+                                                                    colour=0xe91e63)
                                             embedVar.add_field(name=f"Transformation",
-                                                               value="All stats & stamina greatly increased")
+                                                            value="All stats & stamina greatly increased")
                                         await button_ctx.send(embed=embedVar)
                                         turn_total = turn_total + 1
                                         turn = 1
                                 else:
                                     emessage = m.CANNOT_USE_RESOLVE
                                     embedVar = discord.Embed(title=emessage,
-                                                             description=f"Entering `Resolved State` sacrifices a turn to power up even greater and regain `Stamina`!",
-                                                             colour=0xe91e63)
+                                                            description=f"Entering `Resolved State` sacrifices a turn to power up even greater and regain `Stamina`!",
+                                                            colour=0xe91e63)
                                     await button_ctx.send(embed=embedVar)
                                     turn = 0
                             elif button_ctx.custom_id == "6":
@@ -2189,9 +2471,9 @@ class CrownUnlimited(commands.Cog):
                                 if o_used_resolve and o_used_focus and not o_pet_used:
                                     o_enhancer_used = True
                                     dmg = damage_cal(o_universe, o_card, opet_move, o_attack, o_defense, t_defense,
-                                                     o_stamina, o_enhancer_used, o_health, t_health, t_stamina,
-                                                     o_max_health, t_attack, o_special_move_description, turn_total,
-                                                     ocard_lvl_ap_buff)
+                                                    o_stamina, o_enhancer_used, o_health, t_health, t_stamina,
+                                                    o_max_health, t_attack, o_special_move_description, turn_total,
+                                                    ocard_lvl_ap_buff)
                                     o_enhancer_used = False
                                     o_pet_used = True
                                     opet_dmg = dmg['DMG']
@@ -2279,9 +2561,9 @@ class CrownUnlimited(commands.Cog):
                                         o_stamina = o_stamina - int(dmg['STAMINA_USED'])
 
                                         embedVar = discord.Embed(title=f"{o_card.upper()} Summoned 🧬 {opet_name}",
-                                                                 colour=0xe91e63)
+                                                                colour=0xe91e63)
                                         embedVar.add_field(name=f"{opet_name} used **{opetmove_text}**!",
-                                                           value=f"Enhanced **{opet_type}** by **{opet_dmg}**")
+                                                        value=f"Enhanced **{opet_type}** by **{opet_dmg}**")
                                         
                                         # await asyncio.sleep(1)
                                         embedVar.set_image(url="attachment://image.png")
@@ -2511,8 +2793,8 @@ class CrownUnlimited(commands.Cog):
                                 else:
                                     emessage = m.NOT_ENOUGH_STAMINA
                                     embedVar = discord.Embed(title=emessage,
-                                                             description=f"Use abilities to Increase `STAM` or enter `FOCUS STATE`!",
-                                                             colour=0xe91e63)
+                                                            description=f"Use abilities to Increase `STAM` or enter `FOCUS STATE`!",
+                                                            colour=0xe91e63)
                                     await button_ctx.send(embed=embedVar)
                                     turn = 0
                         except asyncio.TimeoutError:
@@ -2546,7 +2828,7 @@ class CrownUnlimited(commands.Cog):
                                     t_defense = t_defense * 2
                                     t_attack = t_attack * 2
                                     embedVar = discord.Embed(title=f"{t_card.upper()}'s Devilization",
-                                                             description=f"**{t_card}** Doubles Stats", colour=0xe91e63)
+                                                            description=f"**{t_card}** Doubles Stats", colour=0xe91e63)
                                     await private_channel.send(embed=embedVar)
 
                         elif t_health <= (t_max_health * .50):
@@ -2558,7 +2840,7 @@ class CrownUnlimited(commands.Cog):
                                     t_defense = t_defense * 2
                                     t_attack = t_attack * 2
                                     embedVar = discord.Embed(title=f"{t_card.upper()}'s Devilization",
-                                                             description=f"**{t_card}** Doubles Stats", colour=0xe91e63)
+                                                            description=f"**{t_card}** Doubles Stats", colour=0xe91e63)
                                     await private_channel.send(embed=embedVar)
                         elif t_health <= (t_max_health * .75):
                             embed_color_t = 0xf1c40f
@@ -2604,10 +2886,10 @@ class CrownUnlimited(commands.Cog):
                             t_used_focus = True
 
                             embedVar = discord.Embed(title=f"{t_card.upper()} FOCUSED",
-                                                     description=f"**{t_card} says**\n{t_focus_description}",
-                                                     colour=0xe91e63)
+                                                    description=f"**{t_card} says**\n{t_focus_description}",
+                                                    colour=0xe91e63)
                             embedVar.add_field(name=f"{t_card} focused and {healmessage}",
-                                               value="All stats & stamina increased")
+                                            value="All stats & stamina increased")
                             await private_channel.send(embed=embedVar)
                             if not t_used_resolve and t_used_focus and t_universe == "Digimon":  # Digimon Universal Trait
                                 # fortitude or luck is based on health
@@ -2627,14 +2909,14 @@ class CrownUnlimited(commands.Cog):
                                 t_used_resolve = True
 
                                 embedVar = discord.Embed(title=f"{t_card} STRENGTHENED RESOLVE :zap:",
-                                                         description=f"**{t_card} says**\n{t_resolve_description}",
-                                                         colour=0xe91e63)
+                                                        description=f"**{t_card} says**\n{t_resolve_description}",
+                                                        colour=0xe91e63)
                                 embedVar.add_field(name=f"Transformation: Digivolve", value="On Focus you Resolve.")
                                 await private_channel.send(embed=embedVar)
 
                             elif t_universe == "League Of Legends":
                                 embedVar = discord.Embed(title=f"Turret Shot hits {o_card} for **30** Damage 💥",
-                                                         colour=0xe91e63)
+                                                        colour=0xe91e63)
                                 await private_channel.send(embed=embedVar)
                                 o_health = round(o_health - 30)
 
@@ -2647,13 +2929,13 @@ class CrownUnlimited(commands.Cog):
 
                             elif t_universe == "Attack On Titan":
                                 embedVar = discord.Embed(title=f"Rally! **{t_card}** Increased Max Health ❤️",
-                                                         colour=0xe91e63)
+                                                        colour=0xe91e63)
                                 await private_channel.send(embed=embedVar)
                                 t_max_health = round(t_max_health + 100)
 
                             elif t_universe == "Black Clover":
                                 embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina 🌀",
-                                                         colour=0xe91e63)
+                                                        colour=0xe91e63)
                                 await private_channel.send(embed=embedVar)
                                 t_stamina = 100
                                 tcard_lvl_ap_buff = tcard_lvl_ap_buff + 30
@@ -2661,22 +2943,22 @@ class CrownUnlimited(commands.Cog):
                             elif t_universe == "Death Note":
                                 if turn_total >= 50:
                                     embedVar = discord.Embed(title=f"{o_card.upper()}'s' Scheduled Death 📓 ",
-                                                             description=f"**{t_card} says**\n**Delete**",
-                                                             colour=0xe91e63)
+                                                            description=f"**{t_card} says**\n**Delete**",
+                                                            colour=0xe91e63)
                                     embedVar.add_field(name=f"{o_card} had a heart attack and died", value=f"Death....")
                                     await private_channel.send(embed=embedVar)
                                     o_health = 0
 
                             if o_universe == "One Punch Man":
                                 embedVar = discord.Embed(title=f"Hero Reinforcements! {o_card} Increased Health!  ❤️",
-                                                         colour=0xe91e63)
+                                                        colour=0xe91e63)
                                 await private_channel.send(embed=embedVar)
                                 o_health = round(o_health + 100)
                                 o_max_health = round(o_max_health + 100)
 
                             elif o_universe == "7ds":
                                 embedVar = discord.Embed(title=f"Increase Power Level! {o_card} Increased Stamina 🌀",
-                                                         colour=0xe91e63)
+                                                        colour=0xe91e63)
                                 await private_channel.send(embed=embedVar)
                                 o_stamina = o_stamina + 60
 
@@ -2708,8 +2990,8 @@ class CrownUnlimited(commands.Cog):
                             tpet_msg_on_resolve = ""
                             # UNIVERSE CARD
                             player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina,
-                                                     t_used_resolve, ttitle, t_used_focus, t_attack, t_defense,
-                                                     turn_total, tap1, tap2, tap3, tenh1, tenh_name, tcard_lvl, o_defense)
+                                                    t_used_resolve, ttitle, t_used_focus, t_attack, t_defense,
+                                                    turn_total, tap1, tap2, tap3, tenh1, tenh_name, tcard_lvl, o_defense)
                             await private_channel.send(file=player_2_card)
                             aiMove = 0
 
@@ -2809,27 +3091,27 @@ class CrownUnlimited(commands.Cog):
                             if int(aiMove) == 1:
 
                                 dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense, t_stamina,
-                                                 t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack,
-                                                 t_special_move_description, turn_total, tcard_lvl_ap_buff)
+                                                t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack,
+                                                t_special_move_description, turn_total, tcard_lvl_ap_buff)
                             elif int(aiMove) == 2:
 
                                 dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_stamina,
-                                                 t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack,
-                                                 t_special_move_description, turn_total, tcard_lvl_ap_buff)
+                                                t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack,
+                                                t_special_move_description, turn_total, tcard_lvl_ap_buff)
                             elif int(aiMove) == 3:
 
                                 dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_stamina,
-                                                 t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack,
-                                                 t_special_move_description, turn_total, tcard_lvl_ap_buff)
+                                                t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack,
+                                                t_special_move_description, turn_total, tcard_lvl_ap_buff)
                                 if t_gif != "N/A":
                                     await private_channel.send(f"{t_gif}")
                             elif int(aiMove) == 4:
 
                                 t_enhancer_used = True
                                 dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense,
-                                                 t_stamina, t_enhancer_used, t_health, o_health, o_stamina,
-                                                 t_max_health, o_attack, t_special_move_description, turn_total,
-                                                 tcard_lvl_ap_buff)
+                                                t_stamina, t_enhancer_used, t_health, o_health, o_stamina,
+                                                t_max_health, o_attack, t_special_move_description, turn_total,
+                                                tcard_lvl_ap_buff)
                                 t_enhancer_used = False
                             elif int(aiMove) == 5:
                                 if not t_used_resolve and t_used_focus:
@@ -2853,10 +3135,10 @@ class CrownUnlimited(commands.Cog):
                                         t_pet_used = False
 
                                         embedVar = discord.Embed(title=f"{t_card.upper()} PLUS ULTRAAA",
-                                                                 description=f"**{t_card} says**\n{t_resolve_description}",
-                                                                 colour=0xe91e63)
+                                                                description=f"**{t_card} says**\n{t_resolve_description}",
+                                                                colour=0xe91e63)
                                         embedVar.add_field(name=f"Transformation: Plus Ultra",
-                                                           value="You do not lose a turn after you Resolve.")
+                                                        value="You do not lose a turn after you Resolve.")
                                         await private_channel.send(embed=embedVar)
                                         turn_total = turn_total + 1
                                         turn = 1
@@ -2880,10 +3162,10 @@ class CrownUnlimited(commands.Cog):
                                         health_boost = 100 * t_focus_count
                                         t_health = t_health + health_boost
                                         embedVar = discord.Embed(title=f"{t_card.upper()} Titan Mode",
-                                                                 description=f"**{t_card} says**\n{t_resolve_description}",
-                                                                 colour=0xe91e63)
+                                                                description=f"**{t_card} says**\n{t_resolve_description}",
+                                                                colour=0xe91e63)
                                         embedVar.add_field(name=f"Transformation Complete",
-                                                           value=f"Health increased by **{health_boost}**!")
+                                                        value=f"Health increased by **{health_boost}**!")
                                         await button_ctx.send(embed=embedVar)
 
                                         turn_total = turn_total + 1
@@ -2910,10 +3192,10 @@ class CrownUnlimited(commands.Cog):
                                         t_pet_used = False
 
                                         embedVar = discord.Embed(title=f"{t_card} STRENGTHENED RESOLVE :zap:",
-                                                                 description=f"**{t_card} says**\n{t_resolve_description}",
-                                                                 colour=0xe91e63)
+                                                                description=f"**{t_card} says**\n{t_resolve_description}",
+                                                                colour=0xe91e63)
                                         embedVar.add_field(name=f"Transformation: Bankai",
-                                                           value="Gain double Attack on Resolve.")
+                                                        value="Gain double Attack on Resolve.")
                                         await private_channel.send(embed=embedVar)
                                         turn_total = turn_total + 1
                                         turn = 0
@@ -2936,10 +3218,10 @@ class CrownUnlimited(commands.Cog):
                                         t_pet_used = False
 
                                         embedVar = discord.Embed(title=f"{t_card} STRENGTHENED RESOLVE :zap:",
-                                                                 description=f"**{t_card} says**\n{t_resolve_description}",
-                                                                 colour=0xe91e63)
+                                                                description=f"**{t_card} says**\n{t_resolve_description}",
+                                                                colour=0xe91e63)
                                         embedVar.add_field(name=f"Transformation: Ascension",
-                                                           value="On Resolve Refill Health.")
+                                                        value="On Resolve Refill Health.")
                                         await private_channel.send(embed=embedVar)
                                         turn_total = turn_total + 1
                                         turn = 0
@@ -2961,16 +3243,16 @@ class CrownUnlimited(commands.Cog):
                                         t_used_resolve = True
 
                                         dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense,
-                                                         t_stamina, t_enhancer_used, t_health, o_health, o_stamina,
-                                                         t_max_health, o_attack, t_special_move_description, turn_total,
-                                                         tcard_lvl_ap_buff)
+                                                        t_stamina, t_enhancer_used, t_health, o_health, o_stamina,
+                                                        t_max_health, o_attack, t_special_move_description, turn_total,
+                                                        tcard_lvl_ap_buff)
                                         t_pet_used = False
                                         o_health = o_health - int(dmg['DMG'])
                                         embedVar = discord.Embed(
                                             title=f"{t_card} STRENGTHENED RESOLVE :zap:\n\n{dmg['MESSAGE']}",
                                             description=f"**{t_card} says**\n{t_resolve_description}", colour=0xe91e63)
                                         embedVar.add_field(name=f"Transformation: Command Seal",
-                                                           value="On Resolve, Strike with Ultimate, then Focus.")
+                                                        value="On Resolve, Strike with Ultimate, then Focus.")
                                         await private_channel.send(embed=embedVar)
                                         # t_stamina = 0
                                         turn_total = turn_total + 1
@@ -2994,10 +3276,10 @@ class CrownUnlimited(commands.Cog):
                                         t_pet_used = False
 
                                         embedVar = discord.Embed(title=f"{t_card} STRENGTHENED RESOLVE :zap:",
-                                                                 description=f"**{t_card} says**\n{t_resolve_description}",
-                                                                 colour=0xe91e63)
+                                                                description=f"**{t_card} says**\n{t_resolve_description}",
+                                                                colour=0xe91e63)
                                         embedVar.add_field(name=f"Transformation: Evolution",
-                                                           value="When you Resolve you do not lose Defense.")
+                                                        value="When you Resolve you do not lose Defense.")
                                         await private_channel.send(embed=embedVar)
                                         turn_total = turn_total + 1
                                         turn = 0
@@ -3022,16 +3304,16 @@ class CrownUnlimited(commands.Cog):
                                         if t_universe == "League Of Legends":
                                             o_health = o_health - (30 * (o_focus_count + t_focus_count))
                                             embedVar = discord.Embed(title=f"{t_card.upper()} PENTA KILL!",
-                                                                     description=f"**{t_card} says**\n{t_resolve_description}",
-                                                                     colour=0xe91e63)
+                                                                    description=f"**{t_card} says**\n{t_resolve_description}",
+                                                                    colour=0xe91e63)
                                             embedVar.add_field(name=f"Nexus Destroyed",
-                                                               value=f"**{t_card}** dealt **{(30 * (o_focus_count + t_focus_count))}** damage.")
+                                                            value=f"**{t_card}** dealt **{(30 * (o_focus_count + t_focus_count))}** damage.")
                                         else:
                                             embedVar = discord.Embed(title=f"{t_card} STRENGTHENED RESOLVE :zap:",
-                                                                     description=f"**{t_card} says**\n{t_resolve_description}",
-                                                                     colour=0xe91e63)
+                                                                    description=f"**{t_card} says**\n{t_resolve_description}",
+                                                                    colour=0xe91e63)
                                             embedVar.add_field(name=f"Transformation",
-                                                               value="All stats & stamina greatly increased")
+                                                            value="All stats & stamina greatly increased")
                                         await private_channel.send(embed=embedVar)
                                         turn_total = turn_total + 1
                                         turn = 0
@@ -3044,9 +3326,9 @@ class CrownUnlimited(commands.Cog):
                                 if t_used_resolve and t_used_focus and not t_pet_used:
                                     t_enhancer_used = True
                                     dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, o_defense,
-                                                     t_stamina, t_enhancer_used, t_health, o_health, o_stamina,
-                                                     t_max_health, o_attack, t_special_move_description, turn_total,
-                                                     tcard_lvl_ap_buff)
+                                                    t_stamina, t_enhancer_used, t_health, o_health, o_stamina,
+                                                    t_max_health, o_attack, t_special_move_description, turn_total,
+                                                    tcard_lvl_ap_buff)
                                     t_enhancer_used = False
                                     t_pet_used = True
                                     tpet_dmg = dmg['DMG']
@@ -3133,7 +3415,7 @@ class CrownUnlimited(commands.Cog):
                                         t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
                                         embedVar = discord.Embed(title=f"{t_card.upper()} Summoned 🧬 {tpet_name}",
-                                                                 colour=0xe91e63)
+                                                                colour=0xe91e63)
                                         embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!",
                                                             value=f"{dmg['MESSAGE']}")
                                         
@@ -3375,8 +3657,8 @@ class CrownUnlimited(commands.Cog):
                     response = db.updateUserNoFilter({'DISNAME': str(o_user['DISNAME'])}, {'$set': {'RIFT': 0}})
 
                 embedVar = discord.Embed(title=f":zap: **{t_card}** wins the match!",
-                                         description=f"The game lasted {turn_total} rounds.\n**{t_card} says**\n`{t_win_description}`",
-                                         colour=0x1abc9c)
+                                        description=f"The game lasted {turn_total} rounds.\n**{t_card} says**\n`{t_win_description}`",
+                                        colour=0x1abc9c)
                 embedVar.set_author(name=f"{o_card} lost!")
                 if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
                     embedVar.set_footer(text=f"Battle Time: {gameClock[2]} Seconds.")
@@ -3426,7 +3708,7 @@ class CrownUnlimited(commands.Cog):
 
                 if currentopponent != (total_legends):
                     embedVar = discord.Embed(title=f"VICTORY\n**{o_card} says**\n{o_win_description}",
-                                             description=f"The game lasted {turn_total} rounds.", colour=0xe91e63)
+                                            description=f"The game lasted {turn_total} rounds.", colour=0xe91e63)
                     embedVar.set_author(name=f"{t_card} lost!")
                     await private_channel.send(embed=embedVar)
 
@@ -3521,7 +3803,7 @@ class CrownUnlimited(commands.Cog):
                 # universe = "Naruto"
                 # selected_universe = {"TITLE": "Naruto"}
                 await battle_commands(self, ctx, mode, None, None, None, oguild, None, None, private_channel, sowner,
-                                      oteam, None, opponent, tteam, tguild, None, None, None)
+                                    oteam, None, opponent, tteam, tguild, None, None, None, None, None, None)
         except Exception as ex:
             trace = []
             tb = ex.__traceback__
@@ -4218,7 +4500,11 @@ class CrownUnlimited(commands.Cog):
                     t_health = t_title_passive_value
                     o_health = t_title_passive_value
 
+<<<<<<< HEAD
+        # Arm Passive Player 2
+=======
             # Arm Passive Player 2
+>>>>>>> 16e9c561a8733d15d9e235ceff875424b8e99f14
             tarm_passive_type = list(tarm_passive.keys())[0]
             tarm_passive_value = list(tarm_passive.values())[0]
             tarm_shield_active = False
@@ -4300,13 +4586,13 @@ class CrownUnlimited(commands.Cog):
                         o_defense = o_defense / 2
                     if o_universe == "Death Note" and turn_total == 0:
                         embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death 📓",
-                                                 description=f"**{o_card} says**\nYou will die in 50  turns...",
-                                                 colour=0xe91e63)
+                                                description=f"**{o_card} says**\nYou will die in 50  turns...",
+                                                colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                     if t_universe == 'Death Note' and turn_total == 0:
                         embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death 📓",
-                                                 description=f"**{t_card} says**\nYou will die in 50  turns...",
-                                                 colour=0xe91e63)
+                                                description=f"**{t_card} says**\nYou will die in 50  turns...",
+                                                colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                     if o_attack <= 25:
                         o_attack = 25
@@ -4345,8 +4631,8 @@ class CrownUnlimited(commands.Cog):
                                 o_defense = o_defense * 2
                                 o_attack = o_attack * 2
                                 embedVar = discord.Embed(title=f"{o_card.upper()}'s Devilization",
-                                                         description=f"**{o_card}** Doubles ATK and DEF",
-                                                         colour=0xe91e63)
+                                                        description=f"**{o_card}** Doubles ATK and DEF",
+                                                        colour=0xe91e63)
                                 await private_channel.send(embed=embedVar)
 
                     elif o_health <= (o_max_health * .50):
@@ -4358,8 +4644,8 @@ class CrownUnlimited(commands.Cog):
                                 o_defense = o_defense * 2
                                 o_attack = o_attack * 2
                                 embedVar = discord.Embed(title=f"{o_card.upper()}'s Devilization",
-                                                         description=f"**{o_card}** Doubles ATK and DEF",
-                                                         colour=0xe91e63)
+                                                        description=f"**{o_card}** Doubles ATK and DEF",
+                                                        colour=0xe91e63)
                                 await private_channel.send(embed=embedVar)
                     elif o_health <= (o_max_health * .75):
                         embed_color_o = 0xf1c40f
@@ -4437,8 +4723,8 @@ class CrownUnlimited(commands.Cog):
                         # Resolve Check and Calculation
                         if not o_used_resolve and o_used_focus and o_universe == "Digimon":  # Digimon Universal Trait
                             embedVar = discord.Embed(title=f"{o_card} STRENGTHENED RESOLVE :zap:",
-                                                     description=f"**{o_card} says**\n{o_resolve_description}",
-                                                     colour=0xe91e63)
+                                                    description=f"**{o_card} says**\n{o_resolve_description}",
+                                                    colour=0xe91e63)
                             embedVar.add_field(name=f"Transformation: Digivolve", value="On Focus you Resolve.")
                             await ctx.send(embed=embedVar)
                             # fortitude or luck is based on health
@@ -4461,7 +4747,7 @@ class CrownUnlimited(commands.Cog):
 
                         elif o_universe == "League Of Legends":
                             embedVar = discord.Embed(title=f"Turret Shot hits {t_card} for **30** Damage 💥",
-                                                     colour=0xe91e63)
+                                                    colour=0xe91e63)
                             await ctx.send(embed=embedVar)
                             t_health = round(t_health - 30)
 
@@ -4474,7 +4760,7 @@ class CrownUnlimited(commands.Cog):
 
                         elif o_universe == "Attack On Titan":
                             embedVar = discord.Embed(title=f"Rally! **{o_card}** Increased Max Health ❤️",
-                                                     colour=0xe91e63)
+                                                    colour=0xe91e63)
                             await ctx.send(embed=embedVar)
                             o_max_health = round(o_max_health + 100)
 
@@ -4486,7 +4772,7 @@ class CrownUnlimited(commands.Cog):
                         elif o_universe == "Death Note":
                             if turn_total >= 50:
                                 embedVar = discord.Embed(title=f"{t_card.upper()}'s' Scheduled Death 📓",
-                                                         description=f"**{o_card} says**\n**Delete**", colour=0xe91e63)
+                                                        description=f"**{o_card} says**\n**Delete**", colour=0xe91e63)
                                 embedVar.add_field(name=f"{t_card} had a heart attack and died", value=f"Death....")
                                 await private_channel.send(embed=embedVar)
                                 t_health = 0
@@ -4501,7 +4787,7 @@ class CrownUnlimited(commands.Cog):
 
                         elif t_universe == "7ds":
                             embedVar = discord.Embed(title=f"Increase Power Level! {t_card} Increased Stamina 🌀",
-                                                     colour=0xe91e63)
+                                                    colour=0xe91e63)
                             await ctx.send(embed=embedVar)
                             t_stamina = t_stamina + 60
 
@@ -4535,8 +4821,8 @@ class CrownUnlimited(commands.Cog):
 
                         # UNIVERSE CARD
                         player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve,
-                                                 otitle, o_used_focus, o_attack, o_defense, turn_total, ap1, ap2, ap3,
-                                                 enh1, enh_name, ocard_lvl, t_defense)
+                                                otitle, o_used_focus, o_attack, o_defense, turn_total, ap1, ap2, ap3,
+                                                enh1, enh_name, ocard_lvl, t_defense)
                         # await private_channel.send(file=player_1_card)
 
                         if o_used_focus and o_used_resolve:
@@ -4643,7 +4929,7 @@ class CrownUnlimited(commands.Cog):
                             text=f"{t_card}: ❤️{t_health} 🌀{t_stamina} 🗡️{t_attack}/🛡️{t_defense} {tarm_message}",
                             icon_url="https://cdn.discordapp.com/emojis/789290881654980659.gif?v=1")
                         await private_channel.send(embed=embedVar, components=[battle_action_row, util_action_row],
-                                                   file=player_1_card)
+                                                file=player_1_card)
 
                         # Make sure user is responding with move
                         def check(button_ctx):
@@ -4651,11 +4937,11 @@ class CrownUnlimited(commands.Cog):
 
                         try:
                             button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot,
-                                                                                                      components=[
-                                                                                                          battle_action_row,
-                                                                                                          util_action_row],
-                                                                                                      timeout=45,
-                                                                                                      check=check)
+                                                                                                    components=[
+                                                                                                        battle_action_row,
+                                                                                                        util_action_row],
+                                                                                                    timeout=45,
+                                                                                                    check=check)
 
                             # calculate data based on selected move
                             if button_ctx.custom_id == "q" or button_ctx.custom_id == "Q":
@@ -4673,8 +4959,8 @@ class CrownUnlimited(commands.Cog):
                                 #         text=f"Basic Attacks are great when you are low on stamina, but don't be afraid to enter focus state and REPLENISH!")
                                 #     await button_ctx.send(embed=embedVar)
                                 dmg = damage_cal(o_universe, o_card, o_1, o_attack, o_defense, t_defense, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,
-                                                 o_max_health, t_attack, o_special_move_description, turn_total,
-                                                 ocard_lvl_ap_buff)
+                                                o_max_health, t_attack, o_special_move_description, turn_total,
+                                                ocard_lvl_ap_buff)
 
                             elif button_ctx.custom_id == "2":
                                 # if botActive:
@@ -4687,8 +4973,8 @@ class CrownUnlimited(commands.Cog):
                                 #         text=f"Special Attacks are great when you need to control the focus game! Use Them to Maximize your focus and build stronger combos!")
                                 #     await button_ctx.send(embed=embedVar)
                                 dmg = damage_cal(o_universe, o_card, o_2, o_attack, o_defense, t_defense, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,
-                                                 o_max_health, t_attack, o_special_move_description, turn_total,
-                                                 ocard_lvl_ap_buff)
+                                                o_max_health, t_attack, o_special_move_description, turn_total,
+                                                ocard_lvl_ap_buff)
 
                             elif button_ctx.custom_id == "3":
                                 # if botActive:
@@ -4701,8 +4987,8 @@ class CrownUnlimited(commands.Cog):
                                 #         text=f"Ultimate moves will consume most of your stamina! Use Them Wisely!")
                                 #     await button_ctx.send(embed=embedVar)
                                 dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,
-                                                 o_max_health, t_attack, o_special_move_description, turn_total,
-                                                 ocard_lvl_ap_buff)
+                                                o_max_health, t_attack, o_special_move_description, turn_total,
+                                                ocard_lvl_ap_buff)
 
                                 if o_gif != "N/A":
                                     await private_channel.send(f"{o_gif}")
@@ -4719,8 +5005,8 @@ class CrownUnlimited(commands.Cog):
                                 #     await button_ctx.send(embed=embedVar)
                                 o_enhancer_used = True
                                 dmg = damage_cal(o_universe, o_card, o_enhancer, o_attack, o_defense, t_defense, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,
-                                                 o_max_health, t_attack, o_special_move_description, turn_total,
-                                                 ocard_lvl_ap_buff)
+                                                o_max_health, t_attack, o_special_move_description, turn_total,
+                                                ocard_lvl_ap_buff)
 
                                 o_enhancer_used = False
                             elif button_ctx.custom_id == "5":
@@ -4754,10 +5040,10 @@ class CrownUnlimited(commands.Cog):
                                         o_used_resolve = True
                                         o_pet_used = False
                                         embedVar = discord.Embed(title=f"{o_card.upper()} PLUS ULTRAAA",
-                                                                 description=f"**{o_card} says**\n{o_resolve_description}",
-                                                                 colour=0xe91e63)
+                                                                description=f"**{o_card} says**\n{o_resolve_description}",
+                                                                colour=0xe91e63)
                                         embedVar.add_field(name=f"Transformation: Plus Ultra",
-                                                           value="You do not lose a turn after you Resolve.")
+                                                        value="You do not lose a turn after you Resolve.")
                                         await button_ctx.send(embed=embedVar)
 
                                         turn_total = turn_total + 1
@@ -4782,10 +5068,10 @@ class CrownUnlimited(commands.Cog):
                                         health_boost = 100 * o_focus_count
                                         o_health = o_health + health_boost
                                         embedVar = discord.Embed(title=f"{o_card.upper()} Titan Mode",
-                                                                 description=f"**{o_card} says**\n{o_resolve_description}",
-                                                                 colour=0xe91e63)
+                                                                description=f"**{o_card} says**\n{o_resolve_description}",
+                                                                colour=0xe91e63)
                                         embedVar.add_field(name=f"Transformation Complete",
-                                                           value=f"Health increased by **{health_boost}**!")
+                                                        value=f"Health increased by **{health_boost}**!")
 
                                         turn_total = turn_total + 1
                                         turn = 1
@@ -4809,10 +5095,10 @@ class CrownUnlimited(commands.Cog):
                                         o_used_resolve = True
                                         o_pet_used = False
                                         embedVar = discord.Embed(title=f"{o_card} STRENGTHENED RESOLVE :zap:",
-                                                                 description=f"**{o_card} says**\n{o_resolve_description}",
-                                                                 colour=0xe91e63)
+                                                                description=f"**{o_card} says**\n{o_resolve_description}",
+                                                                colour=0xe91e63)
                                         embedVar.add_field(name=f"Transformation: Bankai",
-                                                           value="Gain double Attack on Resolve.")
+                                                        value="Gain double Attack on Resolve.")
                                         await button_ctx.send(embed=embedVar)
                                         turn_total = turn_total + 1
                                         turn = 1
@@ -4834,10 +5120,10 @@ class CrownUnlimited(commands.Cog):
                                         o_used_resolve = True
                                         o_pet_used = False
                                         embedVar = discord.Embed(title=f"{o_card} STRENGTHENED RESOLVE :zap:",
-                                                                 description=f"**{o_card} says**\n{o_resolve_description}",
-                                                                 colour=0xe91e63)
+                                                                description=f"**{o_card} says**\n{o_resolve_description}",
+                                                                colour=0xe91e63)
                                         embedVar.add_field(name=f"Transformation: Ascension",
-                                                           value="On Resolve Refill Health.")
+                                                        value="On Resolve Refill Health.")
                                         await button_ctx.send(embed=embedVar)
                                         turn_total = turn_total + 1
                                         turn = 1
@@ -4858,14 +5144,14 @@ class CrownUnlimited(commands.Cog):
                                         o_defense = round(o_defense - o_resolve_defense)
 
                                         dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_stamina, o_enhancer_used, o_health, t_health,
-                                                         t_stamina, o_max_health, t_attack, o_special_move_description,
-                                                         turn_total, ocard_lvl_ap_buff)
+                                                        t_stamina, o_max_health, t_attack, o_special_move_description,
+                                                        turn_total, ocard_lvl_ap_buff)
                                         t_health = t_health - dmg['DMG']
                                         embedVar = discord.Embed(
                                             title=f"{o_card} STRENGTHENED RESOLVE :zap:\n\n{dmg['MESSAGE']}",
                                             description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
                                         embedVar.add_field(name=f"Transformation: Command Seal",
-                                                           value="On Resolve, Strike with Ultimate, then Focus.")
+                                                        value="On Resolve, Strike with Ultimate, then Focus.")
                                         await button_ctx.send(embed=embedVar)
                                         # o_stamina = 0
                                         o_used_resolve = True
@@ -4890,10 +5176,10 @@ class CrownUnlimited(commands.Cog):
                                         o_used_resolve = True
                                         o_pet_used = False
                                         embedVar = discord.Embed(title=f"{o_card} STRENGTHENED RESOLVE :zap:",
-                                                                 description=f"**{o_card} says**\n{o_resolve_description}",
-                                                                 colour=0xe91e63)
+                                                                description=f"**{o_card} says**\n{o_resolve_description}",
+                                                                colour=0xe91e63)
                                         embedVar.add_field(name=f"Transformation: Evolution",
-                                                           value="When you Resolve you do not lose Defense.")
+                                                        value="When you Resolve you do not lose Defense.")
                                         await button_ctx.send(embed=embedVar)
                                         turn_total = turn_total + 1
                                         turn = 1
@@ -4917,24 +5203,24 @@ class CrownUnlimited(commands.Cog):
                                         if o_universe == "League Of Legends":
                                             t_health = t_health - (30 * (o_focus_count + t_focus_count))
                                             embedVar = discord.Embed(title=f"{o_card.upper()} PENTA KILL!",
-                                                                     description=f"**{o_card} says**\n{o_resolve_description}",
-                                                                     colour=0xe91e63)
+                                                                    description=f"**{o_card} says**\n{o_resolve_description}",
+                                                                    colour=0xe91e63)
                                             embedVar.add_field(name=f"Nexus Destroyed",
-                                                               value=f"**{o_card}** dealt **{(30 * (o_focus_count + t_focus_count))}** damage.")
+                                                            value=f"**{o_card}** dealt **{(30 * (o_focus_count + t_focus_count))}** damage.")
                                         else:
                                             embedVar = discord.Embed(title=f"{o_card} STRENGTHENED RESOLVE :zap:",
-                                                                     description=f"**{o_card} says**\n{o_resolve_description}",
-                                                                     colour=0xe91e63)
+                                                                    description=f"**{o_card} says**\n{o_resolve_description}",
+                                                                    colour=0xe91e63)
                                             embedVar.add_field(name=f"Transformation",
-                                                               value="All stats & stamina greatly increased")
+                                                            value="All stats & stamina greatly increased")
                                         await button_ctx.send(embed=embedVar)
                                         turn_total = turn_total + 1
                                         turn = 1
                                 else:
                                     emessage = m.CANNOT_USE_RESOLVE
                                     embedVar = discord.Embed(title=emessage,
-                                                             description=f"Entering `Resolved State` sacrifices a turn to power up even greater and regain `Stamina`!",
-                                                             colour=0xe91e63)
+                                                            description=f"Entering `Resolved State` sacrifices a turn to power up even greater and regain `Stamina`!",
+                                                            colour=0xe91e63)
                                     await button_ctx.send(embed=embedVar)
                                     turn = 0
                             # elif button_ctx.custom_id == "6":
@@ -5268,8 +5554,8 @@ class CrownUnlimited(commands.Cog):
                                 else:
                                     emessage = m.NOT_ENOUGH_STAMINA
                                     embedVar = discord.Embed(title=emessage,
-                                                             description=f"Use Enhancers to Increase **STAMINA** or attack to enter **FOCUS STATE**!",
-                                                             colour=0xe91e63)
+                                                            description=f"Use Enhancers to Increase **STAMINA** or attack to enter **FOCUS STATE**!",
+                                                            colour=0xe91e63)
                                     await button_ctx.send(embed=embedVar)
                                     turn = 0
                         except asyncio.TimeoutError:
@@ -5299,7 +5585,7 @@ class CrownUnlimited(commands.Cog):
                                 t_defense = t_defense * 2
                                 t_attack = t_attack * 2
                                 embedVar = discord.Embed(title=f"{t_card.upper()}'s Devilization",
-                                                         description=f"**{t_card}** Doubles Stats", colour=0xe91e63)
+                                                        description=f"**{t_card}** Doubles Stats", colour=0xe91e63)
                                 await private_channel.send(embed=embedVar)
 
                     elif t_health <= (t_max_health * .50):
@@ -5311,7 +5597,7 @@ class CrownUnlimited(commands.Cog):
                                 t_defense = t_defense * 2
                                 t_attack = t_attack * 2
                                 embedVar = discord.Embed(title=f"{t_card.upper()}'s Devilization",
-                                                         description=f"**{t_card}** Doubles Stats", colour=0xe91e63)
+                                                        description=f"**{t_card}** Doubles Stats", colour=0xe91e63)
                                 await private_channel.send(embed=embedVar)
                     elif t_health <= (t_max_health * .75):
                         embed_color_t = 0xf1c40f
@@ -5357,10 +5643,10 @@ class CrownUnlimited(commands.Cog):
                         t_used_focus = True
 
                         embedVar = discord.Embed(title=f"{t_card.upper()} FOCUSED",
-                                                 description=f"**{t_card} says**\n{t_focus_description}",
-                                                 colour=0xe91e63)
+                                                description=f"**{t_card} says**\n{t_focus_description}",
+                                                colour=0xe91e63)
                         embedVar.add_field(name=f"{t_card} focused and {healmessage}",
-                                           value="All stats & stamina increased")
+                                        value="All stats & stamina increased")
                         await private_channel.send(embed=embedVar)
                         if not t_used_resolve and t_used_focus and t_universe == "Digimon":  # Digimon Universal Trait
                             # fortitude or luck is based on health
@@ -5380,14 +5666,14 @@ class CrownUnlimited(commands.Cog):
                             t_used_resolve = True
 
                             embedVar = discord.Embed(title=f"{t_card} STRENGTHENED RESOLVE :zap:",
-                                                     description=f"**{t_card} says**\n{t_resolve_description}",
-                                                     colour=0xe91e63)
+                                                    description=f"**{t_card} says**\n{t_resolve_description}",
+                                                    colour=0xe91e63)
                             embedVar.add_field(name=f"Transformation: Digivolve", value="On Focus you Resolve.")
                             await private_channel.send(embed=embedVar)
 
                         elif t_universe == "League Of Legends":
                             embedVar = discord.Embed(title=f"Turret Shot hits {o_card} for **30** Damage 💥",
-                                                     colour=0xe91e63)
+                                                    colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             o_health = round(o_health - 30)
 
@@ -5400,7 +5686,7 @@ class CrownUnlimited(commands.Cog):
 
                         elif t_universe == "Attack On Titan":
                             embedVar = discord.Embed(title=f"Rally! **{t_card}** Increased Max Health ❤️",
-                                                     colour=0xe91e63)
+                                                    colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_max_health = round(t_max_health + 100)
 
@@ -5412,21 +5698,21 @@ class CrownUnlimited(commands.Cog):
                         elif t_universe == "Death Note":
                             if turn_total >= 50:
                                 embedVar = discord.Embed(title=f"{o_card.upper()}'s' Scheduled Death 📓",
-                                                         description=f"**{t_card} says**\n**Delete**", colour=0xe91e63)
+                                                        description=f"**{t_card} says**\n**Delete**", colour=0xe91e63)
                                 embedVar.add_field(name=f"{o_card} had a heart attack and died", value=f"Death....")
                                 await private_channel.send(embed=embedVar)
                                 o_health = 0
 
                         if o_universe == "One Punch Man":
                             embedVar = discord.Embed(title=f"Hero Reinforcements! {o_card} Increased Health!  ❤️",
-                                                     colour=0xe91e63)
+                                                    colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             o_health = round(o_health + 100)
                             o_max_health = round(o_max_health + 100)
 
                         elif o_universe == "7ds":
                             embedVar = discord.Embed(title=f"Increase Power Level! {o_card} Increased Stamina 🌀",
-                                                     colour=0xe91e63)
+                                                    colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             o_stamina = o_stamina + 60
 
@@ -5458,8 +5744,8 @@ class CrownUnlimited(commands.Cog):
                         tpet_enh_name = list(tpet_move.values())[2]
                         tpet_msg_on_resolve = ""
                         player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve,
-                                                 ttitle, t_used_focus, t_attack, t_defense, turn_total, tap1, tap2,
-                                                 tap3, tenh1, tenh_name, tcard_lvl, o_defense)
+                                                ttitle, t_used_focus, t_attack, t_defense, turn_total, tap1, tap2,
+                                                tap3, tenh1, tenh_name, tcard_lvl, o_defense)
                         await private_channel.send(file=player_2_card)
                         aiMove = 0
 
@@ -5549,23 +5835,23 @@ class CrownUnlimited(commands.Cog):
                             t_health = 0
                         if int(aiMove) == 1:
                             dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense,
-                                             t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health,
-                                             o_attack, t_special_move_description, turn_total, tcard_lvl_ap_buff)
+                                            t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health,
+                                            o_attack, t_special_move_description, turn_total, tcard_lvl_ap_buff)
                         elif int(aiMove) == 2:
                             dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, 
-                                             t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health,
-                                             o_attack, t_special_move_description, turn_total, tcard_lvl_ap_buff)
+                                            t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health,
+                                            o_attack, t_special_move_description, turn_total, tcard_lvl_ap_buff)
                         elif int(aiMove) == 3:
                             dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense,
-                                             t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health,
-                                             o_attack, t_special_move_description, turn_total, tcard_lvl_ap_buff)
+                                            t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health,
+                                            o_attack, t_special_move_description, turn_total, tcard_lvl_ap_buff)
                             if t_gif != "N/A":
                                 await private_channel.send(f"{t_gif}")
                         elif int(aiMove) == 4:
                             t_enhancer_used = True
                             dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,
-                                             t_max_health, o_attack, t_special_move_description, turn_total,
-                                             tcard_lvl_ap_buff)
+                                            t_max_health, o_attack, t_special_move_description, turn_total,
+                                            tcard_lvl_ap_buff)
                             t_enhancer_used = False
                         elif int(aiMove) == 5:
                             if not t_used_resolve and t_used_focus:
@@ -5588,10 +5874,10 @@ class CrownUnlimited(commands.Cog):
                                     t_used_resolve = True
 
                                     embedVar = discord.Embed(title=f"{t_card.upper()} PLUS ULTRAAA",
-                                                             description=f"**{t_card} says**\n{t_resolve_description}",
-                                                             colour=0xe91e63)
+                                                            description=f"**{t_card} says**\n{t_resolve_description}",
+                                                            colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation: Plus Ultra",
-                                                       value="You do not lose a turn after you Resolve.")
+                                                    value="You do not lose a turn after you Resolve.")
                                     await private_channel.send(embed=embedVar)
                                     turn_total = turn_total + 1
                                     turn = 1
@@ -5615,10 +5901,10 @@ class CrownUnlimited(commands.Cog):
                                     health_boost = 100 * t_focus_count
                                     t_health = t_health + health_boost
                                     embedVar = discord.Embed(title=f"{t_card.upper()} Titan Mode",
-                                                             description=f"**{t_card} says**\n{t_resolve_description}",
-                                                             colour=0xe91e63)
+                                                            description=f"**{t_card} says**\n{t_resolve_description}",
+                                                            colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation Complete",
-                                                       value=f"Health increased by **{health_boost}**!")
+                                                    value=f"Health increased by **{health_boost}**!")
 
                                     turn_total = turn_total + 1
                                     turn = 0
@@ -5643,10 +5929,10 @@ class CrownUnlimited(commands.Cog):
                                     t_used_resolve = True
 
                                     embedVar = discord.Embed(title=f"{t_card} STRENGTHENED RESOLVE :zap:",
-                                                             description=f"**{t_card} says**\n{t_resolve_description}",
-                                                             colour=0xe91e63)
+                                                            description=f"**{t_card} says**\n{t_resolve_description}",
+                                                            colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation: Bankai",
-                                                       value="Gain double Attack on Resolve.")
+                                                    value="Gain double Attack on Resolve.")
                                     await private_channel.send(embed=embedVar)
                                     turn_total = turn_total + 1
                                     turn = 0
@@ -5668,10 +5954,10 @@ class CrownUnlimited(commands.Cog):
                                     t_used_resolve = True
 
                                     embedVar = discord.Embed(title=f"{t_card} STRENGTHENED RESOLVE :zap:",
-                                                             description=f"**{t_card} says**\n{t_resolve_description}",
-                                                             colour=0xe91e63)
+                                                            description=f"**{t_card} says**\n{t_resolve_description}",
+                                                            colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation: Ascension",
-                                                       value="On Resolve Refill Health.")
+                                                    value="On Resolve Refill Health.")
                                     await private_channel.send(embed=embedVar)
                                     turn_total = turn_total + 1
                                     turn = 0
@@ -5693,15 +5979,15 @@ class CrownUnlimited(commands.Cog):
                                     t_used_resolve = True
 
                                     dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_stamina, t_enhancer_used, t_health, o_health,
-                                                     o_stamina, t_max_health, o_attack, t_special_move_description,
-                                                     turn_total, tcard_lvl_ap_buff)
+                                                    o_stamina, t_max_health, o_attack, t_special_move_description,
+                                                    turn_total, tcard_lvl_ap_buff)
                                     t_pet_used = False
                                     o_health = o_health - int(dmg['DMG'])
                                     embedVar = discord.Embed(
                                         title=f"{t_card} STRENGTHENED RESOLVE :zap:\n\n{dmg['MESSAGE']}",
                                         description=f"**{t_card} says**\n{t_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation: Command Seal",
-                                                       value="On Resolve, Strike with Ultimate, then Focus.")
+                                                    value="On Resolve, Strike with Ultimate, then Focus.")
                                     await private_channel.send(embed=embedVar)
                                     # t_stamina = 0
                                     turn_total = turn_total + 1
@@ -5724,10 +6010,10 @@ class CrownUnlimited(commands.Cog):
                                     t_used_resolve = True
 
                                     embedVar = discord.Embed(title=f"{t_card} STRENGTHENED RESOLVE :zap:",
-                                                             description=f"**{t_card} says**\n{t_resolve_description}",
-                                                             colour=0xe91e63)
+                                                            description=f"**{t_card} says**\n{t_resolve_description}",
+                                                            colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation: Evolution",
-                                                       value="When you Resolve you do not lose Defense.")
+                                                    value="When you Resolve you do not lose Defense.")
                                     await private_channel.send(embed=embedVar)
                                     turn_total = turn_total + 1
                                     turn = 0
@@ -5751,16 +6037,16 @@ class CrownUnlimited(commands.Cog):
                                     if t_universe == "League Of Legends":
                                         o_health = o_health - (30 * (o_focus_count + t_focus_count))
                                         embedVar = discord.Embed(title=f"{t_card.upper()} PENTA KILL!",
-                                                                 description=f"**{t_card} says**\n{t_resolve_description}",
-                                                                 colour=0xe91e63)
+                                                                description=f"**{t_card} says**\n{t_resolve_description}",
+                                                                colour=0xe91e63)
                                         embedVar.add_field(name=f"Nexus Destroyed",
-                                                           value=f"**{t_card}** dealt **{(30 * (o_focus_count + t_focus_count))}** damage.")
+                                                        value=f"**{t_card}** dealt **{(30 * (o_focus_count + t_focus_count))}** damage.")
                                     else:
                                         embedVar = discord.Embed(title=f"{t_card} STRENGTHENED RESOLVE :zap:",
-                                                                 description=f"**{t_card} says**\n{t_resolve_description}",
-                                                                 colour=0xe91e63)
+                                                                description=f"**{t_card} says**\n{t_resolve_description}",
+                                                                colour=0xe91e63)
                                         embedVar.add_field(name=f"Transformation",
-                                                           value="All stats & stamina greatly increased")
+                                                        value="All stats & stamina greatly increased")
                                     await private_channel.send(embed=embedVar)
                                     turn_total = turn_total + 1
                                     turn = 0
@@ -6004,8 +6290,8 @@ class CrownUnlimited(commands.Cog):
                         await teamloss(oteam)
                         await curseguild(30, oguild)
                 embedVar = discord.Embed(title=f"🛡️ **{t_card}** defended the {guild_info['GNAME']}",
-                                         description=f"Match concluded in {turn_total} turns\n**{t_card} says**\n`{t_win_description}`",
-                                         colour=0x1abc9c)
+                                        description=f"Match concluded in {turn_total} turns\n**{t_card} says**\n`{t_win_description}`",
+                                        colour=0x1abc9c)
                 embedVar.set_author(name=f"{o_card} says:\n{o_lose_description}")
                 if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
                     embedVar.set_footer(text=f"Battle Time: {gameClock[2]} Seconds.")
@@ -6015,7 +6301,7 @@ class CrownUnlimited(commands.Cog):
                     embedVar.set_footer(
                         text=f"Battle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                 embedVar.add_field(name="Focus Count",
-                                   value=f"**{o_card}**: {o_focus_count}\n**{t_card}**: {t_focus_count}")
+                                value=f"**{o_card}**: {o_focus_count}\n**{t_card}**: {t_focus_count}")
                 if o_focus_count >= t_focus_count:
                     embedVar.add_field(name="Most Focused", value=f"**{o_card}**")
                 else:
@@ -6082,7 +6368,7 @@ class CrownUnlimited(commands.Cog):
                     embedVar.set_footer(
                         text=f"Battle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                 embedVar.add_field(name="Focus Count",
-                                   value=f"**{o_card}**: {o_focus_count}\n**{t_card}**: {t_focus_count}")
+                                value=f"**{o_card}**: {o_focus_count}\n**{t_card}**: {t_focus_count}")
                 if o_focus_count >= t_focus_count:
                     embedVar.add_field(name="Most Focused", value=f"**{o_card}**")
                 else:
@@ -6376,7 +6662,7 @@ class CrownUnlimited(commands.Cog):
         # If it's not an array greater than 10, show paginationless embed
         if len(destiny_details) < 10:
             embedVar = discord.Embed(title=f"{universe} Destiny List", description="\n".join(destiny_details),
-                                     colour=0x7289da)
+                                    colour=0x7289da)
             globals()['embedVar%s' % i].set_footer(text=f"{total_destinies} Total Destiny Lines")
             await ctx.send(embed=embedVar)
 
@@ -9974,7 +10260,7 @@ async def enemy_approached(self, message, channel, player, selected_mode, univer
     crestlist = opponent
     crestsearch = bounty
     await battle_commands(self, message.author, mode, universe, universe['TITLE'], None, oguild, crestlist, crestsearch,
-                          private_channel, sowner, None, None, None, None, None, None, None, None)
+                          private_channel, sowner, None, None, None, None, None, None, None, None, None, None, None)
 
 
 
@@ -10366,7 +10652,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
 
 
 async def battle_commands(self, ctx, mode, universe, selected_universe, completed_universes, oguild, crestlist,
-                          crestsearch, private_channel, sowner, oteam, ofam, currentopponent, cowner, cteam, cfam, deckNumber, user):
+                          crestsearch, private_channel, sowner, oteam, ofam, currentopponent, cowner, cteam, cfam, deckNumber, user, arena_flag, arena_owner, arena_type):
     randomized_battle = False
     co_op_modes = ['CTales', 'DTales', 'CDungeon', 'DDungeon', 'CBoss']
     ai_co_op_modes = ['DTales', 'DDungeon']
@@ -20194,6 +20480,38 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 await teamloss(oteam)
                                 await curseguild(30, oguild)
 
+                        if arena_flag and arena_type == "SINGLES":
+                            arena = db.queryArena({"OWNER": str(arena_owner), "ACTIVE": True})
+                            guild1_lost = False
+                            for member in arena['GUILD1_MEMBERS']:
+                                if member['NAME'] == sowner['DISNAME'] and member['STRIKES'] == 1:
+                                    guild1_lost = True
+                            guild2_lost = False
+                            for member in arena['GUILD2_MEMBERS']:
+                                if member['NAME'] == opponent['DISNAME'] and member['STRIKES'] == 1:
+                                    guild2_lost = True
+                            if guild1_lost:
+                                query = {'OWNER': sowner['DISNAME'], "ACTIVE": True}
+                                update_query = {
+                                    '$inc': {'GUILD1_MEMBERS.$[type].' + 'STRIKES': 1},
+                                    '$set': {'ACTIVE': False, "WINNER": str(opponent['DISNAME']), "LOSER": str(sowner['DISNAME'])}
+                                    }
+                                filter_query = [{'type.' + "NAME": str(sowner['DISNAME'])}]
+                                res = db.updateArena(query, update_query, filter_query)
+                                await bless(5000, str(tuser))
+                                await ctx.send(f"{ouser.mention} has won the 1v1!")
+                            else:
+                                query = {'OWNER': sowner['DISNAME'], "ACTIVE": True}
+                                update_query = {
+                                    '$inc': {'GUILD1_MEMBERS.$[type].' + 'STRIKES': 1}
+                                    }
+                                filter_query = [{'type.' + "NAME": str(sowner['DISNAME'])}]
+                                res = db.updateArena(query, update_query, filter_query)
+                                print("This oneee")
+                                await ctx.send(f"{tuser.mention} ❌")
+
+     
+
                         embedVar = discord.Embed(title=f":zap: VICTORY\n**{t_card}** ",
                                                  description=f"Match concluded in {turn_total} turns\n**{t_card} says**\n`{t_win_description}`",
                                                  colour=0x1abc9c)
@@ -20387,6 +20705,38 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 await curseteam(15, tteam)
                                 await teamloss(tteam)
                                 await curseguild(30, tguild)
+
+
+                        if arena_flag and arena_type == "SINGLES":
+                            arena = db.queryArena({"OWNER": str(arena_owner), "ACTIVE": True})
+                            guild1_lost = False
+                            for member in arena['GUILD1_MEMBERS']:
+                                if member['NAME'] == sowner['DISNAME'] and member['STRIKES'] == 1:
+                                    guild1_lost = True
+                            guild2_lost = False
+                            for member in arena['GUILD2_MEMBERS']:
+                                if member['NAME'] == opponent['DISNAME'] and member['STRIKES'] == 1:
+                                    guild2_lost = True
+                            if guild2_lost:
+                                query = {'OWNER': sowner['DISNAME'], 'ACTIVE': True}
+                                update_query = {
+                                    '$inc': {'GUILD2_MEMBERS.$[type].' + 'STRIKES': 1},
+                                    '$set': {'ACTIVE': False, "WINNER": str(sowner['DISNAME']), "LOSER": str(opponent['DISNAME'])}
+                                    }
+                                filter_query = [{'type.' + "NAME": str(opponent['DISNAME'])}]
+                                res = db.updateArena(query, update_query, filter_query)
+                                await bless(5000, str(ouser))
+                                await ctx.send(f"{tuser.mention} has won the 1v1!")
+                            else:
+                                query = {'OWNER': sowner['DISNAME'], 'ACTIVE': True}
+                                update_query = {
+                                    '$inc': {'GUILD2_MEMBERS.$[type].' + 'STRIKES': 1}
+                                    }
+                                filter_query = [{'type.' + "NAME": str(opponent['DISNAME'])}]
+                                res = db.updateArena(query, update_query, filter_query)
+                                
+                                await ctx.send(f"{ouser.mention} ❌")
+
                         match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']),
                                                 str(oarm['ARM']), "N/A", "PVP", o['EXCLUSIVE'])
                         embedVar = discord.Embed(title=f":zap: VICTORY\n**{o_card} says**\n{o_win_description}",
@@ -20473,7 +20823,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 description=f"Match concluded in {turn_total} turns!\n\n{drop_response} + :coin: 25,000!",
                                 colour=0xe91e63)
 
-                        await bless(25000, str(ctx.author))
+                        await bless(250000, str(ctx.author))
                         ofambank = await blessfamily(100000, ofam)
                         oteambank = await blessteam(100000, oteam)
                         petlogger = await summonlevel(opet_name, ouser)
@@ -20585,12 +20935,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 new_upload_query = {'$addToSet': {'DUNGEONS': selected_universe}}
                                 r = db.updateUserNoFilter(upload_query, new_upload_query)
                                 if selected_universe in completed_universes:
-                                    await bless(25000, ctx.author)
-                                    teambank = await blessteam(10000, oteam)
+                                    await bless(300000, ctx.author)
+                                    teambank = await blessteam(80000, oteam)
                                     # await bless(125, user2)
                                     await ctx.send(embed=embedVar)
                                     await ctx.send(
-                                        f"You were awarded :coin: 25,000 for completing the {selected_universe} Dungeon again!")
+                                        f"You were awarded :coin: 300,000 for completing the {selected_universe} Dungeon again!")
                                 else:
                                     await bless(6000000, ctx.author)
                                     teambank = await blessteam(1000000, oteam)
@@ -20612,7 +20962,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 r = db.updateUserNoFilter(upload_query, new_upload_query)
                                 if selected_universe in completed_universes:
                                     await bless(100000, ctx.author)
-                                    teambank = await blessteam(20000, oteam)
+                                    teambank = await blessteam(25000, oteam)
                                     await ctx.send(embed=embedVar)
                                     await ctx.send(
                                         f"You were awarded :coin: 100,000 for completing the {selected_universe} Tale again!")

@@ -144,9 +144,16 @@ def queryArena(arena):
     except Exception as e:
         return e
 
-def updateArena(arena, arena_update):
+def updateArenaNoFilter(arena, arena_update):
     try:
         data = arena_col.update_one(arena, arena_update)
+        return True
+    except Exception as e:
+        return e
+
+def updateArena(query, new_value, arrayFilters):
+    try:
+        update = arena_col.update_one(query, new_value, array_filters=arrayFilters)
         return True
     except Exception as e:
         return e
