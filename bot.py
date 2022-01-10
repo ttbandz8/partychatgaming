@@ -630,7 +630,7 @@ async def rebirth(ctx):
          pursemessage = "You will lose all of your equipped and vaulted items."
          if gabes_purse == 1:
             pursemessage = ":purse: | Gabe's Purse Activated! All Items Will Be Retained!"
-         rebirthCost = round(1000000 * (1 + (rLevel)))
+         rebirthCost = round(10000000 * (1 + (rLevel)))
 
          util_buttons = [
                 manage_components.create_button(
