@@ -1262,7 +1262,7 @@ async def trinketshop(ctx):
 
    🔋 3️⃣ **15,000EXP** for :moneybag: **650,000**
 
-   ⚒️ 4️⃣ **25 Durability** for :moneybag: **10,000**
+   ⚒️ 4️⃣ **25 Durability** for :moneybag: **25,000**
 
    Purchase Gabe's Purse to Keep All Items When Rebirthing
 
