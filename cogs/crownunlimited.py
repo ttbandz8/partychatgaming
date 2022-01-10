@@ -4500,11 +4500,7 @@ class CrownUnlimited(commands.Cog):
                     t_health = t_title_passive_value
                     o_health = t_title_passive_value
 
-<<<<<<< HEAD
-        # Arm Passive Player 2
-=======
             # Arm Passive Player 2
->>>>>>> 16e9c561a8733d15d9e235ceff875424b8e99f14
             tarm_passive_type = list(tarm_passive.keys())[0]
             tarm_passive_value = list(tarm_passive.values())[0]
             tarm_shield_active = False
@@ -8249,13 +8245,21 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         t_user = boss
         opponent_scaling = 400
         opponent_health_scaling = 625
+        if companion:
+            opponent_scaling = 700
+            opponent_health_scaling = 1025
+           
     if mode in U_modes:
         enemy_title = "UTITLE"
         enemy_arm = "UARM"
         opponent_scaling = 15
+        opponent_health_scaling = 30
         if randomized_battle:
             currentopponent = 10
             opponent_scaling = 25
+        if companion:
+            opponent_scaling = 35
+            opponent_health_scaling = 120
     if mode in D_modes:
         enemy_title = "DTITLE"
         enemy_arm = "DARM"
@@ -8264,6 +8268,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         if randomized_battle:
             currentopponent = 15
             opponent_scaling = 275
+        if companion:
+            opponent_scaling = 280
+            opponent_health_scaling = 575
+           
 
     try:
         # Player 1 Data
@@ -8569,13 +8577,13 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             t_gif = t['GIF']
             t_card_path = t['PATH']
             t_rcard_path = t['RPATH']
-            t_health = t['HLT'] + (10 * currentopponent) + opponent_health_scaling
+            t_health = t['HLT'] + (20 * currentopponent) + opponent_health_scaling
             t_max_health = t_health
             t_stamina = t['STAM']
             t_max_stamina = t['STAM']
             t_moveset = t['MOVESET']
-            t_attack = t['ATK'] + (5 * currentopponent) + opponent_scaling
-            t_defense = t['DEF'] + (5 * currentopponent) + opponent_scaling
+            t_attack = t['ATK'] + (10 * currentopponent) + opponent_scaling
+            t_defense = t['DEF'] + (10 * currentopponent) + opponent_scaling
             t_type = t['TYPE']
 
             t_passive = t['PASS'][0]
@@ -20498,8 +20506,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     }
                                 filter_query = [{'type.' + "NAME": str(sowner['DISNAME'])}]
                                 res = db.updateArena(query, update_query, filter_query)
-                                await bless(5000, str(tuser))
-                                await ctx.send(f"{ouser.mention} has won the 1v1!")
+                                await bless(10000, str(tuser))
+                                await ctx.send(f"{ouser.mention} has won the 1v1, earning :coin: 10,000!")
                             else:
                                 query = {'OWNER': sowner['DISNAME'], "ACTIVE": True}
                                 update_query = {
@@ -20725,8 +20733,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     }
                                 filter_query = [{'type.' + "NAME": str(opponent['DISNAME'])}]
                                 res = db.updateArena(query, update_query, filter_query)
-                                await bless(5000, str(ouser))
-                                await ctx.send(f"{tuser.mention} has won the 1v1!")
+                                await bless(10000, str(ouser))
+                                await ctx.send(f"{tuser.mention} has won the 1v1, earning :coin: 10,000!")
                             else:
                                 query = {'OWNER': sowner['DISNAME'], 'ACTIVE': True}
                                 update_query = {
@@ -20808,8 +20816,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         if mode == "CBoss":
                             cmatch = await savematch(str(user2), str(c_card), str(c_card_path), str(ctitle['TITLE']),
                                                      str(carm['ARM']), "N/A", "Boss", c['EXCLUSIVE'])
-                            cfambank = await blessfamily(15000, cfam)
-                            cteambank = await blessteam(15000, cteam)
+                            cfambank = await blessfamily(80000, cfam)
+                            cteambank = await blessteam(80000, cteam)
                             cpetlogger = await summonlevel(cpet_name, user2)
                             ccardlogger = await cardlevel(c_card, user2, "Dungeon", selected_universe)
                             await bless(50, str(user2))
@@ -20823,9 +20831,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 description=f"Match concluded in {turn_total} turns!\n\n{drop_response} + :coin: 25,000!",
                                 colour=0xe91e63)
 
-                        await bless(250000, str(ctx.author))
-                        ofambank = await blessfamily(100000, ofam)
-                        oteambank = await blessteam(100000, oteam)
+                        await bless(25000, str(ctx.author))
+                        ofambank = await blessfamily(20000, ofam)
+                        oteambank = await blessteam(20000, oteam)
                         petlogger = await summonlevel(opet_name, ouser)
                         cardlogger = await cardlevel(o_card, ouser, "Dungeon", selected_universe)
 
@@ -20886,9 +20894,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         elif mode in U_modes:
                             drop_response = await drops(ctx.author, selected_universe, currentopponent)
                         if mode in D_modes:
-                            ofambank = await blessfamily(2500, ofam)
+                            ofambank = await blessfamily(5000, ofam)
                         else:
-                            ofambank = await blessfamily(500, ofam)
+                            ofambank = await blessfamily(2000, ofam)
                         match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']),
                                                 str(oarm['ARM']), str(selected_universe), tale_or_dungeon_only,
                                                 o['EXCLUSIVE'])
@@ -20942,11 +20950,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     await ctx.send(
                                         f"You were awarded :coin: 300,000 for completing the {selected_universe} Dungeon again!")
                                 else:
-                                    await bless(6000000, ctx.author)
-                                    teambank = await blessteam(1000000, oteam)
+                                    await bless(8000000, ctx.author)
+                                    teambank = await blessteam(1500000, oteam)
                                     await ctx.send(embed=embedVar)
                                     await ctx.send(
-                                        f"You were awarded :coin: 6,000,000 for completing the {selected_universe} Dungeon! ")
+                                        f"You were awarded :coin: 8,000,000 for completing the {selected_universe} Dungeon! ")
                                 continued = False
                                 await discord.TextChannel.delete(private_channel, reason=None)
                             elif mode in U_modes:
@@ -20968,7 +20976,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         f"You were awarded :coin: 100,000 for completing the {selected_universe} Tale again!")
                                 else:
                                     await bless(2000000, ctx.author)
-                                    teambank = await blessteam(50000, oteam)
+                                    teambank = await blessteam(500000, oteam)
                                     await ctx.send(embed=embedVar)
                                     await ctx.send(
                                         f"You were awarded :coin: 2,000,000 for completing the {selected_universe} Tale! ")
