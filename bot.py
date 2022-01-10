@@ -1266,7 +1266,7 @@ async def trinketshop(ctx):
 
    Purchase Gabe's Purse to Keep All Items When Rebirthing
 
-   **Gabe's Purse** 👛 for :money_with_wings: **1,500,000**
+   **Gabe's Purse** 👛 for :money_with_wings: **10,000,000**
 
    What would you like to buy?
    """), colour=0xf1c40f)
@@ -1336,7 +1336,7 @@ async def trinketshop(ctx):
             return
 
       if button_ctx.custom_id == "4":
-         price = 1500000
+         price = 10000000
          if price > balance:
             await button_ctx.send("Insufficent funds.", hidden=True)
             return
@@ -1345,7 +1345,7 @@ async def trinketshop(ctx):
             return
          else:
             db.updateUserNoFilter(user_query, {'$set': {'TOURNAMENT_WINS': 1}})
-            await curse(1500000, str(ctx.author))
+            await curse(10000000, str(ctx.author))
             await button_ctx.send("Gabe's Purse has been purchased!")
             return
       

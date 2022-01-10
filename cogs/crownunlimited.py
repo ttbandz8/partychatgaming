@@ -8551,8 +8551,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             t_destiny = t['HAS_COLLECTION']
             if mode in B_modes:
                 tpet = db.queryPet({'PET': enemy_pet})
-            else:
+            elif mode in D_modes:
                 tpet = db.queryPet({'PET': universe['DPET']})
+            elif mode in U_modes:
+                tpet = db.queryPet({'PET': universe['UPET']})
             tpet_passive = tpet['ABILITIES'][0]
             tpet_name = tpet['PET']
             tpet_image = tpet['PATH']
