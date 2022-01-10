@@ -156,10 +156,10 @@ class Lookup(commands.Cog):
                 🧬 | **Summon: **{pet}
 
                 :military_medal: | {most_played_card_message}
-                **Tales Played: **{len(tales_matches)}
-                **Dungeons Played: **{len(dungeon_matches)}
-                **Bosses Played: **{len(boss_matches)}
-                **PVP Won: **{len(pvp_matches)}
+                **Tales Played: **{'{:,}'.format(int(len(tales_matches)))}
+                **Dungeons Played: **{'{:,}'.format(len(dungeon_matches))}
+                **Bosses Played: **{'{:,}'.format(len(boss_matches))}
+                **Pvp Played: **{'{:,}'.format(len(pvp_matches))}
                 
                 **Balance** {bal_message}
                 :flower_playing_cards: **Cards** {all_cards}

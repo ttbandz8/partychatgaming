@@ -75,9 +75,9 @@ BOT_COMMANDS = textwrap.dedent(f"""\
 **/family @user**: Family lookup
 **/marry @user**:Create Family with a User
 **/divorce @user**: Ask for divorce from partner
-**/adopt @user**: Adopt user into family as Child
-**/disown @user**: Remove Child From Family
-**/runaway**: Runaway from family as child
+**/adopt @user**: Adopt kid into family
+**/disown @user**: Remove Kid From Family
+**/leavefamily**: Leave from family (Kid Only)
 **/abandon**: Delete Family
 **/allowance @player amount**: Send Family Members coin (Head/Partner Only)
 **/invest amount**: Invest coin into family Bank
@@ -103,7 +103,6 @@ CROWN_UNLIMITED_COMMANDS = textwrap.dedent(f"""\
 **/quest**: Open your list of Quests
 **/rebirth**: Rebirth Account with permanent increases
 
-
 **PvP Commands**
 **/battle @player**: Challenge another Player
 **/raid association**: Raid another Association
@@ -118,11 +117,13 @@ CROWN_UNLIMITED_COMMANDS = textwrap.dedent(f"""\
 
 **Story Commands**
 **/forcequit**: Close Story Mode Private Channel.
-**/universes**: Show List Of Crown Universes
-**/viewuniverse universe**: Show Expanded Universe Details
 **/tales**: Opens Crown Tales Story Mode Menu
 **/coop**: Opens Crown Tales CO-OP Story Mode Menu
 **/duo**: Opens Crown Tales Duo Story Mode Menu
+
+**Crown Multiverse**
+**/universes**: Show List Of Crown Universes
+**/viewuniverse universe**: Show Expanded Universe Details
 
 
 """)

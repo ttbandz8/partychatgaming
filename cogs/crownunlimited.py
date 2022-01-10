@@ -20916,8 +20916,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             if mode in D_modes:
                                 if crestsearch:
                                     await blessguild(1000, oguild['GNAME'])
-                                    embedVar.add_field(name=f"{selected_universe} CREST SEARCH!",
-                                                       value=f"{oguild['GNAME']} earned 1,000 :coin:")
+                                    embedVar.add_field(name=f"**{selected_universe}** CREST SEARCH!",
+                                                       value=f"**{oguild['GNAME']}** earned 1,000 :coin:")
                             embedVar.set_author(name=f"{t_card} lost!")
                             await private_channel.send(embed=embedVar)
 
@@ -20927,15 +20927,15 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         if currentopponent == (total_legends):
                             if mode in D_modes:
                                 embedVar = discord.Embed(title=f"DUNGEON CONQUERED",
-                                                         description=f"Universe {selected_universe} has been conquered\n\n{drop_response}",
+                                                         description=f"**{selected_universe} Dungeon** has been conquered\n\n{drop_response}",
                                                          colour=0xe91e63)
-                                embedVar.set_author(name=f"New Universes have been unlocked to explore!")
+                                embedVar.set_author(name=f"**{selected_universe}** Boss has been unlocked!")
                                 if crestsearch:
                                     await blessguild(25000, oguild['GNAME'])
                                     teambank = await blessteam(10000, oteam)
                                     await movecrest(selected_universe, oguild['GNAME'])
-                                    embedVar.add_field(name=f"{selected_universe} CREST CLAIMED!",
-                                                       value=f"{oguild['GNAME']} earned the {selected_universe} **Crest**")
+                                    embedVar.add_field(name=f"**{selected_universe}** CREST CLAIMED!",
+                                                       value=f"**{oguild['GNAME']}** earned the {selected_universe} **Crest**")
                                 embedVar.add_field(name="Additional Reward",
                                                    value=f"You earned additional rewards in your vault! Take a look.")
                                 embedVar.set_footer(text="The /shop has been updated with new CARDS, TITLES and ARMS!")
@@ -20959,9 +20959,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 await discord.TextChannel.delete(private_channel, reason=None)
                             elif mode in U_modes:
                                 embedVar = discord.Embed(title=f"UNIVERSE CONQUERED",
-                                                         description=f"Universe {selected_universe} has been conquered\n\n{drop_response}",
+                                                         description=f"**{selected_universe}** has been conquered\n\n{drop_response}",
                                                          colour=0xe91e63)
-                                embedVar.set_author(name=f"New Universes have been unlocked to explore!")
+                                embedVar.set_author(name=f"**{selected_universe}** Dungeon has been unlocked!")
                                 embedVar.add_field(name="Additional Reward",
                                                    value=f"You earned additional rewards in your vault! Take a look.")
                                 embedVar.set_footer(text="The /shop has been updated with new CARDS, TITLES and ARMS!")
@@ -21247,6 +21247,15 @@ async def blessteam(amount, team):
             guild_mult = hall_info['SPLIT']
             blessAmount = amount * guild_mult
             posBlessAmount = 0 + abs(int(blessAmount))
+        total_members = team_data['MEMBERS']
+        headcount_bonus = 0
+        bonus_percentage = 0.0
+        for m in total_members:
+            headcount_bonus= headcount_bonus + 1
+        bonus_percentage= (headcount_bonus/25)
+        if bonus_percentage >= 1:
+            bonus_percentage = 1.5
+        posBlessAmount = int((posBlessAmount + (bonus_percentage * posBlessAmount)))
         update_query = {"$inc": {'BANK': posBlessAmount}}
         db.updateTeam(query, update_query)
 
