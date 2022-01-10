@@ -273,9 +273,9 @@ class Lookup(commands.Cog):
                 embed1.set_image(url=logo)
             embed1.add_field(name=":man_detective: | **~ Owner ~**", value= owner_name.split("#",1)[0], inline=True)
             embed1.add_field(name=":flags: | **~ Association ~** ", value= guild, inline=False)
-            embed1.add_field(name=":medal: | **~ Raid Wins ~**", value=scrim_wins)
-            embed1.add_field(name=":crossed_swords: | **~ Raid Losses ~**", value=scrim_losses)
-            embed1.add_field(name=":fireworks: | **~ Tournament Wins ~**", value=tournament_wins, inline=False)
+            embed1.add_field(name=":medal: | **~ Ranked Wins ~**", value=scrim_wins)
+            embed1.add_field(name=":crossed_swords: | **~ Ranked Losses ~**", value=scrim_losses)
+            embed1.add_field(name=":fireworks: | **~ Guild War Victories ~**", value=tournament_wins, inline=False)
             
             embed2 = discord.Embed(title=f":checkered_flag: | {team_name} Guild Members - {icon} {'{:,}'.format(balance)}".format(self), description=":bank: | Party Chat Gaming Database", colour=000000)
             if team['LOGO_FLAG']:
