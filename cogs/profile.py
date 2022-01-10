@@ -2328,7 +2328,7 @@ class Profile(commands.Cog):
                 if button_ctx.author == ctx.author:
                     universe = str(button_ctx.origin_message.embeds[0].title)
                     if button_ctx.custom_id == "title":
-                        price = price_adjuster(15000, universe, completed_tales, completed_dungeons)['TITLE_PRICE']
+                        price = price_adjuster(50000, universe, completed_tales, completed_dungeons)['TITLE_PRICE']
                         if len(current_titles) >=25:
                             await button_ctx.send("You have max amount of Titles. Transaction cancelled.")
                             self.stop = True
@@ -2710,7 +2710,7 @@ def craft_adjuster(vault, universe, price, item):
 
 def price_adjuster(price, selected_universe, completed_tales, completed_dungeons):
     new_price = price
-    title_price = 15000
+    title_price = 50000
     arm_price = 25000
     c1 = 30000
     c2 = 300000
@@ -2726,7 +2726,7 @@ def price_adjuster(price, selected_universe, completed_tales, completed_dungeons
         message = "**25% Sale**"
     if selected_universe in completed_dungeons:
         new_price = round(price * .50)
-        title_price = round(15000 * .50)
+        title_price = round(50000 * .50)
         arm_price = round(25000 * .50)
         c1 = round(30000 * .50)
         c2 = round(300000 * 50)
