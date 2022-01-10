@@ -2550,7 +2550,7 @@ class Profile(commands.Cog):
                 'trace': trace
             }))
 
-    @cog_ext.cog_slash(description="Open Crown Shop", guild_ids=main.guild_ids)
+    @cog_ext.cog_slash(description="Open Gem Crafting", guild_ids=main.guild_ids)
     async def craft(self, ctx):
         # Craft with Gems
         # Craft Universe Heart, Universe Soul, Skin Box

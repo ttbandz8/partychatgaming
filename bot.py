@@ -397,22 +397,36 @@ async def crown(ctx):
 
    embedVar10 = discord.Embed(title= f"Economy",description=textwrap.dedent(f"""\
    Crown Unlimited features an in game **Shop** where you can purchase new Cards, Titles, and Arms.
-   Use /shop to open the Shop!**
+   
+   **Shop**
+   Use **/shop** to open the **Shop**!
+   The shop sells Cards, Titles and Arms.
 
    **Trading**
    **/trade** will allow you to trade Cards, Titles, Arms and Summons with other players.
    Add items to the open trade using the buttons on the item menu *ex. /cards*
    **/tradecoins** allows you to add or remove coins from the trade
-
+   
    **Resell**
-   **/resell item** to sell Cards, Titles, and Arms back to the market.
+   Sell Cards, Titles, and Arms back to the market for :coin:**Coins**.
+   
+   **Crafting**
+   **/craft** will allow you to craft **Card Skins**, **Summons**, **Universe Hearts** and **Universe Souls**
+
+   **Dismantle**
+   Dismantle Cards, Titles and Arms into :gem:**Gems**.
+   
+   💟 **Universe Heart** - will allow you to buy card levels past 200.
+   🌹 **Universe Soul** - will allow you to keep card levels when trading/selling Cards.
    
    **Trinket Shop**
    **/trinketshop** to purchase Card Levels, Arm Durability and Gabe's Purse!
    
+    👛 **Gabe's Purse** - will allow you to keep all items after a **Rebirth**
+   
    **Currency**
    :coin: - Coins can be used to purchase Cards, Titles and Arms. You can use them to trade and sell items to other players!
-   :gems: - When Arms break they turn into **Gems**, You can also dismantle items from your inventory into **Gems**! 
+   :gem: - When Arms break they turn into **Gems**, You can also dismantle items from your inventory into **Gems**! 
    **Gems** are universe specific items that can be crafted into Skins, Trikets or **Universe Hearts**
    
    """) ,colour=0x7289da)
@@ -616,7 +630,7 @@ async def rebirth(ctx):
          pursemessage = "You will lose all of your equipped and vaulted items."
          if gabes_purse == 1:
             pursemessage = ":purse: | Gabe's Purse Activated! All Items Will Be Retained!"
-         rebirthCost = round(500000 * (1 + (rLevel)))
+         rebirthCost = round(1000000 * (1 + (rLevel)))
 
          util_buttons = [
                 manage_components.create_button(
@@ -1013,7 +1027,8 @@ async def gift(ctx, player: User, amount: int):
 
 @slash.slash(name="Donate", description="Donate money to Guild", guild_ids=guild_ids)
 @commands.check(validate_user)
-async def donate(ctx, amount, team: str):
+async def donate(ctx, amount, guild: str):
+   team = guild
    vault = db.queryVault({'OWNER': str(ctx.author)})
    balance = vault['BALANCE']
    dteam = team
@@ -1403,7 +1418,8 @@ async def bounty(ctx, amount):
 
 @slash.slash(name="Sponsor", description="Sponsor Guild with Association Funds", guild_ids=guild_ids)
 @commands.check(validate_user)
-async def sponsor(ctx, team: str, amount):
+async def sponsor(ctx, guild: str, amount):
+   team = guild
    user = db.queryUser({'DISNAME': str(ctx.author)})
    guild_name = user['GUILD']
    if guild_name == 'PCG':

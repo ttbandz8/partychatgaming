@@ -413,6 +413,17 @@ def queryFamily(family):
            return False
     except:
         print("Find family failed.")
+        
+def queryFamilyAlt(family):
+    try:
+        exists = family_exists({'PARTNER': family['PARTNER']})
+        if exists:
+            data = family_col.find_one(family)
+            return data
+        else:
+           return False
+    except:
+        print("Find family failed.")
 
 def updateFamily(query, new_value):
     try:
@@ -521,10 +532,26 @@ def addFamilyMember(query, add_to_family_query, user, new_user):
             users_col.update_one(query, new_value)
             return "User added to the Family. "
         else:
-            return "The Owner of the Family can add new members. "
+            return "The Family Head & Partner can add new members. "
     else:
         return "Cannot add user to the Family."
 
+def addFamilyMemberAlt(query, add_to_family_query, user, new_user):
+    exists = family_exists({'PARTNER': query['PARTNER']})
+    if exists:
+        family = family_col.find_one(query)
+        if user == family['PARTNER']:
+            family_col.update_one(query, add_to_family_query, upsert=True)
+
+             # Add Team to User Profile as well
+            query = {'DISNAME': new_user}
+            new_value = {'$set': {'FAMILY': family['HEAD']}}
+            users_col.update_one(query, new_value)
+            return "User added to the Family. "
+        else:
+            return "The Family Head & Partner can add new members. "
+    else:
+        return "Cannot add user to the Family."
 #########################################################################
 ''' MATCHES '''
 def matches_exists(data):
