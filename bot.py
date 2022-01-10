@@ -173,7 +173,7 @@ async def enhancers(ctx):
       
       embedVar11 = discord.Embed(title= f"Arm Enhancer Type: Defensive",colour=0x7289da)
       embedVar11.set_thumbnail(url=avatar)
-      embedVar11.add_field(name="`DEFENSE`", value="🌐 **SHIELD**- Grant Damage absorbing Shield until destroyed \n\n💠 **BARRIER** - Blocks all Attack Damage until player Attacks or is Destoyed (Enhancers Exempt)\n\n🔄 **PARRY** - Reflects 50% Damage back to Attacker\n\n")
+      embedVar11.add_field(name="`DEFENSE`", value="🌐 **SHIELD**- Grant Damage absorbing Shield until destroyed \n\n💠 **BARRIER** - Blocks all Attack Damage until player Attacks or is Destoyed (Enhancers Exempt)\n\n🔄 **PARRY** - Reflects 20% Damage back to Attacker\n\n")
       embedVar11.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
       
 
