@@ -903,6 +903,14 @@ class CrownUnlimited(commands.Cog):
                 await ctx.send("You already have an open arena.")
                 return
 
+            if mode == "TEAMS":
+                await ctx.send("Team Open Arena is currently unavailable. Please check back later.")
+                return
+            
+            if mode == "GUILD_WAR":
+                await ctx.send("Guild War is currently unavailable. Please check back later.")
+                return
+
             if mode == "SINGLES":
                 query = {
                     "OWNER": str(ctx.author),
