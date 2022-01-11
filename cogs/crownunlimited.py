@@ -21515,7 +21515,7 @@ async def drops(player, universe, matchcount):
                         card_owned = True
 
                 if card_owned:
-                    await cardlevel(cards[rand_card], player, "Tales", selected_universe)
+                    await cardlevel(cards[rand_card], player, "Tales", universe)
                     response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'CARDS': str(cards[rand_card])}})
                     message = ""
                     await bless(150, player)
