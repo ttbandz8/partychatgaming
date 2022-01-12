@@ -184,40 +184,39 @@ class Teams(commands.Cog):
         owner_profile = db.queryUser({'DISNAME': str(ctx.author)})
         team_profile = db.queryTeam({'TNAME': owner_profile['TEAM']})
         if team_profile:
-            if owner_profile['DISNAME'] == team_profile['OWNER']:
+            if owner_profile['DISNAME'] == team_profile['OWNER']:  
+                team_buttons = [
+                    manage_components.create_button(
+                        style=ButtonStyle.blue,
+                        label="✔️",
+                        custom_id="Yes"
+                    ),
+                    manage_components.create_button(
+                        style=ButtonStyle.red,
+                        label="❌",
+                        custom_id="No"
+                    )
+                ]
+                team_buttons_action_row = manage_components.create_actionrow(*team_buttons)
+                await ctx.send(f"Do you want to remove {member.mention} from the **{team_profile['TNAME']}**?".format(self), components=[team_buttons_action_row])
+
+                def check(button_ctx):
+                    return button_ctx.author == ctx.author
+
+                try:
+                    button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[team_buttons_action_row], check=check)
                     
-                    team_buttons = [
-                        manage_components.create_button(
-                            style=ButtonStyle.blue,
-                            label="✔️",
-                            custom_id="Yes"
-                        ),
-                        manage_components.create_button(
-                            style=ButtonStyle.red,
-                            label="❌",
-                            custom_id="No"
-                        )
-                    ]
-                    team_buttons_action_row = manage_components.create_actionrow(*team_buttons)
-                    await ctx.send(f"Do you want to remove {member.mention} from the **{team_profile['TNAME']}**?".format(self), components=[team_buttons_action_row])
+                    if button_ctx.custom_id == "No":
+                        await button_ctx.send("Member Not Deleted.")
+                        return
 
-                    def check(button_ctx):
-                        return button_ctx.author == ctx.author
-
-                    try:
-                        button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[team_buttons_action_row], check=check)
-                        
-                        if button_ctx.custom_id == "No":
-                            await button_ctx.send("Member Not Deleted.")
-                            return
-
-                        if button_ctx.custom_id == "Yes":    
-                            team_query = {'TNAME': team_profile['TNAME']}
-                            new_value_query = {'$pull': {'MEMBERS': str(member)}}
-                            response = db.deleteTeamMember(team_query, new_value_query, str(member))
-                            await button_ctx.send(response)
-                    except:
-                        print("Guild not created. ")
+                    if button_ctx.custom_id == "Yes":    
+                        team_query = {'TNAME': team_profile['TNAME']}
+                        new_value_query = {'$pull': {'MEMBERS': str(member)}}
+                        response = db.deleteTeamMember(team_query, new_value_query, str(member))
+                        await button_ctx.send(response)
+                except:
+                    print("Guild not created. ")
             else:
                 await ctx.send(m.OWNER_ONLY_COMMAND, delete_after=5)
         else:
@@ -228,39 +227,38 @@ class Teams(commands.Cog):
         member_profile = db.queryUser({'DISNAME': str(ctx.author)})
         team_profile = db.queryTeam({'TNAME': member_profile['TEAM']})
         if team_profile:
+            team_buttons = [
+                manage_components.create_button(
+                    style=ButtonStyle.blue,
+                    label="✔️",
+                    custom_id="Yes"
+                ),
+                manage_components.create_button(
+                    style=ButtonStyle.red,
+                    label="❌",
+                    custom_id="No"
+                )
+            ]
+            team_buttons_action_row = manage_components.create_actionrow(*team_buttons)
+            await ctx.send(f"Do you want to leave guild **{member_profile['TEAM']}**?".format(self), components=[team_buttons_action_row])
 
-                    team_buttons = [
-                        manage_components.create_button(
-                            style=ButtonStyle.blue,
-                            label="✔️",
-                            custom_id="Yes"
-                        ),
-                        manage_components.create_button(
-                            style=ButtonStyle.red,
-                            label="❌",
-                            custom_id="No"
-                        )
-                    ]
-                    team_buttons_action_row = manage_components.create_actionrow(*team_buttons)
-                    await ctx.send(f"Do you want to leave guild **{member_profile['TEAM']}**?".format(self), delete_after=8)
+            def check(button_ctx):
+                return button_ctx.author == ctx.author
 
-                    def check(button_ctx):
-                        return button_ctx.author == ctx.author
+            try:
+                button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[team_buttons_action_row], check=check)
 
-                    try:
-                        button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[team_buttons_action_row], check=check)
-
-                        if button_ctx.custom_id == "No":
-                            await button_ctx.send("Stayed in Guild.")
-                            return
-                        
-                        if button_ctx.custom_id == "Yes":
-                            team_query = {'TNAME': member_profile['TEAM']}
-                            new_value_query = {'$pull': {'MEMBERS': str(ctx.author)}}
-                            response = db.deleteTeamMember(team_query, new_value_query, str(ctx.author))
-                            await ctx.send(response)
-                    except:
-                        print("Guild not Left. ")
+                if button_ctx.custom_id == "No":
+                    await button_ctx.send("Stayed in Guild.")
+                    return
+                
+                if button_ctx.custom_id == "Yes":
+                    team_query = {'TNAME': member_profile['TEAM']}
+                    new_value_query = {'$pull': {'MEMBERS': str(ctx.author)}}
+                    response = db.deleteTeamMember(team_query, new_value_query, str(ctx.author))
+                    await ctx.send(response)
+            except:
+                print("Guild not Left. ")
 
         else:
             await ctx.send(m.TEAM_DOESNT_EXIST, delete_after=5)

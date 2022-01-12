@@ -102,7 +102,7 @@ class Guild(commands.Cog):
                                     await main.DM(ctx, owner, f"{ctx.author.mention}" + f" would like to join the Association {guild_name}" + f" React in server to join their Association" )
                                     await ctx.send(f"{owner.mention}" +f" will you swear the oath?".format(self), components=[guild_buttons_action_row])
                                     def check(button_ctx):
-                                        return button_ctx.author == ctx.user
+                                        return button_ctx.author == sworn
 
                                     try:
                                         button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[guild_buttons_action_row], check=check)
@@ -318,6 +318,8 @@ class Guild(commands.Cog):
         guildname = founder_profile['GUILD']
         sword_profile = db.queryUser({'DISNAME': str(owner)})
         team_profile = db.queryTeam({'TNAME': sword_profile['TEAM']})
+        if not team_profile:
+            await ctx.send(f"{owner.mention} does not own a Guild")
         team_name = team_profile['TNAME']
         team_owner = team_profile['OWNER']
         if founder_profile['GUILD'] == 'PCG':
@@ -338,8 +340,8 @@ class Guild(commands.Cog):
                 return
             trade_buttons = [
                 manage_components.create_button(
-                    style=ButtonStyle.red,
-                    label="Betray Association",
+                    style=ButtonStyle.green,
+                    label="Ally",
                     custom_id="yes"
                 ),
                 manage_components.create_button(
@@ -365,8 +367,8 @@ class Guild(commands.Cog):
                     await main.DM(ctx, owner, f"{ctx.author.mention}" + f" would like to ally with your team!" + f" React in server to join their Association" )
                     trade_buttons = [
                         manage_components.create_button(
-                            style=ButtonStyle.red,
-                            label="Betray Association",
+                            style=ButtonStyle.green,
+                            label="Form Alliance",
                             custom_id="yes"
                         ),
                         manage_components.create_button(
@@ -379,7 +381,7 @@ class Guild(commands.Cog):
                     await ctx.send(f"{owner.mention}" +f" will you join {guild_name}?".format(self), components=[trade_buttons_action_row])
                     
                     def check(button_ctx):
-                        return button_ctx.author == ctx.author
+                        return button_ctx.author == owner
 
                     
                     try:
@@ -427,8 +429,8 @@ class Guild(commands.Cog):
             return
         trade_buttons = [
             manage_components.create_button(
-                style=ButtonStyle.red,
-                label="Disband Assosiation",
+                style=ButtonStyle.green,
+                label="Knight",
                 custom_id="yes"
             ),
             manage_components.create_button(
@@ -451,39 +453,57 @@ class Guild(commands.Cog):
                 self.stop = True
                 return
             if button_ctx.custom_id == "yes":
-                await main.DM(ctx, blade, f"{ctx.author.mention}" + f" would like you to serve as the Association Shield!" + f" React in server to protect the Association" )
-                accept = await ctx.send(f"".format(self), delete_after=10)
-                trade_buttons = [
-                    manage_components.create_button(
-                        style=ButtonStyle.red,
-                        label="Disband Assosiation",
-                        custom_id="yes"
-                    ),
-                    manage_components.create_button(
-                        style=ButtonStyle.blue,
-                        label="No",
-                        custom_id="no"
-                    )
-                ]
-                trade_buttons_action_row = manage_components.create_actionrow(*trade_buttons)
-                await ctx.send(f"{blade.mention}" +f" will you defend {guild_name}?".format(self), components=[trade_buttons_action_row])
-                
-                def check(button_ctx):
-                    return button_ctx.author == ctx.author
+                try: 
+                    await main.DM(ctx, blade, f"{ctx.author.mention}" + f" would like you to serve as the Association Shield!" + f" React in server to protect the Association" )
+                    trade_buttons = [
+                        manage_components.create_button(
+                            style=ButtonStyle.green,
+                            label="Serve",
+                            custom_id="yes"
+                        ),
+                        manage_components.create_button(
+                            style=ButtonStyle.blue,
+                            label="No",
+                            custom_id="no"
+                        )
+                    ]
+                    trade_buttons_action_row = manage_components.create_actionrow(*trade_buttons)
+                    await ctx.send(f"{blade.mention}" +f" will you defend {guild_name}?".format(self), components=[trade_buttons_action_row])
+                    
+                    def check(button_ctx):
+                        return button_ctx.author == blade
 
-                
-                try:
-                    button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[trade_buttons_action_row], timeout=120, check=check)
-                    if button_ctx.custom_id == "no":
-                        await button_ctx.send("Knight Refused")
-                        self.stop = True
-                        return
-                    if button_ctx.custom_id == "yes":
-                        newvalue = {'$set': {'SHIELD': str(blade), 'STREAK' : 0}}
-                        response = db.addGuildShield(new_query, newvalue, str(ctx.author), str(blade))
-                        await ctx.send(response)
-                except:
-                    await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=3)
+                    
+                    try:
+                        button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[trade_buttons_action_row], timeout=120, check=check)
+                        if button_ctx.custom_id == "no":
+                            await button_ctx.send("Knight Refused")
+                            self.stop = True
+                            return
+                        if button_ctx.custom_id == "yes":
+                            newvalue = {'$set': {'SHIELD': str(blade), 'STREAK' : 0}}
+                            response = db.addGuildShield(new_query, newvalue, str(ctx.author), str(blade))
+                            await ctx.send(response)
+                    except:
+                        await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=3)
+                except Exception as ex:
+                    trace = []
+                    tb = ex.__traceback__
+                    while tb is not None:
+                        trace.append({
+                            "filename": tb.tb_frame.f_code.co_filename,
+                            "name": tb.tb_frame.f_code.co_name,
+                            "lineno": tb.tb_lineno
+                        })
+                        tb = tb.tb_next
+                    print(str({
+                        'type': type(ex).__name__,
+                        'message': str(ex),
+                        'trace': trace
+                    }))
+                    await ctx.send(
+                        "There's an issue with your commnads. Alert support.")
+                    return
         except:
             print("No proposal Sent")
         
@@ -531,7 +551,7 @@ class Guild(commands.Cog):
                         self.stop = True
                         return
                     if button_ctx.custom_id == "yes":
-                        new_value_query = {'$pull': {'SWORDS': str(exiled_profile['TEAM'])}}
+                        new_value_query = {'$pull': {'SWORDS': str(exiled_profile['TEAM'])}, '$set': {'SHIELD': guild_profile['SWORN']}}
                         response2 = db.deleteGuildSword(new_query, new_value_query, str(ctx.author), str(exiled_profile['TEAM']))
                         await ctx.send(response2)
                 except:
@@ -582,12 +602,26 @@ class Guild(commands.Cog):
                     return
                 if button_ctx.custom_id == "yes":
                     try:
-                        new_value_query = {'$pull': {'SWORDS': str(team_name)}}
+                        new_value_query = {'$pull': {'SWORDS': str(team_name)}, '$set': {'SHIELD': guild_profile['SWORN']}}
                         response = db.deleteGuildSwordAlt(guild_query, new_value_query, str(team_name))
                         await ctx.send(response)
                     except:
-                        print("Guild not created. ")
-
+                        print("Association not created. ")
+            except:
+                trace = []
+                tb = ex.__traceback__
+                while tb is not None:
+                    trace.append({
+                        "filename": tb.tb_frame.f_code.co_filename,
+                        "name": tb.tb_frame.f_code.co_name,
+                        "lineno": tb.tb_lineno
+                    })
+                    tb = tb.tb_next
+                print(str({
+                    'type': type(ex).__name__,
+                    'message': str(ex),
+                    'trace': trace
+                }))
         else:
             await ctx.send(m.GUILD_DOESNT_EXIST, delete_after=5)
 
@@ -631,8 +665,24 @@ class Guild(commands.Cog):
                             db.updateUserNoFilter(user_query, new_value)
 
                             await ctx.send(response)
+                        
+                        except:
+                            print("Association Not Deleted. ")
                 except:
-                    print("Association Not Deleted. ")
+                    trace = []
+                    tb = ex.__traceback__
+                    while tb is not None:
+                        trace.append({
+                            "filename": tb.tb_frame.f_code.co_filename,
+                            "name": tb.tb_frame.f_code.co_name,
+                            "lineno": tb.tb_lineno
+                        })
+                        tb = tb.tb_next
+                    print(str({
+                        'type': type(ex).__name__,
+                        'message': str(ex),
+                        'trace': trace
+                    }))
             else:
                 await ctx.send("Only the Founder can disband the Association. ")
         else:
