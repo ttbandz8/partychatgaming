@@ -6708,7 +6708,7 @@ class CrownUnlimited(commands.Cog):
                     soul = "🥀"
 
                 gem_details.append(
-                    f"🌍 **{gd['UNIVERSE']}**\n💎 {str(gd['GEMS'])}\nUniverse Heart {heart}\nUniverse Soul {soul}\n")
+                    f"🌍 **{gd['UNIVERSE']}**\n💎 {'{:,}'.format(gd['GEMS'])}\nUniverse Heart {heart}\nUniverse Soul {soul}\n")
 
             # Adding to array until divisible by 10
             while len(gem_details) % 10 != 0:
@@ -10296,6 +10296,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
     oguild = "PCG"
     prevault = db.queryVault({'OWNER': str(ctx.author)})
     balance = prevault['BALANCE']
+    
     crestlist = []
     crestsearch = False
     autoBattle = False
@@ -10480,9 +10481,26 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             selected_universe = custom_function.selected_universe
 
             universe = db.queryUniverse({'TITLE': str(selected_universe)})
+            universe_owner = universe['GUILD']
             if not universe['CROWN_TALES']:
                 await ctx.send(f"{selected_universe} is not ready to be explored! Check back later!")
                 return
+            #Universe Cost
+            entrance_fee = 1000
+            if selected_universe in crestlist:
+                await ctx.send(f"{Crest_dict[selected_universe]} | :flags: {guildname} {selected_universe} Crest Activated! No entrance fee!")
+            else:
+                if balance <= entrance_fee:
+                    await ctx.send(f"Tales require an :coin: {'{:,}'.format(entrance_fee)} entrance fee!", delete_after=5)
+                    db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                    return
+                else:
+                    await curse(entrance_fee, str(ctx.author))
+                    if universe_owner != 'PCG':
+                        crest_guild = db.queryGuildAlt({'GNAME' : universe_owner})
+                        if crest_guild:
+                            await blessguild(entrance_fee, universe['GUILD'])
+                            await ctx.send(f"{Crest_dict[selected_universe]} | {crest_guild['GNAME']} Universe Toll Paid! :coin:{'{:,}'.format(entrance_fee)}")
             
             #Create Explore Category
             categoryname = "Crown Unlimited"
@@ -10569,9 +10587,26 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                 return
             # Universe Cost
             universe = db.queryUniverse({'TITLE': str(selected_universe)})
+            universe_owner = universe['GUILD']
             if not universe['HAS_DUNGEON']:
                 await ctx.send(f"**{selected_universe}'s** dungeon is not available at this time. ")
                 return
+            #Universe Cost
+            entrance_fee = 5000
+            if selected_universe in crestlist:
+                await ctx.send(f"{Crest_dict[selected_universe]} | :flags: {guildname} {selected_universe} Crest Activated! No entrance fee!")
+            else:
+                if balance <= entrance_fee:
+                    await ctx.send(f"Tales require an :coin: {'{:,}'.format(entrance_fee)} entrance fee!", delete_after=5)
+                    db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                    return
+                else:
+                    await curse(entrance_fee, str(ctx.author))
+                    if universe['GUILD'] != 'PCG':
+                        crest_guild = db.queryGuildAlt({'GNAME' : universe['GUILD']})
+                        if crest_guild:
+                            await blessguild(entrance_fee, universe['GUILD'])
+                            await ctx.send(f"{Crest_dict[selected_universe]} | {crest_guild['GNAME']} Universe Toll Paid! :coin:{'{:,}'.format(entrance_fee)}")
             categoryname = "Crown Unlimited"
             category = discord.utils.get(guild.categories, name=categoryname)
 
@@ -10650,6 +10685,23 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                 return
             # Universe Cost
             universe = db.queryUniverse({'TITLE': str(selected_universe)})
+            universe_owner = universe['GUILD']
+            #Universe Cost
+            entrance_fee = 10000
+            if selected_universe in crestlist:
+                await ctx.send(f"{Crest_dict[selected_universe]} | :flags: {guildname} {selected_universe} Crest Activated! No entrance fee!")
+            else:
+                if balance <= entrance_fee:
+                    await ctx.send(f"Tales require an :coin: {'{:,}'.format(entrance_fee)} entrance fee!", delete_after=5)
+                    db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                    return
+                else:
+                    await curse(entrance_fee, str(ctx.author))
+                    if universe['GUILD'] != 'PCG':
+                        crest_guild = db.queryGuildAlt({'GNAME' : universe['GUILD']})
+                        if crest_guild:
+                            await blessguild(entrance_fee, universe['GUILD'])
+                            await ctx.send(f"{Crest_dict[selected_universe]} | {crest_guild['GNAME']} Universe Toll Paid! :coin:{'{:,}'.format(entrance_fee)}")
             categoryname = "Crown Unlimited"
             category = discord.utils.get(guild.categories, name=categoryname)
 

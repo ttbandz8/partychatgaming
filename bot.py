@@ -335,7 +335,7 @@ async def crown(ctx):
    Once in **Focus State** players can **Resolve**!
    **Resolved Characters** transform to greatly increase attack and health while sacrificing defense.
    **Resolved Characters** can summon Summons to aid them in battle.
-   **5:** Resolve _uses 1 turn_. You no longer stack focus Stats
+   ⚡ Resolve _uses 1 turn_. You no longer stack focus Stats
 
    **Summon Assistance!**
    Summons Enhancers can either boost your stats or inflict status effects on your opponent. Summon moves do not end the player turn!
@@ -374,7 +374,7 @@ async def crown(ctx):
    **Boss @partner:** Epic battles between two high level companions and one Incredible Boss.
 
    🤼 **PVP**
-   **/battle @player:** Select your Build and Challenge any Crown Unlimited Player to join your Game Lobby.
+   **/battle @player:** Select your Build and Challenge any Crown Unlimited Player to a quick match!
    
    🔮 **Crown Rifts**
    Crown Rifts are Co-Op Compatable and Helping other players in Co-Op **WILL NOT** close your open Rift!
