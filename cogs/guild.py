@@ -272,21 +272,38 @@ class Guild(commands.Cog):
         
         if guild_profile:
             if sworn_profile['DISNAME'] == guild_profile['SWORN']:
-                accept = await ctx.send(f"Will you renounce your Oath?", delete_after=8)
-                for emoji in emojis:
-                    await accept.add_reaction(emoji)
+                trade_buttons = [
+                    manage_components.create_button(
+                        style=ButtonStyle.red,
+                        label="Betray Association",
+                        custom_id="yes"
+                    ),
+                    manage_components.create_button(
+                        style=ButtonStyle.blue,
+                        label="No",
+                        custom_id="no"
+                    )
+                ]
+                trade_buttons_action_row = manage_components.create_actionrow(*trade_buttons)
+                await ctx.send(f"Will you renounce your Oath?".format(self), components=[trade_buttons_action_row])
+                
+                def check(button_ctx):
+                    return button_ctx.author == ctx.author
 
-                def check(reaction, user):
-                    return user == ctx.author and str(reaction.emoji) == '👍'
-
+                
                 try:
-                    confirmed2 = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
-                    newvalue = {'$pull': {'SWORDS': str(team_name)}}
-                    response2 = db.deleteGuildSword(guild_query, newvalue, str(ctx.author), str(team_name))
-                    await ctx.send(response2)
-                    new_value_query = {'$set': {'SWORN': 'BETRAYED', 'SHIELD' : str(founder)}}
-                    response = db.deleteGuildSworn(guild_query, new_value_query, str(founder), str(ctx.author))
-                    await ctx.send(response)                  
+                    button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[trade_buttons_action_row], timeout=120, check=check)
+                    if button_ctx.custom_id == "no":
+                        await button_ctx.send("No Change")
+                        self.stop = True
+                        return
+                    if button_ctx.custom_id == "yes":
+                        newvalue = {'$pull': {'SWORDS': str(team_name)}}
+                        response2 = db.deleteGuildSword(guild_query, newvalue, str(ctx.author), str(team_name))
+                        await ctx.send(response2)
+                        new_value_query = {'$set': {'SWORN': 'BETRAYED', 'SHIELD' : str(founder)}}
+                        response = db.deleteGuildSworn(guild_query, new_value_query, str(founder), str(ctx.author))
+                        await ctx.send(response)                  
                     
                 except:
                     print("No Betrayal")
@@ -319,31 +336,65 @@ class Guild(commands.Cog):
             if founder_profile['DISNAME'] != f_profile and founder_profile['DISNAME'] != s_profile:
                 await ctx.send(m.ENLIST_GUILD_FOUNDER, delete_after=3)
                 return
-            accept = await ctx.send(f"Do you want to ally with {team_name}?", delete_after=10)
-            for emoji in emojis:
-                await accept.add_reaction(emoji)
+            trade_buttons = [
+                manage_components.create_button(
+                    style=ButtonStyle.red,
+                    label="Betray Association",
+                    custom_id="yes"
+                ),
+                manage_components.create_button(
+                    style=ButtonStyle.blue,
+                    label="No",
+                    custom_id="no"
+                )
+            ]
+            trade_buttons_action_row = manage_components.create_actionrow(*trade_buttons)
+            await ctx.send(f"Do you want to ally with {team_name}?".format(self), components=[trade_buttons_action_row])
+            
+            def check(button_ctx):
+                return button_ctx.author == ctx.author
 
-            def check(reaction, user):
-                return user == ctx.author and str(reaction.emoji) == '👍'
-
+            
             try:
-                confirmed1 = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
-                await main.DM(ctx, owner, f"{ctx.author.mention}" + f" would like to ally with your team!" + f" React in server to join their Association" )
-                accept = await ctx.send(f"{owner.mention}" +f" will you join {guild_name}?".format(self), delete_after=10)
-                for emoji in emojis:
-                    await accept.add_reaction(emoji)
-
-                def check(reaction, kid):
-                    return kid == owner and str(reaction.emoji) == '👍'
-
-                try:
-                    confirmed2 = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
-                    newvalue = {'$push': {'SWORDS': str(team_name)}}
-                    response = db.addGuildSword(new_query, newvalue, str(ctx.author), str(team_name))
-                    await ctx.send(response)
+                button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[trade_buttons_action_row], timeout=120, check=check)
+                if button_ctx.custom_id == "no":
+                    await button_ctx.send("No Change")
+                    self.stop = True
+                    return
+                if button_ctx.custom_id == "yes":
+                    await main.DM(ctx, owner, f"{ctx.author.mention}" + f" would like to ally with your team!" + f" React in server to join their Association" )
+                    trade_buttons = [
+                        manage_components.create_button(
+                            style=ButtonStyle.red,
+                            label="Betray Association",
+                            custom_id="yes"
+                        ),
+                        manage_components.create_button(
+                            style=ButtonStyle.blue,
+                            label="No",
+                            custom_id="no"
+                        )
+                    ]
+                    trade_buttons_action_row = manage_components.create_actionrow(*trade_buttons)
+                    await ctx.send(f"{owner.mention}" +f" will you join {guild_name}?".format(self), components=[trade_buttons_action_row])
                     
-                except:
-                    await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=3)
+                    def check(button_ctx):
+                        return button_ctx.author == ctx.author
+
+                    
+                    try:
+                        button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[trade_buttons_action_row], timeout=120, check=check)
+                        if button_ctx.custom_id == "no":
+                            await button_ctx.send("No Change")
+                            self.stop = True
+                            return
+                        if button_ctx.custom_id == "yes":
+                            newvalue = {'$push': {'SWORDS': str(team_name)}}
+                            response = db.addGuildSword(new_query, newvalue, str(ctx.author), str(team_name))
+                            await ctx.send(response)
+                    
+                    except:
+                        await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=3)
             except:
                 print("No proposal Sent") 
                 
@@ -374,31 +425,65 @@ class Guild(commands.Cog):
         if founder_profile['DISNAME'] != f_profile and founder_profile['DISNAME'] != s_profile:
             await ctx.send(m.KNIGHT_GUILD_FOUNDER, delete_after=3)
             return
-        accept = await ctx.send(f"Do you wish to knight {blade.mention}?".format(self), delete_after=10)
-        for emoji in emojis:
-            await accept.add_reaction(emoji)
+        trade_buttons = [
+            manage_components.create_button(
+                style=ButtonStyle.red,
+                label="Disband Assosiation",
+                custom_id="yes"
+            ),
+            manage_components.create_button(
+                style=ButtonStyle.blue,
+                label="No",
+                custom_id="no"
+            )
+        ]
+        trade_buttons_action_row = manage_components.create_actionrow(*trade_buttons)
+        await ctx.send(f"Do you wish to knight {blade.mention}?".format(self), components=[trade_buttons_action_row])
+        
+        def check(button_ctx):
+            return button_ctx.author == ctx.author
 
-        def check(reaction, user):
-            return user == ctx.author and str(reaction.emoji) == '👍'
-
+        
         try:
-            confirmed1 = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
-            await main.DM(ctx, blade, f"{ctx.author.mention}" + f" would like you to serve as the Association Shield!" + f" React in server to protect the Association" )
-            accept = await ctx.send(f"{blade.mention}" +f" will you defend {guild_name}?".format(self), delete_after=10)
-            for emoji in emojis:
-                await accept.add_reaction(emoji)
-
-            def check(reaction, kid):
-                return kid == blade and str(reaction.emoji) == '👍'
-
-            try:
-                confirmed2 = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
-                newvalue = {'$set': {'SHIELD': str(blade), 'STREAK' : 0}}
-                response = db.addGuildShield(new_query, newvalue, str(ctx.author), str(blade))
-                await ctx.send(response)
+            button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[trade_buttons_action_row], timeout=120, check=check)
+            if button_ctx.custom_id == "no":
+                await button_ctx.send("No Change")
+                self.stop = True
+                return
+            if button_ctx.custom_id == "yes":
+                await main.DM(ctx, blade, f"{ctx.author.mention}" + f" would like you to serve as the Association Shield!" + f" React in server to protect the Association" )
+                accept = await ctx.send(f"".format(self), delete_after=10)
+                trade_buttons = [
+                    manage_components.create_button(
+                        style=ButtonStyle.red,
+                        label="Disband Assosiation",
+                        custom_id="yes"
+                    ),
+                    manage_components.create_button(
+                        style=ButtonStyle.blue,
+                        label="No",
+                        custom_id="no"
+                    )
+                ]
+                trade_buttons_action_row = manage_components.create_actionrow(*trade_buttons)
+                await ctx.send(f"{blade.mention}" +f" will you defend {guild_name}?".format(self), components=[trade_buttons_action_row])
                 
-            except:
-                await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=3)
+                def check(button_ctx):
+                    return button_ctx.author == ctx.author
+
+                
+                try:
+                    button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[trade_buttons_action_row], timeout=120, check=check)
+                    if button_ctx.custom_id == "no":
+                        await button_ctx.send("Knight Refused")
+                        self.stop = True
+                        return
+                    if button_ctx.custom_id == "yes":
+                        newvalue = {'$set': {'SHIELD': str(blade), 'STREAK' : 0}}
+                        response = db.addGuildShield(new_query, newvalue, str(ctx.author), str(blade))
+                        await ctx.send(response)
+                except:
+                    await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=3)
         except:
             print("No proposal Sent")
         
@@ -419,18 +504,36 @@ class Guild(commands.Cog):
         
         if guild_profile:
             if leader_profile['DISNAME'] == guild_profile['FOUNDER'] or leader_profile['DISNAME'] == guild_profile['SWORN']:
-                accept = await ctx.send(f"Do you wish to Exile {owner.mention} and {exiled_profile['TEAM']}?".format(self), delete_after=8)
-                for emoji in emojis:
-                    await accept.add_reaction(emoji)
+                accept = await ctx.send(f"".format(self), delete_after=8)
+                trade_buttons = [
+                    manage_components.create_button(
+                        style=ButtonStyle.red,
+                        label="Exile Guild",
+                        custom_id="yes"
+                    ),
+                    manage_components.create_button(
+                        style=ButtonStyle.blue,
+                        label="No",
+                        custom_id="no"
+                    )
+                ]
+                trade_buttons_action_row = manage_components.create_actionrow(*trade_buttons)
+                await ctx.send(f"Do you wish to Exile {owner.mention} and {exiled_profile['TEAM']}?".format(self), components=[trade_buttons_action_row])
+                
+                def check(button_ctx):
+                    return button_ctx.author == ctx.author
 
-                def check(reaction, user):
-                    return user == ctx.author and str(reaction.emoji) == '👍'
-
+                
                 try:
-                    confirmed = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
-                    new_value_query = {'$pull': {'SWORDS': str(exiled_profile['TEAM'])}}
-                    response2 = db.deleteGuildSword(new_query, new_value_query, str(ctx.author), str(exiled_profile['TEAM']))
-                    await ctx.send(response2)
+                    button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[trade_buttons_action_row], timeout=120, check=check)
+                    if button_ctx.custom_id == "no":
+                        await button_ctx.send("No Change")
+                        self.stop = True
+                        return
+                    if button_ctx.custom_id == "yes":
+                        new_value_query = {'$pull': {'SWORDS': str(exiled_profile['TEAM'])}}
+                        response2 = db.deleteGuildSword(new_query, new_value_query, str(ctx.author), str(exiled_profile['TEAM']))
+                        await ctx.send(response2)
                 except:
                     print("No Exile")
             else:
@@ -447,21 +550,38 @@ class Guild(commands.Cog):
             return
         team_name = team_profile['TNAME']
         guild_query = {'GNAME': team_profile['GUILD']}
-        guild_profile = db.queryGuildAlt(guild_query)
-        if sword_profile['DISNAME'] == guild_profile['SWORN']:
-            await ctx.send(m.SWORD_LEAVE, delete_after=5)
-            return        
+        guild_profile = db.queryGuildAlt(guild_query)  
         if guild_profile:
+            if sword_profile['DISNAME'] == guild_profile['SWORN']:
+                await ctx.send(m.SWORD_LEAVE, delete_after=5)
+                return      
+            trade_buttons = [
+                manage_components.create_button(
+                    style=ButtonStyle.red,
+                    label="Renounce Oath",
+                    custom_id="yes"
+                ),
+                manage_components.create_button(
+                    style=ButtonStyle.blue,
+                    label="No",
+                    custom_id="no"
+                )
+            ]
+            trade_buttons_action_row = manage_components.create_actionrow(*trade_buttons)
+            await ctx.send(f"Do you wish to renounce your allegiance to {guild_profile['GNAME']}?".format(self), components=[trade_buttons_action_row])
+            
+            def check(button_ctx):
+                return button_ctx.author == ctx.author
 
-                    accept = await ctx.send(f"Do you wish to renounce your allegiance to {guild_profile['GNAME']}?".format(self), delete_after=8)
-                    for emoji in emojis:
-                        await accept.add_reaction(emoji)
-
-                    def check(reaction, user):
-                        return user == ctx.author and str(reaction.emoji) == '👍'
-
+            
+            try:
+                button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[trade_buttons_action_row], timeout=120, check=check)
+                if button_ctx.custom_id == "no":
+                    await button_ctx.send("No Change")
+                    self.stop = True
+                    return
+                if button_ctx.custom_id == "yes":
                     try:
-                        confirmed = await self.bot.wait_for('reaction_add', timeout=5.0, check=check)
                         new_value_query = {'$pull': {'SWORDS': str(team_name)}}
                         response = db.deleteGuildSwordAlt(guild_query, new_value_query, str(team_name))
                         await ctx.send(response)
@@ -477,22 +597,40 @@ class Guild(commands.Cog):
         guild = db.queryGuild(guild_query)
         if guild:
             if guild['FOUNDER'] == str(ctx.author):
-                accept = await ctx.send(f"Do you want to disband the {guild['GNAME']}?".format(self), delete_after=10)
-                for emoji in emojis:
-                    await accept.add_reaction(emoji)
+                trade_buttons = [
+                    manage_components.create_button(
+                        style=ButtonStyle.red,
+                        label="Disband Assosiation",
+                        custom_id="yes"
+                    ),
+                    manage_components.create_button(
+                        style=ButtonStyle.blue,
+                        label="No",
+                        custom_id="no"
+                    )
+                ]
+                trade_buttons_action_row = manage_components.create_actionrow(*trade_buttons)
+                await ctx.send(f"Do you want to disband the {guild['GNAME']}?".format(self), components=[trade_buttons_action_row])
+                
+                def check(button_ctx):
+                    return button_ctx.author == ctx.author
 
-                def check(reaction, user):
-                    return user == ctx.author and str(reaction.emoji) == '👍'
-
+                
                 try:
-                    confirmed = await self.bot.wait_for('reaction_add', timeout=8.0, check=check)
-                    response = db.deleteGuild(guild, str(ctx.author))
+                    button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[trade_buttons_action_row], timeout=120, check=check)
+                    if button_ctx.custom_id == "no":
+                        await button_ctx.send("Association not Disbanded")
+                        self.stop = True
+                        return
+                    if button_ctx.custom_id == "yes":
+                        try:
+                            response = db.deleteGuild(guild, str(ctx.author))
 
-                    user_query = {'DISNAME': str(ctx.author)}
-                    new_value = {'$set': {'GUILD': 'PCG'}}
-                    db.updateUserNoFilter(user_query, new_value)
+                            user_query = {'DISNAME': str(ctx.author)}
+                            new_value = {'$set': {'GUILD': 'PCG'}}
+                            db.updateUserNoFilter(user_query, new_value)
 
-                    await ctx.send(response)
+                            await ctx.send(response)
                 except:
                     print("Association Not Deleted. ")
             else:
