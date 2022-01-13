@@ -390,8 +390,6 @@ async def crown(ctx):
    
    **Preset Builds**
    You can bring your preset builds into Duo Battles!
-   
-   Take your **Presets** into Crown Duos!
    """) ,colour=0x7289da)
    embedVar9.set_thumbnail(url=avatar)
 
