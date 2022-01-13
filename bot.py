@@ -435,17 +435,17 @@ async def crown(ctx):
    **Guild Members** earn extra :coin: towards the **Guild Bank** 
 
    **Creating A Guild**
-   Use **/createteam** and create a **Guild Name**
+   Use **/createguild** and create a **Guild Name**
    **/recruit** your friends to join your newly named **Guild** !
    Players can use **/apply** to join as well!
    
    **Guild Bonusus**
-   Teammates gain an extra **10 Attack** and **Defense** playing Co-Op Together !
-   Teams earn additional :coin: for every **Tales**, **Dungeon** and **Boss** Victory
+   Guildmates gain an extra **10 Attack** and **Defense** playing Co-Op Together !
+   Guilds earn additional :coin: for every **Tales**, **Dungeon** and **Boss** Victory
    
    **Guild Economy**
-   Players across **Crown Unlimited** can **/donate** :coin: to their favorite teams
-   Owners can ****/pay**** their members a wage.
+   Players across **Crown Unlimited** can **/donate** :coin: to their favorite Guilds!
+   Guild Owners can ****/pay**** their members a wage.
    """),colour=0x7289da)
    embedVar15.set_thumbnail(url=avatar)
 
@@ -478,7 +478,6 @@ async def crown(ctx):
    Associations in Crown Unlmited are formed by an Oath between two Guild Owners
    
    The Oathgiver becomes the **Founder** and the Oathreciever becomes the ****Sworn and Shield****.
-   
    
    The **Shield** defends the Association from raiding players.
    

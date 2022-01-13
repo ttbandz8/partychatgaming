@@ -21241,6 +21241,10 @@ def existing_channel_check(self, ctx):
         text_channel_list = []
         channel_exists = False
         name_check = str(ctx.author).split("#", 1)[0]
+        punc = '''!()-[];:'"\,<>./?@#$%^&*_~'''
+        for ele in name_check:
+            if ele in punc:
+                name_check = name_check.replace(ele, "")
         for guild in self.bot.guilds:
             for channel in guild.text_channels:
                 text_channel_list.append(channel.name)
