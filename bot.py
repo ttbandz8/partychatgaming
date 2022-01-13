@@ -394,8 +394,6 @@ async def crown(ctx):
    embedVar9.set_thumbnail(url=avatar)
 
    embedVar10 = discord.Embed(title= f"Economy",description=textwrap.dedent(f"""\
-   Crown Unlimited features an in game **Shop** where you can purchase new Cards, Titles, and Arms.
-   
    **Shop**
    Use **/shop** to open the **Shop**!
    The shop sells Cards, Titles and Arms.
