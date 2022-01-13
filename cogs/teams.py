@@ -67,6 +67,7 @@ class Teams(commands.Cog):
                 return
             
             if button_ctx.custom_id == "Yes":
+                
                 response = db.createTeam(data.newTeam(team_query), str(ctx.author))
                 await button_ctx.send(response)
         except:

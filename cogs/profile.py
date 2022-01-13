@@ -175,10 +175,10 @@ class Profile(commands.Cog):
                 bond_message = ""
                 lvl_message = ""
                 if bond == 3:
-                    bond_message = ":star2:"
+                    bond_message = "🌟"
                 
                 if lvl == 10:
-                    lvl_message = ":star:"
+                    lvl_message = "⭐"
 
                 # Arm Information
                 arm_name = arm['ARM']

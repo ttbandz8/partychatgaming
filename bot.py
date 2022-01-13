@@ -391,7 +391,7 @@ async def crown(ctx):
    **Preset Builds**
    You can bring your preset builds into Duo Battles!
    
-   Take your **Preset Presets** into Crown Duos!
+   Take your **Presets** into Crown Duos!
    """) ,colour=0x7289da)
    embedVar9.set_thumbnail(url=avatar)
 
@@ -416,7 +416,7 @@ async def crown(ctx):
    **Dismantle**
    Dismantle Cards, Titles and Arms into :gem:**Gems**.
    
-   💟 **Universe Heart** - will allow you to buy card levels past 200.
+   💟 **Universe Heart** - will allow you to level cards past 200.
    🌹 **Universe Soul** - will allow you to keep card levels when trading/selling Cards.
    
    **Trinket Shop**
@@ -1256,13 +1256,13 @@ async def trinketshop(ctx):
    Purchase Experience Boosts
    *Experience Boost Applied to Current Equipped Card*
 
-   🔋 1️⃣ **1,500EXP** for :coin: **50,000**
+   🔋 1️⃣ **1,500EXP** for :coin: **80,000**
    
-   🔋 2️⃣ **4,500EXP** for :dollar: **140,000**
+   🔋 2️⃣ **4,500EXP** for :dollar: **220,000**
 
-   🔋 3️⃣ **15,000EXP** for :moneybag: **400,000**
+   🔋 3️⃣ **15,000EXP** for :moneybag: **650,000**
 
-   ⚒️ 4️⃣ **25 Durability** for :moneybag: **10,000**
+   ⚒️ 4️⃣ **25 Durability** for :moneybag: **25,000**
 
    Purchase Gabe's Purse to Keep All Items When Rebirthing
 
@@ -1284,16 +1284,16 @@ async def trinketshop(ctx):
       exp_boost_buttons = ["1", "2", "3"]
       if button_ctx.custom_id == "1":
          levels_gained = 10
-         price = 50000
+         price = 80000
       if button_ctx.custom_id == "2":
          levels_gained = 30
-         price = 140000
+         price = 220000
       if button_ctx.custom_id == "3":
          levels_gained = 100
-         price=400000
+         price=650000
       if button_ctx.custom_id == "5":
          levels_gained = 25
-         price=10000
+         price=25000
 
 
       if button_ctx.custom_id == "cancel":

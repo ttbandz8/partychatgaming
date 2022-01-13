@@ -8577,10 +8577,21 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 tcard_lvl = 500
                 tcard_lvl_ap_buff = 200
             else:
-                tpet_lvl = 3
-                tpet_bond = 1
-                tcard_lvl = 30
-                tcard_lvl_ap_buff = 10 + (5 * currentopponent)
+                if mode in co_op_modes and mode in U_modes:
+                    tpet_lvl = 5
+                    tpet_bond = 2
+                    tcard_lvl = 200
+                    tcard_lvl_ap_buff = 50 + (5 * currentopponent)
+                elif mode in co_op_modes and mode in D_modes:
+                    tpet_lvl = 5
+                    tpet_bond = 3
+                    tcard_lvl = 400
+                    tcard_lvl_ap_buff = 150 + (5 * currentopponent)
+                else:
+                    tpet_lvl = 3
+                    tpet_bond = 1
+                    tcard_lvl = 30
+                    tcard_lvl_ap_buff = 10 + (5 * currentopponent)
             tarm_passive = tarm['ABILITIES'][0]
             tarm_name = tarm['ARM']
             t_card = t['NAME']
@@ -18337,7 +18348,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = t_health
                                                         tparry_damage = round(dmg['DMG'])
                                                         t_health = round(t_health - (tparry_damage * .75))
-                                                        c_health = round(c_health - (tparry_damage * 25))
+                                                        c_health = round(c_health - (tparry_damage * .25))
                                                         tparry_count = tparry_count - 1
                                                         embedVar = discord.Embed(title=f"{t_card.upper()} Activates **Parry** 🔄", description=f"{c_card} takes {round(tparry_damage * .25)}! DMG\n **{tparry_count} Parries** to go!!", colour=0xe91e63)
                                                         if carm_barrier_active:
@@ -18349,7 +18360,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = t_health
                                                         tparry_damage = round(dmg['DMG'])
                                                         t_health = round(t_health - (tparry_damage * .75))
-                                                        c_health = round(c_health - (tparry_damage * 25))
+                                                        c_health = round(c_health - (tparry_damage * .25))
                                                         embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{c_card} takes {round(tparry_damage * .25)}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                         
                                                         tparry_count = tparry_count - 1
@@ -19201,7 +19212,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health
                                                             tparry_damage = round(dmg['DMG'])
                                                             t_health = round(t_health - (tparry_damage * .75))
-                                                            c_health = round(c_health - (tparry_damage * 25))
+                                                            c_health = round(c_health - (tparry_damage * .25))
                                                             tparry_count = tparry_count - 1
                                                             embedVar = discord.Embed(title=f"{t_card.upper()} Activates **Parry** 🔄", description=f"{c_card} takes {round(tparry_damage * .25)}! DMG\n **{tparry_count} Parries** to go!!", colour=0xe91e63)
                                                             if carm_barrier_active:
@@ -19213,7 +19224,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health
                                                             tparry_damage = round(dmg['DMG'])
                                                             t_health = round(t_health - (tparry_damage * .75))
-                                                            c_health = round(c_health - (tparry_damage * 25))
+                                                            c_health = round(c_health - (tparry_damage * .25))
                                                             embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{c_card} takes {round(tparry_damage * .25)}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                             
                                                             tparry_count = tparry_count - 1
