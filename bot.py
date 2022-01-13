@@ -334,7 +334,7 @@ async def crown(ctx):
    ⚡**Resolve**
    Once in **Focus State** players can **Resolve**!
    **Resolved Characters** transform to greatly increase attack and health while sacrificing defense.
-   **Resolved Characters** can summon Summons to aid them in battle.
+   **Resolved Characters** can call on Summons to aid them in battle.
    ⚡ Resolve _uses 1 turn_. You no longer stack focus Stats
 
    **Summon Assistance!**
