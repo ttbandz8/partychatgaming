@@ -1163,10 +1163,10 @@ class CrownUnlimited(commands.Cog):
                     guild = ctx.guild
                     if guild:
                         overwrites = {
-                            guild.default_role: discord.PermissionOverwrite(read_messages=True, manage_channels=False,
+                            guild.default_role: discord.PermissionOverwrite(manage_channels=False,
                                                                             kick_members=False, mention_everyone=False,
-                                                                            read_message_history=True,
-                                                                            send_messages=False, view_channel=True),
+                                                                            
+                                                                            send_messages=False),
                             guild.me: discord.PermissionOverwrite(read_messages=True),
                             ctx.author: discord.PermissionOverwrite(read_messages=True, send_messages=True),
                         }
@@ -6708,7 +6708,7 @@ class CrownUnlimited(commands.Cog):
                     soul = "🥀"
 
                 gem_details.append(
-                    f"🌍 **{gd['UNIVERSE']}**\n💎 {str(gd['GEMS'])}\nUniverse Heart {heart}\nUniverse Soul {soul}\n")
+                    f"🌍 **{gd['UNIVERSE']}**\n💎 {'{:,}'.format(gd['GEMS'])}\nUniverse Heart {heart}\nUniverse Soul {soul}\n")
 
             # Adding to array until divisible by 10
             while len(gem_details) % 10 != 0:
@@ -8577,10 +8577,21 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 tcard_lvl = 500
                 tcard_lvl_ap_buff = 200
             else:
-                tpet_lvl = 3
-                tpet_bond = 1
-                tcard_lvl = 30
-                tcard_lvl_ap_buff = 10 + (5 * currentopponent)
+                if mode in co_op_modes and mode in U_modes:
+                    tpet_lvl = 5
+                    tpet_bond = 2
+                    tcard_lvl = 200
+                    tcard_lvl_ap_buff = 50 + (5 * currentopponent)
+                elif mode in co_op_modes and mode in D_modes:
+                    tpet_lvl = 5
+                    tpet_bond = 3
+                    tcard_lvl = 400
+                    tcard_lvl_ap_buff = 150 + (5 * currentopponent)
+                else:
+                    tpet_lvl = 3
+                    tpet_bond = 1
+                    tcard_lvl = 30
+                    tcard_lvl_ap_buff = 10 + (5 * currentopponent)
             tarm_passive = tarm['ABILITIES'][0]
             tarm_name = tarm['ARM']
             t_card = t['NAME']
@@ -10266,9 +10277,9 @@ async def enemy_approached(self, message, channel, player, selected_mode, univer
     sowner = player
     guild = message.guild
     overwrites = {
-        guild.default_role: discord.PermissionOverwrite(read_messages=True, manage_channels=False, kick_members=False,
-                                                        mention_everyone=False, read_message_history=True,
-                                                        send_messages=False, view_channel=True),
+        guild.default_role: discord.PermissionOverwrite(manage_channels=False, kick_members=False,
+                                                        mention_everyone=False,
+                                                        send_messages=False),
         guild.me: discord.PermissionOverwrite(read_messages=True),
         message.author: discord.PermissionOverwrite(read_messages=True, send_messages=True),
     }
@@ -10296,14 +10307,15 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
     oguild = "PCG"
     prevault = db.queryVault({'OWNER': str(ctx.author)})
     balance = prevault['BALANCE']
+    
     crestlist = []
     crestsearch = False
     autoBattle = False
     guild = ctx.guild
     overwrites = {
-        guild.default_role: discord.PermissionOverwrite(read_messages=True, manage_channels=False, kick_members=False,
-                                                        mention_everyone=False, read_message_history=True,
-                                                        send_messages=False, view_channel=True),
+        guild.default_role: discord.PermissionOverwrite(manage_channels=False, kick_members=False,
+                                                        mention_everyone=False,
+                                                        send_messages=False),
         guild.me: discord.PermissionOverwrite(read_messages=True),
         ctx.author: discord.PermissionOverwrite(read_messages=True, send_messages=True),
     }
@@ -10335,10 +10347,10 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                 return
             if button_ctx.custom_id == "yes":
                 overwrites = {
-                    guild.default_role: discord.PermissionOverwrite(read_messages=True, manage_channels=False,
+                    guild.default_role: discord.PermissionOverwrite(manage_channels=False,
                                                                     kick_members=False, mention_everyone=False,
-                                                                    read_message_history=True, send_messages=False,
-                                                                    view_channel=True),
+                                                                   send_messages=False
+                                                                    ),
                     guild.me: discord.PermissionOverwrite(read_messages=True),
                     ctx.author: discord.PermissionOverwrite(read_messages=True, send_messages=True),
                     user: discord.PermissionOverwrite(read_messages=True, send_messages=True),
@@ -10480,9 +10492,26 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             selected_universe = custom_function.selected_universe
 
             universe = db.queryUniverse({'TITLE': str(selected_universe)})
+            universe_owner = universe['GUILD']
             if not universe['CROWN_TALES']:
                 await ctx.send(f"{selected_universe} is not ready to be explored! Check back later!")
                 return
+            #Universe Cost
+            entrance_fee = 1000
+            if selected_universe in crestlist:
+                await ctx.send(f"{Crest_dict[selected_universe]} | :flags: {guildname} {selected_universe} Crest Activated! No entrance fee!")
+            else:
+                if balance <= entrance_fee:
+                    await ctx.send(f"Tales require an :coin: {'{:,}'.format(entrance_fee)} entrance fee!", delete_after=5)
+                    db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                    return
+                else:
+                    await curse(entrance_fee, str(ctx.author))
+                    if universe_owner != 'PCG':
+                        crest_guild = db.queryGuildAlt({'GNAME' : universe_owner})
+                        if crest_guild:
+                            await blessguild(entrance_fee, universe['GUILD'])
+                            await ctx.send(f"{Crest_dict[selected_universe]} | {crest_guild['GNAME']} Universe Toll Paid! :coin:{'{:,}'.format(entrance_fee)}")
             
             #Create Explore Category
             categoryname = "Crown Unlimited"
@@ -10569,9 +10598,26 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                 return
             # Universe Cost
             universe = db.queryUniverse({'TITLE': str(selected_universe)})
+            universe_owner = universe['GUILD']
             if not universe['HAS_DUNGEON']:
                 await ctx.send(f"**{selected_universe}'s** dungeon is not available at this time. ")
                 return
+            #Universe Cost
+            entrance_fee = 5000
+            if selected_universe in crestlist:
+                await ctx.send(f"{Crest_dict[selected_universe]} | :flags: {guildname} {selected_universe} Crest Activated! No entrance fee!")
+            else:
+                if balance <= entrance_fee:
+                    await ctx.send(f"Tales require an :coin: {'{:,}'.format(entrance_fee)} entrance fee!", delete_after=5)
+                    db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                    return
+                else:
+                    await curse(entrance_fee, str(ctx.author))
+                    if universe['GUILD'] != 'PCG':
+                        crest_guild = db.queryGuildAlt({'GNAME' : universe['GUILD']})
+                        if crest_guild:
+                            await blessguild(entrance_fee, universe['GUILD'])
+                            await ctx.send(f"{Crest_dict[selected_universe]} | {crest_guild['GNAME']} Universe Toll Paid! :coin:{'{:,}'.format(entrance_fee)}")
             categoryname = "Crown Unlimited"
             category = discord.utils.get(guild.categories, name=categoryname)
 
@@ -10650,6 +10696,23 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                 return
             # Universe Cost
             universe = db.queryUniverse({'TITLE': str(selected_universe)})
+            universe_owner = universe['GUILD']
+            #Universe Cost
+            entrance_fee = 10000
+            if selected_universe in crestlist:
+                await ctx.send(f"{Crest_dict[selected_universe]} | :flags: {guildname} {selected_universe} Crest Activated! No entrance fee!")
+            else:
+                if balance <= entrance_fee:
+                    await ctx.send(f"Tales require an :coin: {'{:,}'.format(entrance_fee)} entrance fee!", delete_after=5)
+                    db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                    return
+                else:
+                    await curse(entrance_fee, str(ctx.author))
+                    if universe['GUILD'] != 'PCG':
+                        crest_guild = db.queryGuildAlt({'GNAME' : universe['GUILD']})
+                        if crest_guild:
+                            await blessguild(entrance_fee, universe['GUILD'])
+                            await ctx.send(f"{Crest_dict[selected_universe]} | {crest_guild['GNAME']} Universe Toll Paid! :coin:{'{:,}'.format(entrance_fee)}")
             categoryname = "Crown Unlimited"
             category = discord.utils.get(guild.categories, name=categoryname)
 
@@ -18285,7 +18348,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = t_health
                                                         tparry_damage = round(dmg['DMG'])
                                                         t_health = round(t_health - (tparry_damage * .75))
-                                                        c_health = round(c_health - (tparry_damage * 25))
+                                                        c_health = round(c_health - (tparry_damage * .25))
                                                         tparry_count = tparry_count - 1
                                                         embedVar = discord.Embed(title=f"{t_card.upper()} Activates **Parry** 🔄", description=f"{c_card} takes {round(tparry_damage * .25)}! DMG\n **{tparry_count} Parries** to go!!", colour=0xe91e63)
                                                         if carm_barrier_active:
@@ -18297,7 +18360,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = t_health
                                                         tparry_damage = round(dmg['DMG'])
                                                         t_health = round(t_health - (tparry_damage * .75))
-                                                        c_health = round(c_health - (tparry_damage * 25))
+                                                        c_health = round(c_health - (tparry_damage * .25))
                                                         embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{c_card} takes {round(tparry_damage * .25)}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                         
                                                         tparry_count = tparry_count - 1
@@ -19149,7 +19212,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health
                                                             tparry_damage = round(dmg['DMG'])
                                                             t_health = round(t_health - (tparry_damage * .75))
-                                                            c_health = round(c_health - (tparry_damage * 25))
+                                                            c_health = round(c_health - (tparry_damage * .25))
                                                             tparry_count = tparry_count - 1
                                                             embedVar = discord.Embed(title=f"{t_card.upper()} Activates **Parry** 🔄", description=f"{c_card} takes {round(tparry_damage * .25)}! DMG\n **{tparry_count} Parries** to go!!", colour=0xe91e63)
                                                             if carm_barrier_active:
@@ -19161,7 +19224,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health
                                                             tparry_damage = round(dmg['DMG'])
                                                             t_health = round(t_health - (tparry_damage * .75))
-                                                            c_health = round(c_health - (tparry_damage * 25))
+                                                            c_health = round(c_health - (tparry_damage * .25))
                                                             embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{c_card} takes {round(tparry_damage * .25)}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                             
                                                             tparry_count = tparry_count - 1
@@ -21178,6 +21241,10 @@ def existing_channel_check(self, ctx):
         text_channel_list = []
         channel_exists = False
         name_check = str(ctx.author).split("#", 1)[0]
+        punc = '''!()-[];:'"\,<>./?@#$%^&*_~'''
+        for ele in name_check:
+            if ele in punc:
+                name_check = name_check.replace(ele, "")
         for guild in self.bot.guilds:
             for channel in guild.text_channels:
                 text_channel_list.append(channel.name)

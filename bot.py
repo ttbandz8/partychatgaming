@@ -334,8 +334,8 @@ async def crown(ctx):
    ⚡**Resolve**
    Once in **Focus State** players can **Resolve**!
    **Resolved Characters** transform to greatly increase attack and health while sacrificing defense.
-   **Resolved Characters** can summon Summons to aid them in battle.
-   **5:** Resolve _uses 1 turn_. You no longer stack focus Stats
+   **Resolved Characters** can call on Summons to aid them in battle.
+   ⚡ Resolve _uses 1 turn_. You no longer stack focus Stats
 
    **Summon Assistance!**
    Summons Enhancers can either boost your stats or inflict status effects on your opponent. Summon moves do not end the player turn!
@@ -374,7 +374,7 @@ async def crown(ctx):
    **Boss @partner:** Epic battles between two high level companions and one Incredible Boss.
 
    🤼 **PVP**
-   **/battle @player:** Select your Build and Challenge any Crown Unlimited Player to join your Game Lobby.
+   **/battle @player:** Select your Build and Challenge any Crown Unlimited Player to a quick match!
    
    🔮 **Crown Rifts**
    Crown Rifts are Co-Op Compatable and Helping other players in Co-Op **WILL NOT** close your open Rift!
@@ -390,14 +390,10 @@ async def crown(ctx):
    
    **Preset Builds**
    You can bring your preset builds into Duo Battles!
-   
-   Take your **Preset Presets** into Crown Duos!
    """) ,colour=0x7289da)
    embedVar9.set_thumbnail(url=avatar)
 
    embedVar10 = discord.Embed(title= f"Economy",description=textwrap.dedent(f"""\
-   Crown Unlimited features an in game **Shop** where you can purchase new Cards, Titles, and Arms.
-   
    **Shop**
    Use **/shop** to open the **Shop**!
    The shop sells Cards, Titles and Arms.
@@ -416,7 +412,7 @@ async def crown(ctx):
    **Dismantle**
    Dismantle Cards, Titles and Arms into :gem:**Gems**.
    
-   💟 **Universe Heart** - will allow you to buy card levels past 200.
+   💟 **Universe Heart** - will allow you to level cards past 200.
    🌹 **Universe Soul** - will allow you to keep card levels when trading/selling Cards.
    
    **Trinket Shop**
@@ -439,17 +435,17 @@ async def crown(ctx):
    **Guild Members** earn extra :coin: towards the **Guild Bank** 
 
    **Creating A Guild**
-   Use **/createteam** and create a **Guild Name**
+   Use **/createguild** and create a **Guild Name**
    **/recruit** your friends to join your newly named **Guild** !
    Players can use **/apply** to join as well!
    
    **Guild Bonusus**
-   Teammates gain an extra **10 Attack** and **Defense** playing Co-Op Together !
-   Teams earn additional :coin: for every **Tales**, **Dungeon** and **Boss** Victory
+   Guildmates gain an extra **10 Attack** and **Defense** playing Co-Op Together !
+   Guilds earn additional :coin: for every **Tales**, **Dungeon** and **Boss** Victory
    
    **Guild Economy**
-   Players across **Crown Unlimited** can **/donate** :coin: to their favorite teams
-   Owners can ****/pay**** their members a wage.
+   Players across **Crown Unlimited** can **/donate** :coin: to their favorite Guilds!
+   Guild Owners can ****/pay**** their members a wage.
    """),colour=0x7289da)
    embedVar15.set_thumbnail(url=avatar)
 
@@ -482,7 +478,6 @@ async def crown(ctx):
    Associations in Crown Unlmited are formed by an Oath between two Guild Owners
    
    The Oathgiver becomes the **Founder** and the Oathreciever becomes the ****Sworn and Shield****.
-   
    
    The **Shield** defends the Association from raiding players.
    
@@ -1258,7 +1253,7 @@ async def trinketshop(ctx):
 
    🔋 1️⃣ **1,500EXP** for :coin: **80,000**
    
-   🔋 2️⃣ **4,500EXP** for :dollar: **340,000**
+   🔋 2️⃣ **4,500EXP** for :dollar: **220,000**
 
    🔋 3️⃣ **15,000EXP** for :moneybag: **650,000**
 
@@ -1287,7 +1282,7 @@ async def trinketshop(ctx):
          price = 80000
       if button_ctx.custom_id == "2":
          levels_gained = 30
-         price = 340000
+         price = 220000
       if button_ctx.custom_id == "3":
          levels_gained = 100
          price=650000

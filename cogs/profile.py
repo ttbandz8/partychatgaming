@@ -175,10 +175,10 @@ class Profile(commands.Cog):
                 bond_message = ""
                 lvl_message = ""
                 if bond == 3:
-                    bond_message = ":star2:"
+                    bond_message = "🌟"
                 
                 if lvl == 10:
-                    lvl_message = ":star:"
+                    lvl_message = "⭐"
 
                 # Arm Information
                 arm_name = arm['ARM']
@@ -2592,8 +2592,8 @@ class Profile(commands.Cog):
                 embedVar = discord.Embed(title= f"{universe_name}", description=textwrap.dedent(f"""
                 Welcome {ctx.author.mention}!
                 
-                💟 **Universe Heart:** 💎 400,000
-                🌹 **Universe Soul:** 💎 800,000
+                💟 **Universe Heart:** 💎 20,000
+                🌹 **Universe Soul:** 💎 50,000
                 """), colour=0x7289da)
                 embedVar.set_image(url=universe_image)
                 embed_list.append(embedVar)
@@ -2610,7 +2610,7 @@ class Profile(commands.Cog):
                 if button_ctx.author == ctx.author:
                     universe = str(button_ctx.origin_message.embeds[0].title)
                     if button_ctx.custom_id == "UNIVERSE_HEART":
-                        price = 400000
+                        price = 20000
                         response = craft_adjuster(vault, universe, price, button_ctx.custom_id)
                         if response['SUCCESS']:
                             await button_ctx.send(f"{response['MESSAGE']}")
@@ -2620,7 +2620,7 @@ class Profile(commands.Cog):
                             self.stop = True                           
 
                     if button_ctx.custom_id == "UNIVERSE_SOUL":
-                        price = 800000
+                        price = 50000
                         response = craft_adjuster(vault, universe, price, button_ctx.custom_id)
                         if response['SUCCESS']:
                             await button_ctx.send(f"{response['MESSAGE']}")
