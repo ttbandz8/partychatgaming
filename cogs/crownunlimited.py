@@ -1163,10 +1163,10 @@ class CrownUnlimited(commands.Cog):
                     guild = ctx.guild
                     if guild:
                         overwrites = {
-                            guild.default_role: discord.PermissionOverwrite(read_messages=True, manage_channels=False,
+                            guild.default_role: discord.PermissionOverwrite(manage_channels=False,
                                                                             kick_members=False, mention_everyone=False,
-                                                                            read_message_history=True,
-                                                                            send_messages=False, view_channel=True),
+                                                                            
+                                                                            send_messages=False),
                             guild.me: discord.PermissionOverwrite(read_messages=True),
                             ctx.author: discord.PermissionOverwrite(read_messages=True, send_messages=True),
                         }
@@ -10277,9 +10277,9 @@ async def enemy_approached(self, message, channel, player, selected_mode, univer
     sowner = player
     guild = message.guild
     overwrites = {
-        guild.default_role: discord.PermissionOverwrite(read_messages=True, manage_channels=False, kick_members=False,
-                                                        mention_everyone=False, read_message_history=True,
-                                                        send_messages=False, view_channel=True),
+        guild.default_role: discord.PermissionOverwrite(manage_channels=False, kick_members=False,
+                                                        mention_everyone=False,
+                                                        send_messages=False),
         guild.me: discord.PermissionOverwrite(read_messages=True),
         message.author: discord.PermissionOverwrite(read_messages=True, send_messages=True),
     }
@@ -10313,9 +10313,9 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
     autoBattle = False
     guild = ctx.guild
     overwrites = {
-        guild.default_role: discord.PermissionOverwrite(read_messages=True, manage_channels=False, kick_members=False,
-                                                        mention_everyone=False, read_message_history=True,
-                                                        send_messages=False, view_channel=True),
+        guild.default_role: discord.PermissionOverwrite(manage_channels=False, kick_members=False,
+                                                        mention_everyone=False,
+                                                        send_messages=False),
         guild.me: discord.PermissionOverwrite(read_messages=True),
         ctx.author: discord.PermissionOverwrite(read_messages=True, send_messages=True),
     }
@@ -10347,10 +10347,10 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                 return
             if button_ctx.custom_id == "yes":
                 overwrites = {
-                    guild.default_role: discord.PermissionOverwrite(read_messages=True, manage_channels=False,
+                    guild.default_role: discord.PermissionOverwrite(manage_channels=False,
                                                                     kick_members=False, mention_everyone=False,
-                                                                    read_message_history=True, send_messages=False,
-                                                                    view_channel=True),
+                                                                   send_messages=False
+                                                                    ),
                     guild.me: discord.PermissionOverwrite(read_messages=True),
                     ctx.author: discord.PermissionOverwrite(read_messages=True, send_messages=True),
                     user: discord.PermissionOverwrite(read_messages=True, send_messages=True),
