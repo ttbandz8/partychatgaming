@@ -2326,7 +2326,8 @@ class Profile(commands.Cog):
 
             async def custom_function(self, button_ctx):
                 if button_ctx.author == ctx.author:
-                    updated_vault = db.queryVault({'OWNER': d['DISNAME']})
+                    updated_vault = db.queryVault({'OWNER': user['DISNAME']})
+                    balance = updated_vault['BALANCE']
                     universe = str(button_ctx.origin_message.embeds[0].title)
                     if button_ctx.custom_id == "title":
                         price = price_adjuster(50000, universe, completed_tales, completed_dungeons)['TITLE_PRICE']
