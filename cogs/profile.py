@@ -2326,6 +2326,7 @@ class Profile(commands.Cog):
 
             async def custom_function(self, button_ctx):
                 if button_ctx.author == ctx.author:
+                    updated_vault = db.queryVault({'OWNER': d['DISNAME']})
                     universe = str(button_ctx.origin_message.embeds[0].title)
                     if button_ctx.custom_id == "title":
                         price = price_adjuster(50000, universe, completed_tales, completed_dungeons)['TITLE_PRICE']
@@ -2346,7 +2347,6 @@ class Profile(commands.Cog):
                         response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'TITLES': str(title['TITLE'])}})   
                         await main.curse(price, str(ctx.author))
                         await button_ctx.send(f"You purchased **{title['TITLE']}**.")
-                        self.stop = True
 
                     elif button_ctx.custom_id == "arm":
                         price = price_adjuster(25000, universe, completed_tales, completed_dungeons)['ARM_PRICE']
@@ -2367,14 +2367,12 @@ class Profile(commands.Cog):
                             response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'ARMS': {'ARM': str(arm), 'DUR': 25}}})
                             await main.curse(price, str(ctx.author))
                             await button_ctx.send(f"You purchased **{arm}**.")
-                            self.stop = True
                         else:
                             update_query = {'$inc': {'ARMS.$[type].' + 'DUR': 10}}
                             filter_query = [{'type.' + "ARM": str(arm)}]
                             resp = db.updateVault(vault_query, update_query, filter_query)
                             await main.curse(price, str(ctx.author))
                             await button_ctx.send(f"You purchased **{arm}**. Increased durability for the arm by 10 as you already own it.")
-                            self.stop = True 
                     
                     elif button_ctx.custom_id == "t1card":
                         price = price_adjuster(30000, universe, completed_tales, completed_dungeons)['C1']
@@ -2402,7 +2400,6 @@ class Profile(commands.Cog):
                             await cardlevel(card['NAME'], str(ctx.author), "Purchase")
                             await button_ctx.send(f"You received a level up for **{card_name}**!")
                             await main.curse(price, str(ctx.author))
-                            self.stop = True
                             
                         else:
                             response = db.updateVaultNoFilter(vault_query,{'$addToSet': {'CARDS': str(card_name)}})
@@ -2423,7 +2420,6 @@ class Profile(commands.Cog):
                                     db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
                                     await button_ctx.send(
                                         f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.", hidden=True)
-                            self.stop = True
 
                     elif button_ctx.custom_id == "t2card":
                         price = price_adjuster(300000, universe, completed_tales, completed_dungeons)['C2']
@@ -2452,7 +2448,6 @@ class Profile(commands.Cog):
                             await cardlevel(card['NAME'], str(ctx.author), "Purchase")
                             await button_ctx.send(f"You received a level up for **{card_name}**!")
                             await main.curse(price, str(ctx.author))
-                            self.stop = True
                             
                         else:
                             response = db.updateVaultNoFilter(vault_query,{'$addToSet': {'CARDS': str(card_name)}})
@@ -2473,7 +2468,6 @@ class Profile(commands.Cog):
                                     db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
                                     await button_ctx.send(
                                         f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.", hidden=True)
-                            self.stop = True
 
                     elif button_ctx.custom_id == "t3card":
                         price = price_adjuster(6000000, universe, completed_tales, completed_dungeons)['C3']
@@ -2506,7 +2500,6 @@ class Profile(commands.Cog):
                             await cardlevel(card['NAME'], str(ctx.author), "Purchase")
                             await button_ctx.send(f"You received a level up for **{card_name}**!")
                             await main.curse(price, str(ctx.author))
-                            self.stop = True
                             
                         else:
                             response = db.updateVaultNoFilter(vault_query,{'$addToSet': {'CARDS': str(card_name)}})
@@ -2527,7 +2520,6 @@ class Profile(commands.Cog):
                                     db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
                                     await button_ctx.send(
                                         f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.", hidden=True)
-                            self.stop = True
                 else:
                     await ctx.send("This is not your Shop.")
             await Paginator(bot=self.bot, useQuitButton=True, disableAfterTimeout=True, ctx=ctx, pages=embed_list, timeout=60, customActionRow=[
