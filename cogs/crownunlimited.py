@@ -1163,10 +1163,7 @@ class CrownUnlimited(commands.Cog):
                     guild = ctx.guild
                     if guild:
                         overwrites = {
-                            guild.default_role: discord.PermissionOverwrite(manage_channels=False,
-                                                                            kick_members=False, mention_everyone=False,
-                                                                            
-                                                                            send_messages=False),
+                            guild.default_role: discord.PermissionOverwrite(read_messages=False),
                             guild.me: discord.PermissionOverwrite(read_messages=True),
                             ctx.author: discord.PermissionOverwrite(read_messages=True, send_messages=True),
                         }
@@ -10144,13 +10141,7 @@ async def enemy_approached(self, message, channel, player, selected_mode, univer
 
     sowner = player
     guild = message.guild
-    overwrites = {
-        guild.default_role: discord.PermissionOverwrite(manage_channels=False, kick_members=False,
-                                                        mention_everyone=False,
-                                                        send_messages=False),
-        guild.me: discord.PermissionOverwrite(read_messages=True),
-        message.author: discord.PermissionOverwrite(read_messages=True, send_messages=True),
-    }
+    overwrites = { guild.default_role: discord.PermissionOverwrite(read_messages=False), guild.me: discord.PermissionOverwrite(read_messages=True), ctx.author: discord.PermissionOverwrite(read_messages=True),}    
     private_channel = await guild.create_text_channel(f'{str(message.author)}-{selected_mode}-run',
                                                       overwrites=overwrites)
     oguild = "RANDOMIZED_BATTLE"
@@ -10180,13 +10171,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
     crestsearch = False
     autoBattle = False
     guild = ctx.guild
-    overwrites = {
-        guild.default_role: discord.PermissionOverwrite(manage_channels=False, kick_members=False,
-                                                        mention_everyone=False,
-                                                        send_messages=False),
-        guild.me: discord.PermissionOverwrite(read_messages=True),
-        ctx.author: discord.PermissionOverwrite(read_messages=True, send_messages=True),
-    }
+    overwrites = { guild.default_role: discord.PermissionOverwrite(read_messages=False), guild.me: discord.PermissionOverwrite(read_messages=True), ctx.author: discord.PermissionOverwrite(read_messages=True),}    
 
     if mode in C_MODES:
         await user.send(f"{sowner['NAME']} needs your help! React in server to join their Coop Tale!!")
@@ -10215,10 +10200,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                 return
             if button_ctx.custom_id == "yes":
                 overwrites = {
-                    guild.default_role: discord.PermissionOverwrite(manage_channels=False,
-                                                                    kick_members=False, mention_everyone=False,
-                                                                   send_messages=False
-                                                                    ),
+                    guild.default_role: discord.PermissionOverwrite(read_messages=False),
                     guild.me: discord.PermissionOverwrite(read_messages=True),
                     ctx.author: discord.PermissionOverwrite(read_messages=True, send_messages=True),
                     user: discord.PermissionOverwrite(read_messages=True, send_messages=True),
