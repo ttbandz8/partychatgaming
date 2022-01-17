@@ -907,7 +907,7 @@ async def on_slash_command_error(ctx, ex):
 @commands.cooldown(1, 60*60*24, commands.BucketType.user)
 async def daily(ctx):
    try:
-      dailyamount = 5000
+      dailyamount = 10000
       await bless(dailyamount, ctx.author)
 
       user_data = db.queryUser({'DISNAME': str(ctx.author)})
@@ -917,9 +917,7 @@ async def daily(ctx):
       user_available_opponents = []
 
       for x in universes:
-         for y in user_completed_tales:
-            if y == x['PREREQUISITE']:
-               user_available_opponents.append(x['CROWN_TALES'])
+         user_available_opponents.append(x['CROWN_TALES'])
 
       opponents = [x for x in user_available_opponents for x in x]
       oppponent_len = len(opponents)

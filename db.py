@@ -1278,7 +1278,7 @@ def deleteUniverse(query):
         return False
 
 def queryAllUniverse():
-    data = universe_col.find()
+    data = universe_col.find({"HAS_CROWN_TALES": True})
     return data
 
 def queryExploreUniverses():
