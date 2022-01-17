@@ -10141,7 +10141,11 @@ async def enemy_approached(self, message, channel, player, selected_mode, univer
 
     sowner = player
     guild = message.guild
-    overwrites = { guild.default_role: discord.PermissionOverwrite(read_messages=False), guild.me: discord.PermissionOverwrite(read_messages=True), ctx.author: discord.PermissionOverwrite(read_messages=True),}    
+    overwrites = {
+        guild.default_role: discord.PermissionOverwrite(read_messages=False),
+        guild.me: discord.PermissionOverwrite(read_messages=True),
+        message.author: discord.PermissionOverwrite(read_messages=True, send_messages=True),
+    }    
     private_channel = await guild.create_text_channel(f'{str(message.author)}-{selected_mode}-run',
                                                       overwrites=overwrites)
     oguild = "RANDOMIZED_BATTLE"
