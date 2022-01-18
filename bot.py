@@ -1,3 +1,4 @@
+import asyncio
 import db
 import time
 import classes as data
@@ -23,6 +24,7 @@ import textwrap
 import random
 import unique_traits as ut
 now = time.asctime()
+import asyncio
 
 '''User must have predefined roles of the games they play before creating users
    User input for IGN will be available after User is created and goes to join game events

@@ -40,7 +40,7 @@ from pilmoji import Pilmoji
 class CrownUnlimited(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self._cd = commands.CooldownMapping.from_cooldown(1, 1000,
+        self._cd = commands.CooldownMapping.from_cooldown(1, 10,
                                                           commands.BucketType.member)  # Change accordingly. Currently every 8 minutes (3600 seconds == 60 minutes)
 
     co_op_modes = ['CTales', 'DTales', 'CDungeon', 'DDungeon']
@@ -143,12 +143,12 @@ class CrownUnlimited(commands.Cog):
                 manage_components.create_button(
                     style=ButtonStyle.blue,
                     label="Battle",
-                    custom_id="Yes"
+                    custom_id="exploreYes"
                 ),
                 manage_components.create_button(
                     style=ButtonStyle.red,
                     label="Take Chances",
-                    custom_id="No"
+                    custom_id="exploreNo"
                 )
             ]
             random_battle_buttons_action_row = manage_components.create_actionrow(*random_battle_buttons)
@@ -267,7 +267,7 @@ class CrownUnlimited(commands.Cog):
 
             setchannel = discord.utils.get(channel_list, name=server_channel)
             await setchannel.send(f"{message.author.mention}")  
-            msg = await setchannel.send(embed=embedVar, file=card_file, components=[random_battle_buttons_action_row])
+            msg = await setchannel.send(embed=embedVar, file=card_file, components=[random_battle_buttons_action_row])     
 
             def check(button_ctx):
                 return button_ctx.author == message.author
@@ -276,16 +276,18 @@ class CrownUnlimited(commands.Cog):
                 button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[
                     random_battle_buttons_action_row], timeout=120, check=check)
 
-                if button_ctx.custom_id == "No":
+                if button_ctx.custom_id == "exploreNo":
                     await curse(random_flee_loss, message.author)
                     await button_ctx.send(embed=take_chances_response)
                     return
 
-                if button_ctx.custom_id == "Yes":
+                if button_ctx.custom_id == "exploreYes":
                     await button_ctx.send(f"{message.author.mention} private channel has been opened for you. Good luck!")
                     await enemy_approached(self, message, message.channel, player, selected_mode, universe,
                                            cards[rand_card]['NAME'], bounty)
+
             except Exception as ex:
+                await msg.edit(components=[])
                 # trace = []
                 # tb = ex.__traceback__
                 # while tb is not None:
@@ -303,7 +305,9 @@ class CrownUnlimited(commands.Cog):
                 # print("Explore Exception. Likely nothing, but yea.")
                 # await message.channel.send("Something ain't right, my guy.Check with support.")
                 print("")
-    
+
+                
+
     @cog_ext.cog_slash(description="Toggle Explore Mode On/Off", guild_ids=main.guild_ids)
     @commands.cooldown(1, 15, commands.BucketType.user)
     async def explore(self, ctx: SlashContext):
@@ -8117,10 +8121,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         enemy_pet = boss['PET']
         t_user = boss
         opponent_scaling = 400
-        opponent_health_scaling = 625
+        opponent_health_scaling = 1525
         if companion:
             opponent_scaling = 700
-            opponent_health_scaling = 1025
+            opponent_health_scaling = 2025
            
     if mode in U_modes:
         enemy_title = "UTITLE"
@@ -8137,13 +8141,13 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         enemy_title = "DTITLE"
         enemy_arm = "DARM"
         opponent_scaling = 150
-        opponent_health_scaling = 375
+        opponent_health_scaling = 775
         if randomized_battle:
             currentopponent = 15
             opponent_scaling = 275
         if companion:
-            opponent_scaling = 280
-            opponent_health_scaling = 575
+            opponent_scaling = 380
+            opponent_health_scaling = 1075
            
 
     try:
@@ -11154,10 +11158,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                              colour=embed_color_o)
                                     await ctx.send(embed=embedVar)
 
-                            # if not botActive:
-                            #     embedVar = discord.Embed(title=f"{o_card.upper()} FOCUSED", description=f"**{o_card} says**\n{o_focus_description}", colour=0xe91e63)
-                            #     embedVar.add_field(name=f"{o_card} focused and {healmessage}", value="All stats & stamina increased")
-                            #     await ctx.send(embed=embedVar)
+                            if not botActive:
+                                embedVar = discord.Embed(title=f"{o_card.upper()} FOCUSED", description=f"**{o_card} says**\n{o_focus_description}", colour=0xe91e63)
+                                embedVar.add_field(name=f"{o_card} focused and {healmessage}", value="All stats & stamina increased")
+                                await private_channel.send(embed=embedVar)
                             # Resolve Check and Calculation
                             if not o_used_resolve and o_used_focus and o_universe == "Digimon":  # Digimon Universal Trait
                                 embedVar = discord.Embed(title=f"{o_card} STRENGTHENED RESOLVE :zap:",
@@ -12131,9 +12135,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 t_attack = t_attack + t_attackcalc
                                 t_defense = t_defense + t_defensecalc
                             t_used_focus = True
-                            # embedVar = discord.Embed(title=f"{t_card.upper()} FOCUSED", description=f"**{t_card} says**\n{t_focus_description}", colour=0xe91e63)
-                            # embedVar.add_field(name=f"{t_card} focused and {healmessage}", value="All stats & stamina increased")
-                            # await ctx.send(embed=embedVar)
+                            embedVar = discord.Embed(title=f"{t_card.upper()} FOCUSED", description=f"**{t_card} says**\n{t_focus_description}", colour=0xe91e63)
+                            embedVar.add_field(name=f"{t_card} focused and {healmessage}", value="All stats & stamina increased")
+                            await private_channel.send(embed=embedVar)
                             if not t_used_resolve and t_used_focus and t_universe == "Digimon":  # Digimon Universal Trait
                                 # fortitude or luck is based on health
                                 fortitude = 0.0
@@ -15471,7 +15475,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                      colour=0xe91e63)
                                             await button_ctx.send(embed=embedVar)
                                             turn = 0
-                                except asyncio.TimeoutError:
+                                except Exception as e:
                                     await save_spot(self, ctx, universe, mode, currentopponent)
                                     await ctx.author.send(f"{ctx.author.mention} your game timed out. Your channel has been closed but your spot in the tales has been saved where you last left off.")
                                     await discord.TextChannel.delete(private_channel, reason=None)
