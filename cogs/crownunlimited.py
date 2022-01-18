@@ -40,7 +40,7 @@ from pilmoji import Pilmoji
 class CrownUnlimited(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self._cd = commands.CooldownMapping.from_cooldown(1, 1000,
+        self._cd = commands.CooldownMapping.from_cooldown(1, 10,
                                                           commands.BucketType.member)  # Change accordingly. Currently every 8 minutes (3600 seconds == 60 minutes)
 
     co_op_modes = ['CTales', 'DTales', 'CDungeon', 'DDungeon']
@@ -279,12 +279,14 @@ class CrownUnlimited(commands.Cog):
                 if button_ctx.custom_id == "exploreNo":
                     await curse(random_flee_loss, message.author)
                     await button_ctx.send(embed=take_chances_response)
+                    await msg.edit(components=[])
                     return
 
                 if button_ctx.custom_id == "exploreYes":
                     await button_ctx.send(f"{message.author.mention} private channel has been opened for you. Good luck!")
                     await enemy_approached(self, message, message.channel, player, selected_mode, universe,
                                            cards[rand_card]['NAME'], bounty)
+                    await msg.edit(components=[])
 
             except Exception as ex:
                 await msg.edit(components=[])
