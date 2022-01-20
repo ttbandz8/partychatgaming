@@ -933,7 +933,7 @@ async def daily(ctx):
 
       quests = [{'OPPONENT': opponents[q1], 'TYPE': 'Tales', 'GOAL': 2, 'WINS': 0, 'REWARD': q1_earn },{'OPPONENT': opponents[q2], 'TYPE': 'Tales', 'GOAL': 8, 'WINS': 0, 'REWARD': q2_earn }, {'OPPONENT': opponents[q3], 'TYPE': 'Tales', 'GOAL': 16, 'WINS': 0, 'REWARD': q3_earn }]
       db.updateVaultNoFilter({'OWNER': str(ctx.author)}, {'$set': {'QUESTS': quests}})
-
+      db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'BOSS_FOUGHT': False}})
       await ctx.send(f"Daily bonus :coin:{dailyamount} has been applied for {ctx.author.mention}!\nYour new quests are available!\n**use /quests to open the Quest Board**!")
    except Exception as ex:
       trace = []

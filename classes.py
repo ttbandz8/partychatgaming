@@ -38,6 +38,7 @@ class USER():
     SAVE_SPOT: list[str] = field(default_factory=lambda: [])
     PERFORMANCE: bool = field(default_factory=lambda: False)
     TRADING: bool = field(default_factory=lambda: False)
+    BOSS_FOUGHT: bool = field(default_factory=lambda: False)
 
 @dataclass(frozen=True, order=True)
 class TRADE():

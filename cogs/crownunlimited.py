@@ -1024,6 +1024,9 @@ class CrownUnlimited(commands.Cog):
             if mode in B_MODES:
                 bossname = universe_selection['BOSS_NAME']
                 oguild = universe_selection['OGUILD']
+                if not sowner['BOSS_FOUGHT']:
+                    await ctx.send("You have already defeated a boss today! Check back tomorrow.")
+                    return
             else:
                 if mode in D_modes:
                     completed_universes = universe_selection['COMPLETED_DUNGEONS']
@@ -8122,11 +8125,11 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         enemy_arm = boss['ARM']
         enemy_pet = boss['PET']
         t_user = boss
-        opponent_scaling = 400
-        opponent_health_scaling = 1525
+        opponent_scaling = 650
+        opponent_health_scaling = 2325
         if companion:
-            opponent_scaling = 700
-            opponent_health_scaling = 2025
+            opponent_scaling = 650
+            opponent_health_scaling = 4325
            
     if mode in U_modes:
         enemy_title = "UTITLE"
@@ -20744,6 +20747,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         gameClock = getTime(int(h_gametime), int(m_gametime), int(s_gametime), h_playtime, m_playtime,
                                             s_playtime)
                         drop_response = await bossdrops(ctx.author, t_universe)
+                        db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'BOSS_FOUGHT': True}})
                         match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']),
                                                 str(oarm['ARM']), "N/A", "Boss", o['EXCLUSIVE'])
                         if mode == "CBoss":
