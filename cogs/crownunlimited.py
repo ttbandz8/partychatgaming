@@ -2440,6 +2440,8 @@ class CrownUnlimited(commands.Cog):
                                             o_max_health = round(o_max_health + dmg['DMG'])
                                             o_health = round(o_health + dmg['DMG'])
                                         elif opet_type == 'DESTRUCTION':
+                                            if dmg['DMG'] >= 100:
+                                                dmg['DMG'] = 100
                                             t_max_health = round(t_max_health - dmg['DMG'])
 
                                         o_stamina = o_stamina - int(dmg['STAMINA_USED'])
@@ -3295,6 +3297,8 @@ class CrownUnlimited(commands.Cog):
                                             t_max_health = round(t_max_health + dmg['DMG'])
                                             t_health = round(t_health + dmg['DMG'])
                                         elif tpet_type == 'DESTRUCTION':
+                                            if dmg['DMG'] >= 100:
+                                                dmg['DMG'] = 100
                                             o_max_health = round(o_max_health - dmg['DMG'])
                                         t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
@@ -11830,6 +11834,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_max_health = round(o_max_health + dmg['DMG'])
                                                         o_health = round(o_health + dmg['DMG'])
                                                     elif opet_type == 'DESTRUCTION':
+                                                        if dmg['DMG'] >= 100:
+                                                            dmg['DMG'] = 100
                                                         t_max_health = round(t_max_health - dmg['DMG'])
 
                                                     o_stamina = o_stamina - int(dmg['STAMINA_USED'])
@@ -12748,6 +12754,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_max_health = round(t_max_health + dmg['DMG'])
                                                             t_health = round(t_health + dmg['DMG'])
                                                         elif tpet_type == 'DESTRUCTION':
+                                                            if dmg['DMG'] >= 100:
+                                                                dmg['DMG'] = 100
                                                             o_max_health = round(o_max_health - dmg['DMG'])
                                                         t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
@@ -13436,6 +13444,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_max_health = round(t_max_health + dmg['DMG'])
                                                         t_health = round(t_health + dmg['DMG'])
                                                     elif tpet_type == 'DESTRUCTION':
+                                                        if dmg['DMG'] >= 100:
+                                                            dmg['DMG'] = 100
                                                         o_max_health = round(o_max_health - dmg['DMG'])
                                                     t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
@@ -14337,6 +14347,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_max_health = round(o_max_health + dmg['DMG'])
                                                         o_health = round(o_health + dmg['DMG'])
                                                     elif opet_type == 'DESTRUCTION':
+                                                        if dmg['DMG'] >= 100:
+                                                            dmg['DMG'] = 100
                                                         t_max_health = round(t_max_health - dmg['DMG'])
 
                                                     o_stamina = o_stamina - int(dmg['STAMINA_USED'])
@@ -15106,6 +15118,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_max_health = round(o_max_health + dmg['DMG'])
                                                             o_health = round(o_health + dmg['DMG'])
                                                         elif opet_type == 'DESTRUCTION':
+                                                            if dmg['DMG'] >= 100:
+                                                                dmg['DMG'] = 100
                                                             t_max_health = round(t_max_health - dmg['DMG'])
 
                                                         o_stamina = o_stamina - int(dmg['STAMINA_USED'])
@@ -16399,6 +16413,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_max_health = round(t_max_health + dmg['DMG'])
                                                             t_health = round(t_health + dmg['DMG'])
                                                         elif tpet_type == 'DESTRUCTION':
+                                                            if dmg['DMG'] >= 100:
+                                                                dmg['DMG'] = 100
                                                             c_max_health = round(c_max_health - dmg['DMG'])
                                                         t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                                         if mode not in AUTO_BATTLE_modes:
@@ -16541,6 +16557,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_max_health = round(t_max_health + dmg['DMG'])
                                                             t_health = round(t_health + dmg['DMG'])
                                                         elif tpet_type == 'DESTRUCTION':
+                                                            if dmg['DMG'] >= 100:
+                                                                dmg['DMG'] = 100
                                                             o_max_health = round(o_max_health - dmg['DMG'])
                                                         t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
@@ -16677,6 +16695,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_max_health = round(t_max_health + dmg['DMG'])
                                                         t_health = round(t_health + dmg['DMG'])
                                                     elif tpet_type == 'DESTRUCTION':
+                                                        if dmg['DMG'] >= 100:
+                                                            dmg['DMG'] = 100
                                                         o_max_health = round(o_max_health - dmg['DMG'])
                                                     t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
@@ -18115,6 +18135,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             c_max_health = round(c_max_health + dmg['DMG'])
                                                             c_health = round(c_health + dmg['DMG'])
                                                         elif cpet_type == 'DESTRUCTION':
+                                                            if dmg['DMG'] >= 100:
+                                                                dmg['DMG'] = 100
                                                             t_max_health = round(t_max_health - dmg['DMG'])
 
                                                         c_stamina = c_stamina - int(dmg['STAMINA_USED'])
@@ -18974,6 +18996,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 c_max_health = round(c_max_health + dmg['DMG'])
                                                                 c_health = round(c_health + dmg['DMG'])
                                                             elif cpet_type == 'DESTRUCTION':
+                                                                if dmg['DMG'] >= 100:
+                                                                    dmg['DMG'] = 100
                                                                 t_max_health = round(t_max_health - dmg['DMG'])
 
                                                             c_stamina = c_stamina - int(dmg['STAMINA_USED'])
@@ -20025,6 +20049,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_max_health = round(t_max_health + dmg['DMG'])
                                                             t_health = round(t_health + dmg['DMG'])
                                                         elif tpet_type == 'DESTRUCTION':
+                                                            if dmg['DMG'] >= 100:
+                                                                dmg['DMG'] = 100
                                                             o_max_health = round(o_max_health - dmg['DMG'])
                                                         t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
@@ -20148,6 +20174,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_max_health = round(t_max_health + dmg['DMG'])
                                                             t_health = round(t_health + dmg['DMG'])
                                                         elif tpet_type == 'DESTRUCTION':
+                                                            if dmg['DMG'] >= 100:
+                                                                dmg['DMG'] = 100    
                                                             c_max_health = round(c_max_health - dmg['DMG'])
                                                         t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
@@ -22166,7 +22194,7 @@ enhancer_mapping = {'ATK': 'Increase Attack %',
 'MANA': 'Increase Enchancer AP',
 'SHIELD': 'Blocks Incoming DMG, until broken',
 'BARRIER': 'Nullifies Incoming Attacks, until broken',
-'PARRY': 'Returns Half Damage, until broken'
+'PARRY': 'Returns 25% Damage, until broken'
 }
 title_enhancer_mapping = {'ATK': 'Increase Base Attack ',
 'DEF': 'Increase Base Defense ',
@@ -22200,7 +22228,7 @@ title_enhancer_mapping = {'ATK': 'Increase Base Attack ',
 'MANA': 'Increase Enchancer AP',
 'SHIELD': 'Blocks Incoming DMG, until broken',
 'BARRIER': 'Nullifies Incoming Attacks, until broken',
-'PARRY': 'Returns Half Damage, until broken'
+'PARRY': 'Returns 25% Damage, until broken'
 }
 passive_enhancer_suffix_mapping = {'ATK': '%',
 'DEF': '%',
