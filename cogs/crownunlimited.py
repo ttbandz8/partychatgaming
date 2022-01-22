@@ -478,7 +478,6 @@ class CrownUnlimited(commands.Cog):
 
             universe_selection = await select_universe(self, ctx, sowner, oteam, ofam, mode, None)
             selected_universe = universe_selection['SELECTED_UNIVERSE']
-            private_channel = universe_selection['PRIVATE_CHANNEL']
             universe = universe_selection['UNIVERSE_DATA']
             crestlist = universe_selection['CREST_LIST']
             crestsearch = universe_selection['CREST_SEARCH']
@@ -494,7 +493,7 @@ class CrownUnlimited(commands.Cog):
                 oguild = "PCG"
 
             await battle_commands(self, ctx, mode, universe, selected_universe, completed_universes, oguild, crestlist,
-                                  crestsearch, private_channel, sowner, oteam, ofam, currentopponent, cowner, cteam, cfam, deckNumber,
+                                  crestsearch, sowner, oteam, ofam, currentopponent, cowner, cteam, cfam, deckNumber,
                                   None, None, None, None)
         except Exception as ex:
             trace = []
@@ -563,7 +562,6 @@ class CrownUnlimited(commands.Cog):
             if not universe_selection:
                 return
             selected_universe = universe_selection['SELECTED_UNIVERSE']
-            private_channel = universe_selection['PRIVATE_CHANNEL']
             universe = universe_selection['UNIVERSE_DATA']
             crestlist = universe_selection['CREST_LIST']
             crestsearch = universe_selection['CREST_SEARCH']
@@ -583,7 +581,7 @@ class CrownUnlimited(commands.Cog):
                     oguild = "PCG"
             
             await battle_commands(self, ctx, mode, universe, selected_universe, None, oguild, crestlist, crestsearch,
-                            private_channel, sowner, oteam, ofam, currentopponent, companion, cteam, cfam, None, user, None, None, None)
+                             sowner, oteam, ofam, currentopponent, companion, cteam, cfam, None, user, None, None, None)
         except Exception as ex:
             trace = []
             tb = ex.__traceback__
@@ -772,7 +770,7 @@ class CrownUnlimited(commands.Cog):
                                 t = db.queryCard({'NAME': opponent['CARD']})
                                 ttitle = db.queryTitle({'TITLE': opponent['TITLE']})
                                 await button_ctx.send("Arena match starting!")                    
-                                await battle_commands(self, ctx, mode, None, None, None, oguild, None, None, private_channel, sowner,
+                                await battle_commands(self, ctx, mode, None, None, None, oguild, None, None, sowner,
                                                     oteam, None, opponent, tteam, tguild, None, None, None, True, owner, "SINGLES")
                             except Exception as ex:
                                 trace = []
@@ -1015,7 +1013,6 @@ class CrownUnlimited(commands.Cog):
 
             universe_selection = await select_universe(self, ctx, sowner, oteam, ofam, mode, None)
             selected_universe = universe_selection['SELECTED_UNIVERSE']
-            private_channel = universe_selection['PRIVATE_CHANNEL']
             universe = universe_selection['UNIVERSE_DATA']
             crestlist = universe_selection['CREST_LIST']
             crestsearch = universe_selection['CREST_SEARCH']
@@ -1039,10 +1036,10 @@ class CrownUnlimited(commands.Cog):
 
             if mode in B_MODES:
                 await battle_commands(self, ctx, mode, universe, selected_universe, None, oguild, crestlist,
-                                    crestsearch, private_channel, sowner, oteam, ofam, None, None, None, None, None, None, None, None, None)
+                                    crestsearch, sowner, oteam, ofam, None, None, None, None, None, None, None, None, None)
             else:
                 await battle_commands(self, ctx, mode, universe, selected_universe, completed_universes, oguild,
-                                    crestlist, crestsearch, private_channel, sowner, oteam, ofam, currentopponent, None, None, None,
+                                    crestlist, crestsearch, sowner, oteam, ofam, currentopponent, None, None, None,
                                     None, None, None, None, None)
         except Exception as ex:
             trace = []
@@ -2446,7 +2443,7 @@ class CrownUnlimited(commands.Cog):
 
                                         o_stamina = o_stamina - int(dmg['STAMINA_USED'])
 
-                                        embedVar = discord.Embed(title=f"{o_card.upper()} Summoned 🧬 {opet_name}",
+                                        embedVar = discord.Embed(title=f"{o_card.upper()} Summoned 🧬 **{opet_name}**",
                                                                 colour=0xe91e63)
                                         embedVar.add_field(name=f"{opet_name} used **{opetmove_text}**!",
                                                         value=f"Enhanced **{opet_type}** by **{opet_dmg}**")
@@ -3302,7 +3299,7 @@ class CrownUnlimited(commands.Cog):
                                             o_max_health = round(o_max_health - dmg['DMG'])
                                         t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
-                                        embedVar = discord.Embed(title=f"{t_card.upper()} Summoned 🧬 {tpet_name}",
+                                        embedVar = discord.Embed(title=f"{t_card.upper()} Summoned 🧬 **{tpet_name}**",
                                                                 colour=0xe91e63)
                                         embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!",
                                                             value=f"{dmg['MESSAGE']}")
@@ -3690,7 +3687,7 @@ class CrownUnlimited(commands.Cog):
 
                 # universe = "Naruto"
                 # selected_universe = {"TITLE": "Naruto"}
-                await battle_commands(self, ctx, mode, None, None, None, oguild, None, None, private_channel, sowner,
+                await battle_commands(self, ctx, mode, None, None, None, oguild, None, None, sowner,
                                     oteam, None, opponent, tteam, tguild, None, None, None, None, None, None)
         except Exception as ex:
             trace = []
@@ -5201,7 +5198,7 @@ class CrownUnlimited(commands.Cog):
 
                             #             o_stamina = o_stamina - int(dmg['STAMINA_USED'])
 
-                            #             embedVar = discord.Embed(title=f"{o_card.upper()} Summoned 🧬 {opet_name}", colour=0xe91e63)
+                            #             embedVar = discord.Embed(title=f"{o_card.upper()} Summoned 🧬 **{opet_name}**", colour=0xe91e63)
                             #             embedVar.add_field(name=f"{opet_name} used **{opetmove_text}**!", value =f"Enhanced **{opet_type}**")
                             #             # await asyncio.sleep(1)
                             #             await button_ctx.send(embed=embedVar)
@@ -10159,13 +10156,13 @@ async def enemy_approached(self, message, channel, player, selected_mode, univer
         guild.me: discord.PermissionOverwrite(read_messages=True),
         message.author: discord.PermissionOverwrite(read_messages=True, send_messages=True),
     }    
-    private_channel = await guild.create_text_channel(f'{str(message.author)}-{selected_mode}-run',
-                                                      overwrites=overwrites)
+    # private_channel = await guild.create_text_channel(f'{str(message.author)}-{selected_mode}-run',
+    #                                                   overwrites=overwrites)
     oguild = "RANDOMIZED_BATTLE"
     crestlist = opponent
     crestsearch = bounty
     await battle_commands(self, message.author, mode, universe, universe['TITLE'], None, oguild, crestlist, crestsearch,
-                          private_channel, sowner, None, None, None, None, None, None, None, None, None, None, None)
+                         sowner, None, None, None, None, None, None, None, None, None, None, None)
 
 
 
@@ -10380,18 +10377,18 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                             await blessguild(entrance_fee, universe['GUILD'])
                             await ctx.send(f"{Crest_dict[selected_universe]} | {crest_guild['GNAME']} Universe Toll Paid! :coin:{'{:,}'.format(entrance_fee)}")
             
-            #Create Explore Category
-            categoryname = "Crown Unlimited"
-            category = discord.utils.get(guild.categories, name=categoryname)
+            # #Create Explore Category
+            # categoryname = "Crown Unlimited"
+            # category = discord.utils.get(guild.categories, name=categoryname)
 
-            if category is None: #If there's no category matching with the `name`
-                category = await guild.create_category_channel(categoryname)
-            private_channel = await guild.create_text_channel(f'{str(ctx.author)}-{mode}-run', overwrites=overwrites, category=category)
-            await private_channel.send(f"{ctx.author.mention} private channel has been opened for you. Good luck!")
+            # if category is None: #If there's no category matching with the `name`
+            #     category = await guild.create_category_channel(categoryname)
+            # private_channel = await guild.create_text_channel(f'{str(ctx.author)}-{mode}-run', overwrites=overwrites, category=category)
+            # await private_channel.send(f"{ctx.author.mention} private channel has been opened for you. Good luck!")
             
             # React to Saved Spots
             currentopponent = update_save_spot(self, ctx, saved_spots, selected_universe, U_modes)
-            return {'SELECTED_UNIVERSE': selected_universe, 'PRIVATE_CHANNEL': private_channel,
+            return {'SELECTED_UNIVERSE': selected_universe,
                     'UNIVERSE_DATA': universe, 'CREST_LIST': crestlist, 'CREST_SEARCH': crestsearch,
                     'COMPLETED_TALES': completed_crown_tales, 'OGUILD': oguild, 'CURRENTOPPONENT': currentopponent}
 
@@ -10600,7 +10597,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
 
 
 async def battle_commands(self, ctx, mode, universe, selected_universe, completed_universes, oguild, crestlist,
-                          crestsearch, private_channel, sowner, oteam, ofam, currentopponent, cowner, cteam, cfam, deckNumber, user, arena_flag, arena_owner, arena_type):
+                          crestsearch, sowner, oteam, ofam, currentopponent, cowner, cteam, cfam, deckNumber, user, arena_flag, arena_owner, arena_type):
     randomized_battle = False
     co_op_modes = ['CTales', 'DTales', 'CDungeon', 'DDungeon', 'CBoss']
     ai_co_op_modes = ['DTales', 'DDungeon']
@@ -11045,7 +11042,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
             start_tales_buttons_action_row = manage_components.create_actionrow(*start_tales_buttons)
 
-            embedVar = discord.Embed(title="Start?", description="Start the tales test message.")
+            embedVar = discord.Embed(title=f"Confirm start!", description=f"**{o_card}** VS **{t_card}**")
             battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row])
 
             def check(button_ctx):
@@ -11740,7 +11737,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             # Resolve Check and Calculation
                                             if o_used_resolve and o_used_focus and not o_pet_used:
                                                 if botActive:
-                                                    embedVar = discord.Embed(title=f"{o_card.upper()} Summoned 🧬 {opet_name}",colour=0xe91e63)
+                                                    embedVar = discord.Embed(title=f"{o_card.upper()} Summoned 🧬 **{opet_name}**",colour=0xe91e63)
                                                     embedVar.add_field(name=f"Summon Enhancers!",
                                                                     value="Summon Enhancers cost 15 Stamina but do not count as the Summoners turn!")
                                                     embedVar.set_footer(
@@ -11856,7 +11853,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         embedVar.set_image(url="attachment://pet.png")
                                                     else:
                                                         embedVar = discord.Embed(
-                                                            title=f"{o_card.upper()} Summoned 🧬 {opet_name}",
+                                                            title=f"{o_card.upper()} Summoned 🧬 **{opet_name}**",
                                                             colour=0xe91e63)
                                                         
                                                         summon_file = showsummon(opet_image, opet_name, dmg['MESSAGE'], opet_lvl, opet_bond)
@@ -12775,7 +12772,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             embedVar.set_image(url="attachment://pet.png")
                                                         else:
                                                             embedVar = discord.Embed(
-                                                                title=f"{t_card.upper()} Summoned 🧬 {tpet_name}",
+                                                                title=f"{t_card.upper()} Summoned 🧬 **{tpet_name}**",
                                                                 colour=0xe91e63)
                                                             tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
                                                             
@@ -13450,7 +13447,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
                                                     embedVar = discord.Embed(
-                                                        title=f"{t_card.upper()} Summoned 🧬 {tpet_name}", colour=0xe91e63)
+                                                        title=f"{t_card.upper()} Summoned 🧬 **{tpet_name}**", colour=0xe91e63)
                                                     embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!",
                                                                     value=f"{dmg['MESSAGE']}")
                                                     
@@ -14714,7 +14711,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 o_health = 0
                                                 await battle_msg.delete(delay=1)
                                                 await asyncio.sleep(1)
-                                                battle_msg = await private_channel.send(content="Game Saved!")
+                                                battle_msg = await private_channel.send(content="Game Quit.")
                                                 return
                                             
                                             if button_ctx.custom_id == "1":
@@ -15147,23 +15144,23 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             # await button_ctx.send(embed=embedVar, file=summon_file)
                                                         else:
                                                             embedVar = discord.Embed(
-                                                                title=f"{o_card.upper()} Summoned 🧬 {opet_name}",
+                                                                title=f"{o_card.upper()} Summoned 🧬 **{opet_name}**",
                                                                 colour=0xe91e63)
                                                             summon_file = showsummon(opet_image, opet_name, dmg['MESSAGE'], opet_lvl, opet_bond)
                                                             embedVar.set_image(url="attachment://pet.png")
                                                             
-                                                            previous_moves.append(f"{o_card} Summoned 🧬 {opet_name}: {dmg['MESSAGE']}")
+                                                            previous_moves.append(f"{o_card} Summoned 🧬 **{opet_name}**: {dmg['MESSAGE']}")
                                                             await battle_msg.delete(delay=None)
                                                             await asyncio.sleep(1)
                                                             battle_msg = await private_channel.send(embed=embedVar, file=summon_file)
                                                             await asyncio.sleep(2)
                                                         turn = 0
                                                     else:
-                                                        previous_moves.append(f"🧬 {opet_name} needs a turn to rest...")
+                                                        previous_moves.append(f"🧬 **{opet_name}** needs a turn to rest...")
                                                         await button_ctx.defer(ignore=True)
                                                         turn = 0
                                                 else:
-                                                    previous_moves.append(f"🧬 {opet_name} needs a turn to rest...")
+                                                    previous_moves.append(f"🧬 **{opet_name}** needs a turn to rest...")
                                                     await button_ctx.defer(ignore=True)
                                             elif mode in co_op_modes:
                                                 if button_ctx.custom_id == "7":
@@ -15891,8 +15888,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         {previous_moves_into_embed}
                                         """), color=0xe74c3c)
                                         tembedVar.set_image(url="attachment://image.png")
-                                        await battle_msg.delete(delay=3)
-                                        await asyncio.sleep(3)
+                                        await battle_msg.delete(delay=2)
+                                        await asyncio.sleep(2)
                                         battle_msg = await private_channel.send(embed=tembedVar, file=player_2_card)
                                     aiMove = 0
 
@@ -16440,7 +16437,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 previous_moves.append(f"🩸 Persona! {tpet_name} was summoned from {t_card}'s soul dealing {petdmg['DMG']} damage!")
                                                             else:
                                                                 embedVar = discord.Embed(
-                                                                    title=f"{t_card.upper()} Summoned 🧬 {tpet_name}",
+                                                                    title=f"{t_card.upper()} Summoned 🧬 **{tpet_name}**",
                                                                     colour=0xe91e63)
                                                                 embedVar.add_field(
                                                                     name=f"{tpet_name} used **{tpetmove_text}**!",
@@ -16448,7 +16445,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 
                                                                 tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
                                                                 embedVar.set_image(url="attachment://pet.png")
-                                                                previous_moves.append(f"{t_card} Summoned 🧬 {tpet_name}: {dmg['MESSAGE']}")
+                                                                previous_moves.append(f"**{t_card}** Summoned 🧬 **{tpet_name}**: {dmg['MESSAGE']}")
 
 
                                                             await battle_msg.delete(delay=None)
@@ -16466,7 +16463,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         turn = turn_selector
                                                     else:
                                                         if mode not in AUTO_BATTLE_modes:
-                                                            previous_moves.append(f"{t_card} Could not summon 🧬 {tpet_name}. Needs rest")
+                                                            previous_moves.append(f"{t_card} Could not summon 🧬 **{tpet_name}**. Needs rest")
                                                             # await private_channel.send(f"{tpet_name} needs a turn to rest...")
                                                         turn = 1
                                                 else:
@@ -16585,7 +16582,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 previous_moves.append(f"🩸 Persona! {tpet_name} was summoned from {t_card}'s soul dealing {petdmg['DMG']} damage!")
                                                             else:
                                                                 embedVar = discord.Embed(
-                                                                    title=f"{t_card.upper()} Summoned 🧬 {tpet_name}",
+                                                                    title=f"{t_card.upper()} Summoned 🧬 **{tpet_name}**",
                                                                     colour=0xe91e63)
                                                                 embedVar.add_field(
                                                                     name=f"{tpet_name} used **{tpetmove_text}**!",
@@ -16593,7 +16590,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 
                                                                 
                                                                 embedVar.set_image(url="attachment://image.png")
-                                                                previous_moves.append(f"{t_card} Summoned 🧬 {tpet_name}")
+                                                                previous_moves.append(f"**{t_card}** Summoned 🧬 **{tpet_name}**: {dmg['MESSAGE']}")
 
                                                         if t_universe == "Persona":
                                                             petdmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense,
@@ -16604,7 +16601,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health - petdmg['DMG']
                                                         turn = 1
                                                     else:
-                                                        previous_moves.append(f"{t_card} Could not summon 🧬 {tpet_name}. Needs rest")
+                                                        previous_moves.append(f"{t_card} Could not summon 🧬 **{tpet_name}**. Needs rest")
                                                         turn = 1
 
                                             else:
@@ -16722,20 +16719,20 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             previous_moves.append(f"🩸 Persona! {tpet_name} was summoned from {t_card}'s soul dealing {petdmg['DMG']} damage!")
                                                         else:
                                                             embedVar = discord.Embed(
-                                                                title=f"{t_card.upper()} Summoned 🧬 {tpet_name}",
+                                                                title=f"{t_card.upper()} Summoned 🧬 **{tpet_name}**",
                                                                 colour=0xe91e63)
                                                             embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!",
                                                                                 value=f"{dmg['MESSAGE']}")
                                                             
                                                             
                                                             embedVar.set_image(url="attachment://image.png")
-                                                            previous_moves.append(f"{t_card} Summoned 🧬 {tpet_name}")
+                                                            previous_moves.append(f"**{t_card}** Summoned 🧬 **{tpet_name}**")
                                                     turn = 1
                                                 else:
-                                                    previous_moves.append(f"{t_card} Could not summon 🧬 {tpet_name}. Needs rest")
+                                                    previous_moves.append(f"{t_card} Could not summon 🧬 **{tpet_name}**. Needs rest")
                                                     turn = 1
                                         else:
-                                            previous_moves.append(f"{t_card} Could not summon 🧬 {tpet_name}. Needs rest")
+                                            previous_moves.append(f"{t_card} Could not summon 🧬 **{tpet_name}**. Needs rest")
 
                                     if int(aiMove) != 5 and int(aiMove) != 6:
 
@@ -20074,7 +20071,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             await button_ctx.send(embed=embedVar)
                                                         else:
                                                             embedVar = discord.Embed(
-                                                                title=f"{t_card.upper()} Summoned 🧬 {tpet_name}",
+                                                                title=f"{t_card.upper()} Summoned 🧬 **{tpet_name}**",
                                                                 colour=0xe91e63)
                                                             embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!",
                                                                     value=f"{dmg['MESSAGE']}")
@@ -20199,7 +20196,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             await button_ctx.send(embed=embedVar)
                                                         else:
                                                             embedVar = discord.Embed(
-                                                                title=f"{t_card.upper()} Summoned 🧬 {tpet_name}",
+                                                                title=f"{t_card.upper()} Summoned 🧬 **{tpet_name}**",
                                                                 colour=0xe91e63)
                                                             embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!",
                                                                     value=f"{dmg['MESSAGE']}")
