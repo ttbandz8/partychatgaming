@@ -40,7 +40,7 @@ from pilmoji import Pilmoji
 class CrownUnlimited(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self._cd = commands.CooldownMapping.from_cooldown(1, 1000,
+        self._cd = commands.CooldownMapping.from_cooldown(1, 10,
                                                           commands.BucketType.member)  # Change accordingly. Currently every 8 minutes (3600 seconds == 60 minutes)
 
     co_op_modes = ['CTales', 'DTales', 'CDungeon', 'DDungeon']
@@ -79,27 +79,27 @@ class CrownUnlimited(commands.Cog):
                 await message.channel.send(m.SERVER_FUNCTION_ONLY)
                 return
 
-            g = message.author.guild
-            channel_list = message.author.guild.text_channels
-            channel_names = []
-            for channel in channel_list:
-                channel_names.append(channel.name)
+            # g = message.author.guild
+            # channel_list = message.author.guild.text_channels
+            # channel_names = []
+            # for channel in channel_list:
+            #     channel_names.append(channel.name)
 
-            server_channel_response = db.queryServer({'GNAME': str(g)})
-            server_channel = ""
-            if server_channel_response:
-                server_channel = str(server_channel_response['EXP_CHANNEL'])
+            # server_channel_response = db.queryServer({'GNAME': str(g)})
+            # server_channel = ""
+            # if server_channel_response:
+            #     server_channel = str(server_channel_response['EXP_CHANNEL'])
             
-            if "explore-encounters" in channel_names:
-                server_channel = "explore-encounters"
+            # if "explore-encounters" in channel_names:
+            #     server_channel = "explore-encounters"
             
-            if not server_channel:
-                return
+            # if not server_channel:
+            #     return
 
             # Check if currently in a match
-            channel_exists_response = existing_channel_check(self, message)
-            if channel_exists_response:
-                return
+            # channel_exists_response = existing_channel_check(self, message)
+            # if channel_exists_response:
+            #     return
 
             # Pull Character Information
             player = db.queryUser({'DISNAME': str(message.author)})
@@ -265,9 +265,7 @@ class CrownUnlimited(commands.Cog):
             embedVar.set_image(url="attachment://image.png")
 
 
-            setchannel = discord.utils.get(channel_list, name=server_channel)
-            await setchannel.send(f"{message.author.mention}")  
-            msg = await setchannel.send(embed=embedVar, file=card_file, components=[random_battle_buttons_action_row])     
+            msg = await message.channel.send(embed=embedVar, file=card_file, components=[random_battle_buttons_action_row])     
 
             def check(button_ctx):
                 return button_ctx.author == message.author
@@ -283,7 +281,7 @@ class CrownUnlimited(commands.Cog):
                     return
 
                 if button_ctx.custom_id == "exploreYes":
-                    await button_ctx.send(f"{message.author.mention} private channel has been opened for you. Good luck!")
+                    await button_ctx.defer(ignore=True)
                     await enemy_approached(self, message, message.channel, player, selected_mode, universe,
                                            cards[rand_card]['NAME'], bounty)
                     await msg.edit(components=[])
@@ -10136,28 +10134,44 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
 
 
 async def enemy_approached(self, message, channel, player, selected_mode, universe, opponent, bounty):
-    private_channel = channel
-    mode = selected_mode
+    try:
+        private_channel = channel
+        mode = selected_mode
 
-    channel_exists_response = existing_channel_check(self, message)
-    if channel_exists_response:
-        await private_channel.send(m.ALREADY_IN_TALES)
-        return
+        # channel_exists_response = existing_channel_check(self, message)
+        # if channel_exists_response:
+        #     await private_channel.send(m.ALREADY_IN_TALES)
+        #     return
 
-    sowner = player
-    guild = message.guild
-    overwrites = {
-        guild.default_role: discord.PermissionOverwrite(read_messages=False),
-        guild.me: discord.PermissionOverwrite(read_messages=True),
-        message.author: discord.PermissionOverwrite(read_messages=True, send_messages=True),
-    }    
-    # private_channel = await guild.create_text_channel(f'{str(message.author)}-{selected_mode}-run',
-    #                                                   overwrites=overwrites)
-    oguild = "RANDOMIZED_BATTLE"
-    crestlist = opponent
-    crestsearch = bounty
-    await battle_commands(self, message.author, mode, universe, universe['TITLE'], None, oguild, crestlist, crestsearch,
-                         sowner, None, None, None, None, None, None, None, None, None, None, None)
+        # sowner = player
+        # guild = message.guild
+        # overwrites = {
+        #     guild.default_role: discord.PermissionOverwrite(read_messages=False),
+        #     guild.me: discord.PermissionOverwrite(read_messages=True),
+        #     message.author: discord.PermissionOverwrite(read_messages=True, send_messages=True),
+        # }    
+        # private_channel = await guild.create_text_channel(f'{str(message.author)}-{selected_mode}-run',
+        #                                                   overwrites=overwrites)
+        oguild = "RANDOMIZED_BATTLE"
+        crestlist = opponent
+        crestsearch = bounty
+        await battle_commands(self, message.author, mode, universe, universe['TITLE'], None, oguild, crestlist, crestsearch,
+                            sowner, None, None, None, None, None, None, None, None, None, None)
+    except Exception as ex:
+        trace = []
+        tb = ex.__traceback__
+        while tb is not None:
+            trace.append({
+                "filename": tb.tb_frame.f_code.co_filename,
+                "name": tb.tb_frame.f_code.co_name,
+                "lineno": tb.tb_lineno
+            })
+            tb = tb.tb_next
+        print(str({
+            'type': type(ex).__name__,
+            'message': str(ex),
+            'trace': trace
+        }))
 
 
 
