@@ -2110,7 +2110,7 @@ class CrownUnlimited(commands.Cog):
                                 if private_channel.guild:
                                     await private_channel.send(f"{ctx.author.mention} has fled the battle...")
 
-                                    await discord.TextChannel.delete(private_channel, reason=None)
+                                    # await discord.TextChannel.delete(private_channel, reason=None)
                                 else:
 
                                     await private_channel.send(f"You fled the battle...")
@@ -2683,8 +2683,6 @@ class CrownUnlimited(commands.Cog):
                         except asyncio.TimeoutError:
 
                             await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
-                            if private_channel.guild:
-                                await discord.TextChannel.delete(private_channel, reason=None)
                             return
                 # PLayer 2 Turn Start
                 elif turn == 1:
@@ -3567,9 +3565,6 @@ class CrownUnlimited(commands.Cog):
 
                     if str(reaction.emoji) == '👎':
                         continued = False
-
-                        if private_channel.guild:
-                            await discord.TextChannel.delete(private_channel, reason=None)
                         return
 
                     currentopponent = 0
@@ -15800,7 +15795,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         except Exception as e:
                                             await save_spot(self, ctx, universe, mode, currentopponent)
                                             await ctx.author.send(f"{ctx.author.mention} your game timed out. Your channel has been closed but your spot in the tales has been saved where you last left off.")
-                                            await discord.TextChannel.delete(private_channel, reason=None)
+                                            # await discord.TextChannel.delete(private_channel, reason=None)
                                             return
 
                             # Opponent Turn Start
@@ -17940,7 +17935,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 if private_channel.guild:
                                                     await private_channel.send(f"{user2.mention} has fled the battle...")
 
-                                                    await discord.TextChannel.delete(private_channel, reason=None)
+                                                    # await discord.TextChannel.delete(private_channel, reason=None)
                                                 else:
 
                                                     await private_channel.send(f"You fled the battle...")
@@ -18799,7 +18794,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                     if private_channel.guild:
                                                         await private_channel.send(f"{user2.mention} has fled the battle...")
-                                                        await discord.TextChannel.delete(private_channel, reason=None)
+                                                        # await discord.TextChannel.delete(private_channel, reason=None)
                                                     else:
                                                         await private_channel.send(f"You fled the battle...")
                                                     return
@@ -19519,11 +19514,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                                 colour=0xe91e63)
                                                         await button_ctx.send(embed=embedVar)
                                                         turn = 2
-                                            except asyncio.TimeoutError:
+                                            except Exception as e:
 
                                                 await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
-                                                if private_channel.guild:
-                                                    await discord.TextChannel.delete(private_channel, reason=None)
                                                 return
                                 # Opponent Turn Start
                                 elif turn == 3:
@@ -21000,7 +20993,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     play_again_buttons_action_row], timeout=120, check=check)
 
                                 if button_ctx.custom_id == "No":
-                                    await discord.TextChannel.delete(private_channel, reason=None)
+                                    await button_ctx.send("Cancelled.")
                                     return
 
                                 if button_ctx.custom_id == "Yes":
@@ -21123,7 +21116,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     description=f"The game lasted {turn_total} rounds.\n\n{drop_response}", colour=0xe91e63)
                                 embedVar.set_author(name=f"{t_card} lost!")
                                 await ctx.send(embed=embedVar)
-                                await discord.TextChannel.delete(private_channel, reason=None)
+                                # await discord.TextChannel.delete(private_channel, reason=None)
                                 return
 
                             if mode in B_modes:
@@ -21197,7 +21190,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     new_query = {'$addToSet': {'BOSS_WINS': t_card}}
                                     resp = db.updateUserNoFilter(query, new_query)
 
-                                await discord.TextChannel.delete(private_channel, reason=None)
+                                # await discord.TextChannel.delete(private_channel, reason=None)
 
                             elif mode not in B_modes:
                                 uid = o_DID
@@ -21282,7 +21275,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             await ctx.send(
                                                 f"You were awarded :coin: 8,000,000 for completing the {selected_universe} Dungeon! ")
                                         continued = False
-                                        await discord.TextChannel.delete(private_channel, reason=None)
+                                        # await discord.TextChannel.delete(private_channel, reason=None)
                                     elif mode in U_modes:
                                         embedVar = discord.Embed(title=f"UNIVERSE CONQUERED",
                                                                 description=f"**{selected_universe}** has been conquered\n\n{drop_response}",
@@ -21307,7 +21300,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             await ctx.send(
                                                 f"You were awarded :coin: 2,000,000 for completing the {selected_universe} Tale! ")
                                         continued = False
-                                        await discord.TextChannel.delete(private_channel, reason=None)
+                                        # await discord.TextChannel.delete(private_channel, reason=None)
 
 
             except Exception as ex:
