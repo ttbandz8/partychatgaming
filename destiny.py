@@ -3134,7 +3134,7 @@ destiny = [
         "REQUIRED": 30,
         "DEFEAT": "Antares",
         "USE_CARDS": ["Jin Woo"],
-        "EARN": "Jin Woo", 
+        "EARN": "Antares", 
         "COMPLETED": False,
         "UNIVERSE": "Solo Leveling"
     },
