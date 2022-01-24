@@ -305,7 +305,7 @@ enhancer_mapping = {'ATK': 'Increase Attack %',
 'MANA': 'Increase Enchancer AP',
 'SHIELD': 'Blocks Incoming DMG, until broken',
 'BARRIER': 'Nullifies Incoming Attacks, until broken',
-'PARRY': 'Returns Half Damage, until broken'
+'PARRY': 'Returns 25% Damage, until broken'
 }
 enhancer_suffix_mapping = {'ATK': '%',
 'DEF': '%',
