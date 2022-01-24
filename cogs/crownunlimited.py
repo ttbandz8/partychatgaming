@@ -10676,7 +10676,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                 if companion['NAME'] == o['NAME']:
                     await ctx.send(f"You're already using {o['NAME']}. Please use a different card as your companion. ")
-                    await discord.TextChannel.delete(private_channel, reason=None)
+                    # await discord.TextChannel.delete(private_channel, reason=None)
                     return
 
             if mode in ai_co_op_modes:
