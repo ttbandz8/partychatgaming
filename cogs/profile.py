@@ -2392,13 +2392,13 @@ class Profile(commands.Cog):
                             self.stop = True
                             return
 
-                        selection = random.randint(0, round(len(list_of_cards)))
+                        selection = random.randint(0, len(list_of_cards))
                         card = list_of_cards[selection]
                         card_name = card['NAME']
                         tier = 0
 
                         if card_name in current_cards:
-                            await cardlevel(card['NAME'], str(ctx.author), "Purchase")
+                            await cardlevel(card['NAME'], str(ctx.author), "Purchase", universe)
                             await button_ctx.send(f"You received a level up for **{card_name}**!")
                             await main.curse(price, str(ctx.author))
                             
@@ -2440,13 +2440,13 @@ class Profile(commands.Cog):
                             self.stop = True
                             return
 
-                        selection = random.randint(0, round(len(list_of_cards)))
+                        selection = random.randint(0, len(list_of_cards))
                         card = list_of_cards[selection]
                         card_name = card['NAME']
                         tier = 0
 
                         if card_name in current_cards:
-                            await cardlevel(card['NAME'], str(ctx.author), "Purchase")
+                            await cardlevel(card['NAME'], str(ctx.author), "Purchase", universe)
                             await button_ctx.send(f"You received a level up for **{card_name}**!")
                             await main.curse(price, str(ctx.author))
                             
@@ -2492,13 +2492,13 @@ class Profile(commands.Cog):
                             self.stop = True
                             return
 
-                        selection = random.randint(0, round(len(list_of_cards)))
+                        selection = random.randint(0, len(list_of_cards))
                         card = list_of_cards[selection]
                         card_name = card['NAME']
                         tier = 0
 
                         if card_name in current_cards:
-                            await cardlevel(card['NAME'], str(ctx.author), "Purchase")
+                            await cardlevel(card['NAME'], str(ctx.author), "Purchase", universe)
                             await button_ctx.send(f"You received a level up for **{card_name}**!")
                             await main.curse(price, str(ctx.author))
                             
