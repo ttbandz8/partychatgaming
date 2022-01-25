@@ -16257,7 +16257,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         if mode not in AUTO_BATTLE_modes:
                                             if t_gif != "N/A":
                                                 await battle_msg.delete(delay=2)
-                                                await asyncio.sleep(1)
+                                                await asyncio.sleep(2)
                                                 battle_msg = await private_channel.send(f"{t_gif}")
                                                 await asyncio.sleep(2)
                                     elif int(aiMove) == 4:
