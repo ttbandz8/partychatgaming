@@ -40,7 +40,7 @@ from pilmoji import Pilmoji
 class CrownUnlimited(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self._cd = commands.CooldownMapping.from_cooldown(1, 10,
+        self._cd = commands.CooldownMapping.from_cooldown(1, 1000,
                                                           commands.BucketType.member)  # Change accordingly. Currently every 8 minutes (3600 seconds == 60 minutes)
 
     co_op_modes = ['CTales', 'DTales', 'CDungeon', 'DDungeon']
@@ -11061,7 +11061,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         if mode in PVP_MODES:
                             # Player 1 Turn Start
                             if turn == 0:
-                                # await asyncio.sleep(2)
+                                await asyncio.sleep(1)
                                 if o_block_used == True:
                                     o_block_used = False
                                     o_defense = o_defense / 2
@@ -12160,10 +12160,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             'message': str(ex),
                                             'trace': trace
                                         }))
-
+                
                             # Player 2 Turn Start
                             elif turn == 1:
-                                # await asyncio.sleep(2)
+                                await asyncio.sleep(1)
                                 if t_block_used == True:
                                     t_block_used = False
                                     t_defense = int(t_defense / 2)
@@ -13845,7 +13845,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 #         previous_moves = previous_moves[4:]
                                 #     previous_moves_into_embed = "\n\n".join(previous_moves)
 
-                                # await asyncio.sleep(2)
+                                await asyncio.sleep(1)
                                 if o_block_used == True:
                                     o_defense = int(o_defense / 2)
                                     o_block_used = False
@@ -15844,6 +15844,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             # await discord.TextChannel.delete(private_channel, reason=None)
                                             return
                             # Opponent Turn Start
+                            
                             elif turn == 1:
                                 # if previous_moves:
                                 #     previous_moves_len = len(previous_moves)
@@ -15853,7 +15854,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 #     previous_moves_into_embed = "\n\n".join(previous_moves)
 
 
-                                # await asyncio.sleep(2)
+                                await asyncio.sleep(1)
                                 if turn_total == 1 and botActive and mode in B_modes:
                                     embedVar = discord.Embed(title=f"**{t_card}** Says : ", description=f"{t_welcome}",
                                                             colour=0xe91e63)
@@ -16255,10 +16256,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             tcard_lvl_ap_buff)
                                         if mode not in AUTO_BATTLE_modes:
                                             if t_gif != "N/A":
-                                                await battle_msg.delete(delay=None)
-                                                await asyncio.sleep(2)
+                                                await battle_msg.delete(delay=2)
+                                                await asyncio.sleep(1)
                                                 battle_msg = await private_channel.send(f"{t_gif}")
-                                                await asyncio.sleep(3)
+                                                await asyncio.sleep(2)
                                     elif int(aiMove) == 4:
 
                                         t_enhancer_used = True
@@ -21074,7 +21075,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                     elif t_health <= 0 or t_max_health <= 0:
                         if mode in PVP_MODES:
-
                             try:
                                 uid = o_DID
                                 ouser = await self.bot.fetch_user(uid)
