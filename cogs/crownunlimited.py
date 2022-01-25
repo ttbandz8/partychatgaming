@@ -7593,23 +7593,23 @@ cache = dict()
 
 def get_card(url, cardname, cardtype):
     try:
-        # save_path = f"image_cache/{str(cardtype)}/{str(cardname)}.png"
-        # # print(save_path)
+        save_path = f"image_cache/{str(cardtype)}/{str(cardname)}.png"
+        # print(save_path)
         
-        # if url not in cache:
-        #     # print("Not in Cache")
-        #     cache[url] = save_path
-        #     im = Image.open(requests.get(url, stream=True).raw)
-        #     im.save(f"{save_path}", "PNG")
-        #     # print(f"NO : {cardname}")
-        #     return im
+        if url not in cache:
+            # print("Not in Cache")
+            cache[url] = save_path
+            im = Image.open(requests.get(url, stream=True).raw)
+            im.save(f"{save_path}", "PNG")
+            # print(f"NO : {cardname}")
+            return im
 
-        # else:
-        #     # print("In Cache")
-        #     im = Image.open(cache[url])
-        #     # print(f"YES : {cardname}")
-        #     return im
-        im = Image.open(requests.get(url, stream=True).raw)
+        else:
+            # print("In Cache")
+            im = Image.open(cache[url])
+            # print(f"YES : {cardname}")
+            return im
+        # im = Image.open(requests.get(url, stream=True).raw)
         return im
            
     except Exception as ex:
@@ -20881,7 +20881,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         filter_query = [{'type.' + "NAME": str(sowner['DISNAME'])}]
                                         res = db.updateArena(query, update_query, filter_query)
                                         await bless(10000, str(tuser))
-                                        await ctx.send(f"{ouser.mention} has won the 1v1, earning :coin: 10,000!")
+                                        # await ctx.send(f"{ouser.mention} has won the 1v1, earning :coin: 10,000!")
+                                        await battle_msg.delete(delay=2)
+                                        await asyncio.sleep(2)
+                                        battle_msg = await private_channel.send(content=f"{ouser.mention} has won the 1v1, earning :coin: 10,000!")
+
                                     else:
                                         query = {'OWNER': sowner['DISNAME'], "ACTIVE": True}
                                         update_query = {
@@ -20889,9 +20893,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             }
                                         filter_query = [{'type.' + "NAME": str(sowner['DISNAME'])}]
                                         res = db.updateArena(query, update_query, filter_query)
-                                        print("This oneee")
-                                        await ctx.send(f"{tuser.mention} ❌")
-
+                                        # print("This oneee")
+                                        # await ctx.send(f"{tuser.mention} ❌")
+                                        await battle_msg.delete(delay=2)
+                                        await asyncio.sleep(2)
+                                        battle_msg = await private_channel.send(content=f"{tuser.mention} ❌")
             
 
                                 embedVar = discord.Embed(title=f":zap: VICTORY\n**{t_card}** ",
@@ -20911,7 +20917,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     embedVar.add_field(name="Most Focused", value=f"**{o_card}**")
                                 else:
                                     embedVar.add_field(name="Most Focused", value=f"**{t_card}**")
-                                await ctx.send(embed=embedVar)
+                                # await ctx.send(embed=embedVar)
+                                await battle_msg.delete(delay=2)
+                                await asyncio.sleep(2)
+                                battle_msg = await private_channel.send(embed=embedVar)
                                 continued = False
                                 return
                             except Exception as ex:
@@ -20953,7 +20962,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     embedVar.set_footer(
                                         text=f"Battle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
 
-                                await ctx.send(embed=embedVar)
+                                await battle_msg.delete(delay=2)
+                                await asyncio.sleep(2)
+                                battle_msg = await private_channel.send(embed=embedVar)
                                 # await discord.TextChannel.delete(private_channel, reason=None)
                                 return
                             # BOSS LOSS
@@ -20979,7 +20990,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 value="Equiping stronger **TITLES** and **ARMS** will make you character tougher in a fight!")
                                 embedVar.set_footer(
                                     text="The /shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
-                                await ctx.send(embed=embedVar)
+                                await battle_msg.delete(delay=2)
+                                await asyncio.sleep(2)
+                                battle_msg = await private_channel.send(embed=embedVar)
                                 # await discord.TextChannel.delete(private_channel, reason=None)
 
                             # Play Again Buttons
@@ -21108,7 +21121,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         filter_query = [{'type.' + "NAME": str(opponent['DISNAME'])}]
                                         res = db.updateArena(query, update_query, filter_query)
                                         await bless(10000, str(ouser))
-                                        await ctx.send(f"{tuser.mention} has won the 1v1, earning :coin: 10,000!")
+                                        # await ctx.send(f"{tuser.mention} has won the 1v1, earning :coin: 10,000!")
+                                        await battle_msg.delete(delay=2)
+                                        await asyncio.sleep(2)
+                                        battle_msg = await private_channel.send(f"{tuser.mention} has won the 1v1, earning :coin: 10,000!")
+
                                     else:
                                         query = {'OWNER': sowner['DISNAME'], 'ACTIVE': True}
                                         update_query = {
@@ -21117,7 +21134,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         filter_query = [{'type.' + "NAME": str(opponent['DISNAME'])}]
                                         res = db.updateArena(query, update_query, filter_query)
                                         
-                                        await ctx.send(f"{ouser.mention} ❌")
+                                        # await ctx.send(f"{ouser.mention} ❌")
+                                        await battle_msg.delete(delay=2)
+                                        await asyncio.sleep(2)
+                                        battle_msg = await private_channel.send(f"{ouser.mention} ❌")
+
 
                                 match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']),
                                                         str(oarm['ARM']), "N/A", "PVP", o['EXCLUSIVE'])
@@ -21137,7 +21158,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     embedVar.add_field(name="Most Focused", value=f"**{o_card}**")
                                 else:
                                     embedVar.add_field(name="Most Focused", value=f"**{t_card}**")
-                                await ctx.send(embed=embedVar)
+                                # await ctx.send(embed=embedVar)
+                                await battle_msg.delete(delay=2)
+                                await asyncio.sleep(2)
+                                battle_msg = await private_channel.send(embed=embedVar)
+
+
                                 continued = False
                                 return
                             except Exception as ex:
@@ -21171,7 +21197,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     title=f"VICTORY\n:coin: {bounty} Bounty Received!\n**{o_card} says**\n{o_win_description}",
                                     description=f"The game lasted {turn_total} rounds.\n\n{drop_response}", colour=0xe91e63)
                                 embedVar.set_author(name=f"{t_card} lost!")
-                                await ctx.send(embed=embedVar)
+                                # await ctx.send(embed=embedVar)
+                                await battle_msg.delete(delay=2)
+                                await asyncio.sleep(2)
+                                battle_msg = await private_channel.send(embed=embedVar)
+
                                 # await discord.TextChannel.delete(private_channel, reason=None)
                                 return
 
@@ -21227,7 +21257,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 else:
                                     embedVar.set_footer(
                                         text=f"Battle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
-                                await ctx.send(embed=embedVar)
+                                # await ctx.send(embed=embedVar)
+                                await battle_msg.delete(delay=2)
+                                await asyncio.sleep(2)
+                                battle_msg = await private_channel.send(embed=embedVar)
 
                                 embedVar = discord.Embed(title=f"BOSS DEFEATED",
                                                         description=f"Boss Victories are added to your player profile! Defeat {t_card} again to earn exotic loot!",
@@ -21236,7 +21269,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 embedVar.add_field(name="Tips!", value=f"Run /lookup to view your Boss Souls")
                                 embedVar.set_footer(
                                     text="Bosses have a chance to drop :coin:, ARMS, TITLES, and even BOSS CARDS:eyes:")
-                                await ctx.send(embed=embedVar)
+                                # await ctx.send(embed=embedVar)
+                                await battle_msg.delete(delay=2)
+                                await asyncio.sleep(2)
+                                battle_msg = await private_channel.send(embed=embedVar)
 
                                 if t_card not in sowner['BOSS_WINS']:
                                     await bless(15000000, str(ctx.author))
@@ -21294,7 +21330,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             embedVar.add_field(name=f"**{selected_universe}** CREST SEARCH!",
                                                             value=f"**{oguild['GNAME']}** earned 1,000 :coin:")
                                     embedVar.set_author(name=f"{t_card} lost!")
-                                    await private_channel.send(embed=embedVar)
+                                    # await private_channel.send(embed=embedVar)
+                                    await battle_msg.delete(delay=2)
+                                    await asyncio.sleep(2)
+                                    battle_msg = await private_channel.send(embed=embedVar)
 
                                     currentopponent = currentopponent + 1
                                     continued = True
@@ -21321,13 +21360,21 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             await bless(300000, ctx.author)
                                             teambank = await blessteam(80000, oteam)
                                             # await bless(125, user2)
-                                            await ctx.send(embed=embedVar)
+                                            # await ctx.send(embed=embedVar)
+                                            await battle_msg.delete(delay=2)
+                                            await asyncio.sleep(2)
+                                            battle_msg = await private_channel.send(embed=embedVar)
+
                                             await ctx.send(
                                                 f"You were awarded :coin: 300,000 for completing the {selected_universe} Dungeon again!")
                                         else:
                                             await bless(8000000, ctx.author)
                                             teambank = await blessteam(1500000, oteam)
-                                            await ctx.send(embed=embedVar)
+                                            # await ctx.send(embed=embedVar)
+                                            await battle_msg.delete(delay=2)
+                                            await asyncio.sleep(2)
+                                            battle_msg = await private_channel.send(embed=embedVar)
+
                                             await ctx.send(
                                                 f"You were awarded :coin: 8,000,000 for completing the {selected_universe} Dungeon! ")
                                         continued = False
@@ -21346,13 +21393,21 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         if selected_universe in completed_universes:
                                             await bless(100000, ctx.author)
                                             teambank = await blessteam(25000, oteam)
-                                            await ctx.send(embed=embedVar)
+                                            # await ctx.send(embed=embedVar)
+                                            await battle_msg.delete(delay=2)
+                                            await asyncio.sleep(2)
+                                            battle_msg = await private_channel.send(embed=embedVar)
+
                                             await ctx.send(
                                                 f"You were awarded :coin: 100,000 for completing the {selected_universe} Tale again!")
                                         else:
                                             await bless(2000000, ctx.author)
                                             teambank = await blessteam(500000, oteam)
-                                            await ctx.send(embed=embedVar)
+                                            # await ctx.send(embed=embedVar)
+                                            await battle_msg.delete(delay=2)
+                                            await asyncio.sleep(2)
+                                            battle_msg = await private_channel.send(embed=embedVar)
+
                                             await ctx.send(
                                                 f"You were awarded :coin: 2,000,000 for completing the {selected_universe} Tale! ")
                                         continued = False
