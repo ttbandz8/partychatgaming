@@ -544,6 +544,7 @@ class CrownUnlimited(commands.Cog):
                        ]
         , guild_ids=main.guild_ids)
     async def coop(self, ctx: SlashContext, user: User, mode: str):
+        await ctx.send("Co-op is currently unavailable. Coming Soon.")
         U_modes = ['ATales', 'Tales', 'CTales', 'DTales']
         D_modes = ['CDungeon', 'DDungeon', 'Dungeon', 'ADungeon']
         B_MODES = ['Boss', 'CBoss']
@@ -11399,11 +11400,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             oarm_passive_value = f"{oparry_count}"
                                         else:
                                             oarm_passive_value = 0
-                                    embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
+                                    embedVar = discord.Embed(title=f"", description=textwrap.dedent(f"""\
                                     {previous_moves_into_embed}
+
                                     """), color=0xe74c3c)
                                     embedVar.set_author(name=f"🦾 {oarm_name} - {oarm_passive_type} {oarm_passive_value} {enhancer_suffix_mapping[oarm_passive_type]}\n{pet_msg_on_resolve}")
                                     # await asyncio.sleep(2)
+                                    embedVar.add_field(name="➡️ Current Turn", value=f"{ctx.author.mention} Select move below! _Turn_ {turn_total}")
                                     embedVar.set_image(url="attachment://image.png")
                                     embedVar.set_footer(
                                         text=f"{t_card}: ❤️{t_health} 🌀{t_stamina} 🗡️{t_attack}/🛡️{t_defense} {tarm_message}",
@@ -12436,11 +12439,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             else:
                                                 tarm_passive_value = 0
                                         components = [battle_action_row, util_action_row]
-                                        embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
+                                        embedVar = discord.Embed(title=f"{user2.mention} Press your move below! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
                                         {previous_moves_into_embed}
+
                                         """), color=0xe74c3c)
                                         embedVar.set_author(name=f"🦾 {tarm_name} - {tarm_passive_type} {tarm_passive_value} {enhancer_suffix_mapping[tarm_passive_type]}\n{tpet_msg_on_resolve}")
-                                        
+                                        embedVar.add_field(name="➡️ Current Turn", value=f"{user2.mention} Select move below! _Turn_ {turn_total}")
                                         embedVar.set_image(url="attachment://image.png")
                                         embedVar.set_footer(
                                             text=f"{o_card}: ❤️{o_health} 🌀{o_stamina} 🗡️{o_attack}/🛡️{o_defense}{oarm_message}",
@@ -12876,7 +12880,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     embedVar = discord.Embed(title=f"{t_card} **Defended** 🛡️",
                                                                             colour=0xe91e63)
 
-                                                    previous_moves.append(f"*{turn_total}*: **{t_card}:** {block_message}")
+                                                    previous_moves.append(f"*{turn_total}*: {t_card} **Defended** 🛡️")
                                                     await button_ctx.defer(ignore=True)
                                                     turn_total = turn_total + 1
                                                     turn = 0
@@ -14834,8 +14838,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 oarm_passive_value = f"{oparry_count}"
                                             else:
                                                 oarm_passive_value = 0
-                                        embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
+                                        embedVar = discord.Embed(title=f"{ctx.author.mention} Press your move below! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
                                         {previous_moves_into_embed}
+                                        
                                         """), color=0xe74c3c)
                                         embedVar.set_author(name=f"🦾 {oarm_name} - {oarm_passive_type} {oarm_passive_value} {enhancer_suffix_mapping[oarm_passive_type]}\n{pet_msg_on_resolve}\n")
                                         # await asyncio.sleep(2)
