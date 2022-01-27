@@ -982,10 +982,10 @@ class CrownUnlimited(commands.Cog):
                             option_type=3,
                             required=True,
                             choices=[
-                                create_choice(
-                                    name="Auto Battler",
-                                    value="ATales"
-                                ),
+                                # create_choice(
+                                #     name="Auto Battler",
+                                #     value="ATales"
+                                # ),
                                 create_choice(
                                     name="Tales (Normal)",
                                     value="Tales"
@@ -2464,7 +2464,7 @@ class CrownUnlimited(commands.Cog):
                                     o_stamina = o_stamina - 20
                                     o_block_used = True
                                     o_defense = o_defense * 2
-                                    embedVar = discord.Embed(title=f"{o_card} **Defended** 🛡️", colour=0xe91e63)
+                                    embedVar = discord.Embed(title=f"{o_card} Defended 🛡️", colour=0xe91e63)
 
                                     await button_ctx.send(embed=embedVar)
                                     turn_total = turn_total + 1
@@ -3607,10 +3607,10 @@ class CrownUnlimited(commands.Cog):
                     if private_channel.guild:
                         await discord.TextChannel.delete(private_channel, reason=None)
 
-    @cog_ext.cog_slash(description="PVP Battle", guild_ids=main.guild_ids)
+    @cog_ext.cog_slash(description="PvP Battle", guild_ids=main.guild_ids)
     async def battle(self, ctx: SlashContext, player: User):
-        await ctx.defer()
         try:
+            # await ctx.defer()
             private_channel = ctx
             starttime = time.asctime()
             h_gametime = starttime[11:13]
@@ -5185,7 +5185,7 @@ class CrownUnlimited(commands.Cog):
                                     o_stamina = o_stamina - 20
                                     o_block_used = True
                                     o_defense = o_defense * 2
-                                    embedVar = discord.Embed(title=f"{o_card} **Defended** 🛡️", colour=0xe91e63)
+                                    embedVar = discord.Embed(title=f"{o_card} Defended 🛡️", colour=0xe91e63)
 
                                     await button_ctx.send(embed=embedVar)
                                     turn_total = turn_total + 1
@@ -7438,52 +7438,52 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, stamina, en
                 message = f'{move} used! inflicts {enh_type}'
         else: #If not a pet move
             if enh_type == 'ATK':
-                message = f'**{move}** used! Increasing **Attack** by **{enhanced}**'
+                message = f'{move} used! Increasing **Attack** by **{enhanced}**'
             elif enh_type == 'DEF':
-                message = f'**{move}** used! Increasing **Defense** by **{enhanced}**'
+                message = f'{move} used! Increasing **Defense** by **{enhanced}**'
             elif enh_type == 'STAM':
-                message = f'**{move}** used! Increasing **Stamina** by **{enhanced}**'
+                message = f'{move} used! Increasing **Stamina** by **{enhanced}**'
             elif enh_type == 'LIFE':
                 if enhanced == 0:
-                    message = f'**{move}** used! Stealing **{enhanced} Health**  *Your Health is full!*'
+                    message = f'{move} used! Stealing **{enhanced} Health**  *Your Health is full!*'
                 else:
-                    message = f'**{move}** used! Stealing **{enhanced} Health**'
+                    message = f'{move} used! Stealing **{enhanced} Health**'
             elif enh_type == 'DRAIN':
-                message = f'**{move}** used! Draining **{enhanced} Stamina**'
+                message = f'{move} used! Draining **{enhanced} Stamina**'
             elif enh_type == 'FLOG':
-                message = f'**{move}** used! Stealing **{enhanced} Attack**'
+                message = f'{move} used! Stealing **{enhanced} Attack**'
             elif enh_type == 'WITHER':
-                message = f'**{move}** used! Stealing **{enhanced} Defense**'
+                message = f'{move} used! Stealing **{enhanced} Defense**'
             elif enh_type == 'RAGE':
-                message = f'**{move}** used! Sacrificing **{enhanced} Defense**, Increasing **Attack** by **{enhanced}**'
+                message = f'{move} used! Sacrificing **{enhanced} Defense**, Increasing **Attack** by **{enhanced}**'
             elif enh_type == 'BRACE':
-                message = f'**{move}** used! Sacrificing **{enhanced} Attack**, Increasing **Defense** by **{enhanced}**'
+                message = f'{move} used! Sacrificing **{enhanced} Attack**, Increasing **Defense** by **{enhanced}**'
             elif enh_type == 'BZRK':
-                message = f'**{move}** used! Sacrificing **{enhanced} Health**, Increasing **Attack** by **{enhanced}**'
+                message = f'{move} used! Sacrificing **{enhanced} Health**, Increasing **Attack** by **{enhanced}**'
             elif enh_type == 'CRYSTAL':
-                message = f'**{move}** used! Sacrifices **{enhanced} Health**, Increasing **Defense** by **{enhanced}**'
+                message = f'{move} used! Sacrifices **{enhanced} Health**, Increasing **Defense** by **{enhanced}**'
             elif enh_type == 'WAVE' or enh_type == 'BLAST':
-                message = f'**{move}** used! Dealing **{round(enhanced)} {enh_type}** Damage!'
+                message = f'{move} used! Dealing **{round(enhanced)} {enh_type}** Damage!'
             elif enh_type == 'CREATION':
-                message = f'**{move}** used! **Healing and Increasing Max Health** by **{round(enhanced)}**'
+                message = f'{move} used! **Healing and Increasing Max Health** by **{round(enhanced)}**'
             elif enh_type == 'DESTRUCTION':
-                message = f'**{move}** used! Destroying **{round(enhanced)} Max Health**'
+                message = f'{move} used! Destroying **{round(enhanced)} Max Health**'
             elif enh_type == 'GROWTH':
-                message = f'**{move}** used! Sacrificing **{round(enhanced)} Max Health** to Increase **Attack and Defense** by **{round(enhanced * .5)}**'
+                message = f'{move} used! Sacrificing **{round(enhanced)} Max Health** to Increase **Attack and Defense** by **{round(enhanced * .5)}**'
             elif enh_type == 'STANCE':
-                message = f'**{move}** used! Swapping **Attack and Defense**, Increasing **Defense** to **{enhanced}**'
+                message = f'{move} used! Swapping **Attack and Defense**, Increasing **Defense** to **{enhanced}**'
             elif enh_type == 'CONFUSE':
-                message = f'**{move}** used! Swapping **Opponent Attack and Defense**, Decreasing **Defense** to **{enhanced}**'
+                message = f'{move} used! Swapping **Opponent Attack and Defense**, Decreasing **Defense** to **{enhanced}**'
             elif enh_type == 'HLT':
-                message = f'**{move}** used! **Healing** for **{enhanced}**!'
+                message = f'{move} used! **Healing** for **{enhanced}**!'
             elif enh_type == 'FEAR':
-                message = f'**{move}** used! Sacrificing **{round(enhanced)} Max Health** to Decrease **Opponent Attack and Defense** by **{round(enhanced * .5)}**'
+                message = f'{move} used! Sacrificing **{round(enhanced)} Max Health** to Decrease **Opponent Attack and Defense** by **{round(enhanced * .5)}**'
             elif enh_type == 'SOULCHAIN':
-                message = f'**{move}** used! **Synchronizing Stamina** to **{enhanced}**'
+                message = f'{move} used! **Synchronizing Stamina** to **{enhanced}**'
             elif enh_type == 'GAMBLE':
-                message = f'**{move}** used! **Synchronizing Health** to **{enhanced}**'
+                message = f'{move} used! **Synchronizing Health** to **{enhanced}**'
             else:
-                message = f'**{move}** used! **Inflicts {enh_type}**'
+                message = f'{move} used! **Inflicts {enh_type}**'
 
         response = {"DMG": enhanced, "MESSAGE": message, "STAMINA_USED": move_stamina,
                     "CAN_USE_MOVE": can_use_move_flag, "ENHANCED_TYPE": enh_type, "ENHANCE": True}
@@ -7544,26 +7544,26 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, stamina, en
             if hit_roll <= miss_hit:
                 if universe == 'Crown Rift Slayers':
                     true_dmg = round(true_dmg)
-                    message = f'⚔️ **{move}** used Twice! The first strike misses but second hits for **{true_dmg}**! :bangbang:'
+                    message = f'⚔️ {move} used Twice! The first strike misses but second hits for **{true_dmg}**! :bangbang:'
                 else:
                     true_dmg = 0
-                    message = f'⚔️ **{move}** misses! :dash:'
+                    message = f'⚔️ {move} misses! :dash:'
             elif hit_roll <= low_hit and hit_roll > miss_hit:
                 true_dmg = round(true_dmg * .70)
-                message = f'⚔️ **{move}** used! It chips for **{true_dmg}**! :anger:'
+                message = f'⚔️ {move} used! Chips for **{true_dmg}**! :anger:'
             elif hit_roll <= med_hit and hit_roll > low_hit:
                 true_dmg = round(true_dmg * .85)
-                message = f'⚔️ **{move}** used! It connects for **{true_dmg}**! :bangbang:'
+                message = f'⚔️ {move} used! Connects for **{true_dmg}**! :bangbang:'
             elif hit_roll <= standard_hit and hit_roll > med_hit:
                 true_dmg = round(true_dmg)
-                message = f'⚔️ **{move}** used! It hits for **{true_dmg}**! :anger_right:'
+                message = f'⚔️ {move} used! Hits for **{true_dmg}**! :anger_right:'
             elif hit_roll == 20:
                 if universe == 'Crown Rift Awakening':
                     true_dmg = round(true_dmg * 4)
-                    message = f"⚔️ **{move}** used! :boom: IT MORTALLY WOUNDS FOR **{true_dmg}**!! :boom: "
+                    message = f"⚔️ {move} used! Mortally Wounds for **{true_dmg}**!! :boom: "
                 else:
                     true_dmg = round(true_dmg * 2)
-                    message = f"⚔️ **{move}** used! :boom: IT CRITICALLY HITS FOR **{true_dmg}**!! :boom: "
+                    message = f"⚔️ {move} used! Critically Hits for **{true_dmg}**!! :boom: "
 
             if move_stamina == 80:
                 # message = f"{special_description}\n" + message
@@ -8090,11 +8090,11 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         enemy_arm = boss['ARM']
         enemy_pet = boss['PET']
         t_user = boss
-        opponent_scaling = 650
-        opponent_health_scaling = 2325
+        opponent_scaling = 625
+        opponent_health_scaling = 5325
         if companion:
-            opponent_scaling = 650
-            opponent_health_scaling = 4325
+            opponent_scaling = 750
+            opponent_health_scaling = 9325
            
     if mode in U_modes:
         enemy_title = "UTITLE"
@@ -10652,6 +10652,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 companion = db.queryCard({'NAME': str(activeDeck['CARD'])})
                 c = companion
                 ctitle = db.queryTitle({'TITLE': str(activeDeck['TITLE'])})
+            
             elif mode in co_op_modes:
                 companion = db.queryCard({'NAME': str(cowner['CARD'])})
                 c = companion
@@ -10666,10 +10667,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 stats = await build_player_stats(self, randomized_battle, ctx, sowner, o, otitle, t, ttitle, mode,
                                                  universe, currentopponent, oteam, ofam, abyss_scaling, companion, c,
                                                  ctitle, cteam, cfam, activeDeck, None, None, None, None)
+            
             elif mode in co_op_modes and mode != "CBoss":
                 stats = await build_player_stats(self, randomized_battle, ctx, sowner, o, otitle, t, ttitle, mode,
                                                  universe, currentopponent, oteam, ofam, abyss_scaling, cowner, c,
                                                  ctitle, cteam, cfam, None, None, None, None, None)
+            
             elif mode in B_modes:
                 if mode == "CBoss":
                     stats = await build_player_stats(self, randomized_battle, ctx, sowner, o, otitle, t, ttitle, mode,
@@ -10679,16 +10682,18 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                     stats = await build_player_stats(self, randomized_battle, ctx, sowner, o, otitle, t, ttitle, mode,
                                                      universe, 0, oteam, ofam, abyss_scaling, None, None, None, None,
                                                      None, None, boss, None, None, None)
+            
             elif mode in PVP_MODES:
                 stats = await build_player_stats(self, randomized_battle, ctx, sowner, o, otitle, t, ttitle, mode, None,
                                                  None, oteam, ofam, None, None, None, None, None, None, None, None,
                                                  opponent, None, None)
+            
             else:
                 stats = await build_player_stats(self, randomized_battle, ctx, sowner, o, otitle, t, ttitle, mode,
                                                  universe, currentopponent, oteam, ofam, abyss_scaling, None, None,
                                                  None, None, None, None, None, None, None, None)
 
-            o_card = stats['o_card']
+            o_card = s tats['o_card']
             ocard_lvl = stats['ocard_lvl']
             o_card_path = stats['o_card_path']
             oarm = stats['oarm']
@@ -11907,7 +11912,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 o_stamina = o_stamina - 20
                                                 o_block_used = True
                                                 o_defense = o_defense * 2
-                                                previous_moves.append(f"*{turn_total}:* **{o_card}:** **Defended** 🛡️")
+                                                previous_moves.append(f"*{turn_total}:* **{o_card}:** Defended 🛡️")
                                                 await button_ctx.defer(ignore=True)
                                                 turn_total = turn_total + 1
                                                 turn = 1
@@ -12877,10 +12882,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_stamina = t_stamina - 20
                                                     t_block_used = True
                                                     t_defense = t_defense * 2
-                                                    embedVar = discord.Embed(title=f"{t_card} **Defended** 🛡️",
+                                                    embedVar = discord.Embed(title=f"{t_card} Defended 🛡️",
                                                                             colour=0xe91e63)
 
-                                                    previous_moves.append(f"*{turn_total}:* {t_card} **Defended** 🛡️")
+                                                    previous_moves.append(f"*{turn_total}:* {t_card} Defended 🛡️")
                                                     await button_ctx.defer(ignore=True)
                                                     turn_total = turn_total + 1
                                                     turn = 0
@@ -15556,7 +15561,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         c_block_used = True
                                                         c_defense = c_defense * 2
                                                         embedVar = discord.Embed(
-                                                            title=f"**{c_card}** **Defended** 🛡️ {o_card.upper()}",
+                                                            title=f"**{c_card}** Defended 🛡️ {o_card}",
                                                             colour=0xe91e63)
 
                                                         previous_moves.append(f"*{turn_total}:* **{c_card}** Defended 🛡️ {o_card}")
@@ -18486,7 +18491,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     c_stamina = c_stamina - 20
                                                     c_defense = c_defense * 2
                                                     embedVar = discord.Embed(
-                                                        title=f"{c_card} **Defended** 🛡️ {o_card.upper()}", colour=0xe91e63)
+                                                        title=f"{c_card} Defended 🛡️ {o_card.upper()}", colour=0xe91e63)
 
                                                     await private_channel.send(embed=embedVar)
                                                     turn = 3
@@ -19350,7 +19355,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         c_stamina = c_stamina - 20
                                                         c_defense = c_defense * 2
                                                         embedVar = discord.Embed(
-                                                            title=f"{c_card} **Defended** 🛡️ {o_card.upper()}",
+                                                            title=f"{c_card} Defended 🛡️ {o_card.upper()}",
                                                             colour=0xe91e63)
 
                                                         await button_ctx.send(embed=embedVar)
