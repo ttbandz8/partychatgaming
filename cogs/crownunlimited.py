@@ -11027,6 +11027,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             if mode in PVP_MODES:
                 embedVar = discord.Embed(title=f"Confirm PVP Battle!", description=f"{user2.mention}\n**{o_card}** VS **{t_card}**")
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row])            
+            
             if mode in B_modes:
                 embedVar = discord.Embed(title=f"Boss Fight!", description=f"{ctx.author.mention}\n**{o_card}** VS **{t_card}**")
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row])
