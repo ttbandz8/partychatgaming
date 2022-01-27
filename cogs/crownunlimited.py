@@ -10693,7 +10693,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                  universe, currentopponent, oteam, ofam, abyss_scaling, None, None,
                                                  None, None, None, None, None, None, None, None)
 
-            o_card = s tats['o_card']
+            o_card = stats['o_card']
             ocard_lvl = stats['ocard_lvl']
             o_card_path = stats['o_card_path']
             oarm = stats['oarm']
@@ -10752,6 +10752,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             o_block_used = stats['o_block_used']
             o_defend_used = stats['o_defend_used']
             o_final_stand = stats['o_final_stand']
+
+
+
 
             if mode in PVP_MODES:
                 tpet_lvl = stats['tpet_lvl']
@@ -11013,29 +11016,44 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             start_tales_buttons = [
                 manage_components.create_button(
                     style=ButtonStyle.blue,
-                    label="Yes",
+                    label="Start",
                     custom_id="start_tales_yes"
                 ),
                 manage_components.create_button(
                     style=ButtonStyle.red,
-                    label="No",
+                    label="Cancel",
                     custom_id="start_tales_no"
                 )
             ]
 
             start_tales_buttons_action_row = manage_components.create_actionrow(*start_tales_buttons)
 
+            tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff
+            tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff
+            tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff
+            tenh1 = list(t_enhancer.values())[0]
+            tenh_name = list(t_enhancer.values())[2]
+            
+            # UNIVERSE CARD
+            player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina,
+                                    t_used_resolve, ttitle, t_used_focus, t_attack, t_defense,
+                                    turn_total, tap1, tap2, tap3, tenh1, tenh_name, tcard_lvl, o_defense)
+            # await private_channel.send(file=player_2_card)
+
+
             if mode not in PVP_MODES and mode not in B_modes:
-                embedVar = discord.Embed(title=f"Confirm Start!", description=f"{ctx.author.mention}\n**{o_card}** VS **{t_card}**")
-                battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row])
+                embedVar = discord.Embed(title=f"✅ Confirm Start!", description=f"{ctx.author.mention}\n**{o_card}** VS **{t_card}**")
+                embedVar.set_image(url="attachment://image.png")
+                battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card)
 
             if mode in PVP_MODES:
-                embedVar = discord.Embed(title=f"Confirm PVP Battle!", description=f"{user2.mention}\n**{o_card}** VS **{t_card}**")
+                embedVar = discord.Embed(title=f"✅ Confirm PVP Battle!", description=f"{user2.mention}\n**{o_card}** VS **{t_card}**")
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row])            
             
             if mode in B_modes:
-                embedVar = discord.Embed(title=f"Boss Fight!", description=f"{ctx.author.mention}\n**{o_card}** VS **{t_card}**")
-                battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row])
+                embedVar = discord.Embed(title=f"✅ Boss Fight!", description=f"{ctx.author.mention}\n**{o_card}** VS **{t_card}**")
+                embedVar.set_image(url="attachment://image.png")
+                battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card)
 
             def check(button_ctx):
                 if mode in PVP_MODES:
