@@ -11511,9 +11511,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                             if o_gif != "N/A":
                                                 await battle_msg.delete(delay=None)
-                                                await asyncio.sleep(2)
+                                                # await asyncio.sleep(1)
                                                 battle_msg = await private_channel.send(f"{o_gif}")
-                                                # await asyncio.sleep(2)
+                                                await asyncio.sleep(2)
                                         elif button_ctx.custom_id == "4":
                                             if botActive:
                                                 embedVar = discord.Embed(title=f"Enhancers!",
@@ -14939,8 +14939,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 ocard_lvl_ap_buff)
                                                 if o_gif != "N/A":
                                                     # await button_ctx.defer(ignore=True)
-                                                    await battle_msg.delete(delay=2)
-                                                    await asyncio.sleep(2)
+                                                    await battle_msg.delete(delay=None)
+                                                    # await asyncio.sleep(1)
                                                     battle_msg = await private_channel.send(f"{o_gif}")
                                                     
                                                     await asyncio.sleep(2)
