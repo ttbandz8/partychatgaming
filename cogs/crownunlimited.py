@@ -7598,25 +7598,42 @@ cache = dict()
 
 def get_card(url, cardname, cardtype):
     try:
-        save_path = f"image_cache/{str(cardtype)}/{str(cardname)}.png"
-        # print(save_path)
+        # save_path = f"image_cache/{str(cardtype)}/{str(cardname)}.png"
+        # # print(save_path)
         
-        if url not in cache:
-            # print("Not in Cache")
-            cache[url] = save_path
-            im = Image.open(requests.get(url, stream=True).raw)
-            im.save(f"{save_path}", "PNG")
-            # print(f"NO : {cardname}")
-            return im
+        # if url not in cache:
+        #     # print("Not in Cache")
+        #     cache[url] = save_path
+        #     im = Image.open(requests.get(url, stream=True).raw)
+        #     im.save(f"{save_path}", "PNG")
+        #     # print(f"NO : {cardname}")
+        #     return im
 
-        else:
-            # print("In Cache")
-            im = Image.open(cache[url])
-            # print(f"YES : {cardname}")
-            return im
-        # im = Image.open(requests.get(url, stream=True).raw)
+        # else:
+        #     # print("In Cache")
+        #     im = Image.open(cache[url])
+        #     # print(f"YES : {cardname}")
+        #     return im
+        im = Image.open(requests.get(url, stream=True).raw)
         return im
            
+    except Exception as ex:
+        trace = []
+        tb = ex.__traceback__
+        while tb is not None:
+            trace.append({
+                "filename": tb.tb_frame.f_code.co_filename,
+                "name": tb.tb_frame.f_code.co_name,
+                "lineno": tb.tb_lineno
+            })
+            tb = tb.tb_next
+        print(str({
+            'type': type(ex).__name__,
+            'message': str(ex),
+            'trace': trace
+        }))
+        return         
+          
     except Exception as ex:
         trace = []
         tb = ex.__traceback__
@@ -10468,14 +10485,14 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             categoryname = "Crown Unlimited"
             category = discord.utils.get(guild.categories, name=categoryname)
 
-            if category is None: #If there's no category matching with the `name`
-                category = await guild.create_category_channel(categoryname)
-            private_channel = await guild.create_text_channel(f'{str(ctx.author)}-{mode}-run', overwrites=overwrites, category=category)
-            await private_channel.send(f"{ctx.author.mention} private channel has been opened for you. Good luck!")
+            # if category is None: #If there's no category matching with the `name`
+            #     category = await guild.create_category_channel(categoryname)
+            # private_channel = await guild.create_text_channel(f'{str(ctx.author)}-{mode}-run', overwrites=overwrites, category=category)
+            # await private_channel.send(f"{ctx.author.mention} private channel has been opened for you. Good luck!")
             
             
             currentopponent = update_save_spot(self, ctx, saved_spots, selected_universe, D_modes)
-            return {'SELECTED_UNIVERSE': selected_universe, 'PRIVATE_CHANNEL': private_channel,
+            return {'SELECTED_UNIVERSE': selected_universe,
                     'UNIVERSE_DATA': universe, 'CREST_LIST': crestlist, 'CREST_SEARCH': crestsearch,
                     'COMPLETED_DUNGEONS': completed_dungeons, 'OGUILD': oguild, 'CURRENTOPPONENT': currentopponent}
         except Exception as ex:
@@ -10563,13 +10580,13 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             categoryname = "Crown Unlimited"
             category = discord.utils.get(guild.categories, name=categoryname)
 
-            if category is None: #If there's no category matching with the `name`
-                category = await guild.create_category_channel(categoryname)
-            private_channel = await guild.create_text_channel(f'{str(ctx.author)}-{mode}-fight', overwrites=overwrites, category=category)
-            await private_channel.send(f"{ctx.author.mention} private channel has been opened for you.")
+            # if category is None: #If there's no category matching with the `name`
+            #     category = await guild.create_category_channel(categoryname)
+            # private_channel = await guild.create_text_channel(f'{str(ctx.author)}-{mode}-fight', overwrites=overwrites, category=category)
+            # await private_channel.send(f"{ctx.author.mention} private channel has been opened for you.")
 
             currentopponent = 0
-            return {'SELECTED_UNIVERSE': selected_universe, 'PRIVATE_CHANNEL': private_channel,
+            return {'SELECTED_UNIVERSE': selected_universe,
                     'UNIVERSE_DATA': universe, 'CREST_LIST': crestlist, 'CREST_SEARCH': crestsearch,
                     'COMPLETED_DUNGEONS': completed_dungeons, 'OGUILD': oguild, 'BOSS_NAME': universe['UNIVERSE_BOSS'],
                     'CURRENTOPPONENT': currentopponent}
@@ -15977,8 +15994,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             embedVar.add_field(name=f"A great aura starts to envelop **{t_card}** ",
                                                             value=f"{t_aura}")
                                             embedVar.set_footer(text=f"{t_card} Says: 'Now, are you ready for a real fight?'")
-                                            await private_channel.send(embed=embedVar)
-                                            await asyncio.sleep(2)
+                                            # await private_channel.send(embed=embedVar)
+                                            previous_moves.append(f"**{t_card}** Focused and Says: 'Now, are you ready for a real fight?'")
+                                            # await asyncio.sleep(2)
                                         else:
                                             embedVar = discord.Embed(title=f"{t_card.upper()} FOCUSED",
                                                                     description=f"**{t_card} says**\n{t_focus_description}",
