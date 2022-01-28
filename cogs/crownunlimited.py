@@ -3610,7 +3610,8 @@ class CrownUnlimited(commands.Cog):
     @cog_ext.cog_slash(description="PvP Battle", guild_ids=main.guild_ids)
     async def battle(self, ctx: SlashContext, player: User):
         try:
-            # await ctx.defer()
+            await ctx.defer()
+            await ctx.send("Building pvp match...", delete_after=10)
             private_channel = ctx
             starttime = time.asctime()
             h_gametime = starttime[11:13]
@@ -3651,7 +3652,10 @@ class CrownUnlimited(commands.Cog):
 
             # universe = "Naruto"
             # selected_universe = {"TITLE": "Naruto"}
-            await battle_commands(self, ctx, mode, None, None, None, oguild, None, None, sowner, oteam, None, opponent, tteam, tguild, None, None, None, None, None, None)
+            if private_channel:
+                await battle_commands(self, ctx, mode, None, None, None, oguild, None, None, sowner, oteam, None, opponent, tteam, tguild, None, None, None, None, None, None)
+            else:
+                await ctx.send("Failed to start battle!")
         except Exception as ex:
             trace = []
             tb = ex.__traceback__
@@ -12900,10 +12904,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_stamina = t_stamina - 20
                                                     t_block_used = True
                                                     t_defense = t_defense * 2
-                                                    embedVar = discord.Embed(title=f"{t_card} Defended 🛡️",
+                                                    embedVar = discord.Embed(title=f"**{t_card}** Defended 🛡️",
                                                                             colour=0xe91e63)
 
-                                                    previous_moves.append(f"*{turn_total}:* {t_card} Defended 🛡️")
+                                                    previous_moves.append(f"*{turn_total}:* **{t_card}** Defended 🛡️")
                                                     await button_ctx.defer(ignore=True)
                                                     turn_total = turn_total + 1
                                                     turn = 0
@@ -13051,7 +13055,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if obarrier_count >1:
                                                                 o_health = o_health 
                                                                 embedVar = discord.Embed(title=f"{o_card.upper()} Activates **Barrier** 💠", description=f"{t_card}'s attack **Nullified**!\n {obarrier_count - 1} **Barriers** remain!", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* {t_card}'s attack **Nullified**!\n {obarrier_count - 1} **Barriers** remain!")
+                                                                previous_moves.append(f"*{turn_total}:* **{t_card}'s** attack **Nullified**!\n {obarrier_count - 1} **Barriers** remain!")
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
