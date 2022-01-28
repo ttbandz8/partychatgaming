@@ -11459,7 +11459,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         # calculate data based on selected move
                                         if button_ctx.custom_id == "q" or button_ctx.custom_id == "Q":
                                             o_health = 0
-                                            await battle_msg.delete(delay=1)
+                                            await battle_msg.delete(delay=2)
                                             await asyncio.sleep(2)
                                             battle_msg = await button_ctx.send(f"{ctx.author.mention} has fled the battle...")
                                             # await button_ctx.send(f"{ctx.author.mention} has fled the battle...")
@@ -12497,7 +12497,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 t_health = 0
                                                 uid = t_DID
                                                 tuser = await self.bot.fetch_user(uid)
-                                                await battle_msg.delete(delay=1)
+                                                await battle_msg.delete(delay=2)
                                                 await asyncio.sleep(2)
                                                 battle_msg = await private_channel.send(content=f"{tuser.mention} has fled.")
 
@@ -12876,13 +12876,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
                                                             embedVar.set_image(url="attachment://pet.png")
                                                         else:
-                                                            embedVar = discord.Embed(
-                                                                title=f"{t_card.upper()} Summoned 🧬 **{tpet_name}**",
-                                                                colour=0xe91e63)
                                                             tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
+
+                                                            embedVar = discord.Embed(title=f"{t_card.upper()} Summoned 🧬 **{tpet_name}**", colour=0xe91e63)
                                                             
-                                                            
-                                                            embedVar.set_image(url="attachment://image.png")
+                                                            embedVar.set_image(url="attachment://pet.png")
 
                                                             previous_moves.append(f"*{turn_total}:* **{t_card}** Summoned 🧬 **{tpet_name}**: {dmg['MESSAGE']}")
                                                         await battle_msg.delete(delay=2)
@@ -14892,7 +14890,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 try:
                                                     o_health = 0
                                                     await save_spot(self, ctx, universe, mode, currentopponent)
-                                                    await battle_msg.delete(delay=1)
+                                                    await battle_msg.delete(delay=2)
                                                     await asyncio.sleep(2)
                                                     battle_msg = await private_channel.send(content="Game Saved!")
                                                     return
@@ -14916,7 +14914,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             # calculate data based on selected move
                                             if button_ctx.custom_id == "q" or button_ctx.custom_id == "Q":
                                                 o_health = 0
-                                                await battle_msg.delete(delay=1)
+                                                await battle_msg.delete(delay=2)
                                                 await asyncio.sleep(2)
                                                 battle_msg = await private_channel.send(content=f"{ctx.author.mention} has fled.")
                                                 return
@@ -14941,8 +14939,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 ocard_lvl_ap_buff)
                                                 if o_gif != "N/A":
                                                     # await button_ctx.defer(ignore=True)
-                                                    await battle_msg.delete(delay=1)
-                                                    # await asyncio.sleep(2)
+                                                    await battle_msg.delete(delay=2)
+                                                    await asyncio.sleep(2)
                                                     battle_msg = await private_channel.send(f"{o_gif}")
                                                     
                                                     await asyncio.sleep(2)
@@ -16650,6 +16648,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                                     tcard_lvl_ap_buff)
 
                                                                 c_health = c_health - petdmg['DMG']
+                                                                tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
 
                                                                 embedVar = discord.Embed(
                                                                     title=f"**PERSONA!**\n{tpet_name} was summoned from {t_card}'s soul dealing **{petdmg['DMG']}** damage!!",
@@ -16657,20 +16656,17 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 embedVar.add_field(
                                                                     name=f"{tpet_name} used a follow up attack dealing **{petdmg['DMG']}** damage!",
                                                                     value=f"Enhanced **{tpet_type}** by **{tpet_dmg}**")
-                                                                
-                                                                tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
                                                                 embedVar.set_image(url="attachment://pet.png")
                                                                 previous_moves.append(f"*{turn_total}:* 🩸 Persona! {tpet_name} was summoned from {t_card}'s soul dealing {petdmg['DMG']} damage!")
                                                             else:
+                                                                tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
+
                                                                 embedVar = discord.Embed(
                                                                     title=f"{t_card.upper()} Summoned 🧬 **{tpet_name}**",
                                                                     colour=0xe91e63)
-                                                                embedVar.add_field(
-                                                                    name=f"{tpet_name} used **{tpetmove_text}**!",
-                                                                    value=f"{dmg['MESSAGE']}")
-                                                                
-                                                                tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
+
                                                                 embedVar.set_image(url="attachment://pet.png")
+                                                                
                                                                 previous_moves.append(f"*{turn_total}:* **{t_card}** Summoned 🧬 **{tpet_name}**: {dmg['MESSAGE']}")
 
 
