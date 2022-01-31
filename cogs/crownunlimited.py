@@ -2072,7 +2072,7 @@ class CrownUnlimited(commands.Cog):
                             util_buttons.append(
                                 manage_components.create_button(
                                     style=ButtonStyle.green,
-                                    label="🧬 15",
+                                    label="🧬",
                                     custom_id="6"
                                 )
                             )
@@ -2732,6 +2732,7 @@ class CrownUnlimited(commands.Cog):
 
                         # Focus
                         if t_stamina < 10:
+                            t_pet_used = False
                             t_focus_count = t_focus_count + 1
                             # o_pet_used = True
                             fortitude = 0.0
@@ -3992,7 +3993,7 @@ class CrownUnlimited(commands.Cog):
             opetmove_text = list(opet.keys())[3]  # Name of the ability
             opetmove_ap = (opet_bond * opet_lvl) + list(opet.values())[3]  # Ability Power
 
-            opet_move = {str(opetmove_text): int(opetmove_ap), 'STAM': 15, 'TYPE': str(opet_passive_type)}
+            opet_move = {str(opetmove_text): int(opetmove_ap), 'STAM': 0, 'TYPE': str(opet_passive_type)}
 
             # player 1 card passive
             if o_card_passive_type == 'ATK':
@@ -4207,7 +4208,7 @@ class CrownUnlimited(commands.Cog):
             tpetmove_ap = (tpet_bond * tpet_lvl) + list(tpet.values())[3]  # Ability Power
             # tpetmove_type= list(tpet.values())[4]
 
-            tpet_move = {str(tpetmove_text): int(tpetmove_ap), 'STAM': 15, 'TYPE': str(tpet_passive_type)}
+            tpet_move = {str(tpetmove_text): int(tpetmove_ap), 'STAM': 0, 'TYPE': str(tpet_passive_type)}
 
             if t_card_passive_type == 'ATK':
                 t_attack = t_attack + int(t_card_passive)
@@ -4718,7 +4719,7 @@ class CrownUnlimited(commands.Cog):
                         #     util_buttons.append(
                         #             manage_components.create_button(
                         #             style=ButtonStyle.green,
-                        #             label="🧬 15",
+                        #             label="🧬",
                         #             custom_id = "6"
                         #         )
                         #     )
@@ -5452,6 +5453,7 @@ class CrownUnlimited(commands.Cog):
 
                     # Focus
                     if t_stamina < 10:
+                        t_pet_used = False
                         t_focus_count = t_focus_count + 1
                         # o_pet_used = True
                         fortitude = 0.0
@@ -8565,7 +8567,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             cpetmove_text = list(cpet.keys())[3]  # Name of the ability
             cpetmove_ap = (cpet_bond * cpet_lvl) + list(cpet.values())[3]  # Ability Power
 
-            cpet_move = {str(cpetmove_text): int(cpetmove_ap), 'STAM': 15, 'TYPE': str(cpet_passive_type)}
+            cpet_move = {str(cpetmove_text): int(cpetmove_ap), 'STAM': 0, 'TYPE': str(cpet_passive_type)}
 
             # Player 1 Card Passive
             c_card_passive_type = list(c_passive.values())[1]
@@ -8815,7 +8817,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         opetmove_text = list(opet.keys())[3]  # Name of the ability
         opetmove_ap = (opet_bond * opet_lvl) + list(opet.values())[3]  # Ability Power
 
-        opet_move = {str(opetmove_text): int(opetmove_ap), 'STAM': 15, 'TYPE': str(opet_passive_type)}
+        opet_move = {str(opetmove_text): int(opetmove_ap), 'STAM': 0, 'TYPE': str(opet_passive_type)}
 
         # Player 1 Card Passive
         o_card_passive_type = list(o_passive.values())[1]
@@ -9042,7 +9044,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
 
             tpetmove_text = list(tpet.keys())[3]  # Name of the ability
             tpetmove_ap = (tpet_bond * opet_lvl) + list(tpet.values())[3]  # Ability Power
-            tpet_move = {str(tpetmove_text): int(tpetmove_ap), 'STAM': 15, 'TYPE': str(tpet_passive_type)}
+            tpet_move = {str(tpetmove_text): int(tpetmove_ap), 'STAM': 0, 'TYPE': str(tpet_passive_type)}
         else:
             t_1 = t_moveset[0]
             t_2 = t_moveset[1]
@@ -9057,7 +9059,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             tpetmove_text = list(tpet_passive.keys())[0]
             tpetmove_ap = (tpet_bond * tpet_lvl) + list(opet.values())[3]  # Ability Power
             tpetmove_type = list(tpet_passive.values())[1]
-            tpet_move = {str(tpetmove_text): int(tpetmove_ap), 'STAM': 15, 'TYPE': tpetmove_type}
+            tpet_move = {str(tpetmove_text): int(tpetmove_ap), 'STAM': 0, 'TYPE': tpetmove_type}
 
         # Player 2 Passive Config
         if (t_universe == t_title_universe) or (t_title_universe == "Unbound"):
@@ -11183,6 +11185,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     embed_color_o = 0x2ecc71
 
                                 if o_stamina < 10:
+                                    o_pet_used = False
                                     o_focus_count = o_focus_count + 1
                                     if botActive and not o_used_focus:
                                         embedVar = discord.Embed(title=f"You've entered **Focus State**!",
@@ -11314,21 +11317,21 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         embedVar = discord.Embed(
                                             title=f"Hero Reinforcements! **{t_card}**  Increased Health & Max Health ❤️",
                                             colour=0xe91e63)
-                                        previous_moves.append(f"*{turn_total}:* 🩸 Hero Reinforcements! **{o_card}**  Increased Health & Max Health ❤️")
+                                        previous_moves.append(f"*{turn_total}:* 🩸 Hero Reinforcements! **{t_card}**  Increased Health & Max Health ❤️")
                                         t_health = round(t_health + 100)
                                         t_max_health = round(t_max_health + 100)
 
                                     elif t_universe == "7ds":
                                         embedVar = discord.Embed(title=f"Increase Power Level! **{t_card}** Increased Stamina 🌀",
                                                                 colour=0xe91e63)
-                                        previous_moves.append(f"*{turn_total}:* 🩸 Increase Power Level! **{o_card}** Increased Stamina 🌀")
+                                        previous_moves.append(f"*{turn_total}:* 🩸 Increase Power Level! **{t_card}** Increased Stamina 🌀")
                                         t_stamina = t_stamina + 60
 
                                     elif t_universe == "Souls":
                                         embedVar = discord.Embed(
                                             title=f"Combo Recognition! **{t_card}** Increased Attack by **{60 + turn_total}** 🔺 ",
                                             colour=0xe91e63)
-                                        previous_moves.append(f"*{turn_total}:* 🩸 Combo Recognition! **{o_card}** Increased Attack by **{60 + turn_total}** 🔺")
+                                        previous_moves.append(f"*{turn_total}:* 🩸 Combo Recognition! **{t_card}** Increased Attack by **{60 + turn_total}** 🔺")
                                         t_attack = round(t_attack + (60 + turn_total))
                                     else:
                                         turn_total = turn_total + 1
@@ -11404,7 +11407,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         util_buttons.append(
                                             manage_components.create_button(
                                                 style=ButtonStyle.green,
-                                                label="🧬 15",
+                                                label="🧬",
                                                 custom_id="6"
                                             )
                                         )
@@ -11797,7 +11800,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 if botActive:
                                                     embedVar = discord.Embed(title=f"{o_card.upper()} Summoned 🧬 **{opet_name}**",colour=0xe91e63)
                                                     embedVar.add_field(name=f"Summon Enhancers!",
-                                                                    value="Summon Enhancers cost 15 Stamina but do not count as the Summoners turn!")
+                                                                    value="Summon Enhancers once per Focus. Summons Do not count as the Summoners turn!")
                                                     embedVar.set_footer(
                                                         text=f"Summons will Level Up and build Bond as you win battles! Train up your pets to perform better in the field!")
                                                     await button_ctx.send(embed=embedVar)
@@ -11963,7 +11966,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         if button_ctx.custom_id != "5" and button_ctx.custom_id != "6" and button_ctx.custom_id != "0" and button_ctx.custom_id in options:
                                             # If you have enough stamina for move, use it
                                             if dmg['CAN_USE_MOVE']:
-                                                o_pet_used = False
                                                 if dmg['ENHANCE']:
                                                     enh_type = dmg['ENHANCED_TYPE']
                                                     if enh_type == 'ATK':
@@ -12260,6 +12262,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 # Focus
 
                                 if t_stamina < 10:
+                                    t_pet_used = False
                                     t_focus_count = t_focus_count + 1
                                     fortitude = 0.0
                                     low = t_health - (t_health * .90)
@@ -12353,19 +12356,19 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     if o_universe == "One Punch Man":
                                         embedVar = discord.Embed(title=f"Hero Reinforcements! **{o_card}** Increased Health!  ❤️",
                                                                 colour=0xe91e63)
-                                        previous_moves.append(f"*{turn_total}:* Hero Reinforcements! **{t_card}** Increased Health!  ❤️")
+                                        previous_moves.append(f"*{turn_total}:* Hero Reinforcements! **{o_card}** Increased Health!  ❤️")
                                         o_health = round(o_health + 100)
                                         o_max_health = round(o_max_health + 100)
                                     elif o_universe == "7ds":
                                         embedVar = discord.Embed(title=f"Increase Power Level! **{o_card}** Increased Stamina 🌀",
                                                                 colour=0xe91e63)
-                                        previous_moves.append(f"*{turn_total}:* 🩸 Increase Power Level! **{t_card}** Increased Stamina 🌀")
+                                        previous_moves.append(f"*{turn_total}:* 🩸 Increase Power Level! **{o_card}** Increased Stamina 🌀")
                                         o_stamina = o_stamina + 60
                                     elif o_universe == "Souls":
                                         embedVar = discord.Embed(
                                             title=f"Combo Recognition! **{o_card}** Increased Attack by **{60 + turn_total}** 🔺 ",
                                             colour=0xe91e63)
-                                        previous_moves.append(f"*{turn_total}:* 🩸 Combo Recognition! **{t_card}** Increased Attack by **{60 + turn_total}** 🔺")
+                                        previous_moves.append(f"*{turn_total}:* 🩸 Combo Recognition! **{o_card}** Increased Attack by **{60 + turn_total}** 🔺")
                                         o_attack = round(o_attack + (60 + turn_total))
                                     else:
                                         turn_total = turn_total + 1
@@ -12442,7 +12445,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             util_buttons.append(
                                                 manage_components.create_button(
                                                     style=ButtonStyle.green,
-                                                    label="🧬 15",
+                                                    label="🧬",
                                                     custom_id="6"
                                                 )
                                             )
@@ -12934,7 +12937,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             if button_ctx.custom_id != "5" and button_ctx.custom_id != "6" and button_ctx.custom_id != "0" and button_ctx.custom_id in options:
                                                 # If you have enough stamina for move, use it
                                                 if dmg['CAN_USE_MOVE']:
-                                                    t_pet_used = False
                                                     if dmg['ENHANCE']:
 
                                                         enh_type = dmg['ENHANCED_TYPE']
@@ -13673,7 +13675,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         if int(aiMove) != 5 and int(aiMove) != 6:
                                             # If you have enough stamina for move, use it
                                             if dmg['CAN_USE_MOVE']:
-                                                t_pet_used = False
                                                 if dmg['ENHANCE']:
                                                     enh_type = dmg['ENHANCED_TYPE']
                                                     if enh_type == 'ATK':
@@ -13999,6 +14000,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     embed_color_o = 0x2ecc71
 
                                 if o_stamina < 10:
+                                    o_pet_used = False
                                     o_focus_count = o_focus_count + 1
                                     if mode in B_modes:
                                         embedVar = discord.Embed(title=f"{t_punish}")
@@ -14135,7 +14137,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         t_health = round(t_health + 100)
                                         t_max_health = round(t_max_health + 100)
 
-                                        previous_moves.append(f"*{turn_total}:* 🩸 Hero Reinforcements! **{o_card}**  Increased Health & Max Health ❤️")
+                                        previous_moves.append(f"*{turn_total}:* 🩸 Hero Reinforcements! **{t_card}**  Increased Health & Max Health ❤️")
 
                                     elif t_universe == "7ds":
                                         embedVar = discord.Embed(title=f"Increase Power Level! **{o_card}** Increased Stamina 🌀",
@@ -14143,7 +14145,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         # await private_channel.send(embed=embedVar)
                                         t_stamina = t_stamina + 60
                                         
-                                        previous_moves.append(f"*{turn_total}:* 🩸 Increase Power Level! **{o_card}** Increased Stamina 🌀")
+                                        previous_moves.append(f"*{turn_total}:* 🩸 Increase Power Level! **{t_card}** Increased Stamina 🌀")
                                     
                                     elif t_universe == "Souls":
                                         embedVar = discord.Embed(
@@ -14152,7 +14154,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         # await private_channel.send(embed=embedVar)
                                         t_attack = round(t_attack + (60 + turn_total))
 
-                                        previous_moves.append(f"*{turn_total}:* 🩸 Combo Recognition! **{o_card}** Increased Attack by **{60 + turn_total}** 🔺")
+                                        previous_moves.append(f"*{turn_total}:* 🩸 Combo Recognition! **{t_card}** Increased Attack by **{60 + turn_total}** 🔺")
                                     
                                     else:
                                         turn_total = turn_total + 1
@@ -14596,7 +14598,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         if aiMove != 5 and aiMove != 6 and aiMove != 0:
                                             # If you have enough stamina for move, use it
                                             if dmg['CAN_USE_MOVE']:
-                                                o_pet_used = False
                                                 if dmg['ENHANCE']:
                                                     enh_type = dmg['ENHANCED_TYPE']
 
@@ -14829,7 +14830,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             util_buttons.append(
                                                 manage_components.create_button(
                                                     style=ButtonStyle.green,
-                                                    label="🧬 15",
+                                                    label="🧬",
                                                     custom_id="6"
                                                 )
                                             )
@@ -15635,7 +15636,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             if button_ctx.custom_id in main_options:
                                                 # If you have enough stamina for move, use it
                                                 if dmg['CAN_USE_MOVE']:
-                                                    o_pet_used = False
                                                     if dmg['ENHANCE']:
                                                         enh_type = dmg['ENHANCED_TYPE']
 
@@ -15951,6 +15951,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                 # Focus
                                 if t_stamina < 10:
+                                    t_pet_used = False
                                     t_focus_count = t_focus_count + 1
 
                                     # o_pet_used = True
@@ -16071,21 +16072,21 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     if o_universe == "One Punch Man":
                                         embedVar = discord.Embed(title=f"Hero Reinforcements! **{t_card}** Increased Health!  ❤️",
                                                                 colour=0xe91e63)
-                                        previous_moves.append(f"*{turn_total}:* Hero Reinforcements! **{t_card}** Increased Health!  ❤️")
+                                        previous_moves.append(f"*{turn_total}:* Hero Reinforcements! **{o_card}** Increased Health!  ❤️")
                                         o_health = round(o_health + 100)
                                         o_max_health = round(o_max_health + 100)
 
                                     elif o_universe == "7ds":
                                         embedVar = discord.Embed(title=f"Increase Power Level! **{o_card}** Increased Stamina 🌀",
                                                                 colour=0xe91e63)
-                                        previous_moves.append(f"*{turn_total}:* 🩸 Increase Power Level! **{t_card}** Increased Stamina 🌀")
+                                        previous_moves.append(f"*{turn_total}:* 🩸 Increase Power Level! **{o_card}** Increased Stamina 🌀")
                                         o_stamina = o_stamina + 60
 
                                     elif o_universe == "Souls":
                                         embedVar = discord.Embed(
                                             title=f"Combo Recognition! **{t_card}** Increased Attack by **{60 + turn_total}** 🔺 ",
                                             colour=0xe91e63)
-                                        previous_moves.append(f"*{turn_total}:* 🩸 Combo Recognition! **{t_card}** Increased Attack by **{60 + turn_total}** 🔺")
+                                        previous_moves.append(f"*{turn_total}:* 🩸 Combo Recognition! **{o_card}** Increased Attack by **{60 + turn_total}** 🔺")
                                         o_attack = round(o_attack + (60 + turn_total))
 
                                     else:
@@ -16992,7 +16993,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         if mode in co_op_modes:
                                             if c_block_used == True:
                                                 if dmg['CAN_USE_MOVE']:
-                                                    t_pet_used = False
                                                     if dmg['ENHANCE']:
                                                         enh_type = dmg['ENHANCED_TYPE']
                                                         if enh_type == 'ATK':
@@ -17211,7 +17211,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     turn = 1
                                             else:
                                                 if dmg['CAN_USE_MOVE']:
-                                                    t_pet_used = False
                                                     if dmg['ENHANCE']:
                                                         enh_type = dmg['ENHANCED_TYPE']
                                                         if enh_type == 'ATK':
@@ -17432,7 +17431,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     turn = 1
                                         else:
                                             if dmg['CAN_USE_MOVE']:
-                                                t_pet_used = False
                                                 if dmg['ENHANCE']:
                                                     enh_type = dmg['ENHANCED_TYPE']
                                                     if enh_type == 'ATK':
@@ -18820,7 +18818,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 util_buttons.append(
                                                     manage_components.create_button(
                                                         style=ButtonStyle.green,
-                                                        label="🧬 15",
+                                                        label="🧬",
                                                         custom_id="6"
                                                     )
                                                 )
@@ -20464,7 +20462,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                             if o_defend_used == True:
                                                 if dmg['CAN_USE_MOVE']:
-                                                    t_pet_used = False
                                                     if dmg['ENHANCE']:
                                                         enh_type = dmg['ENHANCED_TYPE']
                                                         if enh_type == 'ATK':
@@ -20669,7 +20666,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     turn = 3
                                             else:
                                                 if dmg['CAN_USE_MOVE']:
-                                                    t_pet_used = False
                                                     if dmg['ENHANCE']:
                                                         enh_type = dmg['ENHANCED_TYPE']
                                                         if enh_type == 'ATK':
