@@ -347,7 +347,8 @@ class GODS():
 @dataclass(frozen=True, order=True)
 class VAULT():
     OWNER: str
-    BALANCE: int = field(default_factory=lambda: 100000)
+    DID: str
+    BALANCE: int = field(default_factory=lambda: 500000)
     CARDS: list[str] = field(default_factory=lambda: ['Ochaco Uraraka', 'Eevee', 'Garen'])
     TITLES: list[str] = field(default_factory=lambda: ['Starter', 'Iron 4', 'UA 1st Year', 'Pokemon Trainer'])
     ARMS: list[str] = field(default_factory=lambda: [{'ARM':'Stock', 'DUR': 999999}, {'ARM': 'Poke Ball', 'DUR': 50}, {'ARM': 'Hyper-Density Seals', 'DUR': 50}, {'ARM': 'Dorans Shield', 'DUR': 50}])

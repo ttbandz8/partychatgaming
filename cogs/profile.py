@@ -42,7 +42,7 @@ class Profile(commands.Cog):
     @cog_ext.cog_slash(description="Delete your account", guild_ids=main.guild_ids)
     async def deleteaccount(self, ctx):
         user = str(ctx.author)
-        query = {'DISNAME': str(ctx.author)}
+        query = {'DID': str(ctx.author.id)}
         user_is_validated = db.queryUser(query)
         if user_is_validated:
             accept_buttons = [
@@ -73,15 +73,25 @@ class Profile(commands.Cog):
                     return
 
                 if button_ctx.custom_id == "yes":
+                    response = db.deleteVault({'DID': str(ctx.author.id)})
                     delete_user_resp = db.deleteUser(user)
-                    vault = db.queryVault({'OWNER': user})
-                    if vault:
-                        db.deleteVault(vault)
-
                     await button_ctx.send("Account successfully deleted.")
 
-            except:
-                await ctx.send(m.RESPONSE_NOT_DETECTED, hidden=True) 
+            except Exception as ex:
+                trace = []
+                tb = ex.__traceback__
+                while tb is not None:
+                    trace.append({
+                        "filename": tb.tb_frame.f_code.co_filename,
+                        "name": tb.tb_frame.f_code.co_name,
+                        "lineno": tb.tb_lineno
+                    })
+                    tb = tb.tb_next
+                print(str({
+                    'type': type(ex).__name__,
+                    'message': str(ex),
+                    'trace': trace
+                }))
         else:
             await ctx.send("You aren't registered.", hidden=True)
 

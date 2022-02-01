@@ -8431,8 +8431,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             if mode in D_modes:
                 tpet_lvl = 10
                 tpet_bond = 3
-                tcard_lvl = 300
-                tcard_lvl_ap_buff = 100 + (5 * currentopponent)
+                tcard_lvl = 350
+                tcard_lvl_ap_buff = 116
+                tcard_lvl_attack_defense_buff = 175
+                tcard_lvl_hlt_buff = 438
             elif mode in B_modes:
                 tpet_lvl = 10
                 tpet_bond = 3
@@ -8440,33 +8442,48 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 tcard_lvl_ap_buff = 200
             else:
                 if mode in co_op_modes and mode in U_modes:
-                    tpet_lvl = 5
-                    tpet_bond = 2
-                    tcard_lvl = 200
-                    tcard_lvl_ap_buff = 50 + (5 * currentopponent)
+                        tpet_lvl = 6
+                        tpet_bond = 2
+                        tcard_lvl = ocard_lvl
+                        tcard_lvl_ap_buff = ocard_lvl_ap_buff + 50
+                        tcard_lvl_attack_defense_buff = ocard_lvl_attack_buff + 50
+                        tcard_lvl_hlt_buff = ocard_lvl_hlt_buff + 50
                 elif mode in co_op_modes and mode in D_modes:
-                    tpet_lvl = 5
+                    tpet_lvl = 10
                     tpet_bond = 3
-                    tcard_lvl = 400
-                    tcard_lvl_ap_buff = 150 + (5 * currentopponent)
+                    tcard_lvl = 350
+                    tcard_lvl_ap_buff = 116
+                    tcard_lvl_attack_defense_buff = 175
+                    tcard_lvl_hlt_buff = 438
                 else:
-                    tpet_lvl = 3
-                    tpet_bond = 1
-                    tcard_lvl = 30
-                    tcard_lvl_ap_buff = 10 + (5 * currentopponent)
+                    if ocard_lvl >= 200:
+                        tpet_lvl = 3
+                        tpet_bond = 1
+                        tcard_lvl = 200
+                        tcard_lvl_ap_buff = 67
+                        tcard_lvl_attack_defense_buff = 100
+                        tcard_lvl_hlt_buff = 250
+                    else:
+                        tpet_lvl = 3
+                        tpet_bond = 2
+                        tcard_lvl = ocard_lvl
+                        tcard_lvl_ap_buff = ocard_lvl_ap_buff
+                        tcard_lvl_attack_defense_buff = ocard_lvl_attack_buff
+                        tcard_lvl_hlt_buff = ocard_lvl_hlt_buff
+
             tarm_passive = tarm['ABILITIES'][0]
             tarm_name = tarm['ARM']
             t_card = t['NAME']
             t_gif = t['GIF']
             t_card_path = t['PATH']
             t_rcard_path = t['RPATH']
-            t_health = t['HLT'] + (20 * currentopponent) + opponent_health_scaling
+            t_health = t['HLT'] + (20 * currentopponent) + opponent_health_scaling + tcard_lvl_hlt_buff
             t_max_health = t_health
             t_stamina = t['STAM']
             t_max_stamina = t['STAM']
             t_moveset = t['MOVESET']
-            t_attack = t['ATK'] + (10 * currentopponent) + opponent_scaling
-            t_defense = t['DEF'] + (10 * currentopponent) + opponent_scaling
+            t_attack = t['ATK'] + (5 * currentopponent) + opponent_scaling + tcard_lvl_attack_defense_buff
+            t_defense = t['DEF'] + (5 * currentopponent) + opponent_scaling + tcard_lvl_attack_defense_buff
             t_type = t['TYPE']
 
             t_passive = t['PASS'][0]
@@ -10843,18 +10860,19 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 tpet_lvl = stats['tpet_lvl']
                 tpet_bond = stats['tpet_bond']
                 t_card = stats['t_card']
+                tcard_lvl = stats['tcard_lvl']
                 tcard_lvl_ap_buff = stats['tcard_lvl_ap_buff']
                 tarm = stats['tarm']
                 tarm_name = stats['tarm_name']
-                if mode in D_modes:
-                    tcard_lvl = 300
-                    tcard_lvl_ap_buff = 100
-                elif mode in U_modes:
-                    tcard_lvl = 30
-                    tcard_lvl_ap_buff = 10
-                elif mode in B_modes:
-                    tcard_lvl = 500
-                    tcard_lvl_ap_buff = 166
+                # if mode in D_modes:
+                #     tcard_lvl = tcard_lvl
+                #     tcard_lvl_ap_buff = 100
+                # elif mode in U_modes:
+                #     tcard_lvl = 30
+                #     tcard_lvl_ap_buff = 10
+                # elif mode in B_modes:
+                #     tcard_lvl = 500
+                #     tcard_lvl_ap_buff = 166
                 t_universe = stats['t_universe']
                 t_attack = stats['t_attack']
                 t_defense = stats['t_defense']

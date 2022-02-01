@@ -675,29 +675,28 @@ def altQueryVault(query):
     return data
 
 '''Delete Vault'''
-def deleteVault(vault):
+def deleteVault(query):
     try:
-        vault_col.delete_one({'OWNER': vault['OWNER']})
-        return "Vault removed from the system. "
+        vault_col.delete_one(query)
+        return True
     except:
-        print("Delete Vault failed.")
+        return False
 
 def updateVault(query, new_value, arrayFilters):
-    exists = vault_exist({'OWNER': query['OWNER']})
-    if exists:
+    try:
         update = vault_col.update_one(query, new_value, array_filters=arrayFilters)
         return True
-    else:
+    except Exception as e:
         return False
 
 '''Update Vault With No Array Filters'''
 def updateVaultNoFilter(query, new_value):
-    exists = vault_exist({'OWNER': query['OWNER']})
-    if exists:
+    try:
         update = vault_col.update_one(query, new_value)
-        return "Update completed. "
-    else:
-        return "Update failed. "
+        return True
+    except Exception as e:
+        return False
+
 
 def gods_exists(data):
     collection_exists = col_exists("GODS")

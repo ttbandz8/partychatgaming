@@ -564,49 +564,57 @@ async def register(ctx):
    if response:
 
       embedVar = discord.Embed(title=f"**Welcome to Crown Unlimited**!", description=textwrap.dedent(f"""
-      Welcome {ctx.author.mention}! Use **/daily** to claim your **Daily Reward!**                                                                                               
-      If you'd like to read the manual, run the command below!
-      **/crown** - Read Game Manual
-      **/help** - Help Menu
-      **/enhancers** - Enhancer Help Menu
+      Welcome {ctx.author.mention}!                                                                                           
       
-      **Some Important Symbols**
+      Collect and level **Cards**, **Summons**, and **Accessories** to equip powerful builds to Conquer Worlds, Defeat Bosses, and PVP for prizes and rank solo  or multiplayer! 
+      **Enhancers** are Special Abilities on Cards, Summons, and Accessories that are used to boost your stats or defend yourself in special ways to earn an edge in battle!
+   
+      
       **Card Basics**
-      🀄 - Tier
-      :trident: - Level
-      :heart:  - Health (HLT)
-      :cyclone: - Stamina (ST)
+      🀄 - Card Tier *1-7*
+      :trident: - Card Level *1-500*
+      :heart:  - Card Health (HLT)
+      :cyclone: - Card Stamina (ST)
       🗡️ - Attack (ATK) *Blue Crystal* 🟦
-      🛡️ - Defense (DEF) *Red Crystal* 🟥
-
-      **Accessories**
-      :reminder_ribbon: - Title *Apply Enhancers prior to battle*
-      :mechanical_arm: - Arm *Increase Card Ability Power or Defense*
-      🧬 - Summon *Summon Help during battle after Resolve*
+      🛡️ - Defense (DEF) *Red Crystal* 🟥      
+      :drop_of_blood: - Card Passive *Card Passive enhancers are applied at the beginning of the battle*
+      :infinity: - Universe Trait for Card *Unique Ability shared across Card Universe*
+      *Each Universe has it's own unique Universe Trait*
+      
+      **Accessories & Summons**
+      :reminder_ribbon: - Title  *Title enhancers are applied at the beginning of battle.*
+      :mechanical_arm: - Arm *Arm enhancers are applied at the beginning of battle and passively throughout the duration of battle.*
+      🧬 - Summon *Summons use Active enhancers and are available during battle after you Resolve*
 
       **Moveset**
+      *Each ability costs Stamina. Your Stamina will refill
+      each time it hits 0, entering Focus state.*
       :boom: - Basic Attack *costs 10 :cyclone:*
       :comet: - Special Attack *costs 30 :cyclone:*
       :rosette: - Ultimate Attack *costs 80 :cyclone:*
-      :microbe: - Enhancer Ability *costs 20 :cyclone:*
+      :microbe: - Active Enhancer Ability *costs 20 :cyclone:*
       ↘️ - Explains Enhancer Ability 
 
-      **Passives**
-      :drop_of_blood: - Card  *Applies Enhancer prior to battle*
-      :infinity: - Universe Trait for Card *Unique Ability shared across Card Universe*
-      
+      **Battle Explanation**
+      Each ability costs Stamina. Once your Stamina is empty you will go into **Focus** mode, where you will recover **90 Stamina**, increase attack, increase defense, increse health and lose 1 turn. 
+      Anytime after you focus you are able to **Resolve** to boost your Attack and Health but lowering your defense.
+      You are able to use your  🧬 **Summon** after you Resolve!
+      First card with 0 health loses!
+
       **Currency**
       :coin: - Coins *Buy Items in the /shop and /trinketshop*
       :gem: - Gems *Craft Universe Hearts and Souls*
 
-      **Have fun!**
-      *Additional Information has been DM'd to you*
+      IMPORTANT REMINDER! -> Use **/daily** to claim your **Daily Reward!**     
+      **/crown** - Read Game Manual
+      **/help** - Help Menu
+      **/enhancers** - Enhancer Help Menu
       """), colour=0xe91e63)
       embedVar.set_footer(text="Changing your Discord Account Name or Numbers will break your Crown Unlimited Account.")
       await ctx.author.send(embed=embedVar)
       await ctx.send(embed=embedVar)
 
-
+      # await asyncio.sleep(3)
       vault = db.queryVault({'OWNER': disname})
       if vault:
          await ctx.send(m.VAULT_RECOVERED, delete_after=5)
@@ -635,14 +643,18 @@ async def register(ctx):
                   tales_list = ", ".join(uni['CROWN_TALES'])
 
                   embedVar = discord.Embed(title= f"{uni['TITLE']}", description=textwrap.dedent(f"""                                                                                         
-                  :infinity: - {traitmessage}
-                  Select A Starting Universe! 
+                  **Select A Starting Universe, {ctx.author.mention}!**
+
+                  Selecting a Starter Universe will give you *3* 🎴 Cards, :reminder_ribbon: Titles, and :mechanical_arm: Arms to embark on your journey with!
+                  
+                  :infinity: - Unique Universe Trait
+                  {traitmessage}
                   """))
                   embedVar.set_image(url=uni['PATH'])
                   universe_embed_list.append(embedVar)
                   
             buttons = [
-                  manage_components.create_button(style=3, label="Select Starting Universe", custom_id="Select")
+                  manage_components.create_button(style=3, label="Select This Starter Universe", custom_id="Select")
                ]
             custom_action_row = manage_components.create_actionrow(*buttons)
             # custom_button = manage_components.create_button(style=3, label="Equip")
@@ -651,9 +663,8 @@ async def register(ctx):
                try:
                   if button_ctx.author == ctx.author:
                      universe = str(button_ctx.origin_message.embeds[0].title)
-                     print(universe)
-                     vault = db.createVault(data.newVault({'OWNER' : disname}))
-                     vault_query = {'OWNER' : str(ctx.author)}
+                     vault = db.createVault(data.newVault({'OWNER': disname, 'DID' : str(ctx.author.id)}))
+                     vault_query = {'DID' : str(ctx.author.id)}
                      vault = db.altQueryVault(vault_query)
                      current_titles = vault['TITLES']
                      current_cards = vault['CARDS']
@@ -667,72 +678,74 @@ async def register(ctx):
                      owned_destinies = []
                      for destiny in vault['DESTINY']:
                         owned_destinies.append(destiny['NAME'])
+                     
                      if button_ctx.custom_id == "Select":
-                        acceptable = [1,2,3]
-                        list_of_titles =[x for x in db.queryAllTitlesBasedOnUniverses({'UNIVERSE': str(universe)}) if not x['EXCLUSIVE'] and x['AVAILABLE']]
+                        acceptable = [1,2,3,4]
+                        list_of_titles =[x for x in db.queryAllTitlesBasedOnUniverses({'UNIVERSE': str(universe)}) if not x['EXCLUSIVE'] and x['AVAILABLE'] and x['TITLE'] not in current_titles]
                         count = 0
-                        while count <3:
-                           vault = db.altQueryVault({'DISNAME': str(ctx.author)})
-                           selection = random.randint(0,len(list(list_of_titles)))
-                           print(selection)
+                        selected_titles = [1000]
+                        while count < 3:
+                           selectable_titles = list(range(0, len(list(list_of_titles))))
+                           for selected in selected_titles:
+                              if selected in selectable_titles:
+                                 selectable_titles.remove(selected)
+                           selection = random.choice(selectable_titles)
+                           selected_titles.append(selection)
                            title = list_of_titles[selection]
                            response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'TITLES': str(title['TITLE'])}})
-                           await button_ctx.send(f"You purchased **{title['TITLE']}**.")
+                           await button_ctx.send(f"You collected :reminder_ribbon: **{title['TITLE']}**.")
                            count = count + 1
                         
                         
-                        list_of_arms = [x for x in db.queryAllArmsBasedOnUniverses({'UNIVERSE': str(universe)}) if not x['EXCLUSIVE'] and x['AVAILABLE']]
-                        print(list_of_arms)
+                        list_of_arms = [x for x in db.queryAllArmsBasedOnUniverses({'UNIVERSE': str(universe)}) if not x['EXCLUSIVE'] and x['AVAILABLE'] and x['ARM'] not in current_arms]
                         count = 0
-                        while count <3:
-                           vault = db.altQueryVault({'DISNAME': str(ctx.author)})
+                        selected_arms = [1000]
+                        while count < 3:
                            current_arms = vault['ARMS']
-                           selection = random.randint(0,len(list(list_of_arms)))
-                           print(selection)
+                           selectable_arms = list(range(0, len(list(list_of_arms))))
+                           for selected in selected_arms:
+                              if selected in selectable_arms:
+                                 selectable_arms.remove(selected)
+                           selection = random.choice(selectable_arms)
+                           selected_arms.append(selection)
                            arm = list_of_arms[selection]['ARM']
-                           if arm not in current_arms:
-                              response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'ARMS': {'ARM': str(arm), 'DUR': 25}}})
-                              await button_ctx.send(f"You purchased **{arm}**.")
-                           else:
-                              update_query = {'$inc': {'ARMS.$[type].' + 'DUR': 10}}
-                              filter_query = [{'type.' + "ARM": str(arm)}]
-                              vault_query = {'DISNAME': str(ctx.author)}
-                              resp = db.updateVault(vault_query, update_query, filter_query)
-                              await button_ctx.send(f"You purchased **{arm}**. Increased durability for the arm by 10 as you already own it.")
+                           db.updateVaultNoFilter(vault_query,{'$addToSet':{'ARMS': {'ARM': str(arm), 'DUR': 75}}})                           
+                           await button_ctx.send(f"You collected :mechanical_arm: **{arm}**.")
                            count = count + 1
                            
-                        list_of_cards = [x for x in db.queryAllCardsBasedOnUniverse({'UNIVERSE': str(universe), 'TIER': {'$in': acceptable}}) if not x['EXCLUSIVE'] and not x['HAS_COLLECTION']]
+                        list_of_cards = [x for x in db.queryAllCardsBasedOnUniverse({'UNIVERSE': str(universe), 'TIER': {'$in': acceptable}}) if not x['EXCLUSIVE'] and not x['HAS_COLLECTION'] and x['AVAILABLE'] and x['NAME'] not in current_cards]
                         count = 0
-                        while count <3:
-                           vault = db.altQueryVault({'DISNAME': str(ctx.author)})
+                        selected_cards = [1000]
+                        while count < 3:
                            current_cards = vault['CARDS']
-                           selection = random.randint(0, len(list_of_cards))
+                           selectable_cards = list(range(0, len(list(list_of_cards))))
+                           for selected in selected_cards:
+                              if selected in selectable_cards:
+                                 selectable_cards.remove(selected)
+                           selection = random.choice(selectable_cards)
+                           selectable_cards.append(selection)
                            card = list_of_cards[selection]
                            card_name = card['NAME']
                            tier = 0
-                           if card_name in current_cards:
-                              print(copy)
-                              await cardlevel(card['NAME'], str(ctx.author), "Purchase", universe)
-                              await button_ctx.send(f"You received a level up for **{card_name}**!")
-                              
-                           else:
-                              response = db.updateVaultNoFilter(vault_query,{'$addToSet': {'CARDS': str(card_name)}})
-                              if response:
-                                 if card_name not in owned_card_levels_list:
-                                    update_query = {'$addToSet': {
-                                          'CARD_LEVELS': {'CARD': str(card_name), 'LVL': 0, 'TIER': int(tier),
-                                                         'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
-                                    r = db.updateVaultNoFilter(vault_query, update_query)
 
-                                 await button_ctx.send(f"You purchased **{card_name}**!")
+                           cresponse = db.updateVaultNoFilter(vault_query, {'$addToSet': {'CARDS': str(card_name)}})
+                           if cresponse:
+                              if card_name not in owned_card_levels_list:
+                                 update_query = {'$addToSet': {
+                                       'CARD_LEVELS': {'CARD': str(card_name), 'LVL': 0, 'TIER': int(tier),
+                                                      'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
+                                 r = db.updateVaultNoFilter(vault_query, update_query)
 
-                                 # Add Destiny
-                                 for destiny in d.destiny:
-                                    if card_name in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
-                                          db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
-                                          await button_ctx.send(
-                                             f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.", hidden=True)
+                              await button_ctx.send(f"You collected 🎴 **{card_name}**!")
+
+                              # Add Destiny
+                              for destiny in d.destiny:
+                                 if card_name in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
+                                       db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
+                                       await button_ctx.send(
+                                          f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.", hidden=True)
                            count = count + 1
+                        self.stop = True
                except Exception as ex:
                   trace = []
                   tb = ex.__traceback__
@@ -748,6 +761,7 @@ async def register(ctx):
                      'message': str(ex),
                      'trace': trace
                   }))   
+            
             await Paginator(bot=bot, ctx=ctx, disableAfterTimeout=True, pages=universe_embed_list, customActionRow=[
                custom_action_row,
                custom_function,
@@ -1694,6 +1708,18 @@ async def curseguild(amount, guild):
          print("cant find Association")
 
 
+@bot.command()
+@commands.check(validate_user)
+async def addDID(ctx):
+   if ctx.author.guild_permissions.administrator == True:
+      all_users = db.queryAllUsers()
+      for user in all_users:
+         disname = user['DISNAME']
+         did = user['DID']
+         response = db.updateVaultNoFilter({'OWNER': disname}, {'$set': {'DID': did}})
+      await ctx.send("All DIDs udpated in database collection VAULT.")
+   else:
+      await ctx.send("Fuck off.")
 
 
 @bot.command()
@@ -1702,7 +1728,7 @@ async def addfield(ctx, collection, new_field, field_type):
    if ctx.author.guild_permissions.administrator == True:
 
       if field_type == 'string':
-         field_type = "N/A"
+         field_type = ""
       elif field_type == 'int':
          field_type = 1
       elif field_type == 'list':
