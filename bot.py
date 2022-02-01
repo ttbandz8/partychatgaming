@@ -1724,6 +1724,7 @@ async def addDID(ctx):
       await ctx.send("All DIDs udpated in database collection VAULT.")
    else:
       await ctx.send("Fuck off.")
+   
 
 
 @bot.command()

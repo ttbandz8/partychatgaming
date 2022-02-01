@@ -503,7 +503,7 @@ class Profile(commands.Cog):
                         elif button_ctx.custom_id == "Resell":
                             card_data = db.queryCard({'NAME': selected_card})
                             card_name = card_data['NAME']
-                            sell_price = sell_price + (card_data['PRICE'] * .30)
+                            sell_price = sell_price + (card_data['PRICE'] * .07)
                             if card_name == current_card:
                                 await button_ctx.send("You cannot resell equipped cards.")
                             elif card_name in updated_vault['CARDS']:
@@ -869,7 +869,7 @@ class Profile(commands.Cog):
                         elif button_ctx.custom_id == "Resell":
                             title_data = db.queryTitle({'TITLE': selected_title})
                             title_name = title_data['TITLE']
-                            sell_price = sell_price + (title_data['PRICE'] * .30)
+                            sell_price = sell_price + (title_data['PRICE'] * .10)
                             if title_name == current_title:
                                 await button_ctx.send("You cannot resell equipped titles.")
                             elif title_name in updated_vault['TITLES']:
@@ -927,7 +927,7 @@ class Profile(commands.Cog):
                             title_data = db.queryTitle({'TITLE': selected_title})
                             title_name = title_data['TITLE']
                             selected_universe = title_data['UNIVERSE']
-                            dismantle_amount = round(title_data['PRICE'] * .03)
+                            dismantle_amount = round(title_data['PRICE'] * .05)
                             if title_name == current_title:
                                 await button_ctx.send("You cannot resell equipped titles.")
                             elif title_name in updated_vault['TITLES']:
@@ -1244,7 +1244,7 @@ class Profile(commands.Cog):
                         elif button_ctx.custom_id == "Resell":
                             arm_data = db.queryArm({'ARM': selected_arm})
                             arm_name = arm_data['ARM']
-                            sell_price = sell_price + (arm_data['PRICE'] * .30)
+                            sell_price = sell_price + (arm_data['PRICE'] * .07)
                             if arm_name == current_arm:
                                 await button_ctx.send("You cannot resell equipped arms.")
                             elif arm_name in updated_vault:
