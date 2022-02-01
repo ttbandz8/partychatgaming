@@ -7517,6 +7517,8 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, stamina, en
             elif enh_type == 'CREATION':
                 message = f'{move} used! Healing and Increasing Max Health by {round(enhanced)}'
             elif enh_type == 'DESTRUCTION':
+                if enhanced > 100:
+                    enhanced =100
                 message = f'{move} used! Destroying {round(enhanced)} Max Health'
             elif enh_type == 'GROWTH':
                 message = f'{move} used! Sacrificing {round(enhanced)} Max Health to Increase Attack and Defense by {round(enhanced * .5)}'
@@ -11262,6 +11264,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             text="Select a move to get started. DON'T WORRY! When your STAMINA depletes to 0 your character will Focus to REPLENISH!")
                                         await private_channel.send(embed=embedVar)
                                         await asyncio.sleep(2)
+                                        t_attack = t_attack - 50
+                                        t_defense = t_defense - 50
                                     else:
                                         # await ctx.send(f"{user1.mention}{user2.mention}")
                                         embedVar = discord.Embed(

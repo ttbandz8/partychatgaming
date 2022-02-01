@@ -616,8 +616,8 @@ async def register(ctx):
       embedVar.set_footer(text="Changing your Discord Account Name or Numbers will break your Crown Unlimited Account.")
       await ctx.author.send(embed=embedVar)
       await ctx.send(embed=embedVar)
-
-      # await asyncio.sleep(3)
+      
+      await asyncio.sleep(3)
       vault = db.queryVault({'OWNER': disname})
       if vault:
          await ctx.send(m.VAULT_RECOVERED, delete_after=5)
@@ -748,7 +748,7 @@ async def register(ctx):
                                        await button_ctx.send(
                                           f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.", hidden=True)
                            count = count + 1
-                        await button_ctx.send(f"Nice Choice {ctx.author.mention}!\nRun **/tutorial** to begin the Tutorial Battle!")
+                        await button_ctx.send(f"Nice choice {ctx.author.mention}!\n\nCreate your first **Build**!\n**/cards** Select your 🎴  Card\n**/titles** Select your 🎗️ Title\n**/arms** Select your 🦾  Arm\n\nOnce you're done, run **/tutorial** to begin the **Tutorial Battle**! ⚔️")
                         self.stop = True
                except Exception as ex:
                   trace = []
