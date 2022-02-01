@@ -6217,12 +6217,12 @@ class CrownUnlimited(commands.Cog):
                 else:
                     embedVar.set_footer(
                         text=f"Battle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
-                embedVar.add_field(name="Focus Count",
+                embedVar.add_field(name="🔢 Focus Count",
                                 value=f"**{o_card}**: {o_focus_count}\n**{t_card}**: {t_focus_count}")
                 if o_focus_count >= t_focus_count:
-                    embedVar.add_field(name="Most Focused", value=f"**{o_card}**")
+                    embedVar.add_field(name="🌀 Most Focused", value=f"**{o_card}**")
                 else:
-                    embedVar.add_field(name="Most Focused", value=f"**{t_card}**")
+                    embedVar.add_field(name="🌀 Most Focused", value=f"**{t_card}**")
                 await ctx.send(embed=embedVar)
 
             elif t_health <= 0 or t_max_health <= 0:
@@ -6284,12 +6284,12 @@ class CrownUnlimited(commands.Cog):
                 else:
                     embedVar.set_footer(
                         text=f"Battle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
-                embedVar.add_field(name="Focus Count",
+                embedVar.add_field(name="🔢 Focus Count",
                                 value=f"**{o_card}**: {o_focus_count}\n**{t_card}**: {t_focus_count}")
                 if o_focus_count >= t_focus_count:
-                    embedVar.add_field(name="Most Focused", value=f"**{o_card}**")
+                    embedVar.add_field(name="🌀 Most Focused", value=f"**{o_card}**")
                 else:
-                    embedVar.add_field(name="Most Focused", value=f"**{t_card}**")
+                    embedVar.add_field(name="🌀 Most Focused", value=f"**{t_card}**")
                 await ctx.send(embed=embedVar)
                 # if botActive:
                 #     embedVar = discord.Embed(title=f"TUTORIAL COMPLETE",
@@ -21069,12 +21069,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 else:
                                     embedVar.set_footer(
                                         text=f"Battle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
-                                embedVar.add_field(name="Focus Count",
+                                embedVar.add_field(name="🔢 Focus Count",
                                                 value=f"**{o_card}**: {o_focus_count}\n**{t_card}**: {t_focus_count}")
                                 if o_focus_count >= t_focus_count:
-                                    embedVar.add_field(name="Most Focused", value=f"**{o_card}**")
+                                    embedVar.add_field(name="🌀 Most Focused", value=f"**{o_card}**")
                                 else:
-                                    embedVar.add_field(name="Most Focused", value=f"**{t_card}**")
+                                    embedVar.add_field(name="🌀 Most Focused", value=f"**{t_card}**")
                                 # await ctx.send(embed=embedVar)
                                 await battle_msg.delete(delay=2)
                                 await asyncio.sleep(2)
@@ -21315,12 +21315,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 else:
                                     embedVar.set_footer(
                                         text=f"Battle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
-                                embedVar.add_field(name="Focus Count",
+                                embedVar.add_field(name="🔢 Focus Count",
                                                 value=f"**{o_card}**: {o_focus_count}\n**{t_card}**: {t_focus_count}")
                                 if o_focus_count >= t_focus_count:
-                                    embedVar.add_field(name="Most Focused", value=f"**{o_card}**")
+                                    embedVar.add_field(name="🌀 Most Focused", value=f"**{o_card}**")
                                 else:
-                                    embedVar.add_field(name="Most Focused", value=f"**{t_card}**")
+                                    embedVar.add_field(name="🌀 Most Focused", value=f"**{t_card}**")
                                 # await ctx.send(embed=embedVar)
                                 await battle_msg.delete(delay=2)
                                 await asyncio.sleep(2)

@@ -748,7 +748,7 @@ async def register(ctx):
                                        await button_ctx.send(
                                           f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.", hidden=True)
                            count = count + 1
-                        await button_ctx.send(f"Welcome to **Crown Unlimited** {ctx.author.mention}!\nRun **/tutorial** to begin the Tutorial Battle!")
+                        await button_ctx.send(f"Nice Choice {ctx.author.mention}!\nRun **/tutorial** to begin the Tutorial Battle!")
                         self.stop = True
                except Exception as ex:
                   trace = []
