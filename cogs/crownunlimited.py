@@ -42,7 +42,8 @@ class CrownUnlimited(commands.Cog):
         self.bot = bot
         self._cd = commands.CooldownMapping.from_cooldown(1, 1000,
                                                           commands.BucketType.member)  # Change accordingly. Currently every 8 minutes (3600 seconds == 60 minutes)
-
+        self._lvl_cd = commands.CooldownMapping.from_cooldown(1, 600,
+                                                          commands.BucketType.member)
     co_op_modes = ['CTales', 'DTales', 'CDungeon', 'DDungeon']
     ai_co_op_modes = ['DTales', 'DDungeon']
     U_modes = ['ATales', 'Tales', 'CTales', 'DTales']
@@ -68,12 +69,29 @@ class CrownUnlimited(commands.Cog):
         bucket = self._cd.get_bucket(message)
         return bucket.update_rate_limit()
 
+    def get_lvl_ratelimit(self, message: discord.Message) -> typing.Optional[int]:
+        """Returns the level ratelimit left"""
+        bucket = self._lvl_cd.get_bucket(message)
+        return bucket.update_rate_limit()
+
     @commands.Cog.listener()
     async def on_message(self, message):
         if message.author == main.bot.user:
             return
-
+        level_ratelimit = self.get_lvl_ratelimit(message)
         ratelimit = self.get_ratelimit(message)
+
+        if level_ratelimit is None:
+            try:
+                player_that_leveled = db.queryUser({'DISNAME': str(message.author)})
+                card_that_leveled = db.queryCard({'NAME': player_that_leveled['CARD']})
+                uni = card_that_leveled['UNIVERSE']
+                nam = card_that_leveled['NAME']
+                mode = "Tales"
+                await cardlevel(self, nam, str(message.author), mode, uni)
+            except Exception as e:
+                print("")
+
         if ratelimit is None:
             if isinstance(message.channel, discord.channel.DMChannel):
                 await message.channel.send(m.SERVER_FUNCTION_ONLY)
@@ -7143,8 +7161,10 @@ async def summonlevel(pet, player):
         return
 
 
-async def cardlevel(card: str, player: str, mode: str, universe: str):
+async def cardlevel(self, card: str, player: str, mode: str, universe: str):
     vault = db.queryVault({'OWNER': str(player)})
+    user = await self.bot.fetch_user(vault['DID'])
+
     cardinfo = {}
     for x in vault['CARD_LEVELS']:
         if x['CARD'] == str(card):
@@ -7195,6 +7215,7 @@ async def cardlevel(card: str, player: str, mode: str, universe: str):
                                      'CARD_LEVELS.$[type].' + "AP": ap_buff, 'CARD_LEVELS.$[type].' + "HLT": hlt_buff}}
             filter_query = [{'type.' + "CARD": str(card)}]
             response = db.updateVault(query, update_query, filter_query)
+            await user.send(f"**{card}** leveled up!")
 
     if lvl < 500 and lvl > 200 and has_universe_heart:
         # Experience Code
@@ -7219,6 +7240,7 @@ async def cardlevel(card: str, player: str, mode: str, universe: str):
                                      'CARD_LEVELS.$[type].' + "AP": ap_buff, 'CARD_LEVELS.$[type].' + "HLT": hlt_buff}}
             filter_query = [{'type.' + "CARD": str(card)}]
             response = db.updateVault(query, update_query, filter_query)
+            await user.send(f"**{card}** leveled up!")
 
 
 async def savematch(player, card, path, title, arm, universe, universe_type, exclusive):
@@ -10422,7 +10444,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                         embedVar.set_image(url=uni['PATH'])
                         universe_embed_list.append(embedVar)
 
-        custom_button = manage_components.create_button(style=3, label="Start")
+        custom_button = manage_components.create_button(style=3, label="Select")
 
         async def custom_function(self, button_ctx):
             await button_ctx.defer(ignore=True)
@@ -10531,7 +10553,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
         if not universe_embed_list:
             await ctx.send("No available Dungeons for you at this time!")
             return
-        custom_button = manage_components.create_button(style=3, label="Start")
+        custom_button = manage_components.create_button(style=3, label="Select")
 
         async def custom_function(self, button_ctx):
             await button_ctx.defer(ignore=True)
@@ -10630,7 +10652,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             await ctx.send("No available Bosses for you at this time!")
             return
         
-        custom_button = manage_components.create_button(style=3, label="Start")
+        custom_button = manage_components.create_button(style=3, label="Select")
 
         async def custom_function(self, button_ctx):
             await button_ctx.defer(ignore=True)
@@ -11199,6 +11221,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             # print(f"LIST LEN: {previous_moves_len}")
                             if previous_moves_len >= 6:
                                 previous_moves = previous_moves[5:]
+                            
                             previous_moves_into_embed = "\n\n".join(previous_moves)
                         
                         if mode in PVP_MODES:
@@ -15942,9 +15965,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 await button_ctx.defer(ignore=True)
                                                                 tarm_parry_active = False
                                                         else:
+                                                            previous_moves.append(f"*{turn_total}:* **{o_card}**: {dmg['MESSAGE']}")
                                                             t_health = t_health - dmg['DMG']
                                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
-                                                            previous_moves.append(f"*{turn_total}:* **{o_card}**: {dmg['MESSAGE']}")
                                                             if oarm_barrier_active:
                                                                 oarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -17753,6 +17776,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             turn_total = turn_total + 1
                                                             turn = 0
                                                         else:
+                                                            previous_moves.append(f"*{turn_total}:* **{t_card}**: {dmg['MESSAGE']}")
                                                             o_health = 0
                                                             t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                                             turn_total = turn_total + 1
@@ -20989,6 +21013,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                     if (((o_health <= 0 or c_health <= 0) and mode in co_op_modes) or (
                             o_max_health <= 0 or c_max_health <= 0) and mode in co_op_modes) or (
                             (o_health <= 0 or o_max_health <= 0) and mode not in co_op_modes):
+                        if previous_moves_len >= 6:
+                            previous_moves = previous_moves[5:]
+                        
+                        previous_moves_into_embed = "\n\n".join(previous_moves)
 
                         if mode in PVP_MODES:
                             try:
@@ -21110,11 +21138,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 s_playtime)
                             if o_user['RIFT'] == 1:
                                 response = db.updateUserNoFilter({'DISNAME': str(o_user['DISNAME'])}, {'$set': {'RIFT': 0}})
-
+                            
                             if randomized_battle:
-                                embedVar = discord.Embed(title=f":zap: **{t_card}** wins the match!",
-                                                        description=f"The game lasted {turn_total} rounds.\n**{t_card} says**\n`{t_win_description}`",
-                                                        colour=0x1abc9c)
+                                embedVar = discord.Embed(title=f":zap: **{t_card}** wins the match!\nThe game lasted {turn_total} rounds.\n**{t_card} says**\n`{t_win_description}`", description=textwrap.dedent(f"""
+                                {previous_moves_into_embed}
+                                
+                                """),colour=0x1abc9c)
                                 embedVar.set_author(name=f"{o_card}")
                                 if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
                                     embedVar.set_footer(text=f"Battle Time: {gameClock[2]} Seconds.")
@@ -21131,9 +21160,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 return
                             # BOSS LOSS
                             if mode in B_modes:
-                                embedVar = discord.Embed(title=f":zap: **{t_card}** Wins...",
-                                                        description=f"Match concluded in {turn_total} turns!\n{t_wins}",
-                                                        colour=0x1abc9c)
+                                embedVar = discord.Embed(title=f":zap: **{t_card}** Wins...\nMatch concluded in {turn_total} turns!\n{t_wins}", description=textwrap.dedent(f"""
+                                {previous_moves_into_embed}
+                                
+                                """),colour=0x1abc9c)
                                 embedVar.set_author(name=f"{o_card} says:\n{o_lose_description}",
                                                     icon_url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236432/PCG%20LOGOS%20AND%20RESOURCES/PCGBot_1.png")
                                 if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
@@ -21144,9 +21174,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     embedVar.set_footer(
                                         text=f"Battle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
 
-                                embedVar = discord.Embed(title=f"PLAY AGAIN",
-                                                        description=f"{t_card} was too powerful level up your character and try again...",
-                                                        colour=0xe74c3c)
+                                embedVar = discord.Embed(title=f"PLAY AGAIN\n{t_card} was too powerful level up your character and try again...", description=textwrap.dedent(f"""
+                                {previous_moves_into_embed}
+                                
+                                """),colour=0x1abc9c)
                                 embedVar.set_author(name=f"You Lost...")
                                 embedVar.add_field(name="Tips!",
                                                 value="Equiping stronger **TITLES** and **ARMS** will make you character tougher in a fight!")
@@ -21161,19 +21192,20 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             play_again_buttons = [
                                 manage_components.create_button(
                                     style=ButtonStyle.blue,
-                                    label="Yes",
+                                    label="Play Again",
                                     custom_id="Yes"
                                 ),
                                 manage_components.create_button(
                                     style=ButtonStyle.red,
-                                    label="No",
+                                    label="End",
                                     custom_id="No"
                                 )
                             ]
                             play_again_buttons_action_row = manage_components.create_actionrow(*play_again_buttons)
-                            embedVar = discord.Embed(title=f":zap: **{t_card}** wins the match!\n\nWill you play again?",
-                                                    description=f"The game lasted {turn_total} rounds.\n**{t_card} says**\n`{t_win_description}`",
-                                                    colour=0x1abc9c)
+                            embedVar = discord.Embed(title=f":zap: **{t_card}** wins the match!\nThe game lasted {turn_total} rounds.\n**{t_card} says**\n`{t_win_description}`", description=textwrap.dedent(f"""
+                            {previous_moves_into_embed}
+                            
+                            """),colour=0x1abc9c)
                             if mode in co_op_modes and mode not in ai_co_op_modes:
                                 teammates = False
                                 fam_members =False
@@ -21195,9 +21227,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 else:
                                     bonus_message = f"Join a Guild or Create a Family for Coop Bonuses!"
                                     
-                                embedVar = discord.Embed(title=f":zap: **{t_card}** wins the match!\n\n**{c_user['NAME']}** will you assist again?",
-                                                    description=f"The game lasted {turn_total} rounds.\n**{t_card} says**\n`{t_win_description}`",
-                                                    colour=0x1abc9c)
+                                embedVar = discord.Embed(title=f":zap: **{t_card}** wins the match!\n\n**{c_user['NAME']}** will you assist again?\nThe game lasted {turn_total} rounds.\n**{t_card} says**\n`{t_win_description}`", description=textwrap.dedent(f"""
+                                {previous_moves_into_embed}
+                                
+                                """),colour=0x1abc9c)
                                 embedVar.add_field(name="**Co-Op Bonus**",
                                                 value=f"{bonus_message}")
                             if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
@@ -21235,6 +21268,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 # await discord.TextChannel.delete(private_channel, reason=None)
 
                     elif t_health <= 0 or t_max_health <= 0:
+                        if previous_moves_len >= 6:
+                            previous_moves = previous_moves[5:]
+                        
+                        previous_moves_into_embed = "\n\n".join(previous_moves)
+
+                        # print(previous_moves_into_embed)
                         if mode in PVP_MODES:
                             try:
                                 uid = o_DID
@@ -21309,8 +21348,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     victory_message = f":zap: TUTORIAL VICTORY"
                                     victory_description = f"Congratulations! remember to equip **Titles** and **Arms** to apply **Enhancers** in battle!\nMatch concluded in {turn_total} turns."
                                 
-                                embedVar = discord.Embed(title=f"{victory_message}\n**{o_card} says**\n{o_win_description}",
-                                                        description=f"{victory_description}", colour=0xe91e63)
+                                embedVar = discord.Embed(title=f"{victory_message}\n**{o_card} says**\n{o_win_description}\n{victory_description}", description=textwrap.dedent(f"""
+                                {previous_moves_into_embed}
+                                
+                                """),colour=0x1abc9c)
                                 embedVar.set_author(name=f"{t_card} says\n{t_lose_description}")
                                 if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
                                     embedVar.set_footer(text=f"Battle Time: {gameClock[2]} Seconds.")
@@ -21360,9 +21401,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 bounty = abyss_scaling
                                 drop_response = await specific_drops(str(o_user['DISNAME']), t_card, t_universe)
                                 await bless(bounty, str(o_user['DISNAME']))
-                                embedVar = discord.Embed(
-                                    title=f"VICTORY\n:coin: {bounty} Bounty Received!\n**{o_card} says**\n{o_win_description}",
-                                    description=f"The game lasted {turn_total} rounds.\n\n{drop_response}", colour=0xe91e63)
+                                embedVar = discord.Embed(title=f"VICTORY\n:coin: {bounty} Bounty Received!\n**{o_card} says**\n{o_win_description}\nThe game lasted {turn_total} rounds.\n\n{drop_response}",description=textwrap.dedent(f"""
+                                {previous_moves_into_embed}
+                                
+                                """),colour=0x1abc9c)
                                 embedVar.set_author(name=f"{t_card} lost!")
                                 # await ctx.send(embed=embedVar)
                                 await battle_msg.delete(delay=2)
@@ -21391,23 +21433,22 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     cfambank = await blessfamily(80000, cfam)
                                     cteambank = await blessteam(80000, cteam)
                                     cpetlogger = await summonlevel(cpet_name, user2)
-                                    ccardlogger = await cardlevel(c_card, user2, "Dungeon", selected_universe)
+                                    ccardlogger = await cardlevel(self, c_card, user2, "Dungeon", selected_universe)
                                     await bless(50, str(user2))
-                                    embedVar = discord.Embed(
-                                        title=f":zap: **{o_card}** and **{c_card}**defeated the {t_universe} Boss {t_card}!",
-                                        description=f"Match concluded in {turn_total} turns!\n\n{drop_response} + :coin: 15,000!\n\n{c_user['NAME']} got :coin: 10,000!\n{t_concede}",
-                                        colour=0xe91e63)
+                                    embedVar = discord.Embed(title=f":zap: **{o_card}** and **{c_card}**defeated the {t_universe} Boss {t_card}!\nMatch concluded in {turn_total} turns!\n\n{drop_response} + :coin: 15,000!\n\n{c_user['NAME']} got :coin: 10,000!\n{t_concede}", description=textwrap.dedent(f"""
+                                    {previous_moves_into_embed}
+                                    
+                                    """),colour=0x1abc9c)
                                 else:
-                                    embedVar = discord.Embed(
-                                        title=f":zap: **{o_card}** defeated the {t_universe} Boss {t_card}!",
-                                        description=f"Match concluded in {turn_total} turns!\n\n{drop_response} + :coin: 25,000!",
-                                        colour=0xe91e63)
-
+                                    embedVar = discord.Embed(title=f":zap: **{o_card}** defeated the {t_universe} Boss {t_card}!\nMatch concluded in {turn_total} turns!\n\n{drop_response} + :coin: 25,000!",description=textwrap.dedent(f"""
+                                    {previous_moves_into_embed}
+                                    
+                                    """),colour=0x1abc9c)
                                 await bless(25000, str(ctx.author))
                                 ofambank = await blessfamily(20000, ofam)
                                 oteambank = await blessteam(20000, oteam)
                                 petlogger = await summonlevel(opet_name, ouser)
-                                cardlogger = await cardlevel(o_card, ouser, "Dungeon", selected_universe)
+                                cardlogger = await cardlevel(self, o_card, ouser, "Dungeon", selected_universe)
 
                                 if crestsearch:
                                     await blessguild(25000, oguild['GNAME'])
@@ -21481,16 +21522,17 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 questlogger = await quest(ouser, t_card, tale_or_dungeon_only)
                                 destinylogger = await destiny(ouser, t_card, tale_or_dungeon_only)
                                 petlogger = await summonlevel(opet_name, ouser)
-                                cardlogger = await cardlevel(o_card, ouser, tale_or_dungeon_only, selected_universe)
+                                cardlogger = await cardlevel(self, o_card, ouser, tale_or_dungeon_only, selected_universe)
                                 if questlogger:
                                     await private_channel.send(questlogger)
                                 if destinylogger:
                                     await private_channel.send(destinylogger)
 
                                 if currentopponent != (total_legends):
-                                    embedVar = discord.Embed(title=f"VICTORY\n**{o_card} says**\n{o_win_description}",
-                                                            description=f"The game lasted {turn_total} rounds.\n\n{drop_response}",
-                                                            colour=0xe91e63)
+                                    embedVar = discord.Embed(title=f"VICTORY\n**{o_card} says**\n{o_win_description}\nThe game lasted {turn_total} rounds.\n\n{drop_response}",description=textwrap.dedent(f"""
+                                    {previous_moves_into_embed}
+                                    
+                                    """),colour=0x1abc9c)
                                     if mode in D_modes:
                                         if crestsearch:
                                             await blessguild(1000, oguild['GNAME'])
@@ -22134,7 +22176,7 @@ async def drops(player, universe, matchcount):
                         card_owned = True
 
                 if card_owned:
-                    await cardlevel(cards[rand_card], player, "Tales", universe)
+                    await cardlevel(self, cards[rand_card], player, "Tales", universe)
                     response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'CARDS': str(cards[rand_card])}})
                     message = ""
                     await bless(150, player)
@@ -22204,12 +22246,12 @@ async def specific_drops(player, card, universe):
             card_owned = True
 
         if card_owned and card_lvls_owned:
-            await cardlevel(card, player, "Tales", universe)
+            await cardlevel(self, card, player, "Tales", universe)
             message = ""
             await bless(5000, player)
             return f"You earned EXP for _Card:_ **{card}** + :coin: 5,000 in addition to the card bounty."
         elif card_lvls_owned:
-            await cardlevel(card, player, "Tales", universe)
+            await cardlevel(self, card, player, "Tales", universe)
             message = ""
             await bless(5000, player)
             return f"You earned EXP for _Card:_ **{card}** + :coin: 5,000 in addition to the card bounty."
@@ -22363,7 +22405,7 @@ async def dungeondrops(player, universe, matchcount):
                     card_owned = True
 
             if card_owned:
-                await cardlevel(cards[rand_card], player, "Dungeon", universe)
+                await cardlevel(self, cards[rand_card], player, "Dungeon", universe)
                 response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'CARDS': str(cards[rand_card])}})
                 message = ""
                 await bless(2500, player)
@@ -22548,7 +22590,7 @@ async def bossdrops(player, universe):
                     card_owned = True
 
             if card_owned:
-                await cardlevel(str(boss_card), player, "Dungeon", universe)
+                await cardlevel(self, str(boss_card), player, "Dungeon", universe)
                 message = ""
                 await bless(200, player)
             else:
