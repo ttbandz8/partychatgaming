@@ -22631,7 +22631,7 @@ title_enhancer_suffix_mapping = {'ATK': ' Flat',
 
 crown_rift_universe_mappings = {'Crown Rift Awakening': 3, 'Crown Rift Slayers': 2, 'Crown Rift Madness': 5}
 Healer_Enhancer_Check = ['HLT', 'LIFE']
-# DPS_Enhancer_Check = ['FLOG', 'WITHER', 'LIFE', ]
+#DPS_Enhancer_Check = ['FLOG', 'WITHER', 'LIFE', 'DRAIN']
 Gamble_Enhancer_Check = ['GAMBLE', 'SOULCHAIN']
 Support_Enhancer_Check = ['DEF', 'ATK', 'WITHER', 'FLOG']
 Sacrifice_Enhancer_Check = ['BZRK', 'CRYSTAL', 'GROWTH', 'FEAR']

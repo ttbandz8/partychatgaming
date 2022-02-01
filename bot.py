@@ -564,53 +564,211 @@ async def register(ctx):
    if response:
 
       embedVar = discord.Embed(title=f"**Welcome to Crown Unlimited**!", description=textwrap.dedent(f"""
+      Welcome {ctx.author.mention}! Use **/daily** to claim your **Daily Reward!**                                                                                               
       If you'd like to read the manual, run the command below!
-      **/crown** - Game Manual
-      **/battle @Senpai** - Tutorial Battle
+      **/crown** - Read Game Manual
       **/help** - Help Menu
       **/enhancers** - Enhancer Help Menu
       
-      */battle @legend - Advanced Tutorial Battle*
       **Some Important Symbols**
-      **Basics**
+      **Card Basics**
       🀄 - Tier
       :trident: - Level
-      :heart:  - Health
-      :cyclone: - Stamina
-      🗡️ - Attack
-      🛡️ - Defense
+      :heart:  - Health (HLT)
+      :cyclone: - Stamina (ST)
+      🗡️ - Attack (ATK) *Blue Crystal* 🟦
+      🛡️ - Defense (DEF) *Red Crystal* 🟥
 
       **Accessories**
-      :reminder_ribbon: - Title for Card
-      :mechanical_arm: - Arm for Card
-      🧬 - Summon
+      :reminder_ribbon: - Title *Apply Enhancers prior to battle*
+      :mechanical_arm: - Arm *Increase Card Ability Power or Defense*
+      🧬 - Summon *Summon Help during battle after Resolve*
 
       **Moveset**
       :boom: - Basic Attack *costs 10 :cyclone:*
       :comet: - Special Attack *costs 30 :cyclone:*
       :rosette: - Ultimate Attack *costs 80 :cyclone:*
       :microbe: - Enhancer Ability *costs 20 :cyclone:*
-      ↘️ - Explains Enhancer Ability
+      ↘️ - Explains Enhancer Ability 
 
       **Passives**
-      :drop_of_blood: - Card Passive
-      :infinity: - Universe Trait for Card
+      :drop_of_blood: - Card  *Applies Enhancer prior to battle*
+      :infinity: - Universe Trait for Card *Unique Ability shared across Card Universe*
       
       **Currency**
-      :coin: - Coins
-      :gem: - Gems
+      :coin: - Coins *Buy Items in the /shop and /trinketshop*
+      :gem: - Gems *Craft Universe Hearts and Souls*
 
       **Have fun!**
+      *Additional Information has been DM'd to you*
       """), colour=0xe91e63)
       embedVar.set_footer(text="Changing your Discord Account Name or Numbers will break your Crown Unlimited Account.")
       await ctx.author.send(embed=embedVar)
-      await ctx.send(f"Welcome to Crown Unlimited, {ctx.author.mention}! Use **/daily** to collect your daily reward!\nType **/menu** for quick overview of the game! Additional info has been DM'd to you!")
+      await ctx.send(embed=embedVar)
+
 
       vault = db.queryVault({'OWNER': disname})
       if vault:
          await ctx.send(m.VAULT_RECOVERED, delete_after=5)
       else:
-         vault = db.createVault(data.newVault({'OWNER' : disname}))
+         try:
+            universe_data = db.queryAllUniverse()
+            universe_embed_list = []
+            for uni in universe_data:
+               available = ""
+               if uni['HAS_CROWN_TALES'] == True:
+                  traits = ut.traits
+                  mytrait = {}
+                  traitmessage = ''
+                  o_show = uni['TITLE']
+                  universe = o_show
+                  for trait in traits:
+                     if trait['NAME'] == o_show:
+                           mytrait = trait
+                     if o_show == 'Kanto Region' or o_show == 'Johto Region' or o_show == 'Kalos Region' or o_show == 'Unova Region' or o_show == 'Sinnoh Region' or o_show == 'Hoenn Region' or o_show == 'Galar Region' or o_show == 'Alola Region':
+                           if trait['NAME'] == 'Pokemon':
+                              mytrait = trait
+                  if mytrait:
+                     traitmessage = f"**{mytrait['EFFECT']}:** {mytrait['TRAIT']}"
+                  available = f"{Crest_dict[uni['TITLE']]}"
+                  
+                  tales_list = ", ".join(uni['CROWN_TALES'])
+
+                  embedVar = discord.Embed(title= f"{uni['TITLE']}", description=textwrap.dedent(f"""                                                                                         
+                  :infinity: - {traitmessage}
+                  Select A Starting Universe! 
+                  """))
+                  embedVar.set_image(url=uni['PATH'])
+                  universe_embed_list.append(embedVar)
+                  
+            buttons = [
+                  manage_components.create_button(style=3, label="Select Starting Universe", custom_id="Select")
+               ]
+            custom_action_row = manage_components.create_actionrow(*buttons)
+            # custom_button = manage_components.create_button(style=3, label="Equip")
+
+            async def custom_function(self, button_ctx):
+               try:
+                  if button_ctx.author == ctx.author:
+                     universe = str(button_ctx.origin_message.embeds[0].title)
+                     print(universe)
+                     vault = db.createVault(data.newVault({'OWNER' : disname}))
+                     vault_query = {'OWNER' : str(ctx.author)}
+                     vault = db.altQueryVault(vault_query)
+                     current_titles = vault['TITLES']
+                     current_cards = vault['CARDS']
+                     current_arms = []
+                     for arm in vault['ARMS']:
+                        current_arms.append(arm['ARM'])
+
+                     owned_card_levels_list = []
+                     for c in vault['CARD_LEVELS']:
+                        owned_card_levels_list.append(c['CARD'])
+                     owned_destinies = []
+                     for destiny in vault['DESTINY']:
+                        owned_destinies.append(destiny['NAME'])
+                     if button_ctx.custom_id == "Select":
+                        acceptable = [1,2,3]
+                        list_of_titles =[x for x in db.queryAllTitlesBasedOnUniverses({'UNIVERSE': str(universe)}) if not x['EXCLUSIVE'] and x['AVAILABLE']]
+                        count = 0
+                        while count <3:
+                           vault = db.altQueryVault({'DISNAME': str(ctx.author)})
+                           selection = random.randint(0,len(list(list_of_titles)))
+                           print(selection)
+                           title = list_of_titles[selection]
+                           response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'TITLES': str(title['TITLE'])}})
+                           await button_ctx.send(f"You purchased **{title['TITLE']}**.")
+                           count = count + 1
+                        
+                        
+                        list_of_arms = [x for x in db.queryAllArmsBasedOnUniverses({'UNIVERSE': str(universe)}) if not x['EXCLUSIVE'] and x['AVAILABLE']]
+                        print(list_of_arms)
+                        count = 0
+                        while count <3:
+                           vault = db.altQueryVault({'DISNAME': str(ctx.author)})
+                           current_arms = vault['ARMS']
+                           selection = random.randint(0,len(list(list_of_arms)))
+                           print(selection)
+                           arm = list_of_arms[selection]['ARM']
+                           if arm not in current_arms:
+                              response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'ARMS': {'ARM': str(arm), 'DUR': 25}}})
+                              await button_ctx.send(f"You purchased **{arm}**.")
+                           else:
+                              update_query = {'$inc': {'ARMS.$[type].' + 'DUR': 10}}
+                              filter_query = [{'type.' + "ARM": str(arm)}]
+                              vault_query = {'DISNAME': str(ctx.author)}
+                              resp = db.updateVault(vault_query, update_query, filter_query)
+                              await button_ctx.send(f"You purchased **{arm}**. Increased durability for the arm by 10 as you already own it.")
+                           count = count + 1
+                           
+                        list_of_cards = [x for x in db.queryAllCardsBasedOnUniverse({'UNIVERSE': str(universe), 'TIER': {'$in': acceptable}}) if not x['EXCLUSIVE'] and not x['HAS_COLLECTION']]
+                        count = 0
+                        while count <3:
+                           vault = db.altQueryVault({'DISNAME': str(ctx.author)})
+                           current_cards = vault['CARDS']
+                           selection = random.randint(0, len(list_of_cards))
+                           card = list_of_cards[selection]
+                           card_name = card['NAME']
+                           tier = 0
+                           if card_name in current_cards:
+                              print(copy)
+                              await cardlevel(card['NAME'], str(ctx.author), "Purchase", universe)
+                              await button_ctx.send(f"You received a level up for **{card_name}**!")
+                              
+                           else:
+                              response = db.updateVaultNoFilter(vault_query,{'$addToSet': {'CARDS': str(card_name)}})
+                              if response:
+                                 if card_name not in owned_card_levels_list:
+                                    update_query = {'$addToSet': {
+                                          'CARD_LEVELS': {'CARD': str(card_name), 'LVL': 0, 'TIER': int(tier),
+                                                         'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
+                                    r = db.updateVaultNoFilter(vault_query, update_query)
+
+                                 await button_ctx.send(f"You purchased **{card_name}**!")
+
+                                 # Add Destiny
+                                 for destiny in d.destiny:
+                                    if card_name in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
+                                          db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
+                                          await button_ctx.send(
+                                             f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.", hidden=True)
+                           count = count + 1
+               except Exception as ex:
+                  trace = []
+                  tb = ex.__traceback__
+                  while tb is not None:
+                     trace.append({
+                        "filename": tb.tb_frame.f_code.co_filename,
+                        "name": tb.tb_frame.f_code.co_name,
+                        "lineno": tb.tb_lineno
+                     })
+                     tb = tb.tb_next
+                  print(str({
+                     'type': type(ex).__name__,
+                     'message': str(ex),
+                     'trace': trace
+                  }))   
+            await Paginator(bot=bot, ctx=ctx, disableAfterTimeout=True, pages=universe_embed_list, customActionRow=[
+               custom_action_row,
+               custom_function,
+            ]).run()
+
+
+         except Exception as ex:
+            trace = []
+            tb = ex.__traceback__
+            while tb is not None:
+               trace.append({
+                    "filename": tb.tb_frame.f_code.co_filename,
+                    "name": tb.tb_frame.f_code.co_name,
+                    "lineno": tb.tb_lineno
+               })
+               tb = tb.tb_next
+            print(str({
+                'type': type(ex).__name__,
+                'message': str(ex),
+                'trace': trace
+            }))
          # await ctx.send(m.USER_HAS_REGISTERED, delete_after=5)
    else:
       await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=3)
@@ -2017,6 +2175,32 @@ async def menu(ctx):
 
    except Exception as e:
       await ctx.send(f"Error has occurred: {e}")
+Crest_dict = {'Unbound': ':ideograph_advantage:',
+              'My Hero Academia': ':sparkle:',
+              'League Of Legends': ':u6307:',
+              'Kanto Region': ':chart:',
+              'Naruto': ':u7121:',
+              'Bleach': ':u6709:',
+              'God Of War': ':u7533:',
+              'Chainsawman': ':accept:',
+              'One Punch Man': ':u55b6:',
+              'Johto Region': ':u6708:',
+              'Black Clover': ':ophiuchus:',
+              'Demon Slayer': ':aries:',
+              'Attack On Titan': ':taurus:',
+              '7ds': ':capricorn:',
+              'Hoenn Region': ':leo:',
+              'Digimon': ':cancer:',
+              'Fate': ':u6e80:',
+              'Solo Leveling': ':u5408:',
+              'Souls': ':sos:',
+              'Dragon Ball Z': ':u5272:',
+              'Sinnoh Region': ':u7981:',
+              'Death Note': ':white_flower:',
+              'Crown Rift Awakening': ':u7a7a:',
+              'Crown Rift Slayers': ':sa:',
+              'Crown Rift Madness': ':m:',
+              'Persona': ':o:'}
 
 
 if config('ENV') == "production":
