@@ -566,8 +566,9 @@ async def register(ctx):
       embedVar = discord.Embed(title=f"**Welcome to Crown Unlimited**!", description=textwrap.dedent(f"""
       Welcome {ctx.author.mention}!                                                                                           
       
-      Collect and level **Cards**, **Summons**, and **Accessories** to equip powerful builds to Conquer Worlds, Defeat Bosses, and PVP for prizes and rank solo  or multiplayer! 
-      **Enhancers** are Special Abilities on Cards, Summons, and Accessories that are used to boost your stats or defend yourself in special ways to earn an edge in battle!
+      Collect and level **Cards**, **Summons**, and **Accessories** to create powerful builds
+      Conquer Worlds, Defeat Bosses, and Rule PVP for prizes and rank, both solo and multiplayer! 
+      **Enhancers** are Special Abilities used to boost your Cards, Summons, and Accessories in battle!
    
       
       **Card Basics**
@@ -576,28 +577,28 @@ async def register(ctx):
       :heart:  - Card Health (HLT)
       :cyclone: - Card Stamina (ST)
       🗡️ - Attack (ATK) *Blue Crystal* 🟦
-      🛡️ - Defense (DEF) *Red Crystal* 🟥      
-      :drop_of_blood: - Card Passive *Card Passive enhancers are applied at the beginning of the battle*
-      :infinity: - Universe Trait for Card *Unique Ability shared across Card Universe*
+      🛡️ - Defense (DEF) *Red Crystal* 🟥
+      :drop_of_blood: - Card Passive *Enhancers applied at the start of the battle*
+      :infinity: - Universe Trait for Card 
       *Each Universe has it's own unique Universe Trait*
       
       **Accessories & Summons**
-      :reminder_ribbon: - Title  *Title enhancers are applied at the beginning of battle.*
-      :mechanical_arm: - Arm *Arm enhancers are applied at the beginning of battle and passively throughout the duration of battle.*
-      🧬 - Summon *Summons use Active enhancers and are available during battle after you Resolve*
+      :reminder_ribbon: - Title  *Title enhancers are applied at the start of battle.*
+      :mechanical_arm: - Arm *Arm enhancers are applied passively throughout the duration of battle.*
+      🧬 - Summon *Summons use Active Enhancers and are available during battle after you Resolve*
 
       **Moveset**
-      *Each ability costs Stamina. Your Stamina will refill
-      each time it hits 0, entering Focus state.*
+      *Each ability costs Stamina*
       :boom: - Basic Attack *costs 10 :cyclone:*
       :comet: - Special Attack *costs 30 :cyclone:*
       :rosette: - Ultimate Attack *costs 80 :cyclone:*
       :microbe: - Active Enhancer Ability *costs 20 :cyclone:*
-      ↘️ - Explains Enhancer Ability 
+      ↘️ - Explains Enhancer Ability
 
       **Battle Explanation**
-      Each ability costs Stamina. Once your Stamina is empty you will go into **Focus** mode, where you will recover **90 Stamina**, increase attack, increase defense, increse health and lose 1 turn. 
-      Anytime after you focus you are able to **Resolve** to boost your Attack and Health but lowering your defense.
+      Select your attack be mindful of stamina cost, 
+      Once your Stamina reaches 0 you will go into **Focus** mode, where you will recover **90 Stamina**, you will sacrifice 1 turn to increase ATK, DEF and Heal!
+      After you focus you are able to **Resolve** to boost your Attack and Health but lowering your defense.
       You are able to use your  🧬 **Summon** after you Resolve!
       First card with 0 health loses!
 
@@ -605,7 +606,9 @@ async def register(ctx):
       :coin: - Coins *Buy Items in the /shop and /trinketshop*
       :gem: - Gems *Craft Universe Hearts and Souls*
 
-      IMPORTANT REMINDER! -> Use **/daily** to claim your **Daily Reward!**     
+      IMPORTANT REMINDER! ⬇️
+      Use **/daily** to claim your **Daily Reward!**     
+      **/tutorial** - Tutorial Battle
       **/crown** - Read Game Manual
       **/help** - Help Menu
       **/enhancers** - Enhancer Help Menu
@@ -645,7 +648,7 @@ async def register(ctx):
                   embedVar = discord.Embed(title= f"{uni['TITLE']}", description=textwrap.dedent(f"""                                                                                         
                   **Select A Starting Universe, {ctx.author.mention}!**
 
-                  Selecting a Starter Universe will give you *3* 🎴 Cards, :reminder_ribbon: Titles, and :mechanical_arm: Arms to embark on your journey with!
+                  Selecting a Starter Universe will give you *3* 🎴 Cards, :reminder_ribbon: Titles, and :mechanical_arm: Arms to begin!
                   
                   :infinity: - Unique Universe Trait
                   {traitmessage}
@@ -745,6 +748,7 @@ async def register(ctx):
                                        await button_ctx.send(
                                           f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.", hidden=True)
                            count = count + 1
+                        await button_ctx.send(f"Welcome to **Crown Unlimited** {ctx.author.mention}!\nRun **/tutorial** to begin the Tutorial Battle!")
                         self.stop = True
                except Exception as ex:
                   trace = []

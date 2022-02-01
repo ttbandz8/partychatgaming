@@ -10,33 +10,47 @@ import textwrap
 CROWN_UNLIMITED_GAMES="`/crownhelp` - Crown Unlimited Help Book\n\n`/senpaibattle` - Tutorial Bot\n\n`/legendbattle` -  Advanced Tutorial Bot\n\n`/battle` @`PLAYER` - Challenge another Player\n\n`/start` - To start a battle in your current session\n\n`/wager` `AMOUNT` - Wager amount to battle in current session\n\n`/solo` - Play Crown Unlimited In DMS\n\n`/tales` - Opens Crown Tales Story Mode Menu\n\n`/dungeon` - Opens Crown Tales Dungeon Menu\n\n`/boss` `UNIVERSE` - Opens Crown Universe Boss Fight\n\n`/ctales` @`COMPANION` - Opens Crown Tales CO-OP Story Mode Menu\n\n`/cdungeon` @`COMPANION`- Opens Crown Tales CO-OP Dungeon Menu\n\n`/cboss` @`COMPANION` `UNIVERSE` - Opens Crown Universe CO-OP Boss Fight\n\n`/enhance` - Opens Enhancement Help Menu\n\n"
 
 LEGEND = textwrap.dedent(f"""\
-**Basics**
-🀄 - Tier
-:trident: - Level
-:heart:  - Health
-:cyclone: - Stamina
-🗡️ - Attack
-🛡️ - Defense
+**Card Basics**
+🀄 - Card Tier *1-7*
+:trident: - Card Level *1-500*
+:heart:  - Card Health (HLT)
+:cyclone: - Card Stamina (ST)
+🗡️ - Attack (ATK) *Blue Crystal* 🟦
+🛡️ - Defense (DEF) *Red Crystal* 🟥
+:drop_of_blood: - Card Passive *Enhancers applied at the start of battle*
+:infinity: - Universe Trait for Card 
+*Each Universe has it's own unique Universe Trait*
 
-**Accessories**
-:reminder_ribbon: - Title
-:mechanical_arm: - Arm
-🧬 - Summon
+**Accessories & Summons**
+:reminder_ribbon: - Title  *Title enhancers are applied at the start of battle.*
+:mechanical_arm: - Arm *Arm enhancers are applied passively throughout the duration of battle.*
+🧬 - Summon *Summons use Active Enhancers and are available during battle after you Resolve*
 
 **Moveset**
+*Each ability costs Stamina*
 :boom: - Basic Attack *costs 10 :cyclone:*
 :comet: - Special Attack *costs 30 :cyclone:*
 :rosette: - Ultimate Attack *costs 80 :cyclone:*
-:microbe: - Enhancer Ability *costs 20 :cyclone:*
-↘️ - Explains Enhancer Ability */enhancers*
+:microbe: - Active Enhancer Ability *costs 20 :cyclone:*
+↘️ - Explains Enhancer Ability
 
-**Passives**
-:drop_of_blood: - Card Passive
-:infinity: - Universe Trait for Card
+**Battle Explanation**
+Select your attack be mindful of stamina cost, 
+Once your Stamina reaches 0 you will go into **Focus** mode, where you will recover **90 Stamina**, you will sacrifice 1 turn to increase Attack, Defense and Heal!
+After you focus you are able to **Resolve** to boost your Attack and Health but lowering your defense.
+You are able to use your  🧬 **Summon** after you Resolve!
+First card with 0 health loses!
 
 **Currency**
-:coin: - Coins
-:gem: - Gems
+:coin: - Coins *Buy Items in the /shop and /trinketshop*
+:gem: - Gems *Craft Universe Hearts and Souls*
+
+IMPORTANT REMINDER! ⬇️
+Use **/daily** to claim your **Daily Reward!** 
+**/tutorial** - Tutorial Battle    
+**/crown** - Read Game Manual
+**/help** - Help Menu
+**/enhancers** - Enhancer Help Menu
 """)
 
 BOT_COMMANDS = textwrap.dedent(f"""\
