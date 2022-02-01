@@ -3676,7 +3676,7 @@ class CrownUnlimited(commands.Cog):
             return
 
 
-    @cog_ext.cog_slash(description="PvP Battle", guild_ids=main.guild_ids)
+    @cog_ext.cog_slash(description="Tutorial Battle", guild_ids=main.guild_ids)
     async def tutorial(self, ctx: SlashContext):
         try:
             await ctx.defer()
