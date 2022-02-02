@@ -11151,15 +11151,25 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             start_tales_buttons = [
                 manage_components.create_button(
                     style=ButtonStyle.blue,
-                    label="Start",
+                    label="Start Match",
                     custom_id="start_tales_yes"
                 ),
                 manage_components.create_button(
                     style=ButtonStyle.red,
-                    label="Cancel",
+                    label="End",
                     custom_id="start_tales_no"
                 )
             ]
+
+            if currentopponent > 0 and not randomized_battle and mode not in PVP_MODES and mode not in B_modes:
+                start_tales_buttons.append(
+
+                    manage_components.create_button(
+                        style=ButtonStyle.blue,
+                        label="Save Game",
+                        custom_id="save_tales_yes"
+                    )
+                )
 
             start_tales_buttons_action_row = manage_components.create_actionrow(*start_tales_buttons)
 
@@ -11211,7 +11221,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 if button_ctx.custom_id == "start_tales_no":
                     await battle_msg.delete()
                     return
-                
+
+                if button_ctx.custom_id == "save_tales_yes":
+                    await battle_msg.delete()
+                    await save_spot(self, ctx, universe, mode, currentopponent)
+                    await button_ctx.send(f"Game has been saved.")
+                    return
                 if button_ctx.custom_id == "start_tales_yes":
                     await button_ctx.defer(ignore=True)
                     while (((o_health > 0) and (c_health > 0)) and (t_health > 0) and mode in co_op_modes) or (
@@ -21620,7 +21635,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             await ctx.send(
                                                 f"You were awarded :coin: 2,000,000 for completing the {selected_universe} Tale! ")
                                         continued = False
-                                        # await discord.TextChannel.delete(private_channel, reason=None)
 
 
             except Exception as ex:
