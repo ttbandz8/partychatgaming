@@ -9170,7 +9170,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             tpetmove_text = list(tpet_passive.keys())[0]
             tpetmove_ap = (tpet_bond * tpet_lvl) + list(opet.values())[3]  # Ability Power
             tpetmove_type = list(tpet_passive.values())[1]
-            tpet_move = {str(tpetmove_text): int(tpetmove_ap), 'STAM': 0, 'TYPE': tpetmove_type}
+            tpet_move = {str(tpetmove_text): int(tpetmove_ap), 'STAM': 15, 'TYPE': tpetmove_type}
 
         # Player 2 Passive Config
         if (t_universe == t_title_universe) or (t_title_universe == "Unbound"):
@@ -11160,16 +11160,16 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                     custom_id="start_tales_no"
                 )
             ]
+            if botActive ==False:
+                if currentopponent > 0 and not randomized_battle and mode not in PVP_MODES and mode not in B_modes:
+                    start_tales_buttons.append(
 
-            if currentopponent > 0 and not randomized_battle and mode not in PVP_MODES and mode not in B_modes:
-                start_tales_buttons.append(
-
-                    manage_components.create_button(
-                        style=ButtonStyle.blue,
-                        label="Save Game",
-                        custom_id="save_tales_yes"
+                        manage_components.create_button(
+                            style=ButtonStyle.blue,
+                            label="Save Game",
+                            custom_id="save_tales_yes"
+                        )
                     )
-                )
 
             start_tales_buttons_action_row = manage_components.create_actionrow(*start_tales_buttons)
 
