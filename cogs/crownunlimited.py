@@ -8240,6 +8240,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
     try:
         # Player 1 Data
         o_user = sowner
+        operformance = o_user['PERFORMANCE']
         oarm = db.queryArm({'ARM': o_user['ARM']})
         oarm_universe = oarm['UNIVERSE']
         oarm_passive = oarm['ABILITIES'][0]
@@ -8324,7 +8325,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         if companion:
             ### Companion Data
             c_user = companion
-
+            cperformance = c_user['PERFORMANCE']
             if mode in ai_co_op_modes:
                 cvault = vault
                 cpet = {}
@@ -8423,6 +8424,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         if mode in pvp_modes:
             # Player 2 Data
             t_user = player2
+            tperformance = t_user['PERFORMANCE']
             tarm = db.queryArm({'ARM': t_user['ARM']})
             tarm_universe = tarm['UNIVERSE']
             tarm_passive = tarm['ABILITIES'][0]
@@ -9491,6 +9493,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             c_defense = c_defense + (c_user['REBIRTH'] * 10)
 
         STATS = {
+            'operformance': operformance,
             'o_card': o_card,
             'ocard_lvl': ocard_lvl,
             'o_card_path': o_card_path,
@@ -9606,6 +9609,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
 
         if mode in pvp_modes:
             STATS = {
+                'operformance': operformance,
                 'o_card': o_card,
                 'ocard_lvl': ocard_lvl,
                 'o_card_path': o_card_path,
@@ -9668,6 +9672,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 'tpet_bond': tpet_bond,
                 't_card': t_card,
                 'tcard_lvl': tcard_lvl,
+                'tperformance': tperformance,
                 'tarm': tarm_name,
                 'tarm_name': tarm_name,
                 'tarm_passive_type' : tarm_passive_type,
@@ -9728,6 +9733,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
 
         if mode == "Boss":
             STATS = {
+                'operformance': operformance,
                 'opet_lvl': opet_lvl,
                 'opet_bond': opet_bond,
                 'tpet_lvl': tpet_lvl,
@@ -10047,6 +10053,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
 
         if mode in co_op_modes and mode != "CBoss":
             STATS = {
+                'operformance': operformance,
                 'opet_lvl': opet_lvl,
                 'opet_bond': opet_bond,
                 'tpet_lvl': tpet_lvl,
@@ -10086,7 +10093,6 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 'oparry_count': oparry_count,
                 'o_gif': o_gif,
                 'o_enhancer': o_enhancer,
-
                 'o_speed': o_speed,
                 'o_special_move_description': o_special_move_description,
                 'o_greeting_description': o_greeting_description,
@@ -10171,6 +10177,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 'c_universe': c_universe,
                 'c_attack': c_attack,
                 'c_defense': c_defense,
+                'cperformance': cperformance,
                 'c_stamina': c_stamina,
                 'c_max_stamina': c_max_stamina,
                 'c_health': c_health,

@@ -1325,6 +1325,34 @@ async def allowance(ctx, player: User, amount):
       return
 
 
+@slash.slash(name="Performance", description="Toggles Text Only Performance Mode", guild_ids=guild_ids)
+async def performance(ctx):
+   try:
+      player = db.queryUser({"DISNAME": str(ctx.author)})
+      if not player["PERFORMANCE"]:
+            await ctx.send(f"Entering Performance Mode :gear:")
+            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'PERFORMANCE': True}})
+            return
+      if player["PERFORMANCE"]:
+            await ctx.send(f"Exiting Performance Mode :gear:")
+            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'PERFORMANCE': False}})
+            return
+   except Exception as ex:
+      trace = []
+      tb = ex.__traceback__
+      while tb is not None:
+            trace.append({
+               "filename": tb.tb_frame.f_code.co_filename,
+               "name": tb.tb_frame.f_code.co_name,
+               "lineno": tb.tb_lineno
+            })
+            tb = tb.tb_next
+      print(str({
+            'type': type(ex).__name__,
+            'message': str(ex),
+            'trace': trace
+      }))
+
 async def blessfamily(amount, family):
    blessAmount = amount
    posBlessAmount = 0 + abs(int(blessAmount))
