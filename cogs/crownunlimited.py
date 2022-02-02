@@ -11165,7 +11165,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 start_tales_buttons.append(
 
                     manage_components.create_button(
-                        style=ButtonStyle.blue,
+                        style=ButtonStyle.green,
                         label="Save Game",
                         custom_id="save_tales_yes"
                     )
