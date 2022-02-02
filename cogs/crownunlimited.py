@@ -10833,7 +10833,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 stats = await build_player_stats(self, randomized_battle, ctx, sowner, o, otitle, t, ttitle, mode,
                                                  universe, currentopponent, oteam, ofam, abyss_scaling, None, None,
                                                  None, None, None, None, None, None, None, None)
-
+            operformance = stats['operformance']
             o_card = stats['o_card']
             ocard_lvl = stats['ocard_lvl']
             o_card_path = stats['o_card_path']
@@ -10898,6 +10898,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
 
             if mode in PVP_MODES:
+                tperformance = stats['tperformance']
                 tpet_lvl = stats['tpet_lvl']
                 tpet_bond = stats['tpet_bond']
                 t_card = stats['t_card']
@@ -11674,7 +11675,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_attack, o_special_move_description, turn_total,
                                                             ocard_lvl_ap_buff)
 
-                                            if o_gif != "N/A":
+                                            if o_gif != "N/A" and not operformance:
                                                 await battle_msg.delete(delay=None)
                                                 # await asyncio.sleep(1)
                                                 battle_msg = await private_channel.send(f"{o_gif}")
@@ -12699,7 +12700,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_stamina, t_enhancer_used, t_health, o_health, o_stamina,
                                                                 t_max_health, o_attack, t_special_move_description, turn_total,
                                                                 tcard_lvl_ap_buff)
-                                                if t_gif != "N/A":
+                                                if t_gif != "N/A" and not operformance:
                                                     await battle_msg.delete(delay=None)
                                                     # await asyncio.sleep(2)
                                                     battle_msg = await private_channel.send(f"{t_gif}")
@@ -13464,7 +13465,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_enhancer_used, t_health, o_health, o_stamina, t_max_health,
                                                             o_attack, t_special_move_description, turn_total,
                                                             tcard_lvl_ap_buff)
-                                            if t_gif != "N/A":
+                                            if t_gif != "N/A" and not operformance:
                                                 await battle_msg.delete(delay=None)
                                                 await asyncio.sleep(2)
                                                 battle_msg = await private_channel.send(f"{t_gif}")
@@ -15114,7 +15115,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_stamina, o_enhancer_used, o_health, t_health, t_stamina,
                                                                 o_max_health, t_attack, o_special_move_description, turn_total,
                                                                 ocard_lvl_ap_buff)
-                                                if o_gif != "N/A":
+                                                if o_gif != "N/A" and not operformance:
                                                     # await button_ctx.defer(ignore=True)
                                                     await battle_msg.delete(delay=None)
                                                     # await asyncio.sleep(1)
@@ -16463,7 +16464,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_attack, t_special_move_description, turn_total,
                                                             tcard_lvl_ap_buff)
                                         if mode not in AUTO_BATTLE_modes:
-                                            if t_gif != "N/A":
+                                            if t_gif != "N/A"  and not operformance:
                                                 await battle_msg.delete(delay=2)
                                                 await asyncio.sleep(2)
                                                 battle_msg = await private_channel.send(f"{t_gif}")
@@ -20102,7 +20103,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_stamina, t_enhancer_used, t_health, c_health, c_stamina,
                                                                 t_max_health, c_attack, t_special_move_description, turn_total,
                                                                 tcard_lvl_ap_buff)
-                                            if t_gif != "N/A":
+                                            if t_gif != "N/A" and not operformance:
                                                 await private_channel.send(f"{t_gif}")
                                         elif int(aiMove) == 4:
 
