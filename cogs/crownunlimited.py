@@ -8550,13 +8550,13 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                     tcard_lvl_attack_defense_buff = 175
                     tcard_lvl_hlt_buff = 438
                 else:
-                    if ocard_lvl >= 200:
+                    if ocard_lvl >= 100:
                         tpet_lvl = 3
                         tpet_bond = 1
-                        tcard_lvl = 200
-                        tcard_lvl_ap_buff = 67
-                        tcard_lvl_attack_defense_buff = 100
-                        tcard_lvl_hlt_buff = 250
+                        tcard_lvl = 100
+                        tcard_lvl_ap_buff = 33
+                        tcard_lvl_attack_defense_buff = 50
+                        tcard_lvl_hlt_buff = 150
                     else:
                         tpet_lvl = 3
                         tpet_bond = 2
