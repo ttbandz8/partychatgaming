@@ -13683,7 +13683,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                                 colour=0xe91e63)
                                                         embedVar.add_field(name=f"Nexus Destroyed",
                                                                         value=f"**{t_card}** dealt **{(60 * (o_focus_count + t_focus_count))}** damage.")
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Pentakill! Dealing {(60 * (c_focus_count + t_focus_count))} damage.")
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Pentakill! Dealing {(60 * (o_focus_count + t_focus_count))} damage.")
                                                     else:
                                                         embedVar = discord.Embed(title=f"{t_card} STRENGTHENED RESOLVE :zap:",
                                                                                 description=f"**{t_card} says**\n{t_resolve_description}",
