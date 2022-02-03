@@ -11151,6 +11151,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
             private_channel = ctx.channel
             previous_moves = []
+            previous_moves_len = 0
             previous_moves_into_embed = "\n".join(previous_moves)
 
 
@@ -21049,10 +21050,15 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                     if (((o_health <= 0 or c_health <= 0) and mode in co_op_modes) or (
                             o_max_health <= 0 or c_max_health <= 0) and mode in co_op_modes) or (
                             (o_health <= 0 or o_max_health <= 0) and mode not in co_op_modes):
-                        if previous_moves_len >= 6:
-                            previous_moves = previous_moves[5:]
                         
-                        previous_moves_into_embed = "\n\n".join(previous_moves)
+                        if previous_moves:
+                            if previous_moves_len ==0:
+                                previous_moves_into_embed = "\n\n".join(previous_moves)
+                                #previous_moves_into_embed = f"You got One Shot! Try Again..."  
+                            elif previous_moves_len >= 6:
+                                previous_moves = previous_moves[5:]
+                                previous_moves_into_embed = "\n\n".join(previous_moves)
+                            
 
                         if mode in PVP_MODES:
                             try:
@@ -21304,10 +21310,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 # await discord.TextChannel.delete(private_channel, reason=None)
 
                     elif t_health <= 0 or t_max_health <= 0:
-                        if previous_moves_len >= 6:
-                            previous_moves = previous_moves[5:]
-                        
-                        previous_moves_into_embed = "\n\n".join(previous_moves)
+                        if previous_moves:
+                            if previous_moves_len ==0:
+                                previous_moves_into_embed = "\n\n".join(previous_moves)
+                                #previous_moves_into_embed = f"**{t_card}** GOT DROPPED! **{o_card}** ONE SHOT THEM!"  
+                            elif previous_moves_len >= 6:
+                                previous_moves = previous_moves[5:]
+                                previous_moves_into_embed = "\n\n".join(previous_moves)
 
                         # print(previous_moves_into_embed)
                         if mode in PVP_MODES:
