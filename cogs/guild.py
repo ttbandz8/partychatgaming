@@ -251,7 +251,7 @@ class Guild(commands.Cog):
                 'trace': trace
             }))
             await ctx.send(
-                "There's an issue with your Oath. Please use /ff to close this channel and start anew. Alert support.")
+                "There's an issue with your Oath. Alert support.")
             return
             
                    
