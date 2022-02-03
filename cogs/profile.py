@@ -103,7 +103,7 @@ class Profile(commands.Cog):
         card = db.queryCard({'NAME':str(d['CARD'])})
         title = db.queryTitle({'TITLE': str(d['TITLE'])})
         arm = db.queryArm({'ARM': str(d['ARM'])})
-        vault = db.queryVault({'OWNER': d['DISNAME']})
+        vault = db.queryVault({'DID': d['DID']})
         if card:
             try:
                 durability = ""
@@ -348,7 +348,7 @@ class Profile(commands.Cog):
         await ctx.defer()
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
-        vault = db.queryVault({'OWNER': d['DISNAME']})
+        vault = db.queryVault({'DID': d['DID']})
         try: 
             if vault:
                 name = d['DISNAME'].split("#",1)[0]
@@ -486,7 +486,7 @@ class Profile(commands.Cog):
 
                 async def custom_function(self, button_ctx):
                     if button_ctx.author == ctx.author:
-                        updated_vault = db.queryVault({'OWNER': d['DISNAME']})
+                        updated_vault = db.queryVault({'DID': d['DID']})
                         sell_price = 0
                         selected_card = str(button_ctx.origin_message.embeds[0].title)
                         if button_ctx.custom_id == "Equip":
@@ -795,7 +795,7 @@ class Profile(commands.Cog):
         await ctx.defer()
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
-        vault = db.queryVault({'OWNER': d['DISNAME']})
+        vault = db.queryVault({'DID': d['DID']})
         if vault:
             try:
                 name = d['DISNAME'].split("#",1)[0]
@@ -852,7 +852,7 @@ class Profile(commands.Cog):
 
                 async def custom_function(self, button_ctx):
                     if button_ctx.author == ctx.author:
-                        updated_vault = db.queryVault({'OWNER': d['DISNAME']})
+                        updated_vault = db.queryVault({'DID': d['DID']})
                         sell_price = 0
                         selected_title = str(button_ctx.origin_message.embeds[0].title)
                         if button_ctx.custom_id == "Equip":
@@ -1163,7 +1163,7 @@ class Profile(commands.Cog):
         await ctx.defer()
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
-        vault = db.queryVault({'OWNER': d['DISNAME']})
+        vault = db.queryVault({'DID': d['DID']})
         if vault:
             try:
                 name = d['DISNAME'].split("#",1)[0]
@@ -1223,7 +1223,7 @@ class Profile(commands.Cog):
 
                 async def custom_function(self, button_ctx):
                     if button_ctx.author == ctx.author:
-                        u_vault = db.queryVault({'OWNER': d['DISNAME']})
+                        u_vault = db.queryVault({'DID': d['DID']})
                         updated_vault = []
                         for arm in u_vault['ARMS']:
                             updated_vault.append(arm['ARM'])
@@ -1537,7 +1537,7 @@ class Profile(commands.Cog):
         await ctx.defer()
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
-        vault = db.queryVault({'OWNER': d['DISNAME']})
+        vault = db.queryVault({'DID': d['DID']})
         if vault:
             try:
                 name = d['DISNAME'].split("#",1)[0]
@@ -1602,7 +1602,7 @@ class Profile(commands.Cog):
 
                 async def custom_function(self, button_ctx):
                     if button_ctx.author == ctx.author:
-                        updated_vault = db.queryVault({'OWNER': d['DISNAME']})
+                        updated_vault = db.queryVault({'DID': d['DID']})
                         sell_price = 0
                         selected_summon = str(button_ctx.origin_message.embeds[0].title)
                         user_query = {'DISNAME': str(ctx.author)}
@@ -1782,7 +1782,7 @@ class Profile(commands.Cog):
         await ctx.defer()
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
-        vault = db.queryVault({'OWNER': d['DISNAME']})
+        vault = db.queryVault({'DID': d['DID']})
         if not vault['DESTINY']:
             await ctx.send("No Destiny Lines available at this time!")
             return
@@ -1871,7 +1871,7 @@ class Profile(commands.Cog):
         await ctx.defer()
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
-        vault = db.queryVault({'OWNER': d['DISNAME']})
+        vault = db.queryVault({'DID': d['DID']})
         if not vault['QUESTS']:
             await ctx.send("No Quests available at this time!", hidden=True)
             return
@@ -1926,7 +1926,7 @@ class Profile(commands.Cog):
         try:
             query = {'DISNAME': str(ctx.author)}
             d = db.queryUser(query)
-            vault = db.queryVault({'OWNER': d['DISNAME']})
+            vault = db.queryVault({'DID': d['DID']})
             icon = ":coin:"
             if vault:
                 name = d['DISNAME'].split("#",1)[0]
@@ -2351,6 +2351,11 @@ class Profile(commands.Cog):
                             self.stop = True
                             return
                         list_of_titles =[x for x in db.queryAllTitlesBasedOnUniverses({'UNIVERSE': str(universe)}) if not x['EXCLUSIVE'] and x['AVAILABLE']]
+                        if not list_of_titles:
+                            await button_ctx.send("There are no titles available for purchase in this range.")
+                            self.stop = True
+                            return
+
                         selection = random.randint(1,len(list(list_of_titles)))
                         
                         title = list_of_titles[selection]
@@ -2358,6 +2363,9 @@ class Profile(commands.Cog):
                         response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'TITLES': str(title['TITLE'])}})   
                         await main.curse(price, str(ctx.author))
                         await button_ctx.send(f"You purchased **{title['TITLE']}**.")
+                        self.stop = True
+                        return
+
 
                     elif button_ctx.custom_id == "arm":
                         price = price_adjuster(25000, universe, completed_tales, completed_dungeons)['ARM_PRICE']
@@ -2370,6 +2378,12 @@ class Profile(commands.Cog):
                             self.stop = True
                             return
                         list_of_arms = [x for x in db.queryAllArmsBasedOnUniverses({'UNIVERSE': str(universe)}) if not x['EXCLUSIVE'] and x['AVAILABLE']]
+                        if not list_of_arms:
+                            await button_ctx.send("There are no arms available for purchase in this range.")
+                            self.stop = True
+                            return
+
+                        
                         selection = random.randint(1,len(list(list_of_arms)))
 
                         arm = list_of_arms[selection]['ARM']
@@ -2384,7 +2398,9 @@ class Profile(commands.Cog):
                             resp = db.updateVault(vault_query, update_query, filter_query)
                             await main.curse(price, str(ctx.author))
                             await button_ctx.send(f"You purchased **{arm}**. Increased durability for the arm by 10 as you already own it.")
-                    
+                            self.stop = True
+                            return
+               
                     elif button_ctx.custom_id == "t1card":
                         price = price_adjuster(30000, universe, completed_tales, completed_dungeons)['C1']
                         if len(current_cards) >= 25:
@@ -2424,6 +2440,8 @@ class Profile(commands.Cog):
                                 r = db.updateVaultNoFilter(vault_query, update_query)
 
                             await button_ctx.send(f"You purchased **{card_name}**!")
+                            self.stop = True
+                            return
 
                             # Add Destiny
                             for destiny in d.destiny:
@@ -2471,7 +2489,6 @@ class Profile(commands.Cog):
                                                     'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
                                 r = db.updateVaultNoFilter(vault_query, update_query)
 
-                            await button_ctx.send(f"You purchased **{card_name}**!")
 
                             # Add Destiny
                             for destiny in d.destiny:
@@ -2479,6 +2496,11 @@ class Profile(commands.Cog):
                                     db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
                                     await button_ctx.send(
                                         f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.", hidden=True)
+
+
+                            await button_ctx.send(f"You purchased **{card_name}**!")
+                            self.stop = True
+                            return
 
                     elif button_ctx.custom_id == "t3card":
                         price = price_adjuster(6000000, universe, completed_tales, completed_dungeons)['C3']
@@ -2492,6 +2514,11 @@ class Profile(commands.Cog):
                             self.stop = True
                             return
                         card_list_response = [x for x in db.queryAllCardsBasedOnUniverse({'UNIVERSE': str(universe), 'TIER': {'$in': acceptable}})]
+                        if not card_list_response:
+                            await button_ctx.send("There are no cards available for purchase in this range.")
+                            self.stop = True
+                            return
+
                         list_of_cards = []
                         for card in card_list_response:
                             if card['AVAILABLE'] and not card['EXCLUSIVE'] and not card['HAS_COLLECTION']:
@@ -2531,6 +2558,10 @@ class Profile(commands.Cog):
                                     db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
                                     await button_ctx.send(
                                         f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.", hidden=True)
+
+                            self.stop = True
+                            return
+
                 else:
                     await ctx.send("This is not your Shop.")
             await Paginator(bot=self.bot, useQuitButton=True, disableAfterTimeout=True, ctx=ctx, pages=embed_list, timeout=60, customActionRow=[
