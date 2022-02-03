@@ -1452,8 +1452,10 @@ async def trinketshop(ctx):
    sell_buttons_action_row = manage_components.create_actionrow(*sell_buttons)
    util_sell_buttons_action_row = manage_components.create_actionrow(*util_sell_buttons)
    embedVar = discord.Embed(title=f":tickets: | **Trinket Shop** - {icon}{'{:,}'.format(balance)} ", description=textwrap.dedent(f"""\
-   Purchase Experience Boosts
-   *Experience Boost Applied to Current Equipped Card*
+   Welcome to the Trinket Shop {ctx.author.mention}!
+   Purchase Experience Boosts and Arm Durability here!
+   *Experience Boost Applied to* **{current_card}**
+   *Arm Durabilty Applied to* **{current_arm}**
 
    🔋 1️⃣ **1,500EXP** for :coin: **80,000**
    
@@ -1463,7 +1465,7 @@ async def trinketshop(ctx):
 
    ⚒️ 4️⃣ **25 Durability** for :moneybag: **25,000**
 
-   Purchase Gabe's Purse to Keep All Items When Rebirthing
+   Purchase **Gabe's Purse** to Keep ALL ITEMS when **Rebirthing**
 
    **Gabe's Purse** 👛 for :money_with_wings: **10,000,000**
 

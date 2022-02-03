@@ -11168,12 +11168,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                     custom_id="start_tales_no"
                 )
             ]
-            if botActive ==False:
+            if tutorial ==False and mode not in PVP_MODES:
                 if currentopponent > 0 and not randomized_battle and mode not in PVP_MODES and mode not in B_modes:
                     start_tales_buttons.append(
 
                         manage_components.create_button(
-                            style=ButtonStyle.blue,
+                            style=ButtonStyle.green,
                             label="Save Game",
                             custom_id="save_tales_yes"
                         )
@@ -11204,7 +11204,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 embedVar.set_image(url="attachment://image.png")
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card)
                 
-            elif mode in PVP_MODES:
+            elif mode in PVP_MODES and tutorial == False:
                 embedVar = discord.Embed(title=f"✅ Confirm PVP Battle!", description=f"{user2.mention}\n**{o_card}** VS **{t_card}**")
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row])            
             
@@ -11950,7 +11950,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     value="Summon Enhancers once per Focus. Summons Do not count as the Summoners turn!")
                                                     embedVar.set_footer(
                                                         text=f"Summons will Level Up and build Bond as you win battles! Train up your pets to perform better in the field!")
-                                                    await button_ctx.send(embed=embedVar)
+                                                    #await button_ctx.send(embed=embedVar)
                                                     await asyncio.sleep(2)
                                                 o_enhancer_used = True
                                                 dmg = damage_cal(o_universe, o_card, opet_move, o_attack, o_defense, t_defense,
