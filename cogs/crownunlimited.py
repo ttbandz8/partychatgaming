@@ -12349,8 +12349,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 embedVar = discord.Embed(title=emessage,
                                                                         description=f"Use abilities to Increase `STAM` or enter `FOCUS STATE`!",
                                                                         colour=0xe91e63)
-                                                await button_ctx.defer(ignore=True)
                                                 turn = 0
+                                                await button_ctx.defer(ignore=True)
                                     # except Exception as e:
                                     #     await ctx.send(f"{ctx.author.mention}, the match has ended. ")
                                     #     await button_ctx.defer(ignore=True)
@@ -16038,12 +16038,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 await button_ctx.defer(ignore=True)
                                                 else:
                                                     previous_moves.append(f"*{turn_total}:* **{o_card}**: Not enough Stamina to use this ability.")
-                                                    await button_ctx.defer(ignore=True)
                                                     # embedVar = discord.Embed(title=emessage,
                                                     #                         description=f"Use abilities to Increase `STAM` or enter `FOCUS STATE`!",
                                                     #                         colour=0xe91e63)
-                                                    await button_ctx.defer(ignore=True)
                                                     turn = 0
+                                                    await button_ctx.defer(ignore=True)
                                         except Exception as ex:
                                             trace = []
                                             tb = ex.__traceback__
