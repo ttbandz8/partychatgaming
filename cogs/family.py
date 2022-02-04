@@ -37,8 +37,15 @@ class Family(commands.Cog):
     @cog_ext.cog_slash(description="Marry a player", guild_ids=main.guild_ids)
     async def marry(self, ctx, player: User):
         try:
-            head_profile = db.queryUser({'DISNAME': str(ctx.author)})
-            partner_profile = db.queryUser({'DISNAME': str(player)})
+            head_profile = db.queryUser({'DID': str(ctx.author.id)})
+            partner_profile = db.queryUser({'DID': str(player.id)})
+            if head_profile['LEVEL'] < 10:
+                await ctx.send(f"🔓 {ctx.author.mention} Unlock Family by completeing Floor 10 of the 🌑 Abyss! Use /abyss to enter the abyss.")
+                return
+            if partner_profile['LEVEL'] < 10:
+                await ctx.send(f"🔓 {player.mention} Unlock Family by completeing Floor 10 of the 🌑 Abyss! Use /abyss to enter the abyss.")
+                return
+
             if head_profile['DISNAME'] == partner_profile['DISNAME']:
                 await ctx.send("You cannot **Marry** yourself", delete_after=8)
                 return

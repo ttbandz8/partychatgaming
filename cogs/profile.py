@@ -2256,6 +2256,11 @@ class Profile(commands.Cog):
         try:
             all_universes = db.queryAllUniverse()
             user = db.queryUser({'DISNAME': str(ctx.author)})
+
+            if user['LEVEL'] < 5:
+                await ctx.send("🔓 Unlock the Shop by completeing Floor 5 of the 🌑 Abyss! Use /abyss to enter the abyss.")
+                return
+
             completed_tales = user['CROWN_TALES']
             completed_dungeons = user['DUNGEONS']
             available_universes = []
@@ -2591,6 +2596,10 @@ class Profile(commands.Cog):
         try:
             all_universes = db.queryAllUniverse()
             user = db.queryUser({'DISNAME': str(ctx.author)})
+            if user['LEVEL'] < 8:
+                await ctx.send("🔓 Unlock Crafting by completeing Floor 8 of the 🌑 Abyss! Use /abyss to enter the abyss.")
+                return
+
             available_universes = []
             riftShopOpen = False
             shopName = ':shopping_cart: Crown Shop'

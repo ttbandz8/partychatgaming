@@ -64,8 +64,17 @@ class Trade(commands.Cog):
     async def trade(self, ctx: SlashContext, mode: str, player: User):
         try:
             buyer_name = player
-            merchant = db.queryUser({'DISNAME': str(ctx.author)})
+            merchant = db.queryUser({'DID': str(ctx.author.id)})
+            
+            if merchant['LEVEL'] < 10:
+                await ctx.send("🔓 Unlock Trading by completeing Floor 10 of the 🌑 Abyss! Use /abyss to enter the abyss.")
+                return
+
             buyer = db.queryUser({'DISNAME': str(buyer_name)})
+            if buyer['LEVEL'] < 10:
+                await ctx.send(f"🔓 {str(player)} has not unlocked Trading by completing Floor 10 of the 🌑.")
+                return
+
             mvault = db.queryVault({'OWNER' : str(ctx.author)})
             trade_query={'MERCHANT': str(ctx.author) , 'BUYER' : str(player), 'OPEN' : True}
             if mode == 'New':

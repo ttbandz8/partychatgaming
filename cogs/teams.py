@@ -34,6 +34,10 @@ class Teams(commands.Cog):
 
     @cog_ext.cog_slash(description="Create a new guild", guild_ids=main.guild_ids)
     async def createguild(self, ctx, guild: str):
+        user = db.queryUser({'DID': str(ctx.author.id)})
+        if user['LEVEL'] < 10:
+            await ctx.send("🔓 Unlock Guilds by completeing Floor 10 of the 🌑 Abyss! Use /abyss to enter the abyss.")
+            return
         team = guild
         team_name = team
         if team_name == "":
@@ -75,8 +79,12 @@ class Teams(commands.Cog):
 
     @cog_ext.cog_slash(description="Recruit Guild member", guild_ids=main.guild_ids)
     async def recruit(self, ctx, player: User):
-        owner_profile = db.queryUser({'DISNAME': str(ctx.author)})
+        owner_profile = db.queryUser({'DID': str(ctx.author.id)})
         team_profile = db.queryTeam({'TNAME': owner_profile['TEAM']})
+        if owner_profile['LEVEL'] < 10:
+            await ctx.send("🔓 Unlock Guilds by completeing Floor 10 of the 🌑 Abyss! Use /abyss to enter the abyss.")
+            return
+
 
         if owner_profile['TEAM'] == 'PCG':
             await ctx.send(m.USER_NOT_ON_TEAM, delete_after=5)
@@ -84,7 +92,11 @@ class Teams(commands.Cog):
 
             if owner_profile['DISNAME'] == team_profile['OWNER']:
 
-                member_profile = db.queryUser({'DISNAME': str(player)})
+                member_profile = db.queryUser({'DID': str(player.id)})
+                if member_profile['LEVEL'] < 10:
+                    await ctx.send(f"🔓 f{str(player)} has not unlocked Guilds by completeing Floor 10 of the 🌑 Abyss! Use /abyss to enter the abyss.")
+                    return
+
                 # If user is part of a team you cannot add them to your team
                 if member_profile['TEAM'] == 'PCG':
                     await main.DM(ctx, player, f"{ctx.author.mention}" + f" has invited you to join **{team_profile['TNAME']}** !" + f" React in server to join **{team_profile['TNAME']}**" )
@@ -129,7 +141,7 @@ class Teams(commands.Cog):
 
     @cog_ext.cog_slash(description="Apply for a Guild", guild_ids=main.guild_ids)
     async def apply(self, ctx, owner: User):
-        owner_profile = db.queryUser({'DISNAME': str(owner)})
+        owner_profile = db.queryUser({'DID': str(owner.id)})
         team_profile = db.queryTeam({'TNAME': owner_profile['TEAM']})
 
         if owner_profile['TEAM'] == 'PCG':
@@ -137,7 +149,11 @@ class Teams(commands.Cog):
         else:
 
             if owner_profile['DISNAME'] == team_profile['OWNER']:
-                member_profile = db.queryUser({'DISNAME': str(owner)})
+                member_profile = db.queryUser({'DID': str(ctx.author.id)})
+                if member_profile['LEVEL'] < 10:
+                    await ctx.send(f"🔓 Unlock Guilds by completeing Floor 10 of the 🌑 Abyss! Use /abyss to enter the abyss.")
+                    return
+
                 # If user is part of a team you cannot add them to your team
                 if member_profile['TEAM'] != 'PCG':
                     await main.DM(ctx, owner, f"{ctx.author.mention}" + f" Applied to join **{team_profile['TNAME']}** !" + f" You may accept or deny in server." )

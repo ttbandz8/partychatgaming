@@ -1182,7 +1182,12 @@ async def curse(amount, user):
 @commands.check(validate_user)
 async def gift(ctx, player: User, amount: int):
    user2 = player
-   vault = db.queryVault({'OWNER': str(ctx.author)})
+   vault = db.queryVault({'DID': str(ctx.author.id)})
+   user_data = db.queryUser({'DID': str(ctx.author.id)})
+   if user_data['LEVEL'] < 20:
+      await ctx.send(f"🔓 Unlock Gifting by completeing Floor 25 of the 🌑 Abyss! Use /abyss to enter the abyss.")
+      return
+
    balance = vault['BALANCE']
    tax = amount * .09
    amount_plus_tax = amount + tax
@@ -1399,10 +1404,14 @@ async def cursefamily(amount, family):
 @slash.slash(description="Purchase Boosts", guild_ids=guild_ids)
 @commands.check(validate_user)
 async def trinketshop(ctx):
-   user_query = {'DISNAME': str(ctx.author)}
+   user_query = {'DID': str(ctx.author.id)}
    user = db.queryUser(user_query)
+   if user['LEVEL'] < 15:
+      await ctx.send(f"🔓 Unlock the Trinket Shop by completeing Floor 15 of the 🌑 Abyss! Use /abyss to enter the abyss.")
+      return
+
    current_arm = user['ARM']
-   vault = db.altQueryVault({'OWNER' : str(ctx.author)})
+   vault = db.altQueryVault({'DID' : str(ctx.author.id)})
    current_card = user['CARD']
    has_gabes_purse = user['TOURNAMENT_WINS']
    balance = vault['BALANCE']
