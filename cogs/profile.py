@@ -18,7 +18,7 @@ from PIL import Image, ImageFont, ImageDraw
 import requests
 from collections import ChainMap
 import DiscordUtils
-from .crownunlimited import showcard, cardback, enhancer_mapping, title_enhancer_mapping, enhancer_suffix_mapping, title_enhancer_suffix_mapping, passive_enhancer_suffix_mapping, Crest_dict, cardlevel
+from .crownunlimited import showcard, cardback, enhancer_mapping, title_enhancer_mapping, enhancer_suffix_mapping, title_enhancer_suffix_mapping, passive_enhancer_suffix_mapping, Crest_dict, cardlevel, destiny as update_destiny_call
 import random
 import textwrap
 from discord_slash import cog_ext, SlashContext
@@ -2444,16 +2444,18 @@ class Profile(commands.Cog):
                                                     'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
                                 r = db.updateVaultNoFilter(vault_query, update_query)
 
-                            await button_ctx.send(f"You purchased **{card_name}**!")
-                            self.stop = True
-                            return
-
                             # Add Destiny
                             for destiny in d.destiny:
                                 if card_name in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
                                     db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
                                     await button_ctx.send(
                                         f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.", hidden=True)
+
+
+                            await button_ctx.send(f"You purchased **{card_name}**!")
+                            self.stop = True
+                            return
+
 
                     elif button_ctx.custom_id == "t2card":
                         price = price_adjuster(300000, universe, completed_tales, completed_dungeons)['C2']
@@ -2596,6 +2598,7 @@ class Profile(commands.Cog):
         try:
             all_universes = db.queryAllUniverse()
             user = db.queryUser({'DISNAME': str(ctx.author)})
+            card_info = db.queryCard({"NAME": user['CARD']})
             if user['LEVEL'] < 8:
                 await ctx.send("🔓 Unlock Crafting by completeing Floor 8 of the 🌑 Abyss! Use /abyss to enter the abyss.")
                 return
@@ -2634,9 +2637,10 @@ class Profile(commands.Cog):
                 universe_image = universe['PATH']
                 embedVar = discord.Embed(title= f"{universe_name}", description=textwrap.dedent(f"""
                 Welcome {ctx.author.mention}!
-                
+                Your equipped card is **{card_info['NAME']}**
                 💟 **Universe Heart:** 💎 20,000
                 🌹 **Universe Soul:** 💎 50,000
+                ✨ **Destiny Line:** 💎 50,000
                 """), colour=0x7289da)
                 embedVar.set_image(url=universe_image)
                 embed_list.append(embedVar)
@@ -2644,7 +2648,8 @@ class Profile(commands.Cog):
         
             buttons = [
                 manage_components.create_button(style=3, label="💟", custom_id="UNIVERSE_HEART"),
-                manage_components.create_button(style=1, label="🌹", custom_id="UNIVERSE_SOUL")
+                manage_components.create_button(style=1, label="🌹", custom_id="UNIVERSE_SOUL"),
+                manage_components.create_button(style=1, label="✨", custom_id="Destiny")
             ]
 
             custom_action_row = manage_components.create_actionrow(*buttons)
@@ -2654,7 +2659,7 @@ class Profile(commands.Cog):
                     universe = str(button_ctx.origin_message.embeds[0].title)
                     if button_ctx.custom_id == "UNIVERSE_HEART":
                         price = 20000
-                        response = craft_adjuster(vault, universe, price, button_ctx.custom_id)
+                        response = await craft_adjuster(ctx.author, vault, universe, price, button_ctx.custom_id)
                         if response['SUCCESS']:
                             await button_ctx.send(f"{response['MESSAGE']}")
                             self.stop = True
@@ -2664,13 +2669,23 @@ class Profile(commands.Cog):
 
                     if button_ctx.custom_id == "UNIVERSE_SOUL":
                         price = 50000
-                        response = craft_adjuster(vault, universe, price, button_ctx.custom_id)
+                        response = await craft_adjuster(ctx.author, vault, universe, price, button_ctx.custom_id)
                         if response['SUCCESS']:
                             await button_ctx.send(f"{response['MESSAGE']}")
                             self.stop = True
                         else:
                             await button_ctx.send(f"{response['MESSAGE']}")
                             self.stop = True
+                    if button_ctx.custom_id == "Destiny":
+                        price = 50000
+                        response = await craft_adjuster(ctx.author, vault, universe, price, card_info)
+                        if response['SUCCESS']:
+                            await button_ctx.send(f"{response['MESSAGE']}")
+                            self.stop = True
+                        else:
+                            await button_ctx.send(f"{response['MESSAGE']}")
+                            self.stop = True
+
                 else:
                     await ctx.send("This is not your Craft.")
 
@@ -2695,7 +2710,7 @@ class Profile(commands.Cog):
             }))
 
 
-def craft_adjuster(vault, universe, price, item):
+async def craft_adjuster(player, vault, universe, price, item):
     try:
         item_bools = [
             'UNIVERSE_HEART', 
@@ -2716,6 +2731,57 @@ def craft_adjuster(vault, universe, price, item):
 
         if has_gems_for:
             if gems >= price:
+                if item not in item_bools:
+                    card_universe = item['UNIVERSE']
+                    card_name = item['NAME']
+                    card_has_destiny = False
+                    destiny_wins = 0
+                    destiny_required_wins = 0
+                    destiny_name = ""
+                    destiny_earn = ""
+                    destiny_universe = ""
+                    destiny_defeat = ""
+                    if vault['DESTINY']:
+                        for destiny in vault['DESTINY']:
+                            if card_name in destiny['USE_CARDS']:
+                                card_has_destiny = True
+                                destiny_wins = destiny['WINS']
+                                destiny_required_wins = destiny['REQUIRED']
+                                destiny_name = destiny['NAME']
+                                destiny_earn = destiny['EARN']
+                                destiny_universe = destiny['UNIVERSE']
+                                destiny_defeat = destiny['DEFEAT']
+
+                    if card_has_destiny:
+                        if card_universe != destiny_universe:
+                            response = {"HAS_GEMS_FOR": True, "SUCCESS":  False, "MESSAGE": f"Your **{card_name}** does not have a Destiny Line in **{universe}**!"}
+                            return response
+                        else:
+                            try:
+                                r = await update_destiny_call(player, destiny_defeat, "Tales")
+                                response = {"HAS_GEMS_FOR": True, "SUCCESS":  True, "MESSAGE": "Craft Success!"}
+                                return response
+                            except Exception as ex:
+                                trace = []
+                                tb = ex.__traceback__
+                                while tb is not None:
+                                    trace.append({
+                                        "filename": tb.tb_frame.f_code.co_filename,
+                                        "name": tb.tb_frame.f_code.co_name,
+                                        "lineno": tb.tb_lineno
+                                    })
+                                    tb = tb.tb_next
+                                print(str({
+                                    'type': type(ex).__name__,
+                                    'message': str(ex),
+                                    'trace': trace
+                                }))
+                                response = {"HAS_GEMS_FOR": True, "SUCCESS":  False, "MESSAGE": f"Craft Failed!"}
+                                return response
+                    else:
+                        response = {"HAS_GEMS_FOR": True, "SUCCESS":  False, "MESSAGE": f"Your **{card_name}** does not have a Destiny Line in **{universe}**!"}
+                        return response
+
                 if item in item_bools:
                     query = {'OWNER': str(vault['OWNER'])}
                     update_query = {

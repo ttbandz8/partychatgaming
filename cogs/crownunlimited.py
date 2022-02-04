@@ -122,7 +122,7 @@ class CrownUnlimited(commands.Cog):
             # Pull Character Information
             player = db.queryUser({'DISNAME': str(message.author)})
             if player['LEVEL'] < 35:
-                await ctx.send(f"🔓 Unlock the Explore Mode by completeing Floor 35 of the 🌑 Abyss! Use /abyss to enter the abyss.")
+                await message.channel.send(f"🔓 Unlock the Explore Mode by completeing Floor 35 of the 🌑 Abyss! Use /abyss to enter the abyss.")
                 return
 
             if not player:
@@ -4638,9 +4638,9 @@ async def quest(player, opponent, mode):
 
 
 async def destiny(player, opponent, mode):
-    vault = db.queryVault({'OWNER': str(player)})
-    user = db.queryUser({"DISNAME": str(player)})
-    vault_query = {'OWNER': str(player)}
+    vault = db.queryVault({'DID': str(player.id)})
+    user = db.queryUser({"DID": str(player.id)})
+    vault_query = {'DID': str(player.id)}
     owned_destinies = []
     for destiny in vault['DESTINY']:
         owned_destinies.append(destiny['NAME'])
@@ -4686,12 +4686,14 @@ async def destiny(player, opponent, mode):
                             if destiny['EARN'] in dest["USE_CARDS"] and dest['NAME'] not in owned_destinies:
                                 db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': dest}})
                                 message = f"**DESTINY AWAITS!**\n**New Destinies** have been added to your vault."
+                        await player.send(message)
                         return message
 
                     query = {'OWNER': str(player)}
                     update_query = {'$inc': {'DESTINY.$[type].' + "WINS": 1}}
                     filter_query = [{'type.' + "DEFEAT": opponent}]
                     resp = db.updateVault(query, update_query, filter_query)
+                    await player.send(message)
                     return message
 
             # Dungeon
@@ -4726,13 +4728,14 @@ async def destiny(player, opponent, mode):
                             if destiny['EARN'] in dest["USE_CARDS"] and dest['NAME'] not in owned_destinies:
                                 db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': dest}})
                                 message = f"**DESTINY AWAITS!**\n**New Destinies** have been added to your vault."
-
+                        await player.send(message)
                         return message
 
                     query = {'OWNER': str(player)}
                     update_query = {'$inc': {'DESTINY.$[type].' + "WINS": 3}}
                     filter_query = [{'type.' + "DEFEAT": opponent}]
                     resp = db.updateVault(query, update_query, filter_query)
+                    await player.send(message)
                     return message
         else:
             return False
@@ -8980,7 +8983,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         if mode in PVP_MODES or mode in RAID_MODES:
                             # Player 1 Turn Start
                             if turn == 0:
-                                await asyncio.sleep(1)
                                 if o_block_used == True:
                                     o_block_used = False
                                     o_defense = o_defense / 2
@@ -9346,8 +9348,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     embedVar.set_footer(
                                         text=f"{t_card}: ❤️{t_health} 🌀{t_stamina} 🗡️{t_attack}/🛡️{t_defense} {tarm_message}",
                                         icon_url="https://cdn.discordapp.com/emojis/789290881654980659.gif?v=1")
-                                    await battle_msg.delete(delay=2)
-                                    await asyncio.sleep(2)
+                                    await battle_msg.delete(delay=1)
+                                    await asyncio.sleep(1)
                                     battle_msg = await private_channel.send(embed=embedVar, components=components, file=player_1_card)
 
 
@@ -9366,8 +9368,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         # calculate data based on selected move
                                         if button_ctx.custom_id == "q" or button_ctx.custom_id == "Q":
                                             o_health = 0
-                                            await battle_msg.delete(delay=2)
-                                            await asyncio.sleep(2)
+                                            await battle_msg.delete(delay=None)
+                                            # await asyncio.sleep(2)
                                             battle_msg = await button_ctx.send(f"{ctx.author.mention} has fled the battle...")
                                             # await button_ctx.send(f"{ctx.author.mention} has fled the battle...")
                                             return
@@ -10117,7 +10119,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 
                             # Player 2 Turn Start
                             elif turn == 1:
-                                await asyncio.sleep(1)
                                 if t_block_used == True:
                                     t_block_used = False
                                     t_defense = int(t_defense / 2)
@@ -10428,8 +10429,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         embedVar.set_footer(
                                             text=f"{o_card}: ❤️{o_health} 🌀{o_stamina} 🗡️{o_attack}/🛡️{o_defense}{oarm_message}",
                                             icon_url="https://cdn.discordapp.com/emojis/789290881654980659.gif?v=1")
-                                        await battle_msg.delete(delay=2)
-                                        await asyncio.sleep(2)
+                                        await battle_msg.delete(delay=1)
+                                        await asyncio.sleep(1)
                                         battle_msg = await private_channel.send(embed=embedVar, components=components, file=player_2_card)
 
                                         # Make sure user is responding with move
@@ -10449,8 +10450,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 t_health = 0
                                                 uid = t_DID
                                                 tuser = await self.bot.fetch_user(uid)
-                                                await battle_msg.delete(delay=2)
-                                                await asyncio.sleep(2)
+                                                await battle_msg.delete(delay=1)
+                                                await asyncio.sleep(1)
                                                 battle_msg = await private_channel.send(content=f"{tuser.mention} has fled.")
 
                                                 return
@@ -11823,7 +11824,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 #         previous_moves = previous_moves[4:]
                                 #     previous_moves_into_embed = "\n\n".join(previous_moves)
 
-                                await asyncio.sleep(1)
+                                # await asyncio.sleep(1)
                                 if o_block_used == True:
                                     o_defense = int(o_defense / 2)
                                     o_block_used = False
@@ -12840,8 +12841,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 try:
                                                     o_health = 0
                                                     await save_spot(self, ctx, universe, mode, currentopponent)
-                                                    await battle_msg.delete(delay=2)
-                                                    await asyncio.sleep(2)
+                                                    await battle_msg.delete(delay=1)
+                                                    await asyncio.sleep(1)
                                                     battle_msg = await private_channel.send(content="Game Saved!")
                                                     return
                                                 except Exception as ex:
@@ -12864,8 +12865,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             # calculate data based on selected move
                                             if button_ctx.custom_id == "q" or button_ctx.custom_id == "Q":
                                                 o_health = 0
-                                                await battle_msg.delete(delay=2)
-                                                await asyncio.sleep(2)
+                                                await battle_msg.delete(delay=1)
+                                                await asyncio.sleep(1)
                                                 battle_msg = await private_channel.send(content=f"{ctx.author.mention} has fled.")
                                                 return
                                             
@@ -13295,7 +13296,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             
                                                             previous_moves.append(f"*{turn_total}:* 🩸 Persona! **{opet_name}** was summoned from **{o_card}**'s soul dealing **{petdmg['DMG']}** damage!")
                                                             await battle_msg.delete(delay=None)
-                                                            await asyncio.sleep(2)
+                                                            await asyncio.sleep(1)
                                                             battle_msg = await private_channel.send(embed=embedVar, file=summon_file)
                                                             await asyncio.sleep(2)
 
@@ -13309,7 +13310,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             
                                                             previous_moves.append(f"*{turn_total}:* **{o_card}** Summoned 🧬 **{opet_name}**: {dmg['MESSAGE']}")
                                                             await battle_msg.delete(delay=None)
-                                                            await asyncio.sleep(2)
+                                                            await asyncio.sleep(1)
                                                             battle_msg = await private_channel.send(embed=embedVar, file=summon_file)
                                                             await asyncio.sleep(2)
                                                         turn = 0
@@ -13844,8 +13845,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 #         previous_moves = previous_moves[4:]
                                 #     previous_moves_into_embed = "\n\n".join(previous_moves)
 
-
-                                await asyncio.sleep(1)
                                 if turn_total == 1 and botActive and mode in B_modes:
                                     embedVar = discord.Embed(title=f"**{t_card}** Says : ", description=f"{t_welcome}",
                                                             colour=0xe91e63)
@@ -14075,8 +14074,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         {previous_moves_into_embed}
                                         """), color=0xe74c3c)
                                         tembedVar.set_image(url="attachment://image.png")
-                                        await battle_msg.delete(delay=2)
-                                        await asyncio.sleep(2)
+                                        await battle_msg.delete(delay=None)
+                                        # await asyncio.sleep(2)
                                         battle_msg = await private_channel.send(embed=tembedVar, file=player_2_card)
                                     aiMove = 0
 
@@ -14901,20 +14900,15 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             embedVar = discord.Embed(
                                                                 title=f"**PERSONA!**\n{tpet_name} was summoned from {t_card}'s soul dealing **{petdmg['DMG']}** damage!!",
                                                                 colour=0xe91e63)
-                                                            embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!",
-                                                                    value=f"{dmg['MESSAGE']}")
+                                                            # embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!",
+                                                            #         value=f"{dmg['MESSAGE']}")
                                                             
                                                             tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
                                                             embedVar.set_image(url="attachment://image.png")
                                                             previous_moves.append(f"*{turn_total}:* 🩸 Persona! {tpet_name} was summoned from {t_card}'s soul dealing {petdmg['DMG']} damage!")
                                                         else:
-                                                            embedVar = discord.Embed(
-                                                                title=f"{t_card.upper()} Summoned 🧬 **{tpet_name}**",
-                                                                colour=0xe91e63)
-                                                            embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!",
-                                                                                value=f"{dmg['MESSAGE']}")
                                                             tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
-                                                            
+                                                            embedVar = discord.Embed(title=f"{t_card} Summoned 🧬 **{tpet_name}**", colour=0xe91e63)                                                            
                                                             embedVar.set_image(url="attachment://image.png")
                                                             previous_moves.append(f"*{turn_total}:* **{t_card}** Summoned 🧬 **{tpet_name}**: {dmg['MESSAGE']}")
                                                     
@@ -19591,7 +19585,7 @@ def update_arm_durability(self, vault, arm, universe):
                     arm_data = db.queryArm({'ARM': selected_arm})
                     arm_name = arm_data['ARM']
                     selected_universe = arm_data['UNIVERSE']
-                    dismantle_amount = round(arm_data['PRICE'] * .03)
+                    dismantle_amount = round(arm_data['PRICE'] * .09)
                     current_gems = []
                     for gems in vault['GEMS']:
                         current_gems.append(gems['UNIVERSE'])
