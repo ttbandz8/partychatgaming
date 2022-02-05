@@ -1411,6 +1411,14 @@ def updateUserNoFilter(query, new_value):
         return "Update completed. "
     else:
         return "Update failed. "
+    
+def updateUserNoFilterAlt(query, new_value):
+    exists = user_exists({'DID': query['DID']})
+    if exists:
+        update = users_col.update_one(query, new_value)
+        return "Update completed. "
+    else:
+        return "Update failed. "
 
 def updateManyUsers(new_value):
     users_col.update_many({}, new_value)

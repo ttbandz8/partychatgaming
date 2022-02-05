@@ -802,7 +802,7 @@ async def rebirth(ctx):
       if rLevel < 5:
          pursemessage = "You will lose all of your equipped and vaulted items."
          if gabes_purse == 1:
-            pursemessage = ":purse: | Gabe's Purse Activated! All Items Will Be Retained!"
+            pursemessage = ":purse: | Gabe's Purse Activated! All Items Will Be Retained!\n*You will not be able to select a new starting universe!*"
          rebirthCost = round(10000000 * (1 + (rLevel)))
 
          util_buttons = [
@@ -845,7 +845,7 @@ async def rebirth(ctx):
             button_ctx: ComponentContext = await manage_components.wait_for_component(bot, components=[util_action_row], timeout=120,check=check)
             if button_ctx.custom_id == "Y":
                try:
-                  vault = db.queryVault({'OWNER': user_is_validated['DISNAME']})
+                  vault = db.queryVault({'DID': user_is_validated['DID']})
                   if vault:
                      if vault['BALANCE'] >= rebirthCost:
                         if rLevel == 0:
@@ -1048,6 +1048,173 @@ async def rebirth(ctx):
                               db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'BOSS_WINS': ['']}})
                               nRebirth = db.updateUserNoFilter(query, {'$inc': {'REBIRTH': 1 }})
                               await button_ctx.send(f":heart_on_fire: | You are now Rebirth Level: {user_is_validated['REBIRTH'] + 1}")
+                        #Starting Selection
+                        try:
+                           if gabes_purse == 1:
+                              await button_ctx.send(f":purse: | Gabe's Purse Activated! All Items Will Be Retained!\nNo Starting Universe Selection...")
+                              return
+                           universe_data = db.queryAllUniverse()
+                           universe_embed_list = []
+                           for uni in universe_data:
+                              available = ""
+                              if uni['HAS_CROWN_TALES'] == True:
+                                 traits = ut.traits
+                                 mytrait = {}
+                                 traitmessage = ''
+                                 o_show = uni['TITLE']
+                                 universe = o_show
+                                 for trait in traits:
+                                    if trait['NAME'] == o_show:
+                                          mytrait = trait
+                                    if o_show == 'Kanto Region' or o_show == 'Johto Region' or o_show == 'Kalos Region' or o_show == 'Unova Region' or o_show == 'Sinnoh Region' or o_show == 'Hoenn Region' or o_show == 'Galar Region' or o_show == 'Alola Region':
+                                          if trait['NAME'] == 'Pokemon':
+                                             mytrait = trait
+                                 if mytrait:
+                                    traitmessage = f"**{mytrait['EFFECT']}:** {mytrait['TRAIT']}"
+                                 available = f"{Crest_dict[uni['TITLE']]}"
+                                 
+                                 tales_list = ", ".join(uni['CROWN_TALES'])
+
+                                 embedVar = discord.Embed(title= f"{uni['TITLE']}", description=textwrap.dedent(f"""                                                                                         
+                                 **Select A Starting Universe, {ctx.author.mention}!**
+
+                                 Selecting a Starter Universe will give you *3* 🎴 Cards, :reminder_ribbon: Titles, and :mechanical_arm: Arms to begin!
+                                 
+                                 :infinity: - Unique Universe Trait
+                                 {traitmessage}
+                                 """))
+                                 embedVar.set_image(url=uni['PATH'])
+                                 universe_embed_list.append(embedVar)
+                                 
+                           buttons = [
+                                 manage_components.create_button(style=3, label="Select This Starter Universe", custom_id="Select")
+                              ]
+                           custom_action_row = manage_components.create_actionrow(*buttons)
+                           # custom_button = manage_components.create_button(style=3, label="Equip")
+
+                           async def custom_function(self, button_ctx):
+                              try:
+                                 if button_ctx.author == ctx.author:
+                                    universe = str(button_ctx.origin_message.embeds[0].title)
+                                    vault_query = {'DID' : str(ctx.author.id)}
+                                    vault = db.altQueryVault(vault_query)
+                                    current_titles = vault['TITLES']
+                                    current_cards = vault['CARDS']
+                                    current_arms = []
+                                    for arm in vault['ARMS']:
+                                       current_arms.append(arm['ARM'])
+
+                                    owned_card_levels_list = []
+                                    for c in vault['CARD_LEVELS']:
+                                       owned_card_levels_list.append(c['CARD'])
+                                    owned_destinies = []
+                                    for destiny in vault['DESTINY']:
+                                       owned_destinies.append(destiny['NAME'])
+                                    
+                                    if button_ctx.custom_id == "Select":
+                                       acceptable = [1,2,3,4]
+                                       list_of_titles =[x for x in db.queryAllTitlesBasedOnUniverses({'UNIVERSE': str(universe)}) if not x['EXCLUSIVE'] and x['AVAILABLE'] and x['TITLE'] not in current_titles]
+                                       count = 0
+                                       selected_titles = [1000]
+                                       while count < 3:
+                                          selectable_titles = list(range(0, len(list(list_of_titles))))
+                                          for selected in selected_titles:
+                                             if selected in selectable_titles:
+                                                selectable_titles.remove(selected)
+                                          selection = random.choice(selectable_titles)
+                                          selected_titles.append(selection)
+                                          title = list_of_titles[selection]
+                                          response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'TITLES': str(title['TITLE'])}})
+                                          await button_ctx.send(f"You collected :reminder_ribbon: **{title['TITLE']}**.")
+                                          count = count + 1
+                                       
+                                       
+                                       list_of_arms = [x for x in db.queryAllArmsBasedOnUniverses({'UNIVERSE': str(universe)}) if not x['EXCLUSIVE'] and x['AVAILABLE'] and x['ARM'] not in current_arms]
+                                       count = 0
+                                       selected_arms = [1000]
+                                       while count < 3:
+                                          current_arms = vault['ARMS']
+                                          selectable_arms = list(range(0, len(list(list_of_arms))))
+                                          for selected in selected_arms:
+                                             if selected in selectable_arms:
+                                                selectable_arms.remove(selected)
+                                          selection = random.choice(selectable_arms)
+                                          selected_arms.append(selection)
+                                          arm = list_of_arms[selection]['ARM']
+                                          db.updateVaultNoFilter(vault_query,{'$addToSet':{'ARMS': {'ARM': str(arm), 'DUR': 75}}})                           
+                                          await button_ctx.send(f"You collected :mechanical_arm: **{arm}**.")
+                                          count = count + 1
+                                          
+                                       list_of_cards = [x for x in db.queryAllCardsBasedOnUniverse({'UNIVERSE': str(universe), 'TIER': {'$in': acceptable}}) if not x['EXCLUSIVE'] and not x['HAS_COLLECTION'] and x['AVAILABLE'] and x['NAME'] not in current_cards]
+                                       count = 0
+                                       selected_cards = [1000]
+                                       while count < 3:
+                                          current_cards = vault['CARDS']
+                                          selectable_cards = list(range(0, len(list(list_of_cards))))
+                                          for selected in selected_cards:
+                                             if selected in selectable_cards:
+                                                selectable_cards.remove(selected)
+                                          selection = random.choice(selectable_cards)
+                                          selectable_cards.append(selection)
+                                          card = list_of_cards[selection]
+                                          card_name = card['NAME']
+                                          tier = 0
+
+                                          cresponse = db.updateVaultNoFilter(vault_query, {'$addToSet': {'CARDS': str(card_name)}})
+                                          if cresponse:
+                                             if card_name not in owned_card_levels_list:
+                                                update_query = {'$addToSet': {
+                                                      'CARD_LEVELS': {'CARD': str(card_name), 'LVL': 0, 'TIER': int(tier),
+                                                                     'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
+                                                r = db.updateVaultNoFilter(vault_query, update_query)
+
+                                             await button_ctx.send(f"You collected 🎴 **{card_name}**!")
+
+                                             # Add Destiny
+                                             for destiny in d.destiny:
+                                                if card_name in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
+                                                      db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
+                                                      await button_ctx.send(
+                                                         f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.", hidden=True)
+                                          count = count + 1
+                                       await button_ctx.send(f"Nice choice {ctx.author.mention}!\n\nCreate your first **Build**!\n**/cards** Select your 🎴  Card\n**/titles** Select your 🎗️ Title\n**/arms** Select your 🦾  Arm\n\nOnce you're done, run **/tutorial** to begin the **Tutorial Battle**! ⚔️")
+                                       self.stop = True
+                              except Exception as ex:
+                                 trace = []
+                                 tb = ex.__traceback__
+                                 while tb is not None:
+                                    trace.append({
+                                       "filename": tb.tb_frame.f_code.co_filename,
+                                       "name": tb.tb_frame.f_code.co_name,
+                                       "lineno": tb.tb_lineno
+                                    })
+                                    tb = tb.tb_next
+                                 print(str({
+                                    'type': type(ex).__name__,
+                                    'message': str(ex),
+                                    'trace': trace
+                                 }))
+                                 await ctx.send("Rebirth Issue Seek support.")
+                           await Paginator(bot=bot, ctx=ctx, disableAfterTimeout=True, pages=universe_embed_list, customActionRow=[
+                              custom_action_row,
+                              custom_function,
+                           ]).run()
+                        except Exception as ex:
+                           trace = []
+                           tb = ex.__traceback__
+                           while tb is not None:
+                              trace.append({
+                                 "filename": tb.tb_frame.f_code.co_filename,
+                                 "name": tb.tb_frame.f_code.co_name,
+                                 "lineno": tb.tb_lineno
+                              })
+                              tb = tb.tb_next
+                           print(str({
+                              'type': type(ex).__name__,
+                              'message': str(ex),
+                              'trace': trace
+                           }))
+                           await ctx.send("Rebirth Issue Seek support.")
                      else:
                         await button_ctx.send(f"Not enough :coin:!\nYou need {'{:,}'.format(rebirthCost)} to Rebirth:angel:", delete_after=5)
                   else:
@@ -1492,6 +1659,7 @@ async def trinketshop(ctx):
    ⚒️ 4️⃣ **25 Durability** for :moneybag: **25,000**
 
    Purchase **Gabe's Purse** to Keep ALL ITEMS when **Rebirthing**
+   *You will not be able to select a new starting universe!*
 
    **Gabe's Purse** 👛 for :money_with_wings: **10,000,000**
 
@@ -1571,7 +1739,7 @@ async def trinketshop(ctx):
             await button_ctx.send("You already own Gabes Purse. You cannot purchase more than one.", hidden=True)
             return
          else:
-            db.updateUserNoFilter(user_query, {'$set': {'TOURNAMENT_WINS': 1}})
+            update = db.updateUserNoFilterAlt(user_query, {'$set': {'TOURNAMENT_WINS': 1}})
             await curse(10000000, str(ctx.author))
             await button_ctx.send("Gabe's Purse has been purchased!")
             return
