@@ -1307,6 +1307,8 @@ class Profile(commands.Cog):
                             dismantle_amount = round(arm_data['PRICE'] * .03)
                             if arm_name == current_arm:
                                 await button_ctx.send("You cannot dismantle equipped arms.")
+                            elif arm_name == "Stock" or arm_name == "Reborn Stock" or arm_name == "Deadgun" or arm_name == "Glaive" or arm_name == "Kings Glaive" or arm_name == "Legendary Weapon":
+                                await button_ctx.send("You cannot dismantle Stock arms.")
                             elif arm_name in updated_vault:
                                 dismantle_buttons = [
                                     manage_components.create_button(

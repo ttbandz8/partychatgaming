@@ -46,8 +46,8 @@ First card with 0 health loses!
 :gem: - Gems *Craft Universe Hearts and Souls*
 
 IMPORTANT REMINDER! ⬇️
-Use **/daily** to claim your **Daily Reward!** 
-**/tutorial** - Tutorial Battle    
+Use **/daily** to claim your **Daily Reward!**
+**/tutorial** - Tutorial Battle
 **/crown** - Read Game Manual
 **/help** - Help Menu
 **/enhancers** - Enhancer Help Menu
