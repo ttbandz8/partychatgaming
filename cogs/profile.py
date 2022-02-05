@@ -561,7 +561,7 @@ class Profile(commands.Cog):
                             card_data = db.queryCard({'NAME': selected_card})
                             card_name = card_data['NAME']
                             selected_universe = card_data['UNIVERSE']
-                            dismantle_amount = round(card_data['PRICE'] * .01)
+                            dismantle_amount = round(card_data['PRICE'] * .05)
                             if card_name == current_card:
                                 await button_ctx.send("You cannot dismantle equipped cards.")
                             elif card_name in updated_vault['CARDS']:
@@ -789,6 +789,7 @@ class Profile(commands.Cog):
             }))
             await ctx.send("There's an issue with loading your cards. Check with support.", hidden=True)
             return
+
 
     @cog_ext.cog_slash(description="Check all your Titles", guild_ids=main.guild_ids)
     async def titles(self, ctx):
@@ -1157,6 +1158,7 @@ class Profile(commands.Cog):
                 return
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
+
 
     @cog_ext.cog_slash(description="Check all your Arms", guild_ids=main.guild_ids)
     async def arms(self, ctx):
@@ -1532,6 +1534,7 @@ class Profile(commands.Cog):
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
+
     @cog_ext.cog_slash(description="Check all your Summons", guild_ids=main.guild_ids)
     async def summons(self, ctx):
         await ctx.defer()
@@ -1777,6 +1780,7 @@ class Profile(commands.Cog):
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
+
     @cog_ext.cog_slash(description="Check all your destiny lines", guild_ids=main.guild_ids)
     async def destinies(self, ctx):
         await ctx.defer()
@@ -1866,6 +1870,7 @@ class Profile(commands.Cog):
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
+
     @cog_ext.cog_slash(description="Check all your Quests", guild_ids=main.guild_ids)
     async def quests(self, ctx):
         await ctx.defer()
@@ -1921,6 +1926,7 @@ class Profile(commands.Cog):
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
+
     @cog_ext.cog_slash(description="Check your Balance", guild_ids=main.guild_ids)
     async def balance(self, ctx):
         try:
@@ -1964,6 +1970,7 @@ class Profile(commands.Cog):
                 'trace': trace
             }))
             
+
     @cog_ext.cog_slash(description="Check your Build Presets", guild_ids=main.guild_ids)
     async def preset(self, ctx):
         query = {'DISNAME': str(ctx.author)}
@@ -2141,6 +2148,7 @@ class Profile(commands.Cog):
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
+
     @cog_ext.cog_slash(description="Save your current Build as Preset", guild_ids=main.guild_ids)
     async def savepreset(self, ctx):
         query = {'DISNAME': str(ctx.author)}
@@ -2253,6 +2261,7 @@ class Profile(commands.Cog):
                 await ctx.send("Preset Issue Seek support.", hidden=True)
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
+
 
     @cog_ext.cog_slash(description="Open Crown Shop", guild_ids=main.guild_ids)
     async def shop(self, ctx):
@@ -2594,6 +2603,7 @@ class Profile(commands.Cog):
                 'trace': trace
             }))
 
+
     @cog_ext.cog_slash(description="Open Gem Crafting", guild_ids=main.guild_ids)
     async def craft(self, ctx):
         # Craft with Gems
@@ -2712,6 +2722,12 @@ class Profile(commands.Cog):
                 'trace': trace
             }))
 
+    @cog_ext.cog_slash(description="Open Storage", guild_ids=main.guild_ids)
+    async def storage(self, ctx):
+        vault_query = {'DID': str(ctx.author.id)}
+        vault = db.altQueryVault(vault_query)
+        storage = vault['STORAGE']
+        hand = vault['CARDS']
 
 async def craft_adjuster(player, vault, universe, price, item):
     try:
@@ -2854,7 +2870,6 @@ def price_adjuster(price, selected_universe, completed_tales, completed_dungeons
     'MESSAGE': message
     }
     return response
-
 
 
 def setup(bot):
