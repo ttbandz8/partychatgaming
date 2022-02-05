@@ -52,7 +52,7 @@ if config('ENV') == "production":
 else:
    # TEST
    bot = commands.Bot(command_prefix=",", intents=intents)
-   guild_ids = [839352855000776735]
+   guild_ids = [839352855000776735, 543442011156643871]
 
 
 slash = SlashCommand(bot, sync_commands=True)

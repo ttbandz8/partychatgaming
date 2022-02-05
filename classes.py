@@ -367,6 +367,7 @@ class VAULT():
     QUESTS: list[str] = field(default_factory=lambda: [])
     DESTINY: list[str] = field(default_factory=lambda: [])
     GEMS: list[str] = field(default_factory=lambda: [])
+    STORAGE: list[str] = field(default_factory=lambda: [])
 
 
 @dataclass(frozen=True, order=True)
