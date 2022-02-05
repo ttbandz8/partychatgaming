@@ -561,7 +561,7 @@ class Profile(commands.Cog):
                             card_data = db.queryCard({'NAME': selected_card})
                             card_name = card_data['NAME']
                             selected_universe = card_data['UNIVERSE']
-                            dismantle_amount = round(card_data['PRICE'] * .01)
+                            dismantle_amount = round(card_data['PRICE'] * .05)
                             if card_name == current_card:
                                 await button_ctx.send("You cannot dismantle equipped cards.")
                             elif card_name in updated_vault['CARDS']:

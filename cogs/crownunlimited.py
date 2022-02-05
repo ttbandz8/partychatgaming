@@ -35,12 +35,13 @@ from discord_slash.utils.manage_commands import create_option, create_choice
 from dinteractions_Paginator import Paginator
 import typing
 from pilmoji import Pilmoji
+import destiny as d
 
 
 class CrownUnlimited(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self._cd = commands.CooldownMapping.from_cooldown(1, 1800,
+        self._cd = commands.CooldownMapping.from_cooldown(1, 3,
                                                           commands.BucketType.member)  # Change accordingly. Currently every 8 minutes (3600 seconds == 60 minutes)
         self._lvl_cd = commands.CooldownMapping.from_cooldown(1, 600,
                                                           commands.BucketType.member)
@@ -122,8 +123,9 @@ class CrownUnlimited(commands.Cog):
             # Pull Character Information
             player = db.queryUser({'DISNAME': str(message.author)})
             if player['LEVEL'] < 35:
-                await message.channel.send(f"🔓 Unlock the Explore Mode by completeing Floor 35 of the 🌑 Abyss! Use /abyss to enter the abyss.")
                 return
+                # await message.channel.send(f"🔓 Unlock the Explore Mode by completeing Floor 35 of the 🌑 Abyss! Use /abyss to enter the abyss.")
+                # return
 
             if not player:
                 return
@@ -306,7 +308,7 @@ class CrownUnlimited(commands.Cog):
 
                 if button_ctx.custom_id == "exploreYes":
                     await button_ctx.defer(ignore=True)
-                    await enemy_approached(self, message, message.channel, player, selected_mode, universe,
+                    await enemy_approached(self, message, setchannel, player, selected_mode, universe,
                                            cards[rand_card]['NAME'], bounty)
                     await msg.edit(components=[])
 
@@ -1117,7 +1119,27 @@ class CrownUnlimited(commands.Cog):
             return
 
         try:
-            sowner = db.queryUser({'DISNAME': str(ctx.author)})
+            sowner = db.queryUser({'DID': str(ctx.author.id)})
+            vault = db.altQueryVault({'DID': str(ctx.author.id)})
+            maxed_out_messages = []
+            bad_message = ""
+            current_titles = vault['TITLES']
+            if len(current_titles) >=25:
+                maxed_out_messages.append("You have max amount of Titles. You won't be able to earn the Floor Title.")
+
+            current_arms = []
+            for arm in vault['ARMS']:
+                current_arms.append(arm['ARM'])
+                if len(current_arms) >=25:
+                    maxed_out_messages.append("You have max amount of Arms. You won't be able to earn the Floor Arm.")
+
+            current_cards = vault['CARDS']
+            if len(current_cards) >= 25:
+                maxed_out_messages.append("You have max amount of Cards. You won't be able to earn the Floor Card.")
+
+            if maxed_out_messages:
+                bad_message = "\n".join(maxed_out_messages)
+                 
             oteam = sowner['TEAM']
             ofam = sowner['FAMILY']
             oguild = "PCG"
@@ -1132,6 +1154,7 @@ class CrownUnlimited(commands.Cog):
             enemies = abyss['ENEMIES']
             level = int(abyss['SPECIAL_BUFF'])
             floor = abyss['FLOOR']
+            card_to_earn = enemies[-1] 
             title = abyss['TITLE']
             arm = abyss['ARM']
             abyss_pet = abyss['PET']
@@ -1143,7 +1166,7 @@ class CrownUnlimited(commands.Cog):
             banned_card_tiers = abyss['BANNED_TIERS']
 
             # Convert tiers into strings from ints
-            tier_conversion = [str(tier) for tier in banned_universe_tiers]
+            tier_conversion = [str(tier) for tier in banned_card_tiers]
 
             abyss_buttons = [
                 manage_components.create_button(
@@ -1160,7 +1183,14 @@ class CrownUnlimited(commands.Cog):
 
             abyss_buttons_action_row = manage_components.create_actionrow(*abyss_buttons)
 
-            embedVar = discord.Embed(title=f":new_moon: Abyss Floor {floor}", colour=000000)
+            embedVar = discord.Embed(title=f":new_moon: Abyss Floor {floor}", description=textwrap.dedent(f"""
+            Unlockables on this Floor
+            Unlockable Card: **{card_to_earn}**
+            Unlockable Title: **{title}**
+            Unlockable Arm: **{arm}**
+
+            {bad_message}
+            """))
             if banned_cards:
                 embedVar.add_field(name=":flower_playing_cards: Banned Cards", value="\n".join(banned_cards),
                                 inline=True)
@@ -1184,10 +1214,11 @@ class CrownUnlimited(commands.Cog):
 
             try:
                 button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[
-                    abyss_buttons_action_row, abyss_buttons], timeout=80, check=check)
+                    abyss_buttons_action_row, abyss_buttons], timeout=120, check=check)
 
                 if button_ctx.custom_id == "Yes":
                     await button_ctx.defer(ignore=True)
+                    await msg.edit(components=[])
                     if sowner['CARD'] in banned_cards:
                         await private_channel.send(
                             f":x: **{sowner['CARD']}** is banned on floor {floor}. Use another card.")
@@ -1216,9 +1247,11 @@ class CrownUnlimited(commands.Cog):
                     
                 elif button_ctx.custom_id == "No":
                     await button_ctx.send("Leaving the Abyss...")
+                    await msg.edit(components=[])
                     return
                 else:
                     await button_ctx.send("Leaving the Abyss...")
+                    await msg.edit(components=[])
                     return
             except Exception as ex:
                 trace = []
@@ -5354,6 +5387,93 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, stamina, en
             }))
             return
 
+def abyss_level_up_message(did, new_level, card, title, arm):
+    try:
+        message = ""
+        drop_message = []
+        new_unlock = False
+        vault_query = {'DID': did}
+        vault = db.altQueryVault(vault_query)
+        db.updateVaultNoFilter(vault_query,{'$addToSet':{'TITLES': str(title)}}) 
+        db.updateVaultNoFilter(vault_query,{'$addToSet':{'ARMS': {'ARM': str(arm), 'DUR': 25}}})
+        db.updateVaultNoFilter(vault_query,{'$addToSet': {'CARDS': str(card)}})
+        
+        owned_card_levels_list = []
+        for c in vault['CARD_LEVELS']:
+            owned_card_levels_list.append(c['CARD'])
+
+        owned_destinies = []
+        for destiny in vault['DESTINY']:
+            owned_destinies.append(destiny['NAME'])
+        
+        if card not in owned_card_levels_list:
+            update_query = {'$addToSet': {'CARD_LEVELS': {'CARD': str(card), 'LVL': 0, 'TIER': 0, 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
+            r = db.updateVaultNoFilter(vault_query, update_query)
+
+        drop_message.append(f"🎴 **{card}** has been added to your vault!")
+        drop_message.append(f"🎗️ **{title}** has been added to your vault!")
+        drop_message.append(f"🦾 **{arm}** has been added to your vault!")
+
+        for destiny in d.destiny:
+            if card in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
+                db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
+                drop_message.append(f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.")
+
+
+        if new_level == 3:
+            message = "🎊 Congratulations! 🎊 You unlocked **Tales!**. Use the **/tales** command to battle through Universes to earn Cards, Titles, Arms, Summons, and Money!"
+            new_unlock = True
+
+        if new_level == 5:
+            message = "🎊 Congratulations! 🎊 You unlocked **Shop!**. Use the **/shop** command to purchase Cards, Titles and Arms!"
+            new_unlock = True
+
+        if new_level == 8:
+            message = "🎊 Congratulations! 🎊 You unlocked **Crafting!**. Use the **/craft** command to craft Universe Items such as Universe Souls, or even Destiny Line Wins toward Destiny Cards!"
+            new_unlock = True
+
+        if new_level == 10:
+            message = "🎊 Congratulations! 🎊 You unlocked **Trading, Guilds, and Families!**. Use the **/trade** command to Trade Cards, Titles and Arms with other players!\nYou're now able to create Guilds and Families now! Use /help to learn more about Guild and Family commands!"
+            new_unlock = True
+
+        if new_level == 15:
+            message = "🎊 Congratulations! 🎊 You unlocked **PVP & Trinket Shop!**. Use the **/trinketshop** command to purchase Level Ups, Arm Durability Increases and more!\nUse the /**battle** command to PVP against other players!"
+            new_unlock = True
+
+        if new_level == 20:
+            message = "🎊 Congratulations! 🎊 You unlocked **Gifting**. Use the **/gift** command to gift players money!"
+            new_unlock = True
+
+        if new_level == 35:
+            message = "🎊 Congratulations! 🎊 You unlocked **Explore Mode**. Explore Mode allows for Cards to spawn randomly with Bounties! If you defeat the Card you will earn that Card + it's Bounty! Happy Hunting!"
+            new_unlock = True
+
+        if new_level == 40:
+            message = "🎊 Congratulations! 🎊 You unlocked **Dungeons**. Use the **/tales** command and select Dungeons to battle through the Hard Mode of Universes to earn super rare Cards, Titles, and Arms!"
+            new_unlock = True
+
+        if new_level == 60:
+            message = "🎊 Congratulations! 🎊 You unlocked **Bosses**. Use the **/tales** command and select Boss to battle Universe Bosses too earn ultra rare Cards, Titles, and Arms!"
+            new_unlock = True
+
+        return {"MESSAGE": message, "NEW_UNLOCK": new_unlock, "DROP_MESSAGE": drop_message}
+    except Exception as ex:
+        trace = []
+        tb = ex.__traceback__
+        while tb is not None:
+            trace.append({
+                "filename": tb.tb_frame.f_code.co_filename,
+                "name": tb.tb_frame.f_code.co_name,
+                "lineno": tb.tb_lineno
+            })
+            tb = tb.tb_next
+        print(str({
+            'type': type(ex).__name__,
+            'message': str(ex),
+            'trace': trace
+        }))
+        return         
+
 # DONT REMOVE THIS
 cache = dict()
 
@@ -7960,7 +8080,7 @@ async def enemy_approached(self, message, channel, player, selected_mode, univer
         oguild = "RANDOMIZED_BATTLE"
         crestlist = opponent
         crestsearch = bounty
-        await battle_commands(self, message, mode, universe, universe['TITLE'], None, oguild, crestlist, crestsearch, sowner, None, None, None, None, None, None, None, None, None, None, None)
+        await battle_commands(self, message, mode, universe, universe['TITLE'], None, oguild, crestlist, crestsearch, sowner, None, private_channel, None, None, None, None, None, None, None, None, None)
     except Exception as ex:
         trace = []
         tb = ex.__traceback__
@@ -8411,6 +8531,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
 
 async def battle_commands(self, ctx, mode, universe, selected_universe, completed_universes, oguild, crestlist,
                           crestsearch, sowner, oteam, ofam, currentopponent, cowner, cteam, cfam, deckNumber, user, arena_flag, arena_owner, arena_type):
+    private_channel = ctx.channel
     randomized_battle = False
     co_op_modes = ['CTales', 'DTales', 'CDungeon', 'DDungeon', 'CBoss']
     ai_co_op_modes = ['DTales', 'DDungeon']
@@ -8474,6 +8595,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 shield_training_active = crestlist
 
             if oguild == "RANDOMIZED_BATTLE":
+                private_channel = ofam
                 randomized_battle = True
                 opponent = crestlist
                 abyss_scaling = crestsearch
@@ -8544,6 +8666,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 stats = await build_player_stats(self, randomized_battle, ctx, sowner, o, otitle, t, ttitle, mode, None,
                                                  None, oteam, ofam, None, None, None, None, None, None, None, None,
                                                  opponent, None, None)
+            
             elif mode in RAID_MODES:
                 stats = await build_player_stats(self, randomized_battle, ctx, sowner, o, otitle, t, ttitle, mode, hall,
                                                  None, oteam, ofam, None, None, None, None, None, None, None, None,
@@ -8740,6 +8863,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 tpet_image = stats['tpet_image']
                 t_pet_used = stats['t_pet_used']
                 tpetmove_text = stats['tpetmove_text']
+                t_title = ttitle['TITLE']
 
             if mode in B_modes:
                 t_arena = stats['t_arena']
@@ -8872,7 +8996,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 lineup = f"{currentopponent + 1}/{total_legends}"
             options = [1, 2, 3, 4, 5, 0]
 
-            private_channel = ctx.channel
+            
             previous_moves = []
             previous_moves_len = 0
             previous_moves_into_embed = "\n".join(previous_moves)
@@ -13815,6 +13939,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     #                         colour=0xe91e63)
                                                     turn = 0
                                                     await button_ctx.defer(ignore=True)
+                                        except asyncio.TimeoutError:
+                                            await save_spot(self, ctx, universe, mode, currentopponent)
+                                            await ctx.author.send(f"{ctx.author.mention} your game timed out. Your channel has been closed but your spot in the tales has been saved where you last left off.")
+                                            # await discord.TextChannel.delete(private_channel, reason=None)
+                                            return
                                         except Exception as ex:
                                             trace = []
                                             tb = ex.__traceback__
@@ -13830,11 +13959,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 'message': str(ex),
                                                 'trace': trace
                                             }))
-                                        except asyncio.TimeoutError:
-                                            await save_spot(self, ctx, universe, mode, currentopponent)
-                                            await ctx.author.send(f"{ctx.author.mention} your game timed out. Your channel has been closed but your spot in the tales has been saved where you last left off.")
-                                            # await discord.TextChannel.delete(private_channel, reason=None)
-                                            return
                             # Opponent Turn Start
                             
                             elif turn == 1:
@@ -19380,8 +19504,36 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     resp = db.updateUserNoFilter(query, new_query)
 
                                 # await discord.TextChannel.delete(private_channel, reason=None)
+                            if mode == "ABYSS":
+                                if currentopponent != (total_legends):
+                                    embedVar = discord.Embed(title=f"VICTORY\n**{o_card} says**\n{o_win_description}\nThe game lasted {turn_total} rounds.",description=textwrap.dedent(f"""
+                                    {previous_moves_into_embed}
+                                    
+                                    """),colour=0x1abc9c)
 
-                            elif mode not in B_modes:
+                                    embedVar.set_author(name=f"{t_card} lost!")
+                                    # await private_channel.send(embed=embedVar)
+                                    await battle_msg.delete(delay=2)
+                                    await asyncio.sleep(2)
+                                    battle_msg = await private_channel.send(embed=embedVar)
+
+                                    currentopponent = currentopponent + 1
+                                    continued = True
+                                
+                                if currentopponent == (total_legends):
+                                    new_level = floor + 1
+                                    response = db.updateUserNoFilter({'DID': str(ctx.author.id)}, {'$set': {'LEVEL': new_level}})
+                                    abyss_message = abyss_level_up_message(str(ctx.author.id), new_level, t_card, t_title, tarm_name)
+                                    abyss_drop_message = "\n".join(abyss_message['DROP_MESSAGE'])
+                                    await bless(100000, ctx.author)
+                                    await ctx.author.send(f"Abyss Floor {floor} Completed! You have been awarded :coin:100,000!\n{abyss_drop_message}")
+
+                                    if abyss_message['NEW_UNLOCK']:
+                                        await ctx.author.send(abyss_message['MESSAGE'])
+                                        await ctx.send(f"{ctx.author.mention} {abyss_message['MESSAGE']}")
+                                    continued = False
+
+                            elif mode not in B_modes and mode != "ABYSS":
                                 uid = o_DID
                                 ouser = await self.bot.fetch_user(uid)
                                 wintime = time.asctime()
