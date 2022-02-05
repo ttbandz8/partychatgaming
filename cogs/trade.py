@@ -213,11 +213,14 @@ class Trade(commands.Cog):
                         if button_ctx.custom_id == "exit":
                             await button_ctx.send("No change to **Trade**")
                             self.stop = True
+                            return
                         if button_ctx.custom_id == "no":
                             await button_ctx.send("Trade **Cancelled**")                
                             await main.bless(trade_check['MCOIN'], str(ctx.author))
                             await main.bless(trade_check['BCOIN'], str(trade_check['BUYER']))
                             resp = db.deleteTrade(trade_check)
+                            self.stop = True
+                            return
                         if button_ctx.custom_id == "yes":
                             try:
                                 await button_ctx.send("Processing Trade...")

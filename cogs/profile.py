@@ -2222,16 +2222,19 @@ class Profile(commands.Cog):
                     return
                 elif button_ctx.custom_id == "1":
                     response = db.updateVaultNoFilter(vault_query, {'$set': {'DECK.0.CARD' :str(current_card), 'DECK.0.TITLE': str(current_title),'DECK.0.ARM': str(current_arm), 'DECK.0.PET': str(current_pet)}})
-                    await button_ctx.send(response)
-                    return
+                    if response:
+                        await button_ctx.send("📝 1️⃣| Preset Updated!")
+                        return
                 elif button_ctx.custom_id == "2":
                     response = db.updateVaultNoFilter(vault_query, {'$set': {'DECK.1.CARD' :str(current_card), 'DECK.1.TITLE': str(current_title),'DECK.1.ARM': str(current_arm), 'DECK.1.PET': str(current_pet)}})
-                    await button_ctx.send(response)
-                    return
+                    if response:
+                        await button_ctx.send("📝 2️⃣| Preset Updated!")
+                        return
                 elif button_ctx.custom_id == "3":
                     response = db.updateVaultNoFilter(vault_query, {'$set': {'DECK.2.CARD' :str(current_card), 'DECK.2.TITLE': str(current_title),'DECK.2.ARM': str(current_arm), 'DECK.2.PET': str(current_pet)}})
-                    await button_ctx.send(response)
-                    return
+                    if response:
+                        await button_ctx.send("📝 3️⃣| Preset Updated!")
+                        return
             except Exception as ex:
                 trace = []
                 tb = ex.__traceback__
@@ -2838,7 +2841,7 @@ def price_adjuster(price, selected_universe, completed_tales, completed_dungeons
         title_price = round(50000 * .50)
         arm_price = round(25000 * .50)
         c1 = round(30000 * .50)
-        c2 = round(300000 * 50)
+        c2 = round(300000 * .50)
         c3 = round(6000000 * .50)
         message = "**50% Sale**"
 
