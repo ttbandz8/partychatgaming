@@ -5182,6 +5182,8 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, stamina, en
                 enhanced = ap
             else:
                 enhanced = round(ap * turn)
+                if enhanced >= 350:
+                    enhanced = 350
         elif enh_type == 'CREATION':
             if turn == 0:
                 enhanced = ap
@@ -5202,6 +5204,8 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, stamina, en
                 enhanced = ap
             else:
                 enhanced = round(ap * turn)
+                if enhanced >= 350:
+                    enhanced = 350
             if enhanced > op_health:
                 message = f'Opponent has been reduced.'
                 enhanced = op_health - 1
@@ -5709,7 +5713,7 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
                 if turn_total == 0:
                     move_enhanced_ap = round(enh1)
                 elif turn_total % 10 == 0:
-                    move_enhanced_ap = round(enh1 * .50)
+                    move_enhanced_ap = round(enh1 * .75)
                     turn_crit == True
                 elif turn_total >= 1:
                     move_enhanced_ap = round(enh1 / turn_total)
@@ -5718,6 +5722,8 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
             elif enhname in Damage_Enhancer_Check:
                 if turn_total > 0:
                     move_enhanced_ap = round(enh1 * turn_total)
+                    if move_enhanced_ap >= 350:
+                        move_enhanced_ap = 350
                 else:
                     move_enhanced_ap = enh1
             if not turn_crit:
