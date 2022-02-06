@@ -5418,9 +5418,39 @@ def abyss_level_up_message(did, new_level, card, title, arm):
         new_unlock = False
         vault_query = {'DID': did}
         vault = db.altQueryVault(vault_query)
-        db.updateVaultNoFilter(vault_query,{'$addToSet':{'TITLES': str(title)}}) 
-        db.updateVaultNoFilter(vault_query,{'$addToSet':{'ARMS': {'ARM': str(arm), 'DUR': 25}}})
-        db.updateVaultNoFilter(vault_query,{'$addToSet': {'CARDS': str(card)}})
+        
+        
+        
+
+        current_titles = vault['TITLES']
+        if len(current_titles) >=25:
+            drop_message.append("You have max amount of Titles. You did not receive the **Floor Title**.")
+        elif title in current_titles:
+            maxed_out_messages.append(f"You already own {title} so you did not receive it.")
+        else:
+            db.updateVaultNoFilter(vault_query,{'$addToSet':{'TITLES': str(title)}}) 
+            drop_message.append(f"🎗️ **{title}** has been added to your vault!")
+
+        current_arms = []
+        for arm in vault['ARMS']:
+            current_arms.append(arm['ARM'])
+            if len(current_arms) >=25:
+                maxed_out_messages.append("You have max amount of Arms. You did not receive the **Floor Arm**.")
+            elif arm in current_arms:
+                maxed_out_messages.append(f"You already own {arm} so you did not receive it.")
+            else:
+                db.updateVaultNoFilter(vault_query,{'$addToSet':{'ARMS': {'ARM': str(arm), 'DUR': 25}}})
+                drop_message.append(f"🦾 **{arm}** has been added to your vault!")
+
+        current_cards = vault['CARDS']
+        if len(current_cards) >= 25:
+            maxed_out_messages.append("You have max amount of Cards. You did not earn receive **Floor Card**.")
+        elif card in current_cards:
+            maxed_out_messages.append(f"You already own {card} so you did not receive it.")
+        else:
+            db.updateVaultNoFilter(vault_query,{'$addToSet': {'CARDS': str(card)}})
+            drop_message.append(f"🎴 **{card}** has been added to your vault!")
+
         
         owned_card_levels_list = []
         for c in vault['CARD_LEVELS']:
@@ -5434,9 +5464,6 @@ def abyss_level_up_message(did, new_level, card, title, arm):
             update_query = {'$addToSet': {'CARD_LEVELS': {'CARD': str(card), 'LVL': 0, 'TIER': 0, 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
             r = db.updateVaultNoFilter(vault_query, update_query)
 
-        drop_message.append(f"🎴 **{card}** has been added to your vault!")
-        drop_message.append(f"🎗️ **{title}** has been added to your vault!")
-        drop_message.append(f"🦾 **{arm}** has been added to your vault!")
 
         for destiny in d.destiny:
             if card in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
