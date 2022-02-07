@@ -1897,7 +1897,7 @@ class Profile(commands.Cog):
                     else:
                         completed = "🔴"
                     quest_messages.append(textwrap.dedent(f"""\
-                    Defeat **{quest['OPPONENT']}** {quest['GOAL']} times in {quest['TYPE']} for :coin:{'{:,}'.format(quest['REWARD'])}! : {completed}
+                    Defeat **{quest['OPPONENT']}** {quest['GOAL']} times in {quest['TYPE']}\n**Reward**: :coin:{'{:,}'.format(quest['REWARD'])}! : {completed}
                     **Current Progress:** {quest['WINS']}/{quest['GOAL']}
                     
                     """))
@@ -1940,11 +1940,11 @@ class Profile(commands.Cog):
                 name = d['DISNAME'].split("#",1)[0]
                 avatar = d['AVATAR']
                 balance = vault['BALANCE']
-                if balance >= 150000:
+                if balance >= 1000000:
                     icon = ":money_with_wings:"
-                elif balance >=100000:
+                elif balance >=500000:
                     icon = ":moneybag:"
-                elif balance >= 50000:
+                elif balance >= 100000:
                     icon = ":dollar:"
                 if d['TEAM'] != 'PCG':
                     t = db.queryTeam({'TNAME' : d['TEAM']})
