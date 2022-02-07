@@ -178,17 +178,18 @@ class Cards(commands.Cog):
                     tip = f"Defeat {o_show} Boss to earn this card."
                 elif o_attack > o_defense:
                     message = f"{o_card} is an offensive card. "
-                    tip = "Tip: Equipping defensive /titles and /arms would help boost survivability"
+                    tip = f"Tip: Equipping {o_show} /titles and defensive /arms would help boost survivability"
                 elif o_defense > o_attack:
                     message = f"{o_card} is a defensive card. "
-                    tip = "Tip: Equipping offensive /titles and /arms would help boost killability"
+                    tip = f"Tip: Equipping {o_show} /titles and offensive /arms would help boost killability"
                 else:
                     message = f"{o_card} is a balanced card. "
-                    tip = "Tip: Equip /titles and /arms that will maximize your Enhancer"
+                    tip = f"Tip: Equip {o_show} /titles and /arms that will maximize your Enhancer"
 
                 
                 if performance_mode:
                     embedVar = discord.Embed(title=f"{card_icon} {price_message} {o_card}", description=textwrap.dedent(f"""\
+                    :mahjong: {card['TIER']}
                     ❤️ {o_max_health}
                     🗡️ {o_attack}
                     🛡️ {o_defense}
@@ -199,7 +200,7 @@ class Cards(commands.Cog):
                     💥 {move1}: {move1ap}
                     ☄️ {move2}: {move2ap}
                     🏵️ {move3}: {move3ap}
-                    🦠 {move4}: {move4ap}
+                    🦠 {move4}: {move4enh} {move4ap} {passive_enhancer_suffix_mapping[move4enh]}   
 
                     ♾️ {traitmessage}
                     """), colour=000000)
