@@ -9952,13 +9952,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_stamina = round(o_stamina - dmg['DMG'])
                                                         t_stamina = round(t_stamina + dmg['DMG'])
                                                     elif opet_type == 'SLOW':
-                                                        tempstam = round(t_stamina + dmg['DMG'])
-                                                        o_stamina = round(o_stamina - dmg['DMG'])
+                                                        tempstam = round(t_stamina + dmg['DMG']) - 20
+                                                        o_stamina = round(o_stamina - dmg['DMG']) - 20
                                                         t_stamina = o_stamina
                                                         o_stamina = tempstam
                                                     elif opet_type == 'HASTE':
-                                                        tempstam = round(t_stamina - dmg['DMG'])
-                                                        o_stamina = round(o_stamina + dmg['DMG'])
+                                                        tempstam = round(t_stamina - dmg['DMG']) - 20
+                                                        o_stamina = round(o_stamina + dmg['DMG']) - 20
                                                         t_stamina = o_stamina
                                                         o_stamina = tempstam
                                                     elif opet_type == 'SOULCHAIN':
@@ -10105,13 +10105,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_stamina = round(o_stamina - dmg['DMG'])
                                                         t_stamina = round(t_stamina + dmg['DMG'])
                                                     elif enh_type == 'SLOW':
-                                                        tempstam = round(t_stamina + dmg['DMG'])
-                                                        o_stamina = round(o_stamina - dmg['DMG'])
+                                                        tempstam = round(t_stamina + dmg['DMG']) - 20
+                                                        o_stamina = round(o_stamina - dmg['DMG']) - 20
                                                         t_stamina = o_stamina
                                                         o_stamina = tempstam
                                                     elif enh_type == 'HASTE':
-                                                        tempstam = round(t_stamina - dmg['DMG'])
-                                                        o_stamina = round(o_stamina + dmg['DMG'])
+                                                        tempstam = round(t_stamina - dmg['DMG']) - 20
+                                                        o_stamina = round(o_stamina + dmg['DMG']) - 20
                                                         t_stamina = o_stamina
                                                         o_stamina = tempstam
                                                     elif enh_type == 'SOULCHAIN':
@@ -10976,13 +10976,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_stamina = round(t_stamina - dmg['DMG'])
                                                             o_stamina = round(o_stamina + dmg['DMG'])
                                                         elif tpet_type == 'SLOW':
-                                                            tempstam = round(o_stamina + dmg['DMG'])
-                                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                                            tempstam = round(o_stamina + dmg['DMG']) - 20
+                                                            t_stamina = round(t_stamina - dmg['DMG']) - 20
                                                             o_stamina = t_stamina
                                                             t_stamina = tempstam
                                                         elif tpet_type == 'HASTE':
-                                                            tempstam = round(o_stamina - dmg['DMG'])
-                                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                                            tempstam = round(o_stamina - dmg['DMG']) - 20
+                                                            t_stamina = round(t_stamina + dmg['DMG']) - 20
                                                             o_stamina = t_stamina
                                                             t_stamina = tempstam
                                                         elif tpet_type == 'SOULCHAIN':
@@ -11117,13 +11117,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_stamina = round(t_stamina - dmg['DMG'])
                                                             o_stamina = round(o_stamina + dmg['DMG'])
                                                         elif enh_type == 'SLOW':
-                                                            tempstam = round(o_stamina + dmg['DMG'])
-                                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                                            tempstam = round(o_stamina + dmg['DMG']) - 20
+                                                            t_stamina = round(t_stamina - dmg['DMG']) - 20
                                                             o_stamina = t_stamina
                                                             t_stamina = tempstam
                                                         elif enh_type == 'HASTE':
-                                                            tempstam = round(o_stamina - dmg['DMG'])
-                                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                                            tempstam = round(o_stamina - dmg['DMG']) - 20
+                                                            t_stamina = round(t_stamina + dmg['DMG']) - 20
                                                             o_stamina = t_stamina
                                                             t_stamina = tempstam
                                                         elif enh_type == 'SOULCHAIN':
@@ -11726,13 +11726,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_stamina = round(t_stamina - dmg['DMG'])
                                                         o_stamina = round(o_stamina + dmg['DMG'])
                                                     elif tpet_type == 'SLOW':
-                                                        tempstam = round(o_stamina + dmg['DMG'])
-                                                        t_stamina = round(t_stamina - dmg['DMG'])
+                                                        tempstam = round(o_stamina + dmg['DMG']) - 20
+                                                        t_stamina = round(t_stamina - dmg['DMG']) - 20
                                                         o_stamina = t_stamina
                                                         t_stamina = tempstam
                                                     elif tpet_type == 'HASTE':
-                                                        tempstam = round(o_stamina - dmg['DMG'])
-                                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                                        tempstam = round(o_stamina - dmg['DMG']) - 20
+                                                        t_stamina = round(t_stamina + dmg['DMG']) - 20
                                                         o_stamina = t_stamina
                                                         t_stamina = tempstam
                                                     elif tpet_type == 'SOULCHAIN':
@@ -11855,13 +11855,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_stamina = round(t_stamina - dmg['DMG'])
                                                         o_stamina = round(o_stamina + dmg['DMG'])
                                                     elif enh_type == 'SLOW':
-                                                        tempstam = round(o_stamina + dmg['DMG'])
-                                                        t_stamina = round(t_stamina - dmg['DMG'])
+                                                        tempstam = round(o_stamina + dmg['DMG']) - 20
+                                                        t_stamina = round(t_stamina - dmg['DMG']) - 20
                                                         o_stamina = t_stamina
                                                         t_stamina = tempstam
                                                     elif enh_type == 'HASTE':
-                                                        tempstam = round(o_stamina - dmg['DMG'])
-                                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                                        tempstam = round(o_stamina - dmg['DMG']) - 20
+                                                        t_stamina = round(t_stamina + dmg['DMG']) - 20
                                                         o_stamina = t_stamina
                                                         t_stamina = tempstam
                                                     elif enh_type == 'SOULCHAIN':
@@ -12667,13 +12667,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_stamina = round(o_stamina - dmg['DMG'])
                                                         t_stamina = round(t_stamina + dmg['DMG'])
                                                     elif opet_type == 'SLOW':
-                                                        tempstam = round(t_stamina + dmg['DMG'])
-                                                        o_stamina = round(o_stamina - dmg['DMG'])
+                                                        tempstam = round(t_stamina + dmg['DMG']) - 20
+                                                        o_stamina = round(o_stamina - dmg['DMG']) - 20
                                                         t_stamina = o_stamina
                                                         o_stamina = tempstam
                                                     elif opet_type == 'HASTE':
-                                                        tempstam = round(t_stamina - dmg['DMG'])
-                                                        o_stamina = round(o_stamina + dmg['DMG'])
+                                                        tempstam = round(t_stamina - dmg['DMG']) - 20
+                                                        o_stamina = round(o_stamina + dmg['DMG']) - 20
                                                         t_stamina = o_stamina
                                                         o_stamina = tempstam
                                                     elif opet_type == 'SOULCHAIN':
@@ -12779,13 +12779,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_stamina = round(o_stamina - dmg['DMG'])
                                                         t_stamina = round(t_stamina + dmg['DMG'])
                                                     elif enh_type == 'SLOW':
-                                                        tempstam = round(t_stamina + dmg['DMG'])
-                                                        o_stamina = round(o_stamina - dmg['DMG'])
+                                                        tempstam = round(t_stamina + dmg['DMG']) - 20
+                                                        o_stamina = round(o_stamina - dmg['DMG']) - 20
                                                         t_stamina = o_stamina
                                                         o_stamina = tempstam
                                                     elif enh_type == 'HASTE':
-                                                        tempstam = round(t_stamina - dmg['DMG'])
-                                                        o_stamina = round(o_stamina + dmg['DMG'])
+                                                        tempstam = round(t_stamina - dmg['DMG']) - 20
+                                                        o_stamina = round(o_stamina + dmg['DMG']) - 20
                                                         t_stamina = o_stamina
                                                         o_stamina = tempstam
                                                     elif enh_type == 'SOULCHAIN':
@@ -13442,13 +13442,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_stamina = round(o_stamina - dmg['DMG'])
                                                             t_stamina = round(t_stamina + dmg['DMG'])
                                                         elif opet_type == 'SLOW':
-                                                            tempstam = round(t_stamina + dmg['DMG'])
-                                                            o_stamina = round(o_stamina - dmg['DMG'])
+                                                            tempstam = round(t_stamina + dmg['DMG']) - 20
+                                                            o_stamina = round(o_stamina - dmg['DMG']) - 20
                                                             t_stamina = o_stamina
                                                             o_stamina = tempstam
                                                         elif opet_type == 'HASTE':
-                                                            tempstam = round(t_stamina - dmg['DMG'])
-                                                            o_stamina = round(o_stamina + dmg['DMG'])
+                                                            tempstam = round(t_stamina - dmg['DMG']) - 20
+                                                            o_stamina = round(o_stamina + dmg['DMG']) - 20
                                                             t_stamina = o_stamina
                                                             o_stamina = tempstam
                                                         elif opet_type == 'SOULCHAIN':
@@ -13577,13 +13577,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             c_stamina = round(c_stamina - dmg['DMG'])
                                                             o_stamina = round(o_stamina + dmg['DMG'])
                                                         elif comp_enh == 'SLOW':
-                                                            tempstam = round(o_stamina + dmg['DMG'])
-                                                            c_stamina = round(c_stamina - dmg['DMG'])
+                                                            tempstam = round(o_stamina + dmg['DMG']) - 20
+                                                            c_stamina = round(c_stamina - dmg['DMG']) - 20
                                                             o_stamina = c_stamina
                                                             c_stamina = tempstam
                                                         elif comp_enh == 'HASTE':
-                                                            tempstam = round(o_stamina - dmg['DMG'])
-                                                            c_stamina = round(c_stamina + dmg['DMG'])
+                                                            tempstam = round(o_stamina - dmg['DMG']) - 20
+                                                            c_stamina = round(c_stamina + dmg['DMG']) - 20
                                                             o_stamina = c_stamina
                                                             c_stamina = tempstam
                                                         elif comp_enh == 'SOULCHAIN':
@@ -13679,13 +13679,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_stamina = round(o_stamina - dmg['DMG'])
                                                             c_stamina = round(c_stamina + dmg['DMG'])
                                                         elif cenh_type == 'SLOW':
-                                                            tempstam = round(c_stamina + dmg['DMG'])
-                                                            o_stamina = round(o_stamina - dmg['DMG'])
+                                                            tempstam = round(c_stamina + dmg['DMG']) - 20
+                                                            o_stamina = round(o_stamina - dmg['DMG']) - 20
                                                             c_stamina = o_stamina
                                                             o_stamina = tempstam
                                                         elif cenh_type == 'HASTE':
-                                                            tempstam = round(c_stamina - dmg['DMG'])
-                                                            o_stamina = round(o_stamina + dmg['DMG'])
+                                                            tempstam = round(c_stamina - dmg['DMG']) - 20
+                                                            o_stamina = round(o_stamina + dmg['DMG']) - 20
                                                             c_stamina = o_stamina
                                                             o_stamina = tempstam
                                                         elif cenh_type == 'SOULCHAIN':
@@ -13817,13 +13817,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_stamina = round(o_stamina - dmg['DMG'])
                                                             t_stamina = round(t_stamina + dmg['DMG'])
                                                         elif enh_type == 'SLOW':
-                                                            tempstam = round(t_stamina + dmg['DMG'])
-                                                            o_stamina = round(o_stamina - dmg['DMG'])
+                                                            tempstam = round(t_stamina + dmg['DMG']) - 20
+                                                            o_stamina = round(o_stamina - dmg['DMG']) - 20
                                                             t_stamina = o_stamina
                                                             o_stamina = tempstam
                                                         elif enh_type == 'HASTE':
-                                                            tempstam = round(t_stamina - dmg['DMG'])
-                                                            o_stamina = round(o_stamina + dmg['DMG'])
+                                                            tempstam = round(t_stamina - dmg['DMG']) - 20
+                                                            o_stamina = round(o_stamina + dmg['DMG']) - 20
                                                             t_stamina = o_stamina
                                                             o_stamina = tempstam
                                                         elif enh_type == 'SOULCHAIN':
@@ -14765,13 +14765,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_stamina = round(t_stamina - dmg['DMG'])
                                                             c_stamina = round(c_stamina + dmg['DMG'])
                                                         elif tpet_type == 'SLOW':
-                                                            tempstam = round(c_stamina + dmg['DMG'])
-                                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                                            tempstam = round(c_stamina + dmg['DMG']) - 20
+                                                            t_stamina = round(t_stamina - dmg['DMG']) - 20
                                                             c_stamina = t_stamina
                                                             t_stamina = tempstam
                                                         elif tpet_type == 'HASTE':
-                                                            tempstam = round(c_stamina - dmg['DMG'])
-                                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                                            tempstam = round(c_stamina - dmg['DMG']) - 20
+                                                            t_stamina = round(t_stamina + dmg['DMG']) - 20
                                                             c_stamina = t_stamina
                                                             t_stamina = tempstam
                                                         elif tpet_type == 'SOULCHAIN':
@@ -14907,13 +14907,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_stamina = round(t_stamina - dmg['DMG'])
                                                             o_stamina = round(o_stamina + dmg['DMG'])
                                                         elif tpet_type == 'SLOW':
-                                                            tempstam = round(o_stamina + dmg['DMG'])
-                                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                                            tempstam = round(o_stamina + dmg['DMG']) - 20
+                                                            t_stamina = round(t_stamina - dmg['DMG']) - 20
                                                             o_stamina = t_stamina
                                                             t_stamina = tempstam
                                                         elif tpet_type == 'HASTE':
-                                                            tempstam = round(o_stamina - dmg['DMG'])
-                                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                                            tempstam = round(o_stamina - dmg['DMG']) - 20
+                                                            t_stamina = round(t_stamina + dmg['DMG']) - 20
                                                             o_stamina = t_stamina
                                                             t_stamina = tempstam
                                                         elif tpet_type == 'SOULCHAIN':
@@ -15050,13 +15050,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_stamina = round(t_stamina - dmg['DMG'])
                                                         o_stamina = round(o_stamina + dmg['DMG'])
                                                     elif tpet_type == 'SLOW':
-                                                        tempstam = round(o_stamina + dmg['DMG'])
-                                                        t_stamina = round(t_stamina - dmg['DMG'])
+                                                        tempstam = round(o_stamina + dmg['DMG']) - 20
+                                                        t_stamina = round(t_stamina - dmg['DMG']) - 20
                                                         o_stamina = t_stamina
                                                         t_stamina = tempstam
                                                     elif tpet_type == 'HASTE':
-                                                        tempstam = round(o_stamina - dmg['DMG'])
-                                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                                        tempstam = round(o_stamina - dmg['DMG']) - 20
+                                                        t_stamina = round(t_stamina + dmg['DMG']) - 20
                                                         o_stamina = t_stamina
                                                         t_stamina = tempstam
                                                     elif tpet_type == 'SOULCHAIN':
@@ -15179,13 +15179,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_stamina = round(t_stamina - dmg['DMG'])
                                                             c_stamina = round(c_stamina + dmg['DMG'])
                                                         elif enh_type == 'SLOW':
-                                                            tempstam = round(c_stamina + dmg['DMG'])
-                                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                                            tempstam = round(c_stamina + dmg['DMG']) - 20
+                                                            t_stamina = round(t_stamina - dmg['DMG']) - 20
                                                             c_stamina = t_stamina
                                                             t_stamina = tempstam
                                                         elif enh_type == 'HASTE':
-                                                            tempstam = round(c_stamina - dmg['DMG'])
-                                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                                            tempstam = round(c_stamina - dmg['DMG']) - 20
+                                                            t_stamina = round(t_stamina + dmg['DMG']) - 20
                                                             c_stamina = t_stamina
                                                             t_stamina = tempstam
                                                         elif enh_type == 'SOULCHAIN':
@@ -15398,13 +15398,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_stamina = round(t_stamina - dmg['DMG'])
                                                             o_stamina = round(o_stamina + dmg['DMG'])
                                                         elif enh_type == 'SLOW':
-                                                            tempstam = round(o_stamina + dmg['DMG'])
-                                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                                            tempstam = round(o_stamina + dmg['DMG']) - 20
+                                                            t_stamina = round(t_stamina - dmg['DMG']) - 20
                                                             o_stamina = t_stamina
                                                             t_stamina = tempstam
                                                         elif enh_type == 'HASTE':
-                                                            tempstam = round(o_stamina - dmg['DMG'])
-                                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                                            tempstam = round(o_stamina - dmg['DMG']) - 20
+                                                            t_stamina = round(t_stamina + dmg['DMG']) - 20
                                                             o_stamina = t_stamina
                                                             t_stamina = tempstam
                                                         elif enh_type == 'SOULCHAIN':
@@ -15619,13 +15619,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_stamina = round(t_stamina - dmg['DMG'])
                                                         o_stamina = round(o_stamina + dmg['DMG'])
                                                     elif enh_type == 'SLOW':
-                                                        tempstam = round(o_stamina + dmg['DMG'])
-                                                        t_stamina = round(t_stamina - dmg['DMG'])
+                                                        tempstam = round(o_stamina + dmg['DMG']) - 20
+                                                        t_stamina = round(t_stamina - dmg['DMG']) - 20
                                                         o_stamina = t_stamina
                                                         t_stamina = tempstam
                                                     elif enh_type == 'HASTE':
-                                                        tempstam = round(o_stamina - dmg['DMG'])
-                                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                                        tempstam = round(o_stamina - dmg['DMG']) - 20
+                                                        t_stamina = round(t_stamina + dmg['DMG']) - 20
                                                         o_stamina = t_stamina
                                                         t_stamina = tempstam
                                                     elif enh_type == 'SOULCHAIN':
@@ -16518,13 +16518,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             c_stamina = round(c_stamina - dmg['DMG'])
                                                             t_stamina = round(t_stamina + dmg['DMG'])
                                                         elif cpet_type == 'SLOW':
-                                                            tempstam = round(t_stamina + dmg['DMG'])
-                                                            c_stamina = round(c_stamina - dmg['DMG'])
+                                                            tempstam = round(t_stamina + dmg['DMG']) - 20
+                                                            c_stamina = round(c_stamina - dmg['DMG']) - 20
                                                             t_stamina = c_stamina
                                                             c_stamina = tempstam
                                                         elif cpet_type == 'HASTE':
-                                                            tempstam = round(t_stamina - dmg['DMG'])
-                                                            c_stamina = round(c_stamina + dmg['DMG'])
+                                                            tempstam = round(t_stamina - dmg['DMG']) - 20
+                                                            c_stamina = round(c_stamina + dmg['DMG']) - 20
                                                             t_stamina = c_stamina
                                                             c_stamina = tempstam
                                                         elif cpet_type == 'SOULCHAIN':
@@ -16651,13 +16651,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_stamina = round(o_stamina - dmg['DMG'])
                                                         c_stamina = round(c_stamina + dmg['DMG'])
                                                     elif cenh_type == 'SLOW':
-                                                        tempstam = round(c_stamina + dmg['DMG'])
-                                                        o_stamina = round(o_stamina - dmg['DMG'])
+                                                        tempstam = round(c_stamina + dmg['DMG']) - 20
+                                                        o_stamina = round(o_stamina - dmg['DMG']) - 20
                                                         c_stamina = o_stamina
                                                         o_stamina = tempstam
                                                     elif cenh_type == 'HASTE':
-                                                        tempstam = round(c_stamina - dmg['DMG'])
-                                                        o_stamina = round(o_stamina + dmg['DMG'])
+                                                        tempstam = round(c_stamina - dmg['DMG']) - 20
+                                                        o_stamina = round(o_stamina + dmg['DMG']) - 20
                                                         c_stamina = o_stamina
                                                         o_stamina = tempstam
                                                     elif cenh_type == 'SOULCHAIN':
@@ -16766,13 +16766,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             c_stamina = round(c_stamina - dmg['DMG'])
                                                             t_stamina = round(t_stamina + dmg['DMG'])
                                                         elif enh_type == 'SLOW':
-                                                            tempstam = round(t_stamina + dmg['DMG'])
-                                                            c_stamina = round(c_stamina - dmg['DMG'])
+                                                            tempstam = round(t_stamina + dmg['DMG']) - 20
+                                                            c_stamina = round(c_stamina - dmg['DMG']) - 20
                                                             t_stamina = c_stamina
                                                             c_stamina = tempstam
                                                         elif enh_type == 'HASTE':
-                                                            tempstam = round(t_stamina - dmg['DMG'])
-                                                            c_stamina = round(c_stamina + dmg['DMG'])
+                                                            tempstam = round(t_stamina - dmg['DMG']) - 20
+                                                            c_stamina = round(c_stamina + dmg['DMG']) - 20
                                                             t_stamina = c_stamina
                                                             c_stamina = tempstam
                                                         elif enh_type == 'SOULCHAIN':
@@ -17430,13 +17430,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 c_stamina = round(c_stamina - dmg['DMG'])
                                                                 t_stamina = round(t_stamina + dmg['DMG'])
                                                             elif cpet_type == 'SLOW':
-                                                                tempstam = round(t_stamina + dmg['DMG'])
-                                                                c_stamina = round(c_stamina - dmg['DMG'])
+                                                                tempstam = round(t_stamina + dmg['DMG']) - 20
+                                                                c_stamina = round(c_stamina - dmg['DMG']) - 20
                                                                 t_stamina = c_stamina
                                                                 c_stamina = tempstam
                                                             elif cpet_type == 'HASTE':
-                                                                tempstam = round(t_stamina - dmg['DMG'])
-                                                                c_stamina = round(c_stamina + dmg['DMG'])
+                                                                tempstam = round(t_stamina - dmg['DMG']) - 20
+                                                                c_stamina = round(c_stamina + dmg['DMG']) - 20
                                                                 t_stamina = c_stamina
                                                                 c_stamina = tempstam
                                                             elif cpet_type == 'SOULCHAIN':
@@ -17564,13 +17564,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_stamina = round(o_stamina - dmg['DMG'])
                                                             c_stamina = round(c_stamina + dmg['DMG'])
                                                         elif cenh_type == 'SLOW':
-                                                            tempstam = round(c_stamina + dmg['DMG'])
-                                                            o_stamina = round(o_stamina - dmg['DMG'])
+                                                            tempstam = round(c_stamina + dmg['DMG']) - 20
+                                                            o_stamina = round(o_stamina - dmg['DMG']) - 20
                                                             c_stamina = o_stamina
                                                             o_stamina = tempstam
                                                         elif cenh_type == 'HASTE':
-                                                            tempstam = round(c_stamina - dmg['DMG'])
-                                                            o_stamina = round(o_stamina + dmg['DMG'])
+                                                            tempstam = round(c_stamina - dmg['DMG']) - 20
+                                                            o_stamina = round(o_stamina + dmg['DMG']) - 20
                                                             c_stamina = o_stamina
                                                             o_stamina = tempstam
                                                         elif cenh_type == 'SOULCHAIN':
@@ -17684,13 +17684,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 c_stamina = round(c_stamina - dmg['DMG'])
                                                                 t_stamina = round(t_stamina + dmg['DMG'])
                                                             elif enh_type == 'SLOW':
-                                                                tempstam = round(t_stamina + dmg['DMG'])
-                                                                c_stamina = round(c_stamina - dmg['DMG'])
+                                                                tempstam = round(t_stamina + dmg['DMG']) - 20
+                                                                c_stamina = round(c_stamina - dmg['DMG']) - 20
                                                                 t_stamina = c_stamina
                                                                 c_stamina = tempstam
                                                             elif enh_type == 'HASTE':
-                                                                tempstam = round(t_stamina - dmg['DMG'])
-                                                                c_stamina = round(c_stamina + dmg['DMG'])
+                                                                tempstam = round(t_stamina - dmg['DMG']) - 20
+                                                                c_stamina = round(c_stamina + dmg['DMG']) - 20
                                                                 t_stamina = c_stamina
                                                                 c_stamina = tempstam
                                                             elif enh_type == 'SOULCHAIN':
@@ -18574,13 +18574,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_stamina = round(t_stamina - dmg['DMG'])
                                                             o_stamina = round(o_stamina + dmg['DMG'])
                                                         elif tpet_type == 'SLOW':
-                                                            tempstam = round(o_stamina + dmg['DMG'])
-                                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                                            tempstam = round(o_stamina + dmg['DMG']) - 20
+                                                            t_stamina = round(t_stamina - dmg['DMG']) - 20
                                                             o_stamina = t_stamina
                                                             t_stamina = tempstam
                                                         elif tpet_type == 'HASTE':
-                                                            tempstam = round(o_stamina - dmg['DMG'])
-                                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                                            tempstam = round(o_stamina - dmg['DMG']) - 20
+                                                            t_stamina = round(t_stamina + dmg['DMG']) - 20
                                                             o_stamina = t_stamina
                                                             t_stamina = tempstam
                                                         elif tpet_type == 'SOULCHAIN':
@@ -18701,13 +18701,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_stamina = round(t_stamina - dmg['DMG'])
                                                             c_stamina = round(c_stamina + dmg['DMG'])
                                                         elif tpet_type == 'SLOW':
-                                                            tempstam = round(c_stamina + dmg['DMG'])
-                                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                                            tempstam = round(c_stamina + dmg['DMG']) - 20
+                                                            t_stamina = round(t_stamina - dmg['DMG']) - 20
                                                             c_stamina = t_stamina
                                                             t_stamina = tempstam
                                                         elif tpet_type == 'HASTE':
-                                                            tempstam = round(c_stamina - dmg['DMG'])
-                                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                                            tempstam = round(c_stamina - dmg['DMG']) - 20
+                                                            t_stamina = round(t_stamina + dmg['DMG']) - 20
                                                             c_stamina = t_stamina
                                                             t_stamina = tempstam
                                                         elif tpet_type == 'SOULCHAIN':
@@ -18826,13 +18826,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_stamina = round(t_stamina - dmg['DMG'])
                                                             o_stamina = round(o_stamina + dmg['DMG'])
                                                         elif enh_type == 'SLOW':
-                                                            tempstam = round(o_stamina + dmg['DMG'])
-                                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                                            tempstam = round(o_stamina + dmg['DMG']) - 20
+                                                            t_stamina = round(t_stamina - dmg['DMG']) - 20
                                                             o_stamina = t_stamina
                                                             t_stamina = tempstam
                                                         elif enh_type == 'HASTE':
-                                                            tempstam = round(o_stamina - dmg['DMG'])
-                                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                                            tempstam = round(o_stamina - dmg['DMG']) - 20
+                                                            t_stamina = round(t_stamina + dmg['DMG']) - 20
                                                             o_stamina = t_stamina
                                                             t_stamina = tempstam
                                                         elif enh_type == 'SOULCHAIN':
@@ -19050,13 +19050,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_stamina = round(t_stamina - dmg['DMG'])
                                                             c_stamina = round(c_stamina + dmg['DMG'])
                                                         elif enh_type == 'SLOW':
-                                                            tempstam = round(c_stamina + dmg['DMG'])
-                                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                                            tempstam = round(c_stamina + dmg['DMG']) - 20
+                                                            t_stamina = round(t_stamina - dmg['DMG']) - 20
                                                             c_stamina = t_stamina
                                                             t_stamina = tempstam
                                                         elif enh_type == 'HASTE':
-                                                            tempstam = round(c_stamina - dmg['DMG'])
-                                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                                            tempstam = round(c_stamina - dmg['DMG']) - 20
+                                                            t_stamina = round(t_stamina + dmg['DMG']) - 20
                                                             c_stamina = t_stamina
                                                             t_stamina = tempstam
                                                         elif enh_type == 'SOULCHAIN':

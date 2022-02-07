@@ -590,7 +590,7 @@ class Trade(commands.Cog):
                     coins = round(int_coins)
                     bank = vault['BALANCE']
                     if mode == 'add':
-                        if bank >= int(x):
+                        if bank >= coins:
                             await main.curse(coins, ctx.author)
                             if mvalidation ==True:
                                 trade_query = {'MERCHANT' : str(ctx.author), 'BUYER': str(mtrade['BUYER']), 'OPEN' : True}
