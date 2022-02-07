@@ -1650,11 +1650,11 @@ async def trinketshop(ctx):
    *Experience Boost Applied to* **{current_card}**
    *Arm Durabilty Applied to* **{current_arm}**
 
-   🔋 1️⃣ **1,500EXP** for :coin: **80,000**
+   🔋 1️⃣ **10 Levels** for :coin: **80,000**
    
-   🔋 2️⃣ **4,500EXP** for :dollar: **220,000**
+   🔋 2️⃣ **30 Levels** for :dollar: **220,000**
 
-   🔋 3️⃣ **15,000EXP** for :moneybag: **650,000**
+   🔋 3️⃣ **100 Levels** for :moneybag: **650,000**
 
    ⚒️ 4️⃣ **25 Durability** for :moneybag: **25,000**
 
@@ -1672,7 +1672,6 @@ async def trinketshop(ctx):
       return button_ctx.author == ctx.author
 
    try:
-      print("TESTING")
       button_ctx: ComponentContext = await manage_components.wait_for_component(bot, components=[sell_buttons_action_row, util_sell_buttons_action_row], timeout=120,check=check)
       levels_gained = 0
       price = 0
