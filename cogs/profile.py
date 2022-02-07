@@ -277,6 +277,7 @@ class Profile(commands.Cog):
                 #<:PCG:769471288083218432>
                 if performance_mode:
                     embedVar = discord.Embed(title=f"{licon}{card_lvl} {o_card}".format(self), description=textwrap.dedent(f"""\
+                    :mahjong: **{card_tier}**
                     ❤️ **{o_max_health}**
                     🗡️ **{o_attack}**
                     🛡️ **{o_defense}**
