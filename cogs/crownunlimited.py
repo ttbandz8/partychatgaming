@@ -1147,22 +1147,6 @@ class CrownUnlimited(commands.Cog):
             vault = db.altQueryVault({'DID': str(ctx.author.id)})
             maxed_out_messages = []
             bad_message = ""
-            current_titles = vault['TITLES']
-            if len(current_titles) >=25:
-                maxed_out_messages.append("You have max amount of Titles. You won't be able to earn the **Floor Title**.")
-
-            current_arms = []
-            for arm in vault['ARMS']:
-                current_arms.append(arm['ARM'])
-                if len(current_arms) >=25:
-                    maxed_out_messages.append("You have max amount of Arms. You won't be able to earn the **Floor Arm**.")
-
-            current_cards = vault['CARDS']
-            if len(current_cards) >= 25:
-                maxed_out_messages.append("You have max amount of Cards. You won't be able to earn the **Floor Card**.")
-
-            if maxed_out_messages:
-                bad_message = "\n".join(maxed_out_messages)
                  
             oteam = sowner['TEAM']
             ofam = sowner['FAMILY']
@@ -1170,6 +1154,24 @@ class CrownUnlimited(commands.Cog):
 
             checks = db.queryCard({'NAME': sowner['CARD']})
             abyss = db.queryAbyss({'FLOOR': sowner['LEVEL']})
+
+            if abyss['FLOOR'] in abyss_floor_reward_list:
+                current_titles = vault['TITLES']
+                if len(current_titles) >=25:
+                    maxed_out_messages.append("You have max amount of Titles. You won't be able to earn the **Floor Title**.")
+
+                current_arms = []
+                for arm in vault['ARMS']:
+                    current_arms.append(arm['ARM'])
+                    if len(current_arms) >=25:
+                        maxed_out_messages.append("You have max amount of Arms. You won't be able to earn the **Floor Arm**.")
+
+                current_cards = vault['CARDS']
+                if len(current_cards) >= 25:
+                    maxed_out_messages.append("You have max amount of Cards. You won't be able to earn the **Floor Card**.")
+
+                if maxed_out_messages:
+                    bad_message = "\n".join(maxed_out_messages)
 
             if not abyss:
                 await ctx.send("The **Abyss** has shifted. More floors will be available soon.")
@@ -4885,6 +4887,7 @@ async def summonlevel(pet, player):
 
 async def cardlevel(self, card: str, player: str, mode: str, universe: str):
     vault = db.queryVault({'OWNER': str(player)})
+    card_uni = db.queryCard({'NAME': card})['UNIVERSE']
     user = await self.bot.fetch_user(vault['DID'])
 
     cardinfo = {}
@@ -4893,8 +4896,10 @@ async def cardlevel(self, card: str, player: str, mode: str, universe: str):
             cardinfo = x
     
     has_universe_heart = False
+
+    
     for gems in vault['GEMS']:
-        if gems['UNIVERSE'] == universe and gems['UNIVERSE_HEART']:
+        if gems['UNIVERSE'] == card_uni and gems['UNIVERSE_HEART']:
             has_universe_heart = True
 
 
@@ -4939,11 +4944,11 @@ async def cardlevel(self, card: str, player: str, mode: str, universe: str):
             response = db.updateVault(query, update_query, filter_query)
             await user.send(f"**{card}** leveled up!")
 
-    if lvl < 500 and lvl > 200 and has_universe_heart:
+    if lvl < 500 and lvl >= 200 and has_universe_heart:
         # Experience Code
         if exp < (lvl_req - 1):
             query = {'OWNER': str(player)}
-            update_query = {'$inc': {'CARD_LEVELS.$[type].' + "EXP": 35}}
+            update_query = {'$inc': {'CARD_LEVELS.$[type].' + "EXP": exp_gain}}
             filter_query = [{'type.' + "CARD": str(card)}]
             response = db.updateVault(query, update_query, filter_query)
 
@@ -5415,7 +5420,7 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, stamina, en
             }))
             return
 
-def abyss_level_up_message(did, new_level, card, title, arm):
+def abyss_level_up_message(did, floor, card, title, arm):
     try:
         message = ""
         drop_message = []
@@ -5423,91 +5428,89 @@ def abyss_level_up_message(did, new_level, card, title, arm):
         vault_query = {'DID': did}
         vault = db.altQueryVault(vault_query)
         
-        
-        
-
-        current_titles = vault['TITLES']
-        if len(current_titles) >=25:
-            drop_message.append("You have max amount of Titles. You did not receive the **Floor Title**.")
-        elif title in current_titles:
-            maxed_out_messages.append(f"You already own {title} so you did not receive it.")
-        else:
-            db.updateVaultNoFilter(vault_query,{'$addToSet':{'TITLES': str(title)}}) 
-            drop_message.append(f"🎗️ **{title}** has been added to your vault!")
-
-        current_arms = []
-        for arm in vault['ARMS']:
-            current_arms.append(arm['ARM'])
-            if len(current_arms) >=25:
-                maxed_out_messages.append("You have max amount of Arms. You did not receive the **Floor Arm**.")
-            elif arm in current_arms:
-                maxed_out_messages.append(f"You already own {arm} so you did not receive it.")
+        if floor in abyss_floor_reward_list:
+            current_titles = vault['TITLES']
+            if len(current_titles) >=25:
+                drop_message.append("You have max amount of Titles. You did not receive the **Floor Title**.")
+            elif title in current_titles:
+                maxed_out_messages.append(f"You already own {title} so you did not receive it.")
             else:
-                db.updateVaultNoFilter(vault_query,{'$addToSet':{'ARMS': {'ARM': str(arm), 'DUR': 25}}})
-                drop_message.append(f"🦾 **{arm}** has been added to your vault!")
+                db.updateVaultNoFilter(vault_query,{'$addToSet':{'TITLES': str(title)}}) 
+                drop_message.append(f"🎗️ **{title}** has been added to your vault!")
 
-        current_cards = vault['CARDS']
-        if len(current_cards) >= 25:
-            maxed_out_messages.append("You have max amount of Cards. You did not earn receive **Floor Card**.")
-        elif card in current_cards:
-            maxed_out_messages.append(f"You already own {card} so you did not receive it.")
-        else:
-            db.updateVaultNoFilter(vault_query,{'$addToSet': {'CARDS': str(card)}})
-            drop_message.append(f"🎴 **{card}** has been added to your vault!")
+            current_arms = []
+            for arm in vault['ARMS']:
+                current_arms.append(arm['ARM'])
+                if len(current_arms) >=25:
+                    maxed_out_messages.append("You have max amount of Arms. You did not receive the **Floor Arm**.")
+                elif arm in current_arms:
+                    maxed_out_messages.append(f"You already own {arm} so you did not receive it.")
+                else:
+                    db.updateVaultNoFilter(vault_query,{'$addToSet':{'ARMS': {'ARM': str(arm), 'DUR': 25}}})
+                    drop_message.append(f"🦾 **{arm}** has been added to your vault!")
 
-        
-        owned_card_levels_list = []
-        for c in vault['CARD_LEVELS']:
-            owned_card_levels_list.append(c['CARD'])
+            current_cards = vault['CARDS']
+            if len(current_cards) >= 25:
+                maxed_out_messages.append("You have max amount of Cards. You did not earn receive **Floor Card**.")
+            elif card in current_cards:
+                maxed_out_messages.append(f"You already own {card} so you did not receive it.")
+            else:
+                db.updateVaultNoFilter(vault_query,{'$addToSet': {'CARDS': str(card)}})
+                drop_message.append(f"🎴 **{card}** has been added to your vault!")
 
-        owned_destinies = []
-        for destiny in vault['DESTINY']:
-            owned_destinies.append(destiny['NAME'])
-        
-        if card not in owned_card_levels_list:
-            update_query = {'$addToSet': {'CARD_LEVELS': {'CARD': str(card), 'LVL': 0, 'TIER': 0, 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
-            r = db.updateVaultNoFilter(vault_query, update_query)
+            
+            owned_card_levels_list = []
+            for c in vault['CARD_LEVELS']:
+                owned_card_levels_list.append(c['CARD'])
+
+            owned_destinies = []
+            for destiny in vault['DESTINY']:
+                owned_destinies.append(destiny['NAME'])
+            
+            if card not in owned_card_levels_list:
+                update_query = {'$addToSet': {'CARD_LEVELS': {'CARD': str(card), 'LVL': 0, 'TIER': 0, 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
+                r = db.updateVaultNoFilter(vault_query, update_query)
 
 
-        for destiny in d.destiny:
-            if card in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
-                db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
-                drop_message.append(f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.")
+            for destiny in d.destiny:
+                if card in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
+                    db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
+                    drop_message.append(f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.")
 
 
-        if new_level == 3:
+        if floor == 3:
             message = "🎊 Congratulations! 🎊 You unlocked **Tales!**. Use the **/tales** command to battle through Universes to earn Cards, Titles, Arms, Summons, and Money!"
             new_unlock = True
 
-        if new_level == 5:
+        if floor == 5:
             message = "🎊 Congratulations! 🎊 You unlocked **Shop!**. Use the **/shop** command to purchase Cards, Titles and Arms!"
             new_unlock = True
 
-        if new_level == 8:
+        if floor == 8:
             message = "🎊 Congratulations! 🎊 You unlocked **Crafting!**. Use the **/craft** command to craft Universe Items such as Universe Souls, or even Destiny Line Wins toward Destiny Cards!"
             new_unlock = True
 
-        if new_level == 10:
+        if floor == 10:
             message = "🎊 Congratulations! 🎊 You unlocked **Trading, Guilds, and Families!**. Use the **/trade** command to Trade Cards, Titles and Arms with other players!\nYou're now able to create Guilds and Families now! Use /help to learn more about Guild and Family commands!"
             new_unlock = True
 
-        if new_level == 15:
+        if floor == 15:
             message = "🎊 Congratulations! 🎊 You unlocked **PVP & Trinket Shop!**. Use the **/trinketshop** command to purchase Level Ups, Arm Durability Increases and more!\nUse the /**battle** command to PVP against other players!"
             new_unlock = True
 
-        if new_level == 20:
+        if floor == 20:
             message = "🎊 Congratulations! 🎊 You unlocked **Gifting**. Use the **/gift** command to gift players money!"
             new_unlock = True
 
-        if new_level == 35:
+        if floor == 35:
             message = "🎊 Congratulations! 🎊 You unlocked **Explore Mode**. Explore Mode allows for Cards to spawn randomly with Bounties! If you defeat the Card you will earn that Card + it's Bounty! Happy Hunting!"
             new_unlock = True
 
-        if new_level == 40:
+        if floor == 40:
             message = "🎊 Congratulations! 🎊 You unlocked **Dungeons**. Use the **/tales** command and select Dungeons to battle through the Hard Mode of Universes to earn super rare Cards, Titles, and Arms!"
             new_unlock = True
 
-        if new_level == 60:
+        if floor == 60:
             message = "🎊 Congratulations! 🎊 You unlocked **Bosses**. Use the **/tales** command and select Boss to battle Universe Bosses too earn ultra rare Cards, Titles, and Arms!"
             new_unlock = True
 
@@ -19805,7 +19808,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 if currentopponent == (total_legends):
                                     new_level = floor + 1
                                     response = db.updateUserNoFilter({'DID': str(ctx.author.id)}, {'$set': {'LEVEL': new_level}})
-                                    abyss_message = abyss_level_up_message(str(ctx.author.id), new_level, t_card, t_title, tarm_name)
+                                    abyss_message = abyss_level_up_message(str(ctx.author.id), floor, t_card, t_title, tarm_name)
                                     abyss_drop_message = "\n".join(abyss_message['DROP_MESSAGE'])
                                     await bless(100000, ctx.author)
                                     await ctx.author.send(f"Abyss Floor {floor} Completed! You have been awarded :coin:100,000!\n{abyss_drop_message}")
@@ -21117,6 +21120,8 @@ title_enhancer_suffix_mapping = {'ATK': ' Flat',
 'BARRIER': ' Blocks 💠',
 'PARRY': ' Counters 🔄'
 }
+
+abyss_floor_reward_list = [10,20,30,40,50,60,70,80,90,100]
 
 crown_rift_universe_mappings = {'Crown Rift Awakening': 3, 'Crown Rift Slayers': 2, 'Crown Rift Madness': 5}
 Healer_Enhancer_Check = ['HLT', 'LIFE']
