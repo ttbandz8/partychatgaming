@@ -25,7 +25,7 @@ traits = [{
 },{
     'NAME': 'Bleach',
     'EFFECT': 'Bankai',
-    'TRAIT': 'Gain double Attack on Resolve.'
+    'TRAIT': 'Gain double (Plus Turn Count) Attack on Resolve.'
 },{
     'NAME': 'Attack On Titan',
     'EFFECT': 'Rally',
