@@ -2070,7 +2070,7 @@ class Profile(commands.Cog):
                                             for pet in ownedpets:
                                                 if preset1_pet in ownedpets:
                                                     response = db.updateUserNoFilter(query, {'$set': {'CARD': str(preset1_card), 'TITLE': str(preset1_title),'ARM': str(preset1_arm), 'PET': str(preset1_pet)}})
-                                                    await button_ctx.send(response)
+                                                    await button_ctx.send(f"{ctx.author.mention}, your build updated successfully!")
                                                     return
                                                 else:
                                                     await button_ctx.send(f"{ctx.author.mention}, You No Longer Own {preset1_pet}", hidden=True)
@@ -2094,7 +2094,7 @@ class Profile(commands.Cog):
                                             for pet in ownedpets:
                                                 if preset2_pet in ownedpets:
                                                     response = db.updateUserNoFilter(query, {'$set': {'CARD': str(preset2_card), 'TITLE': str(preset2_title),'ARM': str(preset2_arm), 'PET': str(preset2_pet)}})
-                                                    await button_ctx.send(response)
+                                                    await button_ctx.send(f"{ctx.author.mention}, your build updated successfully!")
                                                     return
                                                 else:
                                                     await button_ctx.send(f"{ctx.author.mention}, You No Longer Own {preset2_pet}")
@@ -2118,7 +2118,7 @@ class Profile(commands.Cog):
                                             for pet in ownedpets:
                                                 if preset3_pet in ownedpets:
                                                     response = db.updateUserNoFilter(query, {'$set': {'CARD': str(preset3_card), 'TITLE': str(preset3_title),'ARM': str(preset3_arm), 'PET': str(preset3_pet)}})
-                                                    await button_ctx.send(response)
+                                                    await button_ctx.send(f"{ctx.author.mention}, your build updated successfully!")
                                                     return
                                                 else:
                                                     await button_ctx.send(f"{ctx.author.mention}, You No Longer Own {preset3_pet}")
@@ -2655,8 +2655,13 @@ class Profile(commands.Cog):
                 Welcome {ctx.author.mention}!
                 Your equipped card is **{card_info['NAME']}**
                 💟 **Universe Heart:** 💎 20,000
+                *Grants ability to level past 200*
+
                 🌹 **Universe Soul:** 💎 50,000
+                *Grants double exp in this Universe*
+
                 ✨ **Destiny Line:** 💎 50,000
+                *Grants win for a Destiny Line*
                 """), colour=0x7289da)
                 embedVar.set_image(url=universe_image)
                 embed_list.append(embedVar)

@@ -41,7 +41,7 @@ import destiny as d
 class CrownUnlimited(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self._cd = commands.CooldownMapping.from_cooldown(1, 3,
+        self._cd = commands.CooldownMapping.from_cooldown(1, 1500,
                                                           commands.BucketType.member)  # Change accordingly. Currently every 8 minutes (3600 seconds == 60 minutes)
         self._lvl_cd = commands.CooldownMapping.from_cooldown(1, 600,
                                                           commands.BucketType.member)
@@ -2743,7 +2743,7 @@ class CrownUnlimited(commands.Cog):
 
         #                                 o_stamina = o_stamina + o_resolve
         #                                 o_health = o_health + o_resolve_health
-        #                                 o_attack = round((o_attack + (2 * o_resolve_attack)) * 2)
+        #                                 o_attack = round((o_attack + (2 * o_resolve_attack)) * 2 + turn_total)
         #                                 o_defense = round(o_defense - o_resolve_defense)
         #                                 # if o_defense >= 120:
         #                                 # o_defense = 120
@@ -3578,7 +3578,7 @@ class CrownUnlimited(commands.Cog):
 
         #                             t_stamina = t_stamina + t_resolve
         #                             t_health = t_health + t_resolve_health
-        #                             t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
+        #                             t_attack = round((t_attack + (2 * t_resolve_attack)) * 2 + turn_total)
         #                             t_defense = round(t_defense - t_resolve_defense)
         #                             # if t_defense >= 120:
         #                             # t_defense = 120
@@ -4896,23 +4896,34 @@ async def cardlevel(self, card: str, player: str, mode: str, universe: str):
             cardinfo = x
     
     has_universe_heart = False
+    has_universe_soul = False
 
     
     for gems in vault['GEMS']:
         if gems['UNIVERSE'] == card_uni and gems['UNIVERSE_HEART']:
             has_universe_heart = True
+        if gems['UNIVERSE'] == card_uni and gems['UNIVERSE_SOUL']:
+            has_universe_soul = True
 
 
     lvl = cardinfo['LVL']
     lvl_req = 150
     exp = cardinfo['EXP']
     exp_gain = 0
-    if mode == "Dungeon":
-        exp_gain = 30
-    if mode == "Tales":
-        exp_gain = 15
-    if mode == "Purchase":
-        exp_gain = 150
+    if has_universe_soul:
+        if mode == "Dungeon":
+            exp_gain = 65
+        if mode == "Tales":
+            exp_gain = 35
+        if mode == "Purchase":
+            exp_gain = 150
+    else:
+        if mode == "Dungeon":
+            exp_gain = 30
+        if mode == "Tales":
+            exp_gain = 15
+        if mode == "Purchase":
+            exp_gain = 150
 
 
     hlt_buff = 0
@@ -9686,6 +9697,35 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     await button_ctx.defer(ignore=True)
                                                     turn_total = turn_total + 1
                                                     turn = 0
+
+                                                if o_universe == "Demon Slayer": 
+                                                    # fortitude or luck is based on health
+                                                    fortitude = 0.0
+                                                    low = o_health - (o_health * .75)
+                                                    high = o_health - (o_health * .66)
+                                                    fortitude = random.randint(int(low), int(high))
+                                                    # Resolve Scaling
+                                                    o_resolve_health = round(fortitude + (.5 * o_resolve))
+                                                    o_resolve_attack = round(
+                                                        (.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                                    o_resolve_defense = round(
+                                                        (.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                                    ap3 = ap3 * 2
+
+                                                    o_stamina = o_stamina + o_resolve
+                                                    o_health = o_health + o_resolve_health
+                                                    o_attack = round(o_attack + o_resolve_attack)
+                                                    o_defense = round(o_defense - o_resolve_defense)
+                                                    o_used_resolve = True
+                                                    o_pet_used = False
+                                                    embedVar = discord.Embed(title=f"{o_card} begins Total Concentration Breathing",
+                                                                            description=f"**{o_card} says**\n{o_resolve_description}",
+                                                                            colour=0xe91e63)
+                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Total Concentration Breathing!")
+                                                    await button_ctx.defer(ignore=True)
+                                                    turn_total = turn_total + 1
+                                                    turn = 1
+
                                                 if o_universe == "Attack On Titan":
                                                     # fortitude or luck is based on health
                                                     fortitude = 0.0
@@ -9733,7 +9773,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                     o_stamina = o_stamina + o_resolve
                                                     o_health = o_health + o_resolve_health
-                                                    o_attack = round((o_attack + (2 * o_resolve_attack)) * 2)
+                                                    o_attack = round((o_attack + (2 * o_resolve_attack)) * 2 + turn_total)
                                                     o_defense = round(o_defense - o_resolve_defense)
                                                     # if o_defense >= 120:
                                                     # o_defense = 120
@@ -10717,6 +10757,34 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         await button_ctx.defer(ignore=True)
                                                         turn_total = turn_total + 1
                                                         turn = 1
+                                                    if t_universe == "Demon Slayer": 
+                                                        # fortitude or luck is based on health
+                                                        fortitude = 0.0
+                                                        low = t_health - (t_health * .75)
+                                                        high = t_health - (t_health * .66)
+                                                        fortitude = random.randint(int(low), int(high))
+                                                        # Resolve Scaling
+                                                        t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                                        t_resolve_attack = round(
+                                                            (.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                                        t_resolve_defense = round(
+                                                            (.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                                        tap3 = tap3 * 2
+
+                                                        t_stamina = t_stamina + t_resolve
+                                                        t_health = t_health + t_resolve_health
+                                                        t_attack = round(t_attack + t_resolve_attack)
+                                                        t_defense = round(t_defense - t_resolve_defense)
+                                                        t_used_resolve = True
+                                                        t_pet_used = False
+                                                        embedVar = discord.Embed(title=f"{t_card} begins Total Concentration Breathing",
+                                                                                description=f"**{t_card} says**\n{t_resolve_description}",
+                                                                                colour=0xe91e63)
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Total Concentration Breathing!")
+                                                        await button_ctx.defer(ignore=True)
+                                                        turn_total = turn_total + 1
+                                                        turn = 0
+
                                                     elif t_universe == "Attack On Titan":
                                                         # fortitude or luck is based on health
                                                         fortitude = 0.0
@@ -10764,7 +10832,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                         t_stamina = t_stamina + t_resolve
                                                         t_health = t_health + t_resolve_health
-                                                        t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
+                                                        t_attack = round((t_attack + (2 * t_resolve_attack)) * 2 + turn_total)
                                                         t_defense = round(t_defense - t_resolve_defense)
                                                         # if t_defense >= 120:
                                                         # t_defense = 120
@@ -11480,6 +11548,34 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: PLUS ULTRA!")
                                                     turn_total = turn_total + 1
                                                     turn = 1
+                                                if t_universe == "Demon Slayer": 
+                                                    # fortitude or luck is based on health
+                                                    fortitude = 0.0
+                                                    low = t_health - (t_health * .75)
+                                                    high = t_health - (t_health * .66)
+                                                    fortitude = random.randint(int(low), int(high))
+                                                    # Resolve Scaling
+                                                    t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                                    t_resolve_attack = round(
+                                                        (.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                                    t_resolve_defense = round(
+                                                        (.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                                    tap3 = tap3 * 2
+
+                                                    t_stamina = t_stamina + t_resolve
+                                                    t_health = t_health + t_resolve_health
+                                                    t_attack = round(t_attack + t_resolve_attack)
+                                                    t_defense = round(t_defense - t_resolve_defense)
+                                                    t_used_resolve = True
+                                                    t_pet_used = False
+                                                    embedVar = discord.Embed(title=f"{t_card} begins Total Concentration Breathing",
+                                                                            description=f"**{t_card} says**\n{t_resolve_description}",
+                                                                            colour=0xe91e63)
+                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Total Concentration Breathing!")
+                                                
+                                                    turn_total = turn_total + 1
+                                                    turn = 0
+
                                                 elif t_universe == "Attack On Titan":
                                                     # fortitude or luck is based on health
                                                     fortitude = 0.0
@@ -11526,7 +11622,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                     t_stamina = t_stamina + t_resolve
                                                     t_health = t_health + t_resolve_health
-                                                    t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
+                                                    t_attack = round((t_attack + (2 * t_resolve_attack)) * 2 + turn_total)
                                                     t_defense = round(t_defense - t_resolve_defense)
                                                     # if t_defense >= 120:
                                                     # t_defense = 120
@@ -12465,6 +12561,35 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                     turn_total = turn_total + 1
                                                     turn = 0
+                                                if o_universe == "Demon Slayer": 
+                                                    # fortitude or luck is based on health
+                                                    fortitude = 0.0
+                                                    low = o_health - (o_health * .75)
+                                                    high = o_health - (o_health * .66)
+                                                    fortitude = random.randint(int(low), int(high))
+                                                    # Resolve Scaling
+                                                    o_resolve_health = round(fortitude + (.5 * o_resolve))
+                                                    o_resolve_attack = round(
+                                                        (.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                                    o_resolve_defense = round(
+                                                        (.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                                    ap3 = ap3 * 2
+
+                                                    o_stamina = o_stamina + o_resolve
+                                                    o_health = o_health + o_resolve_health
+                                                    o_attack = round(o_attack + o_resolve_attack)
+                                                    o_defense = round(o_defense - o_resolve_defense)
+                                                    o_used_resolve = True
+                                                    o_pet_used = False
+                                                    embedVar = discord.Embed(title=f"{o_card} begins Total Concentration Breathing",
+                                                                            description=f"**{o_card} says**\n{o_resolve_description}",
+                                                                            colour=0xe91e63)
+                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Total Concentration Breathing!")
+                                                    await button_ctx.defer(ignore=True)
+                                                    turn_total = turn_total + 1
+                                                    turn = 1
+
+
                                                 elif o_universe == "Attack On Titan":
                                                     # fortitude or luck is based on health
                                                     fortitude = 0.0
@@ -12504,7 +12629,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                     o_stamina = o_stamina + o_resolve
                                                     o_health = o_health + o_resolve_health
-                                                    o_attack = round((o_attack + (2 * o_resolve_attack)) * 2)
+                                                    o_attack = round((o_attack + (2 * o_resolve_attack)) * 2 + turn_total)
                                                     o_defense = round(o_defense - o_resolve_defense)
                                                     # # if o_defense >= 120:
                                                     # o_defense = 120
@@ -13141,6 +13266,36 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                         turn_total = turn_total + 1
                                                         turn = 0
+
+                                                    if o_universe == "Demon Slayer": 
+                                                        # fortitude or luck is based on health
+                                                        fortitude = 0.0
+                                                        low = o_health - (o_health * .75)
+                                                        high = o_health - (o_health * .66)
+                                                        fortitude = random.randint(int(low), int(high))
+                                                        # Resolve Scaling
+                                                        o_resolve_health = round(fortitude + (.5 * o_resolve))
+                                                        o_resolve_attack = round(
+                                                            (.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                                        o_resolve_defense = round(
+                                                            (.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                                        ap3 = ap3 * 2
+
+                                                        o_stamina = o_stamina + o_resolve
+                                                        o_health = o_health + o_resolve_health
+                                                        o_attack = round(o_attack + o_resolve_attack)
+                                                        o_defense = round(o_defense - o_resolve_defense)
+                                                        o_used_resolve = True
+                                                        o_pet_used = False
+                                                        embedVar = discord.Embed(title=f"{o_card} begins Total Concentration Breathing",
+                                                                                description=f"**{o_card} says**\n{o_resolve_description}",
+                                                                                colour=0xe91e63)
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Total Concentration Breathing!")
+                                                        await button_ctx.defer(ignore=True)
+                                                        turn_total = turn_total + 1
+                                                        turn = 1
+
+
                                                     elif o_universe == "Attack On Titan":
                                                         # fortitude or luck is based on health
                                                         fortitude = 0.0
@@ -13193,7 +13348,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                         o_stamina = o_stamina + o_resolve
                                                         o_health = o_health + o_resolve_health
-                                                        o_attack = round((o_attack + (2 * o_resolve_attack)) * 2)
+                                                        o_attack = round((o_attack + (2 * o_resolve_attack)) * 2 + turn_total)
                                                         o_defense = round(o_defense - o_resolve_defense)
                                                         # if o_defense >= 120:
                                                         # # o_defense = 120
@@ -14502,6 +14657,36 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: PLUS ULTRA!")
                                                 turn_total = turn_total + 1
                                                 turn = 1
+
+                                            if t_universe == "Demon Slayer": 
+                                                # fortitude or luck is based on health
+                                                fortitude = 0.0
+                                                low = t_health - (t_health * .75)
+                                                high = t_health - (t_health * .66)
+                                                fortitude = random.randint(int(low), int(high))
+                                                # Resolve Scaling
+                                                t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                                t_resolve_attack = round(
+                                                    (.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                                t_resolve_defense = round(
+                                                    (.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                                tap3 = tap3 * 2
+
+                                                t_stamina = t_stamina + t_resolve
+                                                t_health = t_health + t_resolve_health
+                                                t_attack = round(t_attack + t_resolve_attack)
+                                                t_defense = round(t_defense - t_resolve_defense)
+                                                t_used_resolve = True
+                                                t_pet_used = False
+                                                embedVar = discord.Embed(title=f"{t_card} begins Total Concentration Breathing",
+                                                                        description=f"**{t_card} says**\n{t_resolve_description}",
+                                                                        colour=0xe91e63)
+                                                previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Total Concentration Breathing!")
+
+                                                turn_total = turn_total + 1
+                                                turn = turn_selector
+
+
                                             elif t_universe == "Attack On Titan":
                                                 # fortitude or luck is based on health
                                                 fortitude = 0.0
@@ -14544,7 +14729,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                 t_stamina = t_stamina + t_resolve
                                                 t_health = t_health + t_resolve_health
-                                                t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
+                                                t_attack = round((t_attack + (2 * t_resolve_attack)) * 2 + turn_total)
                                                 t_defense = round(t_defense - t_resolve_defense)
                                                 # if t_defense >= 120:
                                                 # t_defense = 120
@@ -16264,6 +16449,35 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                         turn_total = turn_total + 1
                                                         turn = 2
+
+                                                    if c_universe == "Demon Slayer": 
+                                                        # fortitude or luck is based on health
+                                                        fortitude = 0.0
+                                                        low = c_health - (c_health * .75)
+                                                        high = c_health - (c_health * .66)
+                                                        fortitude = random.randint(int(low), int(high))
+                                                        # Resolve Scaling
+                                                        c_resolve_health = round(fortitude + (.5 * c_resolve))
+                                                        c_resolve_attack = round(
+                                                            (.30 * c_defense) * (c_resolve / (.50 * c_defense)))
+                                                        c_resolve_defense = round(
+                                                            (.30 * c_defense) * (c_resolve / (.50 * c_defense)))
+                                                        cap3 = cap3 * 2
+
+                                                        c_stamina = c_stamina + c_resolve
+                                                        c_health = c_health + c_resolve_health
+                                                        c_attack = round(c_attack + c_resolve_attack)
+                                                        c_defense = round(c_defense - c_resolve_defense)
+                                                        c_used_resolve = True
+                                                        c_pet_used = False
+                                                        embedVar = discord.Embed(title=f"{c_card} begins Total Concentration Breathing",
+                                                                                description=f"**{c_card} says**\n{c_resolve_description}",
+                                                                                colour=0xe91e63)
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: Total Concentration Breathing!")
+                                                        
+                                                        turn_total = turn_total + 1
+                                                        turn = 0
+
                                                     elif c_universe == "Attack On Titan":
                                                         # fortitude or luck is based on health
                                                         fortitude = 0.0
@@ -16311,7 +16525,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                         c_stamina = c_stamina + c_resolve
                                                         c_health = c_health + c_resolve_health
-                                                        c_attack = round((c_attack + (2 * c_resolve_attack)) * 2)
+                                                        c_attack = round((c_attack + (2 * c_resolve_attack)) * 2 + turn_total)
                                                         c_defense = round(c_defense - c_resolve_defense)
                                                         # if c_defense >= 120:
                                                         # c_defense = 120
@@ -17167,6 +17381,37 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             await button_ctx.defer(ignore=True)
                                                             turn_total = turn_total + 1
                                                             turn = 2
+                                                        
+                                                        if c_universe == "Demon Slayer": 
+                                                            # fortitude or luck is based on health
+                                                            fortitude = 0.0
+                                                            low = c_health - (c_health * .75)
+                                                            high = c_health - (c_health * .66)
+                                                            fortitude = random.randint(int(low), int(high))
+                                                            # Resolve Scaling
+                                                            c_resolve_health = round(fortitude + (.5 * c_resolve))
+                                                            c_resolve_attack = round(
+                                                                (.30 * c_defense) * (c_resolve / (.50 * c_defense)))
+                                                            c_resolve_defense = round(
+                                                                (.30 * c_defense) * (c_resolve / (.50 * c_defense)))
+                                                            cap3 = cap3 * 2
+
+                                                            c_stamina = c_stamina + c_resolve
+                                                            c_health = c_health + c_resolve_health
+                                                            c_attack = round(c_attack + c_resolve_attack)
+                                                            c_defense = round(c_defense - c_resolve_defense)
+                                                            c_used_resolve = True
+                                                            c_pet_used = False
+                                                            embedVar = discord.Embed(title=f"{c_card} begins Total Concentration Breathing",
+                                                                                    description=f"**{c_card} says**\n{c_resolve_description}",
+                                                                                    colour=0xe91e63)
+                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: Total Concentration Breathing!")
+                                                            await button_ctx.defer(ignore=True)
+                                                            turn_total = turn_total + 1
+                                                            turn = 0
+
+
+                                                        
                                                         elif c_universe == "Attack On Titan":
                                                             # fortitude or luck is based on health
                                                             fortitude = 0.0
@@ -17213,7 +17458,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                             c_stamina = c_stamina + c_resolve
                                                             c_health = c_health + c_resolve_health
-                                                            c_attack = round((c_attack + (2 * c_resolve_attack)) * 2)
+                                                            c_attack = round((c_attack + (2 * c_resolve_attack)) * 2  + turn_total)
                                                             c_defense = round(c_defense - c_resolve_defense)
                                                             # if c_defense >= 120:
                                                             # c_defense = 120
@@ -18299,6 +18544,36 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     #await private_channel.send(embed=embedVar)
                                                     turn_total = turn_total + 1
                                                     turn = 3
+                                                
+                                                if t_universe == "Demon Slayer": 
+                                                    # fortitude or luck is based on health
+                                                    fortitude = 0.0
+                                                    low = t_health - (t_health * .75)
+                                                    high = t_health - (t_health * .66)
+                                                    fortitude = random.randint(int(low), int(high))
+                                                    # Resolve Scaling
+                                                    t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                                    t_resolve_attack = round(
+                                                        (.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                                    t_resolve_defense = round(
+                                                        (.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                                    tap3 = tap3 * 2
+
+                                                    t_stamina = t_stamina + t_resolve
+                                                    t_health = t_health + t_resolve_health
+                                                    t_attack = round(t_attack + t_resolve_attack)
+                                                    t_defense = round(t_defense - t_resolve_defense)
+                                                    t_used_resolve = True
+                                                    t_pet_used = False
+                                                    embedVar = discord.Embed(title=f"{t_card} begins Total Concentration Breathing",
+                                                                            description=f"**{t_card} says**\n{t_resolve_description}",
+                                                                            colour=0xe91e63)
+                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Total Concentration Breathing!")
+                                                    
+                                                    turn_total = turn_total + 1
+                                                    turn = 0
+
+                                                
                                                 elif t_universe == "Attack On Titan":
                                                     # fortitude or luck is based on health
                                                     fortitude = 0.0
@@ -18345,7 +18620,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                     t_stamina = t_stamina + t_resolve
                                                     t_health = t_health + t_resolve_health
-                                                    t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
+                                                    t_attack = round((t_attack + (2 * t_resolve_attack)) * 2 + turn_total)
                                                     t_defense = round(t_defense - t_resolve_defense)
                                                     # if t_defense >= 120:
                                                     # t_defense = 120

@@ -25,7 +25,7 @@ traits = [{
 },{
     'NAME': 'Bleach',
     'EFFECT': 'Bankai',
-    'TRAIT': 'Gain double Attack on Resolve.'
+    'TRAIT': 'Gain double (Plus Turn Count) Attack on Resolve.'
 },{
     'NAME': 'Attack On Titan',
     'EFFECT': 'Rally',
@@ -41,7 +41,7 @@ traits = [{
 },{
     'NAME': 'Demon Slayer',
     'EFFECT': 'Total Concentration Constant',
-    'TRAIT': 'At match start, if your oppponent has greater health, Your health = Opponent Health.'
+    'TRAIT': 'At match start, if your oppponent has greater health, Your health = Opponent Health. Your Ultimate AP doubles once you resolve.'
 },{
     'NAME': 'God Of War',
     'EFFECT': 'Ascension',
