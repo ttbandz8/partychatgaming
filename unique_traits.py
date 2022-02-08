@@ -5,7 +5,7 @@ traits = [{
 },{
     'NAME': 'League Of Legends',
     'EFFECT': 'Turret Shot',
-    'TRAIT': 'When you Focus you deal 30 damage to Opponent. Upon Resolve, you deal 30 x (Your Focus Count + Opponent Focus Count) damage.'
+    'TRAIT': 'When you Focus you deal 30 damage to Opponent. Upon Resolve, you deal 60 x (Total Focus Count) damage.'
 },{
     'NAME': 'Pokemon',
     'EFFECT': 'Evolution',
@@ -13,7 +13,7 @@ traits = [{
 },{
     'NAME': 'Digimon',
     'EFFECT': 'Digivolve',
-    'TRAIT': 'On Focus you Resolve.'
+    'TRAIT': 'On Focus you Resolve. If turn count < 5 double ATK and DEF'
 },{
     'NAME': 'Naruto',
     'EFFECT': 'Substitution',
@@ -72,8 +72,8 @@ traits = [{
     'TRAIT': 'When you die, Resolve with 75% ATK + DEF as Health'
 },{
     'NAME': 'Crown Rift Slayers',
-    'EFFECT': 'Follow Up Attack',
-    'TRAIT': 'If you miss, Hit!'
+    'EFFECT': 'Feint Attack',
+    'TRAIT': 'If you miss, Crit!'
 },{
     'NAME': 'Crown Rift Awakening',
     'EFFECT': 'Blood Awakening',

@@ -5385,8 +5385,8 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, stamina, en
 
             if hit_roll <= miss_hit:
                 if universe == 'Crown Rift Slayers':
-                    true_dmg = round(true_dmg)
-                    message = f'⚔️ {move} used Twice! The first strike misses but second hits for **{true_dmg}**! :bangbang:'
+                    true_dmg = round(true_dmg * 2)
+                    message = f'🩸 Feint Attack! {move} Critically Hits for **{true_dmg}**!! :boom: '
                 else:
                     true_dmg = 0
                     message = f'⚔️ {move} misses! :dash:'
@@ -5402,7 +5402,7 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, stamina, en
             elif hit_roll == 20:
                 if universe == 'Crown Rift Awakening':
                     true_dmg = round(true_dmg * 4)
-                    message = f"⚔️ {move} used! Mortally Wounds for **{true_dmg}**!! :boom: "
+                    message = f"🩸 Blood Awakeking! {move} Mortally Wounds for **{true_dmg}**!! :boom: "
                 else:
                     true_dmg = round(true_dmg * 2)
                     message = f"⚔️ {move} used! Critically Hits for **{true_dmg}**!! :boom: "
@@ -9358,7 +9358,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 description=f"**{o_card} says**\n{o_resolve_description}",
                                                                 colour=0xe91e63)
                                         embedVar.add_field(name=f"Transformation: Digivolve", value="On Focus you Resolve.")
-                                        previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Transformation: Digivolve")
+                                        
                                         # fortitude or luck is based on health
                                         fortitude = 0.0
                                         low = o_health - (o_health * .75)
@@ -9375,7 +9375,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         o_defense = round(o_defense - o_resolve_defense)
                                         o_used_resolve = True
                                         o_pet_used = False
-
+                                        if turn_total <=5:
+                                            o_attack = round(o_attack * 2)
+                                            o_defense = round(o_defense * 2 )
+                                            previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Transformation: Mega Digivolution!!!")
+                                        else:
+                                            previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Transformation: Digivolve")
 
                                     elif o_universe == "League Of Legends":
                                         embedVar = discord.Embed(title=f"Turret Shot hits {t_card} for **60** Damage 💥",
@@ -10494,7 +10499,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 description=f"**{t_card} says**\n{t_resolve_description}",
                                                                 colour=0xe91e63)
                                         embedVar.add_field(name=f"Transformation: Digivolve", value="On Focus you Resolve.")
-                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Transformation: Digivolve")
+                                        if turn_total <=5:
+                                            t_attack = round(t_attack * 2)
+                                            t_defense = round(t_defense * 2 )
+                                            previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Transformation: Mega Digivolution!!!")
+                                        else:
+                                            previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Transformation: Digivolve")
                                     elif t_universe == "League Of Legends":
                                         embedVar = discord.Embed(title=f"Turret Shot hits {o_card} for **60** Damage 💥",
                                                                 colour=0xe91e63)
@@ -12283,7 +12293,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 description=f"**{o_card} says**\n{o_resolve_description}",
                                                                 colour=0xe91e63)
                                         embedVar.add_field(name=f"Transformation: Digivolve", value="On Focus you Resolve.")
-                                        previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Transformation: Digivolve")
+                                        #previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Transformation: Digivolve")
                                         # await private_channel.send(embed=embedVar)
                                         # fortitude or luck is based on health
                                         fortitude = 0.0
@@ -12301,6 +12311,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         o_defense = round(o_defense - o_resolve_defense)
                                         o_used_resolve = True
                                         o_pet_used = False
+                                        if turn_total <=5:
+                                            o_attack = round(o_attack * 2)
+                                            o_defense = round(o_defense * 2 )
+                                            previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Transformation: Mega Digivolution!!!")
+                                        else:
+                                            previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Transformation: Digivolve")
 
                                     elif o_universe == "League Of Legends":
                                         embedVar = discord.Embed(title=f"Turret Shot hits {t_card} for **60** Damage 💥",
@@ -14325,7 +14341,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 description=f"**{t_card} says**\n{t_resolve_description}",
                                                                 colour=0xe91e63)
                                         embedVar.add_field(name=f"Transformation: Digivolve", value="On Focus you Resolve.")
-                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Transformation: Digivolve")
+                                        if turn_total <=5:
+                                            t_attack = round(t_attack * 2)
+                                            t_defense = round(t_defense * 2 )
+                                            previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Transformation: Mega Digivolution!!!")
+                                        else:
+                                            previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Transformation: Digivolve")
                                         if mode in B_modes:
                                             embedVar = discord.Embed(title=f"**{t_card}** Resolved!", description=f"{t_rmessage}",
                                                                     colour=0xe91e63)
@@ -16085,7 +16106,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     colour=0xe91e63)
                                             embedVar.add_field(name=f"Transformation: Digivolve", value="On Focus you Resolve.")
                                             #await private_channel.send(embed=embedVar)
-                                            previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Transformation: Digivolve")
                                             # fortitude or luck is based on health
                                             fortitude = 0.0
                                             low = o_health - (o_health * .75)
@@ -16102,6 +16122,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             c_defense = round(c_defense - c_resolve_defense)
                                             c_used_resolve = True
                                             c_pet_used = False
+                                            if turn_total <=5:
+                                                c_attack = round(c_attack * 2)
+                                                c_defense = round(c_defense * 2 )
+                                                previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Transformation: Mega Digivolution!!!")
+                                            else:
+                                                previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Transformation: Digivolve")
 
 
                                         elif c_universe == "League Of Legends":
@@ -18260,7 +18286,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     colour=0xe91e63)
                                             embedVar.add_field(name=f"Transformation: Digivolve", value="On Focus you Resolve.")
                                             #await private_channel.send(embed=embedVar)
-                                            previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Transformation: Digivolve")
+                                            if turn_total <=5:
+                                                t_attack = round(t_attack * 2)
+                                                t_defense = round(t_defense * 2 )
+                                                previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Transformation: Mega Digivolution!!!")
+                                            else:
+                                                previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Transformation: Digivolve")
+
 
                                         elif t_universe == "League Of Legends":
                                             embedVar = discord.Embed(title=f"Turret Shot hits {c_card} for **60** Damage 💥",
