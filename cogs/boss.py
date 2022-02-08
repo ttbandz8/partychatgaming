@@ -120,6 +120,10 @@ class Boss(commands.Cog):
             vault_query = {'OWNER' : str(ctx.author)}
             vault = db.queryVault(vault_query)
             userinfo = db.queryUser({"DISNAME" : str(ctx.author)})
+            
+            if userinfo['LEVEL'] < 100:
+                await ctx.send(f"🔓 Unlock **Soul Exchange** by completing **Floor 100** of the 🌑 Abyss! Use /abyss to enter the abyss.")
+                return
             bossname = boss
             cardname = card
             boss_info = db.queryBoss({'NAME': {"$regex": str(bossname), "$options": "i"}})

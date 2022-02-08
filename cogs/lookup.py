@@ -362,7 +362,7 @@ class Lookup(commands.Cog):
                 for blades in sword_team['MEMBERS']:
                     blade_count = blade_count + 1
                 sword_bank = sword_team['BANK']
-                sword_list.append(f"~ {swords} ~ W**{dubs}** / L**{els}**\n:man_detective: | **Owner: **{sword_team['OWNER']}\n:coin: | **Bank: **{'{:,}'.format(sword_bank)}\n:knife: | **Blades: **{blade_count}\n_______________________")
+                sword_list.append(f"~ {swords} ~ W**{dubs}** / L**{els}**\n:man_detective: | **Owner: **{sword_team['OWNER']}\n:coin: | **Bank: **{'{:,}'.format(sword_bank)}\n:knife: | **Members: **{blade_count}\n_______________________")
             crest_list = []
             for c in crest:
                 crest_list.append(f"{Crest_dict[c]} | {c}")

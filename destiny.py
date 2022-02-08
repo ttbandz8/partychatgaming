@@ -2598,16 +2598,6 @@ destiny = [
         "UNIVERSE": "Fate"
     },
     {
-        "NAME": "Trained By Roshi",
-        "WINS": 0,
-        "REQUIRED": 5,
-        "DEFEAT": "Goku",
-        "USE_CARDS": ["Master Roshi"],
-        "EARN": "Goku", 
-        "COMPLETED": False,
-        "UNIVERSE": "Dragon Ball Z"
-    },
-    {
         "NAME": "Red Ribbon 13",
         "WINS": 0,
         "REQUIRED": 10,

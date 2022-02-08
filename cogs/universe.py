@@ -68,7 +68,7 @@ class Universe(commands.Cog):
                         prerecmessage = "Complete Battles To Open Crown Rifts!"
                     else:
                         prerec = "Starter Universe"
-                        prerecmessage = "Complete this Starter Tale to unlock additional Universes!"
+                        prerecmessage = "Complete this Season 1 Tale to unlock rewards!"
                 owner = universe['GUILD']
                 ownermessage = f"{universe_title} is owned by the {owner} Guild!"
                 if owner == "PCG":
