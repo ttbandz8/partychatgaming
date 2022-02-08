@@ -41,7 +41,7 @@ import destiny as d
 class CrownUnlimited(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self._cd = commands.CooldownMapping.from_cooldown(1, 3,
+        self._cd = commands.CooldownMapping.from_cooldown(1, 1500,
                                                           commands.BucketType.member)  # Change accordingly. Currently every 8 minutes (3600 seconds == 60 minutes)
         self._lvl_cd = commands.CooldownMapping.from_cooldown(1, 600,
                                                           commands.BucketType.member)
@@ -4896,23 +4896,34 @@ async def cardlevel(self, card: str, player: str, mode: str, universe: str):
             cardinfo = x
     
     has_universe_heart = False
+    has_universe_soul = False
 
     
     for gems in vault['GEMS']:
         if gems['UNIVERSE'] == card_uni and gems['UNIVERSE_HEART']:
             has_universe_heart = True
+        if gems['UNIVERSE'] == card_uni and gems['UNIVERSE_SOUL']:
+            has_universe_soul = True
 
 
     lvl = cardinfo['LVL']
     lvl_req = 150
     exp = cardinfo['EXP']
     exp_gain = 0
-    if mode == "Dungeon":
-        exp_gain = 30
-    if mode == "Tales":
-        exp_gain = 15
-    if mode == "Purchase":
-        exp_gain = 150
+    if has_universe_soul:
+        if mode == "Dungeon":
+            exp_gain = 65
+        if mode == "Tales":
+            exp_gain = 35
+        if mode == "Purchase":
+            exp_gain = 150
+    else:
+        if mode == "Dungeon":
+            exp_gain = 30
+        if mode == "Tales":
+            exp_gain = 15
+        if mode == "Purchase":
+            exp_gain = 150
 
 
     hlt_buff = 0

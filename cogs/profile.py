@@ -2655,8 +2655,13 @@ class Profile(commands.Cog):
                 Welcome {ctx.author.mention}!
                 Your equipped card is **{card_info['NAME']}**
                 💟 **Universe Heart:** 💎 20,000
+                *Grants ability to level past 200*
+
                 🌹 **Universe Soul:** 💎 50,000
+                *Grants double exp in this Universe*
+
                 ✨ **Destiny Line:** 💎 50,000
+                *Grants win for a Destiny Line*
                 """), colour=0x7289da)
                 embedVar.set_image(url=universe_image)
                 embed_list.append(embedVar)
