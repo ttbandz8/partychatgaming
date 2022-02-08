@@ -143,6 +143,9 @@ class Boss(commands.Cog):
                         uboss_show = boss_info['UNIVERSE']
                         card_show = card_info['UNIVERSE']
                         if uboss_show == card_show:
+                            if card_info['HAS_COLLECTION']:
+                                await ctx.send(f"You can not use exchange on Destiny cards.")
+                                return
                             card_owned = False
                             for c in vault['CARD_LEVELS']:
                                 if c['CARD'] == str(card_info['NAME']):
