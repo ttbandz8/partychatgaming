@@ -2014,7 +2014,7 @@ destiny = [
         "WINS": 0,
         "REQUIRED": 3,
         "DEFEAT": "Rui",
-        "USE_CARDS": ["Giyu"],
+        "USE_CARDS": ["Giyu Tomioka"],
         "EARN": "Rui",
         "COMPLETED": False,
         "UNIVERSE": "Demon Slayer"
