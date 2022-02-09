@@ -1962,7 +1962,7 @@ destiny = [
     {
         "NAME": "The Invisible Mentor",
         "WINS": 0,
-        "REQUIRED": 15,
+        "REQUIRED": 2,
         "DEFEAT": "Hand Demon",
         "USE_CARDS": ["Tanjiro Kamado"],
         "EARN": "Sabito",
@@ -1972,13 +1972,44 @@ destiny = [
     {
         "NAME": "For Nezukuo",
         "WINS": 0,
-        "REQUIRED": 40,
+        "REQUIRED": 25,
         "DEFEAT": "Muzan Kibutsuji",
         "USE_CARDS": ["Tanjiro Kamado"],
         "EARN": "Muzan Kibutsuji",
         "COMPLETED": False,
         "UNIVERSE": "Demon Slayer"
     },
+    {
+        "NAME": "My Dear Nezuko",
+        "WINS": 0,
+        "REQUIRED": 3,
+        "DEFEAT": "Nezuko Kamado",
+        "USE_CARDS": ["Tanjiro Kamado"],
+        "EARN": "Nezuko Kamado",
+        "COMPLETED": False,
+        "UNIVERSE": "Demon Slayer"
+    },
+    {
+        "NAME": "Train Wreck",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Azaka",
+        "USE_CARDS": ["Kyojuro Rengoku"],
+        "EARN": "Azaka",
+        "COMPLETED": False,
+        "UNIVERSE": "Demon Slayer"
+    },
+    {
+        "NAME": "A Dance In The Water Stance",
+        "WINS": 0,
+        "REQUIRED": 3,
+        "DEFEAT": "Rui",
+        "USE_CARDS": ["Giyu"],
+        "EARN": "Rui",
+        "COMPLETED": False,
+        "UNIVERSE": "Demon Slayer"
+    },
+
     {
         "NAME": "Masters Awakening",
         "WINS": 0,
