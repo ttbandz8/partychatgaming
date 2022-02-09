@@ -9,11 +9,11 @@ traits = [{
 },{
     'NAME': 'Pokemon',
     'EFFECT': 'Evolution',
-    'TRAIT': 'When you Resolve your Defense doubles.'
+    'TRAIT': 'When you Resolve your Defense Doubles.'
 },{
     'NAME': 'Digimon',
     'EFFECT': 'Digivolve',
-    'TRAIT': 'On Focus you Resolve. If turn count < 5 double ATK and DEF'
+    'TRAIT': 'On Focus you Resolve. Mega Digivolution: If turn count < 5 Double ATK and DEF'
 },{
     'NAME': 'Naruto',
     'EFFECT': 'Substitution',
@@ -21,11 +21,11 @@ traits = [{
 },{
     'NAME': 'Chainsawman',
     'EFFECT': 'Devilization',
-    'TRAIT': 'When health reaches 50% gain double ATK and double DEF. Strong Fear Infliction.'
+    'TRAIT': 'When Health reaches 50% gain Double ATK and Double DEF. Strong Fear Infliction.'
 },{
     'NAME': 'Bleach',
     'EFFECT': 'Bankai',
-    'TRAIT': 'Gain double (Plus Turn Count) Attack on Resolve.'
+    'TRAIT': 'Gain Double Attack on Resolve.'
 },{
     'NAME': 'Attack On Titan',
     'EFFECT': 'Rally',
@@ -41,7 +41,7 @@ traits = [{
 },{
     'NAME': 'Demon Slayer',
     'EFFECT': 'Total Concentration Constant',
-    'TRAIT': 'At match start, if your oppponent has greater health, Your health = Opponent Health. Your Ultimate AP doubles once you resolve.'
+    'TRAIT': 'At match start, if your oppponent has greater Health, Your Health = Opponent Health. Your Ultimate AP Doubles once you Resolve.'
 },{
     'NAME': 'God Of War',
     'EFFECT': 'Ascension',
@@ -57,11 +57,11 @@ traits = [{
 },{
     'NAME': 'Solo Leveling',
     'EFFECT': 'Rulers Authority',
-    'TRAIT': 'When you focus, opponent loses (30 + turn count) defense'
+    'TRAIT': 'When you Focus, opponent loses (30 + turn count) defense'
 },{
     'NAME': 'Souls',
     'EFFECT': 'Combo Recognition',
-    'TRAIT': 'When your opponent focus, gain (30 + turn count) attack'
+    'TRAIT': 'When your opponent Focus, gain (30 + turn count) attack'
 },{
     'NAME': 'Death Note',
     'EFFECT': 'Scheduled Death',
