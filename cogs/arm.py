@@ -305,7 +305,8 @@ enhancer_mapping = {'ATK': 'Increase Attack %',
 'MANA': 'Increase Enchancer AP',
 'SHIELD': 'Blocks Incoming DMG, until broken',
 'BARRIER': 'Nullifies Incoming Attacks, until broken',
-'PARRY': 'Returns 25% Damage, until broken'
+'PARRY': 'Returns 25% Damage, until broken',
+'SIPHON': 'Heal for 10% DMG inflicted + AP'
 }
 enhancer_suffix_mapping = {'ATK': '%',
 'DEF': '%',
@@ -339,5 +340,6 @@ enhancer_suffix_mapping = {'ATK': '%',
 'MANA': ' %',
 'SHIELD': ' DMG 🌐',
 'BARRIER': ' Blocks 💠',
-'PARRY': ' Counters 🔄'
+'PARRY': ' Counters 🔄',
+'SIPHON': ' Healing 💉'
 }

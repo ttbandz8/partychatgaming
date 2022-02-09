@@ -557,10 +557,24 @@ async def crown(ctx):
 
 @slash.slash(description="Register for Crown Unlimited", guild_ids=guild_ids)
 async def register(ctx):
-   disname = str(ctx.author)
-   name = disname.split("#",1)[0]
-   user = {'DISNAME': disname, 'NAME': name, 'DID' : str(ctx.author.id), 'AVATAR': str(ctx.author.avatar_url)}
-   response = db.createUsers(data.newUser(user))
+   reg_query = {'DISNAME' : str(ctx.author)}
+   applied = db.queryUser(reg_query)
+   if applied:
+      vault_query = {'OWNER':str(ctx.author)}
+      registered = db.queryVault(vault_query)
+      if registered:
+         await ctx.send(f"{ctx.author.mention} You already have a Crown Unlimited Account!")
+         return 
+      else:
+         await ctx.author.send(f"Previous Registration Failed...Lets try again!")
+         await ctx.send(f"{ctx.author.mention} Previous Registration Failed...Lets try again!")
+         response = applied
+         disname = str(ctx.author)
+   else:
+      disname = str(ctx.author)
+      name = disname.split("#",1)[0]
+      user = {'DISNAME': disname, 'NAME': name, 'DID' : str(ctx.author.id), 'AVATAR': str(ctx.author.avatar_url)}
+      response = db.createUsers(data.newUser(user))
    if response:
 
       embedVar = discord.Embed(title=f"**Welcome to Crown Unlimited**!", description=textwrap.dedent(f"""
@@ -766,12 +780,20 @@ async def register(ctx):
                      'trace': trace
                   }))   
             
-            await Paginator(bot=bot, ctx=ctx, disableAfterTimeout=True, pages=universe_embed_list, customActionRow=[
+            await Paginator(bot=bot, ctx=ctx, disableAfterTimeout=True, timeout = 120,pages=universe_embed_list, customActionRow=[
                custom_action_row,
                custom_function,
             ]).run()
 
-
+         except asyncio.TimeoutError:
+            user = str(ctx.author)
+            query = {'DID': str(ctx.author.id)}
+            response = db.deleteVault({'DID': str(ctx.author.id)})
+            delete_user_resp = db.deleteUser(user)
+            await ctx.author.send(f"{ctx.author.mention} your Registration was cancelled. You must interact before the timeout!")
+            await ctx.send(f"{ctx.author.mention} your Registration was cancelled. You must interact before the timeout!")
+            
+            
          except Exception as ex:
             trace = []
             tb = ex.__traceback__
