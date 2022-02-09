@@ -1902,9 +1902,9 @@ destiny = [
     {
         "NAME": "The Hollow Within",
         "WINS": 0,
-        "REQUIRED": 20,
-        "DEFEAT": "Hollow Ichigo",
-        "USE_CARDS": ["Ichigo"],
+        "REQUIRED": 5,
+        "DEFEAT": "Vasto Lorde",
+        "USE_CARDS": ["Hollow Ichigo"],
         "EARN": "Vasto Lorde",
         "COMPLETED": False,
         "UNIVERSE": "Bleach"
@@ -1912,10 +1912,20 @@ destiny = [
     {
         "NAME": "Final Mugetsu",
         "WINS": 0,
-        "REQUIRED": 20,
-        "DEFEAT": "Vasto Lorde",
-        "USE_CARDS": ["Ichigo"],
+        "REQUIRED": 8,
+        "DEFEAT": "Mugetsu",
+        "USE_CARDS": ["Vasto Lorde"],
         "EARN": "Mugetsu",
+        "COMPLETED": False,
+        "UNIVERSE": "Bleach"
+    },
+    {
+        "NAME": "Ichigo Kurosaki, Substitute Soul Reaper",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Ichigo Kurosaki",
+        "USE_CARDS": ["Mugetsu"],
+        "EARN": "Ichigo Kurosaki",
         "COMPLETED": False,
         "UNIVERSE": "Bleach"
     },
