@@ -763,7 +763,7 @@ class Profile(commands.Cog):
                                         return   
                             
                         elif button_ctx.custom_id == "Exit":
-                            await button_ctx.send("Done.")
+                            await button_ctx.defer(ignore=True)
                             self.stop = True
                     else:
                         await ctx.send("This is not your card list.")
@@ -1129,7 +1129,7 @@ class Profile(commands.Cog):
                                     return   
                                                         
                         elif button_ctx.custom_id == "Exit":
-                            await button_ctx.send("Done.")
+                            await button_ctx.defer(ignore=True)
                             self.stop = True
                     else:
                         await ctx.send("This is not your Title list.")
@@ -1507,7 +1507,7 @@ class Profile(commands.Cog):
                                     return   
                                         
                         elif button_ctx.custom_id == "Exit":
-                            await button_ctx.send("Done.")
+                            await button_ctx.defer(ignore=True)
                             self.stop = True
                     else:
                         await ctx.send("This is not your Arms list.")        
@@ -1754,7 +1754,7 @@ class Profile(commands.Cog):
                                     return   
                                                         
                         elif button_ctx.custom_id =="Exit":
-                            await button_ctx.send("Done.")
+                            await button_ctx.defer(ignore=True)
                             self.stop = True
                     else:
                         await ctx.send("This is not your Summons list.")
