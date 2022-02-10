@@ -331,6 +331,7 @@ class GAMES():
 @dataclass(frozen=True, order=True)
 class GODS():
     PLAYER: str
+    DID: str
     CARD: str
     TITLE: int
     ARM: str

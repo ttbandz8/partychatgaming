@@ -1197,7 +1197,7 @@ class CrownUnlimited(commands.Cog):
 
             # Convert tiers into strings from ints
             tier_conversion = [str(tier) for tier in banned_card_tiers]
-
+            
             abyss_buttons = [
                 manage_components.create_button(
                     style=ButtonStyle.blue,
@@ -1219,11 +1219,12 @@ class CrownUnlimited(commands.Cog):
                 unlockable_message = ""
 
             embedVar = discord.Embed(title=f":new_moon: Abyss Floor {floor}", description=textwrap.dedent(f"""
-            Depth  ⚔️{len(enemies)}
+            Fights  ⚔️{len(enemies)}
 
             {unlockable_message}
             {bad_message}
             """))
+            embedVar.set_footer(text="Each floor must be completed all the way through to advance to the next floor.")
             if banned_cards:
                 embedVar.add_field(name=":flower_playing_cards: Banned Cards", value="\n".join(banned_cards),
                                 inline=True)
@@ -1272,7 +1273,8 @@ class CrownUnlimited(commands.Cog):
                         await private_channel.send(
                             f":x: **{checks['UNIVERSE']}** cards are banned on floor {floor}. Use another card.")
                         return
-                    if checks['TIER'] in banned_card_tiers:
+                    
+                    if str(checks['TIER']) in tier_conversion:
                         await private_channel.send(
                             f":x: Tier **{str(checks['TIER'])}** cards are banned on floor {floor}. Use another card.")
                         return
