@@ -1218,7 +1218,7 @@ class CrownUnlimited(commands.Cog):
             else:
                 unlockable_message = ""
 
-            embedVar = discord.Embed(title=f":new_moon: Abyss Floor {floor}", description=textwrap.dedent(f"""
+            embedVar = discord.Embed(title=f":new_moon: Abyss Floor {floor}\nFights This Floor  ⚔️{len(enemies)}", description=textwrap.dedent(f"""
             {unlockable_message}
             {bad_message}
             """))
@@ -6611,6 +6611,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             else:
                 turn = 1
             turn_total = 0
+            demon_slayer_buff = 0
+            tdemon_slayer_buff = 0
+            cdemon_slayer_buff = 0
             # Enhance Turn Iterators
             eo = 0
             et = 0
@@ -6690,7 +6693,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
             tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff
             tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff
-            tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff
+            tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff
             tenh1 = list(t_enhancer.values())[0]
             tenh_name = list(t_enhancer.values())[2]
             
@@ -7035,7 +7038,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     # Ap Levels
                                     ap1 = list(o_1.values())[0] + ocard_lvl_ap_buff
                                     ap2 = list(o_2.values())[0] + ocard_lvl_ap_buff
-                                    ap3 = list(o_3.values())[0] + ocard_lvl_ap_buff
+                                    ap3 = list(o_3.values())[0] + ocard_lvl_ap_buff + demon_slayer_buff
                                     enh1 = list(o_enhancer.values())[0]
                                     enh_name = list(o_enhancer.values())[2]
                                     pet_enh_name = list(opet_move.values())[2]
@@ -7306,7 +7309,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         (.30 * o_defense) * (o_resolve / (.50 * o_defense)))
                                                     o_resolve_defense = round(
                                                         (.30 * o_defense) * (o_resolve / (.50 * o_defense)))
-                                                    ap3 = ap3 * 2
+                                                    demon_slayer_buff = ap3 * 2
 
                                                     o_stamina = o_stamina + o_resolve
                                                     o_health = o_health + o_resolve_health
@@ -8188,7 +8191,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         # PlayUser
                                         tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff
                                         tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff
-                                        tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff
+                                        tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff
                                         tenh1 = list(t_enhancer.values())[0]
                                         tenh_name = list(t_enhancer.values())[2]
                                         tpet_enh_name = list(tpet_move.values())[2]
@@ -8399,7 +8402,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             (.30 * t_defense) * (t_resolve / (.50 * t_defense)))
                                                         t_resolve_defense = round(
                                                             (.30 * t_defense) * (t_resolve / (.50 * t_defense)))
-                                                        tap3 = tap3 * 2
+                                                        tdemon_slayer_buff = tap3 * 2
 
                                                         t_stamina = t_stamina + t_resolve
                                                         t_health = t_health + t_resolve_health
@@ -9029,7 +9032,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         # UNIVERSE CARD
                                         tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff
                                         tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff
-                                        tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff
+                                        tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff
                                         tenh1 = list(t_enhancer.values())[0]
                                         tenh_name = list(t_enhancer.values())[2]
                                         tpet_enh_name = list(tpet_move.values())[2]
@@ -9198,7 +9201,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         (.30 * t_defense) * (t_resolve / (.50 * t_defense)))
                                                     t_resolve_defense = round(
                                                         (.30 * t_defense) * (t_resolve / (.50 * t_defense)))
-                                                    tap3 = tap3 * 2
+                                                    tdemon_slayer_buff = tap3 * 2
 
                                                     t_stamina = t_stamina + t_resolve
                                                     t_health = t_health + t_resolve_health
@@ -10221,7 +10224,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         (.30 * o_defense) * (o_resolve / (.50 * o_defense)))
                                                     o_resolve_defense = round(
                                                         (.30 * o_defense) * (o_resolve / (.50 * o_defense)))
-                                                    ap3 = ap3 * 2
+                                                    demon_slayer_buff = ap3 * 2
 
                                                     o_stamina = o_stamina + o_resolve
                                                     o_health = o_health + o_resolve_health
@@ -10631,7 +10634,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         # UNIVERSE CARD
                                         ap1 = list(o_1.values())[0] + ocard_lvl_ap_buff
                                         ap2 = list(o_2.values())[0] + ocard_lvl_ap_buff
-                                        ap3 = list(o_3.values())[0] + ocard_lvl_ap_buff
+                                        ap3 = list(o_3.values())[0] + ocard_lvl_ap_buff + demon_slayer_buff
                                         enh1 = list(o_enhancer.values())[0]
                                         enh_name = list(o_enhancer.values())[2]
                                         pet_enh_name = list(opet_move.values())[2]
@@ -10931,7 +10934,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             (.30 * o_defense) * (o_resolve / (.50 * o_defense)))
                                                         o_resolve_defense = round(
                                                             (.30 * o_defense) * (o_resolve / (.50 * o_defense)))
-                                                        ap3 = ap3 * 2
+                                                        demon_slayer_buff = ap3 * 2
 
                                                         o_stamina = o_stamina + o_resolve
                                                         o_health = o_health + o_resolve_health
@@ -12090,7 +12093,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     if mode not in AUTO_BATTLE_modes:
                                         tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff
                                         tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff
-                                        tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff
+                                        tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff
                                         tenh1 = list(t_enhancer.values())[0]
                                         tenh_name = list(t_enhancer.values())[2]
                                         tpet_enh_name = list(tpet_move.values())[2]
@@ -12345,7 +12348,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     (.30 * t_defense) * (t_resolve / (.50 * t_defense)))
                                                 t_resolve_defense = round(
                                                     (.30 * t_defense) * (t_resolve / (.50 * t_defense)))
-                                                tap3 = tap3 * 2
+                                                tdemon_slayer_buff = tap3 * 2
 
                                                 t_stamina = t_stamina + t_resolve
                                                 t_health = t_health + t_resolve_health
@@ -13887,7 +13890,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             # UNIVERSE CARD
                                             cap1 = list(c_1.values())[0] + ccard_lvl_ap_buff
                                             cap2 = list(c_2.values())[0] + ccard_lvl_ap_buff
-                                            cap3 = list(c_3.values())[0] + ccard_lvl_ap_buff
+                                            cap3 = list(c_3.values())[0] + ccard_lvl_ap_buff + cdemon_slayer_buff
                                             cenh1 = list(c_enhancer.values())[0]
                                             cenh_name = list(c_enhancer.values())[2]
                                             cpet_enh_name = list(cpet_move.values())[2]
@@ -14166,7 +14169,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             (.30 * c_defense) * (c_resolve / (.50 * c_defense)))
                                                         c_resolve_defense = round(
                                                             (.30 * c_defense) * (c_resolve / (.50 * c_defense)))
-                                                        cap3 = cap3 * 2
+                                                        cdemon_slayer_buff = cap3 * 2
 
                                                         c_stamina = c_stamina + c_resolve
                                                         c_health = c_health + c_resolve_health
@@ -14879,7 +14882,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         else:
                                             cap1 = list(c_1.values())[0] + ccard_lvl_ap_buff
                                             cap2 = list(c_2.values())[0] + ccard_lvl_ap_buff
-                                            cap3 = list(c_3.values())[0] + ccard_lvl_ap_buff
+                                            cap3 = list(c_3.values())[0] + ccard_lvl_ap_buff + cdemon_slayer_buff
                                             cenh1 = list(c_enhancer.values())[0]
                                             cenh_name = list(c_enhancer.values())[2]
                                             cpet_enh_name = list(cpet_move.values())[2]
@@ -14965,7 +14968,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                             cap1 = list(c_1.values())[0] + ccard_lvl_ap_buff
                                             cap2 = list(c_2.values())[0] + ccard_lvl_ap_buff
-                                            cap3 = list(c_3.values())[0] + ccard_lvl_ap_buff
+                                            cap3 = list(c_3.values())[0] + ccard_lvl_ap_buff + cdemon_slayer_buff
                                             cenh1 = list(c_enhancer.values())[0]
                                             cenh_name = list(c_enhancer.values())[2]
                                             cpet_enh_name = list(cpet_move.values())[2]
@@ -15109,7 +15112,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 (.30 * c_defense) * (c_resolve / (.50 * c_defense)))
                                                             c_resolve_defense = round(
                                                                 (.30 * c_defense) * (c_resolve / (.50 * c_defense)))
-                                                            cap3 = cap3 * 2
+                                                            cdemon_slayer_buff = cap3 * 2
 
                                                             c_stamina = c_stamina + c_resolve
                                                             c_health = c_health + c_resolve_health
@@ -16072,7 +16075,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         # UNIVERSE CARD
                                         tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff
                                         tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff
-                                        tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff
+                                        tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff
                                         tenh1 = list(t_enhancer.values())[0]
                                         tenh_name = list(t_enhancer.values())[2]
                                         tpet_enh_name = list(tpet_move.values())[2]
@@ -16287,7 +16290,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         (.30 * t_defense) * (t_resolve / (.50 * t_defense)))
                                                     t_resolve_defense = round(
                                                         (.30 * t_defense) * (t_resolve / (.50 * t_defense)))
-                                                    tap3 = tap3 * 2
+                                                    tdemon_slayer_buff = tap3 * 2
 
                                                     t_stamina = t_stamina + t_resolve
                                                     t_health = t_health + t_resolve_health
