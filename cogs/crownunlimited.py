@@ -1158,6 +1158,11 @@ class CrownUnlimited(commands.Cog):
             checks = db.queryCard({'NAME': sowner['CARD']})
             abyss = db.queryAbyss({'FLOOR': sowner['LEVEL']})
 
+            if not abyss:
+                await ctx.send("The **Abyss** has shifted. More floors will be available soon.")
+                return
+
+
             if abyss['FLOOR'] in abyss_floor_reward_list:
                 current_titles = vault['TITLES']
                 if len(current_titles) >=25:
@@ -1175,10 +1180,6 @@ class CrownUnlimited(commands.Cog):
 
                 if maxed_out_messages:
                     bad_message = "\n".join(maxed_out_messages)
-
-            if not abyss:
-                await ctx.send("The **Abyss** has shifted. More floors will be available soon.")
-                return
 
             enemies = abyss['ENEMIES']
             level = int(abyss['SPECIAL_BUFF'])
@@ -18408,40 +18409,52 @@ async def drops(player, universe, matchcount):
     arms = []
     pets = []
 
+
     if all_available_drop_cards:
         for card in all_available_drop_cards:
             cards.append(card['NAME'])
-        c = len(cards) - 1
-        if c==0:
-            c=1
-        rand_card = random.randint(0, c)
 
     if all_available_drop_titles:
         for title in all_available_drop_titles:
             titles.append(title['TITLE'])
-        t = len(titles) - 1
-        if t==0:
-            t=1
-        rand_title = random.randint(0, t)
 
     if all_available_drop_arms:
         for arm in all_available_drop_arms:
             arms.append(arm['ARM'])
-        a = len(arms) - 1
-        if a==o:
-            a=1
-        rand_arm = random.randint(0, a)
-
+        
     if all_available_drop_pets:
         for pet in all_available_drop_pets:
             pets.append(pet['PET'])
+         
+    
+    if len(cards)==0:
+        rand_card = 0
+    else:
+        c = len(cards) - 1
+        rand_card = random.randint(0, c)
+
+    if len(titles)==0:
+        rand_title= 0
+    else:
+        t = len(titles) - 1
+        rand_title = random.randint(0, t)
+
+    if len(arms)==0:
+        rand_arm = 0
+    else:
+        a = len(arms) - 1
+        rand_arm = random.randint(0, a)
+
+    
+    if len(pets)==0:
+        rand_pet = 0
+    else:
         p = len(pets) - 1
-        if p==0:
-            p=1
-        rand_pet = random.randint(0, p)    
+        rand_pet = random.randint(0, p)
+
+
     
-    
-    
+
     
     
     gold_drop = 150  # 150
@@ -18680,23 +18693,32 @@ async def dungeondrops(player, universe, matchcount):
 
     for pet in all_available_drop_pets:
         pets.append(pet['PET'])
+    
+    if len(cards)==0:
+        rand_card = 0
+    else:
+        c = len(cards) - 1
+        rand_card = random.randint(0, c)
 
-    c = len(cards) - 1
-    t = len(titles) - 1
-    a = len(arms) - 1
-    p = len(pets) - 1
-    if c==0:
-        c=1
-    if t==0:
-        t=1
-    if a==0:
-        a=1
-    if p==0:
-        p=1
-    rand_card = random.randint(0, c)
-    rand_title = random.randint(0, t)
-    rand_arm = random.randint(0, a)
-    rand_pet = random.randint(0, p)
+    if len(titles)==0:
+        rand_title= 0
+    else:
+        t = len(titles) - 1
+        rand_title = random.randint(0, t)
+
+    if len(arms)==0:
+        rand_arm = 0
+    else:
+        a = len(arms) - 1
+        rand_arm = random.randint(0, a)
+
+    
+    if len(pets)==0:
+        rand_pet = 0
+    else:
+        p = len(pets) - 1
+        rand_pet = random.randint(0, p)
+
 
     gold_drop = 300  #
     rift_rate = 350  #
@@ -18845,24 +18867,31 @@ async def bossdrops(player, universe):
     for pet in all_available_drop_pets:
         pets.append(pet['PET'])
 
-    c = len(cards) - 1
-    t = len(titles) - 1
-    a = len(arms) - 1
-    p = len(pets) - 1
-    
-    if c==0:
-        c=1
-    if t==0:
-        t=1
-    if a==o:
-        a=1
-    if p==0:
-        p=1
+    if len(cards)==0:
+        rand_card = 0
+    else:
+        c = len(cards) - 1
+        rand_card = random.randint(0, c)
 
-    rand_card = random.randint(0, c)
-    rand_title = random.randint(0, t)
-    rand_arm = random.randint(0, a)
-    rand_pet = random.randint(0, p)
+    if len(titles)==0:
+        rand_title= 0
+    else:
+        t = len(titles) - 1
+        rand_title = random.randint(0, t)
+
+    if len(arms)==0:
+        rand_arm = 0
+    else:
+        a = len(arms) - 1
+        rand_arm = random.randint(0, a)
+
+    
+    if len(pets)==0:
+        rand_pet = 0
+    else:
+        p = len(pets) - 1
+        rand_pet = random.randint(0, p)
+
 
     gold_drop = 339  #
     title_drop = 340  #
