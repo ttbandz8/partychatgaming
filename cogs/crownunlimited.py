@@ -4073,13 +4073,13 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 c_final_stand = True
 
             if oteam == cteam:
-                o_defense = o_defense + 10
-                c_defense = c_defense + 10
+                o_defense = o_defense + 50
+                c_defense = c_defense + 50
             if ofam == cfam:
-                o_health = o_health + 50
-                c_health = c_health + 50
-                o_max_health = o_max_health + 50
-                c_max_health = c_max_health + 50
+                o_health = o_health + 100
+                c_health = c_health + 100
+                o_max_health = o_max_health + 100
+                c_max_health = c_max_health + 100
 
             # Companion Passive Config
             if (c_universe == c_title_universe) or (c_title_universe == "Unbound"):
@@ -5325,6 +5325,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
 
         if mode == "CBoss":
             STATS = {
+                'operformance': operformance,
                 'opet_lvl': opet_lvl,
                 'opet_bond': opet_bond,
                 'tpet_lvl': tpet_lvl,
@@ -5457,6 +5458,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 't_rebuke': t_rebuke,
                 't_concede': t_concede,
                 't_wins': t_wins,
+                'cperformance': cperformance,
                 'c_card': c_card,
                 'ccard_lvl': ccard_lvl,
                 'c_card_path': c_card_path,
@@ -5636,6 +5638,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 'tpetmove_text': tpetmove_text,
                 'tpet_image': tpet_image,
                 't_pet_used': t_pet_used,
+                'cperformance': cperformance,
                 'c_card': c_card,
                 'ccard_lvl': ccard_lvl,
                 'c_card_path': c_card_path,
@@ -6758,17 +6761,23 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 embedVar.set_image(url="attachment://image.png")
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card)
             
-            if mode in co_op_modes and mode not in ai_co_op_modes:
+            if mode in co_op_modes and mode not in ai_co_op_modes and mode not in B_modes:
                 embedVar = discord.Embed(title=f"✅ Confirm Co-Op Battle!", description=f"{ctx.author.mention}\n**{o_card}** & **{c_card}** VS **{t_card}**")
                 embedVar.set_image(url="attachment://image.png")
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card)
+                
             if mode in ai_co_op_modes:
                 embedVar = discord.Embed(title=f"✅ Confirm Duo Battle!", description=f"{ctx.author.mention}\n**{o_card}** & **{c_card}** VS **{t_card}**")
                 embedVar.set_image(url="attachment://image.png")
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card) 
                 
-            if mode in B_modes:
+            if mode in B_modes and mode not in co_op_modes:
                 embedVar = discord.Embed(title=f"✅ Boss Fight!", description=f"{ctx.author.mention}\n**{o_card}** VS **{t_card}**")
+                embedVar.set_image(url="attachment://image.png")
+                battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card)
+                
+            if mode in B_modes and mode in co_op_modes:
+                embedVar = discord.Embed(title=f"✅ Boss Fight!", description=f"{ctx.author.mention}\n**{o_card}** & **{c_card}** VS **{t_card}**")
                 embedVar.set_image(url="attachment://image.png")
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card)
 
@@ -8941,8 +8950,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         elif oarm_barrier_active:
                                                             if obarrier_count >1:
                                                                 o_health = o_health 
-                                                                embedVar = discord.Embed(title=f"{o_card.upper()} Activates **Barrier** 💠", description=f"{t_card}'s attack **Nullified**!\n {obarrier_count - 1} **Barriers** remain!", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* **{t_card}'s** attack **Nullified**!\n {obarrier_count - 1} **Barriers** remain!")
+                                                                embedVar = discord.Embed(title=f"{o_card.upper()} Activates **Barrier** 💠", description=f"{t_card}'s attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!", colour=0xe91e63)
+                                                                previous_moves.append(f"*{turn_total}:* **{t_card}'s** attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!")
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -9708,8 +9717,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     elif oarm_barrier_active:
                                                         if obarrier_count >1:
                                                             o_health = o_health 
-                                                            embedVar = discord.Embed(title=f"{o_card.upper()} Activates **Barrier** 💠", description=f"{t_card}'s attack **Nullified**!\n {obarrier_count - 1} **Barriers** remain!", colour=0xe91e63)
-                                                            previous_moves.append(f"*{turn_total}:* {t_card}'s attack **Nullified**!\n {obarrier_count - 1} **Barriers** remain!")
+                                                            embedVar = discord.Embed(title=f"{o_card.upper()} Activates **Barrier** 💠", description=f"{t_card}'s attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!", colour=0xe91e63)
+                                                            previous_moves.append(f"*{turn_total}:* {t_card}'s attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!")
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -10804,11 +10813,20 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         util_action_row = manage_components.create_actionrow(*util_buttons)
                                         if mode in co_op_modes:
                                             coop_util_action_row = manage_components.create_actionrow(*coop_util_buttons)
+                                            
+                                        carm_message = ""
+                                        if carm_barrier_active:
+                                            carm_message = f"💠{cbarrier_count}"
+                                        elif carm_shield_active:
+                                            carm_message = f"🌐{cshield_value}"
+                                        elif carm_parry_active:
+                                            carm_message = f"🔄{cparry_count}"
+
 
                                         companion_stats = ""
                                         if mode in co_op_modes:
                                             components = [battle_action_row, util_action_row, coop_util_action_row]
-                                            companion_stats = f"\n{c_card}: ❤️{c_health} 🌀{c_stamina} 🗡️{c_attack}/🛡️{c_defense}"
+                                            companion_stats = f"\n{c_card}: ❤️{c_health} 🌀{c_stamina} 🗡️{c_attack}/🛡️{c_defense} {carm_message}"
                                         else:
                                             components = [battle_action_row, util_action_row]
 
@@ -12015,7 +12033,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             value=f"{t_aura}")
                                             embedVar.set_footer(text=f"{t_card} Says: 'Now, are you ready for a real fight?'")
                                             # await private_channel.send(embed=embedVar)
-                                            previous_moves.append(f"**{t_card}** Focused and Says: 'Now, are you ready for a real fight?'")
+                                            previous_moves.append(f"*{turn_total}:* 🌀 **{t_card}** Focused and Says: 'Now, are you ready for a real fight?'")
                                             # await asyncio.sleep(2)
                                         else:
                                             embedVar = discord.Embed(title=f"{t_card.upper()} FOCUSED",
@@ -12053,7 +12071,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         else:
                                             previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Transformation: Digivolve")
                                         if mode in B_modes:
-                                            embedVar = discord.Embed(title=f"**{t_card}** Resolved!", description=f"{t_rmessage}",
+                                            embedVar = discord.Embed(title=f"*{turn_total}:* :zap: **{t_card}** Resolved!", description=f"{t_rmessage}",
                                                                     colour=0xe91e63)
                                             embedVar.set_footer(text=f"{o_card} this will not be easy...")
                                             await private_channel.send(embed=embedVar)
@@ -12350,7 +12368,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     elif int(aiMove) == 5:
                                         if not t_used_resolve and t_used_focus:
                                             if mode in B_modes:
-                                                embedVar = discord.Embed(title=f"**{t_card}** Resolved!",
+                                                embedVar = discord.Embed(title=f":zap: **{t_card}** Resolved!",
                                                                         description=f"{t_rmessage}", colour=0xe91e63)
                                                 embedVar.set_footer(text=f"{o_card} this will not be easy...")
                                                 await private_channel.send(embed=embedVar)
@@ -13181,7 +13199,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         elif carm_barrier_active:
                                                             if cbarrier_count >1:
                                                                 c_health = c_health 
-                                                                embedVar = discord.Embed(title=f"{c_card.upper()} Activates **Barrier** 💠", description=f"{t_card}'s attack **Nullified**!\n **{cbarrier_count - 1} Barriers** remain!", colour=0xe91e63)
+                                                                embedVar = discord.Embed(title=f"{c_card.upper()} Activates **Barrier** 💠", description=f"{t_card}'s attack **Nullified**!\n 💠{cbarrier_count - 1} **Barriers** remain!", colour=0xe91e63)
                                                                 previous_moves.append(f"*{turn_total}:* {c_card} Activates Barrier 💠")
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
@@ -13410,8 +13428,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         elif oarm_barrier_active:
                                                             if obarrier_count >1:
                                                                 o_health = o_health 
-                                                                embedVar = discord.Embed(title=f"{o_card.upper()} Activates **Barrier** 💠", description=f"{t_card}'s attack **Nullified**!\n {obarrier_count - 1} **Barriers** remain!", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* {t_card}'s attack **Nullified**!\n {obarrier_count - 1} **Barriers** remain!")
+                                                                embedVar = discord.Embed(title=f"{o_card.upper()} Activates **Barrier** 💠", description=f"{t_card}'s attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!", colour=0xe91e63)
+                                                                previous_moves.append(f"*{turn_total}:* {t_card}'s attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!")
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -13639,8 +13657,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     elif oarm_barrier_active:
                                                         if obarrier_count >1:
                                                             o_health = o_health 
-                                                            embedVar = discord.Embed(title=f"{o_card.upper()} Activates **Barrier** 💠", description=f"{t_card}'s attack **Nullified**!\n {obarrier_count - 1} **Barriers** remain!", colour=0xe91e63)
-                                                            previous_moves.append(f"*{turn_total}:* {t_card}'s attack **Nullified**!\n {obarrier_count - 1} **Barriers** remain!")
+                                                            embedVar = discord.Embed(title=f"{o_card.upper()} Activates **Barrier** 💠", description=f"{t_card}'s attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!", colour=0xe91e63)
+                                                            previous_moves.append(f"*{turn_total}:* {t_card}'s attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!")
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -14837,7 +14855,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if tbarrier_count >1:
                                                                 t_health = t_health 
                                                                 embedVar = discord.Embed(title=f"{t_card.upper()} Activates **Barrier** 💠", description=f"{c_card}'s attack **Nullified**!\n **{tbarrier_count - 1} Barriers** remain!", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* {c_card}'s attack **Nullified**!\n {tbarrier_count - 1} **Barriers** remain!")
+                                                                previous_moves.append(f"*{turn_total}:* {c_card}'s attack **Nullified**!\n💠 {tbarrier_count - 1} **Barriers** remain!")
                                                                 if carm_barrier_active:
                                                                     carm_barrier_active=False
                                                                     embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -15030,7 +15048,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             cpet_enh_name = list(cpet_move.values())[2]
                                             cpet_msg_on_resolve = ""
                                             carm_message = " "
-                                            
+                                            oarm_message = " "
                                             if c_used_resolve:
                                                 cpet_msg_on_resolve = f"🧬 {enhancer_mapping[pet_enh_name]}"
                                             if tarm_barrier_active:
@@ -15039,6 +15057,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 carm_message = f"🌐{tshield_value}"
                                             elif tarm_parry_active:
                                                 carm_message = f"🔄{tparry_count}"
+                                            if oarm_barrier_active:
+                                                oarm_message = f"💠{obarrier_count}"
+                                            elif oarm_shield_active:
+                                                oarm_message = f"🌐{oshield_value}"
+                                            elif oarm_parry_active:
+                                                oarm_message = f"🔄{oparry_count}"
                                             if carm_passive_type == "BARRIER":
                                                 if carm_barrier_active:
                                                     carm_passive_value = f"{cbarrier_count}"
@@ -15063,7 +15087,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             # await asyncio.sleep(2)
                                             embedVar.set_image(url="attachment://image.png")
                                             embedVar.set_footer(
-                                                text=f"{t_card}: ❤️{t_health} 🌀{t_stamina} 🗡️{t_attack}/🛡️{t_defense} {carm_message}\n{o_card}: ❤️{o_health} 🌀{o_stamina} 🗡️{o_attack}/🛡️{o_defense}",
+                                                text=f"{t_card}: ❤️{t_health} 🌀{t_stamina} 🗡️{t_attack}/🛡️{t_defense} {tarm_message}\n{o_card}: ❤️{o_health} 🌀{o_stamina} 🗡️{o_attack}/🛡️{o_defense} {oarm_message}",
                                                 icon_url="https://cdn.discordapp.com/emojis/789290881654980659.gif?v=1")
                                             await battle_msg.delete(delay=2)
                                             await asyncio.sleep(2)
@@ -15807,7 +15831,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if tbarrier_count >1:
                                                                     t_health = t_health 
                                                                     embedVar = discord.Embed(title=f"{t_card.upper()} Activates **Barrier** 💠", description=f"{c_card}'s attack **Nullified**!\n **{tbarrier_count - 1} Barriers** remain!", colour=0xe91e63)
-                                                                    previous_moves.append(f"*{turn_total}:* {c_card}'s attack **Nullified**!\n {tbarrier_count - 1} **Barriers** remain!")
+                                                                    previous_moves.append(f"*{turn_total}:* {c_card}'s attack **Nullified**!\n💠 {tbarrier_count - 1} **Barriers** remain!")
                                                                     if carm_barrier_active:
                                                                         carm_barrier_active=False
                                                                         embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -16017,7 +16041,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             embedVar.add_field(name=f"A great aura starts to envelop **{t_card}** ",
                                                             value=f"{t_aura}")
                                             embedVar.set_footer(text=f"{t_card} Says: 'Now, are you ready for a real fight?'")
-                                            previous_moves.append(f"**{t_card}** Focused and Says: 'Now, are you ready for a real fight?'")
+                                            previous_moves.append(f"*{turn_total}:* 🌀 **{t_card}** Focused and Says: 'Now, are you ready for a real fight?'")
                                         else:
                                             previous_moves.append(f"*{turn_total}:* 🌀 **{t_card}** focused and {healmessage}")
                                         if not t_used_resolve:
@@ -16985,8 +17009,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         elif oarm_barrier_active:
                                                             if obarrier_count >1:
                                                                 o_health = o_health 
-                                                                embedVar = discord.Embed(title=f"{o_card.upper()} Activates **Barrier** 💠", description=f"{t_card}'s attack **Nullified**!\n {obarrier_count - 1} **Barriers** remain!", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* {t_card}'s attack **Nullified**!\n {obarrier_count - 1} **Barriers** remain!")
+                                                                embedVar = discord.Embed(title=f"{o_card.upper()} Activates **Barrier** 💠", description=f"{t_card}'s attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!", colour=0xe91e63)
+                                                                previous_moves.append(f"*{turn_total}:* {t_card}'s attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!")
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -17217,8 +17241,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         elif carm_barrier_active:
                                                             if cbarrier_count >1:
                                                                 c_health = c_health 
-                                                                embedVar = discord.Embed(title=f"{c_card.upper()} Activates **Barrier** 💠", description=f"{t_card}'s attack **Nullified**!\n **{cbarrier_count - 1} Barriers** remain!", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* {t_card}'s attack **Nullified**!\n {cbarrier_count - 1} **Barriers** remain!")
+                                                                embedVar = discord.Embed(title=f"{c_card.upper()} Activates **Barrier** 💠", description=f"{t_card}'s attack **Nullified**!\n 💠{cbarrier_count - 1} **Barriers** remain!", colour=0xe91e63)
+                                                                previous_moves.append(f"*{turn_total}:* {t_card}'s attack **Nullified**!\n💠 {cbarrier_count - 1} **Barriers** remain!")
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -17542,17 +17566,17 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 hlt_bonus = 0 
                                 if o_user['TEAM'] == c_user['TEAM'] and o_user['TEAM'] != 'PCG':
                                     teammates=True
-                                    stat_bonus=10
+                                    stat_bonus=50
                                 if o_user['FAMILY'] == c_user['FAMILY'] and o_user['FAMILY'] != 'PCG':
                                     fam_members=True
-                                    hlt_bonus=50
+                                    hlt_bonus=100
                                 
                                 if teammates==True:
-                                    bonus_message = f"Guild **{o_user['TEAM']}**: 🗡️**+{stat_bonus}** 🛡️**+{stat_bonus}**"
+                                    bonus_message = f"Guild **{o_user['TEAM']}:** 🗡️**+{stat_bonus}** 🛡️**+{stat_bonus}**"
                                     if fam_members==True:
-                                        bonus_message = f"Guild **{o_user['TEAM']}**: ❤️**+{hlt_bonus}**\nFamily **{o_user['FAMILY']}**: 🗡️**+{stat_bonus}**\🛡️**+{stat_bonus}**"
+                                        bonus_message = f"Family **{o_user['FAMILY']}:** ❤️**+{hlt_bonus}**\nGuild **{o_user['TEAM']}:** 🗡️**+{stat_bonus}**\🛡️**+{stat_bonus}**"
                                 elif fam_members==True:
-                                        bonus_message = f"Family **{o_user['FAMILY']}**: ❤️**+{hlt_bonus}**"
+                                        bonus_message = f"Family **{o_user['FAMILY']}:** ❤️**+{hlt_bonus}**"
                                 else:
                                     bonus_message = f"Join a Guild or Create a Family for Coop Bonuses!"
                                     
@@ -17810,17 +17834,39 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']),
                                                         str(oarm['ARM']), "N/A", "Boss", o['EXCLUSIVE'])
                                 if mode == "CBoss":
-                                    cmatch = await savematch(str(user2), str(c_card), str(c_card_path), str(ctitle['TITLE']),
-                                                            str(carm['ARM']), "N/A", "Boss", c['EXCLUSIVE'])
+                                    # cmatch = await savematch(str(user2), str(c_card), str(c_card_path), str(ctitle['TITLE']),
+                                    #                         str(carm['ARM']), "N/A", "Boss", c['EXCLUSIVE'])
                                     cfambank = await blessfamily(80000, cfam)
                                     cteambank = await blessteam(80000, cteam)
                                     cpetlogger = await summonlevel(cpet_name, user2)
                                     ccardlogger = await cardlevel(self, c_card, user2, "Dungeon", selected_universe)
                                     await bless(50, str(user2))
-                                    embedVar = discord.Embed(title=f":zap: **{o_card}** and **{c_card}**defeated the {t_universe} Boss {t_card}!\nMatch concluded in {turn_total} turns!\n\n{drop_response} + :coin: 15,000!\n\n{c_user['NAME']} got :coin: 10,000!\n{t_concede}", description=textwrap.dedent(f"""
+                                    teammates = False
+                                    fam_members =False
+                                    stat_bonus = 0
+                                    hlt_bonus = 0 
+                                    if o_user['TEAM'] == c_user['TEAM'] and o_user['TEAM'] != 'PCG':
+                                        teammates=True
+                                        stat_bonus=50
+                                    if o_user['FAMILY'] == c_user['FAMILY'] and o_user['FAMILY'] != 'PCG':
+                                        fam_members=True
+                                        hlt_bonus=100
+                                    
+                                    if teammates==True:
+                                        bonus_message = f":checkered_flag:**{o_user['TEAM']}:** 🗡️**+{stat_bonus}** 🛡️**+{stat_bonus}**"
+                                        if fam_members==True:
+                                            bonus_message = f":family_mwgb:**{o_user['FAMILY']}:** ❤️**+{hlt_bonus}**\n:checkered_flag:**{o_user['TEAM']}:**🗡️**+{stat_bonus}** 🛡️**+{stat_bonus}**"
+                                    elif fam_members==True:
+                                            bonus_message = f":family_mwgb:**{o_user['FAMILY']}:** ❤️**+{hlt_bonus}**"
+                                    else:
+                                        bonus_message = f"Join a Guild or Create a Family for Coop Bonuses!"
+                                    embedVar = discord.Embed(title=f":zap: **{o_card}** and **{c_card}** defeated the {t_universe} Boss {t_card}!\nMatch concluded in {turn_total} turns!\n\n{drop_response} + :coin: 15,000!\n\n{c_user['NAME']} got :coin: 10,000!", description=textwrap.dedent(f"""
                                     {previous_moves_into_embed}
                                     
                                     """),colour=0x1abc9c)
+                                    embedVar.set_author(name=f"**{t_card}** Says: {t_concede}")
+                                    embedVar.add_field(name="**Co-Op Bonus**",
+                                                value=f"{bonus_message}")
                                 else:
                                     embedVar = discord.Embed(title=f":zap: **{o_card}** defeated the {t_universe} Boss {t_card}!\nMatch concluded in {turn_total} turns!\n\n{drop_response} + :coin: 25,000!",description=textwrap.dedent(f"""
                                     {previous_moves_into_embed}
@@ -17836,8 +17882,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     await blessguild(25000, oguild['GNAME'])
                                     teambank = await blessteam(5000, oteam)
                                     await movecrest(selected_universe, oguild['GNAME'])
-                                    embedVar.add_field(name=f"{selected_universe} CREST CLAIMED!",
-                                                    value=f"{oguild['GNAME']} earned the {selected_universe} **Crest**")
+                                    embedVar.add_field(name=f"**{selected_universe} Crest Claimed**!",
+                                                    value=f":flags:**{oguild['GNAME']}** earned the {selected_universe} **Crest**")
                                 embedVar.set_author(name=f"{t_card} lost",
                                                     icon_url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236432/PCG%20LOGOS%20AND%20RESOURCES/PCGBot_1.png")
                                 if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
@@ -17852,18 +17898,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 await asyncio.sleep(2)
                                 battle_msg = await private_channel.send(embed=embedVar)
 
-                                embedVar = discord.Embed(title=f"BOSS DEFEATED",
-                                                        description=f"Boss Victories are added to your player profile! Defeat {t_card} again to earn exotic loot!",
-                                                        colour=0xe91e63)
-                                embedVar.set_author(name=f"Congratulations You Defeated {t_card}!")
-                                embedVar.add_field(name="Tips!", value=f"Run /lookup to view your Boss Souls")
-                                embedVar.set_footer(
-                                    text="Bosses have a chance to drop coin, Arms, Titles, and even the Boss Card")
-                                # await ctx.send(embed=embedVar)
-                                await battle_msg.delete(delay=2)
-                                await asyncio.sleep(2)
-                                battle_msg = await private_channel.send(embed=embedVar)
-
                                 if t_card not in sowner['BOSS_WINS']:
                                     await bless(15000000, str(ctx.author))
                                     if mode == "CBoss":
@@ -17873,6 +17907,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     resp = db.updateUserNoFilter(query, new_query)
 
                                 # await discord.TextChannel.delete(private_channel, reason=None)
+                                continued = False
                             if mode == "ABYSS":
                                 if currentopponent != (total_legends):
                                     embedVar = discord.Embed(title=f"VICTORY\n**{o_card} says**\n{o_win_description}\nThe game lasted {turn_total} rounds.",description=textwrap.dedent(f"""
@@ -17947,17 +17982,17 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     hlt_bonus = 0 
                                     if o_user['TEAM'] == c_user['TEAM'] and o_user['TEAM'] != 'PCG':
                                         teammates=True
-                                        stat_bonus=10
+                                        stat_bonus=50
                                     if o_user['FAMILY'] == c_user['FAMILY'] and o_user['FAMILY'] != 'PCG':
                                         fam_members=True
-                                        hlt_bonus=50
+                                        hlt_bonus=100
                                     
-                                     if teammates==True:
-                                        bonus_message = f"Guild **{o_user['TEAM']}**: 🗡️**+{stat_bonus}** 🛡️**+{stat_bonus}**"
+                                    if teammates==True:
+                                        bonus_message = f":checkered_flag:**{o_user['TEAM']}:** 🗡️**+{stat_bonus}** 🛡️**+{stat_bonus}**"
                                         if fam_members==True:
-                                            bonus_message = f"Guild **{o_user['TEAM']}**: ❤️**+{hlt_bonus}**\nFamily **{o_user['FAMILY']}**: 🗡️**+{stat_bonus}**\🛡️**+{stat_bonus}**"
+                                            bonus_message = f":family_mwgb:**{o_user['FAMILY']}:** ❤️**+{hlt_bonus}**\n:checkered_flag:**{o_user['TEAM']}:**🗡️**+{stat_bonus}** 🛡️**+{stat_bonus}**"
                                     elif fam_members==True:
-                                            bonus_message = f"Family **{o_user['FAMILY']}**: ❤️**+{hlt_bonus}**"
+                                            bonus_message = f":family_mwgb:**{o_user['FAMILY']}:** ❤️**+{hlt_bonus}**"
                                     else:
                                         bonus_message = f"Join a Guild or Create a Family for Coop Bonuses!"
                                     cuid = c_DID
@@ -17988,27 +18023,27 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                 if currentopponent != (total_legends):
                                     if mode not in co_op_modes:
-                                        embedVar = discord.Embed(title=f"VICTORY\n**{o_card} says**\n{o_win_description}\nThe game lasted {turn_total} rounds.\n\n{drop_response}",description=textwrap.dedent(f"""
+                                        embedVar = discord.Embed(title=f":crown: VICTORY\n**{o_card} says**\n{o_win_description}\nThe game lasted {turn_total} rounds.\n\n{drop_response}",description=textwrap.dedent(f"""
                                         {previous_moves_into_embed}
                                         
                                         """),colour=0x1abc9c)
                                     elif mode in co_op_modes and mode not in ai_co_op_modes:
-                                        embedVar = discord.Embed(title=f"CO-OP VICTORY\n**{o_card} says**\n{o_win_description}\nThe game lasted {turn_total} rounds.\n\n**{o_user['NAME']}:** {drop_response}\n**{c_user['NAME']}:** {cdrop_response} ",description=textwrap.dedent(f"""
+                                        embedVar = discord.Embed(title=f"👥 CO-OP VICTORY\n**{o_card} says**\n{o_win_description}\nThe game lasted {turn_total} rounds.\n\n👤**{o_user['NAME']}:** {drop_response}\n👥**{c_user['NAME']}:** {cdrop_response} ",description=textwrap.dedent(f"""
                                         {previous_moves_into_embed}
                                         
                                         """),colour=0x1abc9c)
                                         embedVar.add_field(name="**Co-Op Bonus**",
                                                 value=f"{bonus_message}")
                                     elif mode not in ai_co_op_modes:
-                                        embedVar = discord.Embed(title=f"DUO VICTORY\n**{o_card} says**\n{o_win_description}\nThe game lasted {turn_total} rounds.\n\n{drop_response}",description=textwrap.dedent(f"""
+                                        embedVar = discord.Embed(title=f":crown: DUO VICTORY\n**{o_card} says**\n{o_win_description}\nThe game lasted {turn_total} rounds.\n\n{drop_response}",description=textwrap.dedent(f"""
                                         {previous_moves_into_embed}
                                         
                                         """),colour=0x1abc9c)
                                     if mode in D_modes:
                                         if crestsearch:
-                                            await blessguild(1000, oguild['GNAME'])
-                                            embedVar.add_field(name=f"**{selected_universe}** CREST SEARCH!",
-                                                            value=f"**{oguild['GNAME']}** earned 1,000 :coin:")
+                                            await blessguild(10000, oguild['GNAME'])
+                                            embedVar.add_field(name=f"**{selected_universe} Crest Search!**",
+                                                            value=f":flags:**{oguild['GNAME']}** earned **10,000** :coin:")
                                     embedVar.set_author(name=f"{t_card} lost!")
                                     # await private_channel.send(embed=embedVar)
                                     await battle_msg.delete(delay=2)
@@ -18020,12 +18055,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                 if currentopponent == (total_legends):
                                     if mode in D_modes:
-                                        embedVar = discord.Embed(title=f"DUNGEON CONQUERED",
+                                        embedVar = discord.Embed(title=f":fire: DUNGEON CONQUERED",
                                                                 description=f"**{selected_universe} Dungeon** has been conquered\n\n{drop_response}",
                                                                 colour=0xe91e63)
                                         embedVar.set_author(name=f"**{selected_universe}** Boss has been unlocked!")
                                         if crestsearch:
-                                            await blessguild(25000, oguild['GNAME'])
+                                            await blessguild(100000, oguild['GNAME'])
                                             teambank = await blessteam(10000, oteam)
                                             await movecrest(selected_universe, oguild['GNAME'])
                                             embedVar.add_field(name=f"**{selected_universe}** CREST CLAIMED!",
@@ -18071,7 +18106,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         continued = False
                                         # await discord.TextChannel.delete(private_channel, reason=None)
                                     elif mode in U_modes:
-                                        embedVar = discord.Embed(title=f"UNIVERSE CONQUERED",
+                                        embedVar = discord.Embed(title=f":crown: UNIVERSE CONQUERED",
                                                                 description=f"**{selected_universe}** has been conquered\n\n{drop_response}",
                                                                 colour=0xe91e63)
                                         embedVar.set_author(name=f"**{selected_universe}** Dungeon has been unlocked!")
@@ -18617,18 +18652,18 @@ async def drops(player, universe, matchcount):
 
     try:
         if drop_rate <= gold_drop:
-            bless_amount = (1000 + (5 * matchcount)) * (1 + rebirth)
+            bless_amount = (1000 + (100 * matchcount)) * (1 + rebirth)
             await bless(bless_amount, player)
             return f"You earned :coin: **{bless_amount}**!"
         elif drop_rate <= rift_rate and drop_rate > gold_drop:
             response = db.updateUserNoFilter(user_query, {'$set': {'RIFT': 1}})
-            bless_amount = (200 + (5 * matchcount)) * (1 + rebirth)
+            bless_amount = (200 + (100 * matchcount)) * (1 + rebirth)
             await bless(bless_amount, player)
             return f"A RIFT HAS OPENED! You have earned :coin: **{bless_amount}**!"
         elif drop_rate <= title_drop and drop_rate > gold_drop:
             if all_available_drop_titles:
                 if len(vault['TITLES']) >= 25:
-                    await bless(150, player)
+                    await bless(300, player)
                     return f"You're maxed out on Titles! You earned :coin: 300 instead!"
                 response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'TITLES': str(titles[rand_title])}})
                 return f"You earned _Title:_ **{titles[rand_title]}**!"
@@ -18638,7 +18673,7 @@ async def drops(player, universe, matchcount):
         elif drop_rate <= arm_drop and drop_rate > title_drop:
             if all_available_drop_arms:
                 if len(vault['ARMS']) >= 25:
-                    await bless(150, player)
+                    await bless(300, player)
                     return f"You're maxed out on Arms! You earned :coin: 300 instead!"
                 if str(arms[rand_arm]) in owned_arms:
                     await bless(150, player)
@@ -18652,7 +18687,7 @@ async def drops(player, universe, matchcount):
         elif drop_rate <= pet_drop and drop_rate > arm_drop:
             if all_available_drop_pets:
                 if len(vault['PETS']) >= 25:
-                    await bless(150, player)
+                    await bless(300, player)
                     return f"You're maxed out on Summons! You earned :coin: 300 instead!"
 
                 pet_owned = False
@@ -18682,7 +18717,7 @@ async def drops(player, universe, matchcount):
         elif drop_rate <= card_drop and drop_rate > pet_drop:
             if all_available_drop_cards:
                 if len(vault['CARDS']) >= 25:
-                    await bless(150, player)
+                    await bless(300, player)
                     return f"You're maxed out on Cards! You earned :coin: 300 instead!"
 
                 # Check if already owned
@@ -18880,12 +18915,12 @@ async def dungeondrops(player, universe, matchcount):
 
     try:
         if drop_rate <= gold_drop:
-            bless_amount = (5000 + (5 * matchcount)) * (1 + rebirth)
+            bless_amount = (5000 + (250 * matchcount)) * (1 + rebirth)
             await bless(bless_amount, player)
             return f"You earned :coin: **{bless_amount}**!"
         elif drop_rate <= rift_rate and drop_rate > gold_drop:
             response = db.updateUserNoFilter(user_query, {'$set': {'RIFT': 1}})
-            bless_amount = (150 + (5 * matchcount)) * (1 + rebirth)
+            bless_amount = (150 + (250 * matchcount)) * (1 + rebirth)
             await bless(bless_amount, player)
             return f"A RIFT HAS OPENED! You have earned :coin: **{bless_amount}**!"
         elif drop_rate <= title_drop and drop_rate > gold_drop:
@@ -19059,7 +19094,7 @@ async def bossdrops(player, universe):
         if drop_rate <= gold_drop:
             bless_amount = 80000 * (1 + rebirth)
             await bless(bless_amount, player)
-            return f"You earned :coin: 5000!"
+            return f"You earned :coin: {bless_amount}!"
         elif drop_rate <= title_drop and drop_rate > gold_drop:
             if len(vault['TITLES']) >= 25:
                 await bless(8000, player)

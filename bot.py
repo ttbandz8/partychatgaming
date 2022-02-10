@@ -442,7 +442,7 @@ async def crown(ctx):
    Players can use **/apply** to join as well!
    
    **Guild Bonusus**
-   Guildmates gain an extra **10 Attack** and **Defense** playing Co-Op Together !
+   Guildmates gain an extra **50 Attack** and **Defense** playing Co-Op Together !
    Guilds earn additional :coin: for every **Tales**, **Dungeon** and **Boss** Victory
    
    **Guild Economy**
@@ -463,7 +463,7 @@ async def crown(ctx):
    **2 Kids** can be adopted into the family to create a 4 player Maximum.
    
    **Family Bonuses**
-   Family Members gain an extra **50 Health** when playing Co-Op Together !
+   Family Members gain an extra **100 Health** when playing Co-Op Together !
    Family Members earn extra :coin: towards the **Family Bank**.
    Families can /invest their income together.
    Heads of Household and Partners can pay **/allowance** to Family members. 
