@@ -6750,7 +6750,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                     else:
                         return button_ctx.author == user2
                 elif mode in co_op_modes:
-                    return button_ctx.author == user2
+                    return button_ctx.author == ctx.author
                 else:
                     return button_ctx.author == ctx.author
 
