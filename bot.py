@@ -1291,7 +1291,7 @@ async def on_slash_command_error(ctx, ex):
 @commands.cooldown(1, 60*60*24, commands.BucketType.user)
 async def daily(ctx):
    try:
-      dailyamount = 25000
+      dailyamount = 100000
       await bless(dailyamount, ctx.author)
 
       user_data = db.queryUser({'DID': str(ctx.author.id)})
@@ -1309,11 +1309,11 @@ async def daily(ctx):
       q2 = random.randint(0, oppponent_len)
       q3 = random.randint(0, oppponent_len)
 
-      q1_earn = round(random.randint(150000, 300000))
-      q2_earn = round(random.randint(400000, 900000))
-      q3_earn = round(random.randint(800000, 1950000))
+      q1_earn = round(random.randint(50000, 300000))
+      q2_earn = round(random.randint(100000, 900000))
+      q3_earn = round(random.randint(300000, 1000000))
 
-      quests = [{'OPPONENT': opponents[q1], 'TYPE': 'Tales', 'GOAL': 2, 'WINS': 0, 'REWARD': q1_earn },{'OPPONENT': opponents[q2], 'TYPE': 'Tales', 'GOAL': 8, 'WINS': 0, 'REWARD': q2_earn }, {'OPPONENT': opponents[q3], 'TYPE': 'Tales', 'GOAL': 16, 'WINS': 0, 'REWARD': q3_earn }]
+      quests = [{'OPPONENT': opponents[q1], 'TYPE': 'Tales', 'GOAL': 1, 'WINS': 0, 'REWARD': q1_earn },{'OPPONENT': opponents[q2], 'TYPE': 'Tales', 'GOAL': 2, 'WINS': 0, 'REWARD': q2_earn }, {'OPPONENT': opponents[q3], 'TYPE': 'Tales', 'GOAL': 3, 'WINS': 0, 'REWARD': q3_earn }]
       db.updateVaultNoFilter({'DID': str(ctx.author.id)}, {'$set': {'QUESTS': quests}})
       db.updateUserNoFilter({'DID': str(ctx.author.id)}, {'$set': {'BOSS_FOUGHT': False}})
       await ctx.send(f"Daily bonus :coin:{dailyamount} has been applied for {ctx.author.mention}!\nYour new quests are available!\n**use /quests to open the Quest Board**!")
