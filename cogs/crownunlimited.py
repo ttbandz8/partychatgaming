@@ -1218,7 +1218,9 @@ class CrownUnlimited(commands.Cog):
             else:
                 unlockable_message = ""
 
-            embedVar = discord.Embed(title=f":new_moon: Abyss Floor {floor}\nFights This Floor  ⚔️{len(enemies)}", description=textwrap.dedent(f"""
+            embedVar = discord.Embed(title=f":new_moon: Abyss Floor {floor}", description=textwrap.dedent(f"""
+            Depth  ⚔️{len(enemies)}
+
             {unlockable_message}
             {bad_message}
             """))
@@ -17827,6 +17829,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     continued = True
                             
                                 if currentopponent == (total_legends):
+                                    floor = universe['FLOOR']
                                     new_level = floor + 1
                                     response = db.updateUserNoFilter({'DID': str(ctx.author.id)}, {'$set': {'LEVEL': new_level}})
                                     abyss_message = abyss_level_up_message(str(ctx.author.id), floor, t_card, t_title, tarm_name)
