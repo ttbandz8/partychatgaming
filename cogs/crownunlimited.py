@@ -1234,7 +1234,7 @@ class CrownUnlimited(commands.Cog):
                 embedVar.add_field(name=":ringed_planet: Banned Universes", value="\n".join(banned_universes),
                                 inline=True)
             if banned_card_tiers:
-                embedVar.add_field(name=":white_flower: Banned Card Tiers", value="\n".join(tier_conversion),
+                embedVar.add_field(name="🀄 Banned Card Tiers", value="\n".join(tier_conversion),
                                 inline=True)
 
             msg = await private_channel.send(embed=embedVar, components=[abyss_buttons_action_row])
