@@ -3062,6 +3062,10 @@ def abyss_level_up_message(did, floor, card, title, arm):
             message = "🎊 Congratulations! 🎊 You unlocked **Bosses**. Use the **/tales** command and select Boss to battle Universe Bosses too earn ultra rare Cards, Titles, and Arms!"
             new_unlock = True
             
+        if floor == 80:
+            message = "🎊 Congratulations! 🎊 You unlocked **Duo Dungeons**. Use the **/duo** command and select Dungeons to battle battle through the Hard Mode of Universes to earn super rare Cards, Titles, and Arms!"
+            new_unlock = True
+            
         if floor == 100:
             message = "🎊 Congratulations! 🎊 You unlocked **Soul Exchange**. Use the **/exchange** command and Exchange any boss souls for cards from their respective universe! This will Reset your Abyss Level!"
             new_unlock = True
@@ -18034,7 +18038,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         """),colour=0x1abc9c)
                                         embedVar.add_field(name="**Co-Op Bonus**",
                                                 value=f"{bonus_message}")
-                                    elif mode not in ai_co_op_modes:
+                                    elif mode in ai_co_op_modes:
                                         embedVar = discord.Embed(title=f":crown: DUO VICTORY\n**{o_card} says**\n{o_win_description}\nThe game lasted {turn_total} rounds.\n\n{drop_response}",description=textwrap.dedent(f"""
                                         {previous_moves_into_embed}
                                         
