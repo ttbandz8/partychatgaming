@@ -6730,7 +6730,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card)
             
             if mode in co_op_modes and mode not in ai_co_op_modes:
-                embedVar = discord.Embed(title=f"✅ Confirm Co-Op Battle!", description=f"{user2.mention}\n**{o_card}** & **{c_card}** VS **{t_card}**")
+                embedVar = discord.Embed(title=f"✅ Confirm Co-Op Battle!", description=f"{ctx.author.mention}\n**{o_card}** & **{c_card}** VS **{t_card}**")
                 embedVar.set_image(url="attachment://image.png")
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card)
             if mode in ai_co_op_modes:
@@ -13705,7 +13705,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             elif mode in co_op_modes and turn != (0 or 1):
                                 # Companion Turn Start
                                 if turn == 2:
-                                    # await asyncio.sleep(2)
+                                    await asyncio.sleep(1)
                                     if c_block_used == True:
                                         c_defense = int(c_defense / 2)
                                         c_block_used = False
@@ -15906,8 +15906,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     'trace': trace
                                                 }))
                                 # Opponent Turn Start
+                                
                                 elif turn == 3:
-                                    # await asyncio.sleep(2)
+                                    await asyncio.sleep(1)
                                     if t_attack <= 25:
                                         t_attack = 25
                                     if t_defense <= 30:
@@ -17527,7 +17528,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 else:
                                     bonus_message = f"Join a Guild or Create a Family for Coop Bonuses!"
                                     
-                                embedVar = discord.Embed(title=f":zap: **{t_card}** wins the match!\n\n**{c_user['NAME']}** will you assist again?\nThe game lasted {turn_total} rounds.\n**{t_card} says**\n`{t_win_description}`", description=textwrap.dedent(f"""
+                                embedVar = discord.Embed(title=f":zap: **{t_card}** wins the match!\n\nThe game lasted {turn_total} rounds.\n**{t_card} says**\n`{t_win_description}`", description=textwrap.dedent(f"""
+                                **{ctx.author.mention}** do you want to play again?
+
                                 {previous_moves_into_embed}
                                 
                                 """),colour=0x1abc9c)
@@ -17545,7 +17548,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             if mode not in co_op_modes and mode != "Abyss":
                                 play_again_selector = ctx.author
                             elif mode in co_op_modes and mode not in ai_co_op_modes:
-                                play_again_selector = user2
+                                play_again_selector = ctx.author
                             else:
                                 play_again_selector = ctx.author
 
