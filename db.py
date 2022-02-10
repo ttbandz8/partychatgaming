@@ -710,12 +710,11 @@ def gods_exists(data):
         return False
 
 def createGods(query):
-    exists = gods_exists(query)
-    if exists:
-        return "Gods already created. "
-    else:
+    try:
         response = gods_col.insert_one(query)
         return "Gods Created. "
+    except:
+        return False
 
 def queryGods(query):
     response = gods_col.find_one(query)

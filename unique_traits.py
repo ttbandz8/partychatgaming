@@ -41,7 +41,7 @@ traits = [{
 },{
     'NAME': 'Demon Slayer',
     'EFFECT': 'Total Concentration Constant',
-    'TRAIT': 'If your oppponent has greater Health, Your Starting Health = Opponent Health. On Resolve If Opponent has greater ATK or DEF, Your ATK & DEF = Opponent ATK and DEF'
+    'TRAIT': 'Your Starting Health = Opp Health if Opp Health is greater. On Resolve, Your ATK & DEF = Opp ATK and DEF if Opp stats are greater.'
 },{
     'NAME': 'God Of War',
     'EFFECT': 'Ascension',

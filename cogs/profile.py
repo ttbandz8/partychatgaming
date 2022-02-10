@@ -2444,7 +2444,7 @@ class Profile(commands.Cog):
                         tier = 0
 
                         if card_name in current_cards:
-                            await cardlevel(card['NAME'], str(ctx.author), "Purchase", universe)
+                            await cardlevel(self,card['NAME'], str(ctx.author), "Purchase", universe)
                             await button_ctx.send(f"You received a level up for **{card_name}**!")
                             await main.curse(price, str(ctx.author))
                             
@@ -2496,7 +2496,7 @@ class Profile(commands.Cog):
                         tier = 0
 
                         if card_name in current_cards:
-                            await cardlevel(card['NAME'], str(ctx.author), "Purchase", universe)
+                            await cardlevel(self,card['NAME'], str(ctx.author), "Purchase", universe)
                             await button_ctx.send(f"You received a level up for **{card_name}**!")
                             await main.curse(price, str(ctx.author))
                             
@@ -2540,11 +2540,12 @@ class Profile(commands.Cog):
                             await button_ctx.send("There are no cards available for purchase in this range.")
                             self.stop = True
                             return
+                        else:
+                            list_of_cards = []
+                            for card in card_list_response:
+                                if card['AVAILABLE'] and not card['EXCLUSIVE'] and not card['HAS_COLLECTION']:
+                                    list_of_cards.append(card)
 
-                        list_of_cards = []
-                        for card in card_list_response:
-                            if card['AVAILABLE'] and not card['EXCLUSIVE'] and not card['HAS_COLLECTION']:
-                                list_of_cards.append(card)
 
                         if not list_of_cards:
                             await button_ctx.send("There are no cards available for purchase in this range.")
@@ -2557,7 +2558,7 @@ class Profile(commands.Cog):
                         tier = 0
 
                         if card_name in current_cards:
-                            await cardlevel(card['NAME'], str(ctx.author), "Purchase", universe)
+                            await cardlevel(self,card['NAME'], str(ctx.author), "Purchase", universe)
                             await button_ctx.send(f"You received a level up for **{card_name}**!")
                             await main.curse(price, str(ctx.author))
                             
@@ -2572,7 +2573,6 @@ class Profile(commands.Cog):
                                                     'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
                                 r = db.updateVaultNoFilter(vault_query, update_query)
 
-                            await button_ctx.send(f"You purchased **{card_name}**!")
 
                             # Add Destiny
                             for destiny in d.destiny:
@@ -2580,6 +2580,8 @@ class Profile(commands.Cog):
                                     db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
                                     await button_ctx.send(
                                         f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.", hidden=True)
+
+                            await button_ctx.send(f"You purchased **{card_name}**!")
 
                             self.stop = True
                             return

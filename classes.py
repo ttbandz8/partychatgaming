@@ -330,17 +330,11 @@ class GAMES():
 
 @dataclass(frozen=True, order=True)
 class GODS():
-    TITLE: str
-    GAME: str
-    TYPE: int
-    IMG_URL: str
-    REWARD: int
-    ARCHIVED: bool = field(default_factory=lambda: False)
-    TEAM_FLAG: bool = field(default_factory=lambda: False)
-    AVAILABLE: bool = field(default_factory=lambda: False)
-    REGISTRATION: bool = field(default_factory=lambda: False)
-    PARTICIPANTS: list[str] = field(default_factory=lambda: [])
-    WINNER: str = field(default_factory=lambda: '')
+    PLAYER: str
+    DID: str
+    CARD: str
+    TITLE: int
+    ARM: str
     TIMESTAMP: str = now
 
 

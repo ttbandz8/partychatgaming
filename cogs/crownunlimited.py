@@ -1197,7 +1197,7 @@ class CrownUnlimited(commands.Cog):
 
             # Convert tiers into strings from ints
             tier_conversion = [str(tier) for tier in banned_card_tiers]
-
+            
             abyss_buttons = [
                 manage_components.create_button(
                     style=ButtonStyle.blue,
@@ -1219,11 +1219,12 @@ class CrownUnlimited(commands.Cog):
                 unlockable_message = ""
 
             embedVar = discord.Embed(title=f":new_moon: Abyss Floor {floor}", description=textwrap.dedent(f"""
-            Depth  ⚔️{len(enemies)}
+            Fights  ⚔️{len(enemies)}
 
             {unlockable_message}
             {bad_message}
             """))
+            embedVar.set_footer(text="Each floor must be completed all the way through to advance to the next floor.")
             if banned_cards:
                 embedVar.add_field(name=":flower_playing_cards: Banned Cards", value="\n".join(banned_cards),
                                 inline=True)
@@ -1272,7 +1273,8 @@ class CrownUnlimited(commands.Cog):
                         await private_channel.send(
                             f":x: **{checks['UNIVERSE']}** cards are banned on floor {floor}. Use another card.")
                         return
-                    if checks['TIER'] in banned_card_tiers:
+                    
+                    if str(checks['TIER']) in tier_conversion:
                         await private_channel.send(
                             f":x: Tier **{str(checks['TIER'])}** cards are banned on floor {floor}. Use another card.")
                         return
@@ -2948,6 +2950,23 @@ def abyss_level_up_message(did, floor, card, title, arm):
         new_unlock = False
         vault_query = {'DID': did}
         vault = db.altQueryVault(vault_query)
+
+        # Determine first to beat floor 100
+        if floor == 100:
+            all_users = db.queryAllUsers()
+            first = True
+            for user in all_users:
+                if user['LEVEL'] == 101:
+                    first = False
+            if first:
+                winner = {
+                    'PLAYER': vault['OWNER'],
+                    'DID': vault['DID'],
+                    'CARD': card,
+                    'TITLE': title,
+                    'ARM': arm
+                }
+                rr = db.createGods(data.newGods(winner))
         
         if floor in abyss_floor_reward_list:
             current_titles = vault['TITLES']
@@ -5908,11 +5927,13 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
         
 
         async def custom_function(self, button_ctx):
-            await button_ctx.defer(ignore=True)
-            selected_universe = custom_function
-            custom_function.selected_universe = str(button_ctx.origin_message.embeds[0].title)
-            self.stop = True
-            
+            if button_ctx.author == ctx.author:
+                await button_ctx.defer(ignore=True)
+                selected_universe = custom_function
+                custom_function.selected_universe = str(button_ctx.origin_message.embeds[0].title)
+                self.stop = True
+            else:
+                await ctx.send("This is not your button.", hidden=True)
 
         await Paginator(bot=self.bot, ctx=ctx, useQuitButton=True, deleteAfterTimeout=True, pages=universe_embed_list, timeout=60, customButton=[
             custom_button,
@@ -6017,10 +6038,14 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
         custom_button = manage_components.create_button(style=3, label="Select")
 
         async def custom_function(self, button_ctx):
-            await button_ctx.defer(ignore=True)
-            selected_universe = custom_function
-            custom_function.selected_universe = str(button_ctx.origin_message.embeds[0].title)
-            self.stop = True
+            if button_ctx.author == ctx.author:
+                await button_ctx.defer(ignore=True)
+                selected_universe = custom_function
+                custom_function.selected_universe = str(button_ctx.origin_message.embeds[0].title)
+                self.stop = True
+            else:
+                await ctx.send("This is not your button.", hidden=True)
+
             
 
         await Paginator(bot=self.bot, ctx=ctx, useQuitButton=True, deleteAfterTimeout=True, pages=universe_embed_list, timeout=60,  customButton=[
@@ -6116,11 +6141,14 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
         custom_button = manage_components.create_button(style=3, label="Select")
 
         async def custom_function(self, button_ctx):
-            await button_ctx.defer(ignore=True)
-            selected_universe = custom_function
-            custom_function.selected_universe = str(button_ctx.origin_message.embeds[0].title)
-            self.stop = True
-        
+            if button_ctx.author == ctx.author:
+                await button_ctx.defer(ignore=True)
+                selected_universe = custom_function
+                custom_function.selected_universe = str(button_ctx.origin_message.embeds[0].title)
+                self.stop = True
+            else:
+                await ctx.send("This is not your button.", hidden=True)
+
         await Paginator(bot=self.bot, ctx=ctx, useQuitButton=True, deleteAfterTimeout=True, pages=universe_embed_list, timeout=60,  customButton=[
             custom_button,
             custom_function,
