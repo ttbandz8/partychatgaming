@@ -39,7 +39,7 @@ class Guild(commands.Cog):
             owner = sworn
             guild_name = association
             cost = 10000
-            founder_profile = db.queryUser({'DISNAME': str(ctx.author)})
+            founder_profile = db.queryUser({'DID': str(ctx.author.id)})
             guildsearch_name = founder_profile['GUILD']
             if guildsearch_name != "PCG":
                 guildsearch_query = {'GNAME' : guildsearch_name}
@@ -258,7 +258,7 @@ class Guild(commands.Cog):
 
     @cog_ext.cog_slash(description="Betray your Association (Association Sworn)", guild_ids=main.guild_ids)
     async def betray(self, ctx, founder: User):
-        sworn_profile = db.queryUser({'DISNAME': str(ctx.author)})
+        sworn_profile = db.queryUser({'DID': str(ctx.author.id)})
         founder_profile = db.queryUser({'DISNAME': str(founder)})
         if sworn_profile['GUILD'] != founder_profile['GUILD']:
             await ctx.send(m.GUILD_DOESNT_EXIST, delete_after=5)
@@ -314,7 +314,7 @@ class Guild(commands.Cog):
 
     @cog_ext.cog_slash(description="Ask Guild Owner to join Association! (Association Owner)", guild_ids=main.guild_ids)
     async def ally(self, ctx, owner: User):
-        founder_profile = db.queryUser({'DISNAME': str(ctx.author)})
+        founder_profile = db.queryUser({'DID': str(ctx.author.id)})
         guildname = founder_profile['GUILD']
         sword_profile = db.queryUser({'DISNAME': str(owner)})
         team_profile = db.queryTeam({'TNAME': sword_profile['TEAM']})
@@ -402,7 +402,7 @@ class Guild(commands.Cog):
                 
     @cog_ext.cog_slash(description="Knight your Association Shield! (Association Owner)", guild_ids=main.guild_ids)
     async def knight(self, ctx, blade: User):
-        founder_profile = db.queryUser({'DISNAME': str(ctx.author)})
+        founder_profile = db.queryUser({'DID': str(ctx.author.id)})
         shield_profile = db.queryUser({'DISNAME' : str(blade)})
         if not shield_profile:
             await ctx.send(m.USER_NOT_REGISTERED)
@@ -509,7 +509,7 @@ class Guild(commands.Cog):
         
     @cog_ext.cog_slash(description="Exile Guild from Association (Association Owner)", guild_ids=main.guild_ids)
     async def exile(self, ctx, owner: User):
-        leader_profile = db.queryUser({'DISNAME': str(ctx.author)})
+        leader_profile = db.queryUser({'DID': str(ctx.author.id)})
         exiled_profile = db.queryUser({'DISNAME': str(owner)})
         if not exiled_profile:
             await ctx.send(m.USER_DOESNT_EXIST, delete_after=5)
@@ -563,7 +563,7 @@ class Guild(commands.Cog):
 
     @cog_ext.cog_slash(description="Abandon Association (Guild Owner)", guild_ids=main.guild_ids)
     async def renounce(self, ctx):
-        sword_profile = db.queryUser({'DISNAME': str(ctx.author)})
+        sword_profile = db.queryUser({'DID': str(ctx.author.id)})
         team_profile = db.queryTeam({'TNAME' : sword_profile['TEAM']})
         if sword_profile['DISNAME'] != team_profile['OWNER'] or sword_profile['TEAM'] == 'PCG':
             await ctx.send(m.OWNER_ONLY_COMMAND, delete_after=5)
@@ -660,7 +660,7 @@ class Guild(commands.Cog):
                         try:
                             response = db.deleteGuild(guild, str(ctx.author))
 
-                            user_query = {'DISNAME': str(ctx.author)}
+                            user_query = {'DID': str(ctx.author.id)}
                             new_value = {'$set': {'GUILD': 'PCG'}}
                             db.updateUserNoFilter(user_query, new_value)
 

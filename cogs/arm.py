@@ -49,7 +49,7 @@ class Arm(commands.Cog):
     #             await ctx.send("You are not connected to the rift...", hidden=True)
     #             return
     #         all_universes = db.queryAllUniverse()
-    #         user = db.queryUser({'DISNAME': str(ctx.author)})
+    #         user = db.queryUser({'DID': str(ctx.author.id)})
     #         available_universes = []
     #         if user['RIFT'] == 1:
     #             riftShopOpen = True
@@ -127,7 +127,7 @@ class Arm(commands.Cog):
     #                         return
 
     #                     if button_ctx.custom_id == "Yes":
-    #                         user_query = {'DISNAME': str(ctx.author)}
+    #                         user_query = {'DID': str(ctx.author.id)}
     #                         response = db.updateUserNoFilter(user_query, {'$set': {'ARM': str(arm_name)}})
     #                         await button_ctx.send(response)
     #                 except:
@@ -141,7 +141,7 @@ class Arm(commands.Cog):
     @cog_ext.cog_slash(description="Equip an Arm")
     async def equiparm(self, ctx, arm: str):
         arm_name = arm
-        user_query = {'DISNAME': str(ctx.author)}
+        user_query = {'DID': str(ctx.author.id)}
         user = db.queryUser(user_query)
 
         vault_query = {'OWNER' : str(ctx.author)}

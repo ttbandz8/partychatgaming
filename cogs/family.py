@@ -156,7 +156,7 @@ class Family(commands.Cog):
 
     @cog_ext.cog_slash(description="Divorce your partner", guild_ids=main.guild_ids)
     async def divorce(self, ctx, partner: User):
-        head_profile = db.queryUser({'DISNAME': str(ctx.author)})
+        head_profile = db.queryUser({'DID': str(ctx.author.id)})
         partner_profile = db.queryUser({'DISNAME': str(partner)})
         family_profile = db.queryFamily({'HEAD': head_profile['FAMILY']})
         if family_profile['HEAD'] == str(ctx.author):
@@ -297,7 +297,7 @@ class Family(commands.Cog):
     @cog_ext.cog_slash(description="Adopt a kid", guild_ids=main.guild_ids)
     async def adopt(self, ctx, player: User):
         try:
-            head_profile = db.queryUser({'DISNAME': str(ctx.author)})
+            head_profile = db.queryUser({'DID': str(ctx.author.id)})
             kid_profile = db.queryUser({'DISNAME': str(player)})
             partner_mode = False
             if head_profile['FAMILY'] == 'PCG':
@@ -456,7 +456,7 @@ class Family(commands.Cog):
     @cog_ext.cog_slash(description="Disown your kid", guild_ids=main.guild_ids)
     async def disown(self, ctx, kid: User):
         try:
-            head_profile = db.queryUser({'DISNAME': str(ctx.author)})
+            head_profile = db.queryUser({'DID': str(ctx.author.id)})
             family_profile = db.queryFamily({'HEAD': head_profile['FAMILY']})
             family_query = {'HEAD': str(ctx.author)}
             if str(ctx.author) != family_profile['HEAD']:
@@ -543,7 +543,7 @@ class Family(commands.Cog):
 
     @cog_ext.cog_slash(description="Leave your adopted family", guild_ids=main.guild_ids)
     async def leavefamily(self, ctx):
-        kid_profile = db.queryUser({'DISNAME': str(ctx.author)})
+        kid_profile = db.queryUser({'DID': str(ctx.author.id)})
         family_profile = db.queryFamily({'HEAD': kid_profile['FAMILY']})
         kidlist = []
         family_query = {'HEAD': kid_profile['FAMILY']}
@@ -640,7 +640,7 @@ class Family(commands.Cog):
                         if button_ctx.custom_id == "yes":
                             try:
                                 response = db.deleteFamily(family, str(ctx.author))
-                                user_query = {'DISNAME': str(ctx.author)}
+                                user_query = {'DID': str(ctx.author.id)}
                                 new_value = {'$set': {'FAMILY': 'PCG'}}
                                 db.updateUserNoFilter(user_query, new_value)
 

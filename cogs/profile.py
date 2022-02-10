@@ -98,7 +98,7 @@ class Profile(commands.Cog):
 
     @cog_ext.cog_slash(description="View your current build", guild_ids=main.guild_ids)
     async def build(self, ctx):
-        query = {'DISNAME': str(ctx.author)}
+        query = {'DID': str(ctx.author.id)}
         d = db.queryUser(query)
         card = db.queryCard({'NAME':str(d['CARD'])})
         title = db.queryTitle({'TITLE': str(d['TITLE'])})
@@ -347,7 +347,7 @@ class Profile(commands.Cog):
     @cog_ext.cog_slash(description="Check all your cards", guild_ids=main.guild_ids)
     async def cards(self, ctx):
         await ctx.defer()
-        query = {'DISNAME': str(ctx.author)}
+        query = {'DID': str(ctx.author.id)}
         d = db.queryUser(query)
         vault = db.queryVault({'DID': d['DID']})
         try: 
@@ -494,7 +494,7 @@ class Profile(commands.Cog):
                             if selected_card in updated_vault['CARDS']:
                                 selected_universe = custom_function
                                 custom_function.selected_universe = selected_card
-                                user_query = {'DISNAME': str(ctx.author)}
+                                user_query = {'DID': str(ctx.author.id)}
                                 response = db.updateUserNoFilter(user_query, {'$set': {'CARD': selected_card}})
                                 await button_ctx.send(f":flower_playing_cards: **{selected_card}** equipped.")
                                 self.stop = True
@@ -534,7 +534,7 @@ class Profile(commands.Cog):
                                         await button_ctx.send("Sell cancelled. ")
                                         self.stop = True
                                     if button_ctx.custom_id == "yes":
-                                        db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'CARDS': card_name}})
+                                        db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'CARDS': card_name}})
                                         await main.bless(sell_price, ctx.author)
                                         await button_ctx.send("Sold.")
                                 except Exception as ex:
@@ -593,14 +593,14 @@ class Profile(commands.Cog):
                                         self.stop = True
                                     if button_ctx.custom_id == "yes":
                                         if selected_universe in current_gems:
-                                            query = {'OWNER': str(ctx.author)}
+                                            query = {'DID': str(ctx.author.id)}
                                             update_query = {'$inc': {'GEMS.$[type].' + "GEMS": dismantle_amount}}
                                             filter_query = [{'type.' + "UNIVERSE": selected_universe}]
                                             response = db.updateVault(query, update_query, filter_query)
                                         else:
-                                            response = db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$addToSet':{'GEMS': {'UNIVERSE': selected_universe, 'GEMS': dismantle_amount, 'UNIVERSE_HEART': False, 'UNIVERSE_SOUL': False}}})
+                                            response = db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$addToSet':{'GEMS': {'UNIVERSE': selected_universe, 'GEMS': dismantle_amount, 'UNIVERSE_HEART': False, 'UNIVERSE_SOUL': False}}})
 
-                                        db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'CARDS': card_name}})
+                                        db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'CARDS': card_name}})
                                         await main.bless(sell_price, ctx.author)
                                         await button_ctx.send("Dismantled.")
                                         self.stop = True
@@ -795,7 +795,7 @@ class Profile(commands.Cog):
     @cog_ext.cog_slash(description="Check all your Titles", guild_ids=main.guild_ids)
     async def titles(self, ctx):
         await ctx.defer()
-        query = {'DISNAME': str(ctx.author)}
+        query = {'DID': str(ctx.author.id)}
         d = db.queryUser(query)
         vault = db.queryVault({'DID': d['DID']})
         if vault:
@@ -861,7 +861,7 @@ class Profile(commands.Cog):
                             if selected_title in updated_vault['TITLES']:
                                 selected_universe = custom_function
                                 custom_function.selected_universe = selected_title
-                                user_query = {'DISNAME': str(ctx.author)}
+                                user_query = {'DID': str(ctx.author.id)}
                                 response = db.updateUserNoFilter(user_query, {'$set': {'TITLE': selected_title}})
                                 await button_ctx.send(f"🎗️ **{selected_title}** equipped.")
                                 self.stop = True
@@ -901,7 +901,7 @@ class Profile(commands.Cog):
                                         await button_ctx.send("Sell cancelled. Please press the Exit button if you are done reselling titles.")
                                         self.stop = True
                                     if button_ctx.custom_id == "yes":
-                                        db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'TITLES': title_name}})
+                                        db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'TITLES': title_name}})
                                         await main.bless(sell_price, ctx.author)
                                         await button_ctx.send("Sold.")
                                 except Exception as ex:
@@ -960,14 +960,14 @@ class Profile(commands.Cog):
                                         self.stop = True
                                     if button_ctx.custom_id == "yes":
                                         if selected_universe in current_gems:
-                                            query = {'OWNER': str(ctx.author)}
+                                            query = {'DID': str(ctx.author.id)}
                                             update_query = {'$inc': {'GEMS.$[type].' + "GEMS": dismantle_amount}}
                                             filter_query = [{'type.' + "UNIVERSE": selected_universe}]
                                             response = db.updateVault(query, update_query, filter_query)
                                         else:
-                                            response = db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$addToSet':{'GEMS': {'UNIVERSE': selected_universe, 'GEMS': dismantle_amount, 'UNIVERSE_HEART': False, 'UNIVERSE_SOUL': False}}})
+                                            response = db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$addToSet':{'GEMS': {'UNIVERSE': selected_universe, 'GEMS': dismantle_amount, 'UNIVERSE_HEART': False, 'UNIVERSE_SOUL': False}}})
 
-                                        db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'TITLES': title_name}})
+                                        db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'TITLES': title_name}})
                                         await main.bless(sell_price, ctx.author)
                                         await button_ctx.send("Dismantled.")
                                         self.stop = True
@@ -1164,7 +1164,7 @@ class Profile(commands.Cog):
     @cog_ext.cog_slash(description="Check all your Arms", guild_ids=main.guild_ids)
     async def arms(self, ctx):
         await ctx.defer()
-        query = {'DISNAME': str(ctx.author)}
+        query = {'DID': str(ctx.author.id)}
         d = db.queryUser(query)
         vault = db.queryVault({'DID': d['DID']})
         if vault:
@@ -1237,7 +1237,7 @@ class Profile(commands.Cog):
                             if selected_arm in updated_vault:
                                 selected_universe = custom_function
                                 custom_function.selected_universe = selected_arm
-                                user_query = {'DISNAME': str(ctx.author)}
+                                user_query = {'DID': str(ctx.author.id)}
                                 response = db.updateUserNoFilter(user_query, {'$set': {'ARM': selected_arm}})
                                 await button_ctx.send(f":mechanical_arm: **{selected_arm}** equipped.")
                                 self.stop = True
@@ -1277,7 +1277,7 @@ class Profile(commands.Cog):
                                         await button_ctx.send("Sell cancelled. Please press the Exit button if you are done reselling titles.")
                                         self.stop = True
                                     if button_ctx.custom_id == "yes":
-                                        db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'ARMS': {'ARM': str(arm_name)}}})
+                                        db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'ARMS': {'ARM': str(arm_name)}}})
                                         await main.bless(sell_price, ctx.author)
                                         await button_ctx.send("Sold.")
                                 except Exception as ex:
@@ -1338,14 +1338,14 @@ class Profile(commands.Cog):
                                         self.stop = True
                                     if button_ctx.custom_id == "yes":
                                         if selected_universe in current_gems:
-                                            query = {'OWNER': str(ctx.author)}
+                                            query = {'DID': str(ctx.author.id)}
                                             update_query = {'$inc': {'GEMS.$[type].' + "GEMS": dismantle_amount}}
                                             filter_query = [{'type.' + "UNIVERSE": selected_universe}]
                                             response = db.updateVault(query, update_query, filter_query)
                                         else:
-                                            response = db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$addToSet':{'GEMS': {'UNIVERSE': selected_universe, 'GEMS': dismantle_amount, 'UNIVERSE_HEART': False, 'UNIVERSE_SOUL': False}}})
+                                            response = db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$addToSet':{'GEMS': {'UNIVERSE': selected_universe, 'GEMS': dismantle_amount, 'UNIVERSE_HEART': False, 'UNIVERSE_SOUL': False}}})
 
-                                        db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'ARMS': {'ARM': str(arm_name)}}})
+                                        db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'ARMS': {'ARM': str(arm_name)}}})
                                         await main.bless(sell_price, ctx.author)
                                         await button_ctx.send("Dismantled.")
                                         self.stop = True
@@ -1541,7 +1541,7 @@ class Profile(commands.Cog):
     @cog_ext.cog_slash(description="Check all your Summons", guild_ids=main.guild_ids)
     async def summons(self, ctx):
         await ctx.defer()
-        query = {'DISNAME': str(ctx.author)}
+        query = {'DID': str(ctx.author.id)}
         d = db.queryUser(query)
         vault = db.queryVault({'DID': d['DID']})
         if vault:
@@ -1611,7 +1611,7 @@ class Profile(commands.Cog):
                         updated_vault = db.queryVault({'DID': d['DID']})
                         sell_price = 0
                         selected_summon = str(button_ctx.origin_message.embeds[0].title)
-                        user_query = {'DISNAME': str(ctx.author)}
+                        user_query = {'DID': str(ctx.author.id)}
                         
                         if button_ctx.custom_id == "Equip":
                             response = db.updateUserNoFilter(user_query, {'$set': {'PET': str(button_ctx.origin_message.embeds[0].title)}})
@@ -1787,7 +1787,7 @@ class Profile(commands.Cog):
     @cog_ext.cog_slash(description="Check all your destiny lines", guild_ids=main.guild_ids)
     async def destinies(self, ctx):
         await ctx.defer()
-        query = {'DISNAME': str(ctx.author)}
+        query = {'DID': str(ctx.author.id)}
         d = db.queryUser(query)
         vault = db.queryVault({'DID': d['DID']})
         if not vault['DESTINY']:
@@ -1877,7 +1877,7 @@ class Profile(commands.Cog):
     @cog_ext.cog_slash(description="Check all your Quests", guild_ids=main.guild_ids)
     async def quests(self, ctx):
         await ctx.defer()
-        query = {'DISNAME': str(ctx.author)}
+        query = {'DID': str(ctx.author.id)}
         d = db.queryUser(query)
         vault = db.queryVault({'DID': d['DID']})
         if not vault['QUESTS']:
@@ -1933,7 +1933,7 @@ class Profile(commands.Cog):
     @cog_ext.cog_slash(description="Check your Balance", guild_ids=main.guild_ids)
     async def balance(self, ctx):
         try:
-            query = {'DISNAME': str(ctx.author)}
+            query = {'DID': str(ctx.author.id)}
             d = db.queryUser(query)
             vault = db.queryVault({'DID': d['DID']})
             icon = ":coin:"
@@ -1976,7 +1976,7 @@ class Profile(commands.Cog):
 
     @cog_ext.cog_slash(description="Check your Build Presets", guild_ids=main.guild_ids)
     async def preset(self, ctx):
-        query = {'DISNAME': str(ctx.author)}
+        query = {'DID': str(ctx.author.id)}
         d = db.queryUser(query)
         vault_query = {'OWNER': d['DISNAME']}
         vault = db.queryVault(vault_query)
@@ -2154,7 +2154,7 @@ class Profile(commands.Cog):
 
     @cog_ext.cog_slash(description="Save your current Build as Preset", guild_ids=main.guild_ids)
     async def savepreset(self, ctx):
-        query = {'DISNAME': str(ctx.author)}
+        query = {'DID': str(ctx.author.id)}
         d = db.queryUser(query)
         vault_query = {'OWNER': d['DISNAME']}
         vault = db.queryVault(vault_query)
@@ -2270,7 +2270,7 @@ class Profile(commands.Cog):
     async def shop(self, ctx):
         try:
             all_universes = db.queryAllUniverse()
-            user = db.queryUser({'DISNAME': str(ctx.author)})
+            user = db.queryUser({'DID': str(ctx.author.id)})
 
             if user['LEVEL'] < 5:
                 await ctx.send("🔓 Unlock the Shop by completeing Floor 5 of the 🌑 Abyss! Use /abyss to enter the abyss.")
@@ -2613,7 +2613,7 @@ class Profile(commands.Cog):
         # Craft Universe Heart, Universe Soul, Skin Box
         try:
             all_universes = db.queryAllUniverse()
-            user = db.queryUser({'DISNAME': str(ctx.author)})
+            user = db.queryUser({'DID': str(ctx.author.id)})
             card_info = db.queryCard({"NAME": user['CARD']})
             if user['LEVEL'] < 8:
                 await ctx.send("🔓 Unlock Crafting by completeing Floor 8 of the 🌑 Abyss! Use /abyss to enter the abyss.")

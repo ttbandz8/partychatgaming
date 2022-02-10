@@ -1397,7 +1397,7 @@ def deleteUser(user):
         print("Delete User failed.")
 
 def updateUser(query, new_value, arrayFilters):
-    exists = user_exists({'DISNAME': query['DISNAME']})
+    exists = user_exists({'DID': query['DID']})
     if exists:
         update = users_col.update_one(query, new_value, array_filters=arrayFilters)
         return "Update completed. "
@@ -1405,7 +1405,7 @@ def updateUser(query, new_value, arrayFilters):
         return "Update failed. "
 
 def updateUserNoFilter(query, new_value):
-    exists = user_exists({'DISNAME': query['DISNAME']})
+    exists = user_exists({'DID': query['DID']})
     if exists:
         update = users_col.update_one(query, new_value)
         return "Update completed. "

@@ -75,7 +75,7 @@ class Trade(commands.Cog):
                 await ctx.send(f"🔓 {str(player)} has not unlocked Trading by completing Floor 10 of the 🌑.")
                 return
 
-            mvault = db.queryVault({'OWNER' : str(ctx.author)})
+            mvault = db.queryVault({'DID': str(ctx.author.id)})
             trade_query={'MERCHANT': str(ctx.author) , 'BUYER' : str(player), 'OPEN' : True}
             if mode == 'New':
                 m_query = {'MERCHANT': str(ctx.author), 'OPEN': True}
@@ -566,7 +566,7 @@ class Trade(commands.Cog):
             mvalidation =False
             bvalidation =False
             item = 'P'
-            user = db.queryUser({'DISNAME': str(ctx.author)})
+            user = db.queryUser({'DID': str(ctx.author.id)})
             if user:
                 vault = db.queryVault({'OWNER': str(ctx.author)})
                 if vault:

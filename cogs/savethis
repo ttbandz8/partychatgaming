@@ -248,11 +248,11 @@ class CrownUnlimited(commands.Cog):
             player = db.queryUser({"DISNAME": str(ctx.author)})
             if not player["EXPLORE"]:
                 await ctx.send(f"Entering Explorer Mode :milky_way: ")
-                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'EXPLORE': True}})
+                db.updateUserNoFilter({'DID': str(ctx.author.id)}, {'$set': {'EXPLORE': True}})
                 return
             if player["EXPLORE"]:
                 await ctx.send(f"Exiting Explorer Mode :rotating_light: ")
-                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'EXPLORE': False}})
+                db.updateUserNoFilter({'DID': str(ctx.author.id)}, {'$set': {'EXPLORE': False}})
                 return
         except Exception as ex:
             trace = []
@@ -322,7 +322,7 @@ class CrownUnlimited(commands.Cog):
                 await ctx.send("Not a valid Deck Option")
                 return
             deckNumber = deck - 1
-            sowner = db.queryUser({'DISNAME': str(ctx.author)})
+            sowner = db.queryUser({'DID': str(ctx.author.id)})
             oteam = sowner['TEAM']
             ofam = sowner['FAMILY']
             cowner = sowner
@@ -404,7 +404,7 @@ class CrownUnlimited(commands.Cog):
             B_MODES = ['Boss', 'CBoss']
 
 
-            sowner = db.queryUser({'DISNAME': str(ctx.author)})
+            sowner = db.queryUser({'DID': str(ctx.author.id)})
             companion = db.queryUser({'DISNAME': str(user)})
             oteam = sowner['TEAM']
             cteam = companion['TEAM']
@@ -487,7 +487,7 @@ class CrownUnlimited(commands.Cog):
         try:
             # await ctx.defer()
 
-            sowner = db.queryUser({'DISNAME': str(ctx.author)})
+            sowner = db.queryUser({'DID': str(ctx.author.id)})
             oteam = sowner['TEAM']
             ofam = sowner['FAMILY']
             
@@ -550,7 +550,7 @@ class CrownUnlimited(commands.Cog):
             return
 
         try:
-            sowner = db.queryUser({'DISNAME': str(ctx.author)})
+            sowner = db.queryUser({'DID': str(ctx.author.id)})
             checks = db.queryCard({'NAME': sowner['CARD']})
             checks_uni = db.queryUniverse({'TITLE': checks['UNIVERSE']})
             uni_tier = checks_uni['TIER']
@@ -2909,7 +2909,7 @@ class CrownUnlimited(commands.Cog):
                     await bless(1000, ctx.author)
                     await ctx.author.send(f"Abyss Floor {floor} Completed! You have been awarded :coin:1000!")
                     new_level = floor + 1
-                    response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'LEVEL': new_level}})
+                    response = db.updateUserNoFilter({'DID': str(ctx.author.id)}, {'$set': {'LEVEL': new_level}})
                     continued=False
                     
                     if private_channel.guild:
@@ -2969,7 +2969,7 @@ class CrownUnlimited(commands.Cog):
             if button_ctx.custom_id == "Yes":
                 await button_ctx.send("Battle starting...")
                 # Get Session Owner Disname for scoring
-                sowner = db.queryUser({'DISNAME': str(ctx.author)})
+                sowner = db.queryUser({'DID': str(ctx.author.id)})
                 opponent = db.queryUser({'DISNAME': str(player)})
                 oteam = sowner['TEAM']
                 oguild = sowner['GUILD']
@@ -3017,7 +3017,7 @@ class CrownUnlimited(commands.Cog):
             s_gametime = starttime[17:19]
         
             # Get Session Owner Disname for scoring
-            sowner = db.queryUser({'DISNAME': str(ctx.author)})
+            sowner = db.queryUser({'DID': str(ctx.author.id)})
             oteam = sowner['TEAM']
             oteam_info = db.queryTeam({'TNAME' : oteam})
             if oteam_info:
@@ -5336,7 +5336,7 @@ class CrownUnlimited(commands.Cog):
     @cog_ext.cog_slash(description="View all Cards of a Universe you unlocked", guild_ids=main.guild_ids)
     async def cardlist(self, ctx: SlashContext, universe: str):
         universe_data = db.queryUniverse({'TITLE': {"$regex": str(universe), "$options": "i"}})
-        user = db.queryUser({'DISNAME': str(ctx.author)})
+        user = db.queryUser({'DID': str(ctx.author.id)})
         if universe_data['PREREQUISITE'] not in user['CROWN_TALES'] and universe_data['PREREQUISITE'] != "":
             await ctx.send("You have not unlocked this universe!")
             return
@@ -5415,7 +5415,7 @@ class CrownUnlimited(commands.Cog):
     @cog_ext.cog_slash(description="View all Titles of a Universe you unlocked", guild_ids=main.guild_ids)
     async def titlelist(self, ctx: SlashContext, universe: str):
         universe_data = db.queryUniverse({'TITLE': {"$regex": universe, "$options": "i"}})
-        user = db.queryUser({'DISNAME': str(ctx.author)})
+        user = db.queryUser({'DID': str(ctx.author.id)})
         if universe_data['PREREQUISITE'] not in user['CROWN_TALES'] and universe_data['PREREQUISITE'] != "":
             await ctx.send("You have not unlocked this universe!")
             return
@@ -5489,7 +5489,7 @@ class CrownUnlimited(commands.Cog):
     @cog_ext.cog_slash(description="View all Arms of a Universe you unlocked", guild_ids=main.guild_ids)
     async def armlist(self, ctx: SlashContext, universe: str):
         universe_data = db.queryUniverse({'TITLE': {"$regex": universe, "$options": "i"}})
-        user = db.queryUser({'DISNAME': str(ctx.author)})
+        user = db.queryUser({'DID': str(ctx.author.id)})
         if universe_data['PREREQUISITE'] not in user['CROWN_TALES'] and universe_data['PREREQUISITE'] != "":
             await ctx.send("You have not unlocked this universe!")
             return
@@ -5559,7 +5559,7 @@ class CrownUnlimited(commands.Cog):
     @cog_ext.cog_slash(description="View all Destinies of a Universe you unlocked", guild_ids=main.guild_ids)
     async def destinylist(self, ctx: SlashContext, universe: str):
         universe_data = db.queryUniverse({'TITLE': {"$regex": universe, "$options": "i"}})
-        user = db.queryUser({'DISNAME': str(ctx.author)})
+        user = db.queryUser({'DID': str(ctx.author.id)})
         if universe_data['PREREQUISITE'] not in user['CROWN_TALES'] and universe_data['PREREQUISITE'] != "":
             await ctx.send("You have not unlocked this universe!")
             return
@@ -5612,7 +5612,7 @@ class CrownUnlimited(commands.Cog):
     @cog_ext.cog_slash(description="View all Pets of a Universe you unlocked", guild_ids=main.guild_ids)
     async def petlist(self, ctx: SlashContext, universe: str):
         universe_data = db.queryUniverse({'TITLE': {"$regex": universe, "$options": "i"}})
-        user = db.queryUser({'DISNAME': str(ctx.author)})
+        user = db.queryUser({'DID': str(ctx.author.id)})
         if universe_data['PREREQUISITE'] not in user['CROWN_TALES'] and universe_data['PREREQUISITE'] != "":
             await ctx.send("You have not unlocked this universe!")
             return
@@ -5685,7 +5685,7 @@ class CrownUnlimited(commands.Cog):
     async def universes(self, ctx: SlashContext):
         try:
             universe_data = db.queryAllUniverse()
-            user = db.queryUser({'DISNAME': str(ctx.author)})
+            user = db.queryUser({'DID': str(ctx.author.id)})
 
             available_universes = []
             unavailable_universes = []
@@ -5766,7 +5766,7 @@ class CrownUnlimited(commands.Cog):
     @cog_ext.cog_slash(description="View all Homes for purchase", guild_ids=main.guild_ids)
     async def houses(self, ctx: SlashContext):
         house_data = db.queryAllHouses()
-        user = db.queryUser({'DISNAME': str(ctx.author)})
+        user = db.queryUser({'DID': str(ctx.author.id)})
 
         house_list = []
         for homes in house_data:
@@ -5807,7 +5807,7 @@ class CrownUnlimited(commands.Cog):
     @cog_ext.cog_slash(description="View all Guild Halls for purchase", guild_ids=main.guild_ids)
     async def halls(self, ctx: SlashContext):
         hall_data = db.queryAllHalls()
-        user = db.queryUser({'DISNAME': str(ctx.author)})
+        user = db.queryUser({'DID': str(ctx.author.id)})
 
         hall_list = []
         for homes in hall_data:
@@ -17443,7 +17443,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     embedVar.add_field(name=f"{selected_universe} CREST CLAIMED!", value=f"{oguild['GNAME']} earned the {selected_universe} **Crest**")
                                 embedVar.add_field(name="Additional Reward", value=f"You earned additional rewards in your vault! Take a look.")
                                 embedVar.set_footer(text="The /shop has been updated with new CARDS, TITLES and ARMS!")
-                                upload_query={'DISNAME': str(ctx.author)}
+                                upload_query={'DID': str(ctx.author.id)}
                                 new_upload_query={'$addToSet': {'DUNGEONS': selected_universe}}
                                 r=db.updateUserNoFilter(upload_query, new_upload_query)
                                 if selected_universe in completed_universes:
@@ -17462,7 +17462,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 embedVar.set_author(name=f"New Universes have been unlocked to explore!")
                                 embedVar.add_field(name="Additional Reward", value=f"You earned additional rewards in your vault! Take a look.")
                                 embedVar.set_footer(text="The /shop has been updated with new CARDS, TITLES and ARMS!")
-                                upload_query={'DISNAME': str(ctx.author)}
+                                upload_query={'DID': str(ctx.author.id)}
                                 new_upload_query={'$addToSet': {'CROWN_TALES': selected_universe}}
                                 r=db.updateUserNoFilter(upload_query, new_upload_query)
                                 if selected_universe in completed_universes:

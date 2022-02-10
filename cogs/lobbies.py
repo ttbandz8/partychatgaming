@@ -278,7 +278,7 @@ class Lobbies(commands.Cog):
         user1 = "SenpaiSays#3224"
         if game:
             name = game['GAME']
-            user_query = {'DISNAME': str(ctx.author)}
+            user_query = {'DID': str(ctx.author.id)}
             player2_query = {'DISNAME': user1}
             player2=db.queryUser(player2_query)
 
@@ -333,7 +333,7 @@ class Lobbies(commands.Cog):
         user1 = "SenpaiLegend#9179"
         if game:
             name = game['GAME']
-            user_query = {'DISNAME': str(ctx.author)}
+            user_query = {'DID': str(ctx.author.id)}
             player2_query = {'DISNAME': user1}
             player2=db.queryUser(player2_query)
 

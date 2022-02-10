@@ -198,7 +198,7 @@ class Teams(commands.Cog):
 
     @cog_ext.cog_slash(description="Delete guild member", guild_ids=main.guild_ids)
     async def deletemember(self, ctx, member: User):
-        owner_profile = db.queryUser({'DISNAME': str(ctx.author)})
+        owner_profile = db.queryUser({'DID': str(ctx.author.id)})
         team_profile = db.queryTeam({'TNAME': owner_profile['TEAM']})
         if team_profile:
             if owner_profile['DISNAME'] == team_profile['OWNER']:  
@@ -241,7 +241,7 @@ class Teams(commands.Cog):
 
     @cog_ext.cog_slash(description="Leave a guild", guild_ids=main.guild_ids)
     async def leaveguild(self, ctx):
-        member_profile = db.queryUser({'DISNAME': str(ctx.author)})
+        member_profile = db.queryUser({'DID': str(ctx.author.id)})
         team_profile = db.queryTeam({'TNAME': member_profile['TEAM']})
         if team_profile:
             team_buttons = [
@@ -321,7 +321,7 @@ class Teams(commands.Cog):
 
                     if button_ctx.custom_id == "Yes":
                         response = db.deleteTeam(team, str(ctx.author))
-                        user_query = {'DISNAME': str(ctx.author)}
+                        user_query = {'DID': str(ctx.author.id)}
                         new_value = {'$set': {'TEAM': 'PCG'}}
                         db.updateUserNoFilter(user_query, new_value)
                         await button_ctx.send(response)

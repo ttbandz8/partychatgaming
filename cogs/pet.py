@@ -31,7 +31,7 @@ class Pet(commands.Cog):
     @cog_ext.cog_slash(description="Equip Summon", guild_ids=main.guild_ids)
     async def equipsummon(self, ctx, summon: str):
         pet_name = summon
-        user_query = {'DISNAME': str(ctx.author)}
+        user_query = {'DID': str(ctx.author.id)}
         user = db.queryUser(user_query)
 
         vault_query = {'OWNER' : str(ctx.author)}

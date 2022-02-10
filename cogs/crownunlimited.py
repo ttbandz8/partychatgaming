@@ -91,7 +91,7 @@ class CrownUnlimited(commands.Cog):
                 mode = "Tales"
                 await cardlevel(self, nam, str(message.author), mode, uni)
             except Exception as e:
-                print("")
+                print(f"{str(message.author)} Error in on_message: {e}")
 
         if ratelimit is None:
             if isinstance(message.channel, discord.channel.DMChannel):
@@ -313,20 +313,20 @@ class CrownUnlimited(commands.Cog):
                     await msg.edit(components=[])
 
             except Exception as ex:
-                trace = []
-                tb = ex.__traceback__
-                while tb is not None:
-                    trace.append({
-                        "filename": tb.tb_frame.f_code.co_filename,
-                        "name": tb.tb_frame.f_code.co_name,
-                        "lineno": tb.tb_lineno
-                    })
-                    tb = tb.tb_next
-                print(str({
-                    'type': type(ex).__name__,
-                    'message': str(ex),
-                    'trace': trace
-                }))
+                # trace = []
+                # tb = ex.__traceback__
+                # while tb is not None:
+                #     trace.append({
+                #         "filename": tb.tb_frame.f_code.co_filename,
+                #         "name": tb.tb_frame.f_code.co_name,
+                #         "lineno": tb.tb_lineno
+                #     })
+                #     tb = tb.tb_next
+                # print(str({
+                #     'type': type(ex).__name__,
+                #     'message': str(ex),
+                #     'trace': trace
+                # }))
                 await msg.edit(components=[])
 
                 # print("Explore Exception. Likely nothing, but yea.")
@@ -339,17 +339,17 @@ class CrownUnlimited(commands.Cog):
     @commands.cooldown(1, 15, commands.BucketType.user)
     async def explore(self, ctx: SlashContext):
         try:
-            player = db.queryUser({"DISNAME": str(ctx.author)})
+            player = db.queryUser({"DID": str(ctx.author.id)})
             if player['LEVEL'] < 35:             
                 await message.channel.send(f"🔓 Unlock the Explore Mode by completing Floor 35 of the 🌑 Abyss! Use /abyss to enter the abyss.")
                 return
             if not player["EXPLORE"]:
                 await ctx.send(f"Entering Explorer Mode :milky_way: ")
-                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'EXPLORE': True}})
+                db.updateUserNoFilter({'DID': str(ctx.author.id)}, {'$set': {'EXPLORE': True}})
                 return
             if player["EXPLORE"]:
                 await ctx.send(f"Exiting Explorer Mode :rotating_light: ")
-                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'EXPLORE': False}})
+                db.updateUserNoFilter({'DID': str(ctx.author.id)}, {'$set': {'EXPLORE': False}})
                 return
         except Exception as ex:
             trace = []
@@ -496,7 +496,7 @@ class CrownUnlimited(commands.Cog):
                 await ctx.send("Not a valid Deck Option")
                 return
             deckNumber = deck - 1
-            sowner = db.queryUser({'DISNAME': str(ctx.author)})
+            sowner = db.queryUser({'DID': str(ctx.author.id)})
             oteam = sowner['TEAM']
             ofam = sowner['FAMILY']
             cowner = sowner
@@ -1212,12 +1212,13 @@ class CrownUnlimited(commands.Cog):
 
             abyss_buttons_action_row = manage_components.create_actionrow(*abyss_buttons)
 
-            embedVar = discord.Embed(title=f":new_moon: Abyss Floor {floor}", description=textwrap.dedent(f"""
-            Unlockables on this Floor
-            Unlockable Card: **{card_to_earn}**
-            Unlockable Title: **{title}**
-            Unlockable Arm: **{arm}**
+            if abyss['FLOOR'] in abyss_floor_reward_list:
+                unlockable_message = f"Drops on this Floor\nUnlockable Card: **{card_to_earn}**\nUnlockable Title: **{title}**\nUnlockable Arm: **{arm}**\n"
+            else:
+                unlockable_message = ""
 
+            embedVar = discord.Embed(title=f":new_moon: Abyss Floor {floor}", description=textwrap.dedent(f"""
+            {unlockable_message}
             {bad_message}
             """))
             if banned_cards:
@@ -1415,7 +1416,7 @@ class CrownUnlimited(commands.Cog):
             mode = "PVP"
 
             # Get Session Owner Disname for scoring
-            sowner = db.queryUser({'DISNAME': str(ctx.author)})
+            sowner = db.queryUser({'DID': str(ctx.author.id)})
             opponent = db.queryUser({'DISNAME': str(tutorial_user)})
             oteam = sowner['TEAM']
             tteam = opponent['TEAM']
@@ -1474,7 +1475,7 @@ class CrownUnlimited(commands.Cog):
             s_gametime = starttime[17:19]
 
             # Get Session Owner Disname for scoring
-            sowner = db.queryUser({'DISNAME': str(ctx.author)})
+            sowner = db.queryUser({'DID': str(ctx.author.id)})
             oteam = sowner['TEAM']
             oteam_info = db.queryTeam({'TNAME': oteam})
             oguild_name = "PCG"
@@ -1558,7 +1559,7 @@ class CrownUnlimited(commands.Cog):
     @cog_ext.cog_slash(description="View all Cards of a Universe you unlocked", guild_ids=main.guild_ids)
     async def cardlist(self, ctx: SlashContext, universe: str):
         universe_data = db.queryUniverse({'TITLE': {"$regex": str(universe), "$options": "i"}})
-        user = db.queryUser({'DISNAME': str(ctx.author)})
+        user = db.queryUser({'DID': str(ctx.author.id)})
         list_of_cards = db.queryAllCardsBasedOnUniverse({'UNIVERSE': {"$regex": str(universe), "$options": "i"}})
         cards = [x for x in list_of_cards]
         dungeon_card_details = []
@@ -1643,7 +1644,7 @@ class CrownUnlimited(commands.Cog):
     @cog_ext.cog_slash(description="View all Titles of a Universe you unlocked", guild_ids=main.guild_ids)
     async def titlelist(self, ctx: SlashContext, universe: str):
         universe_data = db.queryUniverse({'TITLE': {"$regex": universe, "$options": "i"}})
-        user = db.queryUser({'DISNAME': str(ctx.author)})
+        user = db.queryUser({'DID': str(ctx.author.id)})
         list_of_titles = db.queryAllTitlesBasedOnUniverses({'UNIVERSE': {"$regex": str(universe), "$options": "i"}})
         titles = [x for x in list_of_titles]
         dungeon_titles_details = []
@@ -1717,7 +1718,7 @@ class CrownUnlimited(commands.Cog):
     @cog_ext.cog_slash(description="View all Arms of a Universe you unlocked", guild_ids=main.guild_ids)
     async def armlist(self, ctx: SlashContext, universe: str):
         universe_data = db.queryUniverse({'TITLE': {"$regex": universe, "$options": "i"}})
-        user = db.queryUser({'DISNAME': str(ctx.author)})
+        user = db.queryUser({'DID': str(ctx.author.id)})
         list_of_arms = db.queryAllArmsBasedOnUniverses({'UNIVERSE': {"$regex": str(universe), "$options": "i"}})
         arms = [x for x in list_of_arms]
         dungeon_arms_details = []
@@ -1787,7 +1788,7 @@ class CrownUnlimited(commands.Cog):
     @cog_ext.cog_slash(description="View all Destinies of a Universe you unlocked", guild_ids=main.guild_ids)
     async def destinylist(self, ctx: SlashContext, universe: str):
         universe_data = db.queryUniverse({'TITLE': {"$regex": universe, "$options": "i"}})
-        user = db.queryUser({'DISNAME': str(ctx.author)})
+        user = db.queryUser({'DID': str(ctx.author.id)})
         destinies = []
         for destiny in d.destiny:
             if destiny["UNIVERSE"].upper() == universe.upper():
@@ -1837,7 +1838,7 @@ class CrownUnlimited(commands.Cog):
 
     @cog_ext.cog_slash(description="View Gems", guild_ids=main.guild_ids)
     async def gems(self, ctx: SlashContext):
-        vault = db.queryVault({'OWNER': str(ctx.author)})
+        vault = db.queryVault({'DID': str(ctx.author.id)})
         current_gems = vault['GEMS']
         if current_gems:
             number_of_gems_universes = len(current_gems)
@@ -1897,7 +1898,7 @@ class CrownUnlimited(commands.Cog):
     @cog_ext.cog_slash(description="View all Summons of a Universe you unlocked", guild_ids=main.guild_ids)
     async def summonlist(self, ctx: SlashContext, universe: str):
         universe_data = db.queryUniverse({'TITLE': {"$regex": universe, "$options": "i"}})
-        user = db.queryUser({'DISNAME': str(ctx.author)})
+        user = db.queryUser({'DID': str(ctx.author.id)})
         list_of_pets = db.queryAllPetsBasedOnUniverses({'UNIVERSE': {"$regex": str(universe), "$options": "i"}})
         pets = [x for x in list_of_pets]
         dungeon_pets_details = []
@@ -1970,7 +1971,7 @@ class CrownUnlimited(commands.Cog):
     async def universes(self, ctx: SlashContext):
         try:
             universe_data = db.queryAllUniverse()
-            # user = db.queryUser({'DISNAME': str(ctx.author)})
+            # user = db.queryUser({'DID': str(ctx.author.id)})
             universe_embed_list = []
             for uni in universe_data:
                 available = ""
@@ -2012,7 +2013,7 @@ class CrownUnlimited(commands.Cog):
     @cog_ext.cog_slash(description="View all Homes for purchase", guild_ids=main.guild_ids)
     async def houses(self, ctx: SlashContext):
         house_data = db.queryAllHouses()
-        user = db.queryUser({'DISNAME': str(ctx.author)})
+        user = db.queryUser({'DID': str(ctx.author.id)})
 
         house_list = []
         for homes in house_data:
@@ -2053,7 +2054,7 @@ class CrownUnlimited(commands.Cog):
     @cog_ext.cog_slash(description="View all Halls for purchase", guild_ids=main.guild_ids)
     async def halls(self, ctx: SlashContext):
         hall_data = db.queryAllHalls()
-        user = db.queryUser({'DISNAME': str(ctx.author)})
+        user = db.queryUser({'DID': str(ctx.author.id)})
 
         hall_list = []
         for homes in hall_data:
@@ -5733,7 +5734,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
         await ctx.send(m.SERVER_FUNCTION_ONLY)
         return
     oguild = "PCG"
-    prevault = db.queryVault({'OWNER': str(ctx.author)})
+    prevault = db.queryVault({'DID': str(ctx.author.id)})
     balance = prevault['BALANCE']
     
     crestlist = []
@@ -5923,7 +5924,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             else:
                 if balance <= entrance_fee:
                     await ctx.send(f"Tales require an :coin: {'{:,}'.format(entrance_fee)} entrance fee!", delete_after=5)
-                    db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                    db.updateUserNoFilter({'DID': str(ctx.author.id)}, {'$set': {'AVAILABLE': True}})
                     return
                 else:
                     await curse(entrance_fee, str(ctx.author))
@@ -6029,7 +6030,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             else:
                 if balance <= entrance_fee:
                     await ctx.send(f"Tales require an :coin: {'{:,}'.format(entrance_fee)} entrance fee!", delete_after=5)
-                    db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                    db.updateUserNoFilter({'DID': str(ctx.author.id)}, {'$set': {'AVAILABLE': True}})
                     return
                 else:
                     await curse(entrance_fee, str(ctx.author))
@@ -6124,7 +6125,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             else:
                 if balance <= entrance_fee:
                     await ctx.send(f"Tales require an :coin: {'{:,}'.format(entrance_fee)} entrance fee!", delete_after=5)
-                    db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                    db.updateUserNoFilter({'DID': str(ctx.author.id)}, {'$set': {'AVAILABLE': True}})
                     return
                 else:
                     await curse(entrance_fee, str(ctx.author))
@@ -6172,7 +6173,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
         m_gametime = starttime[14:16]
         s_gametime = starttime[17:19]
 
-        if mode not in B_modes and not randomized_battle and mode not in PVP_MODES and mode not in D_modes and mode not in RAID_MODES:
+        if mode not in B_modes and not randomized_battle and mode not in PVP_MODES and mode not in D_modes and mode not in RAID_MODES and mode != "ABYSS":
             legends = [x for x in universe['CROWN_TALES']]
             total_legends = len(legends)
             # currentopponent = 0
@@ -6233,7 +6234,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                     currentopponent = 35
 
             if not randomized_battle:
-                vault = db.queryVault({'OWNER': str(ctx.author)})
+                vault = db.queryVault({'DID': str(ctx.author.id)})
                 abyss_scaling = 0
                 if mode in B_modes:
                     bossname = universe['UNIVERSE_BOSS']
@@ -6248,6 +6249,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 if mode in D_modes:
                     t = db.queryCard({'NAME': legends[currentopponent]})
                     ttitle = db.queryTitle({'TITLE': universe['DTITLE']})
+                
+                if mode == "ABYSS":
+                    abyss_scaling = deckNumber
+                    t = db.queryCard({'NAME': legends[currentopponent]})
+                    ttitle = db.queryTitle({'TITLE': universe['TITLE']})
 
             if mode in ai_co_op_modes:
                 activeDeck = vault['DECK'][deckNumber]
@@ -10667,12 +10673,15 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 label="Quit | /ff",
                                                 custom_id="q"
                                             ),
-                                            manage_components.create_button(
-                                                style=ButtonStyle.red,
-                                                label=f"Save",
-                                                custom_id="s"
-                                            )
                                         ]
+
+                                        if not randomized_battle or mode != "ABYSS":
+                                                util_buttons.append(                                            manage_components.create_button(
+                                                    style=ButtonStyle.red,
+                                                    label=f"Save",
+                                                    custom_id="s"
+                                                )
+                                            )
 
                                         if mode in ai_co_op_modes:
                                             coop_util_buttons = [
@@ -17697,7 +17706,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 gameClock = getTime(int(h_gametime), int(m_gametime), int(s_gametime), h_playtime, m_playtime,
                                                     s_playtime)
                                 drop_response = await bossdrops(ctx.author, t_universe)
-                                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'BOSS_FOUGHT': True}})
+                                db.updateUserNoFilter({'DID': str(ctx.author.id)}, {'$set': {'BOSS_FOUGHT': True}})
                                 match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']),
                                                         str(oarm['ARM']), "N/A", "Boss", o['EXCLUSIVE'])
                                 if mode == "CBoss":
@@ -17773,13 +17782,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                     embedVar.set_author(name=f"{t_card} lost!")
                                     # await private_channel.send(embed=embedVar)
+
                                     await battle_msg.delete(delay=2)
                                     await asyncio.sleep(2)
                                     battle_msg = await private_channel.send(embed=embedVar)
 
                                     currentopponent = currentopponent + 1
                                     continued = True
-                                
+                            
                                 if currentopponent == (total_legends):
                                     new_level = floor + 1
                                     response = db.updateUserNoFilter({'DID': str(ctx.author.id)}, {'$set': {'LEVEL': new_level}})
@@ -17863,7 +17873,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         embedVar.add_field(name="Additional Reward",
                                                         value=f"You earned additional rewards in your vault! Take a look.")
                                         embedVar.set_footer(text="The /shop has been updated with new CARDS, TITLES and ARMS!")
-                                        upload_query = {'DISNAME': str(ctx.author)}
+                                        upload_query = {'DID': str(ctx.author.id)}
                                         new_upload_query = {'$addToSet': {'DUNGEONS': selected_universe}}
                                         r = db.updateUserNoFilter(upload_query, new_upload_query)
                                         if selected_universe in completed_universes:
@@ -17897,7 +17907,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         embedVar.add_field(name="Additional Reward",
                                                         value=f"You earned additional rewards in your vault! Take a look.")
                                         embedVar.set_footer(text="The /shop has been updated with new CARDS, TITLES and ARMS!")
-                                        upload_query = {'DISNAME': str(ctx.author)}
+                                        upload_query = {'DID': str(ctx.author.id)}
                                         new_upload_query = {'$addToSet': {'CROWN_TALES': selected_universe}}
                                         r = db.updateUserNoFilter(upload_query, new_upload_query)
                                         if selected_universe in completed_universes:
@@ -17963,7 +17973,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
 async def save_spot(self, ctx, universe, mode, currentopponent):
     try:
-        user = {"DISNAME": str(ctx.author)}
+        user = {"DID": str(ctx.author.id)}
         query = {"$addToSet": {"SAVE_SPOT": {"UNIVERSE": str(universe['TITLE']), "MODE": str(mode), "CURRENTOPPONENT": currentopponent}}}
         response = db.updateUserNoFilter(user, query)
         return
@@ -18052,7 +18062,7 @@ def update_save_spot(self, ctx, saved_spots, selected_universe, modes):
             for save in saved_spots:
                 if save['UNIVERSE'] == selected_universe and save['MODE'] in modes:
                     currentopponent = save['CURRENTOPPONENT']
-                    query = {'DISNAME': str(ctx.author)}
+                    query = {'DID': str(ctx.author.id)}
                     update_query = {'$pull': {'SAVE_SPOT': {"UNIVERSE": selected_universe}}}
                     resp = db.updateUserNoFilter(query, update_query)
         return currentopponent

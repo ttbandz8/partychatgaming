@@ -37,7 +37,7 @@ class Cards(commands.Cog):
     @cog_ext.cog_slash(description="Equip a Card", guild_ids=main.guild_ids)
     async def equipcard(self, ctx, card: str):
         card_name = card
-        user_query = {'DISNAME': str(ctx.author)}
+        user_query = {'DID': str(ctx.author.id)}
         user = db.queryUser(user_query)
 
         vault_query = {'OWNER': str(ctx.author)}
@@ -56,7 +56,7 @@ class Cards(commands.Cog):
     @cog_ext.cog_slash(description="View a Card", guild_ids=main.guild_ids)
     async def viewcard(self, ctx, card: str):
         card_name = card
-        query = {'DISNAME': str(ctx.author)}
+        query = {'DID': str(ctx.author.id)}
         d = db.queryUser(query)
         card = db.queryCard({'NAME': {"$regex": f"^{str(card_name)}$", "$options": "i"}})
         try:
