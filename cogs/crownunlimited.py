@@ -17529,8 +17529,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     bonus_message = f"Join a Guild or Create a Family for Coop Bonuses!"
                                     
                                 embedVar = discord.Embed(title=f":zap: **{t_card}** wins the match!\n\nThe game lasted {turn_total} rounds.\n**{t_card} says**\n`{t_win_description}`", description=textwrap.dedent(f"""
-                                **{ctx.author.mention}** do you want to play again?
-
                                 {previous_moves_into_embed}
                                 
                                 """),colour=0x1abc9c)
