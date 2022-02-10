@@ -123,9 +123,7 @@ CROWN_UNLIMITED_COMMANDS = textwrap.dedent(f"""\
 **/arena**: Create PVP Arena
 
 **Tutorial Bot Commands**
-**/battle @Senpai**: Tutorial Bot
-**/battle @Legend**: Advanced Tutorial Bot
-*Must be in Support Server For Tutorial*
+**/tutorial:** Play Crown Unlimited Tutorial
 **/menu**: View In Game Menu
 **/crown**: Crown Unlimited Help Book
 

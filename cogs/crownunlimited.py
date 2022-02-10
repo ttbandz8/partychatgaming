@@ -5905,6 +5905,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                         universe_embed_list.append(embedVar)
 
         custom_button = manage_components.create_button(style=3, label="Select")
+        
 
         async def custom_function(self, button_ctx):
             await button_ctx.defer(ignore=True)
@@ -5913,7 +5914,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             self.stop = True
             
 
-        await Paginator(bot=self.bot, ctx=ctx, useQuitButton=True, deleteAfterTimeout=True, pages=universe_embed_list, timeout=60,  customButton=[
+        await Paginator(bot=self.bot, ctx=ctx, useQuitButton=True, deleteAfterTimeout=True, pages=universe_embed_list, timeout=60, customButton=[
             custom_button,
             custom_function,
         ]).run()
@@ -13705,7 +13706,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             elif mode in co_op_modes and turn != (0 or 1):
                                 # Companion Turn Start
                                 if turn == 2:
-                                    await asyncio.sleep(1)
+                                    # await asyncio.sleep(2)
                                     if c_block_used == True:
                                         c_defense = int(c_defense / 2)
                                         c_block_used = False
@@ -15906,9 +15907,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     'trace': trace
                                                 }))
                                 # Opponent Turn Start
-                                
                                 elif turn == 3:
-                                    await asyncio.sleep(1)
+                                    # await asyncio.sleep(2)
                                     if t_attack <= 25:
                                         t_attack = 25
                                     if t_defense <= 30:
@@ -17528,7 +17528,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 else:
                                     bonus_message = f"Join a Guild or Create a Family for Coop Bonuses!"
                                     
-                                embedVar = discord.Embed(title=f":zap: **{t_card}** wins the match!\n\nThe game lasted {turn_total} rounds.\n**{t_card} says**\n`{t_win_description}`", description=textwrap.dedent(f"""
+                                embedVar = discord.Embed(title=f":zap: **{t_card}** wins the match!\n\n**{o_user['NAME']}** and **{c_user['NAME']}** will you play again?\nThe game lasted {turn_total} rounds.\n**{t_card} says**\n`{t_win_description}`", description=textwrap.dedent(f"""
                                 {previous_moves_into_embed}
                                 
                                 """),colour=0x1abc9c)
@@ -17911,12 +17911,50 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     await private_channel.send(questlogger)
                                 if destinylogger:
                                     await private_channel.send(destinylogger)
+                                
+                                if mode in co_op_modes and mode not in ai_co_op_modes:
+                                    cuid = c_DID
+                                    cuser = await self.bot.fetch_user(cuid)
+                                    if mode in D_modes:
+                                        teambank = await blessteam(2500, oteam)
+                                        cteambank = await blessteam(5000, oteam)
+                                    else:
+                                        teambank = await blessteam(500, oteam)
+                                        cteambank = await blessteam(1000, oteam)
+                                    if mode in D_modes:
+                                        cdrop_response = await dungeondrops(user2, selected_universe, currentopponent)
+                                    elif mode in U_modes:
+                                        cdrop_response = await drops(user2, selected_universe, currentopponent)
+                                    if mode in D_modes:
+                                        cfambank = await blessfamily(10000, cfam)
+                                        ofambank = await blessfamily(5000, ofam)
+                                    else:
+                                        cfambank = await blessfamily(4000, cfam)
+                                        ofambank = await blessfamily(2000, ofam)
+                                    # cmatch = await savematch(str(user2), str(c_card), str(c_card_path), str(ctitle['TITLE']),
+                                    #                         str(carm['ARM']), str(selected_universe), tale_or_dungeon_only, c['EXCLUSIVE'])
+                                    cfambank = await blessfamily(10000, cfam)
+                                    cteambank = await blessteam(10000, cteam)
+                                    cpetlogger = await summonlevel(cpet_name, user2)
+                                    ccardlogger = await cardlevel(self, c_card, user2, tale_or_dungeon_only, selected_universe)
+                                    await bless(5000, str(user2))
 
                                 if currentopponent != (total_legends):
-                                    embedVar = discord.Embed(title=f"VICTORY\n**{o_card} says**\n{o_win_description}\nThe game lasted {turn_total} rounds.\n\n{drop_response}",description=textwrap.dedent(f"""
-                                    {previous_moves_into_embed}
-                                    
-                                    """),colour=0x1abc9c)
+                                    if mode not in co_op_modes:
+                                        embedVar = discord.Embed(title=f"VICTORY\n**{o_card} says**\n{o_win_description}\nThe game lasted {turn_total} rounds.\n\n{drop_response}",description=textwrap.dedent(f"""
+                                        {previous_moves_into_embed}
+                                        
+                                        """),colour=0x1abc9c)
+                                    elif mode in co_op_modes and mode not in ai_co_op_modes:
+                                        embedVar = discord.Embed(title=f"CO-OP VICTORY\n**{o_card} says**\n{o_win_description}\nThe game lasted {turn_total} rounds.\n\n**{o_user['NAME']}:** {drop_response}\n**{c_user['NAME']}:** {cdrop_response} ",description=textwrap.dedent(f"""
+                                        {previous_moves_into_embed}
+                                        
+                                        """),colour=0x1abc9c)
+                                    elif mode not in ai_co_op_modes:
+                                        embedVar = discord.Embed(title=f"DUO VICTORY\n**{o_card} says**\n{o_win_description}\nThe game lasted {turn_total} rounds.\n\n{drop_response}",description=textwrap.dedent(f"""
+                                        {previous_moves_into_embed}
+                                        
+                                        """),colour=0x1abc9c)
                                     if mode in D_modes:
                                         if crestsearch:
                                             await blessguild(1000, oguild['GNAME'])
@@ -17970,6 +18008,17 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                             await ctx.send(
                                                 f"You were awarded :coin: 8,000,000 for completing the {selected_universe} Dungeon! ")
+                                        if mode in co_op_modes and mode not in ai_co_op_modes:
+                                            cuid = c_DID
+                                            cuser = await self.bot.fetch_user(cuid)
+                                            await bless(300000, user2)
+                                            teambank = await blessteam(80000, cteam)
+                                            # await bless(125, user2)
+                                            # await ctx.send(embed=embedVar)
+                                            await asyncio.sleep(2)
+
+                                            await ctx.send(
+                                                f"{user2.mention} You were awarded :coin: 250,000 for  assisting in the {selected_universe} Dungeon!")
                                         continued = False
                                         # await discord.TextChannel.delete(private_channel, reason=None)
                                     elif mode in U_modes:
@@ -18003,6 +18052,17 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                             await ctx.send(
                                                 f"You were awarded :coin: 2,000,000 for completing the {selected_universe} Tale! ")
+                                        if mode in co_op_modes and mode not in ai_co_op_modes:
+                                            cuid = c_DID
+                                            cuser = await self.bot.fetch_user(cuid)
+                                            await bless(300000, user2)
+                                            teambank = await blessteam(80000, cteam)
+                                            # await bless(125, user2)
+                                            # await ctx.send(embed=embedVar)
+                                            await asyncio.sleep(2)
+
+                                            await ctx.send(
+                                                f"{user2.mention} You were awarded :coin: 75,000 for assisting in the {selected_universe} Tale!")
                                         continued = False
 
 
