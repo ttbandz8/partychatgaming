@@ -17913,6 +17913,25 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     await private_channel.send(destinylogger)
                                 
                                 if mode in co_op_modes and mode not in ai_co_op_modes:
+                                    teammates = False
+                                    fam_members =False
+                                    stat_bonus = 0
+                                    hlt_bonus = 0 
+                                    if o_user['TEAM'] == c_user['TEAM'] and o_user['TEAM'] != 'PCG':
+                                        teammates=True
+                                        stat_bonus=10
+                                    if o_user['FAMILY'] == c_user['FAMILY'] and o_user['FAMILY'] != 'PCG':
+                                        fam_members=True
+                                        hlt_bonus=50
+                                    
+                                     if teammates==True:
+                                        bonus_message = f"Guild **{o_user['TEAM']}**: 🗡️**+{stat_bonus}** 🛡️**+{stat_bonus}**"
+                                        if fam_members==True:
+                                            bonus_message = f"Guild **{o_user['TEAM']}**: ❤️**+{hlt_bonus}**\nFamily **{o_user['FAMILY']}**: 🗡️**+{stat_bonus}**\🛡️**+{stat_bonus}**"
+                                    elif fam_members==True:
+                                            bonus_message = f"Family **{o_user['FAMILY']}**: ❤️**+{hlt_bonus}**"
+                                    else:
+                                        bonus_message = f"Join a Guild or Create a Family for Coop Bonuses!"
                                     cuid = c_DID
                                     cuser = await self.bot.fetch_user(cuid)
                                     if mode in D_modes:
@@ -17950,6 +17969,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         {previous_moves_into_embed}
                                         
                                         """),colour=0x1abc9c)
+                                        embedVar.add_field(name="**Co-Op Bonus**",
+                                                value=f"{bonus_message}")
                                     elif mode not in ai_co_op_modes:
                                         embedVar = discord.Embed(title=f"DUO VICTORY\n**{o_card} says**\n{o_win_description}\nThe game lasted {turn_total} rounds.\n\n{drop_response}",description=textwrap.dedent(f"""
                                         {previous_moves_into_embed}
