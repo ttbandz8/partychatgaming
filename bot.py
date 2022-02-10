@@ -160,17 +160,17 @@ async def enhancers(ctx):
 
       embedVar8 = discord.Embed(title= f"Title Enhancer Type: Damage",colour=0x7289da)
       embedVar8.set_thumbnail(url=avatar)
-      embedVar8.add_field(name="`DAMAGE`", value="**WAVE** - Deal Flat AP Damage to Opponent. AP Decreases each turn. If used on turn that is divisible by 10 you will deal 30% of Flat AP Damage. You have chance to Crit for Double Flat AP Damage. \n\n**BLAST** - Deal Flat AP Damage to Opponent. AP Increases each turn.\n\n")
+      embedVar8.add_field(name="`DAMAGE`", value="**WAVE** - Deal Flat AP Damage to Opponent. AP Decreases each turn (Can Crit). *If used on turn that is divisible by 10 you will deal 75% AP Damage.*\n\n**BLAST** - Deal Flat AP Damage to Opponent. AP Increases each turn.\n\n")
       embedVar8.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
 
       embedVar9 = discord.Embed(title= f"Title Enhancer Type: Divinity",colour=0x7289da)
       embedVar9.set_thumbnail(url=avatar)
-      embedVar9.add_field(name="`DIVINITY`", value="**CREATION** - Increase Max Health by Flat AP. AP Decreases each turn. If used on turn that is divisible by 10 you will heal Health & Max Health for 20% of Flat AP. You have chance to Crit Heal Health and Max Health for Double Flat AP. \n\n**DESTRUCTION** - Decrease Opponent Max Health by Flat AP. AP Increases each turn.\n\n")
+      embedVar9.add_field(name="`DIVINITY`", value="**CREATION** - Increase Max Health by Flat AP. AP Decreases each turn (Can Crit). *If used on turn that is divisible by 10 you will heal Health & Max Health for 75% AP.*\n\n**DESTRUCTION** - Decrease Opponent Max Health by Flat AP. AP Increases each turn.\n\n")
       embedVar9.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
       
       embedVar10 = discord.Embed(title= f"Arm Enhancer Type: Offensive",colour=0x7289da)
       embedVar10.set_thumbnail(url=avatar)
-      embedVar10.add_field(name="`OFFENSE`", value="**BASIC** - Increase 💥 Basic Attack Ability Power by Value \n\n**SPECIAL** - Increase ☄️ Special Attack Ability Power by Value \n\n**ULTIMATE** - Increase 🏵️ Ultimate Attack Ability Power by Value \n\n**ULTIMAX** - Increase **ALL** Attack Move Ability Power by Value \n\n**MANA** - Increase 🦠 Enhancer Ability Power by Percentage \n\n")
+      embedVar10.add_field(name="`OFFENSE`", value="**BASIC** - Increase 💥 Basic Attack Ability Power by Value \n\n**SPECIAL** - Increase ☄️ Special Attack Ability Power by Value \n\n**ULTIMATE** - Increase 🏵️ Ultimate Attack Ability Power by Value \n\n**ULTIMAX** - Increase **ALL** Attack Move Ability Power by Value \n\n**MANA** - Increase 🦠 Enhancer Ability Power by Percentage \n\n💉 **SIPHON** - Heal for 10% DMG + AP\n\n")
       embedVar10.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
       
       embedVar11 = discord.Embed(title= f"Arm Enhancer Type: Defensive",colour=0x7289da)
@@ -557,10 +557,10 @@ async def crown(ctx):
 
 @slash.slash(description="Register for Crown Unlimited", guild_ids=guild_ids)
 async def register(ctx):
-   reg_query = {'DISNAME' : str(ctx.author)}
+   reg_query = {'DID' : str(ctx.author.id)}
    applied = db.queryUser(reg_query)
    if applied:
-      vault_query = {'OWNER':str(ctx.author)}
+      vault_query = {'DID':str(ctx.author.id)}
       registered = db.queryVault(vault_query)
       if registered:
          await ctx.send(f"{ctx.author.mention} You already have a Crown Unlimited Account!")
@@ -632,7 +632,7 @@ async def register(ctx):
       await ctx.send(embed=embedVar)
       
       await asyncio.sleep(3)
-      vault = db.queryVault({'OWNER': disname})
+      vault = db.queryVault({'DID': str(ctx.author.id)})
       if vault:
          await ctx.send(m.VAULT_RECOVERED, delete_after=5)
       else:

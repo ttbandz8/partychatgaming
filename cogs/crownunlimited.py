@@ -6680,7 +6680,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                     custom_id="start_tales_no"
                 )
             ]
-            if tutorial ==False and mode not in PVP_MODES and mode not in RAID_MODES and mode not in B_modes:
+            if tutorial ==False and mode not in PVP_MODES and mode not in RAID_MODES and mode not in B_modes and mode != "ABYSS":
                 if currentopponent > 0 and not randomized_battle and mode not in PVP_MODES and mode not in B_modes:
                     start_tales_buttons.append(
 
@@ -7311,12 +7311,15 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         (.30 * o_defense) * (o_resolve / (.50 * o_defense)))
                                                     o_resolve_defense = round(
                                                         (.30 * o_defense) * (o_resolve / (.50 * o_defense)))
-                                                    demon_slayer_buff = ap3 * 2
 
                                                     o_stamina = o_stamina + o_resolve
                                                     o_health = o_health + o_resolve_health
                                                     o_attack = round(o_attack + o_resolve_attack)
                                                     o_defense = round(o_defense - o_resolve_defense)
+                                                    if t_attack > o_attack:
+                                                        o_attack = t_attack
+                                                    if t_defense > o_defense:
+                                                        o_defense = t_defense
                                                     o_used_resolve = True
                                                     o_pet_used = False
                                                     embedVar = discord.Embed(title=f"{o_card} begins Total Concentration Breathing",
@@ -8404,12 +8407,15 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             (.30 * t_defense) * (t_resolve / (.50 * t_defense)))
                                                         t_resolve_defense = round(
                                                             (.30 * t_defense) * (t_resolve / (.50 * t_defense)))
-                                                        tdemon_slayer_buff = tap3 * 2
 
                                                         t_stamina = t_stamina + t_resolve
                                                         t_health = t_health + t_resolve_health
                                                         t_attack = round(t_attack + t_resolve_attack)
                                                         t_defense = round(t_defense - t_resolve_defense)
+                                                        if o_attack > t_attack:
+                                                            t_attack = o_attack
+                                                        if o_defense > t_defense:
+                                                            t_defense = o_defense
                                                         t_used_resolve = True
                                                         t_pet_used = False
                                                         embedVar = discord.Embed(title=f"{t_card} begins Total Concentration Breathing",
@@ -9203,12 +9209,16 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         (.30 * t_defense) * (t_resolve / (.50 * t_defense)))
                                                     t_resolve_defense = round(
                                                         (.30 * t_defense) * (t_resolve / (.50 * t_defense)))
-                                                    tdemon_slayer_buff = tap3 * 2
+                                                    
 
                                                     t_stamina = t_stamina + t_resolve
                                                     t_health = t_health + t_resolve_health
                                                     t_attack = round(t_attack + t_resolve_attack)
                                                     t_defense = round(t_defense - t_resolve_defense)
+                                                    if o_attack > t_attack:
+                                                        t_attack = o_attack
+                                                    if o_defense > t_defense:
+                                                        t_defense = o_defense
                                                     t_used_resolve = True
                                                     t_pet_used = False
                                                     embedVar = discord.Embed(title=f"{t_card} begins Total Concentration Breathing",
@@ -10226,12 +10236,15 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         (.30 * o_defense) * (o_resolve / (.50 * o_defense)))
                                                     o_resolve_defense = round(
                                                         (.30 * o_defense) * (o_resolve / (.50 * o_defense)))
-                                                    demon_slayer_buff = ap3 * 2
 
                                                     o_stamina = o_stamina + o_resolve
                                                     o_health = o_health + o_resolve_health
                                                     o_attack = round(o_attack + o_resolve_attack)
                                                     o_defense = round(o_defense - o_resolve_defense)
+                                                    if t_attack > o_attack:
+                                                        o_attack = t_attack
+                                                    if t_defense > o_defense:
+                                                        o_defense = t_defense
                                                     o_used_resolve = True
                                                     o_pet_used = False
                                                     embedVar = discord.Embed(title=f"{o_card} begins Total Concentration Breathing",
@@ -10936,12 +10949,16 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             (.30 * o_defense) * (o_resolve / (.50 * o_defense)))
                                                         o_resolve_defense = round(
                                                             (.30 * o_defense) * (o_resolve / (.50 * o_defense)))
-                                                        demon_slayer_buff = ap3 * 2
+
 
                                                         o_stamina = o_stamina + o_resolve
                                                         o_health = o_health + o_resolve_health
                                                         o_attack = round(o_attack + o_resolve_attack)
                                                         o_defense = round(o_defense - o_resolve_defense)
+                                                        if t_attack > o_attack:
+                                                            o_attack = t_attack
+                                                        if t_defense > o_defense:
+                                                            o_defense = t_defense
                                                         o_used_resolve = True
                                                         o_pet_used = False
                                                         embedVar = discord.Embed(title=f"{o_card} begins Total Concentration Breathing",
@@ -12356,6 +12373,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 t_health = t_health + t_resolve_health
                                                 t_attack = round(t_attack + t_resolve_attack)
                                                 t_defense = round(t_defense - t_resolve_defense)
+                                                if o_attack > t_attack:
+                                                    t_attack = o_attack
+                                                if o_defense > t_defense:
+                                                    t_defense = o_defense
                                                 t_used_resolve = True
                                                 t_pet_used = False
                                                 embedVar = discord.Embed(title=f"{t_card} begins Total Concentration Breathing",
@@ -14177,6 +14198,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         c_health = c_health + c_resolve_health
                                                         c_attack = round(c_attack + c_resolve_attack)
                                                         c_defense = round(c_defense - c_resolve_defense)
+                                                        if t_attack > c_attack:
+                                                            c_attack = t_attack
+                                                        if t_defense > c_defense:
+                                                            c_defense = t_defense
                                                         c_used_resolve = True
                                                         c_pet_used = False
                                                         embedVar = discord.Embed(title=f"{c_card} begins Total Concentration Breathing",
@@ -15114,12 +15139,16 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 (.30 * c_defense) * (c_resolve / (.50 * c_defense)))
                                                             c_resolve_defense = round(
                                                                 (.30 * c_defense) * (c_resolve / (.50 * c_defense)))
-                                                            cdemon_slayer_buff = cap3 * 2
+                                                            
 
                                                             c_stamina = c_stamina + c_resolve
                                                             c_health = c_health + c_resolve_health
                                                             c_attack = round(c_attack + c_resolve_attack)
                                                             c_defense = round(c_defense - c_resolve_defense)
+                                                            if t_attack > c_attack:
+                                                                c_attack = t_attack
+                                                            if t_defense > c_defense:
+                                                                c_defense = t_defense
                                                             c_used_resolve = True
                                                             c_pet_used = False
                                                             embedVar = discord.Embed(title=f"{c_card} begins Total Concentration Breathing",
@@ -16292,12 +16321,16 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         (.30 * t_defense) * (t_resolve / (.50 * t_defense)))
                                                     t_resolve_defense = round(
                                                         (.30 * t_defense) * (t_resolve / (.50 * t_defense)))
-                                                    tdemon_slayer_buff = tap3 * 2
+                                                    
 
                                                     t_stamina = t_stamina + t_resolve
                                                     t_health = t_health + t_resolve_health
                                                     t_attack = round(t_attack + t_resolve_attack)
                                                     t_defense = round(t_defense - t_resolve_defense)
+                                                    if c_attack > t_attack:
+                                                        t_attack = c_attack
+                                                    if c_defense > t_defense:
+                                                        t_defense = c_defense
                                                     t_used_resolve = True
                                                     t_pet_used = False
                                                     embedVar = discord.Embed(title=f"{t_card} begins Total Concentration Breathing",
