@@ -3019,6 +3019,10 @@ def abyss_level_up_message(did, floor, card, title, arm):
         if floor == 20:
             message = "🎊 Congratulations! 🎊 You unlocked **Gifting**. Use the **/gift** command to gift players money!"
             new_unlock = True
+        
+        if floor == 25:
+            message = "🎊 Congratulations! 🎊 You unlocked **Co-Op**. Use the **/coop** to traverse Tales with other players!"
+            new_unlock = True
 
         if floor == 35:
             message = "🎊 Congratulations! 🎊 You unlocked **Explore Mode**. Explore Mode allows for Cards to spawn randomly with Bounties! If you defeat the Card you will earn that Card + it's Bounty! Happy Hunting!"
@@ -3027,10 +3031,19 @@ def abyss_level_up_message(did, floor, card, title, arm):
         if floor == 40:
             message = "🎊 Congratulations! 🎊 You unlocked **Dungeons**. Use the **/tales** command and select Dungeons to battle through the Hard Mode of Universes to earn super rare Cards, Titles, and Arms!"
             new_unlock = True
+            
+        if floor == 50:
+            message = "🎊 Congratulations! 🎊 You unlocked **Duo**. Use the **/duo** command and select a Difficulty and a Preset to bring into Tales with you!"
+            new_unlock = True
 
         if floor == 60:
             message = "🎊 Congratulations! 🎊 You unlocked **Bosses**. Use the **/tales** command and select Boss to battle Universe Bosses too earn ultra rare Cards, Titles, and Arms!"
             new_unlock = True
+            
+        if floor == 100:
+            message = "🎊 Congratulations! 🎊 You unlocked **Soul Exchange**. Use the **/exchange** command and Exchange any boss souls for cards from their respective universe! This will Reset your Abyss Level!"
+            new_unlock = True
+
 
         return {"MESSAGE": message, "NEW_UNLOCK": new_unlock, "DROP_MESSAGE": drop_message}
     except Exception as ex:

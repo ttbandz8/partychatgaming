@@ -1678,7 +1678,7 @@ async def trinketshop(ctx):
 
    🔋 3️⃣ **100 Levels** for :moneybag: **650,000**
 
-   ⚒️ 4️⃣ **25 Durability** for :moneybag: **25,000**
+   ⚒️ 4️⃣ **50 Durability** for :moneybag: **50,000**
 
    Purchase **Gabe's Purse** to Keep ALL ITEMS when **Rebirthing**
    *You will not be able to select a new starting universe!*
@@ -1708,8 +1708,8 @@ async def trinketshop(ctx):
          levels_gained = 100
          price=650000
       if button_ctx.custom_id == "5":
-         levels_gained = 25
-         price=25000
+         levels_gained = 50
+         price=100000
 
 
       if button_ctx.custom_id == "cancel":
@@ -1777,7 +1777,7 @@ async def trinketshop(ctx):
                resp = db.updateVault(query, update_query, filter_query)
 
                await curse(price, str(ctx.author))
-               await button_ctx.send(f"{current_arm}'s ⚒️ durability has increased by 25!")
+               await button_ctx.send(f"{current_arm}'s ⚒️ durability has increased by 50!")
                return
             except:
                await ctx.send("Failed to purchase durability boost.", hidden=True)

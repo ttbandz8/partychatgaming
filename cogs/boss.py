@@ -121,9 +121,12 @@ class Boss(commands.Cog):
             vault = db.queryVault(vault_query)
             userinfo = db.queryUser({"DISNAME" : str(ctx.author)})
             
+            
             if userinfo['LEVEL'] < 100:
                 await ctx.send(f"🔓 Unlock **Soul Exchange** by completing **Floor 100** of the 🌑 Abyss! Use /abyss to enter the abyss.")
                 return
+            
+            await ctx.send(f"{ctx.author.mention} :japanese_ogre: **Soul Exchange** will reset your 🌑 Abyss level! ")
             bossname = boss
             cardname = card
             boss_info = db.queryBoss({'NAME': {"$regex": str(bossname), "$options": "i"}})
@@ -163,9 +166,9 @@ class Boss(commands.Cog):
                                 if card_info['NAME'] in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
                                     db.updateVaultNoFilter(vault_query,{'$addToSet':{'DESTINY': destiny}})
                                     await ctx.send(f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.")
-
+                            db.updateUserNoFilter({'DID' : str(ctx.author.id)}, {'$set' : {'LEVEL' : 0}})
                             db.updateUserNoFilter({'DID': str(ctx.author.id)},{'$pull':{'BOSS_WINS': str(bossname)}})
-                            response = db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$addToSet':{'CARDS': str(cardname)}})
+                            response = db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$addToSet':{'CARDS': str(cardname)}})
                             await ctx.send(f"SOUL EXCHANGE: {cardname} has been added to {ctx.author.mention}'s vault: CARDS")
                             
                         else:
