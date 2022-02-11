@@ -17953,7 +17953,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     embedVar.set_author(name=f"{t_card} lost!")
                                     embedVar.add_field(
                                     name=f"Abyssal Rewards",
-                                    value=f"You have been awarded :coin:**{bless_amount}**!\n{abyss_drop_message}")
+                                    value=f"You have been awarded :coin:**{'{:,}'.format(bless_Amount)}**!\n{abyss_drop_message}")
                                     embedVar.set_footer(text=f"Traverse to /abyss to unlock new game modes and features!")
                                     
                                     battle_msg = await private_channel.send(embed=embedVar)

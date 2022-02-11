@@ -1898,9 +1898,9 @@ class Profile(commands.Cog):
                     else:
                         completed = "🔴"
                     quest_messages.append(textwrap.dedent(f"""\
-                    Defeat **{quest['OPPONENT']}** {quest['GOAL']} times in {quest['TYPE']} 
+                    Defeat **{quest['OPPONENT']}** {quest['GOAL']} times in {quest['TYPE']}
                     **Reward**: :coin:{'{:,}'.format(quest['REWARD'])}! : {completed}
-                    **Current Progress:** {quest['WINS']}/{quest['GOAL']}                  
+                    **Current Progress:** {quest['WINS']}/{quest['GOAL']}\n
                     """))
                 
                 embedVar = discord.Embed(title= f":notepad_spiral: Quest Board", description=textwrap.dedent(f"""
