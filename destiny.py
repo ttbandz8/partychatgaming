@@ -3009,16 +3009,6 @@ destiny = [
         "UNIVERSE": "Dragon Ball Z"
     },
     {
-        "NAME": "The Prodigal Son",
-        "WINS": 0,
-        "REQUIRED": 100,
-        "DEFEAT": "Light Yagami",
-        "USE_CARDS": ["Ryuk"],
-        "EARN": "Light Yagami", 
-        "COMPLETED": False,
-        "UNIVERSE": "Death Note"
-    },
-    {
         "NAME": "Pop Star Shinigami",
         "WINS": 0,
         "REQUIRED": 50,

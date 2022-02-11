@@ -126,7 +126,6 @@ class Profile(commands.Cog):
                 for x in vault['CARD_LEVELS']:
                     if x['CARD'] == card['NAME']:
                         card_lvl = x['LVL']
-                        card_tier = x['TIER']
                         card_exp = x['EXP']
                         card_lvl_ap_buff = x['AP']
                         card_lvl_attack_buff = x['ATK']
@@ -152,6 +151,7 @@ class Profile(commands.Cog):
                 o_destiny = card['HAS_COLLECTION']
                 o_rebirth = d['REBIRTH']
                 performance_mode = d['PERFORMANCE']
+                card_tier = card['TIER']
                 
         
                 rebirthBonus = o_rebirth * 10
@@ -1898,9 +1898,9 @@ class Profile(commands.Cog):
                     else:
                         completed = "🔴"
                     quest_messages.append(textwrap.dedent(f"""\
-                    Defeat **{quest['OPPONENT']}** {quest['GOAL']} times in {quest['TYPE']}\n**Reward**: :coin:{'{:,}'.format(quest['REWARD'])}! : {completed}
-                    **Current Progress:** {quest['WINS']}/{quest['GOAL']}
-                    
+                    Defeat **{quest['OPPONENT']}** {quest['GOAL']} times in {quest['TYPE']} 
+                    **Reward**: :coin:{'{:,}'.format(quest['REWARD'])}! : {completed}
+                    **Current Progress:** {quest['WINS']}/{quest['GOAL']}                  
                     """))
                 
                 embedVar = discord.Embed(title= f":notepad_spiral: Quest Board", description=textwrap.dedent(f"""
@@ -2272,7 +2272,7 @@ class Profile(commands.Cog):
             all_universes = db.queryAllUniverse()
             user = db.queryUser({'DID': str(ctx.author.id)})
 
-            if user['LEVEL'] < 5:
+            if user['LEVEL'] < 6:
                 await ctx.send("🔓 Unlock the Shop by completeing Floor 5 of the 🌑 Abyss! Use /abyss to enter the abyss.")
                 return
 
@@ -2617,7 +2617,7 @@ class Profile(commands.Cog):
             all_universes = db.queryAllUniverse()
             user = db.queryUser({'DID': str(ctx.author.id)})
             card_info = db.queryCard({"NAME": user['CARD']})
-            if user['LEVEL'] < 8:
+            if user['LEVEL'] < 9:
                 await ctx.send("🔓 Unlock Crafting by completeing Floor 8 of the 🌑 Abyss! Use /abyss to enter the abyss.")
                 return
 

@@ -1678,7 +1678,7 @@ async def trinketshop(ctx):
 
    🔋 3️⃣ **100 Levels** for :moneybag: **650,000**
 
-   ⚒️ 4️⃣ **50 Durability** for :moneybag: **50,000**
+   ⚒️ 4️⃣ **50 Durability** for :moneybag: **100,000**
 
    Purchase **Gabe's Purse** to Keep ALL ITEMS when **Rebirthing**
    *You will not be able to select a new starting universe!*
@@ -1732,7 +1732,7 @@ async def trinketshop(ctx):
             await button_ctx.send(f"**{current_card}** is already at max Trinket level. You may level up in /tales, but you can no longer purchase levels for this card.", hidden=True)
             return
 
-         if (levels_gained + lvl) > max_lvl:
+         elif (levels_gained + lvl) > max_lvl:
             levels_gained =  max_lvl - lvl
             print(levels_gained)
 

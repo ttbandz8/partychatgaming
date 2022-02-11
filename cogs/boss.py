@@ -122,7 +122,7 @@ class Boss(commands.Cog):
             userinfo = db.queryUser({"DISNAME" : str(ctx.author)})
             
             
-            if userinfo['LEVEL'] < 100:
+            if userinfo['LEVEL'] < 101:
                 await ctx.send(f"🔓 Unlock **Soul Exchange** by completing **Floor 100** of the 🌑 Abyss! Use /abyss to enter the abyss.")
                 return
             
