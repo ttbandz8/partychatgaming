@@ -41,6 +41,10 @@ class Guild(commands.Cog):
             cost = 10000
             founder_profile = db.queryUser({'DID': str(ctx.author.id)})
             guildsearch_name = founder_profile['GUILD']
+            
+            if founder_profile['LEVEL'] < 31:
+                await ctx.send("🔓 Unlock Associations by completing Floor 30 of the 🌑 Abyss! Use /abyss to enter the abyss.")
+                return
             if guildsearch_name != "PCG":
                 guildsearch_query = {'GNAME' : guildsearch_name}
                 guildsearch = db.queryGuildAlt(guildsearch_query)
@@ -49,7 +53,10 @@ class Guild(commands.Cog):
                         await ctx.send(m.FOUNDER_LEAVE)
                         return
                     await ctx.send(f"{guildsearch_name} NEW OATH!")
-                    sworn_profile = db.queryUser({'DISNAME': str(owner)})              
+                    sworn_profile = db.queryUser({'DISNAME': str(owner)}) 
+                    if sworn_profile['LEVEL'] < 31:
+                        await ctx.send(f"🔓 {sworn.mention} Has not Unlocked Associations! Complete Floor 30 of the 🌑 Abyss! Use /abyss to enter the abyss.")
+                        return             
                     if sworn_profile['GUILD'] != 'PCG' and guildsearch['SHIELD'] != sworn_profile['DISNAME']:
                         await ctx.send(m.USER_IN_GUILD, delete_after=3)
                         return
@@ -257,7 +264,7 @@ class Guild(commands.Cog):
                    
 
     @cog_ext.cog_slash(description="Betray your Association (Association Sworn)", guild_ids=main.guild_ids)
-    async def betray(self, ctx, founder: User):
+    async def betray(self, sctx, founder: User):
         sworn_profile = db.queryUser({'DID': str(ctx.author.id)})
         founder_profile = db.queryUser({'DISNAME': str(founder)})
         if sworn_profile['GUILD'] != founder_profile['GUILD']:

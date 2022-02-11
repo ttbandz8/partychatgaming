@@ -66,12 +66,12 @@ class Trade(commands.Cog):
             buyer_name = player
             merchant = db.queryUser({'DID': str(ctx.author.id)})
             
-            if merchant['LEVEL'] < 10:
+            if merchant['LEVEL'] < 11:
                 await ctx.send("🔓 Unlock Trading by completeing Floor 10 of the 🌑 Abyss! Use /abyss to enter the abyss.")
                 return
 
             buyer = db.queryUser({'DISNAME': str(buyer_name)})
-            if buyer['LEVEL'] < 10:
+            if buyer['LEVEL'] < 11:
                 await ctx.send(f"🔓 {str(player)} has not unlocked Trading by completing Floor 10 of the 🌑.")
                 return
 

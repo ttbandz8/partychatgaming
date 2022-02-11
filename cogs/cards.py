@@ -80,6 +80,7 @@ class Cards(commands.Cog):
                 o_speed = card['SPD']
                 o_show = card['UNIVERSE']
                 o_has_collection = card['HAS_COLLECTION']
+                o_tier = card['TIER']
                 traits = ut.traits
                 show_img = db.queryUniverse({'TITLE': o_show})['PATH']
                 o_collection = card['COLLECTION']
@@ -189,7 +190,7 @@ class Cards(commands.Cog):
                 
                 if performance_mode:
                     embedVar = discord.Embed(title=f"{card_icon} {price_message} {o_card}", description=textwrap.dedent(f"""\
-                    :mahjong: {card['TIER']}
+                    :mahjong: {o_tier}
                     ❤️ {o_max_health}
                     🗡️ {o_attack}
                     🛡️ {o_defense}

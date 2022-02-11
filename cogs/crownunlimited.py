@@ -343,8 +343,8 @@ class CrownUnlimited(commands.Cog):
     async def explore(self, ctx: SlashContext):
         try:
             player = db.queryUser({"DID": str(ctx.author.id)})
-            if player['LEVEL'] < 35:             
-                await message.channel.send(f"🔓 Unlock the Explore Mode by completing Floor 35 of the 🌑 Abyss! Use /abyss to enter the abyss.")
+            if player['LEVEL'] < 36:             
+                await ctx.send(f"🔓 Unlock the Explore Mode by completing Floor 35 of the 🌑 Abyss! Use /abyss to enter the abyss.")
                 return
             if not player["EXPLORE"]:
                 await ctx.send(f"Entering Explorer Mode :milky_way: ")
@@ -506,10 +506,10 @@ class CrownUnlimited(commands.Cog):
             cteam = oteam
             cfam = ofam
             
-            if sowner['LEVEL'] < 50:
+            if sowner['LEVEL'] < 51:
                 await ctx.send(f"🔓 Unlock **Duo** by completing **Floor 50** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
                 return
-            if mode in D_modes and sowner['LEVEL'] < 80:
+            if mode in D_modes and sowner['LEVEL'] < 81:
                 await ctx.send("🔓 Unlock **Duo Dungeons** by completing **Floor 80** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
                 return
 
@@ -593,27 +593,27 @@ class CrownUnlimited(commands.Cog):
             sowner = db.queryUser({'DID': str(ctx.author.id)})
             companion = db.queryUser({'DID': str(user.id)})
 
-            if sowner['LEVEL'] < 25:
+            if sowner['LEVEL'] < 26:
                 await ctx.send(f"🔓 Unlock **Co-op** by completing **Floor 25** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
                 return
             
-            if companion['LEVEL'] < 25:
+            if companion['LEVEL'] < 26:
                 await ctx.send(f"🔓 {user.mention} Has not unlocked **Co-op**! Complete **Floor 25** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
                 return
             
-            if mode in D_modes and sowner['LEVEL'] < 40:
+            if mode in D_modes and sowner['LEVEL'] < 41:
                 await ctx.send("🔓 Unlock **Dungeons** by completing **Floor 40** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
                 return
 
-            if mode in B_MODES and sowner['LEVEL'] < 60:
+            if mode in B_MODES and sowner['LEVEL'] < 61:
                 await ctx.send("🔓 Unlock **Boss Fights** by completing **Floor 60** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
                 return
             
-            if mode in D_modes and companion['LEVEL'] < 40:
+            if mode in D_modes and companion['LEVEL'] < 41:
                 await ctx.send(f"🔓 {user.mention} Has not unlocked **Dungeons**! Complete **Floor 40** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
                 return
 
-            if mode in B_MODES and companion['LEVEL'] < 60:
+            if mode in B_MODES and companion['LEVEL'] < 61:
                 await ctx.send(f"🔓 {user.mention} Has not unlocked **Boss Fights**! Complete **Floor 60** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
                 return
 
@@ -963,7 +963,7 @@ class CrownUnlimited(commands.Cog):
     async def arena(self, ctx: SlashContext, mode: str):
         try:
             player = db.queryUser({"DID": str(ctx.author.id)})
-            if player['LEVEL'] < 15:
+            if player['LEVEL'] < 16:
                 await ctx.send(f"🔓 Unlock **PVP** by completing **Floor 15** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
                 return
 
@@ -1076,15 +1076,15 @@ class CrownUnlimited(commands.Cog):
             # await ctx.defer()
 
             sowner = db.queryUser({'DID': str(ctx.author.id)})
-            if sowner['LEVEL'] < 3:
+            if sowner['LEVEL'] < 4:
                 await ctx.send("🔓 Unlock **Tales** by completing **Floor 3** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
                 return
 
-            if mode in D_modes and sowner['LEVEL'] < 40:
+            if mode in D_modes and sowner['LEVEL'] < 41:
                 await ctx.send("🔓 Unlock **Dungeons** by completing **Floor 40** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
                 return
 
-            if mode in B_MODES and sowner['LEVEL'] < 60:
+            if mode in B_MODES and sowner['LEVEL'] < 61:
                 await ctx.send("🔓 Unlock **Boss Fights** by completing **Floor 60** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
                 return
 
@@ -1350,10 +1350,10 @@ class CrownUnlimited(commands.Cog):
             sowner = db.queryUser({'DID': str(ctx.author.id)})
             opponent = db.queryUser({'DID': str(player.id)})
 
-            if sowner['LEVEL'] < 15:
+            if sowner['LEVEL'] < 16:
                 await ctx.send(f"🔓 Unlock **PVP** by completing **Floor 15** of the 🌑 Abyss! Use /abyss to enter the abyss.")
                 return
-            if opponent['LEVEL'] < 15:
+            if opponent['LEVEL'] < 16:
                 await ctx.send(f"🔓 {player.mention} Has not unlocked **PVP**! Complete **Floor 15** of the 🌑 Abyss! Use /abyss to enter the abyss.")
                 return
 
@@ -2950,10 +2950,14 @@ def abyss_level_up_message(did, floor, card, title, arm):
     try:
         message = ""
         drop_message = []
+        maxed_out_messages = []
         new_unlock = False
         vault_query = {'DID': did}
         vault = db.altQueryVault(vault_query)
 
+        card_drop = card
+        title_drop = title
+        arm_drop = arm
         # Determine first to beat floor 100
         if floor == 100:
             all_users = db.queryAllUsers()
@@ -2970,36 +2974,37 @@ def abyss_level_up_message(did, floor, card, title, arm):
                     'ARM': arm
                 }
                 rr = db.createGods(data.newGods(winner))
+
         
         if floor in abyss_floor_reward_list:
             current_titles = vault['TITLES']
             if len(current_titles) >=25:
                 drop_message.append("You have max amount of Titles. You did not receive the **Floor Title**.")
             elif title in current_titles:
-                maxed_out_messages.append(f"You already own {title} so you did not receive it.")
+                maxed_out_messages.append(f"You already own {title_drop} so you did not receive it.")
             else:
-                db.updateVaultNoFilter(vault_query,{'$addToSet':{'TITLES': str(title)}}) 
-                drop_message.append(f"🎗️ **{title}** has been added to your vault!")
+                db.updateVaultNoFilter(vault_query,{'$addToSet':{'TITLES': str(title_drop)}}) 
+                drop_message.append(f"🎗️ **{title_drop}** has been added to your vault!")
 
             current_arms = []
             for arm in vault['ARMS']:
                 current_arms.append(arm['ARM'])
-                if len(current_arms) >=25:
-                    maxed_out_messages.append("You have max amount of Arms. You did not receive the **Floor Arm**.")
-                elif arm in current_arms:
-                    maxed_out_messages.append(f"You already own {arm} so you did not receive it.")
-                else:
-                    db.updateVaultNoFilter(vault_query,{'$addToSet':{'ARMS': {'ARM': str(arm), 'DUR': 25}}})
-                    drop_message.append(f"🦾 **{arm}** has been added to your vault!")
+            if len(current_arms) >=25:
+                maxed_out_messages.append("You have max amount of Arms. You did not receive the **Floor Arm**.")
+            elif arm in current_arms:
+                maxed_out_messages.append(f"You already own {arm_drop} so you did not receive it.")
+            else:
+                db.updateVaultNoFilter(vault_query,{'$addToSet':{'ARMS': {'ARM': str(arm_drop), 'DUR': 25}}})
+                drop_message.append(f"🦾 **{arm_drop}** has been added to your vault!")
 
             current_cards = vault['CARDS']
             if len(current_cards) >= 25:
                 maxed_out_messages.append("You have max amount of Cards. You did not earn receive **Floor Card**.")
             elif card in current_cards:
-                maxed_out_messages.append(f"You already own {card} so you did not receive it.")
+                maxed_out_messages.append(f"You already own {card_drop} so you did not receive it.")
             else:
-                db.updateVaultNoFilter(vault_query,{'$addToSet': {'CARDS': str(card)}})
-                drop_message.append(f"🎴 **{card}** has been added to your vault!")
+                db.updateVaultNoFilter(vault_query,{'$addToSet': {'CARDS': str(card_drop)}})
+                drop_message.append(f"🎴 **{card_drop}** has been added to your vault!")
 
             
             owned_card_levels_list = []
@@ -3047,6 +3052,10 @@ def abyss_level_up_message(did, floor, card, title, arm):
         
         if floor == 25:
             message = "🎊 Congratulations! 🎊 You unlocked **Co-Op**. Use the **/coop** to traverse Tales with other players!"
+            new_unlock = True
+            
+        if floor == 30:
+            message = "🎊 Congratulations! 🎊 You unlocked **Associations**. Use the **/oath** to create an association with another Guild Owner!"
             new_unlock = True
 
         if floor == 35:
@@ -10762,8 +10771,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             ),
                                         ]
 
-                                        if not randomized_battle or mode != "ABYSS":
-                                                util_buttons.append(                                            manage_components.create_button(
+                                        if not randomized_battle and mode != "ABYSS" or mode !="ABYSS":
+                                                util_buttons.append(             
+                                                    manage_components.create_button(
                                                     style=ButtonStyle.red,
                                                     label=f"Save",
                                                     custom_id="s"
@@ -17947,8 +17957,20 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     response = db.updateUserNoFilter({'DID': str(ctx.author.id)}, {'$set': {'LEVEL': new_level}})
                                     abyss_message = abyss_level_up_message(str(ctx.author.id), floor, t_card, t_title, tarm_name)
                                     abyss_drop_message = "\n".join(abyss_message['DROP_MESSAGE'])
+                                    bless_amount = 100000 + (10000 * floor)
                                     await bless(100000, ctx.author)
-                                    await ctx.author.send(f"Abyss Floor {floor} Completed! You have been awarded :coin:100,000!\n{abyss_drop_message}")
+                                    embedVar = discord.Embed(title=f"🌑 Floor **{floor}** Cleared\n**{o_card} says**\n{o_win_description}\nThe game lasted {turn_total} rounds.",description=textwrap.dedent(f"""
+                                    {previous_moves_into_embed}
+                                    
+                                    """),colour=0x1abc9c)
+
+                                    embedVar.set_author(name=f"{t_card} lost!")
+                                    embedVar.add_field(
+                                    name=f"Abyssal Rewards",
+                                    value=f"You have been awarded :coin:**{bless_amount}**!\n{abyss_drop_message}")
+                                    embedVar.set_footer(text=f"Traverse to /abyss to unlock new game modes and features!")
+                                    
+                                    battle_msg = await private_channel.send(embed=embedVar)
 
                                     if abyss_message['NEW_UNLOCK']:
                                         await ctx.author.send(abyss_message['MESSAGE'])
