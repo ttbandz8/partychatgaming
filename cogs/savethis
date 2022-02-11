@@ -18349,3 +18349,19 @@ Crest_dict = {'Unbound': ':ideograph_advantage:',
               'Crown Rift Madness': ':m:',
               'Persona': ':o:'}
 take_chances_messages = ['You lost immediately.', 'You got smoked!', 'You fainted before the fight even started.', 'That... was just sad. You got dropped with ease.', 'Too bad, so sad. You took the L.', 'Annnd another L. You lost.', 'Annnnnnnnnnnd another L! You lost.', 'How many Ls you gonna take today?', 'That was worse than the last time. You got dropped.']
+
+
+    #   **Moveset**
+    #   *Each ability costs Stamina*
+    #   :boom: - Basic Attack *costs 10 :cyclone:*
+    #   :comet: - Special Attack *costs 30 :cyclone:*
+    #   :rosette: - Ultimate Attack *costs 80 :cyclone:*
+    #   :microbe: - Active Enhancer Ability *costs 20 :cyclone:*
+    #   ↘️ - Explains Enhancer Ability
+
+    #   **Battle Explanation**
+    #   Select your attack be mindful of stamina cost, 
+    #   Once your Stamina reaches 0 you will go into **Focus** mode, where you will recover **90 Stamina**, you will sacrifice 1 turn to increase ATK, DEF and Heal!
+    #   After you focus you are able to **Resolve** to boost your Attack and Health but lowering your defense.
+    #   You are able to use your  🧬 **Summon** after you Resolve!
+    #   First card with 0 health loses!
