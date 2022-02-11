@@ -85,11 +85,14 @@ class CrownUnlimited(commands.Cog):
         if level_ratelimit is None:
             try:
                 player_that_leveled = db.queryUser({'DISNAME': str(message.author)})
-                card_that_leveled = db.queryCard({'NAME': player_that_leveled['CARD']})
-                uni = card_that_leveled['UNIVERSE']
-                nam = card_that_leveled['NAME']
-                mode = "Tales"
-                await cardlevel(self, nam, str(message.author), mode, uni)
+                if player_that_leveled:
+                    card_that_leveled = db.queryCard({'NAME': player_that_leveled['CARD']})
+                    uni = card_that_leveled['UNIVERSE']
+                    nam = card_that_leveled['NAME']
+                    mode = "Tales"
+                    await cardlevel(self, nam, str(message.author), mode, uni)
+                else:
+                    return
             except Exception as e:
                 print(f"{str(message.author)} Error in on_message: {e}")
 
