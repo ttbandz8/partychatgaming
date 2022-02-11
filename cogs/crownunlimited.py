@@ -10817,14 +10817,15 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         util_action_row = manage_components.create_actionrow(*util_buttons)
                                         if mode in co_op_modes:
                                             coop_util_action_row = manage_components.create_actionrow(*coop_util_buttons)
-                                            
-                                        carm_message = ""
-                                        if carm_barrier_active:
-                                            carm_message = f"💠{cbarrier_count}"
-                                        elif carm_shield_active:
-                                            carm_message = f"🌐{cshield_value}"
-                                        elif carm_parry_active:
-                                            carm_message = f"🔄{cparry_count}"
+                                        
+                                        if mode in co_op_modes:    
+                                            carm_message = ""
+                                            if carm_barrier_active:
+                                                carm_message = f"💠{cbarrier_count}"
+                                            elif carm_shield_active:
+                                                carm_message = f"🌐{cshield_value}"
+                                            elif carm_parry_active:
+                                                carm_message = f"🔄{cparry_count}"
 
 
                                         companion_stats = ""
