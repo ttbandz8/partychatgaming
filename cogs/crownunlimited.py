@@ -7422,7 +7422,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                     o_stamina = o_stamina + o_resolve
                                                     o_health = o_health + o_resolve_health
-                                                    o_attack = round((o_attack + (2 * o_resolve_attack)))
+                                                    o_attack = round((o_attack + (2 * o_resolve_attack)) * 2)
                                                     o_defense = round(o_defense - o_resolve_defense)
                                                     # if o_defense >= 120:
                                                     # o_defense = 120
@@ -8518,7 +8518,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                         t_stamina = t_stamina + t_resolve
                                                         t_health = t_health + t_resolve_health
-                                                        t_attack = round((t_attack + (2 * t_resolve_attack)))
+                                                        t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                                         t_defense = round(t_defense - t_resolve_defense)
                                                         # if t_defense >= 120:
                                                         # t_defense = 120
@@ -9320,7 +9320,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                     t_stamina = t_stamina + t_resolve
                                                     t_health = t_health + t_resolve_health
-                                                    t_attack = round((t_attack + (2 * t_resolve_attack)))
+                                                    t_attack = round((t_attack + (2 * t_resolve_attack))* 2)
                                                     t_defense = round(t_defense - t_resolve_defense)
                                                     # if t_defense >= 120:
                                                     # t_defense = 120
@@ -10340,7 +10340,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                     o_stamina = o_stamina + o_resolve
                                                     o_health = o_health + o_resolve_health
-                                                    o_attack = round((o_attack + (2 * o_resolve_attack)))
+                                                    o_attack = round((o_attack + (2 * o_resolve_attack))* 2)
                                                     o_defense = round(o_defense - o_resolve_defense)
                                                     # # if o_defense >= 120:
                                                     # o_defense = 120
@@ -10831,8 +10831,16 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 carm_message = f"🔄{cparry_count}"
 
 
+                                        # carm_message = ""
+                            
                                         companion_stats = ""
                                         if mode in co_op_modes:
+                                            if carm_barrier_active:
+                                                carm_message = f"💠{cbarrier_count}"
+                                            elif carm_shield_active:
+                                                carm_message = f"🌐{cshield_value}"
+                                            elif carm_parry_active:
+                                                carm_message = f"🔄{cparry_count}"
                                             components = [battle_action_row, util_action_row, coop_util_action_row]
                                             companion_stats = f"\n{c_card}: ❤️{c_health} 🌀{c_stamina} 🗡️{c_attack}/🛡️{c_defense} {carm_message}"
                                         else:
@@ -11077,7 +11085,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                         o_stamina = o_stamina + o_resolve
                                                         o_health = o_health + o_resolve_health
-                                                        o_attack = round((o_attack + (2 * o_resolve_attack)))
+                                                        o_attack = round((o_attack + (2 * o_resolve_attack))* 2)
                                                         o_defense = round(o_defense - o_resolve_defense)
                                                         # if o_defense >= 120:
                                                         # # o_defense = 120
@@ -12485,7 +12493,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                 t_stamina = t_stamina + t_resolve
                                                 t_health = t_health + t_resolve_health
-                                                t_attack = round((t_attack + (2 * t_resolve_attack)))
+                                                t_attack = round((t_attack + (2 * t_resolve_attack))*2 )
                                                 t_defense = round(t_defense - t_resolve_defense)
                                                 # if t_defense >= 120:
                                                 # t_defense = 120
@@ -14314,7 +14322,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                         c_stamina = c_stamina + c_resolve
                                                         c_health = c_health + c_resolve_health
-                                                        c_attack = round((c_attack + (2 * c_resolve_attack)))
+                                                        c_attack = round((c_attack + (2 * c_resolve_attack))*2 )
                                                         c_defense = round(c_defense - c_resolve_defense)
                                                         # if c_defense >= 120:
                                                         # c_defense = 120
@@ -15268,7 +15276,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                             c_stamina = c_stamina + c_resolve
                                                             c_health = c_health + c_resolve_health
-                                                            c_attack = round((c_attack + (2 * c_resolve_attack)))
+                                                            c_attack = round((c_attack + (2 * c_resolve_attack))*2 )
                                                             c_defense = round(c_defense - c_resolve_defense)
                                                             # if c_defense >= 120:
                                                             # c_defense = 120
@@ -16449,7 +16457,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                     t_stamina = t_stamina + t_resolve
                                                     t_health = t_health + t_resolve_health
-                                                    t_attack = round((t_attack + (2 * t_resolve_attack)))
+                                                    t_attack = round((t_attack + (2 * t_resolve_attack))* 2)
                                                     t_defense = round(t_defense - t_resolve_defense)
                                                     # if t_defense >= 120:
                                                     # t_defense = 120
