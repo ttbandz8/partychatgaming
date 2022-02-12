@@ -10073,7 +10073,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 # await private_channel.send(embed=embedVar)
                                                 t_health = 0
 
-                                    elif t_universe == "One Punch Man":
+                                    if t_universe == "One Punch Man":
                                         embedVar = discord.Embed(
                                             title=f"Hero Reinforcements! **{o_card}**  Increased Health & Max Health ❤️",
                                             colour=0xe91e63)

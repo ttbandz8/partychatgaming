@@ -568,14 +568,14 @@ async def register(ctx):
       else:
          await ctx.author.send(f"Previous Registration Failed...Lets try again!")
          await ctx.send(f"{ctx.author.mention} Previous Registration Failed...Lets try again!")
-         response = applied
+         r_response = applied
          disname = str(ctx.author)
    else:
       disname = str(ctx.author)
       name = disname.split("#",1)[0]
       user = {'DISNAME': disname, 'NAME': name, 'DID' : str(ctx.author.id), 'AVATAR': str(ctx.author.avatar_url)}
-      response = db.createUsers(data.newUser(user))
-   if response:
+      r_response = db.createUsers(data.newUser(user))
+   if r_response:
 
       embedVar = discord.Embed(title=f"**Welcome to Crown Unlimited**!", description=textwrap.dedent(f"""
       Welcome {ctx.author.mention}!                                                                                           
@@ -583,30 +583,13 @@ async def register(ctx):
       Collect and level **Cards**, **Summons**, and **Accessories** to create powerful builds
       Conquer Worlds, Defeat Bosses, and Rule PVP for prizes and rank, both solo and multiplayer! 
       **Enhancers** are Special Abilities used to boost your Cards, Summons, and Accessories in battle!
-   
-      
-      **Card Basics**
-      🀄 - Card Tier *1-7*
-      :trident: - Card Level *1-500*
-      :heart:  - Card Health (HLT)
-      :cyclone: - Card Stamina (ST)
-      🗡️ - Attack (ATK) *Blue Crystal* 🟦
-      🛡️ - Defense (DEF) *Red Crystal* 🟥
-      :drop_of_blood: - Card Passive *Enhancers applied at the start of the battle*
-      :infinity: - Universe Trait for Card 
-      *Each Universe has it's own unique Universe Trait*
-      
-      **Accessories & Summons**
-      :reminder_ribbon: - Title  *Title enhancers are applied at the start of battle.*
-      :mechanical_arm: - Arm *Arm enhancers are applied passively throughout the duration of battle.*
-      🧬 - Summon *Summons use Active Enhancers and are available during battle after you Resolve*
 
       **Currency**
       :coin: - Coins *Buy Items in the /shop and /trinketshop*
       :gem: - Gems *Craft Universe Hearts and Souls*
 
       IMPORTANT REMINDER! ⬇️
-      Use **/daily** to claim your **Daily Reward!**     
+      Use **/daily** to claim your **Daily Reward!**
       **/tutorial** - Tutorial Battle
       **/crown** - Read Game Manual
       **/help** - Help Menu
@@ -686,6 +669,10 @@ async def register(ctx):
                         list_of_titles =[x for x in db.queryAllTitlesBasedOnUniverses({'UNIVERSE': str(universe)}) if not x['EXCLUSIVE'] and x['AVAILABLE'] and x['TITLE'] not in current_titles]
                         count = 0
                         selected_titles = [1000]
+                        
+                        title_message = []
+                        arm_message = []
+                        card_message = []
                         while count < 3:
                            selectable_titles = list(range(0, len(list(list_of_titles))))
                            for selected in selected_titles:
@@ -695,6 +682,7 @@ async def register(ctx):
                            selected_titles.append(selection)
                            title = list_of_titles[selection]
                            response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'TITLES': str(title['TITLE'])}})
+                           title_message.append(f"You collected :reminder_ribbon: **{title['TITLE']}**.")
                            await button_ctx.send(f"You collected :reminder_ribbon: **{title['TITLE']}**.")
                            count = count + 1
                         
@@ -711,7 +699,8 @@ async def register(ctx):
                            selection = random.choice(selectable_arms)
                            selected_arms.append(selection)
                            arm = list_of_arms[selection]['ARM']
-                           db.updateVaultNoFilter(vault_query,{'$addToSet':{'ARMS': {'ARM': str(arm), 'DUR': 75}}})                           
+                           db.updateVaultNoFilter(vault_query,{'$addToSet':{'ARMS': {'ARM': str(arm), 'DUR': 75}}})        
+                           arm_message.append(f"You collected :mechanical_arm: **{arm}**.")                   
                            await button_ctx.send(f"You collected :mechanical_arm: **{arm}**.")
                            count = count + 1
                            
@@ -737,7 +726,7 @@ async def register(ctx):
                                        'CARD_LEVELS': {'CARD': str(card_name), 'LVL': 0, 'TIER': int(tier),
                                                       'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
                                  r = db.updateVaultNoFilter(vault_query, update_query)
-
+                              card_message.append(f"You collected 🎴 **{card_name}**!")
                               await button_ctx.send(f"You collected 🎴 **{card_name}**!")
 
                               # Add Destiny
@@ -747,7 +736,31 @@ async def register(ctx):
                                        await button_ctx.send(
                                           f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.", hidden=True)
                            count = count + 1
+                        title_drop_message_into_embded = "\n\n".join(title_message)
+                        arm_drop_message_into_embded = "\n\n".join(arm_message)
+                        card_drop_message_into_embded = "\n\n".join(card_message)
+                        embedVar = discord.Embed(title=f":crown: Nice Choice {ctx.author.mention}!\nNow lets create your first **Build!**",description=textwrap.dedent(f"""
+                        **Card Basics**
+                        🀄 - Card Tier *1-7*
+                        :trident: - Card Level *1-500*
+                        :heart:  - Card Health (HLT)
+                        :cyclone: - Card Stamina (ST)
+                        🗡️ - Attack (ATK) *Blue Crystal* 🟦
+                        🛡️ - Defense (DEF) *Red Crystal* 🟥
+                        :drop_of_blood: - Card Passive *Enhancers applied at the start of the battle*
+
+                        
+                        **Accessories & Summons**
+                        :reminder_ribbon: - Title  *Title enhancers are applied at the start of battle.*
+                        :mechanical_arm: - Arm *Arm enhancers are applied passively throughout the duration of battle.*
+                        🧬 - Summon *Summons use Active Enhancers and are available during battle after you Resolve*
+                        """),colour=0x1abc9c)
+                        embedVar.add_field(name=f"**Cards**", value=f"{card_drop_message_into_embded}", inline=False)
+                        embedVar.add_field(name=f"**Titles**", value=f"{title_drop_message_into_embded}", inline=True)
+                        embedVar.add_field(name=f"**Arms**", value=f"{arm_drop_message_into_embded}", inline=True)
+                        embedVar.set_author(name=f":crown:]Registration Complete!", icon_url=r_response['AVATAR'])
                         await button_ctx.send(f"Nice choice {ctx.author.mention}!\n\nCreate your first **Build**!\n**/cards** Select your 🎴  Card\n**/titles** Select your 🎗️ Title\n**/arms** Select your 🦾  Arm\n\nOnce you're done, run **/tutorial** to begin the **Tutorial Battle**! ⚔️")
+                        await button_ctx.send(embed=embedVar)
                         self.stop = True
                except Exception as ex:
                   trace = []
