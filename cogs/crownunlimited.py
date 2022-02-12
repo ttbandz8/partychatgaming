@@ -7382,7 +7382,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     turn_total = turn_total + 1
                                                     turn = 1
 
-                                                if o_universe == "Attack On Titan":
+                                                elif o_universe == "Attack On Titan":
                                                     # fortitude or luck is based on health
                                                     fortitude = 0.0
                                                     low = o_health - (o_health * .75)
