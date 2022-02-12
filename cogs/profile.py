@@ -2780,6 +2780,13 @@ async def craft_adjuster(player, vault, universe, price, item):
                                 destiny_earn = destiny['EARN']
                                 destiny_universe = destiny['UNIVERSE']
                                 destiny_defeat = destiny['DEFEAT']
+    
+                    query = {'OWNER': str(vault['OWNER'])}
+                    update_query = {
+                        '$inc': {'GEMS.$[type].' + "GEMS": int(negPriceAmount)}
+                    }
+                    filter_query = [{'type.' + "UNIVERSE": universe}]
+                    res = db.updateVault(query, update_query, filter_query)
 
                     if card_has_destiny:
                         if card_universe != destiny_universe:
