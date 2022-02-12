@@ -601,21 +601,6 @@ async def register(ctx):
       :mechanical_arm: - Arm *Arm enhancers are applied passively throughout the duration of battle.*
       🧬 - Summon *Summons use Active Enhancers and are available during battle after you Resolve*
 
-      **Moveset**
-      *Each ability costs Stamina*
-      :boom: - Basic Attack *costs 10 :cyclone:*
-      :comet: - Special Attack *costs 30 :cyclone:*
-      :rosette: - Ultimate Attack *costs 80 :cyclone:*
-      :microbe: - Active Enhancer Ability *costs 20 :cyclone:*
-      ↘️ - Explains Enhancer Ability
-
-      **Battle Explanation**
-      Select your attack be mindful of stamina cost, 
-      Once your Stamina reaches 0 you will go into **Focus** mode, where you will recover **90 Stamina**, you will sacrifice 1 turn to increase ATK, DEF and Heal!
-      After you focus you are able to **Resolve** to boost your Attack and Health but lowering your defense.
-      You are able to use your  🧬 **Summon** after you Resolve!
-      First card with 0 health loses!
-
       **Currency**
       :coin: - Coins *Buy Items in the /shop and /trinketshop*
       :gem: - Gems *Craft Universe Hearts and Souls*
@@ -1391,7 +1376,7 @@ async def gift(ctx, player: User, amount: int):
    vault = db.queryVault({'DID': str(ctx.author.id)})
    user_data = db.queryUser({'DID': str(ctx.author.id)})
    if user_data['LEVEL'] < 20:
-      await ctx.send(f"🔓 Unlock Gifting by completeing Floor 25 of the 🌑 Abyss! Use /abyss to enter the abyss.")
+      await ctx.send(f"🔓 Unlock Gifting by completing Floor 25 of the 🌑 Abyss! Use /abyss to enter the abyss.")
       return
 
    balance = vault['BALANCE']
@@ -1613,7 +1598,7 @@ async def trinketshop(ctx):
    user_query = {'DID': str(ctx.author.id)}
    user = db.queryUser(user_query)
    if user['LEVEL'] < 15:
-      await ctx.send(f"🔓 Unlock the Trinket Shop by completeing Floor 15 of the 🌑 Abyss! Use /abyss to enter the abyss.")
+      await ctx.send(f"🔓 Unlock the Trinket Shop by completing Floor 15 of the 🌑 Abyss! Use /abyss to enter the abyss.")
       return
 
    current_arm = user['ARM']
@@ -1628,6 +1613,13 @@ async def trinketshop(ctx):
       icon = ":moneybag:"
    elif balance >= 150000:
       icon = ":dollar:"
+   
+   owned_arms = []
+   current_durability = 0
+   for arms in vault['ARMS']:
+      if arms['ARM'] == current_arm:
+         current_durability = arms['DUR']
+      
 
    sell_buttons = [
          manage_components.create_button(
@@ -1667,10 +1659,10 @@ async def trinketshop(ctx):
    sell_buttons_action_row = manage_components.create_actionrow(*sell_buttons)
    util_sell_buttons_action_row = manage_components.create_actionrow(*util_sell_buttons)
    embedVar = discord.Embed(title=f":tickets: | **Trinket Shop** - {icon}{'{:,}'.format(balance)} ", description=textwrap.dedent(f"""\
-   Welcome to the Trinket Shop {ctx.author.mention}!
-   Purchase Experience Boosts and Arm Durability here!
-   *Experience Boost Applied to* **{current_card}**
-   *Arm Durabilty Applied to* **{current_arm}**
+   Welcome {ctx.author.mention}!
+   Purchase **Card XP** and **Arm Durability**!
+   🎴 Card:  **{current_card}**
+   🦾 Arm: **{current_arm}**
 
    🔋 1️⃣ **10 Levels** for :coin: **80,000**
    
@@ -1678,7 +1670,7 @@ async def trinketshop(ctx):
 
    🔋 3️⃣ **100 Levels** for :moneybag: **650,000**
 
-   ⚒️ 4️⃣ **50 Durability** for :moneybag: **100,000**
+   ⚒️ 4️⃣ **50 Durability** for :dollar: **100,000**
 
    Purchase **Gabe's Purse** to Keep ALL ITEMS when **Rebirthing**
    *You will not be able to select a new starting universe!*
@@ -1734,7 +1726,7 @@ async def trinketshop(ctx):
 
          elif (levels_gained + lvl) > max_lvl:
             levels_gained =  max_lvl - lvl
-            print(levels_gained)
+
 
          atk_def_buff = round(levels_gained / 2)
          ap_buff = round(levels_gained / 3)
@@ -1769,8 +1761,14 @@ async def trinketshop(ctx):
          if price > balance:
             await button_ctx.send("Insufficent funds.", hidden=True)
             return
+         if current_durability >= 100:
+            await button_ctx.send(f"🦾 {current_arm} is already at Max Durability. ⚒️",hidden=True)
+            return
          else:
             try:
+               new_durability = current_durability + levels_gained
+               if new_durability > 100:
+                  levels_gained = 100 - current_durability
                query = {'DID': str(ctx.author.id)}
                update_query = {'$inc': {'ARMS.$[type].' + 'DUR': levels_gained}}
                filter_query = [{'type.' + "ARM": str(current_arm)}]
