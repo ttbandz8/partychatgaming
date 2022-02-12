@@ -17965,16 +17965,18 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     """),colour=0x1abc9c)
 
                                     embedVar.set_author(name=f"{t_card} lost!")
-                                    embedVar.add_field(
-                                    name=f"Abyssal Rewards",
-                                    value=f"You have been awarded :coin:**{'{:,}'.format(bless_Amount)}**!\n{abyss_drop_message}")
                                     embedVar.set_footer(text=f"Traverse the /abyss to unlock new game modes and features!")
-                                    
-                                    battle_msg = await ctx.send(embed=embedVar)
 
                                     if abyss_message['NEW_UNLOCK']:
+                                        embedVar.add_field(
+                                        name=f"Abyssal Rewards",
+                                        value=f"You have been awarded :coin:**{'{:,}'.format(bless_Amount)}**!\n{abyss_drop_message}")
+
                                         await ctx.author.send(abyss_message['MESSAGE'])
                                         await ctx.send(f"{ctx.author.mention} {abyss_message['MESSAGE']}")
+ 
+                                    battle_msg = await ctx.send(embed=embedVar)
+
                                     continued = False
 
                             elif mode not in B_modes and mode != "ABYSS":
