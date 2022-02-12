@@ -7350,7 +7350,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     turn_total = turn_total + 1
                                                     turn = 0
 
-                                                if o_universe == "Demon Slayer": 
+                                                elif o_universe == "Demon Slayer": 
                                                     # fortitude or luck is based on health
                                                     fortitude = 0.0
                                                     low = o_health - (o_health * .75)
@@ -8446,7 +8446,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         await button_ctx.defer(ignore=True)
                                                         turn_total = turn_total + 1
                                                         turn = 1
-                                                    if t_universe == "Demon Slayer": 
+                                                    elif t_universe == "Demon Slayer": 
                                                         # fortitude or luck is based on health
                                                         fortitude = 0.0
                                                         low = t_health - (t_health * .75)
@@ -9248,7 +9248,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: PLUS ULTRA!")
                                                     turn_total = turn_total + 1
                                                     turn = 1
-                                                if t_universe == "Demon Slayer": 
+                                                elif t_universe == "Demon Slayer": 
                                                     # fortitude or luck is based on health
                                                     fortitude = 0.0
                                                     low = t_health - (t_health * .75)
@@ -10275,7 +10275,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                     turn_total = turn_total + 1
                                                     turn = 0
-                                                if o_universe == "Demon Slayer": 
+                                                elif o_universe == "Demon Slayer": 
                                                     # fortitude or luck is based on health
                                                     fortitude = 0.0
                                                     low = o_health - (o_health * .75)
@@ -10996,7 +10996,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         turn_total = turn_total + 1
                                                         turn = 0
 
-                                                    if o_universe == "Demon Slayer": 
+                                                    elif o_universe == "Demon Slayer": 
                                                         # fortitude or luck is based on health
                                                         fortitude = 0.0
                                                         low = o_health - (o_health * .75)
@@ -12414,7 +12414,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 turn_total = turn_total + 1
                                                 turn = 1
 
-                                            if t_universe == "Demon Slayer": 
+                                            elif t_universe == "Demon Slayer": 
                                                 # fortitude or luck is based on health
                                                 fortitude = 0.0
                                                 low = t_health - (t_health * .75)
@@ -14239,7 +14239,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         turn_total = turn_total + 1
                                                         turn = 2
 
-                                                    if c_universe == "Demon Slayer": 
+                                                    elif c_universe == "Demon Slayer": 
                                                         # fortitude or luck is based on health
                                                         fortitude = 0.0
                                                         low = c_health - (c_health * .75)
@@ -15192,7 +15192,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             turn_total = turn_total + 1
                                                             turn = 2
                                                         
-                                                        if c_universe == "Demon Slayer": 
+                                                        elif c_universe == "Demon Slayer": 
                                                             # fortitude or luck is based on health
                                                             fortitude = 0.0
                                                             low = c_health - (c_health * .75)
@@ -16374,7 +16374,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     turn_total = turn_total + 1
                                                     turn = 3
                                                 
-                                                if t_universe == "Demon Slayer": 
+                                                elif t_universe == "Demon Slayer": 
                                                     # fortitude or luck is based on health
                                                     fortitude = 0.0
                                                     low = t_health - (t_health * .75)
