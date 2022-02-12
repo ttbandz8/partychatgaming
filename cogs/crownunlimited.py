@@ -17970,7 +17970,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     value=f"You have been awarded :coin:**{'{:,}'.format(bless_Amount)}**!\n{abyss_drop_message}")
                                     embedVar.set_footer(text=f"Traverse the /abyss to unlock new game modes and features!")
                                     
-                                    battle_msg = await private_channel.send(embed=embedVar)
+                                    battle_msg = await ctx.send(embed=embedVar)
 
                                     if abyss_message['NEW_UNLOCK']:
                                         await ctx.author.send(abyss_message['MESSAGE'])
