@@ -1217,13 +1217,11 @@ class CrownUnlimited(commands.Cog):
             abyss_buttons_action_row = manage_components.create_actionrow(*abyss_buttons)
 
             if abyss['FLOOR'] in abyss_floor_reward_list:
-                unlockable_message = f"Drops on this Floor\nUnlockable Card: **{card_to_earn}**\nUnlockable Title: **{title}**\nUnlockable Arm: **{arm}**\n"
+                unlockable_message = f"⭐ Drops on this Floor\nUnlockable Card: **{card_to_earn}**\nUnlockable Title: **{title}**\nUnlockable Arm: **{arm}**\n"
             else:
                 unlockable_message = ""
 
-            embedVar = discord.Embed(title=f":new_moon: Abyss Floor {floor}", description=textwrap.dedent(f"""
-            Fights  ⚔️{len(enemies)}
-
+            embedVar = discord.Embed(title=f":new_moon: Abyss Floor {floor}  ⚔️{len(enemies)}", description=textwrap.dedent(f"""
             {unlockable_message}
             {bad_message}
             """))
@@ -6755,11 +6753,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             
 
             if mode not in PVP_MODES and mode not in B_modes and mode != "ABYSS" and mode not in RAID_MODES and mode not in co_op_modes:
-                embedVar = discord.Embed(title=f"✅ Confirm Start!", description=f"{ctx.author.mention}\n**{o_card}** VS **{t_card}**")
+                embedVar = discord.Embed(title=f"✅ Confirm Start! ({currentopponent + 1}/{total_legends})", description=f"{ctx.author.mention}\n**{o_card}** VS **{t_card}**")
                 embedVar.set_image(url="attachment://image.png")
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card)
             if mode == "ABYSS":
-                embedVar = discord.Embed(title=f"🌑 Abyss Floor {universe['FLOOR']}\n✨ Confirm Start!", description=f"{ctx.author.mention}\n**{o_card}** VS **{t_card}**")
+                embedVar = discord.Embed(title=f"🌑 Abyss Floor {universe['FLOOR']}\n✨ Confirm Start!  ({currentopponent + 1}/{total_legends})", description=f"{ctx.author.mention}\n**{o_card}** VS **{t_card}**")
                 embedVar.set_image(url="attachment://image.png")
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card)
             
@@ -6778,12 +6776,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card)
             
             if mode in co_op_modes and mode not in ai_co_op_modes and mode not in B_modes:
-                embedVar = discord.Embed(title=f"✅ Confirm Co-Op Battle!", description=f"{ctx.author.mention}\n**{o_card}** & **{c_card}** VS **{t_card}**")
+                embedVar = discord.Embed(title=f"✅ Confirm Co-Op Battle! ({currentopponent + 1}/{total_legends})", description=f"{ctx.author.mention}\n**{o_card}** & **{c_card}** VS **{t_card}**")
                 embedVar.set_image(url="attachment://image.png")
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card)
                 
             if mode in ai_co_op_modes:
-                embedVar = discord.Embed(title=f"✅ Confirm Duo Battle!", description=f"{ctx.author.mention}\n**{o_card}** & **{c_card}** VS **{t_card}**")
+                embedVar = discord.Embed(title=f"✅ Confirm Duo Battle! ({currentopponent + 1}/{total_legends})", description=f"{ctx.author.mention}\n**{o_card}** & **{c_card}** VS **{t_card}**")
                 embedVar.set_image(url="attachment://image.png")
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card) 
                 
@@ -17970,7 +17968,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     if abyss_message['NEW_UNLOCK']:
                                         embedVar.add_field(
                                         name=f"Abyssal Rewards",
-                                        value=f"You have been awarded :coin:**{'{:,}'.format(bless_Amount)}**!\n{abyss_drop_message}")
+                                        value=f"You have been awarded :coin:**{'{:,}'.format(bless_amount)}**!\n{abyss_drop_message}")
 
                                         await ctx.author.send(abyss_message['MESSAGE'])
                                         await ctx.send(f"{ctx.author.mention} {abyss_message['MESSAGE']}")
