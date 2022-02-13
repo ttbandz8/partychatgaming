@@ -8011,9 +8011,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     #     await button_ctx.defer(ignore=True)
                                     #     return
                                     except asyncio.TimeoutError:
-                                                await ctx.author.send(f"{ctx.author.mention} your Tutorial Battle was closed. You must interact before the timeout!")
-                                                await ctx.send(f"{ctx.author.mention} your Tutorial Battle was closed. You must interact before the timeout!")
-                                                o_health = 0
+                                        await ctx.author.send(f"{ctx.author.mention} your Tutorial Battle was closed. You must interact before the timeout!")
+                                        await ctx.send(f"{ctx.author.mention} your Tutorial Battle was closed. You must interact before the timeout!")
+                                        o_health = 0
                                     except Exception as ex:
                                         trace = []
                                         tb = ex.__traceback__
@@ -13376,7 +13376,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_stamina = tempstam
                                                         elif enh_type == 'SOULCHAIN':
                                                             t_stamina = round(dmg['DMG'])
-                                                            o_stamina = o_stamina
+                                                            o_stamina = t_stamina
                                                         elif enh_type == 'GAMBLE':
                                                             if mode in D_modes:
                                                                 t_health = round(dmg['DMG']) * 2
@@ -13605,7 +13605,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_stamina = tempstam
                                                     elif enh_type == 'SOULCHAIN':
                                                         t_stamina = round(dmg['DMG'])
-                                                        o_stamina = o_stamina
+                                                        o_stamina = t_stamina
                                                     elif enh_type == 'GAMBLE':
                                                         if mode in D_modes:
                                                             t_health = round(dmg['DMG']) * 2
@@ -18612,11 +18612,14 @@ async def drops(player, universe, matchcount):
     all_available_drop_titles = db.queryDropTitles(universe)
     all_available_drop_arms = db.queryDropArms(universe)
     all_available_drop_pets = db.queryDropPets(universe)
-    vault_query = {'OWNER': str(player)}
+    vault_query = {'DID': str(player.id)}
     vault = db.queryVault(vault_query)
     owned_arms = []
     for arm in vault['ARMS']:
         owned_arms.append(arm['ARM'])
+        
+    owned_titles = []
+    owned_titles = vault['TITLES']
 
     user_query = {'DISNAME': str(player)}
     user = db.queryUser(user_query)
@@ -18702,6 +18705,9 @@ async def drops(player, universe, matchcount):
                 if len(vault['TITLES']) >= 25:
                     await bless(300, player)
                     return f"You're maxed out on Titles! You earned :coin: 300 instead!"
+                if str(titles[rand_title]) in owned_titles:
+                    await bless(150, player)
+                    return f"You already own **{titles[rand_title]}**! You earn :coin: **150**."
                 response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'TITLES': str(titles[rand_title])}})
                 return f"You earned _Title:_ **{titles[rand_title]}**!"
             else:
@@ -18811,9 +18817,9 @@ async def drops(player, universe, matchcount):
 
 
 async def specific_drops(player, card, universe):
-    vault_query = {'OWNER': str(player)}
+    vault_query = {'DID': str(player.id)}
     vault = db.queryVault(vault_query)
-    user_query = {'DISNAME': str(player)}
+    user_query = {'DID': str(player.id)}
     user = db.queryUser(user_query)
     rebirth = user['REBIRTH']
     owned_destinies = []
@@ -18885,11 +18891,12 @@ async def dungeondrops(player, universe, matchcount):
     all_available_drop_titles = db.queryExclusiveDropTitles(universe)
     all_available_drop_arms = db.queryExclusiveDropArms(universe)
     all_available_drop_pets = db.queryExclusiveDropPets(universe)
-    vault_query = {'OWNER': str(player)}
+    vault_query = {'DID': str(player.id)}
     vault = db.queryVault(vault_query)
     owned_arms = []
     for arm in vault['ARMS']:
         owned_arms.append(arm['ARM'])
+    owned_titles = vault['TITLES']
 
     user_query = {'DISNAME': str(player)}
     user = db.queryUser(user_query)
@@ -18964,6 +18971,9 @@ async def dungeondrops(player, universe, matchcount):
             if len(vault['TITLES']) >= 25:
                 await bless(1500, player)
                 return f"You're maxed out on Titles! You earned :coin: 1500 instead!"
+            if str(titles[rand_title]) in owned_titles:
+                    await bless(1250, player)
+                    return f"You already own **{titles[rand_title]}**! You earn :coin: **1250**."
             response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'TITLES': str(titles[rand_title])}})
             return f"You earned _Title:_ **{titles[rand_title]}**!"
         elif drop_rate <= arm_drop and drop_rate > title_drop:
@@ -19062,6 +19072,7 @@ async def bossdrops(player, universe):
     owned_arms = []
     for arm in vault['ARMS']:
         owned_arms.append(arm['ARM'])
+    owned_titled = vault['TITLES']
 
     user_query = {'DISNAME': str(player)}
     user = db.queryUser(user_query)
@@ -19136,6 +19147,9 @@ async def bossdrops(player, universe):
             if len(vault['TITLES']) >= 25:
                 await bless(8000, player)
                 return f"You're maxed out on Titles! You earned :coin: **8000** instead!"
+            if str(titles[rand_title]) in owned_titles:
+                    await bless(8000, player)
+                    return f"You already own **{titles[rand_title]}**! You earn :coin: **8000**."
             response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'TITLES': str(titles[rand_title])}})
             return f"You earned {titles[rand_title]}!"
         elif drop_rate <= arm_drop and drop_rate > title_drop:

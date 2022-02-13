@@ -5,7 +5,7 @@ traits = [{
 },{
     'NAME': 'League Of Legends',
     'EFFECT': 'Turret Shot',
-    'TRAIT': 'When you Focus you deal 30 damage to Opponent. Upon Resolve, you deal 60 x (Total Focus Count) damage.'
+    'TRAIT': 'When you Focus you deal 60 damage to Opponent. Upon Resolve, you deal 60 x (Total Focus Count) damage.'
 },{
     'NAME': 'Pokemon',
     'EFFECT': 'Evolution',
@@ -57,15 +57,15 @@ traits = [{
 },{
     'NAME': 'Solo Leveling',
     'EFFECT': 'Rulers Authority',
-    'TRAIT': 'When you Focus, opponent loses (30 + turn count) defense'
+    'TRAIT': 'When you Focus, opponent loses (60 + turn count) defense'
 },{
     'NAME': 'Souls',
     'EFFECT': 'Combo Recognition',
-    'TRAIT': 'When your opponent Focus, gain (30 + turn count) attack'
+    'TRAIT': 'When your opponent Focus, gain (60 + turn count) attack'
 },{
     'NAME': 'Death Note',
     'EFFECT': 'Scheduled Death',
-    'TRAIT': 'After 50 Turns You Win'
+    'TRAIT': 'Your First Focus After 50 Turns You Win.'
 },{
     'NAME': 'Dragon Ball Z',
     'EFFECT': 'Final Stand',

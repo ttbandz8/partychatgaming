@@ -1788,7 +1788,7 @@ async def trinketshop(ctx):
                resp = db.updateVault(query, update_query, filter_query)
 
                await curse(price, str(ctx.author))
-               await button_ctx.send(f"{current_arm}'s ⚒️ durability has increased by 50!")
+               await button_ctx.send(f"{current_arm}'s ⚒️ durability has increased by **{levels_gained}**!")
                return
             except:
                await ctx.send("Failed to purchase durability boost.", hidden=True)
