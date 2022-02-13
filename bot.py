@@ -1733,7 +1733,7 @@ async def trinketshop(ctx):
 
          lvl = card_info['LVL']
          max_lvl = 200
-         if lvl == max_lvl:
+         if lvl >= max_lvl:
             await button_ctx.send(f"**{current_card}** is already at max Trinket level. You may level up in /tales, but you can no longer purchase levels for this card.", hidden=True)
             return
 
