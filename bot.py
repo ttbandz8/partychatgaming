@@ -145,7 +145,7 @@ async def enhancers(ctx):
 
       embedVar5 = discord.Embed(title= f"Title Enhancer Type: Time Manipulation",colour=0x7289da)
       embedVar5.set_thumbnail(url=avatar)
-      embedVar5.add_field(name="`TIME MANIPULATION`", value="**BLINK**  - Decrease Your Stamina by Flat AP, Increase Opponent Stamina by Flat AP\n\n**SLOW** - Decrease Your Stamina by Flat AP, Swap You and Your Opponent's Stamina\n\n**HASTE** - Increase Your Stamina, Swap You and Your Opponent's Stamina\n\n")
+      embedVar5.add_field(name="`TIME MANIPULATION`", value="**BLINK**  - Decrease Your Stamina by Flat AP, Increase Opponent Stamina by Flat AP\n\n**SLOW** - Increase Opponent Stamina, Decrease Your Stamina then Swap Stamina with Opponent\n\n**HASTE** - Increase your Stamina, Decrease Opponent Stamina then Swap Stamina with Opponent\n\n")
       embedVar5.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
 
       embedVar6 = discord.Embed(title= f"Title Enhancer Type: Control",colour=0x7289da)

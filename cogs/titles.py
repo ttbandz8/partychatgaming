@@ -83,6 +83,7 @@ class Titles(commands.Cog):
             else:
                 price_message = f"_Shop & Drop_"
             typetext = " "
+            type2 = " "
             if o_title_passive_type == 'ATK':
                 typetext = "Attack"
                 message=f"{title_title} is an ATK title"
@@ -129,13 +130,16 @@ class Titles(commands.Cog):
                 typetext = "Opponent Attack And Defense decrease Opponent"
                 message=f"{title_title} is a CONFUSE title"
             elif o_title_passive_type == 'BLINK':
-                typetext = "Decrease Stamina, Increase Opponent Stamina"
+                typetext = "Decrease Stamina"
+                type2 ="Increase Target/Ally Stamina"
                 message=f"{title_title} is a BLINK title"
             elif o_title_passive_type == 'SLOW':
-                typetext = "Decrease Stamina by"
+                typetext = "Increase Opponent Stamina"
+                type2 = "Decrease Stamina"
                 message=f"{title_title} is a SLOW title"
             elif o_title_passive_type == 'HASTE':
                 typetext = "Increase Stamina by"
+                type2 = "Decrease Opponent Stamina"
                 message=f"{title_title} is a HASTE title" 
             elif o_title_passive_type == 'SOULCHAIN':
                 typetext = "Stamina"
@@ -159,9 +163,9 @@ class Titles(commands.Cog):
             elif o_title_passive_type == "STANCE" or o_title_passive_type == "CONFUSE":
                 embedVar.add_field(name=f"**Unique Passive**", value=f"Swap {typetext} Defense by **{o_title_passive_value}**", inline=False)
             elif o_title_passive_type == "BLINK":
-                embedVar.add_field(name=f"**Unique Passive**", value=f"**{typetext}** by **{o_title_passive_value}**", inline=False)
+                embedVar.add_field(name=f"**Unique Passive**", value=f"**{typetext}** by **{o_title_passive_value}**, **{type2}** by **{o_title_passive_value}**", inline=False)
             elif o_title_passive_type == "SLOW" or o_title_passive_type == "HASTE":
-                embedVar.add_field(name=f"**Unique Passive**", value=f"**{typetext}** by **{o_title_passive_value}**", inline=False)
+                embedVar.add_field(name=f"**Unique Passive**", value=f"**{typetext}** by **{o_title_passive_value}**, **{type2}** by **{o_title_passive_value}** then **Swap Stamina**", inline=False)
             elif o_title_passive_type == "SOULCHAIN" or o_title_passive_type == "GAMBLE":
                 embedVar.add_field(name=f"**Unique Passive**", value=f"Set both players **{typetext}** equal to **{o_title_passive_value}**", inline=False)
             embedVar.set_footer(text=f"{o_title_passive_type}: {title_enhancer_mapping[o_title_passive_type]}")
