@@ -4890,16 +4890,16 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             tsiphon_value = tarm_passive_value
         
 
-        if o['UNIVERSE'] == "Demon Slayer" and t_max_health >= o['HLT']:  # Demon Slayer Universal Trait
+        if o['UNIVERSE'] == "Demon Slayer" and t_max_health >= o['HLT'] and o_card_passive_type != "GAMBLE" and o_title_passive_type != "GAMBLE" and t_card_passive_type != "GAMBLE" and t_title_passive_type != "GAMBLE":  # Demon Slayer Universal Trait
             o_max_health = t_max_health
             o_health = t_max_health
 
-        if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT']:  # Demon Slayer Universal Trait
+        if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT'] and o_card_passive_type != "GAMBLE" and o_title_passive_type != "GAMBLE" and t_card_passive_type != "GAMBLE" and t_title_passive_type != "GAMBLE":  # Demon Slayer Universal Trait
             t_max_health = o_max_health
             t_health = o_max_health
 
         if companion:
-            if c['UNIVERSE'] == "Demon Slayer" and t_max_health >= c['HLT']:  # Demon Slayer Universal Trait
+            if c['UNIVERSE'] == "Demon Slayer" and t_max_health >= c['HLT'] and o_card_passive_type != "GAMBLE" and o_title_passive_type != "GAMBLE" and t_card_passive_type != "GAMBLE" and t_title_passive_type != "GAMBLE" and c_card_passive_type != "GAMBLE" and c_title_passive_type != "GAMBLE":  # Demon Slayer Universal Trait
                 c_max_health = t_max_health
                 c_health = t_max_health
 
