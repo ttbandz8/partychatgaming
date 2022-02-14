@@ -2853,7 +2853,7 @@ async def craft_adjuster(player, vault, universe, price, item):
                         return response
 
                 if item in item_bools:
-                    query = {'OWNER': str(vault['OWNER'])}
+                    query = {'DID': str(vault['DID'])}
                     update_query = {
                         '$inc': {'GEMS.$[type].' + "GEMS": int(negPriceAmount)}, 
                         '$set': {'GEMS.$[type].' + str(item): True}
