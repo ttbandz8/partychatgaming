@@ -9142,9 +9142,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             aiMove = 6
                                         elif tarm_barrier_active: #Ai Barrier Checks
                                             if t_stamina >=20: #Stamina Check For Enhancer
-                                                aiMove = await ai_enhancer_moves(t_used_focus,t_used_resolve,t_pet_used,t_stamina,
+                                                aiMove = await ai_enhancer_moves(turn_total,t_used_focus,t_used_resolve,t_pet_used,t_stamina,
                                                                            t_enhancer['TYPE'],t_health,t_max_health,t_attack,
-                                                                           t_defense,o_stamina,o_attack,o_defense)
+                                                                           t_defense,o_stamina,o_attack,o_defense, o_health)
                                             else:
                                                 aiMove = 1
                                         elif o_stamina == 0:
@@ -12263,9 +12263,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         aiMove = 6
                                     elif tarm_barrier_active: #Ai Barrier Checks
                                         if t_stamina >=20: #Stamina Check For Enhancer
-                                            aiMove = await ai_enhancer_moves(t_used_focus,t_used_resolve,t_pet_used,t_stamina,
+                                            aiMove = await ai_enhancer_moves(turn_total,t_used_focus,t_used_resolve,t_pet_used,t_stamina,
                                                                         t_enhancer['TYPE'],t_health,t_max_health,t_attack,
-                                                                        t_defense,o_stamina,o_attack,o_defense)
+                                                                        t_defense,o_stamina,o_attack,o_defense, o_health)
                                         else:
                                             aiMove = 1
                                     elif o_stamina < 10:
@@ -12331,9 +12331,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         if t_enhancer['TYPE'] in Gamble_Enhancer_Check:
                                             aiMove = 1
                                         else:
-                                            aiMove = await ai_enhancer_moves(t_used_focus,t_used_resolve,t_pet_used,t_stamina,
+                                            aiMove = await ai_enhancer_moves(turn_total,t_used_focus,t_used_resolve,t_pet_used,t_stamina,
                                                                         t_enhancer['TYPE'],t_health,t_max_health,t_attack,
-                                                                        t_defense,o_stamina,o_attack,o_defense)
+                                                                        t_defense,o_stamina,o_attack,o_defense, o_health)
                                     elif t_stamina >= 70:
                                         aiMove = 1
                                     elif t_stamina >= 60 and (t_health >= o_health):
@@ -12378,9 +12378,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             'TYPE'] in Stamina_Enhancer_Check:
                                             aiMove = 2
                                         else:
-                                            aiMove = await ai_enhancer_moves(t_used_focus,t_used_resolve,t_pet_used,t_stamina,
+                                            aiMove = await ai_enhancer_moves(turn_total,t_used_focus,t_used_resolve,t_pet_used,t_stamina,
                                                                         t_enhancer['TYPE'],t_health,t_max_health,t_attack,
-                                                                        t_defense,o_stamina,o_attack,o_defense)
+                                                                        t_defense,o_stamina,o_attack,o_defense, o_health)
                                     elif t_stamina >= 30:
                                         aiMove = 2
                                     elif t_stamina >= 20 and (t_health >= o_health):
@@ -14092,9 +14092,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 aiMove = 6
                                             elif carm_barrier_active: #Ai Barrier Checks
                                                 if t_stamina >=20: #Stamina Check For Enhancer
-                                                    aiMove = await ai_enhancer_moves(c_used_focus,c_used_resolve,c_pet_used,c_stamina,
+                                                    aiMove = await ai_enhancer_moves(turn_total,c_used_focus,c_used_resolve,c_pet_used,c_stamina,
                                                                             c_enhancer['TYPE'],c_health,c_max_health,c_attack,
-                                                                            c_defense,t_stamina,t_attack,t_defense)
+                                                                            c_defense,t_stamina,t_attack,t_defense, o_health)
                                                 else:
                                                     aiMove = 1
                                             elif t_stamina == 0:
@@ -14245,9 +14245,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     else:
                                                         aiMove = 2
                                                 else:
-                                                    aiMove = await ai_enhancer_moves(c_used_focus,c_used_resolve,c_pet_used,c_stamina,
+                                                    aiMove = await ai_enhancer_moves(turn_total,c_used_focus,c_used_resolve,c_pet_used,c_stamina,
                                                                             c_enhancer['TYPE'],c_health,c_max_health,c_attack,
-                                                                            c_defense,t_stamina,t_attack,t_defense)
+                                                                            c_defense,t_stamina,t_attack,t_defense, t_health)
                                             elif c_stamina >= 30:
                                                 aiMove = 2
                                             elif c_stamina >= 20 and (c_health >= t_health):
@@ -16318,9 +16318,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             aiMove = 6
                                         elif tarm_barrier_active: #Ai Barrier Checks
                                             if t_stamina >=20: #Stamina Check For Enhancer
-                                                aiMove = await ai_enhancer_moves(t_used_focus,t_used_resolve,t_pet_used,t_stamina,
+                                                aiMove = await ai_enhancer_moves(turn_total,t_used_focus,t_used_resolve,t_pet_used,t_stamina,
                                                                            t_enhancer['TYPE'],t_health,t_max_health,t_attack,
-                                                                           t_defense,c_stamina,c_attack,c_defense)
+                                                                           t_defense,c_stamina,c_attack,c_defense, c_health)
                                             else:
                                                 aiMove = 1
                                         elif c_stamina < 10:
@@ -16350,25 +16350,25 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         elif t_stamina >= 110:
                                             aiMove = 2
                                         elif t_stamina >= 100 and (t_health >= c_health):
-                                            aiMove = await ai_enhancer_moves(t_used_focus,t_used_resolve,t_pet_used,t_stamina,
+                                            aiMove = await ai_enhancer_moves(turn_total,t_used_focus,t_used_resolve,t_pet_used,t_stamina,
                                                                            t_enhancer['TYPE'],t_health,t_max_health,t_attack,
-                                                                           t_defense,c_stamina,c_attack,c_defense)
+                                                                           t_defense,c_stamina,c_attack,c_defense, c_health)
                                         elif t_stamina >= 100:
                                             aiMove = 1
                                         elif t_stamina >= 90 and (t_health >= c_health):
                                             aiMove = 3
                                         elif t_stamina >= 90:
-                                            aiMove = await ai_enhancer_moves(t_used_focus,t_used_resolve,t_pet_used,t_stamina,
+                                            aiMove = await ai_enhancer_moves(turn_total,t_used_focus,t_used_resolve,t_pet_used,t_stamina,
                                                                            t_enhancer['TYPE'],t_health,t_max_health,t_attack,
-                                                                           t_defense,c_stamina,c_attack,c_defense)
+                                                                           t_defense,c_stamina,c_attack,c_defense, c_health)
                                         elif t_stamina >= 80 and (t_health >= c_health):
                                             aiMove = 1
                                         elif t_stamina >= 80:
                                             aiMove = 3
                                         elif t_stamina >= 70 and (t_health >= c_health):
-                                            aiMove = await ai_enhancer_moves(t_used_focus,t_used_resolve,t_pet_used,t_stamina,
+                                            aiMove = await ai_enhancer_moves(turn_total,t_used_focus,t_used_resolve,t_pet_used,t_stamina,
                                                                            t_enhancer['TYPE'],t_health,t_max_health,t_attack,
-                                                                           t_defense,c_stamina,c_attack,c_defense)
+                                                                           t_defense,c_stamina,c_attack,c_defense, c_health)
                                         elif t_stamina >= 70:
                                             aiMove = 1
                                         elif t_stamina >= 60 and (t_health >= c_health):
@@ -16404,17 +16404,17 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         elif t_stamina >= 40:
                                             aiMove = 2
                                         elif t_stamina >= 30 and (t_health >= c_health):
-                                            aiMove = await ai_enhancer_moves(t_used_focus,t_used_resolve,t_pet_used,t_stamina,
+                                            aiMove = await ai_enhancer_moves(turn_total,t_used_focus,t_used_resolve,t_pet_used,t_stamina,
                                                                            t_enhancer['TYPE'],t_health,t_max_health,t_attack,
-                                                                           t_defense,c_stamina,c_attack,c_defense)
+                                                                           t_defense,c_stamina,c_attack,c_defense, c_health)
                                         elif t_stamina >= 30:
                                             aiMove = 2
                                         elif t_stamina >= 20 and (t_health >= c_health):
                                             aiMove = 1
                                         elif t_stamina >= 20:
-                                            aiMove = await ai_enhancer_moves(t_used_focus,t_used_resolve,t_pet_used,t_stamina,
+                                            aiMove = await ai_enhancer_moves(turn_total,t_used_focus,t_used_resolve,t_pet_used,t_stamina,
                                                                            t_enhancer['TYPE'],t_health,t_max_health,t_attack,
-                                                                           t_defense,c_stamina,c_attack,c_defense)
+                                                                           t_defense,c_stamina,c_attack,c_defense, c_health)
                                         elif t_stamina >= 10:
                                             aiMove = 1
                                         else:
@@ -19405,7 +19405,7 @@ async def bossdrops(player, universe):
             "There's an issue with Boss Drops. Please use /ff to close this channel and start anew. Alert support.")
         return
 
-async def ai_enhancer_moves(focus, resolve, summon, stamina, enhancer_type, health, maxhealth, attack, defense, oppstamina, oppattack, oppdefense):
+async def ai_enhancer_moves(turn_total,focus, resolve, summon, stamina, enhancer_type, health, maxhealth, attack, defense, oppstamina, oppattack, oppdefense, opphealth):
     aiMove = 1
     focus_used = focus
     resolve_used = resolve
@@ -19440,8 +19440,8 @@ async def ai_enhancer_moves(focus, resolve, summon, stamina, enhancer_type, heal
             else:
                 aiMove = 7
         else:
-            if attack >=999 and defense>= 999:
-                aiMove = 7
+            if attack >=800 and defense>= 800:
+                aiMove = 1
             else:
                 aiMove = 4
     elif enhancer in Damage_Enhancer_Check or enhancer in Turn_Enhancer_Check: #Ai Damage Check
@@ -19475,7 +19475,7 @@ async def ai_enhancer_moves(focus, resolve, summon, stamina, enhancer_type, heal
         else:
             aiMove = 4
     elif enhancer in INC_Enhancer_Check: #Ai Inc Check
-        if attack >= 999 or defense >=999:
+        if attack >= 800 or defense >=800:
             if stamina >=80 and focus_used:
                 aiMove = 3
             elif stamina>=20:
@@ -19485,7 +19485,7 @@ async def ai_enhancer_moves(focus, resolve, summon, stamina, enhancer_type, heal
         else:
             aiMove = 4
     elif enhancer in DPS_Enhancer_Check: #Ai Steal Check
-        if attack >= 999 and oppattack >=100:
+        if attack >= 800 and oppattack >=100:
             if stamina >=80 and focus_used:
                 aiMove = 3
             elif stamina>=30 and focus_used:
@@ -19494,7 +19494,7 @@ async def ai_enhancer_moves(focus, resolve, summon, stamina, enhancer_type, heal
                 aiMove = 7
             else:
                 aiMove = 1
-        elif defense >= 999 and oppdefense >=100:
+        elif defense >= 800 and oppdefense >=100:
             if stamina >=80 and focus_used:
                 aiMove = 3
             elif stamina>=30 and focus_used:
@@ -19506,7 +19506,7 @@ async def ai_enhancer_moves(focus, resolve, summon, stamina, enhancer_type, heal
         else:
             aiMove = 4
     elif enhancer in FORT_Enhancer_Check: #Ai Fort Check
-        if (oppattack<= 50 or attack >= 999) or health <= 650 or health <= (.66 * maxhealth):
+        if (oppattack<= 50 or attack >= 800) or health <= 650 or health <= (.66 * maxhealth):
             if stamina >=80 and focus_used:
                 aiMove = 3
             elif stamina>=30 and focus_used:
@@ -19515,7 +19515,7 @@ async def ai_enhancer_moves(focus, resolve, summon, stamina, enhancer_type, heal
                 aiMove = 7
             else:
                 aiMove = 1
-        elif (oppdefense <=50 or defense >= 999) or health <= 650 or health <= (.66 * maxhealth):
+        elif (oppdefense <=50 or defense >= 800) or health <= 650 or health <= (.66 * maxhealth):
             if stamina >=80 and focus_used:
                 aiMove = 3
             elif stamina>=30 and focus_used:
@@ -19527,26 +19527,36 @@ async def ai_enhancer_moves(focus, resolve, summon, stamina, enhancer_type, heal
         else:
             aiMove = 4
     elif enhancer in Sacrifice_Enhancer_Check: #Ai Sacrifice Check
-        if attack >= 999 or health <= 500 or health <= (.75 * maxhealth):
+        if attack >= 800 or health <= 500 or health <= (.75 * maxhealth):
             if focus_used and not resolve_used:
                 aiMove =5
             else:
-                if summon_used == False:
-                    aiMove =6
-                else:
-                    aiMove = 7
-        elif defense >= 999 or health <=500 or health <= (.75 * maxhealth):
+                aiMove = 7
+        elif defense >= 800 or health <=500 or health <= (.75 * maxhealth):
             if focus_used and not resolve_used:
                 aiMove =5
             else:
-                if summon_used == False:
-                    aiMove =6
-                else:
-                    aiMove = 7
+                aiMove = 7
         else:
             aiMove = 4
     else:
         aiMove = 4 #Block or Enhance
+        
+    #Killing Blow Checks
+    if opphealth <=200:
+        if stamina >=80:
+            aiMove =3
+        elif stamina >=30:
+            aiMove=2
+        elif stamina >=20:
+            if enhancer == "LIFE" or enhancer in Damage_Enhancer_Check:
+                aiMove = 4
+            else:
+                aiMove = 1
+        else:
+            aiMove = 1
+            
+        
     return aiMove
 enhancer_mapping = {'ATK': 'Increase Attack %',
 'DEF': 'Increase Defense %',

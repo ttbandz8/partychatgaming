@@ -117,9 +117,9 @@ class Boss(commands.Cog):
     @cog_ext.cog_slash(description="Exchange Boss Souls for Cards", guild_ids=main.guild_ids)
     async def exchange(self, ctx, boss : str, card : str):
         try:
-            vault_query = {'OWNER' : str(ctx.author)}
+            vault_query = {'DID' : str(ctx.author.id)}
             vault = db.queryVault(vault_query)
-            userinfo = db.queryUser({"DISNAME" : str(ctx.author)})
+            userinfo = db.queryUser({"DID" : str(ctx.author.id)})
             
             
             if userinfo['LEVEL'] < 101:

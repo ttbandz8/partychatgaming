@@ -29,8 +29,8 @@ class Hall(commands.Cog):
     @cog_ext.cog_slash(description="Buy a Hall for your guild", guild_ids=main.guild_ids)
     async def buyhall(self, ctx, hall: str):
         hall_name = hall
-        leadername = str(ctx.author)
-        user_query = {'DISNAME' : leadername}
+        leadername = str(ctx.author.id)
+        user_query = {'DID' : leadername}
         leader_info = db.queryUser(user_query)
         guildname = leader_info['GUILD']
         if guildname == 'PCG':
