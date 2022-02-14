@@ -2893,12 +2893,12 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, stamina, en
             true_dmg = (random.randint(int(low), int(high))) + 25
             message = ""
 
-            miss_hit = 4  # Miss
+            miss_hit = 3  # Miss
             low_hit = 7  # Lower Damage
             med_hit = 11  # Medium Damage
             standard_hit = 19  # Standard Damage
             high_hit = 20  # Crit Hit
-            hit_roll = random.randint(4, 20)
+            hit_roll = random.randint(3, 20)
 
             if hit_roll <= miss_hit:
                 if universe == 'Crown Rift Slayers':
