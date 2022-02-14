@@ -138,7 +138,7 @@ class Titles(commands.Cog):
                 type2 = "Decrease Stamina"
                 message=f"{title_title} is a SLOW title"
             elif o_title_passive_type == 'HASTE':
-                typetext = "Increase Stamina by"
+                typetext = "Increase Stamina"
                 type2 = "Decrease Opponent Stamina"
                 message=f"{title_title} is a HASTE title" 
             elif o_title_passive_type == 'SOULCHAIN':
