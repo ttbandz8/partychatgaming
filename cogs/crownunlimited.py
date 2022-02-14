@@ -2158,7 +2158,7 @@ async def quest(player, opponent, mode):
                     await bless(reward, player.id)
                     message = f"Dungeon Quest Completed! :coin:{reward} has been added to your balance."
 
-                query = {'OWNER': str(player)}
+                query = {'DID': str(player.id)}
                 update_query = {'$inc': {'QUESTS.$[type].' + "WINS": 1}}
                 filter_query = [{'type.' + "OPPONENT": opponent}]
                 resp = db.updateVault(query, update_query, filter_query)
@@ -2174,7 +2174,7 @@ async def quest(player, opponent, mode):
                         await bless(reward, player.id)
                         message = f"Tales Quest Completed! :coin:{reward} has been added to your balance."
 
-                query = {'OWNER': str(player)}
+                query = {'DID': str(player.id)}
                 update_query = {'$inc': {'QUESTS.$[type].' + "WINS": 1}}
                 filter_query = [{'type.' + "OPPONENT": opponent}]
                 resp = db.updateVault(query, update_query, filter_query)
