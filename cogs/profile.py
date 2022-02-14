@@ -2815,7 +2815,7 @@ async def craft_adjuster(player, vault, universe, price, item):
                                 destiny_universe = destiny['UNIVERSE']
                                 destiny_defeat = destiny['DEFEAT']
     
-                    query = {'OWNER': str(vault['OWNER'])}
+                    query = {'DID': str(vault['DID'])}
                     update_query = {
                         '$inc': {'GEMS.$[type].' + "GEMS": int(negPriceAmount)}
                     }
