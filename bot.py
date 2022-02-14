@@ -581,9 +581,22 @@ async def register(ctx):
       Welcome {ctx.author.mention}!                                                                                           
       
       Collect and level **Cards**, **Summons**, and **Accessories** to create powerful builds
-      Conquer Worlds, Defeat Bosses, and Rule PVP for prizes and rank, both solo and multiplayer! 
-      **Enhancers** are Special Abilities used to boost your Cards, Summons, and Accessories in battle!
+      Conquer **Universes**, Defeat **Bosses**, and Rule **PVP** for prizes and rank, **Solo** and **Multiplayer**! 
+      Discover **Enhancers!!** - Special Abilities used to boost your Cards, Summons, and Accessories in battle!
 
+      **Card Basics**
+      🀄 - Card Tier *1-7*
+      :trident: - Card Level *1-500*
+      :heart:  - Card Health (HLT)
+      :cyclone: - Card Stamina (ST)
+      🗡️ - Attack (ATK) *Blue Crystal* 🟦
+      🛡️ - Defense (DEF) *Red Crystal* 🟥
+      :drop_of_blood: - Card Passive *Enhancers applied at the start of the battle*
+
+      **Accessories & Summons**
+      :reminder_ribbon: - Title  *Title enhancers are applied at the start of battle.*
+      :mechanical_arm: - Arm *Arm enhancers are applied passively throughout the duration of battle.*
+      🧬 - Summon *Summons use Active Enhancers and are available during battle after you Resolve*
       **Currency**
       :coin: - Coins *Buy Items in the /shop and /trinketshop*
       :gem: - Gems *Craft Universe Hearts and Souls*
@@ -636,6 +649,7 @@ async def register(ctx):
                   {traitmessage}
                   """))
                   embedVar.set_image(url=uni['PATH'])
+                  embedVar.set_footer(text="You can earn or purchase items from other universes after Abyss Floor 3")
                   universe_embed_list.append(embedVar)
                   
             buttons = [
@@ -648,6 +662,7 @@ async def register(ctx):
                try:
                   if button_ctx.author == ctx.author:
                      universe = str(button_ctx.origin_message.embeds[0].title)
+                     user_info = db.queryUser({'DID':str(ctx.author.id)})
                      vault = db.createVault(data.newVault({'OWNER': disname, 'DID' : str(ctx.author.id)}))
                      vault_query = {'DID' : str(ctx.author.id)}
                      vault = db.altQueryVault(vault_query)
@@ -683,7 +698,7 @@ async def register(ctx):
                            title = list_of_titles[selection]
                            response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'TITLES': str(title['TITLE'])}})
                            title_message.append(f"You collected :reminder_ribbon: **{title['TITLE']}**.")
-                           await button_ctx.send(f"You collected :reminder_ribbon: **{title['TITLE']}**.")
+                           #await button_ctx.send(f"You collected :reminder_ribbon: **{title['TITLE']}**.")
                            count = count + 1
                         
                         
@@ -701,12 +716,16 @@ async def register(ctx):
                            arm = list_of_arms[selection]['ARM']
                            db.updateVaultNoFilter(vault_query,{'$addToSet':{'ARMS': {'ARM': str(arm), 'DUR': 75}}})        
                            arm_message.append(f"You collected :mechanical_arm: **{arm}**.")                   
-                           await button_ctx.send(f"You collected :mechanical_arm: **{arm}**.")
+                           #await button_ctx.send(f"You collected :mechanical_arm: **{arm}**.")
                            count = count + 1
                            
                         list_of_cards = [x for x in db.queryAllCardsBasedOnUniverse({'UNIVERSE': str(universe), 'TIER': {'$in': acceptable}}) if not x['EXCLUSIVE'] and not x['HAS_COLLECTION'] and x['AVAILABLE'] and x['NAME'] not in current_cards]
                         count = 0
                         selected_cards = [1000]
+                        counter = 1
+                        destiny_counter = 0
+                        destiny_message = []
+                        has_destiny=False
                         while count < 3:
                            current_cards = vault['CARDS']
                            selectable_cards = list(range(0, len(list(list_of_cards))))
@@ -720,46 +739,47 @@ async def register(ctx):
                            tier = 0
 
                            cresponse = db.updateVaultNoFilter(vault_query, {'$addToSet': {'CARDS': str(card_name)}})
+                           cardname_list = []
                            if cresponse:
                               if card_name not in owned_card_levels_list:
                                  update_query = {'$addToSet': {
                                        'CARD_LEVELS': {'CARD': str(card_name), 'LVL': 0, 'TIER': int(tier),
                                                       'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
                                  r = db.updateVaultNoFilter(vault_query, update_query)
+                              cardname_list.append(card_name)
                               card_message.append(f"You collected 🎴 **{card_name}**!")
-                              await button_ctx.send(f"You collected 🎴 **{card_name}**!")
+                              #await button_ctx.send(f"You collected 🎴 **{card_name}**!")
 
                               # Add Destiny
                               for destiny in d.destiny:
                                  if card_name in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
-                                       db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
-                                       await button_ctx.send(
-                                          f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.", hidden=True)
+                                    destiny_counter = destiny_counter + 1
+                                    db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
+                                    has_destiny=True
+                                    if counter > 0:
+                                       destiny_message.append(f"✨**{destiny['NAME']}** : Earn 🎴 **{destiny['EARN']}**.!")
+                                       counter = counter - 1
+                                       # await button_ctx.send(
+                                       #    f"✨**{destiny['NAME']}** addes to **/destinylist**.", hidden=True)
                            count = count + 1
-                        title_drop_message_into_embded = "\n\n".join(title_message)
-                        arm_drop_message_into_embded = "\n\n".join(arm_message)
-                        card_drop_message_into_embded = "\n\n".join(card_message)
-                        embedVar = discord.Embed(title=f":crown: Nice Choice {ctx.author.mention}!\nNow lets create your first **Build!**",description=textwrap.dedent(f"""
-                        **Card Basics**
-                        🀄 - Card Tier *1-7*
-                        :trident: - Card Level *1-500*
-                        :heart:  - Card Health (HLT)
-                        :cyclone: - Card Stamina (ST)
-                        🗡️ - Attack (ATK) *Blue Crystal* 🟦
-                        🛡️ - Defense (DEF) *Red Crystal* 🟥
-                        :drop_of_blood: - Card Passive *Enhancers applied at the start of the battle*
-
+                        title_drop_message_into_embded = "\n".join(title_message)
+                        arm_drop_message_into_embded = "\n".join(arm_message)
+                        card_drop_message_into_embded = "\n".join(card_message)
+                        destiny_drop_message_into_embded = "\n".join(destiny_message)
+                        embedVar = discord.Embed(title=f":crown: Create your **Build!**",description=textwrap.dedent(f"""
+                        *Nice Choice {ctx.author.mention}!*
+                        Create a **/build** with your **Starting Items**
                         
-                        **Accessories & Summons**
-                        :reminder_ribbon: - Title  *Title enhancers are applied at the start of battle.*
-                        :mechanical_arm: - Arm *Arm enhancers are applied passively throughout the duration of battle.*
-                        🧬 - Summon *Summons use Active Enhancers and are available during battle after you Resolve*
                         """),colour=0x1abc9c)
-                        embedVar.add_field(name=f"**Cards**", value=f"{card_drop_message_into_embded}", inline=False)
-                        embedVar.add_field(name=f"**Titles**", value=f"{title_drop_message_into_embded}", inline=True)
-                        embedVar.add_field(name=f"**Arms**", value=f"{arm_drop_message_into_embded}", inline=True)
-                        embedVar.set_author(name=f":crown:]Registration Complete!", icon_url=r_response['AVATAR'])
-                        await button_ctx.send(f"Nice choice {ctx.author.mention}!\n\nCreate your first **Build**!\n**/cards** Select your 🎴  Card\n**/titles** Select your 🎗️ Title\n**/arms** Select your 🦾  Arm\n\nOnce you're done, run **/tutorial** to begin the **Tutorial Battle**! ⚔️")
+                        embedVar.add_field(name=f"🎴 **Cards** */cards to open your Cards*", value=f"{card_drop_message_into_embded}", inline=True)
+                        embedVar.add_field(name=f":reminder_ribbon: **Titles** */titles to open your Titles*", value=f"{title_drop_message_into_embded}", inline=True)
+                        embedVar.add_field(name=f":mechanical_arm: **Arms** */arms to open your Arms*", value=f"{arm_drop_message_into_embded}", inline=True)
+                        if has_destiny:
+                           embedVar.add_field(name=f"**Destinies** */destinylist to open your Destinies*", value=f"{destiny_drop_message_into_embded}", inline=False)
+                        embedVar.set_author(name=f"Registration Complete!", icon_url=user_info['AVATAR'])
+                        embedVar.set_footer(text="Use /tutorial to start the tutorial match!",
+                                    icon_url="https://cdn.discordapp.com/emojis/877233426770583563.gif?v=1")
+                        #await button_ctx.send(f"Nice choice {ctx.author.mention}!\n\nCreate your first **Build**!\n**/cards** Select your 🎴  Card\n**/titles** Select your 🎗️ Title\n**/arms** Select your 🦾  Arm\n\nOnce you're done, run **/tutorial** to begin the **Tutorial Battle**! ⚔️")
                         await button_ctx.send(embed=embedVar)
                         self.stop = True
                except Exception as ex:
@@ -1290,7 +1310,7 @@ async def on_slash_command_error(ctx, ex):
 async def daily(ctx):
    try:
       dailyamount = 100000
-      await bless(dailyamount, ctx.author)
+      await bless(dailyamount, ctx.author.id)
 
       user_data = db.queryUser({'DID': str(ctx.author.id)})
       user_completed_tales = user_data['CROWN_TALES']
@@ -1363,10 +1383,10 @@ async def DM(ctx, user : User, m,  message=None):
 async def bless(amount, user):
    blessAmount = amount
    posBlessAmount = 0 + abs(int(blessAmount))
-   query = {'DISNAME': str(user)}
+   query = {'DID': str(user)}
    vaultOwner = db.queryUser(query)
    if vaultOwner:
-      vault = db.queryVault({'OWNER' : vaultOwner['DISNAME']})
+      vault = db.queryVault({'DID' : vaultOwner['DID']})
       update_query = {"$inc": {'BALANCE': posBlessAmount}}
       db.updateVaultNoFilter(vault, update_query)
 
@@ -1374,10 +1394,10 @@ async def bless(amount, user):
 async def curse(amount, user):
       curseAmount = amount
       negCurseAmount = 0 - abs(int(curseAmount))
-      query = {'DISNAME': str(user)}
+      query = {'DID': str(user)}
       vaultOwner = db.queryUser(query)
       if vaultOwner:
-         vault = db.queryVault({'OWNER' : vaultOwner['DISNAME']})
+         vault = db.queryVault({'DID' : vaultOwner['DID']})
          update_query = {"$inc": {'BALANCE': int(negCurseAmount)}}
          db.updateVaultNoFilter(vault, update_query)
 
@@ -1399,8 +1419,8 @@ async def gift(ctx, player: User, amount: int):
    if balance <= int(amount):
       await ctx.send("You do not have that amount to gift.")
    else:
-      await bless(int(amount), user2)
-      await curse(amount_plus_tax, ctx.author)
+      await bless(int(amount), user2.id)
+      await curse(amount_plus_tax, ctx.author.id)
       await ctx.send(f":coin:{amount} has been gifted to {user2.mention}.")
       return
 
@@ -1419,7 +1439,7 @@ async def donate(ctx, amount, guild: str):
          await ctx.send("You do not have that amount to donate.")
       else:
          await blessteam(int(amount), dteam)
-         await curse(int(amount), ctx.author)
+         await curse(int(amount), ctx.author.id)
          await ctx.send(f":coin:{amount} has been gifted to {dteam}.")
          return
    else:
@@ -1438,7 +1458,7 @@ async def invest(ctx, amount):
          await ctx.send("You do not have that amount to invest.", hidden=True)
       else:
          await blessfamily_Alt(int(amount), user['FAMILY'])
-         await curse(int(amount), ctx.author)
+         await curse(int(amount), ctx.author.id)
          await ctx.send(f":coin:{amount} invested into **{user['NAME']}'s Family**.")
          return
    else:
@@ -1465,7 +1485,7 @@ async def pay(ctx, player: User, amount):
    if balance <= int(amount):
       await ctx.send("You do not have that amount to pay.")
    else:
-      await bless(int(amount), user2)
+      await bless(int(amount), user2.id)
       await curseteam(int(amount), team['TNAME'])
       await ctx.send(f":coin:{amount} has been paid to {user2.mention}.")
       return
@@ -1528,7 +1548,7 @@ async def allowance(ctx, player: User, amount):
    if balance <= int(amount):
       await ctx.send("You do not have that amount saved.")
    else:
-      await bless(int(amount), user2)
+      await bless(int(amount), user2.id)
       await cursefamily(int(amount), family['HEAD'])
       await ctx.send(f":coin:{amount} has been gifted to {user2.mention}.")
       return
@@ -1749,7 +1769,7 @@ async def trinketshop(ctx):
          update_query = {'$set': {'CARD_LEVELS.$[type].' + "EXP": 0}, '$inc': {'CARD_LEVELS.$[type].' + "LVL": levels_gained, 'CARD_LEVELS.$[type].' + "ATK": atk_def_buff, 'CARD_LEVELS.$[type].' + "DEF": atk_def_buff, 'CARD_LEVELS.$[type].' + "AP": ap_buff, 'CARD_LEVELS.$[type].' + "HLT": hlt_buff}}
          filter_query = [{'type.'+ "CARD": str(current_card)}]
          response = db.updateVault(query, update_query, filter_query)
-         await curse(price, str(ctx.author))
+         await curse(price, str(ctx.author.id))
          await button_ctx.send(f"**{str(current_card)}** gained {levels_gained} levels!")
 
          if button_ctx.custom_id == "cancel":
@@ -1766,7 +1786,7 @@ async def trinketshop(ctx):
             return
          else:
             update = db.updateUserNoFilterAlt(user_query, {'$set': {'TOURNAMENT_WINS': 1}})
-            await curse(10000000, str(ctx.author))
+            await curse(10000000, str(ctx.author.id))
             await button_ctx.send("Gabe's Purse has been purchased!")
             return
       

@@ -61,7 +61,7 @@ class CrownUnlimited(commands.Cog):
         return await main.validate_user(ctx)
 
     async def companion(user):
-        user_data = db.queryUser({'DISNAME': str(user)})
+        user_data = db.queryUser({'DID': str(user.id)})
         companion = user_data['DISNAME']
         return companion
 
@@ -84,13 +84,13 @@ class CrownUnlimited(commands.Cog):
 
         if level_ratelimit is None:
             try:
-                player_that_leveled = db.queryUser({'DISNAME': str(message.author)})
+                player_that_leveled = db.queryUser({'DID': str(message.author.id)})
                 if player_that_leveled:
                     card_that_leveled = db.queryCard({'NAME': player_that_leveled['CARD']})
                     uni = card_that_leveled['UNIVERSE']
                     nam = card_that_leveled['NAME']
                     mode = "Tales"
-                    await cardlevel(self, nam, str(message.author), mode, uni)
+                    await cardlevel(self, nam, str(message.author.id), mode, uni)
                 else:
                     return
             except Exception as e:
@@ -124,7 +124,7 @@ class CrownUnlimited(commands.Cog):
             #     return
 
             # Pull Character Information
-            player = db.queryUser({'DISNAME': str(message.author)})
+            player = db.queryUser({'DID': str(message.author.id)})
             if player['LEVEL'] < 35:
                 return
                 # await message.channel.send(f"🔓 Unlock the Explore Mode by completing Floor 35 of the 🌑 Abyss! Use /abyss to enter the abyss.")
@@ -212,7 +212,7 @@ class CrownUnlimited(commands.Cog):
                     found_amount = round(bounty / 3)
                 else:
                     found_amount = round(bounty / 5)
-                await bless(found_amount, str(message.author))
+                await bless(found_amount, str(message.author.id))
                 embedVar = discord.Embed(title=f"💨You fled but earned {bounty_icon} {found_amount}!", colour=0xf1c40f)
                 take_chances_response = embedVar
             else:
@@ -304,7 +304,7 @@ class CrownUnlimited(commands.Cog):
                     random_battle_buttons_action_row], timeout=120, check=check)
 
                 if button_ctx.custom_id == "exploreNo":
-                    await curse(random_flee_loss, message.author)
+                    await curse(random_flee_loss, message.author.id)
                     await button_ctx.send(embed=take_chances_response)
                     await msg.edit(components=[])
                     return
@@ -516,6 +516,8 @@ class CrownUnlimited(commands.Cog):
 
 
             universe_selection = await select_universe(self, ctx, sowner, oteam, ofam, mode, None)
+            if not universe_selection:
+                return
             selected_universe = universe_selection['SELECTED_UNIVERSE']
             universe = universe_selection['UNIVERSE_DATA']
             crestlist = universe_selection['CREST_LIST']
@@ -1093,6 +1095,8 @@ class CrownUnlimited(commands.Cog):
             ofam = sowner['FAMILY']
 
             universe_selection = await select_universe(self, ctx, sowner, oteam, ofam, mode, None)
+            if universe_selection == None:
+                return
             selected_universe = universe_selection['SELECTED_UNIVERSE']
             universe = universe_selection['UNIVERSE_DATA']
             crestlist = universe_selection['CREST_LIST']
@@ -1337,7 +1341,7 @@ class CrownUnlimited(commands.Cog):
             # Tutorial Code
             tutorialbot = '837538366509154407'
             legendbot = '845672426113466395'
-            opponent = db.queryUser({'DISNAME': str(player)})
+            opponent = db.queryUser({'DID': str(player.id)})
             oppDID = opponent['DID']
             tutorial = False
             if oppDID == tutorialbot or oppDID == legendbot:
@@ -2135,7 +2139,7 @@ async def score(owner, user: User):
 
 
 async def quest(player, opponent, mode):
-    user_data = db.queryVault({'OWNER': str(player)})
+    user_data = db.queryVault({'DID': str(player.id)})
     quest_data = {}
     try:
         if user_data['QUESTS']:
@@ -2151,7 +2155,7 @@ async def quest(player, opponent, mode):
             if str(mode) == "Dungeon" and quest_data['TYPE'] == "Dungeon" and completion >= 0:
                 message = "Dungeon Quest progressed!"
                 if completion == 0:
-                    await bless(reward, player)
+                    await bless(reward, player.id)
                     message = f"Dungeon Quest Completed! :coin:{reward} has been added to your balance."
 
                 query = {'OWNER': str(player)}
@@ -2164,10 +2168,10 @@ async def quest(player, opponent, mode):
                 message = "Tales Quest progressed!"
                 if completion == 0:
                     if quest_data['GOAL'] == 5:
-                        await bless(reward, player)
+                        await bless(reward, player.id)
                         message = f"Tales Quest Completed! :coin:{reward} has been added to your balance."
                     elif quest_data['GOAL'] == 3:
-                        await bless(reward, player)
+                        await bless(reward, player.id)
                         message = f"Tales Quest Completed! :coin:{reward} has been added to your balance."
 
                 query = {'OWNER': str(player)}
@@ -2323,7 +2327,7 @@ async def destiny(player, opponent, mode):
 
 
 async def summonlevel(pet, player):
-    vault = db.queryVault({'OWNER': str(player)})
+    vault = db.queryVault({'DID': str(player.id)})
     petinfo = {}
     try:
         for x in vault['PETS']:
@@ -2389,8 +2393,8 @@ async def summonlevel(pet, player):
         return
 
 
-async def cardlevel(self, card: str, player: str, mode: str, universe: str):
-    vault = db.queryVault({'OWNER': str(player)})
+async def cardlevel(self, card: str, player, mode: str, universe: str):
+    vault = db.queryVault({'DID': str(player)})
     card_uni = db.queryCard({'NAME': card})['UNIVERSE']
     user = await self.bot.fetch_user(vault['DID'])
 
@@ -3672,7 +3676,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         oarm_passive = oarm['ABILITIES'][0]
         oarm_name = oarm['ARM']
 
-        vault = db.queryVault({'OWNER': str(o_user['DISNAME']), 'PETS.NAME': o_user['PET']})
+        vault = db.queryVault({'DID': str(o_user['DID']), 'PETS.NAME': o_user['PET']})
         
         balance = vault['BALANCE']
         if mode == "RAID":
@@ -3770,7 +3774,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 carm_name = carm['ARM']
             else:
                 cperformance = c_user['PERFORMANCE']
-                cvault = db.queryVault({'OWNER': c_user['DISNAME'], 'PETS.NAME': c_user['PET']})
+                cvault = db.queryVault({'DID': c_user['DID'], 'PETS.NAME': c_user['PET']})
                 cpet = {}
                 for pet in cvault['PETS']:
                     if c_user['PET'] == pet['NAME']:
@@ -3863,7 +3867,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             tarm_passive = tarm['ABILITIES'][0]
             tarm_name = tarm['ARM']
 
-            tvault = db.queryVault({'OWNER': str(t_user['DISNAME']), 'PETS.NAME': t_user['PET']})
+            tvault = db.queryVault({'DID': str(t_user['DID']), 'PETS.NAME': t_user['PET']})
             tupdate_durability_message = update_arm_durability(self, tvault, tarm, universe)
             if tupdate_durability_message['MESSAGE']:
                 await ctx.send(f"{tupdate_durability_message['MESSAGE']}")
@@ -5071,7 +5075,9 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             'tpet_bond': tpet_bond,
             'tpetmove_text': tpetmove_text,
             'tpet_image': tpet_image,
-            't_pet_used': t_pet_used
+            't_pet_used': t_pet_used,
+            't_block_used': t_block_used,
+            't_defend_used': t_defend_used
         }
 
         if mode in pvp_modes or mode in raid_modes:
@@ -5334,7 +5340,9 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 't_rmessage': t_rmessage,
                 't_rebuke': t_rebuke,
                 't_concede': t_concede,
-                't_wins': t_wins
+                't_wins': t_wins,
+                't_block_used': t_block_used,
+                't_defend_used': t_defend_used
             }
 
         if mode == "CBoss":
@@ -5472,6 +5480,8 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 't_rebuke': t_rebuke,
                 't_concede': t_concede,
                 't_wins': t_wins,
+                't_block_used': t_block_used,
+                't_defend_used': t_defend_used,
                 'cperformance': cperformance,
                 'c_card': c_card,
                 'ccard_lvl': ccard_lvl,
@@ -5646,6 +5656,8 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 't_resolve': t_resolve,
                 't_used_resolve': t_used_resolve,
                 't_final_stand': t_final_stand,
+                't_block_used': t_block_used,
+                't_defend_used': t_defend_used,
                 'tcard_lvl_ap_buff': tcard_lvl_ap_buff,
                 'tpet_name': tpet_name,
                 'tpet_move': tpet_move,
@@ -5786,7 +5798,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
         await ctx.send(m.SERVER_FUNCTION_ONLY)
         return
     oguild = "PCG"
-    prevault = db.queryVault({'DID': str(ctx.author.id)})
+    prevault = db.queryVault({'DID': sowner['DID']})
     balance = prevault['BALANCE']
     
     crestlist = []
@@ -5964,8 +5976,10 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                 await ctx.send(m.ALREADY_IN_TALES)
                 return
 
-            # print(custom_function.selected_universe)
+            # print(custom_function.selected_universez
             selected_universe = custom_function.selected_universe
+            if selected_universe == "":
+                return
 
             universe = db.queryUniverse({'TITLE': str(selected_universe)})
             universe_owner = universe['GUILD']
@@ -5982,7 +5996,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                     db.updateUserNoFilter({'DID': str(ctx.author.id)}, {'$set': {'AVAILABLE': True}})
                     return
                 else:
-                    await curse(entrance_fee, str(ctx.author))
+                    await curse(entrance_fee, str(ctx.author.id))
                     if universe_owner != 'PCG':
                         crest_guild = db.queryGuildAlt({'GNAME' : universe_owner})
                         if crest_guild:
@@ -6092,7 +6106,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                     db.updateUserNoFilter({'DID': str(ctx.author.id)}, {'$set': {'AVAILABLE': True}})
                     return
                 else:
-                    await curse(entrance_fee, str(ctx.author))
+                    await curse(entrance_fee, str(ctx.author.id))
                     if universe['GUILD'] != 'PCG':
                         crest_guild = db.queryGuildAlt({'GNAME' : universe['GUILD']})
                         if crest_guild:
@@ -6190,7 +6204,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                     db.updateUserNoFilter({'DID': str(ctx.author.id)}, {'$set': {'AVAILABLE': True}})
                     return
                 else:
-                    await curse(entrance_fee, str(ctx.author))
+                    await curse(entrance_fee, str(ctx.author.id))
                     if universe['GUILD'] != 'PCG':
                         crest_guild = db.queryGuildAlt({'GNAME' : universe['GUILD']})
                         if crest_guild:
@@ -6560,6 +6574,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 tpet_image = stats['tpet_image']
                 t_pet_used = stats['t_pet_used']
                 tpetmove_text = stats['tpetmove_text']
+                t_block_used = stats['t_block_used']
+                t_defend_used = stats['t_defend_used']
                 t_title = ttitle['TITLE']
 
             if mode in B_modes:
@@ -7654,13 +7670,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_stamina = round(o_stamina - dmg['DMG'])
                                                         t_stamina = round(t_stamina + dmg['DMG'])
                                                     elif opet_type == 'SLOW':
-                                                        tempstam = round(t_stamina + dmg['DMG']) - 20
-                                                        o_stamina = round(o_stamina - dmg['DMG']) - 20
+                                                        tempstam = round(t_stamina + dmg['DMG'])
+                                                        o_stamina = round(o_stamina - dmg['DMG'])
                                                         t_stamina = o_stamina
                                                         o_stamina = tempstam
                                                     elif opet_type == 'HASTE':
-                                                        tempstam = round(t_stamina - dmg['DMG']) - 20
-                                                        o_stamina = round(o_stamina + dmg['DMG']) - 20
+                                                        tempstam = round(t_stamina - dmg['DMG'])
+                                                        o_stamina = round(o_stamina + dmg['DMG'])
                                                         t_stamina = o_stamina
                                                         o_stamina = tempstam
                                                     elif opet_type == 'SOULCHAIN':
@@ -7686,7 +7702,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if dmg['DMG'] >= 100:
                                                             dmg['DMG'] = 100
                                                         t_max_health = round(t_max_health - dmg['DMG'])
-
+                
                                                     o_stamina = o_stamina - int(dmg['STAMINA_USED'])
 
                                                     if o_universe == "Persona":
@@ -7811,13 +7827,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_stamina = round(o_stamina - dmg['DMG'])
                                                         t_stamina = round(t_stamina + dmg['DMG'])
                                                     elif enh_type == 'SLOW':
-                                                        tempstam = round(t_stamina + dmg['DMG']) - 20
-                                                        o_stamina = round(o_stamina - dmg['DMG']) - 20
+                                                        tempstam = round(t_stamina + dmg['DMG'])
+                                                        o_stamina = round(o_stamina - dmg['DMG'])
                                                         t_stamina = o_stamina
                                                         o_stamina = tempstam
                                                     elif enh_type == 'HASTE':
-                                                        tempstam = round(t_stamina - dmg['DMG']) - 20
-                                                        o_stamina = round(o_stamina + dmg['DMG']) - 20
+                                                        tempstam = round(t_stamina - dmg['DMG'])
+                                                        o_stamina = round(o_stamina + dmg['DMG'])
                                                         t_stamina = o_stamina
                                                         o_stamina = tempstam
                                                     elif enh_type == 'SOULCHAIN':
@@ -7839,7 +7855,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_health = round(o_health + dmg['DMG'])
                                                     elif enh_type == 'DESTRUCTION':
                                                         t_max_health = round(t_max_health - dmg['DMG'])
-                                                    o_stamina = o_stamina - int(dmg['STAMINA_USED'])
+                                                    if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check:
+                                                        t_stamina = t_stamina
+                                                    else:
+                                                        o_stamina = o_stamina - int(dmg['STAMINA_USED'])
 
                                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
                                                     previous_moves.append(f"*{turn_total}:* **{o_card}**: 🦠 {dmg['MESSAGE']}")
@@ -7847,8 +7866,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         # await asyncio.sleep(2)
                                                     turn_total = turn_total + 1
                                                     turn = 1
-                                                    if not botActive:
-                                                        await button_ctx.defer(ignore=True)
+                                                    
+                                                    await button_ctx.defer(ignore=True)
                                                 elif dmg['DMG'] == 0:
                                                     o_stamina = o_stamina - int(dmg['STAMINA_USED'])
 
@@ -7860,8 +7879,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     previous_moves.append(f"*{turn_total}:* **{o_card}**: {dmg['MESSAGE']}")
                                                     turn_total = turn_total + 1
                                                     turn = 1
-                                                    if not botActive:
-                                                        await button_ctx.defer(ignore=True)
+                                                    
+                                                    await button_ctx.defer(ignore=True)
                                                 else:
                                                     if t_universe == "Naruto" and t_stamina < 10:
                                                         t_health = t_health 
@@ -7872,8 +7891,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             previous_moves.append(f"*{turn_total}:* **{o_card}**'s Barrier Disabled!")
 
                                                         previous_moves.append(f"*{turn_total}:* **{t_card}**: Substitution Jutsu")
-                                                        if not botActive:
-                                                            await button_ctx.defer(ignore=True)
+                                                        
+                                                       # await button_ctx.defer(ignore=True)
                                                     elif tarm_shield_active:
                                                         if tshield_value > 0:
                                                             tshield_value = tshield_value -dmg['DMG']
@@ -7885,8 +7904,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     oarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                     previous_moves.append(f"*{turn_total}:* **{o_card}**'s Barrier Disabled!")
-                                                                if not botActive:
-                                                                    await button_ctx.defer(ignore=True)
+                                                                
+                                                         #       await button_ctx.defer(ignore=True)
                                                                 tarm_shield_active = False
                                                             else:
                                                                 embedVar = discord.Embed(title=f"{t_card.upper()} Activates **Shield** 🌐", description=f"**{o_card}** strikes the Shield 🌐 **{tshield_value} Shield** Left!", colour=0xe91e63)
@@ -7895,8 +7914,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     oarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                     previous_moves.append(f"*{turn_total}:* **{o_card}**'s Barrier Disabled!")
-                                                                if not botActive:
-                                                                    await button_ctx.defer(ignore=True)
+                                                                
+                                                         #       await button_ctx.defer(ignore=True)
 
                                                     elif tarm_barrier_active:
                                                         if tbarrier_count >1:
@@ -7907,8 +7926,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 oarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                 previous_moves.append(f"*{turn_total}:* **{o_card}**'s Barrier Disabled!")
-                                                            if not botActive:
-                                                                await button_ctx.defer(ignore=True)
+                                                            
+                                                      #      await button_ctx.defer(ignore=True)
                                                             tbarrier_count = tbarrier_count - 1
                                                         elif tbarrier_count==1:
                                                             embedVar = discord.Embed(title=f"{t_card.upper()}'s **Barrier** Broken!", description=f"{o_card} destroys the **Barrier**", colour=0xe91e63)
@@ -7918,8 +7937,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 oarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                 previous_moves.append(f"*{turn_total}:* **{o_card}**'s Barrier Disabled!")
-                                                            if not botActive:
-                                                                await button_ctx.defer(ignore=True)
+                                                            
+                                                    #        await button_ctx.defer(ignore=True)
                                                             tarm_barrier_active = False
                                                     elif tarm_parry_active:
                                                         if tparry_count > 1:
@@ -7934,8 +7953,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 oarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                 previous_moves.append(f"*{turn_total}:* **{o_card}**'s Barrier Disabled!")
-                                                            if not botActive:
-                                                                await button_ctx.defer(ignore=True)
+                                                            
+                                                    #        await button_ctx.defer(ignore=True)
                                                             
                                                         elif tparry_count==1:
                                                             t_health = t_health
@@ -7949,8 +7968,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 oarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                 previous_moves.append(f"*{turn_total}:* **{o_card}**'s Barrier Disabled!")
-                                                            if not botActive:
-                                                                await button_ctx.defer(ignore=True)
+                                                            
+                                                   #         await button_ctx.defer(ignore=True)
                                                             tarm_parry_active = False
                                                     else:
                                                         t_health = t_health - dmg['DMG']
@@ -7968,8 +7987,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             oarm_barrier_active=False
                                                             embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                             previous_moves.append(f"*{turn_total}:* **{o_card}**'s Barrier Disabled!")
-                                                        if not botActive:
-                                                            await button_ctx.defer(ignore=True)
+                                                #        await button_ctx.defer(ignore=True)
                                                     if t_health <= 0:
                                                         if t_final_stand==True:
                                                             embedVar = discord.Embed(title=f"{t_card.upper()}'s LAST STAND", description=f"{t_card} FINDS RESOLVE", colour=0xe91e63)
@@ -7979,8 +7997,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                 previous_moves.append(f"*{turn_total}:* **{o_card}**'s Barrier Disabled!")
                                                             previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Transformation: Last Stand!!!")
-                                                            if not botActive:
-                                                                await button_ctx.defer(ignore=True)
+                                               #             await button_ctx.defer(ignore=True)
                                                             t_health = int(.75 * (t_attack + t_defense))
                                                             
                                                             t_used_resolve = True
@@ -7993,12 +8010,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = 0
                                                             o_stamina = o_stamina - dmg['STAMINA_USED']
                                                             turn_total = turn_total + 1
-                                                            if botActive:
-                                                                await button_ctx.defer(ignore=True)
+                                                       #     await button_ctx.defer(ignore=True)
                                                     else:
                                                         o_stamina = o_stamina - dmg['STAMINA_USED']
                                                         turn_total = turn_total + 1
                                                         turn = 1
+                                                    await button_ctx.defer(ignore=True)    
                                             else:
                                                 previous_moves.append(f"*{turn_total}:* **{o_card}**: Not enough Stamina to use this ability.")
                                                 embedVar = discord.Embed(title=emessage,
@@ -8011,8 +8028,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     #     await button_ctx.defer(ignore=True)
                                     #     return
                                     except asyncio.TimeoutError:
-                                        await ctx.author.send(f"{ctx.author.mention} your Tutorial Battle was closed. You must interact before the timeout!")
-                                        await ctx.send(f"{ctx.author.mention} your Tutorial Battle was closed. You must interact before the timeout!")
+                                        if mode in PVP_MODES and not tutorial:
+                                            await ctx.author.send(f"{ctx.author.mention} your Battle was closed. You must interact before the timeout!")
+                                            await ctx.send(f"{ctx.author.mention} your Battle was closed. You must interact before the timeout!")
+                                        else:
+                                            await ctx.author.send(f"{ctx.author.mention} your Tutorial Battle was closed. You must interact before the timeout!")
+                                            await ctx.send(f"{ctx.author.mention} your Tutorial Battle was closed. You must interact before the timeout!")
+                                        previous_moves.append(f"*{turn_total}:* 💨 **{o_card}** Fled...")
                                         o_health = 0
                                     except Exception as ex:
                                         trace = []
@@ -8740,13 +8762,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_stamina = round(t_stamina - dmg['DMG'])
                                                             o_stamina = round(o_stamina + dmg['DMG'])
                                                         elif tpet_type == 'SLOW':
-                                                            tempstam = round(o_stamina + dmg['DMG']) - 20
-                                                            t_stamina = round(t_stamina - dmg['DMG']) - 20
+                                                            tempstam = round(o_stamina + dmg['DMG'])
+                                                            t_stamina = round(t_stamina - dmg['DMG'])
                                                             o_stamina = t_stamina
                                                             t_stamina = tempstam
                                                         elif tpet_type == 'HASTE':
-                                                            tempstam = round(o_stamina - dmg['DMG']) - 20
-                                                            t_stamina = round(t_stamina + dmg['DMG']) - 20
+                                                            tempstam = round(o_stamina - dmg['DMG'])
+                                                            t_stamina = round(t_stamina + dmg['DMG'])
                                                             o_stamina = t_stamina
                                                             t_stamina = tempstam
                                                         elif tpet_type == 'SOULCHAIN':
@@ -8772,6 +8794,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if dmg['DMG'] >= 100:
                                                                 dmg['DMG'] = 100
                                                             o_max_health = round(o_max_health - dmg['DMG'])
+                                                            
                                                         t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
                                                         if t_universe == "Persona":
@@ -8881,13 +8904,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_stamina = round(t_stamina - dmg['DMG'])
                                                             o_stamina = round(o_stamina + dmg['DMG'])
                                                         elif enh_type == 'SLOW':
-                                                            tempstam = round(o_stamina + dmg['DMG']) - 20
-                                                            t_stamina = round(t_stamina - dmg['DMG']) - 20
+                                                            tempstam = round(o_stamina + dmg['DMG'])
+                                                            t_stamina = round(t_stamina - dmg['DMG'])
                                                             o_stamina = t_stamina
                                                             t_stamina = tempstam
                                                         elif enh_type == 'HASTE':
-                                                            tempstam = round(o_stamina - dmg['DMG']) - 20
-                                                            t_stamina = round(t_stamina + dmg['DMG']) - 20
+                                                            tempstam = round(o_stamina - dmg['DMG'])
+                                                            t_stamina = round(t_stamina + dmg['DMG'])
                                                             o_stamina = t_stamina
                                                             t_stamina = tempstam
                                                         elif enh_type == 'SOULCHAIN':
@@ -8909,7 +8932,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = round(t_health + dmg['DMG'])
                                                         elif enh_type == 'DESTRUCTION':
                                                             o_max_health = round(o_max_health - dmg['DMG'])
-                                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                                                            
+                                                        if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check:
+                                                            t_stamina = t_stamina
+                                                        else:
+                                                            t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}",
                                                                                 colour=embed_color_t)
                                                         previous_moves.append(f"*{turn_total}:* **{t_card}**: 🦠 {dmg['MESSAGE']}")
@@ -8965,7 +8992,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if obarrier_count >1:
                                                                 o_health = o_health 
                                                                 embedVar = discord.Embed(title=f"{o_card.upper()} Activates **Barrier** 💠", description=f"{t_card}'s attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* **{t_card}'s** attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!")
+                                                                previous_moves.append(f"*{turn_total}:* **{o_card}** Activates Barrier 💠  **{t_card}'s** attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!")
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -9113,6 +9140,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                         if t_used_resolve and not t_pet_used and mode != "RAID":
                                             aiMove = 6
+                                        elif tarm_barrier_active: #Ai Barrier Checks
+                                            if t_stamina >=20: #Stamina Check For Enhancer
+                                                aiMove = await ai_enhancer_moves(t_used_focus,t_used_resolve,t_pet_used,t_stamina,
+                                                                           t_enhancer['TYPE'],t_health,t_max_health,t_attack,
+                                                                           t_defense,o_stamina,o_attack,o_defense)
+                                            else:
+                                                aiMove = 1
                                         elif o_stamina == 0:
                                             aiMove = 1
                                         elif t_health <= (.50 * t_max_health) and t_used_resolve == False and t_used_focus:
@@ -9530,13 +9564,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_stamina = round(t_stamina - dmg['DMG'])
                                                         o_stamina = round(o_stamina + dmg['DMG'])
                                                     elif tpet_type == 'SLOW':
-                                                        tempstam = round(o_stamina + dmg['DMG']) - 20
-                                                        t_stamina = round(t_stamina - dmg['DMG']) - 20
+                                                        tempstam = round(o_stamina + dmg['DMG'])
+                                                        t_stamina = round(t_stamina - dmg['DMG'])
                                                         o_stamina = t_stamina
                                                         t_stamina = tempstam
                                                     elif tpet_type == 'HASTE':
-                                                        tempstam = round(o_stamina - dmg['DMG']) - 20
-                                                        t_stamina = round(t_stamina + dmg['DMG']) - 20
+                                                        tempstam = round(o_stamina - dmg['DMG'])
+                                                        t_stamina = round(t_stamina + dmg['DMG'])
                                                         o_stamina = t_stamina
                                                         t_stamina = tempstam
                                                     elif tpet_type == 'SOULCHAIN':
@@ -9601,8 +9635,17 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             else:
                                                 previous_moves.append(f"*{turn_total}:* {t_card} Could not summon 🧬 **{tpet_name}**. Needs rest")
                                                 turn = 1
-
-                                        if int(aiMove) != 5 and int(aiMove) != 6:
+                                        elif int(aiMove) == 7:
+                                            if t_stamina >= 20:
+                                                t_stamina = t_stamina - 20
+                                                t_block_used = True
+                                                t_defense = round(t_defense * 2)
+                                                previous_moves.append(f"*{turn_total}:* **{t_card}:** Blocked 🛡️")
+                                                turn_total = turn_total + 1
+                                                turn = 0
+                                            else:
+                                                turn = 1
+                                        if int(aiMove) != 5 and int(aiMove) != 6 and int(aiMove) != 7:
                                             # If you have enough stamina for move, use it
                                             if dmg['CAN_USE_MOVE']:
                                                 if dmg['ENHANCE']:
@@ -9655,13 +9698,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_stamina = round(t_stamina - dmg['DMG'])
                                                         o_stamina = round(o_stamina + dmg['DMG'])
                                                     elif enh_type == 'SLOW':
-                                                        tempstam = round(o_stamina + dmg['DMG']) - 20
-                                                        t_stamina = round(t_stamina - dmg['DMG']) - 20
+                                                        tempstam = round(o_stamina + dmg['DMG'])
+                                                        t_stamina = round(t_stamina - dmg['DMG'])
                                                         o_stamina = t_stamina
                                                         t_stamina = tempstam
                                                     elif enh_type == 'HASTE':
-                                                        tempstam = round(o_stamina - dmg['DMG']) - 20
-                                                        t_stamina = round(t_stamina + dmg['DMG']) - 20
+                                                        tempstam = round(o_stamina - dmg['DMG'])
+                                                        t_stamina = round(t_stamina + dmg['DMG'])
                                                         o_stamina = t_stamina
                                                         t_stamina = tempstam
                                                     elif enh_type == 'SOULCHAIN':
@@ -9683,7 +9726,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = round(t_health + dmg['DMG'])
                                                     elif enh_type == 'DESTRUCTION':
                                                         o_max_health = round(o_max_health - dmg['DMG'])
-                                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                                                    if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check:
+                                                        t_stamina = t_stamina
+                                                    else:
+                                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
                                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                                     previous_moves.append(f"*{turn_total}:* **{t_card}**: 🦠 {dmg['MESSAGE']}")
@@ -9732,7 +9778,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if obarrier_count >1:
                                                             o_health = o_health 
                                                             embedVar = discord.Embed(title=f"{o_card.upper()} Activates **Barrier** 💠", description=f"{t_card}'s attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!", colour=0xe91e63)
-                                                            previous_moves.append(f"*{turn_total}:* {t_card}'s attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!")
+                                                            previous_moves.append(f"*{turn_total}:* **{o_card}** Activates Barrier 💠 {t_card}'s attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!")
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -10053,25 +10099,15 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     
                                     elif o_universe == "Death Note":
                                         if turn_total >= 50:
-                                            if t_universe == "Death Note":
-                                                embedVar = discord.Embed(title=f"{t_card.upper()}'s' Scheduled Death 📓",
-                                                                        description=f"**{t_card} says**\n**Delete**",
-                                                                        colour=0xe91e63)
-                                                embedVar.add_field(name=f"{o_card} had a heart attack and died",
-                                                                value=f"You cannot cheat a Shinigami in the Shinagami Realm....")
-                                                # await private_channel.send(embed=embedVar)
-                                                previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** had a heart attack and died")
-                                                o_health = 0
-                                            else:
-                                                embedVar = discord.Embed(title=f"{t_card.upper()}'s' Scheduled Death 📓",
-                                                                        description=f"**{o_card} says**\n**Delete**",
-                                                                        colour=0xe91e63)
-                                                embedVar.add_field(name=f"{t_card} had a heart attack and died",
-                                                                value=f"Death....")
-                                                
-                                                previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** had a heart attack and died")
-                                                # await private_channel.send(embed=embedVar)
-                                                t_health = 0
+                                            embedVar = discord.Embed(title=f"{t_card.upper()}'s' Scheduled Death 📓",
+                                                                    description=f"**{o_card} says**\n**Delete**",
+                                                                    colour=0xe91e63)
+                                            embedVar.add_field(name=f"{t_card} had a heart attack and died",
+                                                            value=f"Death....")
+                                            
+                                            previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** had a heart attack and died")
+                                            # await private_channel.send(embed=embedVar)
+                                            t_health = 0
 
                                     if t_universe == "One Punch Man":
                                         embedVar = discord.Embed(
@@ -10513,13 +10549,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_stamina = round(o_stamina - dmg['DMG'])
                                                         t_stamina = round(t_stamina + dmg['DMG'])
                                                     elif opet_type == 'SLOW':
-                                                        tempstam = round(t_stamina + dmg['DMG']) - 20
-                                                        o_stamina = round(o_stamina - dmg['DMG']) - 20
+                                                        tempstam = round(t_stamina + dmg['DMG'])
+                                                        o_stamina = round(o_stamina - dmg['DMG'])
                                                         t_stamina = o_stamina
                                                         o_stamina = tempstam
                                                     elif opet_type == 'HASTE':
-                                                        tempstam = round(t_stamina - dmg['DMG']) - 20
-                                                        o_stamina = round(o_stamina + dmg['DMG']) - 20
+                                                        tempstam = round(t_stamina - dmg['DMG'])
+                                                        o_stamina = round(o_stamina + dmg['DMG'])
                                                         t_stamina = o_stamina
                                                         o_stamina = tempstam
                                                     elif opet_type == 'SOULCHAIN':
@@ -10625,13 +10661,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_stamina = round(o_stamina - dmg['DMG'])
                                                         t_stamina = round(t_stamina + dmg['DMG'])
                                                     elif enh_type == 'SLOW':
-                                                        tempstam = round(t_stamina + dmg['DMG']) - 20
-                                                        o_stamina = round(o_stamina - dmg['DMG']) - 20
+                                                        tempstam = round(t_stamina + dmg['DMG'])
+                                                        o_stamina = round(o_stamina - dmg['DMG'])
                                                         t_stamina = o_stamina
                                                         o_stamina = tempstam
                                                     elif enh_type == 'HASTE':
-                                                        tempstam = round(t_stamina - dmg['DMG']) - 20
-                                                        o_stamina = round(o_stamina + dmg['DMG']) - 20
+                                                        tempstam = round(t_stamina - dmg['DMG'])
+                                                        o_stamina = round(o_stamina + dmg['DMG'])
                                                         t_stamina = o_stamina
                                                         o_stamina = tempstam
                                                     elif enh_type == 'SOULCHAIN':
@@ -10661,7 +10697,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     elif enh_type == 'DESTRUCTION':
                                                         t_max_health = round(t_max_health - dmg['DMG'])
 
-                                                    o_stamina = o_stamina - int(dmg['STAMINA_USED'])
+                                                    if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check:
+                                                        t_stamina = t_stamina
+                                                    else:
+                                                        o_stamina = o_stamina - int(dmg['STAMINA_USED'])
 
                                                     turn_total = turn_total + 1
                                                     turn = 1
@@ -11345,13 +11384,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_stamina = round(o_stamina - dmg['DMG'])
                                                             t_stamina = round(t_stamina + dmg['DMG'])
                                                         elif opet_type == 'SLOW':
-                                                            tempstam = round(t_stamina + dmg['DMG']) - 20
-                                                            o_stamina = round(o_stamina - dmg['DMG']) - 20
+                                                            tempstam = round(t_stamina + dmg['DMG'])
+                                                            o_stamina = round(o_stamina - dmg['DMG'])
                                                             t_stamina = o_stamina
                                                             o_stamina = tempstam
                                                         elif opet_type == 'HASTE':
-                                                            tempstam = round(t_stamina - dmg['DMG']) - 20
-                                                            o_stamina = round(o_stamina + dmg['DMG']) - 20
+                                                            tempstam = round(t_stamina - dmg['DMG'])
+                                                            o_stamina = round(o_stamina + dmg['DMG'])
                                                             t_stamina = o_stamina
                                                             o_stamina = tempstam
                                                         elif opet_type == 'SOULCHAIN':
@@ -11480,13 +11519,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             c_stamina = round(c_stamina - dmg['DMG'])
                                                             o_stamina = round(o_stamina + dmg['DMG'])
                                                         elif comp_enh == 'SLOW':
-                                                            tempstam = round(o_stamina + dmg['DMG']) - 20
-                                                            c_stamina = round(c_stamina - dmg['DMG']) - 20
+                                                            tempstam = round(o_stamina + dmg['DMG'])
+                                                            c_stamina = round(c_stamina - dmg['DMG'])
                                                             o_stamina = c_stamina
                                                             c_stamina = tempstam
                                                         elif comp_enh == 'HASTE':
-                                                            tempstam = round(o_stamina - dmg['DMG']) - 20
-                                                            c_stamina = round(c_stamina + dmg['DMG']) - 20
+                                                            tempstam = round(o_stamina - dmg['DMG'])
+                                                            c_stamina = round(c_stamina + dmg['DMG'])
                                                             o_stamina = c_stamina
                                                             c_stamina = tempstam
                                                         elif comp_enh == 'SOULCHAIN':
@@ -11509,7 +11548,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         elif comp_enh == 'DESTRUCTION':
                                                             t_max_health = round(t_max_health - dmg['DMG'])
 
-                                                        o_stamina = o_stamina - int(dmg['STAMINA_USED'])
+                                                        if comp_enh in Stamina_Enhancer_Check or comp_enh in Time_Enhancer_Check:
+                                                            t_stamina = t_stamina
+                                                        else:
+                                                            o_stamina = o_stamina - int(dmg['STAMINA_USED'])
 
                                                         embedVar = discord.Embed(
                                                             title=f"{o_card.upper()} ASSISTED {c_card.upper()}",
@@ -11582,13 +11624,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_stamina = round(o_stamina - dmg['DMG'])
                                                             c_stamina = round(c_stamina + dmg['DMG'])
                                                         elif cenh_type == 'SLOW':
-                                                            tempstam = round(c_stamina + dmg['DMG']) - 20
-                                                            o_stamina = round(o_stamina - dmg['DMG']) - 20
+                                                            tempstam = round(c_stamina + dmg['DMG'])
+                                                            o_stamina = round(o_stamina - dmg['DMG'])
                                                             c_stamina = o_stamina
                                                             o_stamina = tempstam
                                                         elif cenh_type == 'HASTE':
-                                                            tempstam = round(c_stamina - dmg['DMG']) - 20
-                                                            o_stamina = round(o_stamina + dmg['DMG']) - 20
+                                                            tempstam = round(c_stamina - dmg['DMG'])
+                                                            o_stamina = round(o_stamina + dmg['DMG'])
                                                             c_stamina = o_stamina
                                                             o_stamina = tempstam
                                                         elif cenh_type == 'SOULCHAIN':
@@ -11611,7 +11653,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         elif enh_type == 'DESTRUCTION':
                                                             t_max_health = round(t_max_health - dmg['DMG'])
 
-                                                        c_stamina = c_stamina - int(dmg['STAMINA_USED'])
+                                                        if cenh_type in Stamina_Enhancer_Check or cenh_type in Time_Enhancer_Check:
+                                                            t_stamina = t_stamina
+                                                        else:
+                                                            c_stamina = c_stamina - int(dmg['STAMINA_USED'])
 
                                                         embedVar = discord.Embed(
                                                             title=f"{c_card.upper()} ASSISTED {o_card.upper()}",
@@ -11720,13 +11765,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_stamina = round(o_stamina - dmg['DMG'])
                                                             t_stamina = round(t_stamina + dmg['DMG'])
                                                         elif enh_type == 'SLOW':
-                                                            tempstam = round(t_stamina + dmg['DMG']) - 20
-                                                            o_stamina = round(o_stamina - dmg['DMG']) - 20
+                                                            tempstam = round(t_stamina + dmg['DMG'])
+                                                            o_stamina = round(o_stamina - dmg['DMG'])
                                                             t_stamina = o_stamina
                                                             o_stamina = tempstam
                                                         elif enh_type == 'HASTE':
-                                                            tempstam = round(t_stamina - dmg['DMG']) - 20
-                                                            o_stamina = round(o_stamina + dmg['DMG']) - 20
+                                                            tempstam = round(t_stamina - dmg['DMG'])
+                                                            o_stamina = round(o_stamina + dmg['DMG'])
                                                             t_stamina = o_stamina
                                                             o_stamina = tempstam
                                                         elif enh_type == 'SOULCHAIN':
@@ -11756,7 +11801,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         elif enh_type == 'DESTRUCTION':
                                                             t_max_health = round(t_max_health - dmg['DMG'])
 
-                                                        o_stamina = o_stamina - int(dmg['STAMINA_USED'])
+                                                        if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check:
+                                                            t_stamina = t_stamina
+                                                        else:
+                                                            o_stamina = o_stamina - int(dmg['STAMINA_USED'])
 
                                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}",
                                                                                 colour=embed_color_o)
@@ -11925,10 +11973,16 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     turn = 0
                                                     await button_ctx.defer(ignore=True)
                                         except asyncio.TimeoutError:
-                                            await save_spot(self, ctx, universe, mode, currentopponent)
-                                            await ctx.author.send(f"{ctx.author.mention} your game timed out. Your channel has been closed but your spot in the tales has been saved where you last left off.")
+                                            if mode != "ABYSS":
+                                                await save_spot(self, ctx, universe, mode, currentopponent)
+                                                await ctx.author.send(f"{ctx.author.mention} your game timed out. Your channel has been closed but your spot in the tales has been saved where you last left off.")
+                                                await ctx.send(f"{ctx.author.mention} your game timed out. Your channel has been closed but your spot in the tales has been saved where you last left off.")
+                                            else:
+                                                await ctx.author.send(f"{ctx.author.mention} your game timed out. Your channel has been closed and your Abyss Floor was Reset.") #Findme
+                                                await ctx.send(f"{ctx.author.mention} your game timed out. Your channel has been closed and your Abyss Floor was Reset.")
                                             # await discord.TextChannel.delete(private_channel, reason=None)
-                                            return
+                                            previous_moves.append(f"*{turn_total}:* 💨 **{o_card}** Fled...")
+                                            o_health=0
                                         except Exception as ex:
                                             trace = []
                                             tb = ex.__traceback__
@@ -11970,6 +12024,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     embedVar.set_footer(text=f"{t_card} begins his assault")
                                     await private_channel.send(embed=embedVar)
                                     await asyncio.sleep(2)
+                                if t_block_used == True:
+                                    t_block_used = False
+                                    t_defense = int(t_defense / 2)
                                 if t_attack <= 25:
                                     t_attack = 25
                                 if t_defense <= 30:
@@ -12204,6 +12261,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                     if t_used_resolve and not t_pet_used and t_stamina >= 30:
                                         aiMove = 6
+                                    elif tarm_barrier_active: #Ai Barrier Checks
+                                        if t_stamina >=20: #Stamina Check For Enhancer
+                                            aiMove = await ai_enhancer_moves(t_used_focus,t_used_resolve,t_pet_used,t_stamina,
+                                                                        t_enhancer['TYPE'],t_health,t_max_health,t_attack,
+                                                                        t_defense,o_stamina,o_attack,o_defense)
+                                        else:
+                                            aiMove = 1
                                     elif o_stamina < 10:
                                         if t_enhancer['TYPE'] in Gamble_Enhancer_Check:
                                             if t_stamina >= 20:
@@ -12267,7 +12331,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         if t_enhancer['TYPE'] in Gamble_Enhancer_Check:
                                             aiMove = 1
                                         else:
-                                            aiMove = 4
+                                            aiMove = await ai_enhancer_moves(t_used_focus,t_used_resolve,t_pet_used,t_stamina,
+                                                                        t_enhancer['TYPE'],t_health,t_max_health,t_attack,
+                                                                        t_defense,o_stamina,o_attack,o_defense)
                                     elif t_stamina >= 70:
                                         aiMove = 1
                                     elif t_stamina >= 60 and (t_health >= o_health):
@@ -12312,7 +12378,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             'TYPE'] in Stamina_Enhancer_Check:
                                             aiMove = 2
                                         else:
-                                            aiMove = 4
+                                            aiMove = await ai_enhancer_moves(t_used_focus,t_used_resolve,t_pet_used,t_stamina,
+                                                                        t_enhancer['TYPE'],t_health,t_max_health,t_attack,
+                                                                        t_defense,o_stamina,o_attack,o_defense)
                                     elif t_stamina >= 30:
                                         aiMove = 2
                                     elif t_stamina >= 20 and (t_health >= o_health):
@@ -12438,7 +12506,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     (.30 * t_defense) * (t_resolve / (.50 * t_defense)))
                                                 t_resolve_defense = round(
                                                     (.30 * t_defense) * (t_resolve / (.50 * t_defense)))
-                                                tdemon_slayer_buff = tap3 * 2
+                                                
 
                                                 t_stamina = t_stamina + t_resolve
                                                 t_health = t_health + t_resolve_health
@@ -12725,13 +12793,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_stamina = round(t_stamina - dmg['DMG'])
                                                             c_stamina = round(c_stamina + dmg['DMG'])
                                                         elif tpet_type == 'SLOW':
-                                                            tempstam = round(c_stamina + dmg['DMG']) - 20
-                                                            t_stamina = round(t_stamina - dmg['DMG']) - 20
+                                                            tempstam = round(c_stamina + dmg['DMG'])
+                                                            t_stamina = round(t_stamina - dmg['DMG'])
                                                             c_stamina = t_stamina
                                                             t_stamina = tempstam
                                                         elif tpet_type == 'HASTE':
-                                                            tempstam = round(c_stamina - dmg['DMG']) - 20
-                                                            t_stamina = round(t_stamina + dmg['DMG']) - 20
+                                                            tempstam = round(c_stamina - dmg['DMG'])
+                                                            t_stamina = round(t_stamina + dmg['DMG'])
                                                             c_stamina = t_stamina
                                                             t_stamina = tempstam
                                                         elif tpet_type == 'SOULCHAIN':
@@ -12868,13 +12936,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_stamina = round(t_stamina - dmg['DMG'])
                                                             o_stamina = round(o_stamina + dmg['DMG'])
                                                         elif tpet_type == 'SLOW':
-                                                            tempstam = round(o_stamina + dmg['DMG']) - 20
-                                                            t_stamina = round(t_stamina - dmg['DMG']) - 20
+                                                            tempstam = round(o_stamina + dmg['DMG'])
+                                                            t_stamina = round(t_stamina - dmg['DMG'])
                                                             o_stamina = t_stamina
                                                             t_stamina = tempstam
                                                         elif tpet_type == 'HASTE':
-                                                            tempstam = round(o_stamina - dmg['DMG']) - 20
-                                                            t_stamina = round(t_stamina + dmg['DMG']) - 20
+                                                            tempstam = round(o_stamina - dmg['DMG'])
+                                                            t_stamina = round(t_stamina + dmg['DMG'])
                                                             o_stamina = t_stamina
                                                             t_stamina = tempstam
                                                         elif tpet_type == 'SOULCHAIN':
@@ -13008,13 +13076,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_stamina = round(t_stamina - dmg['DMG'])
                                                         o_stamina = round(o_stamina + dmg['DMG'])
                                                     elif tpet_type == 'SLOW':
-                                                        tempstam = round(o_stamina + dmg['DMG']) - 20
-                                                        t_stamina = round(t_stamina - dmg['DMG']) - 20
+                                                        tempstam = round(o_stamina + dmg['DMG'])
+                                                        t_stamina = round(t_stamina - dmg['DMG'])
                                                         o_stamina = t_stamina
                                                         t_stamina = tempstam
                                                     elif tpet_type == 'HASTE':
-                                                        tempstam = round(o_stamina - dmg['DMG']) - 20
-                                                        t_stamina = round(t_stamina + dmg['DMG']) - 20
+                                                        tempstam = round(o_stamina - dmg['DMG'])
+                                                        t_stamina = round(t_stamina + dmg['DMG'])
                                                         o_stamina = t_stamina
                                                         t_stamina = tempstam
                                                     elif tpet_type == 'SOULCHAIN':
@@ -13079,8 +13147,17 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     turn = 1
                                         else:
                                             previous_moves.append(f"*{turn_total}:* {t_card} Could not summon 🧬 **{tpet_name}**. Needs rest")
-
-                                    if int(aiMove) != 5 and int(aiMove) != 6:
+                                    elif int(aiMove) == 7:
+                                        if t_stamina >= 20:
+                                            t_stamina = t_stamina - 20
+                                            t_block_used = True
+                                            t_defense = round(t_defense * 2)
+                                            previous_moves.append(f"*{turn_total}:* **{t_card}:** Blocked 🛡️")
+                                            turn_total = turn_total + 1
+                                            turn = turn_selector
+                                        else:
+                                            turn = 1
+                                    if int(aiMove) != 5 and int(aiMove) != 6 and int(aiMove) != 7:
 
                                         # If you have enough stamina for move, use it
                                         # if c used block
@@ -13137,13 +13214,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_stamina = round(t_stamina - dmg['DMG'])
                                                             c_stamina = round(c_stamina + dmg['DMG'])
                                                         elif enh_type == 'SLOW':
-                                                            tempstam = round(c_stamina + dmg['DMG']) - 20
-                                                            t_stamina = round(t_stamina - dmg['DMG']) - 20
+                                                            tempstam = round(c_stamina + dmg['DMG'])
+                                                            t_stamina = round(t_stamina - dmg['DMG'])
                                                             c_stamina = t_stamina
                                                             t_stamina = tempstam
                                                         elif enh_type == 'HASTE':
-                                                            tempstam = round(c_stamina - dmg['DMG']) - 20
-                                                            t_stamina = round(t_stamina + dmg['DMG']) - 20
+                                                            tempstam = round(c_stamina - dmg['DMG'])
+                                                            t_stamina = round(t_stamina + dmg['DMG'])
                                                             c_stamina = t_stamina
                                                             t_stamina = tempstam
                                                         elif enh_type == 'SOULCHAIN':
@@ -13172,7 +13249,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = round(t_health + dmg['DMG'])
                                                         elif enh_type == 'DESTRUCTION':
                                                             c_max_health = round(c_max_health - dmg['DMG'])
-                                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                                                        if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check:
+                                                            t_stamina = t_stamina
+                                                        else:
+                                                            t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
                                                         if mode not in AUTO_BATTLE_modes:
                                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}",
@@ -13224,7 +13304,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if cbarrier_count >1:
                                                                 c_health = c_health 
                                                                 embedVar = discord.Embed(title=f"{c_card.upper()} Activates **Barrier** 💠", description=f"{t_card}'s attack **Nullified**!\n 💠{cbarrier_count - 1} **Barriers** remain!", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* {c_card} Activates Barrier 💠")
+                                                                previous_moves.append(f"*{turn_total}:* {c_card} Activates Barrier 💠 {t_card}'s attack **Nullified**!\n💠 {cbarrier_count - 1} **Barriers** remain!")
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -13365,13 +13445,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_stamina = round(t_stamina - dmg['DMG'])
                                                             o_stamina = round(o_stamina + dmg['DMG'])
                                                         elif enh_type == 'SLOW':
-                                                            tempstam = round(o_stamina + dmg['DMG']) - 20
-                                                            t_stamina = round(t_stamina - dmg['DMG']) - 20
+                                                            tempstam = round(o_stamina + dmg['DMG'])
+                                                            t_stamina = round(t_stamina - dmg['DMG'])
                                                             o_stamina = t_stamina
                                                             t_stamina = tempstam
                                                         elif enh_type == 'HASTE':
-                                                            tempstam = round(o_stamina - dmg['DMG']) - 20
-                                                            t_stamina = round(t_stamina + dmg['DMG']) - 20
+                                                            tempstam = round(o_stamina - dmg['DMG'])
+                                                            t_stamina = round(t_stamina + dmg['DMG'])
                                                             o_stamina = t_stamina
                                                             t_stamina = tempstam
                                                         elif enh_type == 'SOULCHAIN':
@@ -13400,7 +13480,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = round(t_health + dmg['DMG'])
                                                         elif enh_type == 'DESTRUCTION':
                                                             o_max_health = round(o_max_health - dmg['DMG'])
-                                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                                                        if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check:
+                                                            t_stamina = t_stamina
+                                                        else:
+                                                            t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                                         if mode not in AUTO_BATTLE_modes:
                                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}",
                                                                                     colour=embed_color_t)
@@ -13453,7 +13536,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if obarrier_count >1:
                                                                 o_health = o_health 
                                                                 embedVar = discord.Embed(title=f"{o_card.upper()} Activates **Barrier** 💠", description=f"{t_card}'s attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* {t_card}'s attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!")
+                                                                previous_moves.append(f"*{turn_total}:* **{o_card}** Activates Barrier 💠 {t_card}'s attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!")
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -13594,13 +13677,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_stamina = round(t_stamina - dmg['DMG'])
                                                         o_stamina = round(o_stamina + dmg['DMG'])
                                                     elif enh_type == 'SLOW':
-                                                        tempstam = round(o_stamina + dmg['DMG']) - 20
-                                                        t_stamina = round(t_stamina - dmg['DMG']) - 20
+                                                        tempstam = round(o_stamina + dmg['DMG'])
+                                                        t_stamina = round(t_stamina - dmg['DMG'])
                                                         o_stamina = t_stamina
                                                         t_stamina = tempstam
                                                     elif enh_type == 'HASTE':
-                                                        tempstam = round(o_stamina - dmg['DMG']) - 20
-                                                        t_stamina = round(t_stamina + dmg['DMG']) - 20
+                                                        tempstam = round(o_stamina - dmg['DMG'])
+                                                        t_stamina = round(t_stamina + dmg['DMG'])
                                                         o_stamina = t_stamina
                                                         t_stamina = tempstam
                                                     elif enh_type == 'SOULCHAIN':
@@ -13629,7 +13712,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = round(t_health + dmg['DMG'])
                                                     elif enh_type == 'DESTRUCTION':
                                                         o_max_health = round(o_max_health - dmg['DMG'])
-                                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                                                    if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check:
+                                                        t_stamina = t_stamina
+                                                    else:
+                                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                                     if mode not in AUTO_BATTLE_modes:
                                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}",
                                                                                 colour=embed_color_t)
@@ -13682,7 +13768,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if obarrier_count >1:
                                                             o_health = o_health 
                                                             embedVar = discord.Embed(title=f"{o_card.upper()} Activates **Barrier** 💠", description=f"{t_card}'s attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!", colour=0xe91e63)
-                                                            previous_moves.append(f"*{turn_total}:* {t_card}'s attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!")
+                                                            previous_moves.append(f"*{turn_total}:* **{o_card}** Activates Barrier 💠  {t_card}'s attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!")
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -14004,6 +14090,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                             if c_used_resolve and not c_pet_used:
                                                 aiMove = 6
+                                            elif carm_barrier_active: #Ai Barrier Checks
+                                                if t_stamina >=20: #Stamina Check For Enhancer
+                                                    aiMove = await ai_enhancer_moves(c_used_focus,c_used_resolve,c_pet_used,c_stamina,
+                                                                            c_enhancer['TYPE'],c_health,c_max_health,c_attack,
+                                                                            c_defense,t_stamina,t_attack,t_defense)
+                                                else:
+                                                    aiMove = 1
                                             elif t_stamina == 0:
                                                 aiMove = 1
                                             elif c_health <= (.50 * c_max_health) and c_used_resolve == False and c_used_focus:
@@ -14011,7 +14104,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             elif c_stamina >= 160 and (c_health >= t_health):
                                                 if o_health <= t_health:
                                                     if cmove_enhanced_text in Healer_Enhancer_Check:
-                                                        aiMove = 7
+                                                        aiMove = 8
                                                     else:
                                                         aiMove = 3
                                                 else:
@@ -14033,7 +14126,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             elif c_stamina >= 120 and (c_health >= t_health):
                                                 if o_health <= t_health:
                                                     if cmove_enhanced_text in Healer_Enhancer_Check:
-                                                        aiMove = 7
+                                                        aiMove = 8
                                                     else:
                                                         aiMove = 2
                                                 else:
@@ -14047,12 +14140,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             elif c_stamina >= 100 and (c_health >= t_health):
                                                 if o_health <= t_health:
                                                     if cmove_enhanced_text in Healer_Enhancer_Check:
-                                                        aiMove = 7
+                                                        aiMove = 8
                                                     else:
                                                         aiMove = 8
                                                 else:
                                                     if cmove_enhanced_text in Healer_Enhancer_Check:
-                                                        aiMove = 7
+                                                        aiMove = 8
                                                     else:
                                                         aiMove = 2
                                             elif c_stamina >= 100:
@@ -14063,15 +14156,15 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             elif c_stamina >= 90 and (c_health >= t_health):
                                                 if o_health <= t_health:
                                                     if c_health >= o_health:
-                                                        aiMove = 8
+                                                        aiMove = 7
                                                     else:
                                                         if cmove_enhanced_text in Healer_Enhancer_Check:
-                                                            aiMove = 7
+                                                            aiMove = 8
                                                         else:
                                                             aiMove = 2
                                                 else:
                                                     if c_health >= o_health:
-                                                        aiMove = 8
+                                                        aiMove = 7
                                                     else:
                                                         aiMove = 1
                                             elif c_stamina >= 90:
@@ -14079,13 +14172,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     aiMove = 8
                                                 else:
                                                     if cmove_enhanced_text in Healer_Enhancer_Check or cmove_enhanced_text in Support_Enhancer_Check:
-                                                        aiMove = 7
+                                                        aiMove = 8
                                                     else:
                                                         aiMove = 2
                                             elif c_stamina >= 80 and (c_health >= t_health):
                                                 if o_health <= t_health:
                                                     if cmove_enhanced_text in Healer_Enhancer_Check:
-                                                        aiMove = 7
+                                                        aiMove = 8
                                                     else:
                                                         aiMove = 2
                                                 else:
@@ -14093,14 +14186,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             elif c_stamina >= 80:
                                                 if o_health <= t_health:
                                                     if cmove_enhanced_text in Healer_Enhancer_Check:
-                                                        aiMove = 7
+                                                        aiMove = 8
                                                     else:
                                                         aiMove = 2
                                                 else:
                                                     aiMove = 3
                                             elif c_stamina >= 70 and (c_health >= t_health):
                                                 if cmove_enhanced_text in Healer_Enhancer_Check:
-                                                    aiMove = 7
+                                                    aiMove = 8
                                                 else:
                                                     aiMove = 2
                                             elif c_stamina >= 70:
@@ -14125,7 +14218,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         aiMove = 8
                                                     else:
                                                         if cmove_enhanced_text in Healer_Enhancer_Check or cmove_enhanced_text in Support_Enhancer_Check:
-                                                            aiMove = 7
+                                                            aiMove = 8
                                                         else:
                                                             aiMove = 2
                                                 else:
@@ -14138,7 +14231,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             elif c_stamina >= 40 and (c_health >= t_health):
                                                 if o_health <= t_health:
                                                     if cmove_enhanced_text in Healer_Enhancer_Check or cmove_enhanced_text in Support_Enhancer_Check:
-                                                        aiMove = 7
+                                                        aiMove = 8
                                                     else:
                                                         aiMove = 2
                                                 else:
@@ -14148,11 +14241,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             elif c_stamina >= 30 and (c_health >= t_health):
                                                 if o_health <= t_health:
                                                     if cmove_enhanced_text in Healer_Enhancer_Check or cmove_enhanced_text in Support_Enhancer_Check:
-                                                        aiMove = 7
+                                                        aiMove = 8
                                                     else:
                                                         aiMove = 2
                                                 else:
-                                                    aiMove = 4
+                                                    aiMove = await ai_enhancer_moves(c_used_focus,c_used_resolve,c_pet_used,c_stamina,
+                                                                            c_enhancer['TYPE'],c_health,c_max_health,c_attack,
+                                                                            c_defense,t_stamina,t_attack,t_defense)
                                             elif c_stamina >= 30:
                                                 aiMove = 2
                                             elif c_stamina >= 20 and (c_health >= t_health):
@@ -14165,7 +14260,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     aiMove = 8
                                                 else:
                                                     if cmove_enhanced_text in Healer_Enhancer_Check or cmove_enhanced_text in Support_Enhancer_Check:
-                                                        aiMove = 7
+                                                        aiMove = 8
                                                     else:
                                                         aiMove = 1
                                             elif c_stamina >= 10:
@@ -14263,7 +14358,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             (.30 * c_defense) * (c_resolve / (.50 * c_defense)))
                                                         c_resolve_defense = round(
                                                             (.30 * c_defense) * (c_resolve / (.50 * c_defense)))
-                                                        cdemon_slayer_buff = cap3 * 2
+                                                        
 
                                                         c_stamina = c_stamina + c_resolve
                                                         c_health = c_health + c_resolve_health
@@ -14540,13 +14635,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             c_stamina = round(c_stamina - dmg['DMG'])
                                                             t_stamina = round(t_stamina + dmg['DMG'])
                                                         elif cpet_type == 'SLOW':
-                                                            tempstam = round(t_stamina + dmg['DMG']) - 20
-                                                            c_stamina = round(c_stamina - dmg['DMG']) - 20
+                                                            tempstam = round(t_stamina + dmg['DMG'])
+                                                            c_stamina = round(c_stamina - dmg['DMG'])
                                                             t_stamina = c_stamina
                                                             c_stamina = tempstam
                                                         elif cpet_type == 'HASTE':
-                                                            tempstam = round(t_stamina - dmg['DMG']) - 20
-                                                            c_stamina = round(c_stamina + dmg['DMG']) - 20
+                                                            tempstam = round(t_stamina - dmg['DMG'])
+                                                            c_stamina = round(c_stamina + dmg['DMG'])
                                                             t_stamina = c_stamina
                                                             c_stamina = tempstam
                                                         elif cpet_type == 'SOULCHAIN':
@@ -14615,7 +14710,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 else:
                                                     #await private_channel.send(f"{cpet_name} needs a turn to rest...")
                                                     previous_moves.append(f"*{turn_total}:* {c_card} Could not summon 🧬 **{cpet_name}**. Needs rest")
-                                            elif aiMove == 7:
+                                            elif aiMove == 8:
                                                 c_enhancer_used = True
                                                 dmg = damage_cal(c_universe, c_card, c_enhancer, c_attack, c_defense, o_defense,
                                                                 c_stamina, c_enhancer_used, c_health, o_health, o_stamina,
@@ -14673,13 +14768,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_stamina = round(o_stamina - dmg['DMG'])
                                                         c_stamina = round(c_stamina + dmg['DMG'])
                                                     elif cenh_type == 'SLOW':
-                                                        tempstam = round(c_stamina + dmg['DMG']) - 20
-                                                        o_stamina = round(o_stamina - dmg['DMG']) - 20
+                                                        tempstam = round(c_stamina + dmg['DMG'])
+                                                        o_stamina = round(o_stamina - dmg['DMG'])
                                                         c_stamina = o_stamina
                                                         o_stamina = tempstam
                                                     elif cenh_type == 'HASTE':
-                                                        tempstam = round(c_stamina - dmg['DMG']) - 20
-                                                        o_stamina = round(o_stamina + dmg['DMG']) - 20
+                                                        tempstam = round(c_stamina - dmg['DMG'])
+                                                        o_stamina = round(o_stamina + dmg['DMG'])
                                                         c_stamina = o_stamina
                                                         o_stamina = tempstam
                                                     elif cenh_type == 'SOULCHAIN':
@@ -14701,8 +14796,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_health = round(o_health + dmg['DMG'])
                                                     elif enh_type == 'DESTRUCTION':
                                                         t_max_health = round(t_max_health - dmg['DMG'])
-
-                                                    c_stamina = c_stamina - int(dmg['STAMINA_USED'])
+                                                    
+                                                    if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check:
+                                                        t_stamina = t_stamina
+                                                    else:
+                                                        c_stamina = c_stamina - int(dmg['STAMINA_USED'])
 
                                                     embedVar = discord.Embed(
                                                         title=f"{c_card.upper()} ASSISTED {o_card.upper()}", colour=0xe91e63)
@@ -14716,7 +14814,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     #await private_channel.send(m.NOT_ENOUGH_STAMINA)
                                                     previous_moves.append(f"*{turn_total}:* **{c_card}** not enough Stamina to use this move") 
                                                     turn = 2
-                                            elif aiMove == 8:
+                                            elif aiMove == 7:
                                                 if c_stamina >= 20:
                                                     c_block_used = True
                                                     c_stamina = c_stamina - 20
@@ -14788,13 +14886,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             c_stamina = round(c_stamina - dmg['DMG'])
                                                             t_stamina = round(t_stamina + dmg['DMG'])
                                                         elif enh_type == 'SLOW':
-                                                            tempstam = round(t_stamina + dmg['DMG']) - 20
-                                                            c_stamina = round(c_stamina - dmg['DMG']) - 20
+                                                            tempstam = round(t_stamina + dmg['DMG'])
+                                                            c_stamina = round(c_stamina - dmg['DMG'])
                                                             t_stamina = c_stamina
                                                             c_stamina = tempstam
                                                         elif enh_type == 'HASTE':
-                                                            tempstam = round(t_stamina - dmg['DMG']) - 20
-                                                            c_stamina = round(c_stamina + dmg['DMG']) - 20
+                                                            tempstam = round(t_stamina - dmg['DMG'])
+                                                            c_stamina = round(c_stamina + dmg['DMG'])
                                                             t_stamina = c_stamina
                                                             c_stamina = tempstam
                                                         elif enh_type == 'SOULCHAIN':
@@ -14824,7 +14922,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         elif enh_type == 'DESTRUCTION':
                                                             t_max_health = round(t_max_health - dmg['DMG'])
 
-                                                        c_stamina = c_stamina - int(dmg['STAMINA_USED'])
+                                                        if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check:
+                                                            t_stamina = t_stamina
+                                                        else:
+                                                            c_stamina = c_stamina - int(dmg['STAMINA_USED'])
 
                                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}",
                                                                                 colour=embed_color_c)
@@ -14879,7 +14980,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if tbarrier_count >1:
                                                                 t_health = t_health 
                                                                 embedVar = discord.Embed(title=f"{t_card.upper()} Activates **Barrier** 💠", description=f"{c_card}'s attack **Nullified**!\n **{tbarrier_count - 1} Barriers** remain!", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* {c_card}'s attack **Nullified**!\n💠 {tbarrier_count - 1} **Barriers** remain!")
+                                                                previous_moves.append(f"*{turn_total}:* **{t_card}** Activates Barrier 💠 {c_card}'s attack **Nullified**!\n💠 {tbarrier_count - 1} **Barriers** remain!")
                                                                 if carm_barrier_active:
                                                                     carm_barrier_active=False
                                                                     embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -15071,16 +15172,16 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             cenh_name = list(c_enhancer.values())[2]
                                             cpet_enh_name = list(cpet_move.values())[2]
                                             cpet_msg_on_resolve = ""
-                                            carm_message = " "
+                                            tarm_message = " "
                                             oarm_message = " "
                                             if c_used_resolve:
                                                 cpet_msg_on_resolve = f"🧬 {enhancer_mapping[pet_enh_name]}"
                                             if tarm_barrier_active:
-                                                carm_message = f"💠{tbarrier_count}"
+                                                tarm_message = f"💠{tbarrier_count}"
                                             elif tarm_shield_active:
-                                                carm_message = f"🌐{tshield_value}"
+                                                tarm_message = f"🌐{tshield_value}"
                                             elif tarm_parry_active:
-                                                carm_message = f"🔄{tparry_count}"
+                                                tarm_message = f"🔄{tparry_count}"
                                             if oarm_barrier_active:
                                                 oarm_message = f"💠{obarrier_count}"
                                             elif oarm_shield_active:
@@ -15504,13 +15605,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 c_stamina = round(c_stamina - dmg['DMG'])
                                                                 t_stamina = round(t_stamina + dmg['DMG'])
                                                             elif cpet_type == 'SLOW':
-                                                                tempstam = round(t_stamina + dmg['DMG']) - 20
-                                                                c_stamina = round(c_stamina - dmg['DMG']) - 20
+                                                                tempstam = round(t_stamina + dmg['DMG'])
+                                                                c_stamina = round(c_stamina - dmg['DMG'])
                                                                 t_stamina = c_stamina
                                                                 c_stamina = tempstam
                                                             elif cpet_type == 'HASTE':
-                                                                tempstam = round(t_stamina - dmg['DMG']) - 20
-                                                                c_stamina = round(c_stamina + dmg['DMG']) - 20
+                                                                tempstam = round(t_stamina - dmg['DMG'])
+                                                                c_stamina = round(c_stamina + dmg['DMG'])
                                                                 t_stamina = c_stamina
                                                                 c_stamina = tempstam
                                                             elif cpet_type == 'SOULCHAIN':
@@ -15638,13 +15739,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_stamina = round(o_stamina - dmg['DMG'])
                                                             c_stamina = round(c_stamina + dmg['DMG'])
                                                         elif cenh_type == 'SLOW':
-                                                            tempstam = round(c_stamina + dmg['DMG']) - 20
-                                                            o_stamina = round(o_stamina - dmg['DMG']) - 20
+                                                            tempstam = round(c_stamina + dmg['DMG'])
+                                                            o_stamina = round(o_stamina - dmg['DMG'])
                                                             c_stamina = o_stamina
                                                             o_stamina = tempstam
                                                         elif cenh_type == 'HASTE':
-                                                            tempstam = round(c_stamina - dmg['DMG']) - 20
-                                                            o_stamina = round(o_stamina + dmg['DMG']) - 20
+                                                            tempstam = round(c_stamina - dmg['DMG'])
+                                                            o_stamina = round(o_stamina + dmg['DMG'])
                                                             c_stamina = o_stamina
                                                             o_stamina = tempstam
                                                         elif cenh_type == 'SOULCHAIN':
@@ -15666,8 +15767,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = round(o_health + dmg['DMG'])
                                                         elif enh_type == 'DESTRUCTION':
                                                             t_max_health = round(t_max_health - dmg['DMG'])
-
-                                                        c_stamina = c_stamina - int(dmg['STAMINA_USED'])
+                                                        
+                                                        if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check:
+                                                            t_stamina = t_stamina
+                                                        else:
+                                                            c_stamina = c_stamina - int(dmg['STAMINA_USED'])
 
                                                         embedVar = discord.Embed(
                                                             title=f"**{c_card.upper()}** ASSISTED **{o_card.upper()}** 👥",
@@ -15758,13 +15862,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 c_stamina = round(c_stamina - dmg['DMG'])
                                                                 t_stamina = round(t_stamina + dmg['DMG'])
                                                             elif enh_type == 'SLOW':
-                                                                tempstam = round(t_stamina + dmg['DMG']) - 20
-                                                                c_stamina = round(c_stamina - dmg['DMG']) - 20
+                                                                tempstam = round(t_stamina + dmg['DMG'])
+                                                                c_stamina = round(c_stamina - dmg['DMG'])
                                                                 t_stamina = c_stamina
                                                                 c_stamina = tempstam
                                                             elif enh_type == 'HASTE':
-                                                                tempstam = round(t_stamina - dmg['DMG']) - 20
-                                                                c_stamina = round(c_stamina + dmg['DMG']) - 20
+                                                                tempstam = round(t_stamina - dmg['DMG'])
+                                                                c_stamina = round(c_stamina + dmg['DMG'])
                                                                 t_stamina = c_stamina
                                                                 c_stamina = tempstam
                                                             elif enh_type == 'SOULCHAIN':
@@ -15793,8 +15897,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 c_health = round(c_health + dmg['DMG'])
                                                             elif enh_type == 'DESTRUCTION':
                                                                 t_max_health = round(t_max_health - dmg['DMG'])
-
-                                                            c_stamina = c_stamina - int(dmg['STAMINA_USED'])
+                                                            
+                                                            if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check:
+                                                                t_stamina = t_stamina
+                                                            else:
+                                                                c_stamina = c_stamina - int(dmg['STAMINA_USED'])
 
                                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}",
                                                                                     colour=embed_color_c)
@@ -15855,7 +15962,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if tbarrier_count >1:
                                                                     t_health = t_health 
                                                                     embedVar = discord.Embed(title=f"{t_card.upper()} Activates **Barrier** 💠", description=f"{c_card}'s attack **Nullified**!\n **{tbarrier_count - 1} Barriers** remain!", colour=0xe91e63)
-                                                                    previous_moves.append(f"*{turn_total}:* {c_card}'s attack **Nullified**!\n💠 {tbarrier_count - 1} **Barriers** remain!")
+                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}** Activates Barrier 💠  {c_card}'s attack **Nullified**!\n💠 {tbarrier_count - 1} **Barriers** remain!")
                                                                     if carm_barrier_active:
                                                                         carm_barrier_active=False
                                                                         embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -15965,8 +16072,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             except asyncio.TimeoutError:
                                                 await save_spot(self, ctx, universe, mode, currentopponent)
                                                 await ctx.author.send(f"{ctx.author.mention} your game timed out. Your channel has been closed but your spot in the tales has been saved where you last left off.")
+                                                await ctx.send(f"{ctx.author.mention} your game timed out. Your channel has been closed but your spot in the tales has been saved where you last left off.")
                                                 # await discord.TextChannel.delete(private_channel, reason=None)
-                                                return
+                                                previous_moves.append(f"*{turn_total}:* 💨 **{c_card}** Fled...")
+                                                c_health = 0
+                                                o_health = 0
                                             except Exception as ex:
                                                 trace = []
                                                 tb = ex.__traceback__
@@ -15985,6 +16095,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 # Opponent Turn Start
                                 elif turn == 3:
                                     # await asyncio.sleep(2)
+                                    if t_block_used == True:
+                                        t_block_used = False
+                                        t_defense = int(t_defense / 2)
                                     if t_attack <= 25:
                                         t_attack = 25
                                     if t_defense <= 30:
@@ -16142,7 +16255,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 value=f"Death....")
                                                 #await private_channel.send(embed=embedVar)
                                                 previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** had a heart attack and died")
-                                                o_health = 0
+                                                c_health = 0
 
                                         if c_universe == "One Punch Man":
                                             embedVar = discord.Embed(
@@ -16203,6 +16316,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                         if t_used_resolve and not t_pet_used:
                                             aiMove = 6
+                                        elif tarm_barrier_active: #Ai Barrier Checks
+                                            if t_stamina >=20: #Stamina Check For Enhancer
+                                                aiMove = await ai_enhancer_moves(t_used_focus,t_used_resolve,t_pet_used,t_stamina,
+                                                                           t_enhancer['TYPE'],t_health,t_max_health,t_attack,
+                                                                           t_defense,c_stamina,c_attack,c_defense)
+                                            else:
+                                                aiMove = 1
                                         elif c_stamina < 10:
                                             aiMove = 1
                                         elif t_stamina >= 160 and (t_health >= c_health):
@@ -16230,19 +16350,25 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         elif t_stamina >= 110:
                                             aiMove = 2
                                         elif t_stamina >= 100 and (t_health >= c_health):
-                                            aiMove = 4
+                                            aiMove = await ai_enhancer_moves(t_used_focus,t_used_resolve,t_pet_used,t_stamina,
+                                                                           t_enhancer['TYPE'],t_health,t_max_health,t_attack,
+                                                                           t_defense,c_stamina,c_attack,c_defense)
                                         elif t_stamina >= 100:
                                             aiMove = 1
                                         elif t_stamina >= 90 and (t_health >= c_health):
                                             aiMove = 3
                                         elif t_stamina >= 90:
-                                            aiMove = 4
+                                            aiMove = await ai_enhancer_moves(t_used_focus,t_used_resolve,t_pet_used,t_stamina,
+                                                                           t_enhancer['TYPE'],t_health,t_max_health,t_attack,
+                                                                           t_defense,c_stamina,c_attack,c_defense)
                                         elif t_stamina >= 80 and (t_health >= c_health):
                                             aiMove = 1
                                         elif t_stamina >= 80:
                                             aiMove = 3
                                         elif t_stamina >= 70 and (t_health >= c_health):
-                                            aiMove = 4
+                                            aiMove = await ai_enhancer_moves(t_used_focus,t_used_resolve,t_pet_used,t_stamina,
+                                                                           t_enhancer['TYPE'],t_health,t_max_health,t_attack,
+                                                                           t_defense,c_stamina,c_attack,c_defense)
                                         elif t_stamina >= 70:
                                             aiMove = 1
                                         elif t_stamina >= 60 and (t_health >= c_health):
@@ -16278,13 +16404,17 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         elif t_stamina >= 40:
                                             aiMove = 2
                                         elif t_stamina >= 30 and (t_health >= c_health):
-                                            aiMove = 4
+                                            aiMove = await ai_enhancer_moves(t_used_focus,t_used_resolve,t_pet_used,t_stamina,
+                                                                           t_enhancer['TYPE'],t_health,t_max_health,t_attack,
+                                                                           t_defense,c_stamina,c_attack,c_defense)
                                         elif t_stamina >= 30:
                                             aiMove = 2
                                         elif t_stamina >= 20 and (t_health >= c_health):
                                             aiMove = 1
                                         elif t_stamina >= 20:
-                                            aiMove = 4
+                                            aiMove = await ai_enhancer_moves(t_used_focus,t_used_resolve,t_pet_used,t_stamina,
+                                                                           t_enhancer['TYPE'],t_health,t_max_health,t_attack,
+                                                                           t_defense,c_stamina,c_attack,c_defense)
                                         elif t_stamina >= 10:
                                             aiMove = 1
                                         else:
@@ -16697,13 +16827,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_stamina = round(t_stamina - dmg['DMG'])
                                                             o_stamina = round(o_stamina + dmg['DMG'])
                                                         elif tpet_type == 'SLOW':
-                                                            tempstam = round(o_stamina + dmg['DMG']) - 20
-                                                            t_stamina = round(t_stamina - dmg['DMG']) - 20
+                                                            tempstam = round(o_stamina + dmg['DMG'])
+                                                            t_stamina = round(t_stamina - dmg['DMG'])
                                                             o_stamina = t_stamina
                                                             t_stamina = tempstam
                                                         elif tpet_type == 'HASTE':
-                                                            tempstam = round(o_stamina - dmg['DMG']) - 20
-                                                            t_stamina = round(t_stamina + dmg['DMG']) - 20
+                                                            tempstam = round(o_stamina - dmg['DMG'])
+                                                            t_stamina = round(t_stamina + dmg['DMG'])
                                                             o_stamina = t_stamina
                                                             t_stamina = tempstam
                                                         elif tpet_type == 'SOULCHAIN':
@@ -16822,13 +16952,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_stamina = round(t_stamina - dmg['DMG'])
                                                             c_stamina = round(c_stamina + dmg['DMG'])
                                                         elif tpet_type == 'SLOW':
-                                                            tempstam = round(c_stamina + dmg['DMG']) - 20
-                                                            t_stamina = round(t_stamina - dmg['DMG']) - 20
+                                                            tempstam = round(c_stamina + dmg['DMG'])
+                                                            t_stamina = round(t_stamina - dmg['DMG'])
                                                             c_stamina = t_stamina
                                                             t_stamina = tempstam
                                                         elif tpet_type == 'HASTE':
-                                                            tempstam = round(c_stamina - dmg['DMG']) - 20
-                                                            t_stamina = round(t_stamina + dmg['DMG']) - 20
+                                                            tempstam = round(c_stamina - dmg['DMG'])
+                                                            t_stamina = round(t_stamina + dmg['DMG'])
                                                             c_stamina = t_stamina
                                                             t_stamina = tempstam
                                                         elif tpet_type == 'SOULCHAIN':
@@ -16888,8 +17018,18 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     else:
                                                         previous_moves.append(f"*{turn_total}:* {t_card} Could not summon 🧬 **{tpet_name}**. Needs rest")
                                                         turn = 3
+                                        elif int(aiMove) == 7:
+                                            if t_stamina >= 20:
+                                                t_stamina = t_stamina - 20
+                                                t_block_used = True
+                                                t_defense = round(t_defense * 2)
+                                                previous_moves.append(f"*{turn_total}:* **{t_card}:** Blocked 🛡️")
+                                                turn_total = turn_total + 1
+                                                turn = 0
+                                            else:
+                                                turn = 2
 
-                                        if int(aiMove) != 5 and int(aiMove) != 6:
+                                        if int(aiMove) != 5 and int(aiMove) != 6 and int(aiMove) !=7:
                                             # If you have enough stamina for move, use it
                                             # check if o is blocking
 
@@ -16945,13 +17085,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_stamina = round(t_stamina - dmg['DMG'])
                                                             o_stamina = round(o_stamina + dmg['DMG'])
                                                         elif enh_type == 'SLOW':
-                                                            tempstam = round(o_stamina + dmg['DMG']) - 20
-                                                            t_stamina = round(t_stamina - dmg['DMG']) - 20
+                                                            tempstam = round(o_stamina + dmg['DMG'])
+                                                            t_stamina = round(t_stamina - dmg['DMG'])
                                                             o_stamina = t_stamina
                                                             t_stamina = tempstam
                                                         elif enh_type == 'HASTE':
-                                                            tempstam = round(o_stamina - dmg['DMG']) - 20
-                                                            t_stamina = round(t_stamina + dmg['DMG']) - 20
+                                                            tempstam = round(o_stamina - dmg['DMG'])
+                                                            t_stamina = round(t_stamina + dmg['DMG'])
                                                             o_stamina = t_stamina
                                                             t_stamina = tempstam
                                                         elif enh_type == 'SOULCHAIN':
@@ -16980,7 +17120,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = round(t_health + dmg['DMG'])
                                                         elif enh_type == 'DESTRUCTION':
                                                             o_max_health = round(o_max_health - dmg['DMG'])
-                                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                                                        
+                                                        if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check:
+                                                            t_stamina = t_stamina
+                                                        else:
+                                                            t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}",
                                                                                 colour=embed_color_t)
                                                         #await private_channel.send(embed=embedVar)
@@ -17034,7 +17178,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if obarrier_count >1:
                                                                 o_health = o_health 
                                                                 embedVar = discord.Embed(title=f"{o_card.upper()} Activates **Barrier** 💠", description=f"{t_card}'s attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* {t_card}'s attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!")
+                                                                previous_moves.append(f"*{turn_total}:* /**{o_card}** Activates Barrier 💠  {t_card}'s attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!")
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -17177,13 +17321,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_stamina = round(t_stamina - dmg['DMG'])
                                                             c_stamina = round(c_stamina + dmg['DMG'])
                                                         elif enh_type == 'SLOW':
-                                                            tempstam = round(c_stamina + dmg['DMG']) - 20
-                                                            t_stamina = round(t_stamina - dmg['DMG']) - 20
+                                                            tempstam = round(c_stamina + dmg['DMG'])
+                                                            t_stamina = round(t_stamina - dmg['DMG'])
                                                             c_stamina = t_stamina
                                                             t_stamina = tempstam
                                                         elif enh_type == 'HASTE':
-                                                            tempstam = round(c_stamina - dmg['DMG']) - 20
-                                                            t_stamina = round(t_stamina + dmg['DMG']) - 20
+                                                            tempstam = round(c_stamina - dmg['DMG'])
+                                                            t_stamina = round(t_stamina + dmg['DMG'])
                                                             c_stamina = t_stamina
                                                             t_stamina = tempstam
                                                         elif enh_type == 'SOULCHAIN':
@@ -17212,7 +17356,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = round(t_health + dmg['DMG'])
                                                         elif enh_type == 'DESTRUCTION':
                                                             c_max_health = round(c_max_health - dmg['DMG'])
-                                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                                                        if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check:
+                                                            t_stamina = t_stamina
+                                                        else:
+                                                            t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}",
                                                                                 colour=embed_color_t)
                                                         #await private_channel.send(embed=embedVar)
@@ -17266,7 +17413,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if cbarrier_count >1:
                                                                 c_health = c_health 
                                                                 embedVar = discord.Embed(title=f"{c_card.upper()} Activates **Barrier** 💠", description=f"{t_card}'s attack **Nullified**!\n 💠{cbarrier_count - 1} **Barriers** remain!", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* {t_card}'s attack **Nullified**!\n💠 {cbarrier_count - 1} **Barriers** remain!")
+                                                                previous_moves.append(f"*{turn_total}:* **{c_card}** Activates Barrier 💠 {t_card}'s attack **Nullified**!\n💠 {cbarrier_count - 1} **Barriers** remain!")
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -17400,15 +17547,15 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     total_bounty = (bounty + ((bonus / 100) * bounty))
                                     wage = .50 * total_bounty
                                 # response = await score(sownerctx, tuser)
-                                await curse(30, str(ctx.author))
-                                await bless(80, tuser)
+                                await curse(30, str(ctx.author.id))
+                                await bless(80, tuser.id)
                                 if tguild:
-                                    await bless(15, str(tuser))
+                                    await bless(15, str(tuser.id))
                                     await blessteam(25, cteam)
                                     await teamwin(cteam)
                                     await blessguild(60, tguild)
                                     if oguild:
-                                        await curse(7, str(tuser))
+                                        await curse(7, str(tuser.id))
                                         await curseteam(15, oteam)
                                         await teamloss(oteam)
                                         await curseguild(30, oguild)
@@ -17431,7 +17578,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             }
                                         filter_query = [{'type.' + "NAME": str(sowner['DISNAME'])}]
                                         res = db.updateArena(query, update_query, filter_query)
-                                        await bless(10000, str(tuser))
+                                        await bless(10000, str(tuser.id))
                                         # await ctx.send(f"{ouser.mention} has won the 1v1, earning :coin: 10,000!")
                                         await battle_msg.delete(delay=2)
                                         await asyncio.sleep(2)
@@ -17692,15 +17839,15 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 
                                 
                                 # response = await score(sownerctx, ouser)
-                                await bless(8, str(ctx.author))
-                                await curse(3, str(tuser))
+                                await bless(8, str(ctx.author.id))
+                                await curse(3, str(tuser.id))
                                 if oguild:
-                                    await bless(15, str(ctx.author))
+                                    await bless(15, str(ctx.author.id))
                                     await blessteam(25, oteam)
                                     await teamwin(oteam)
                                     await blessguild(60, oguild)
                                     if tguild:
-                                        await curse(7, str(tuser))
+                                        await curse(7, str(tuser.id))
                                         await curseteam(15, tteam)
                                         await teamloss(tteam)
                                         await curseguild(30, tguild)
@@ -17724,7 +17871,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             }
                                         filter_query = [{'type.' + "NAME": str(opponent['DISNAME'])}]
                                         res = db.updateArena(query, update_query, filter_query)
-                                        await bless(10000, str(ouser))
+                                        await bless(10000, str(ouser.id))
                                         # await ctx.send(f"{tuser.mention} has won the 1v1, earning :coin: 10,000!")
                                         await battle_msg.delete(delay=2)
                                         await asyncio.sleep(2)
@@ -17830,7 +17977,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             if randomized_battle:
                                 bounty = abyss_scaling
                                 drop_response = await specific_drops(str(o_user['DISNAME']), t_card, t_universe)
-                                await bless(bounty, str(o_user['DISNAME']))
+                                await bless(bounty, str(o_user['DID']))
                                 embedVar = discord.Embed(title=f"VICTORY\n:coin: {bounty} Bounty Received!\n**{o_card} says**\n{o_win_description}\nThe game lasted {turn_total} rounds.\n\n{drop_response}",description=textwrap.dedent(f"""
                                 {previous_moves_into_embed}
                                 
@@ -17863,8 +18010,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     cfambank = await blessfamily(80000, cfam)
                                     cteambank = await blessteam(80000, cteam)
                                     cpetlogger = await summonlevel(cpet_name, user2)
-                                    ccardlogger = await cardlevel(self, c_card, user2, "Dungeon", selected_universe)
-                                    await bless(50, str(user2))
+                                    ccardlogger = await cardlevel(self, c_card, user2.id, "Dungeon", selected_universe)
+                                    await bless(50, str(user2.id))
                                     teammates = False
                                     fam_members =False
                                     stat_bonus = 0
@@ -17896,11 +18043,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     {previous_moves_into_embed}
                                     
                                     """),colour=0x1abc9c)
-                                await bless(25000, str(ctx.author))
+                                await bless(25000, str(ctx.author.id))
                                 ofambank = await blessfamily(20000, ofam)
                                 oteambank = await blessteam(20000, oteam)
                                 petlogger = await summonlevel(opet_name, ouser)
-                                cardlogger = await cardlevel(self, o_card, ouser, "Dungeon", selected_universe)
+                                cardlogger = await cardlevel(self, o_card, ouser.id, "Dungeon", selected_universe)
 
                                 if crestsearch:
                                     await blessguild(25000, oguild['GNAME'])
@@ -17923,9 +18070,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 battle_msg = await private_channel.send(embed=embedVar)
 
                                 if t_card not in sowner['BOSS_WINS']:
-                                    await bless(15000000, str(ctx.author))
+                                    await bless(15000000, str(ctx.author.id))
                                     if mode == "CBoss":
-                                        await bless(15000000, str(user2))
+                                        await bless(15000000, str(user2.id))
                                     query = {'DISNAME': sowner['DISNAME']}
                                     new_query = {'$addToSet': {'BOSS_WINS': t_card}}
                                     resp = db.updateUserNoFilter(query, new_query)
@@ -17956,7 +18103,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     abyss_message = abyss_level_up_message(str(ctx.author.id), floor, t_card, t_title, tarm_name)
                                     abyss_drop_message = "\n".join(abyss_message['DROP_MESSAGE'])
                                     bless_amount = 100000 + (10000 * floor)
-                                    await bless(100000, ctx.author)
+                                    await bless(bless_amount, ctx.author.id)
                                     embedVar = discord.Embed(title=f"🌑 Floor **{floor}** Cleared\n**{o_card} says**\n{o_win_description}\nThe game lasted {turn_total} rounds.",description=textwrap.dedent(f"""
                                     {previous_moves_into_embed}
                                     
@@ -17993,9 +18140,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     response = db.updateUserNoFilter({'DISNAME': str(o_user['DISNAME'])}, {'$set': {'RIFT': 0}})
 
                                 if mode in D_modes:
-                                    drop_response = await dungeondrops(ctx.author, selected_universe, currentopponent)
+                                    drop_response = await dungeondrops(ouser, selected_universe, currentopponent)
                                 elif mode in U_modes:
-                                    drop_response = await drops(ctx.author, selected_universe, currentopponent)
+                                    drop_response = await drops(ouser, selected_universe, currentopponent)
                                 if mode in D_modes:
                                     ofambank = await blessfamily(5000, ofam)
                                 else:
@@ -18006,7 +18153,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 questlogger = await quest(ouser, t_card, tale_or_dungeon_only)
                                 destinylogger = await destiny(ouser, t_card, tale_or_dungeon_only)
                                 petlogger = await summonlevel(opet_name, ouser)
-                                cardlogger = await cardlevel(self, o_card, ouser, tale_or_dungeon_only, selected_universe)
+                                cardlogger = await cardlevel(self, o_card, ouser.id, tale_or_dungeon_only, selected_universe)
                                 if questlogger:
                                     await private_channel.send(questlogger)
                                 if destinylogger:
@@ -18055,8 +18202,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     cfambank = await blessfamily(10000, cfam)
                                     cteambank = await blessteam(10000, cteam)
                                     cpetlogger = await summonlevel(cpet_name, user2)
-                                    ccardlogger = await cardlevel(self, c_card, user2, tale_or_dungeon_only, selected_universe)
-                                    await bless(5000, str(user2))
+                                    ccardlogger = await cardlevel(self, c_card, user2.id, tale_or_dungeon_only, selected_universe)
+                                    await bless(5000, str(user2.id))
 
                                 if currentopponent != (total_legends):
                                     if mode not in co_op_modes:
@@ -18095,7 +18242,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         embedVar = discord.Embed(title=f":fire: DUNGEON CONQUERED",
                                                                 description=f"**{selected_universe} Dungeon** has been conquered\n\n{drop_response}",
                                                                 colour=0xe91e63)
-                                        embedVar.set_author(name=f"**{selected_universe}** Boss has been unlocked!")
+                                        embedVar.set_author(name=f"{selected_universe} Boss has been unlocked!")
                                         if crestsearch:
                                             await blessguild(100000, oguild['GNAME'])
                                             teambank = await blessteam(10000, oteam)
@@ -18109,7 +18256,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         new_upload_query = {'$addToSet': {'DUNGEONS': selected_universe}}
                                         r = db.updateUserNoFilter(upload_query, new_upload_query)
                                         if selected_universe in completed_universes:
-                                            await bless(300000, ctx.author)
+                                            await bless(300000, ctx.author.id)
                                             teambank = await blessteam(80000, oteam)
                                             # await bless(125, user2)
                                             # await ctx.send(embed=embedVar)
@@ -18120,7 +18267,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             await ctx.send(
                                                 f"You were awarded :coin: 300,000 for completing the {selected_universe} Dungeon again!")
                                         else:
-                                            await bless(8000000, ctx.author)
+                                            await bless(8000000, ctx.author.id)
                                             teambank = await blessteam(1500000, oteam)
                                             # await ctx.send(embed=embedVar)
                                             await battle_msg.delete(delay=2)
@@ -18132,7 +18279,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         if mode in co_op_modes and mode not in ai_co_op_modes:
                                             cuid = c_DID
                                             cuser = await self.bot.fetch_user(cuid)
-                                            await bless(300000, user2)
+                                            await bless(300000, user2.id)
                                             teambank = await blessteam(80000, cteam)
                                             # await bless(125, user2)
                                             # await ctx.send(embed=embedVar)
@@ -18154,7 +18301,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         new_upload_query = {'$addToSet': {'CROWN_TALES': selected_universe}}
                                         r = db.updateUserNoFilter(upload_query, new_upload_query)
                                         if selected_universe in completed_universes:
-                                            await bless(100000, ctx.author)
+                                            await bless(100000, ctx.author.id)
                                             teambank = await blessteam(25000, oteam)
                                             # await ctx.send(embed=embedVar)
                                             await battle_msg.delete(delay=2)
@@ -18164,7 +18311,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             await ctx.send(
                                                 f"You were awarded :coin: 100,000 for completing the {selected_universe} Tale again!")
                                         else:
-                                            await bless(2000000, ctx.author)
+                                            await bless(2000000, ctx.author.id)
                                             teambank = await blessteam(500000, oteam)
                                             # await ctx.send(embed=embedVar)
                                             await battle_msg.delete(delay=2)
@@ -18176,7 +18323,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         if mode in co_op_modes and mode not in ai_co_op_modes:
                                             cuid = c_DID
                                             cuser = await self.bot.fetch_user(cuid)
-                                            await bless(300000, user2)
+                                            await bless(300000, user2.id)
                                             teambank = await blessteam(80000, cteam)
                                             # await bless(125, user2)
                                             # await ctx.send(embed=embedVar)
@@ -18448,10 +18595,10 @@ def getTime(hgame, mgame, sgame, hnow, mnow, snow):
 async def bless(amount, user):
     blessAmount = amount
     posBlessAmount = 0 + abs(int(blessAmount))
-    query = {'DISNAME': str(user)}
+    query = {'DID': str(user)}
     vaultOwner = db.queryUser(query)
     if vaultOwner:
-        vault = db.queryVault({'OWNER': vaultOwner['DISNAME']})
+        vault = db.queryVault({'DID': vaultOwner['DID']})
         update_query = {"$inc": {'BALANCE': posBlessAmount}}
         db.updateVaultNoFilter(vault, update_query)
     else:
@@ -18536,10 +18683,10 @@ async def blessguild(amount, guild):
 async def curse(amount, user):
     curseAmount = amount
     negCurseAmount = 0 - abs(int(curseAmount))
-    query = {'DISNAME': str(user)}
+    query = {'DID': str(user)}
     vaultOwner = db.queryUser(query)
     if vaultOwner:
-        vault = db.queryVault({'OWNER': vaultOwner['DISNAME']})
+        vault = db.queryVault({'DID': vaultOwner['DID']})
         update_query = {"$inc": {'BALANCE': int(negCurseAmount)}}
         db.updateVaultNoFilter(vault, update_query)
     else:
@@ -18621,7 +18768,7 @@ async def drops(player, universe, matchcount):
     owned_titles = []
     owned_titles = vault['TITLES']
 
-    user_query = {'DISNAME': str(player)}
+    user_query = {'DID': str(player.id)}
     user = db.queryUser(user_query)
     rebirth = user['REBIRTH']
     owned_destinies = []
@@ -18693,44 +18840,44 @@ async def drops(player, universe, matchcount):
     try:
         if drop_rate <= gold_drop:
             bless_amount = (1000 + (100 * matchcount)) * (1 + rebirth)
-            await bless(bless_amount, player)
+            await bless(bless_amount, player.id)
             return f"You earned :coin: **{bless_amount}**!"
         elif drop_rate <= rift_rate and drop_rate > gold_drop:
             response = db.updateUserNoFilter(user_query, {'$set': {'RIFT': 1}})
             bless_amount = (200 + (100 * matchcount)) * (1 + rebirth)
-            await bless(bless_amount, player)
+            await bless(bless_amount, player.id)
             return f"A RIFT HAS OPENED! You have earned :coin: **{bless_amount}**!"
         elif drop_rate <= title_drop and drop_rate > gold_drop:
             if all_available_drop_titles:
                 if len(vault['TITLES']) >= 25:
-                    await bless(300, player)
+                    await bless(300, player.id)
                     return f"You're maxed out on Titles! You earned :coin: 300 instead!"
                 if str(titles[rand_title]) in owned_titles:
-                    await bless(150, player)
+                    await bless(150, player.id)
                     return f"You already own **{titles[rand_title]}**! You earn :coin: **150**."
                 response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'TITLES': str(titles[rand_title])}})
                 return f"You earned _Title:_ **{titles[rand_title]}**!"
             else:
-                await bless(150, player)
+                await bless(150, player.id)
                 return f"You earned :coin: **150**!"
         elif drop_rate <= arm_drop and drop_rate > title_drop:
             if all_available_drop_arms:
                 if len(vault['ARMS']) >= 25:
-                    await bless(300, player)
+                    await bless(300, player.id)
                     return f"You're maxed out on Arms! You earned :coin: 300 instead!"
                 if str(arms[rand_arm]) in owned_arms:
-                    await bless(150, player)
+                    await bless(150, player.id)
                     return f"You already own **{arms[rand_arm]}**! You earn :coin: **150**."
                 else:
                     response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'ARMS': {'ARM': str(arms[rand_arm]), 'DUR': durability}}})
                     return f"You earned _Arm:_ **{arms[rand_arm]}** with ⚒️**{str(durability)}**!"
             else:
-                await bless(150, player)
+                await bless(150, player.id)
                 return f"You earned :coin: **150**!"
         elif drop_rate <= pet_drop and drop_rate > arm_drop:
             if all_available_drop_pets:
                 if len(vault['PETS']) >= 25:
-                    await bless(300, player)
+                    await bless(300, player.id)
                     return f"You're maxed out on Summons! You earned :coin: 300 instead!"
 
                 pet_owned = False
@@ -18740,7 +18887,7 @@ async def drops(player, universe, matchcount):
 
                 if pet_owned:
 
-                    await bless(150, player)
+                    await bless(150, player.id)
                     return f"You own _Summon:_ **{pets[rand_pet]}**! Received extra + :coin: 150!"
                 else:
 
@@ -18752,15 +18899,15 @@ async def drops(player, universe, matchcount):
                     response = db.updateVaultNoFilter(vault_query, {'$addToSet': {
                         'PETS': {'NAME': selected_pet['PET'], 'LVL': 0, 'EXP': 0, pet_ability_name: int(pet_ability_power),
                                 'TYPE': pet_ability_type, 'BOND': 0, 'BONDEXP': 0, 'PATH': selected_pet['PATH']}}})
-                    await bless(50, player)
+                    await bless(50, player.id)
                     return f"You earned _Summon:_ **{pets[rand_pet]}** + :coin: 50!"
             else:
-                await bless(150, player)
+                await bless(150, player.id)
                 return f"You earned :coin: **150**!"
         elif drop_rate <= card_drop and drop_rate > pet_drop:
             if all_available_drop_cards:
                 if len(vault['CARDS']) >= 25:
-                    await bless(300, player)
+                    await bless(300, player.id)
                     return f"You're maxed out on Cards! You earned :coin: 300 instead!"
 
                 # Check if already owned
@@ -18770,10 +18917,10 @@ async def drops(player, universe, matchcount):
                         card_owned = True
 
                 if card_owned:
-                    await cardlevel(self, cards[rand_card], player, "Tales", universe)
+                    await cardlevel(self, cards[rand_card], player.id, "Tales", universe)
                     response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'CARDS': str(cards[rand_card])}})
                     message = ""
-                    await bless(150, player)
+                    await bless(150, player.id)
                     return f"You earned EXP for _Card:_ **{cards[rand_card]}** + :coin: 150!\n{message}"
                 else:
 
@@ -18791,10 +18938,10 @@ async def drops(player, universe, matchcount):
                             db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
                             message = f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault."
 
-                    await bless(50, player)
+                    await bless(50, player.id)
                     return f"You earned _Card:_ **{cards[rand_card]}** + :coin: 50!\n{message}"
             else:
-                await bless(250, player)
+                await bless(250, player.id)
                 return f"You earned :coin: **250**!"
     except Exception as ex:
         trace = []
@@ -18828,7 +18975,7 @@ async def specific_drops(player, card, universe):
 
     try:
         if len(vault['CARDS']) >= 25:
-            await bless(3000, player)
+            await bless(3000, player.id)
             return f"You're maxed out on Cards! You earned :coin: 3,000 instead!"
         # Check if already owned
         card_lvls_owned = False
@@ -18840,14 +18987,14 @@ async def specific_drops(player, card, universe):
             card_owned = True
 
         if card_owned and card_lvls_owned:
-            await cardlevel(self, card, player, "Tales", universe)
+            await cardlevel(self, card, player.id, "Tales", universe)
             message = ""
-            await bless(5000, player)
+            await bless(5000, player.id)
             return f"You earned EXP for _Card:_ **{card}** + :coin: 5,000 in addition to the card bounty."
         elif card_lvls_owned:
-            await cardlevel(self, card, player, "Tales", universe)
+            await cardlevel(self, card, player.id, "Tales", universe)
             message = ""
-            await bless(5000, player)
+            await bless(5000, player.id)
             return f"You earned EXP for _Card:_ **{card}** + :coin: 5,000 in addition to the card bounty."
         else:
             card_data = db.queryCard({'NAME': str(card)})
@@ -18864,7 +19011,7 @@ async def specific_drops(player, card, universe):
                     db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
                     message = f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault."
 
-            await bless(50, player)
+            await bless(50, player.id)
             return f"You earned _Card:_ **{card}**!\n{message}"
     except Exception as ex:
         trace = []
@@ -18898,7 +19045,7 @@ async def dungeondrops(player, universe, matchcount):
         owned_arms.append(arm['ARM'])
     owned_titles = vault['TITLES']
 
-    user_query = {'DISNAME': str(player)}
+    user_query = {'DID': str(player.id)}
     user = db.queryUser(user_query)
     rebirth = user['REBIRTH']
     owned_destinies = []
@@ -18960,35 +19107,35 @@ async def dungeondrops(player, universe, matchcount):
     try:
         if drop_rate <= gold_drop:
             bless_amount = (5000 + (250 * matchcount)) * (1 + rebirth)
-            await bless(bless_amount, player)
+            await bless(bless_amount, player.id)
             return f"You earned :coin: **{bless_amount}**!"
         elif drop_rate <= rift_rate and drop_rate > gold_drop:
             response = db.updateUserNoFilter(user_query, {'$set': {'RIFT': 1}})
             bless_amount = (150 + (250 * matchcount)) * (1 + rebirth)
-            await bless(bless_amount, player)
+            await bless(bless_amount, player.id)
             return f"A RIFT HAS OPENED! You have earned :coin: **{bless_amount}**!"
         elif drop_rate <= title_drop and drop_rate > gold_drop:
             if len(vault['TITLES']) >= 25:
-                await bless(1500, player)
+                await bless(1500, player.id)
                 return f"You're maxed out on Titles! You earned :coin: 1500 instead!"
             if str(titles[rand_title]) in owned_titles:
-                    await bless(1250, player)
+                    await bless(1250, player.id)
                     return f"You already own **{titles[rand_title]}**! You earn :coin: **1250**."
             response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'TITLES': str(titles[rand_title])}})
             return f"You earned _Title:_ **{titles[rand_title]}**!"
         elif drop_rate <= arm_drop and drop_rate > title_drop:
             if len(vault['ARMS']) >= 25:
-                await bless(1500, player)
+                await bless(1500, player.id)
                 return f"You're maxed out on Arms! You earned :coin: 1500 instead!"
             if str(arms[rand_arm]) in owned_arms:
-                await bless(1250, player)
+                await bless(1250, player.id)
                 return f"You already own **{arms[rand_arm]}**! You earn :coin: **1250**."
             else:
                 response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'ARMS': {'ARM': str(arms[rand_arm]), 'DUR': durability}}})
                 return f"You earned _Arm:_ **{arms[rand_arm]}** with ⚒️**{str(durability)}**!"
         elif drop_rate <= pet_drop and drop_rate > arm_drop:
             if len(vault['PETS']) >= 25:
-                await bless(3000, player)
+                await bless(3000, player.id)
                 return f"You're maxed out on Summons! You earned :coin: 3000 instead!"
             pet_owned = False
             for p in vault['PETS']:
@@ -18996,7 +19143,7 @@ async def dungeondrops(player, universe, matchcount):
                     pet_owned = True
 
             if pet_owned:
-                await bless(1800, player)
+                await bless(1800, player.id)
                 return f"You own _Summon:_ **{pets[rand_pet]}**! Received extra + :coin: 1800!"
             else:
                 selected_pet = db.queryPet({'PET': pets[rand_pet]})
@@ -19007,11 +19154,11 @@ async def dungeondrops(player, universe, matchcount):
                 response = db.updateVaultNoFilter(vault_query, {'$addToSet': {
                     'PETS': {'NAME': selected_pet['PET'], 'LVL': 0, 'EXP': 0, pet_ability_name: int(pet_ability_power),
                              'TYPE': pet_ability_type, 'BOND': 0, 'BONDEXP': 0, 'PATH': selected_pet['PATH']}}})
-                await bless(100, player)
+                await bless(100, player.id)
                 return f"You earned _Summon:_ **{pets[rand_pet]}** + :coin: 100!"
         elif drop_rate <= card_drop and drop_rate > pet_drop:
             if len(vault['CARDS']) >= 25:
-                await bless(5000, player)
+                await bless(5000, player.id)
                 return f"You're maxed out on Cards! You earned :coin: 5000 instead!"
             card_owned = False
             for c in vault['CARD_LEVELS']:
@@ -19019,10 +19166,10 @@ async def dungeondrops(player, universe, matchcount):
                     card_owned = True
 
             if card_owned:
-                await cardlevel(self, cards[rand_card], player, "Dungeon", universe)
+                await cardlevel(self, cards[rand_card], player.id, "Dungeon", universe)
                 response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'CARDS': str(cards[rand_card])}})
                 message = ""
-                await bless(2500, player)
+                await bless(2500, player.id)
                 return f"You earned {exp_gain} EXP for _Card:_ **{cards[rand_card]}** + :coin: 2500!\n{message}"
             else:
                 card_data = db.queryCard({'NAME': str(cards[rand_card])})
@@ -19039,7 +19186,7 @@ async def dungeondrops(player, universe, matchcount):
                         db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
                         message = f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault."
 
-                await bless(2000, player)
+                await bless(2000, player.id)
                 return f"You earned _Card:_ **{cards[rand_card]}** + :coin: 2000!\n{message}"
     except Exception as ex:
         trace = []
@@ -19067,14 +19214,14 @@ async def bossdrops(player, universe):
     all_available_drop_arms = db.queryExclusiveDropArms(universe)
     all_available_drop_pets = db.queryExclusiveDropPets(universe)
     boss = db.queryBoss({'UNIVERSE': universe})
-    vault_query = {'OWNER': str(player)}
+    vault_query = {'DID': str(player.id)}
     vault = db.queryVault(vault_query)
     owned_arms = []
     for arm in vault['ARMS']:
         owned_arms.append(arm['ARM'])
     owned_titled = vault['TITLES']
 
-    user_query = {'DISNAME': str(player)}
+    user_query = {'DID': str(player.id)}
     user = db.queryUser(user_query)
     rebirth = user['REBIRTH']
 
@@ -19141,30 +19288,30 @@ async def bossdrops(player, universe):
     try:
         if drop_rate <= gold_drop:
             bless_amount = 80000 * (1 + rebirth)
-            await bless(bless_amount, player)
+            await bless(bless_amount, player.id)
             return f"You earned :coin: {bless_amount}!"
         elif drop_rate <= title_drop and drop_rate > gold_drop:
             if len(vault['TITLES']) >= 25:
-                await bless(8000, player)
+                await bless(8000, player.id)
                 return f"You're maxed out on Titles! You earned :coin: **8000** instead!"
             if str(titles[rand_title]) in owned_titles:
-                    await bless(8000, player)
+                    await bless(8000, player.id)
                     return f"You already own **{titles[rand_title]}**! You earn :coin: **8000**."
             response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'TITLES': str(titles[rand_title])}})
             return f"You earned {titles[rand_title]}!"
         elif drop_rate <= arm_drop and drop_rate > title_drop:
             if len(vault['ARMS']) >= 25:
-                await bless(8000, player)
+                await bless(8000, player.id)
                 return f"You're maxed out on Arms! You earned :coin: 8000 instead!"
             if str(arms[rand_arm]) in owned_arms:
-                await bless(8000, player)
+                await bless(8000, player.id)
                 return f"You already own **{arms[rand_arm]}**! You earn :coin: **8000**."
             else:
                 response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'ARMS': {'ARM': str(arms[rand_arm]), 'DUR': durability}}})
                 return f"You earned _Arm:_ **{arms[rand_arm]}** with ⚒️**{str(durability)}**!"
         elif drop_rate <= pet_drop and drop_rate > arm_drop:
             if len(vault['PETS']) >= 25:
-                await bless(8000, player)
+                await bless(8000, player.id)
                 return f"You're maxed out on Summons! You earned :coin: 8000 instead!"
             selected_pet = db.queryPet({'PET': pets[rand_pet]})
             pet_ability_name = list(selected_pet['ABILITIES'][0].keys())[0]
@@ -19174,27 +19321,27 @@ async def bossdrops(player, universe):
             response = db.updateVaultNoFilter(vault_query, {'$addToSet': {
                 'PETS': {'NAME': selected_pet['PET'], 'LVL': 0, 'EXP': 0, pet_ability_name: int(pet_ability_power),
                          'TYPE': pet_ability_type, 'BOND': 0, 'BONDEXP': 0, 'PATH': selected_pet['PATH']}}})
-            await bless(80, player)
+            await bless(80, player.id)
             return f"You earned {pets[rand_pet]} + :coin: 80!"
         elif drop_rate <= card_drop and drop_rate > pet_drop:
             if len(vault['CARDS']) >= 25:
-                await bless(8000, player)
+                await bless(8000, player.id)
                 return f"You're maxed out on Cards! You earned :coin: 8000 instead!"
                 response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'CARDS': str(cards[rand_card])}})
-                await bless(50, player)
+                await bless(50, player.id)
                 return f"You earned {cards[rand_card]} + :coin: 50!"
         elif drop_rate <= boss_title_drop and drop_rate > card_drop:
             if len(vault['TITLES']) >= 25:
-                await bless(10000, player)
+                await bless(10000, player.id)
                 return f"You're maxed out on Titles! You earned :coin: **10,000** instead!"
             response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'TITLES': str(boss_title)}})
             return f"You earned the Exclusive Boss Title: {boss_title}!"
         elif drop_rate <= boss_arm_drop and drop_rate > boss_title_drop:
             if len(vault['ARMS']) >= 25:
-                await bless(10000, player)
+                await bless(10000, player.id)
                 return f"You're maxed out on Arms! You earned :coin: **10,000** instead!"
             if str(boss_arm) in owned_arms:
-                await bless(20000, player)
+                await bless(20000, player.id)
                 return f"You already own **{arms[rand_arm]}**! You earn :coin: **20,000**."
             else:
                 response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'ARMS': {'ARM': str(boss_arm), 'DUR': durability}}})
@@ -19202,7 +19349,7 @@ async def bossdrops(player, universe):
 
         elif drop_rate <= boss_pet_drop and drop_rate > boss_arm_drop:
             if len(vault['PETS']) >= 25:
-                await bless(10000, player)
+                await bless(10000, player.id)
                 return f"You're maxed out on Summons! You earned :coin: **10,000** instead!"
             selected_pet = db.queryPet({'PET': boss['PET']})
             pet_ability_name = list(selected_pet['ABILITIES'][0].keys())[0]
@@ -19212,11 +19359,11 @@ async def bossdrops(player, universe):
             response = db.updateVaultNoFilter(vault_query, {'$addToSet': {
                 'PETS': {'NAME': selected_pet['PET'], 'LVL': 0, 'EXP': 0, pet_ability_name: int(pet_ability_power),
                          'TYPE': pet_ability_type, 'BOND': 0, 'BONDEXP': 0, 'PATH': selected_pet['PATH']}}})
-            await bless(10000, player)
+            await bless(10000, player.id)
             return f"You earned the Exclusive Boss Summon:  {boss['PET']} + :coin: **10,000**!"
         elif drop_rate <= boss_card_drop and drop_rate > boss_pet_drop:
             if len(vault['CARDS']) >= 25:
-                await bless(10000, player)
+                await bless(10000, player.id)
                 return f"You're maxed out on Cards! You earned :coin: **10,000** instead!"
             card_owned = False
             for c in vault['CARD_LEVELS']:
@@ -19224,9 +19371,9 @@ async def bossdrops(player, universe):
                     card_owned = True
 
             if card_owned:
-                await cardlevel(self, str(boss_card), player, "Dungeon", universe)
+                await cardlevel(self, str(boss_card), player.id, "Dungeon", universe)
                 message = ""
-                await bless(200, player)
+                await bless(200, player.id)
             else:
                 card_data = db.queryCard({'NAME': str(boss_card)})
                 uni = db.queryUniverse({'TITLE': card_data['UNIVERSE']})
@@ -19238,7 +19385,7 @@ async def bossdrops(player, universe):
                 r = db.updateVaultNoFilter(vault_query, update_query)
 
                 response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'CARDS': str(boss_card)}})
-                await bless(8000, player)
+                await bless(8000, player.id)
     except Exception as ex:
         trace = []
         tb = ex.__traceback__
@@ -19258,7 +19405,149 @@ async def bossdrops(player, universe):
             "There's an issue with Boss Drops. Please use /ff to close this channel and start anew. Alert support.")
         return
 
-
+async def ai_enhancer_moves(focus, resolve, summon, stamina, enhancer_type, health, maxhealth, attack, defense, oppstamina, oppattack, oppdefense):
+    aiMove = 1
+    focus_used = focus
+    resolve_used = resolve
+    summon_used = summon
+    enhancer = enhancer_type
+    if enhancer in Time_Enhancer_Check:
+        if enhancer == "HASTE":
+            if oppstamina <= stamina:
+                aiMove =4
+            else:
+                aiMove = 7
+        elif enhancer == "SLOW":
+            if stamina <= oppstamina:
+                aiMove =4
+            else:
+                aiMove = 7
+        else:
+            if focus_used ==False:
+                aiMove=4
+            else:
+                aiMove=7
+    elif enhancer in SWITCH_Enhancer_Check:
+        if enhancer == "CONFUSE":
+            if oppdefense >= defense:
+                if oppattack >= defense:
+                    if oppattack>=oppdefense:
+                        aimove =4
+                    else:
+                        aiMove = 7
+                else:
+                    aiMove = 7
+            else:
+                aiMove = 7
+        else:
+            if attack >=999 and defense>= 999:
+                aiMove = 7
+            else:
+                aiMove = 4
+    elif enhancer in Damage_Enhancer_Check or enhancer in Turn_Enhancer_Check: #Ai Damage Check
+        aiMove = 4
+    elif enhancer in Gamble_Enhancer_Check: #Ai Gamble and Soul checks
+        aiMove =4
+    elif enhancer in Stamina_Enhancer_Check: #Ai Stamina Check
+        if stamina >= 240:
+            aiMove = 7
+        else:
+            aiMove = 4
+    elif enhancer in TRADE_Enhancer_Check: #Ai Trade Check
+        if defense >= attack and defense <= (attack * 2):
+            aiMove = 4
+        elif attack <= (defense *2):
+            aiMove =4
+        else:
+            if stamina >=90 and focus_used:
+                if defense >= attack:
+                    if focus_used and not resolve_used:
+                        aiMove =5
+                    else:
+                        aiMove = 7
+                else:
+                    aiMove = 3
+            else:
+                aiMove = 7
+    elif enhancer in Healer_Enhancer_Check: #Ai Healer Check
+        if health >= maxhealth:
+            aiMove = 7
+        else:
+            aiMove = 4
+    elif enhancer in INC_Enhancer_Check: #Ai Inc Check
+        if attack >= 999 or defense >=999:
+            if stamina >=80 and focus_used:
+                aiMove = 3
+            elif stamina>=20:
+                aiMove = 7
+            else:
+                aiMove = 1
+        else:
+            aiMove = 4
+    elif enhancer in DPS_Enhancer_Check: #Ai Steal Check
+        if attack >= 999 and oppattack >=100:
+            if stamina >=80 and focus_used:
+                aiMove = 3
+            elif stamina>=30 and focus_used:
+                aiMove = 2
+            elif stamina >=20:
+                aiMove = 7
+            else:
+                aiMove = 1
+        elif defense >= 999 and oppdefense >=100:
+            if stamina >=80 and focus_used:
+                aiMove = 3
+            elif stamina>=30 and focus_used:
+                aiMove = 2
+            elif stamina >=20:
+                aiMove = 7
+            else:
+                aiMove = 1
+        else:
+            aiMove = 4
+    elif enhancer in FORT_Enhancer_Check: #Ai Fort Check
+        if (oppattack<= 50 or attack >= 999) or health <= 650 or health <= (.66 * maxhealth):
+            if stamina >=80 and focus_used:
+                aiMove = 3
+            elif stamina>=30 and focus_used:
+                aiMove = 2
+            elif stamina >=20:
+                aiMove = 7
+            else:
+                aiMove = 1
+        elif (oppdefense <=50 or defense >= 999) or health <= 650 or health <= (.66 * maxhealth):
+            if stamina >=80 and focus_used:
+                aiMove = 3
+            elif stamina>=30 and focus_used:
+                aiMove = 2
+            elif stamina >=20:
+                aiMove = 7
+            else:
+                aiMove = 1
+        else:
+            aiMove = 4
+    elif enhancer in Sacrifice_Enhancer_Check: #Ai Sacrifice Check
+        if attack >= 999 or health <= 500 or health <= (.75 * maxhealth):
+            if focus_used and not resolve_used:
+                aiMove =5
+            else:
+                if summon_used == False:
+                    aiMove =6
+                else:
+                    aiMove = 7
+        elif defense >= 999 or health <=500 or health <= (.75 * maxhealth):
+            if focus_used and not resolve_used:
+                aiMove =5
+            else:
+                if summon_used == False:
+                    aiMove =6
+                else:
+                    aiMove = 7
+        else:
+            aiMove = 4
+    else:
+        aiMove = 4 #Block or Enhance
+    return aiMove
 enhancer_mapping = {'ATK': 'Increase Attack %',
 'DEF': 'Increase Defense %',
 'STAM': 'Increase Stamina',
@@ -19310,8 +19599,8 @@ title_enhancer_mapping = {'ATK': 'Increase Base Attack ',
 'STANCE': 'Swap your Attack & Defense, Increase Defense',
 'CONFUSE': 'Swap Opponent Attack & Defense, Decrease Opponent Defense',
 'BLINK': 'Decrease your Stamina, Increase Opponent Stamina',
-'SLOW': 'Decrease Opponent Stamina, Swap Stamina with Opponent',
-'HASTE': ' Increase your Stamina, Swap Stamina with Opponent',
+'SLOW': 'Increase Opponent Stamina, Decrese Your Stamina then Swap Stamina with Opponent',
+'HASTE': ' Increase your Stamina, Decrease Opponent Stamina then Swap Stamina with Opponent',
 'FEAR': 'Decrease your Health, Decrease Opponent Attack and Defense',
 'SOULCHAIN': 'You and Your Opponent Stamina Link',
 'GAMBLE': 'You and Your Opponent Health Link',
@@ -19439,10 +19728,15 @@ abyss_floor_reward_list = [10,20,30,40,50,60,70,80,90,100]
 
 crown_rift_universe_mappings = {'Crown Rift Awakening': 3, 'Crown Rift Slayers': 2, 'Crown Rift Madness': 5}
 Healer_Enhancer_Check = ['HLT', 'LIFE']
-#DPS_Enhancer_Check = ['FLOG', 'WITHER', 'LIFE', 'DRAIN']
+DPS_Enhancer_Check = ['FLOG', 'WITHER']
+INC_Enhancer_Check = ['ATK', 'DEF']
+TRADE_Enhancer_Check = ['RAGE', 'BRACE']
 Gamble_Enhancer_Check = ['GAMBLE', 'SOULCHAIN']
+SWITCH_Enhancer_Check = ['STANCE', 'CONFUSE']
+Time_Enhancer_Check = ['HASTE', 'SLOW','BLINK']
 Support_Enhancer_Check = ['DEF', 'ATK', 'WITHER', 'FLOG']
-Sacrifice_Enhancer_Check = ['BZRK', 'CRYSTAL', 'GROWTH', 'FEAR']
+Sacrifice_Enhancer_Check = ['BZRK', 'CRYSTAL']
+FORT_Enhancer_Check = ['GROWTH', 'FEAR']
 Stamina_Enhancer_Check = ['STAM', 'DRAIN']
 Control_Enhancer_Check = ['SOULCHAIN']
 Damage_Enhancer_Check = ['DESTRUCTION', 'BLAST']

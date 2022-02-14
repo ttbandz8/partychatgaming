@@ -103,6 +103,7 @@ class Profile(commands.Cog):
         card = db.queryCard({'NAME':str(d['CARD'])})
         title = db.queryTitle({'TITLE': str(d['TITLE'])})
         arm = db.queryArm({'ARM': str(d['ARM'])})
+        user_info = db.queryUser(query)
         vault = db.queryVault({'DID': d['DID']})
         if card:
             try:
@@ -300,6 +301,7 @@ class Profile(commands.Cog):
                         embedVar.set_footer(text=f"EXP Until Next Level: {150 - card_exp}\nRebirth Buff: +{rebirthBonus}\n♾️ {traitmessage}\n{warningmessage}")
                     else:
                         embedVar.set_footer(text=f"Max Level")
+                    embedVar.set_author(name=f"{ctx.author}", icon_url=user_info['AVATAR'])
                     
                     await ctx.send(embed=embedVar)
                     return
@@ -2294,7 +2296,7 @@ class Profile(commands.Cog):
                     if uni['TIER'] != 9 and uni['HAS_CROWN_TALES'] and uni['HAS_DUNGEON']:
                         available_universes.append(uni)
             
-            vault_query = {'OWNER' : str(ctx.author)}
+            vault_query = {'DID' : str(ctx.author.id)}
             vault = db.altQueryVault(vault_query)
             current_titles = vault['TITLES']
             current_cards = vault['CARDS']
@@ -2356,10 +2358,12 @@ class Profile(commands.Cog):
 
             async def custom_function(self, button_ctx):
                 if button_ctx.author == ctx.author:
-                    updated_vault = db.queryVault({'OWNER': user['DISNAME']})
-                    balance = updated_vault['BALANCE']
+                    updated_vault = db.queryVault({'DID': user['DID']})
+                    balance = updated_vault['BALANCE']        
                     universe = str(button_ctx.origin_message.embeds[0].title)
                     if button_ctx.custom_id == "title":
+                        updated_vault = db.queryVault({'DID': user['DID']})
+                        current_titles = updated_vault['TITLES']
                         price = price_adjuster(50000, universe, completed_tales, completed_dungeons)['TITLE_PRICE']
                         if len(current_titles) >=25:
                             await button_ctx.send("You have max amount of Titles. Transaction cancelled.")
@@ -2376,18 +2380,27 @@ class Profile(commands.Cog):
                             self.stop = True
                             return
 
-                        selection = random.randint(1,len(list(list_of_titles)))
-                        
-                        title = list_of_titles[selection]
-
-                        response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'TITLES': str(title['TITLE'])}})   
-                        await main.curse(price, str(ctx.author))
-                        await button_ctx.send(f"You purchased **{title['TITLE']}**.")
-                        self.stop = True
-                        return
+                        selection_length = len(list(list_of_titles)) - 1
+                        if selection_length ==0:
+                            title = list_of_titles[0]
+                        else:
+                            selection = random.randint(1,selection_length)
+                            title = list_of_titles[selection]  
+                        if title['TITLE'] in current_titles:                 
+                            await button_ctx.send(f"You already own **{title['TITLE']}**. You get a 50% refund!")
+                            bless_amount = price/2
+                            await main.bless(bless_amount, str(ctx.author.id))
+                        else:
+                            response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'TITLES': str(title['TITLE'])}})   
+                            await main.curse(price, str(ctx.author.id))
+                            await button_ctx.send(f"You purchased **{title['TITLE']}**.")
 
 
                     elif button_ctx.custom_id == "arm":
+                        updated_vault = db.queryVault({'DID': user['DID']})
+                        current_arms = []
+                        for arm in updated_vault['ARMS']:
+                            current_arms.append(arm['ARM'])
                         price = price_adjuster(25000, universe, completed_tales, completed_dungeons)['ARM_PRICE']
                         if len(current_arms) >=25:
                             await button_ctx.send("You have max amount of Arms. Transaction cancelled.")
@@ -2403,25 +2416,29 @@ class Profile(commands.Cog):
                             self.stop = True
                             return
 
+                        selection_length = len(list(list_of_arms)) - 1
+
+                        if selection_length ==0:
+                            arm = list_of_arms[0]
+                        else:
+                            selection = random.randint(1,selection_length)
+                            arm = list_of_arms[selection]['ARM']
                         
-                        selection = random.randint(1,len(list(list_of_arms)))
-
-                        arm = list_of_arms[selection]['ARM']
-
                         if arm not in current_arms:
                             response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'ARMS': {'ARM': str(arm), 'DUR': 25}}})
-                            await main.curse(price, str(ctx.author))
+                            await main.curse(price, str(ctx.author.id))
                             await button_ctx.send(f"You purchased **{arm}**.")
                         else:
                             update_query = {'$inc': {'ARMS.$[type].' + 'DUR': 10}}
                             filter_query = [{'type.' + "ARM": str(arm)}]
                             resp = db.updateVault(vault_query, update_query, filter_query)
-                            await main.curse(price, str(ctx.author))
+                            await main.curse(price, str(ctx.author.id))
                             await button_ctx.send(f"You purchased **{arm}**. Increased durability for the arm by 10 as you already own it.")
-                            self.stop = True
-                            return
+
                
                     elif button_ctx.custom_id == "t1card":
+                        updated_vault = db.queryVault({'DID': user['DID']})
+                        current_cards = updated_vault['CARDS']
                         price = price_adjuster(30000, universe, completed_tales, completed_dungeons)['C1']
                         if len(current_cards) >= 25:
                             await button_ctx.send("You have max amount of Cards. Transaction cancelled.")
@@ -2438,19 +2455,23 @@ class Profile(commands.Cog):
                             self.stop = True
                             return
 
-                        selection = random.randint(0, len(list_of_cards))
-                        card = list_of_cards[selection]
+                        selection_length = len(list(list_of_cards)) - 1
+                        if selection_length ==0:
+                            card = list_of_cards[0]
+                        else:
+                            selection = random.randint(1,selection_length)
+                            card = list_of_cards[selection]
                         card_name = card['NAME']
                         tier = 0
 
                         if card_name in current_cards:
-                            await cardlevel(self,card['NAME'], str(ctx.author), "Purchase", universe)
+                            await cardlevel(self,card['NAME'], str(ctx.author.id), "Purchase", universe)
                             await button_ctx.send(f"You received a level up for **{card_name}**!")
-                            await main.curse(price, str(ctx.author))
+                            await main.curse(price, str(ctx.author.id))
                             
                         else:
                             response = db.updateVaultNoFilter(vault_query,{'$addToSet': {'CARDS': str(card_name)}})
-                            await main.curse(price, str(ctx.author))
+                            await main.curse(price, str(ctx.author.id))
 
                             # Add Card Level config
                             if card_name not in owned_card_levels_list:
@@ -2468,11 +2489,13 @@ class Profile(commands.Cog):
 
 
                             await button_ctx.send(f"You purchased **{card_name}**!")
-                            self.stop = True
-                            return
+                            # self.stop = True
+                            # return
 
 
                     elif button_ctx.custom_id == "t2card":
+                        updated_vault = db.queryVault({'DID': user['DID']})
+                        current_cards = updated_vault['CARDS']
                         price = price_adjuster(300000, universe, completed_tales, completed_dungeons)['C2']
                         if len(current_cards) >=25:
                             await button_ctx.send("You have max amount of Cards. Transaction cancelled.")
@@ -2489,20 +2512,25 @@ class Profile(commands.Cog):
                             await button_ctx.send("There are no cards available for purchase in this range.")
                             self.stop = True
                             return
+                        
+                        selection_length = len(list(list_of_cards)) - 1
 
-                        selection = random.randint(0, len(list_of_cards))
-                        card = list_of_cards[selection]
+                        if selection_length ==0:
+                            card = list_of_cards[0]
+                        else:
+                            selection = random.randint(1,selection_length)
+                            card = list_of_cards[selection]
                         card_name = card['NAME']
                         tier = 0
 
                         if card_name in current_cards:
-                            await cardlevel(self,card['NAME'], str(ctx.author), "Purchase", universe)
+                            await cardlevel(self,card['NAME'], str(ctx.author.id), "Purchase", universe)
                             await button_ctx.send(f"You received a level up for **{card_name}**!")
-                            await main.curse(price, str(ctx.author))
+                            await main.curse(price, str(ctx.author.id))
                             
                         else:
                             response = db.updateVaultNoFilter(vault_query,{'$addToSet': {'CARDS': str(card_name)}})
-                            await main.curse(price, str(ctx.author))
+                            await main.curse(price, str(ctx.author.id))
 
                             # Add Card Level config
                             if card_name not in owned_card_levels_list:
@@ -2521,10 +2549,12 @@ class Profile(commands.Cog):
 
 
                             await button_ctx.send(f"You purchased **{card_name}**!")
-                            self.stop = True
-                            return
+                            # self.stop = True
+                            # return
 
                     elif button_ctx.custom_id == "t3card":
+                        updated_vault = db.queryVault({'DID': user['DID']})
+                        current_cards = updated_vault['CARDS']
                         price = price_adjuster(6000000, universe, completed_tales, completed_dungeons)['C3']
                         if len(current_cards) >=25:
                             await button_ctx.send("You have max amount of Cards. Transaction cancelled.")
@@ -2552,19 +2582,23 @@ class Profile(commands.Cog):
                             self.stop = True
                             return
 
-                        selection = random.randint(0, len(list_of_cards))
-                        card = list_of_cards[selection]
+                        selection_length = len(list(list_of_cards)) - 1
+                        if selection_length ==0:
+                            card = list_of_cards[0]
+                        else:
+                            selection = random.randint(1,selection_length)
+                            card = list_of_cards[selection]
                         card_name = card['NAME']
                         tier = 0
 
                         if card_name in current_cards:
-                            await cardlevel(self,card['NAME'], str(ctx.author), "Purchase", universe)
+                            await cardlevel(self,card['NAME'], str(ctx.author.id), "Purchase", universe)
                             await button_ctx.send(f"You received a level up for **{card_name}**!")
-                            await main.curse(price, str(ctx.author))
+                            await main.curse(price, str(ctx.author.id))
                             
                         else:
                             response = db.updateVaultNoFilter(vault_query,{'$addToSet': {'CARDS': str(card_name)}})
-                            await main.curse(price, str(ctx.author))
+                            await main.curse(price, str(ctx.author.id))
 
                             # Add Card Level config
                             if card_name not in owned_card_levels_list:
@@ -2583,8 +2617,8 @@ class Profile(commands.Cog):
 
                             await button_ctx.send(f"You purchased **{card_name}**!")
 
-                            self.stop = True
-                            return
+                            # self.stop = True
+                            # return
 
                 else:
                     await ctx.send("This is not your Shop.")
@@ -2637,7 +2671,7 @@ class Profile(commands.Cog):
                     if uni['TIER'] != 9 and uni['HAS_CROWN_TALES'] and uni['HAS_DUNGEON']:
                         available_universes.append(uni)
             
-            vault_query = {'OWNER' : str(ctx.author)}
+            vault_query = {'DID' : str(ctx.author.id)}
             vault = db.altQueryVault(vault_query)
             current_cards = vault['CARDS']
             owned_card_levels_list = []
