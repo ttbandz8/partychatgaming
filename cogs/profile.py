@@ -298,9 +298,9 @@ class Profile(commands.Cog):
                     """),colour=000000)
                     embedVar.set_image(url="attachment://image.png")
                     if card_lvl != 500:
-                        embedVar.set_footer(text=f"EXP Until Next Level: {150 - card_exp}\nRebirth Buff: +{rebirthBonus}\n♾️ {traitmessage}\n{warningmessage}")
+                        embedVar.set_footer(text=f"EXP Until Next Level: {150 - card_exp}\nRebirth Buff: +{rebirthBonus}\n{warningmessage}")
                     else:
-                        embedVar.set_footer(text=f"Max Level")
+                        embedVar.set_footer(text=f"Max Level\nRebirth Buff: +{rebirthBonus}\n{warningmessage}")
                     embedVar.set_author(name=f"{ctx.author}", icon_url=user_info['AVATAR'])
                     
                     await ctx.send(embed=embedVar)

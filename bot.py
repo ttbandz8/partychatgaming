@@ -597,6 +597,7 @@ async def register(ctx):
       :reminder_ribbon: - Title  *Title enhancers are applied at the start of battle.*
       :mechanical_arm: - Arm *Arm enhancers are applied passively throughout the duration of battle.*
       🧬 - Summon *Summons use Active Enhancers and are available during battle after you Resolve*
+      
       **Currency**
       :coin: - Coins *Buy Items in the /shop and /trinketshop*
       :gem: - Gems *Craft Universe Hearts and Souls*

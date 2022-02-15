@@ -9,11 +9,11 @@ traits = [{
 },{
     'NAME': 'Pokemon',
     'EFFECT': 'Evolution',
-    'TRAIT': 'When you Resolve your Defense Doubles. Mega Evolution: If Turn >30 grow 300 HP, Gigantomax: if Turn >50 grow 1000'
+    'TRAIT': 'When you Resolve your Defense Doubles. Mega Evolution: If Turn >30 grow 300 HP, Gigantomax: If Turn >50 grow 1000 HP.'
 },{
     'NAME': 'Digimon',
     'EFFECT': 'Digivolve',
-    'TRAIT': 'On Focus you Resolve. Mega Digivolution: If turn count < 5 Double ATK and DEF'
+    'TRAIT': 'On Focus you Resolve. Mega Digivolution: If turn count <5 Double ATK and DEF.'
 },{
     'NAME': 'Naruto',
     'EFFECT': 'Substitution',
@@ -25,7 +25,7 @@ traits = [{
 },{
     'NAME': 'Bleach',
     'EFFECT': 'Bankai',
-    'TRAIT': 'Gain Double Attack on Resolve. Final Stand: On Death Destroy (Turn Count * Current Stamina) Opponent Max Health'
+    'TRAIT': 'Gain Double Attack on Resolve. Final Stand: On Death Destroy (Turn Count * Current Stamina) Opponent Max Health.'
 },{
     'NAME': 'Attack On Titan',
     'EFFECT': 'Rally',
@@ -57,11 +57,11 @@ traits = [{
 },{
     'NAME': 'Solo Leveling',
     'EFFECT': 'Rulers Authority',
-    'TRAIT': 'When you Focus, opponent loses (60 + turn count) defense'
+    'TRAIT': 'When you Focus, opponent loses (60 + turn count) Defense.'
 },{
     'NAME': 'Souls',
     'EFFECT': 'Combo Recognition',
-    'TRAIT': 'When your opponent Focus, gain (60 + turn count) attack'
+    'TRAIT': 'When your opponent Focus, gain (60 + turn count) Attack.'
 },{
     'NAME': 'Death Note',
     'EFFECT': 'Scheduled Death',
@@ -77,11 +77,11 @@ traits = [{
 },{
     'NAME': 'Crown Rift Awakening',
     'EFFECT': 'Blood Awakening',
-    'TRAIT': 'Your Critical Hits do 4x Damage'
+    'TRAIT': 'Your Critical Hits do 4x Damage.'
 },{
     'NAME': 'Crown Rift Madness',
     'EFFECT': 'Madness',
-    'TRAIT': 'Do not lose turn on Focus, but also do not heal'
+    'TRAIT': 'Do not lose turn on Focus, but also do not Heal.'
 },{
     'NAME': 'Persona',
     'EFFECT': 'Summoner',
