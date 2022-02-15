@@ -18789,7 +18789,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         embedVar = discord.Embed(title=f":crown: UNIVERSE CONQUERED",
                                                                 description=f"**{selected_universe}** has been conquered\n\n{drop_response}",
                                                                 colour=0xe91e63)
-                                        embedVar.set_author(name=f"**{selected_universe}** Dungeon has been unlocked!")
+                                        embedVar.set_author(name=f"{selected_universe} Dungeon has been unlocked!")
                                         embedVar.add_field(name="Additional Reward",
                                                         value=f"You earned additional rewards in your vault! Take a look.")
                                         embedVar.set_footer(text="The /shop has been updated with new CARDS, TITLES and ARMS!")
