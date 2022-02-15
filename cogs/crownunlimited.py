@@ -3018,11 +3018,14 @@ def abyss_level_up_message(did, floor, card, title, arm):
                 update_query = {'$addToSet': {'CARD_LEVELS': {'CARD': str(card), 'LVL': 0, 'TIER': 0, 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
                 r = db.updateVaultNoFilter(vault_query, update_query)
 
-
+            counter = 2
             for destiny in d.destiny:
                 if card in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
+                    counter = counter - 1
                     db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
-                    drop_message.append(f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.")
+                    if counter >=1:
+                        drop_message.append(f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.")
+                        
 
 
         if floor == 3:
