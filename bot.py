@@ -1305,6 +1305,7 @@ async def on_slash_command_error(ctx, ex):
       await ctx.author.send(msg)
 
 
+
 @slash.slash(name="Daily", description="Receive your daily reward and quests", guild_ids=guild_ids)
 @commands.cooldown(1, 60*60*24, commands.BucketType.user)
 async def daily(ctx):

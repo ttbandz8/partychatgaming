@@ -25,7 +25,7 @@ traits = [{
 },{
     'NAME': 'Bleach',
     'EFFECT': 'Bankai',
-    'TRAIT': 'Gain Double Attack on Resolve. Final Stand: On Death deal (Turn Count * Current Stamina) DMG'
+    'TRAIT': 'Gain Double Attack on Resolve. Final Stand: On Death Destroy (Turn Count * Current Stamina) Opponent Max Health'
 },{
     'NAME': 'Attack On Titan',
     'EFFECT': 'Rally',
@@ -49,7 +49,7 @@ traits = [{
 },{
     'NAME': '7ds',
     'EFFECT': 'Power Of Friendship',
-    'TRAIT': 'On opponent Focus gain 60 Stamina and Summon Restd'
+    'TRAIT': 'On opponent Focus gain 60 Stamina and Summon Rest.'
 },{
     'NAME': 'One Punch Man',
     'EFFECT': 'Hero Reinforcement',
