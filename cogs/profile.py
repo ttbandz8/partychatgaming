@@ -2565,7 +2565,7 @@ class Profile(commands.Cog):
                             await button_ctx.send("Insufficent funds.")
                             self.stop = True
                             return
-                        card_list_response = [x for x in db.queryAllCardsBasedOnUniverse({'UNIVERSE': str(universe), 'TIER': {'$in': acceptable}})]
+                        card_list_response = [x for x in db.queryAllCardsBasedOnUniverse({'UNIVERSE': str(universe), 'TIER': {'$in': acceptable}}) if not x['EXCLUSIVE'] and not x['HAS_COLLECTION']]
                         if not card_list_response:
                             await button_ctx.send("There are no cards available for purchase in this range.")
                             self.stop = True
