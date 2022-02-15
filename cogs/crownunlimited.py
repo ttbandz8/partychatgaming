@@ -2890,7 +2890,7 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, stamina, en
             true_dmg = (random.randint(int(low), int(high))) + 25
             message = ""
 
-            miss_hit = 2  # Miss
+            miss_hit = 3  # Miss
             low_hit = 7  # Lower Damage
             med_hit = 13  # Medium Damage
             standard_hit = 19  # Standard Damage
@@ -6843,7 +6843,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             previous_moves_len = len(previous_moves)
                             # print(f"LIST LEN: {previous_moves_len}")
                             if previous_moves_len >= 6:
-                                previous_moves = previous_moves[5:]
+                                previous_moves = previous_moves[-6:]
                             
                             previous_moves_into_embed = "\n\n".join(previous_moves)
                         
@@ -18016,7 +18016,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 previous_moves_into_embed = "\n\n".join(previous_moves)
                                 #previous_moves_into_embed = f"You got One Shot! Try Again..."  
                             elif previous_moves_len >= 6:
-                                previous_moves = previous_moves[5:]
+                                previous_moves = previous_moves[-5:]
                                 previous_moves_into_embed = "\n\n".join(previous_moves)
                             else:
                                 previous_moves_into_embed = "\n\n".join(previous_moves)
@@ -18296,7 +18296,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 previous_moves_into_embed = "\n\n".join(previous_moves)
                                 #previous_moves_into_embed = f"**{t_card}** GOT DROPPED! **{o_card}** ONE SHOT THEM!"  
                             elif previous_moves_len >= 6:
-                                previous_moves = previous_moves[5:]
+                                previous_moves = previous_moves[-6:]
                                 previous_moves_into_embed = "\n\n".join(previous_moves)
                             else:
                                 previous_moves_into_embed = "\n\n".join(previous_moves)
