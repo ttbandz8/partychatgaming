@@ -2167,12 +2167,9 @@ async def quest(player, opponent, mode):
             elif str(mode) == "Tales" and quest_data['TYPE'] == "Tales" and completion >= 0:
                 message = "Tales Quest progressed!"
                 if completion == 0:
-                    if quest_data['GOAL'] == 5:
-                        await bless(reward, player.id)
-                        message = f"Tales Quest Completed! :coin:{reward} has been added to your balance."
-                    elif quest_data['GOAL'] == 3:
-                        await bless(reward, player.id)
-                        message = f"Tales Quest Completed! :coin:{reward} has been added to your balance."
+                    await bless(reward, player.id)
+                    message = f"Tales Quest Completed! :coin:{reward} has been added to your balance."
+
 
                 query = {'DID': str(player.id)}
                 update_query = {'$inc': {'QUESTS.$[type].' + "WINS": 1}}
