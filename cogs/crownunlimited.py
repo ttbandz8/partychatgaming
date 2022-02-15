@@ -2253,7 +2253,7 @@ async def destiny(player, opponent, mode):
                         await player.send(message)
                         return message
 
-                    query = {'DID': str(player.d)}
+                    query = {'DID': str(player.id)}
                     update_query = {'$inc': {'DESTINY.$[type].' + "WINS": 1}}
                     filter_query = [{'type.' + "DEFEAT": opponent}]
                     resp = db.updateVault(query, update_query, filter_query)
