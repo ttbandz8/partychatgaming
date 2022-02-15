@@ -775,7 +775,7 @@ async def register(ctx):
                         embedVar.add_field(name=f":reminder_ribbon: **Titles** */titles to open your Titles*", value=f"{title_drop_message_into_embded}", inline=True)
                         embedVar.add_field(name=f":mechanical_arm: **Arms** */arms to open your Arms*", value=f"{arm_drop_message_into_embded}", inline=True)
                         if has_destiny:
-                           embedVar.add_field(name=f"**Destinies** */destinylist to open your Destinies*", value=f"{destiny_drop_message_into_embded}", inline=False)
+                           embedVar.add_field(name=f"✨ **Destinies** */destinylist to open your Destinies*", value=f"{destiny_drop_message_into_embded}", inline=False)
                         embedVar.set_author(name=f"Registration Complete!", icon_url=user_info['AVATAR'])
                         embedVar.set_footer(text="Use /tutorial to start the tutorial match!",
                                     icon_url="https://cdn.discordapp.com/emojis/877233426770583563.gif?v=1")
