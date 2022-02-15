@@ -9,7 +9,7 @@ traits = [{
 },{
     'NAME': 'Pokemon',
     'EFFECT': 'Evolution',
-    'TRAIT': 'When you Resolve your Defense Doubles.'
+    'TRAIT': 'When you Resolve your Defense Doubles. Mega Evolution: If Turn >30 grow 300 HP, Gigantomax: if Turn >50 grow 1000'
 },{
     'NAME': 'Digimon',
     'EFFECT': 'Digivolve',
@@ -25,7 +25,7 @@ traits = [{
 },{
     'NAME': 'Bleach',
     'EFFECT': 'Bankai',
-    'TRAIT': 'Gain Double Attack on Resolve.'
+    'TRAIT': 'Gain Double Attack on Resolve. Finald Stand: On Death deal (Turn Count * Current Stamina) DMG'
 },{
     'NAME': 'Attack On Titan',
     'EFFECT': 'Rally',
@@ -48,8 +48,8 @@ traits = [{
     'TRAIT': 'On Resolve Refill Health.'
 },{
     'NAME': '7ds',
-    'EFFECT': 'Increase Power',
-    'TRAIT': 'Gain 60 Stamina on Opponent Focus.'
+    'EFFECT': 'Power Of Friendship',
+    'TRAIT': 'On opponent Focus gain 60 Stamina and Summon Restd'
 },{
     'NAME': 'One Punch Man',
     'EFFECT': 'Hero Reinforcement',
