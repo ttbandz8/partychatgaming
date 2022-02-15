@@ -3184,9 +3184,9 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
             # Font Size Adjustments
             # Name not go over Card
             name_font_size = 62
-            if len(list(d['NAME'])) >= 16 and not resolved:
+            if len(list(d['NAME'])) >= 18 and not resolved:
                 name_font_size = 45
-            if len(list(d['RNAME'])) >= 16 and resolved:
+            if len(list(d['RNAME'])) >= 18 and resolved:
                 name_font_size = 45
             if len(list(d['NAME'])) >= 20 and not resolved:
                 name_font_size = 36
@@ -3390,7 +3390,10 @@ def showsummon(url, summon, message, lvl, bond):
         # Name not go over Card
         name_font_size = 80
         if len(list(summon)) >= 10:
-            name_font_size = 62
+            name_font_size = 45
+        if len(list(summon)) >= 14:
+            name_font_size = 36
+        
 
         header = ImageFont.truetype("YesevaOne-Regular.ttf", name_font_size)
         s = ImageFont.truetype("Roboto-Bold.ttf", 22)
