@@ -2690,13 +2690,13 @@ class Profile(commands.Cog):
                 embedVar = discord.Embed(title= f"{universe_name}", description=textwrap.dedent(f"""
                 Welcome {ctx.author.mention}!
                 Your equipped card is **{card_info['NAME']}**
-                💟 **Universe Heart:** 💎 20,000
+                💟 **Universe Heart:** 💎 1,000,000
                 *Grants ability to level past 200*
 
-                🌹 **Universe Soul:** 💎 50,000
+                🌹 **Universe Soul:** 💎 500,000
                 *Grants double exp in this Universe*
 
-                ✨ **Destiny Line:** 💎 50,000
+                ✨ **Destiny Line:** 💎 100,000
                 *Grants win for a Destiny Line*
                 """), colour=0x7289da)
                 embedVar.set_image(url=universe_image)
@@ -2715,7 +2715,7 @@ class Profile(commands.Cog):
                 if button_ctx.author == ctx.author:
                     universe = str(button_ctx.origin_message.embeds[0].title)
                     if button_ctx.custom_id == "UNIVERSE_HEART":
-                        price = 20000
+                        price = 1000000
                         response = await craft_adjuster(ctx.author, vault, universe, price, button_ctx.custom_id)
                         if response['SUCCESS']:
                             await button_ctx.send(f"{response['MESSAGE']}")
@@ -2725,7 +2725,7 @@ class Profile(commands.Cog):
                             self.stop = True                           
 
                     if button_ctx.custom_id == "UNIVERSE_SOUL":
-                        price = 50000
+                        price = 500000
                         response = await craft_adjuster(ctx.author, vault, universe, price, button_ctx.custom_id)
                         if response['SUCCESS']:
                             await button_ctx.send(f"{response['MESSAGE']}")
@@ -2734,7 +2734,7 @@ class Profile(commands.Cog):
                             await button_ctx.send(f"{response['MESSAGE']}")
                             self.stop = True
                     if button_ctx.custom_id == "Destiny":
-                        price = 50000
+                        price = 100000
                         response = await craft_adjuster(ctx.author, vault, universe, price, card_info)
                         if response['SUCCESS']:
                             await button_ctx.send(f"{response['MESSAGE']}")
