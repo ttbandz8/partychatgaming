@@ -37,10 +37,10 @@ class Lookup(commands.Cog):
     async def lookup(self, ctx, player: User):
         await ctx.defer()
         try:
-            query = {'DISNAME': str(player)}
+            query = {'DID': str(player.id)}
             d = db.queryUser(query)
             m = db.queryManyMatchesPerPlayer({'PLAYER': str(player)})
-            v = db.queryVault({'OWNER': str(player)})
+            v = db.queryVault({'DID': str(player.id)})
             if d:
                 balance = v['BALANCE']
                 if balance >= 150000:

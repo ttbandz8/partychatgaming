@@ -774,7 +774,7 @@ class Profile(commands.Cog):
                     custom_function,
                 ]).run()
             else:
-                newVault = db.createVault({'OWNER': d['DISNAME']})
+                newVault = db.createVault({'OWNER': d['DISNAME'], 'DID' : d['DID']})
         except Exception as ex:
             trace = []
             tb = ex.__traceback__
@@ -1160,7 +1160,7 @@ class Profile(commands.Cog):
                 await ctx.send("There's an issue with your Titles list. Check with support.", hidden=True)
                 return
         else:
-            newVault = db.createVault({'OWNER': d['DISNAME']})
+            newVault = db.createVault({'OWNER': d['DISNAME'], 'DID' : d['DID']})
 
 
     @cog_ext.cog_slash(description="Check all your Arms", guild_ids=main.guild_ids)
@@ -1537,7 +1537,7 @@ class Profile(commands.Cog):
                 await ctx.send("There's an issue with your Arms list. Check with support.", hidden=True)
                 return
         else:
-            newVault = db.createVault({'OWNER': d['DISNAME']})
+            newVault = db.createVault({'OWNER': d['DISNAME'], 'DID' : d['DID']})
 
 
     @cog_ext.cog_slash(description="Check all your Summons", guild_ids=main.guild_ids)
@@ -1783,7 +1783,7 @@ class Profile(commands.Cog):
                 await ctx.send("There's an issue with your Summons list. Check with support.", hidden=True)
                 return
         else:
-            newVault = db.createVault({'OWNER': d['DISNAME']})
+            newVault = db.createVault({'OWNER': d['DISNAME'], 'DID' : d['DID']})
 
 
     @cog_ext.cog_slash(description="Check all your destiny lines", guild_ids=main.guild_ids)
@@ -1873,7 +1873,7 @@ class Profile(commands.Cog):
                 await ctx.send("There's an issue with your Destiny Line list. Check with support.")
                 return
         else:
-            newVault = db.createVault({'OWNER': d['DISNAME']})
+            newVault = db.createVault({'OWNER': d['DISNAME'], 'DID' : d['DID']})
 
 
     @cog_ext.cog_slash(description="Check all your Quests", guild_ids=main.guild_ids)
@@ -1929,7 +1929,7 @@ class Profile(commands.Cog):
                 await ctx.send("There's an issue with your Quest list. Check with support.", hidden=True)
                 return
         else:
-            newVault = db.createVault({'OWNER': d['DISNAME']})
+            newVault = db.createVault({'OWNER': d['DISNAME'], 'DID' : d['DID']})
 
 
     @cog_ext.cog_slash(description="Check your Balance", guild_ids=main.guild_ids)
@@ -1958,7 +1958,7 @@ class Profile(commands.Cog):
                 embedVar = discord.Embed(title= f"{icon}{'{:,}'.format(balance)}", colour=0x7289da)
                 await ctx.send(embed=embedVar)
             else:
-                newVault = db.createVault({'OWNER': d['DISNAME']})
+                newVault = db.createVault({'OWNER': d['DISNAME'], 'DID' : d['DID']})
         except:
             trace = []
             tb = ex.__traceback__
@@ -1980,7 +1980,7 @@ class Profile(commands.Cog):
     async def preset(self, ctx):
         query = {'DID': str(ctx.author.id)}
         d = db.queryUser(query)
-        vault_query = {'OWNER': d['DISNAME']}
+        vault_query = {'DID': d['DID']}
         vault = db.queryVault(vault_query)
         if vault:
             ownedcards = []
@@ -2151,14 +2151,14 @@ class Profile(commands.Cog):
                 }))
                 await ctx.send("Preset Issue Seek support.", hidden=True)
         else:
-            newVault = db.createVault({'OWNER': d['DISNAME']})
+            newVault = db.createVault({'OWNER': d['DISNAME'], 'DID' : d['DID']})
 
 
     @cog_ext.cog_slash(description="Save your current Build as Preset", guild_ids=main.guild_ids)
     async def savepreset(self, ctx):
         query = {'DID': str(ctx.author.id)}
         d = db.queryUser(query)
-        vault_query = {'OWNER': d['DISNAME']}
+        vault_query = {'DID': d['DID']}
         vault = db.queryVault(vault_query)
         if vault:
             name = d['DISNAME'].split("#",1)[0]
@@ -2265,7 +2265,7 @@ class Profile(commands.Cog):
                 }))
                 await ctx.send("Preset Issue Seek support.", hidden=True)
         else:
-            newVault = db.createVault({'OWNER': d['DISNAME']})
+            newVault = db.createVault({'OWNER': d['DISNAME'], 'DID' : d['DID']})
 
 
     @cog_ext.cog_slash(description="Open Crown Shop", guild_ids=main.guild_ids)

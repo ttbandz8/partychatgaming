@@ -2243,7 +2243,7 @@ async def destiny(player, opponent, mode):
 
                         response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'CARDS': str(destiny['EARN'])}})
                         message = f"**{destiny['NAME']}** completed! **{destiny['EARN']}** has been added to your vault!"
-                        query = {'OWNER': str(player)}
+                        query = {'DID': str(player.id)}
                         update_query = {'$inc': {'DESTINY.$[type].' + "WINS": 1},
                                         '$set': {'DESTINY.$[type].' + "COMPLETED": True}}
                         filter_query = [{'type.' + "DEFEAT": opponent}]
@@ -2256,7 +2256,7 @@ async def destiny(player, opponent, mode):
                         await player.send(message)
                         return message
 
-                    query = {'OWNER': str(player)}
+                    query = {'DID': str(player.d)}
                     update_query = {'$inc': {'DESTINY.$[type].' + "WINS": 1}}
                     filter_query = [{'type.' + "DEFEAT": opponent}]
                     resp = db.updateVault(query, update_query, filter_query)
@@ -2285,7 +2285,7 @@ async def destiny(player, opponent, mode):
                             print(f"Error in Completing Destiny: {ex}")
                         response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'CARDS': str(destiny['EARN'])}})
                         message = f"**{destiny['NAME']}** completed! **{destiny['EARN']}** has been added to your vault!"
-                        query = {'OWNER': str(player)}
+                        query = {'DID': str(player.id)}
                         update_query = {'$inc': {'DESTINY.$[type].' + "WINS": 3},
                                         '$set': {'DESTINY.$[type].' + "COMPLETED": True}}
                         filter_query = [{'type.' + "DEFEAT": opponent}]
@@ -2298,7 +2298,7 @@ async def destiny(player, opponent, mode):
                         await player.send(message)
                         return message
 
-                    query = {'OWNER': str(player)}
+                    query = {'DID': str(player.id)}
                     update_query = {'$inc': {'DESTINY.$[type].' + "WINS": 3}}
                     filter_query = [{'type.' + "DEFEAT": opponent}]
                     resp = db.updateVault(query, update_query, filter_query)
@@ -2347,14 +2347,14 @@ async def summonlevel(pet, player):
         if lvl < 10:
             # Non Level Up Code
             if exp < (lvl_req - 1):
-                query = {'OWNER': str(player)}
+                query = {'DID': str(player.id)}
                 update_query = {'$inc': {'PETS.$[type].' + "EXP": 1}}
                 filter_query = [{'type.' + "NAME": str(pet)}]
                 response = db.updateVault(query, update_query, filter_query)
 
             # Level Up Code
             if exp >= (lvl_req - 1):
-                query = {'OWNER': str(player)}
+                query = {'DID': str(player.id)}
                 update_query = {'$set': {'PETS.$[type].' + "EXP": 0}, '$inc': {'PETS.$[type].' + "LVL": 1}}
                 filter_query = [{'type.' + "NAME": str(pet)}]
                 response = db.updateVault(query, update_query, filter_query)
@@ -2362,14 +2362,14 @@ async def summonlevel(pet, player):
         if bond < 3:
             # Non Bond Level Up Code
             if bondexp < (bond_req - 1):
-                query = {'OWNER': str(player)}
+                query = {'DID': str(player.id)}
                 update_query = {'$inc': {'PETS.$[type].' + "BONDEXP": 1}}
                 filter_query = [{'type.' + "NAME": str(pet)}]
                 response = db.updateVault(query, update_query, filter_query)
 
             # Bond Level Up Code
             if bondexp >= (bond_req - 1):
-                query = {'OWNER': str(player)}
+                query = {'DID': str(player.id)}
                 update_query = {'$set': {'PETS.$[type].' + "BONDEXP": 0}, '$inc': {'PETS.$[type].' + "BOND": 1}}
                 filter_query = [{'type.' + "NAME": str(pet)}]
                 response = db.updateVault(query, update_query, filter_query)
@@ -2441,7 +2441,7 @@ async def cardlevel(self, card: str, player, mode: str, universe: str):
     if lvl < 200:
         # Experience Code
         if exp < (lvl_req - 1):
-            query = {'OWNER': str(player)}
+            query = {'DID': str(player)}
             update_query = {'$inc': {'CARD_LEVELS.$[type].' + "EXP": exp_gain}}
             filter_query = [{'type.' + "CARD": str(card)}]
             response = db.updateVault(query, update_query, filter_query)
@@ -2454,7 +2454,7 @@ async def cardlevel(self, card: str, player, mode: str, universe: str):
                 ap_buff = 1
             if (lvl + 1) % 20 == 0:
                 hlt_buff = 25
-            query = {'OWNER': str(player)}
+            query = {'DID': str(player)}
             update_query = {'$set': {'CARD_LEVELS.$[type].' + "EXP": 0},
                             '$inc': {'CARD_LEVELS.$[type].' + "LVL": 1, 'CARD_LEVELS.$[type].' + "ATK": atk_def_buff,
                                      'CARD_LEVELS.$[type].' + "DEF": atk_def_buff,
@@ -2466,7 +2466,7 @@ async def cardlevel(self, card: str, player, mode: str, universe: str):
     if lvl < 500 and lvl >= 200 and has_universe_heart:
         # Experience Code
         if exp < (lvl_req - 1):
-            query = {'OWNER': str(player)}
+            query = {'DID': str(player)}
             update_query = {'$inc': {'CARD_LEVELS.$[type].' + "EXP": exp_gain}}
             filter_query = [{'type.' + "CARD": str(card)}]
             response = db.updateVault(query, update_query, filter_query)
@@ -2479,7 +2479,7 @@ async def cardlevel(self, card: str, player, mode: str, universe: str):
                 ap_buff = 1
             if (lvl + 1) % 20 == 0:
                 hlt_buff = 25
-            query = {'OWNER': str(player)}
+            query = {'DID': str(player)}
             update_query = {'$set': {'CARD_LEVELS.$[type].' + "EXP": 0},
                             '$inc': {'CARD_LEVELS.$[type].' + "LVL": 1, 'CARD_LEVELS.$[type].' + "ATK": atk_def_buff,
                                      'CARD_LEVELS.$[type].' + "DEF": atk_def_buff,
@@ -9211,7 +9211,27 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                            t_defense,o_stamina,o_attack,o_defense, o_health)
                                             else:
                                                 aiMove = 1
-                                        elif o_stamina == 0:
+                                        elif o_health <=350: #Killing Blow
+                                            if t_enhancer['TYPE'] == "BLAST":
+                                                if t_stamina >=20:
+                                                    aiMove =4
+                                                else:
+                                                    aiMove =1
+                                            elif t_enhancer['TYPE'] == "WAVE" and (turn_total % 10 == 0 or turn_total == 0 or turn_total == 1):
+                                                if t_stamina >=20:
+                                                    aiMove =4
+                                                else:
+                                                    aiMove =1
+                                            else:
+                                                if t_stamina >= 90:
+                                                    aiMove = 1
+                                                elif t_stamina >= 80:
+                                                    aiMove =3
+                                                elif t_stamina >=30:
+                                                    aiMove=2
+                                                else:
+                                                    aiMove=1
+                                        elif o_stamina < 10:
                                             aiMove = 1
                                         elif t_health <= (.50 * t_max_health) and t_used_resolve == False and t_used_focus:
                                             aiMove = 5
@@ -12418,6 +12438,26 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                         t_defense,o_stamina,o_attack,o_defense, o_health)
                                         else:
                                             aiMove = 1
+                                    elif o_health <=350: #Killing Blow
+                                        if t_enhancer['TYPE'] == "BLAST":
+                                            if t_stamina >=20:
+                                                aiMove =4
+                                            else:
+                                                aiMove =1
+                                        elif t_enhancer['TYPE'] == "WAVE" and (turn_total % 10 == 0 or turn_total == 0 or turn_total == 1):
+                                            if t_stamina >=20:
+                                                aiMove =4
+                                            else:
+                                                aiMove =1
+                                        else:
+                                            if t_stamina >= 90:
+                                                aiMove = 1
+                                            elif t_stamina >= 80:
+                                                aiMove =3
+                                            elif t_stamina >=30:
+                                                aiMove=2
+                                            else:
+                                                aiMove=1
                                     elif o_stamina < 10:
                                         if t_enhancer['TYPE'] in Gamble_Enhancer_Check:
                                             if t_stamina >= 20:
@@ -14356,7 +14396,27 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                             c_defense,t_stamina,t_attack,t_defense, o_health)
                                                 else:
                                                     aiMove = 1
-                                            elif t_stamina == 0:
+                                            elif t_health <=350: #Killing Blow
+                                                if c_enhancer['TYPE'] == "BLAST":
+                                                    if c_stamina >=20:
+                                                        aiMove =4
+                                                    else:
+                                                        aiMove =1
+                                                elif c_enhancer['TYPE'] == "WAVE" and (turn_total % 10 == 0 or turn_total == 0 or turn_total == 1):
+                                                    if c_stamina >=20:
+                                                        aiMove =4
+                                                    else:
+                                                        aiMove =1
+                                                else:
+                                                    if c_stamina >= 90:
+                                                        aiMove = 1
+                                                    elif c_stamina >= 80:
+                                                        aiMove =3
+                                                    elif c_stamina >=30:
+                                                        aiMove=2
+                                                    else:
+                                                        aiMove=1
+                                            elif t_stamina < 10:
                                                 aiMove = 1
                                             elif c_health <= (.50 * c_max_health) and c_used_resolve == False and c_used_focus:
                                                 aiMove = 5
@@ -16667,6 +16727,26 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                            t_defense,c_stamina,c_attack,c_defense, c_health)
                                             else:
                                                 aiMove = 1
+                                        elif c_health <=350: #Killing Blow
+                                            if t_enhancer['TYPE'] == "BLAST":
+                                                if t_stamina >=20:
+                                                    aiMove =4
+                                                else:
+                                                    aiMove =1
+                                            elif t_enhancer['TYPE'] == "WAVE" and (turn_total % 10 == 0 or turn_total == 0 or turn_total == 1):
+                                                if t_stamina >=20:
+                                                    aiMove =4
+                                                else:
+                                                    aiMove =1
+                                            else:
+                                                if t_stamina >= 90:
+                                                    aiMove = 1
+                                                elif t_stamina >= 80:
+                                                    aiMove =3
+                                                elif t_stamina >=30:
+                                                    aiMove=2
+                                                else:
+                                                    aiMove=1
                                         elif c_stamina < 10:
                                             aiMove = 1
                                         elif t_stamina >= 160 and (t_health >= c_health):
@@ -18833,24 +18913,24 @@ def update_arm_durability(self, vault, arm, universe):
                         current_gems.append(gems['UNIVERSE'])
 
                     if selected_universe in current_gems:
-                        query = {'OWNER': str(vault['OWNER'])}
+                        query = {'DID': str(vault['DID'])}
                         update_query = {'$inc': {'GEMS.$[type].' + "GEMS": dismantle_amount}}
                         filter_query = [{'type.' + "UNIVERSE": selected_universe}]
                         response = db.updateVault(query, update_query, filter_query)
                     else:
-                        response = db.updateVaultNoFilter({'OWNER': str(vault['OWNER'])},{'$addToSet':{'GEMS': {'UNIVERSE': selected_universe, 'GEMS': dismantle_amount, 'UNIVERSE_HEART': False, 'UNIVERSE_SOUL': False}}})
+                        response = db.updateVaultNoFilter({'DID': str(vault['DID'])},{'$addToSet':{'GEMS': {'UNIVERSE': selected_universe, 'GEMS': dismantle_amount, 'UNIVERSE_HEART': False, 'UNIVERSE_SOUL': False}}})
 
 
-                    query = {'OWNER': str(vault['OWNER'])}
+                    query = {'DID': str(vault['DID'])}
                     update_query = {'$pull': {'ARMS': {'ARM': str(arm['ARM'])}}}
                     resp = db.updateVaultNoFilter(query, update_query)
 
-                    user_query = {'DISNAME': str(vault['OWNER'])}
+                    user_query = {'DID': str(vault['DID'])}
                     user_update_query = {'$set': {'ARM': 'Stock'}}
                     user_resp = db.updateUserNoFilter(user_query, user_update_query)
                     return {"MESSAGE": f"**{arm['ARM']}** has been dismantled after losing all ⚒️ durability, you earn 💎 {str(dismantle_amount)}. Your arm will be **Stock** after your next match."}
                 else:
-                    query = {'OWNER': str(vault['OWNER'])}
+                    query = {'DID': str(vault['DID'])}
                     update_query = {'$inc': {'ARMS.$[type].' + 'DUR': -1}}
                     filter_query = [{'type.' + "ARM": str(arm['ARM'])}]
                     resp = db.updateVault(query, update_query, filter_query)
@@ -19845,7 +19925,10 @@ async def ai_enhancer_moves(turn_total,focus, resolve, summon, stamina, enhancer
             if focus_used ==False:
                 aiMove=4
             else:
-                aiMove=7
+                if enhancer == "BLINK":
+                    aiMove =4
+                else:
+                    aiMove=7
     elif enhancer in SWITCH_Enhancer_Check:
         if enhancer == "CONFUSE":
             if oppdefense >= defense:

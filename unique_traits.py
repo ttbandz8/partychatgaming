@@ -25,7 +25,7 @@ traits = [{
 },{
     'NAME': 'Bleach',
     'EFFECT': 'Bankai',
-    'TRAIT': 'Gain Double Attack on Resolve. Finald Stand: On Death deal (Turn Count * Current Stamina) DMG'
+    'TRAIT': 'Gain Double Attack on Resolve. Final Stand: On Death deal (Turn Count * Current Stamina) DMG'
 },{
     'NAME': 'Attack On Titan',
     'EFFECT': 'Rally',

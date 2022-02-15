@@ -36,7 +36,7 @@ class Titles(commands.Cog):
         user_query = {'DID': str(ctx.author.id)}
         user = db.queryUser(user_query)
 
-        vault_query = {'OWNER' : str(ctx.author)}
+        vault_query = {'DID' : str(ctx.author.id)}
         vault = db.altQueryVault(vault_query)
 
         resp = db.queryTitle({'TITLE': {"$regex": f"^{str(title_name)}$", "$options": "i"}})

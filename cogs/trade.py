@@ -171,7 +171,7 @@ class Trade(commands.Cog):
                     bsummons = ", ".join(trade_check['BSUMMONS'])
                     buyer = trade_check['BUYER']
                     buyer_info = db.queryUser({'DISNAME': str(buyer)})
-                    bvault = db.queryVault({'OWNER' : buyer_info['DISNAME']})
+                    bvault = db.queryVault({'DID' : buyer_info['DID']})
                     embedVar = discord.Embed(title= f"{trade_check['MERCHANT']}'s Current Trade", description=textwrap.dedent(f"""
                     👨‍🏫 **{trade_check['MERCHANT']}** :coin: ~ {'{:,}'.format(trade_check['MCOIN'])}
                     🎴 {mcards}
@@ -568,7 +568,7 @@ class Trade(commands.Cog):
             item = 'P'
             user = db.queryUser({'DID': str(ctx.author.id)})
             if user:
-                vault = db.queryVault({'OWNER': str(ctx.author)})
+                vault = db.queryVault({'DID': str(ctx.author.id)})
                 if vault:
                     mtrade = db.queryTrade({'MERCHANT' : str(ctx.author), 'OPEN' : True})
                     if mtrade:

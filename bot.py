@@ -911,14 +911,14 @@ async def rebirth(ctx):
                            if 'Braum' not in owned_cards:
                               card_level_list.append({'CARD': 'Braum', 'LVL': 0, 'TIER': 1, 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0})
 
-                           delete = db.deleteVault({'OWNER': user_is_validated['DISNAME']})
+                           delete = db.deleteVault({'DID': user_is_validated['DID']})
                            vault = db.createVault(data.newVault({'OWNER': user_is_validated['DISNAME'], 'DID': str(user_is_validated['DID']), 'GEMS': [], 'CARDS': ['Twice','Charmander','Braum'], 'TITLES': ['Reborn'], 'ARMS': [{'ARM': 'Reborn Stock', 'DUR': 999999}],'DECK': [{'CARD': 'Charmander', 'TITLE': 'Reborn', 'ARM': 'Reborn Stock', 'PET': 'Chick'}, {'CARD': 'Twice', 'TITLE': 'Reborn', 'ARM': 'Reborn Stock', 'PET': 'Chick'}, {'CARD': 'Braum', 'TITLE': 'Reborn', 'ARM': 'Reborn Stock', 'PET': 'Chick'}], 'PETS' : [{'NAME': 'Chick', 'LVL': 1, 'EXP': 0, 'Heal': 10, 'TYPE': 'HLT', 'BOND': 2, 'BONDEXP': 0, 'PATH': "https://res.cloudinary.com/dkcmq8o15/image/upload/v1622307902/Pets/chick.jpg"}], 'CARD_LEVELS': card_level_list}))
                            if vault:
                               cardList = ['Charmander', 'Twice', 'Braum']
                               for card in cardList:
                                  for destiny in d.destiny:
                                     if card in destiny["USE_CARDS"]:
-                                       db.updateVaultNoFilter({'OWNER': user_is_validated['DISNAME']},{'$addToSet':{'DESTINY': destiny}})
+                                       db.updateVaultNoFilter({'DID': user_is_validated['DID']},{'$addToSet':{'DESTINY': destiny}})
                                        message = f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault."
                                        await button_ctx.send(message)
                               db.updateUserNoFilter({'DID': str(ctx.author.id)}, {'$set': {'CARD': 'Charmander', 'TITLE': 'Reborn', 'ARM':'Reborn Stock'}})
@@ -951,14 +951,14 @@ async def rebirth(ctx):
                            if 'Malphite' not in owned_cards:
                               card_level_list.append({'CARD': 'Malphite', 'LVL': 0, 'TIER': 1, 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0})
 
-                           delete = db.deleteVault({'OWNER': user_is_validated['DISNAME']})
+                           delete = db.deleteVault({'DID': user_is_validated['DISNAME']})
                            vault = db.createVault(data.newVault({'OWNER': user_is_validated['DISNAME'], 'DID': str(user_is_validated['DID']), 'GEMS': [], 'CARDS': ['Kirishima','Squirtle','Malphite'], 'TITLES': ['Reborn Soldier'], 'ARMS': [{'ARM': 'Deadgun', 'DUR': 999999}], 'DECK': [{'CARD': 'Kirishima', 'TITLE': 'Reborn Soldier', 'ARM': 'Deadgun', 'PET': 'Chick'}, {'CARD': 'Squirtle', 'TITLE': 'Reborn Soldier', 'ARM': 'Deadgun', 'PET': 'Chick'}, {'CARD': 'Malphite', 'TITLE': 'Reborn Soldier', 'ARM': 'Deadgun', 'PET': 'Chick'}], 'PETS' : [{'NAME': 'Chick', 'LVL': 3, 'EXP': 0, 'Heal': 10, 'TYPE': 'HLT', 'BOND': 2, 'BONDEXP': 0, 'PATH': "https://res.cloudinary.com/dkcmq8o15/image/upload/v1622307902/Pets/chick.jpg"}], 'CARD_LEVELS': card_level_list}))
                            if vault:
                               cardList = ['Squirtle', 'Malphite', 'Kirishima']
                               for card in cardList:
                                  for destiny in d.destiny:
                                     if card in destiny["USE_CARDS"]:
-                                       db.updateVaultNoFilter({'OWNER': user_is_validated['DISNAME']},{'$addToSet':{'DESTINY': destiny}})
+                                       db.updateVaultNoFilter({'DID': user_is_validated['DID']},{'$addToSet':{'DESTINY': destiny}})
                                        message = f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault."
                                        await button_ctx.send(message)
                               nCard = db.updateUserNoFilter({'DID': str(ctx.author.id)}, {'$set': {'CARD': 'Malphite', 'TITLE': 'Reborn Soldier', 'ARM':'Deadgun'}})
@@ -974,7 +974,7 @@ async def rebirth(ctx):
                               db.updateUserNoFilter({'DID': str(ctx.author.id)}, {'$set': {'DUNGEONS': ['']}})
                               db.updateUserNoFilter({'DID': str(ctx.author.id)}, {'$set': {'BOSS_WINS': ['']}})
                               db.updateUserNoFilter(query, {'$inc': {'REBIRTH': 1 }})
-                              db.updateVaultNoFilter({"OWNER" : user_is_validated['DISNAME']}, {'$set': {'BALANCE' : 1500}})
+                              db.updateVaultNoFilter({"DID" : user_is_validated['DID']}, {'$set': {'BALANCE' : 1500}})
                               await button_ctx.send(f":heart_on_fire: | You are now Rebirth Level: {user_is_validated['REBIRTH'] + 1}")
                               db.updateUserNoFilter(query, {'$set': {'TOURNAMENT_WINS': 0 }})
                               return
@@ -991,14 +991,14 @@ async def rebirth(ctx):
                            if 'Shen' not in owned_cards:
                               card_level_list.append({'CARD': 'Shen', 'LVL': 0, 'TIER': 1, 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0})
 
-                           delete = db.deleteVault({'OWNER': user_is_validated['DISNAME']})
+                           delete = db.deleteVault({'DID': user_is_validated['DID']})
                            vault = db.createVault(data.newVault({'OWNER' : user_is_validated['DISNAME'], 'DID': str(user_is_validated['DID']), 'GEMS': [], 'CARDS': ['Mineta','Bulbasaur','Shen'], 'TITLES': ['Reborn Legion'], 'ARMS': [{'ARM': 'Glaive', 'DUR': 999999}], 'DECK': [{'CARD': 'Mineta', 'TITLE': 'Reborn Legion', 'ARM': 'Glaive', 'PET': 'Chick'}, {'CARD': 'Bulbasaur', 'TITLE': 'Reborn Legion', 'ARM': 'Glaive', 'PET': 'Chick'}, {'CARD': 'Shen', 'TITLE': 'Reborn Legion', 'ARM': 'Glaive', 'PET': 'Chick'}], 'PETS' : [{'NAME': 'Chick', 'LVL': 5, 'EXP': 0, 'Heal': 10, 'TYPE': 'HLT', 'BOND': 2, 'BONDEXP': 0, 'PATH': "https://res.cloudinary.com/dkcmq8o15/image/upload/v1622307902/Pets/chick.jpg"}], 'CARD_LEVELS': card_level_list}))
                            if vault:
                               cardList = ['Bulbasaur', 'Mineta', 'Shen']
                               for card in cardList:
                                  for destiny in d.destiny:
                                     if card in destiny["USE_CARDS"]:
-                                       db.updateVaultNoFilter({'OWNER': user_is_validated['DISNAME']},{'$addToSet':{'DESTINY': destiny}})
+                                       db.updateVaultNoFilter({'DID': user_is_validated['DID']},{'$addToSet':{'DESTINY': destiny}})
                                        message = f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault."
                                        await button_ctx.send(message)
                               nCard = db.updateUserNoFilter({'DID': str(ctx.author.id)}, {'$set': {'CARD': 'Mineta', 'TITLE': 'Reborn Legion', 'ARM':'Glaive'}})
@@ -1031,14 +1031,14 @@ async def rebirth(ctx):
                            if 'Yasuo' not in owned_cards:
                               card_level_list.append({'CARD': 'Yasuo', 'LVL': 0, 'TIER': 1, 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0})
 
-                           delete = db.deleteVault({'OWNER': user_is_validated['DISNAME']})
+                           delete = db.deleteVault({'DID': user_is_validated['DID']})
                            vault = db.createVault(data.newVault({'OWNER' : user_is_validated['DISNAME'], 'DID': str(user_is_validated['DID']), 'GEMS': [], 'CARDS': ['Hawks','Clefairy','Yasuo'], 'TITLES': ['Reborn King'], 'ARMS': [{'ARM': 'Kings Glaive', 'DUR': 999999}], 'DECK': [{'CARD': 'Hawks', 'TITLE': 'Reborn King', 'ARM': 'Kings Glaive', 'PET': 'Chick'}, {'CARD': 'Clefairy', 'TITLE': 'Reborn King', 'ARM': 'Kings Glaive', 'PET': 'Chick'}, {'CARD': 'Yasuo', 'TITLE': 'Reborn King', 'ARM': 'Kings Glaive', 'PET': 'Chick'}], 'PETS' : [{'NAME': 'Chick', 'LVL': 1, 'EXP': 0, 'Heal': 10, 'TYPE': 'HLT', 'BOND': 3, 'BONDEXP': 0, 'PATH': "https://res.cloudinary.com/dkcmq8o15/image/upload/v1622307902/Pets/chick.jpg"}], 'CARD_LEVELS': card_level_list}))
                            if vault:
                               cardList = ['Hawks', 'Clefairy', 'Yasuo']
                               for card in cardList:
                                  for destiny in d.destiny:
                                     if card in destiny["USE_CARDS"]:
-                                       db.updateVaultNoFilter({'OWNER': user_is_validated['DISNAME']},{'$addToSet':{'DESTINY': destiny}})
+                                       db.updateVaultNoFilter({'DID': user_is_validated['DID']},{'$addToSet':{'DESTINY': destiny}})
                                        message = f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault."
                                        await button_ctx.send(message)
                               nCard = db.updateUserNoFilter({'DID': str(ctx.author.id)}, {'$set': {'CARD': 'Clefairy', 'TITLE': 'Reborn King', 'ARM':'Kings Glaive'}})
@@ -1071,14 +1071,14 @@ async def rebirth(ctx):
                            if 'Xayah And Rakan' not in owned_cards:
                               card_level_list.append({'CARD': 'Xayah And Rakan', 'LVL': 0, 'TIER': 1, 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0})
 
-                           delete = db.deleteVault({'OWNER': user_is_validated['DISNAME']})
+                           delete = db.deleteVault({'DID': user_is_validated['DID']})
                            vault = db.createVault(data.newVault({'OWNER' : user_is_validated['DISNAME'],'DID': str(user_is_validated['DID']), 'GEMS': [], 'CARDS': ['Stain','Onix','Xayah And Rakan'], 'TITLES': ['Reborn Legend'], 'ARMS': [{'ARM': 'Legendary Weapon', 'DUR': 999999}], 'DECK': [{'CARD': 'Stain', 'TITLE': 'Reborn Legend', 'ARM': 'Legendary Weapon', 'PET': 'Chick'}, {'CARD': 'Onix', 'TITLE': 'Reborn Legend', 'ARM': 'Legendary Weapon', 'PET': 'Chick'}, {'CARD': 'Xayah And Rakan', 'TITLE': 'Reborn Legend', 'ARM': 'Legendary Weapon', 'PET': 'Chick'}], 'PETS' : [{'NAME': 'Chick', 'LVL': 5, 'EXP': 0, 'Heal': 10, 'TYPE': 'HLT', 'BOND': 3, 'BONDEXP': 0, 'PATH': "https://res.cloudinary.com/dkcmq8o15/image/upload/v1622307902/Pets/chick.jpg"}], 'CARD_LEVELS': card_level_list}))
                            if vault:
                               cardList = ['Stain', 'Onix', 'Xayah And Rakan']
                               for card in cardList:
                                  for destiny in d.destiny:
                                     if card in destiny["USE_CARDS"]:
-                                       db.updateVaultNoFilter({'OWNER': user_is_validated['DISNAME']},{'$addToSet':{'DESTINY': destiny}})
+                                       db.updateVaultNoFilter({'DID': user_is_validated['DID']},{'$addToSet':{'DESTINY': destiny}})
                                        message = f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault."
                                        await button_ctx.send(message)
                               nCard = db.updateUserNoFilter({'DID': str(ctx.author.id)}, {'$set': {'CARD': 'Xayah And Rakan', 'TITLE': 'Reborn Legend', 'ARM':'Legendary Weapon'}})
