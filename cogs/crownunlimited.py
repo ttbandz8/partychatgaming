@@ -7729,28 +7729,30 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         embedVar = discord.Embed(
                                                             title=f"**Persona!**\n{opet_name} was summoned from {o_card}'s soul dealing **{petdmg['DMG']}** damage!!",
                                                             colour=0xe91e63)
-                                                        
-                                                        summon_file = showsummon(opet_image, opet_name, dmg['MESSAGE'], opet_lvl, opet_bond)
+                                                        if not operformance:
+                                                            summon_file = showsummon(opet_image, opet_name, dmg['MESSAGE'], opet_lvl, opet_bond)
                                                         embedVar.set_image(url="attachment://pet.png")
                                                         previous_moves.append(f"*{turn_total}:* 🩸 Persona! **{opet_name}** was summoned from **{o_card}**'s soul dealing **{petdmg['DMG']}** damage!")
                                                         await battle_msg.delete(delay=None)
-                                                        await asyncio.sleep(2)
-                                                        battle_msg = await private_channel.send(embed=embedVar, file=summon_file)
-                                                        await asyncio.sleep(2)
+                                                        if not operformance:
+                                                            await asyncio.sleep(2)
+                                                            battle_msg = await private_channel.send(embed=embedVar, file=summon_file)
+                                                            await asyncio.sleep(2)
 
 
                                                     else:
                                                         embedVar = discord.Embed(
                                                             title=f"{o_card.upper()} Summoned 🧬 **{opet_name}**",
                                                             colour=0xe91e63)
-                                                        
-                                                        summon_file = showsummon(opet_image, opet_name, dmg['MESSAGE'], opet_lvl, opet_bond)
+                                                        if not operformance:
+                                                            summon_file = showsummon(opet_image, opet_name, dmg['MESSAGE'], opet_lvl, opet_bond)
                                                         embedVar.set_image(url="attachment://pet.png")
                                                         previous_moves.append(f"*{turn_total}:* **{o_card}** Summoned 🧬 **{opet_name}**: {dmg['MESSAGE']}")
                                                         await battle_msg.delete(delay=None)
-                                                        await asyncio.sleep(2)
-                                                        battle_msg = await private_channel.send(embed=embedVar, file=summon_file)
-                                                        await asyncio.sleep(2)
+                                                        if not operformance:
+                                                            await asyncio.sleep(2)
+                                                            battle_msg = await private_channel.send(embed=embedVar, file=summon_file)
+                                                            await asyncio.sleep(2)
                                                     turn = 0
                                                 else:
                                                     previous_moves.append(f"*{turn_total}:* 🧬 **{opet_name}** needs a turn to rest...")
@@ -8853,11 +8855,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             embedVar = discord.Embed(
                                                                 title=f"**PERSONA!**\n{tpet_name} was summoned from {t_card}'s soul dealing **{petdmg['DMG']}** damage!!",
                                                                 colour=0xe91e63)
-                                                            
-                                                            tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
+                                                            if not operformance:
+                                                                tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
                                                             embedVar.set_image(url="attachment://pet.png")
                                                         else:
-                                                            tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
+                                                            if not operformance:
+                                                                tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
 
                                                             embedVar = discord.Embed(title=f"{t_card.upper()} Summoned 🧬 **{tpet_name}**", colour=0xe91e63)
                                                             
@@ -8865,9 +8868,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                             previous_moves.append(f"*{turn_total}:* **{t_card}** Summoned 🧬 **{tpet_name}**: {dmg['MESSAGE']}")
                                                         await battle_msg.delete(delay=2)
-                                                        await asyncio.sleep(2)
-                                                        battle_msg = await private_channel.send(embed=embedVar, file=tsummon_file)
-                                                        await asyncio.sleep(2)
+                                                        
+                                                        if not operformance:
+                                                            await asyncio.sleep(2)
+                                                            battle_msg = await private_channel.send(embed=embedVar, file=tsummon_file)
+                                                            await asyncio.sleep(2)
                                                         turn = 1
                                                     else:
                                                         previous_moves.append(f"*{turn_total}:* 🧬 **{opet_name}** needs a turn to rest...")
@@ -9707,8 +9712,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         embedVar = discord.Embed(
                                                             title=f"**PERSONA!**\n{tpet_name} was summoned from {t_card}'s soul dealing **{petdmg['DMG']}** damage!!",
                                                             colour=0xe91e63)
-                                                        
-                                                        tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
+                                                        if not operformance:
+                                                            tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
                                                         embedVar.set_image(url="attachment://pet.png")
                                                         previous_moves.append(f"*{turn_total}:* 🩸 Persona! {tpet_name} was summoned from {t_card}'s soul dealing {petdmg['DMG']} damage!")
                                                     else:
@@ -9716,17 +9721,19 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             title=f"{t_card.upper()} Summoned 🧬 **{tpet_name}**",
                                                             colour=0xe91e63)
                                                         
-                                                        
-                                                        tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
+                                                        if not operformance:
+                                                            tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
                                                         
                                                         
                                                         embedVar.set_image(url="attachment://pet.png")
 
                                                         previous_moves.append(f"*{turn_total}:* **{t_card}** Summoned 🧬 **{tpet_name}**: {dmg['MESSAGE']}")
                                                     await battle_msg.delete(delay=2)
-                                                    await asyncio.sleep(2)
-                                                    battle_msg = await private_channel.send(embed=embedVar, file=tsummon_file)
-                                                    await asyncio.sleep(2)
+                                                   
+                                                    if not operformance:
+                                                        await asyncio.sleep(2)
+                                                        battle_msg = await private_channel.send(embed=embedVar, file=tsummon_file)
+                                                        await asyncio.sleep(2)
                                                     turn = 1
                                             else:
                                                 previous_moves.append(f"*{turn_total}:* {t_card} Could not summon 🧬 **{tpet_name}**. Needs rest")
@@ -11568,29 +11575,32 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             embedVar = discord.Embed(
                                                                 title=f"**PERSONA!**\n{opet_name} was summoned from {o_card}'s soul dealing **{petdmg['DMG']}** damage!!",
                                                                 colour=0xe91e63)
-                                                            
-                                                            summon_file = showsummon(opet_image, opet_name, dmg['MESSAGE'], opet_lvl, opet_bond)
+                                                            if not operformance:
+                                                                summon_file = showsummon(opet_image, opet_name, dmg['MESSAGE'], opet_lvl, opet_bond)
                                                             embedVar.set_image(url="attachment://pet.png")
                                                             
                                                             previous_moves.append(f"*{turn_total}:* 🩸 Persona! **{opet_name}** was summoned from **{o_card}**'s soul dealing **{petdmg['DMG']}** damage!")
                                                             await battle_msg.delete(delay=None)
-                                                            await asyncio.sleep(1)
-                                                            battle_msg = await private_channel.send(embed=embedVar, file=summon_file)
-                                                            await asyncio.sleep(2)
+                                                            if not operformance:
+                                                                await asyncio.sleep(1)
+                                                                battle_msg = await private_channel.send(embed=embedVar, file=summon_file)
+                                                                await asyncio.sleep(2)
 
                                                             # await button_ctx.send(embed=embedVar, file=summon_file)
                                                         else:
                                                             embedVar = discord.Embed(
                                                                 title=f"{o_card.upper()} Summoned 🧬 **{opet_name}**",
                                                                 colour=0xe91e63)
-                                                            summon_file = showsummon(opet_image, opet_name, dmg['MESSAGE'], opet_lvl, opet_bond)
+                                                            if not operformance:
+                                                                summon_file = showsummon(opet_image, opet_name, dmg['MESSAGE'], opet_lvl, opet_bond)
                                                             embedVar.set_image(url="attachment://pet.png")
                                                             
                                                             previous_moves.append(f"*{turn_total}:* **{o_card}** Summoned 🧬 **{opet_name}**: {dmg['MESSAGE']}")
                                                             await battle_msg.delete(delay=None)
-                                                            await asyncio.sleep(1)
-                                                            battle_msg = await private_channel.send(embed=embedVar, file=summon_file)
-                                                            await asyncio.sleep(2)
+                                                            if not operformance:
+                                                                await asyncio.sleep(1)
+                                                                battle_msg = await private_channel.send(embed=embedVar, file=summon_file)
+                                                                await asyncio.sleep(2)
                                                         turn = 0
                                                     else:
                                                         previous_moves.append(f"*{turn_total}:* 🧬 **{opet_name}** needs a turn to rest...")
@@ -13038,7 +13048,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                                     tcard_lvl_ap_buff)
 
                                                                 c_health = c_health - petdmg['DMG']
-                                                                tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
+                                                                if not operformance:
+                                                                    tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
 
                                                                 embedVar = discord.Embed(
                                                                     title=f"**PERSONA!**\n{tpet_name} was summoned from {t_card}'s soul dealing **{petdmg['DMG']}** damage!!",
@@ -13049,7 +13060,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 embedVar.set_image(url="attachment://pet.png")
                                                                 previous_moves.append(f"*{turn_total}:* 🩸 Persona! {tpet_name} was summoned from {t_card}'s soul dealing {petdmg['DMG']} damage!")
                                                             else:
-                                                                tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
+                                                                if not operformance:
+                                                                    tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
 
                                                                 embedVar = discord.Embed(
                                                                     title=f"{t_card.upper()} Summoned 🧬 **{tpet_name}**",
@@ -13062,9 +13074,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
 
                                                             await battle_msg.delete(delay=2)
-                                                            await asyncio.sleep(2)
-                                                            battle_msg = await private_channel.send(embed=embedVar, file=tsummon_file)
-                                                            await asyncio.sleep(2)
+                                                            
+                                                            if not operformance:
+                                                                await asyncio.sleep(2)
+                                                                battle_msg = await private_channel.send(embed=embedVar, file=tsummon_file)
+                                                                await asyncio.sleep(2)
 
                                                         if t_universe == "Persona":
                                                             petdmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense,
@@ -13189,8 +13203,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 embedVar.add_field(
                                                                     name=f"{tpet_name} used **{tpetmove_text}**!",
                                                                     value=f"{dmg['MESSAGE']}")
-                                                                
-                                                                tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
+                                                                if not operformance:
+                                                                    tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
                                                                 embedVar.set_image(url="attachment://pet.png")
                                                                 previous_moves.append(f"*{turn_total}:* 🩸 Persona! {tpet_name} was summoned from {t_card}'s soul dealing {petdmg['DMG']} damage!")
                                                             else:
@@ -13198,14 +13212,17 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     title=f"{t_card.upper()} Summoned 🧬 **{tpet_name}**",
                                                                     colour=0xe91e63)
                                                                 
-                                                                tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
+                                                                if not operformance:
+                                                                    tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
                                                                 embedVar.set_image(url="attachment://pet.png")
                                                                 previous_moves.append(f"*{turn_total}:* **{t_card}** Summoned 🧬 **{tpet_name}**: {dmg['MESSAGE']}")
 
                                                             await battle_msg.delete(delay=2)
-                                                            await asyncio.sleep(2)
-                                                            battle_msg = await private_channel.send(embed=embedVar, file=tsummon_file)
-                                                            await asyncio.sleep(2)
+                                                            
+                                                            if not operformance:
+                                                                await asyncio.sleep(2)
+                                                                battle_msg = await private_channel.send(embed=embedVar, file=tsummon_file)
+                                                                await asyncio.sleep(2)
 
                                                         if t_universe == "Persona":
                                                             petdmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense,
@@ -13328,20 +13345,23 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 colour=0xe91e63)
                                                             # embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!",
                                                             #         value=f"{dmg['MESSAGE']}")
-                                                            
-                                                            tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
+                                                            if not operformance:
+                                                                tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
                                                             embedVar.set_image(url="attachment://pet.png")
                                                             previous_moves.append(f"*{turn_total}:* 🩸 Persona! {tpet_name} was summoned from {t_card}'s soul dealing {petdmg['DMG']} damage!")
                                                         else:
-                                                            tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
+                                                            if not operformance:
+                                                                tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
                                                             embedVar = discord.Embed(title=f"{t_card} Summoned 🧬 **{tpet_name}**", colour=0xe91e63)                                                            
                                                             embedVar.set_image(url="attachment://pet.png")
                                                             previous_moves.append(f"*{turn_total}:* **{t_card}** Summoned 🧬 **{tpet_name}**: {dmg['MESSAGE']}")
                                                     
                                                         await battle_msg.delete(delay=2)
-                                                        await asyncio.sleep(2)
-                                                        battle_msg = await private_channel.send(embed=embedVar, file=tsummon_file)
-                                                        await asyncio.sleep(2)
+                                                        
+                                                        if not operformance:
+                                                            await asyncio.sleep(2)
+                                                            battle_msg = await private_channel.send(embed=embedVar, file=tsummon_file)
+                                                            await asyncio.sleep(2)
 
                                                     turn = 1
                                                 else:
@@ -15012,23 +15032,23 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             embedVar = discord.Embed(
                                                                 title=f"**PERSONA!**\n{cpet_name} was summoned from {c_card}'s soul dealing **{petdmg['DMG']}** damage!!",
                                                                 colour=0xe91e63)
-                                                            embedVar.add_field(name=f"{cpet_name} used **{cpetmove_text}**!",
-                                                                    value=f"{dmg['MESSAGE']}")
-                                                            embedVar.set_footer(text=f"{cpet_type}: {enhancer_mapping[cpet_type]}")
+                                                            if not operformance: #FindMeT
+                                                                csummon_file = showsummon(cpet_image, cpet_name, dmg['MESSAGE'], cpet_lvl, cpet_bond)
+                                                                await asyncio.sleep(2)
+                                                                battle_msg = await private_channel.send(embed=embedVar, file=csummon_file)
+                                                                await asyncio.sleep(2)
 
-                                                            embedVar.set_thumbnail(url=cpet_image)
-                                                            embedVar.set_image(url="attachment://image.png")
                                                             #await private_channel.send(embed=embedVar)
                                                             previous_moves.append(f"*{turn_total}:* 🩸 Persona! {cpet_name} was summoned from {c_card}'s soul dealing {petdmg['DMG']} damage!")
                                                         else:
-                                                            embedVar = discord.Embed(
+                                                            embedVar = discord.Embed(#Findmet
                                                                 title=f"{c_card.upper()} Summoned 🧬 {cpet_name}",
                                                                 colour=0xe91e63)
-                                                            embedVar.add_field(name=f"{cpet_name} used **{cpetmove_text}**!",
-                                                                    value=f"{dmg['MESSAGE']}")
-                                                            embedVar.set_footer(text=f"{cpet_type}: {enhancer_mapping[cpet_type]}")
-                                                            embedVar.set_thumbnail(url=cpet_image)
-                                                            embedVar.set_image(url="attachment://image.png")
+                                                            if not operformance: #FindMeT
+                                                                csummon_file = showsummon(cpet_image, cpet_name, dmg['MESSAGE'], cpet_lvl, cpet_bond)
+                                                                await asyncio.sleep(2)
+                                                                battle_msg = await private_channel.send(embed=embedVar, file=csummon_file)
+                                                                await asyncio.sleep(2)
                                                             #await private_channel.send(embed=embedVar)
                                                             previous_moves.append(f"*{turn_total}:* **{c_card}** Summoned 🧬 **{cpet_name}**: {dmg['MESSAGE']}")
                                                             turn_total = turn_total + 1
@@ -16025,7 +16045,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 embedVar = discord.Embed(
                                                                     title=f"**PERSONA!**\n{cpet_name} was summoned from {c_card}'s soul dealing **{petdmg['DMG']}** damage!!",
                                                                     colour=0xe91e63)
-                                                                csummon_file = showsummon(cpet_image, cpet_name, dmg['MESSAGE'], cpet_lvl, cpet_bond)
+                                                                if not operformance:
+                                                                    csummon_file = showsummon(cpet_image, cpet_name, dmg['MESSAGE'], cpet_lvl, cpet_bond)
+                                                                    await asyncio.sleep(2)
+                                                                    battle_msg = await private_channel.send(embed=embedVar, file=csummon_file)
+                                                                    await asyncio.sleep(2)
                                                                 embedVar.set_footer(text=f"{cpet_type}: {enhancer_mapping[cpet_type]}")
 
                                                                 embedVar.set_thumbnail(url=cpet_image)
@@ -16037,14 +16061,15 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 embedVar = discord.Embed(
                                                                     title=f"{c_card.upper()} Summoned 🧬 {cpet_name}",
                                                                     colour=0xe91e63)
-                                                                embedVar.add_field(
-                                                                    name=f"{cpet_name} used **{cpetmove_text}**!",
-                                                                    value=f"{dmg['MESSAGE']}")
-                                                                embedVar.set_footer(text=f"{cpet_type}: {enhancer_mapping[cpet_type]}")
-                                                                embedVar.set_thumbnail(url=cpet_image)
-                                                                embedVar.set_image(url="attachment://image.png")
+
                                                                 #await private_channel.send(embed=embedVar)
+                                                                if not operformance: #FindMeT
+                                                                    csummon_file = showsummon(cpet_image, cpet_name, dmg['MESSAGE'], cpet_lvl, cpet_bond)
+                                                                    await asyncio.sleep(2)
+                                                                    battle_msg = await private_channel.send(embed=embedVar, file=csummon_file)
+                                                                    await asyncio.sleep(2)
                                                                 previous_moves.append(f"*{turn_total}:* **{c_card}** Summoned 🧬 **{cpet_name}**: {dmg['MESSAGE']}")
+                                                                
                                                                 await button_ctx.defer(ignore=True)
                                                             turn = 2
                                                         else:
@@ -17309,7 +17334,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             embedVar = discord.Embed(
                                                                 title=f"**PERSONA!**\n{tpet_name} was summoned from {t_card}'s soul dealing **{petdmg['DMG']}** damage!!",
                                                                 colour=0xe91e63)
-                                                            tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
+                                                            if not operformance:
+                                                                tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
                                                             
                                                             
                                                             embedVar.set_image(url="attachment://pet.png")
@@ -17319,7 +17345,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             embedVar = discord.Embed(
                                                                 title=f"{t_card.upper()} Summoned 🧬 **{tpet_name}**",
                                                                 colour=0xe91e63)
-                                                            tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
+                                                            if not operformance:
+                                                                tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
                                                             
                                                             
                                                             embedVar.set_image(url="attachment://pet.png")
@@ -17434,7 +17461,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             embedVar = discord.Embed(
                                                                 title=f"**PERSONA!**\n{tpet_name} was summoned from {t_card}'s soul dealing **{petdmg['DMG']}** damage!!",
                                                                 colour=0xe91e63)
-                                                            tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
+                                                            if not operformance:
+                                                                tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
                                                             
                                                             
                                                             embedVar.set_image(url="attachment://pet.png")
@@ -17444,7 +17472,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             embedVar = discord.Embed(
                                                                 title=f"{t_card.upper()} Summoned 🧬 **{tpet_name}**",
                                                                 colour=0xe91e63)
-                                                            tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
+                                                            if not operformance:
+                                                                tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
                                                             
                                                             
                                                             embedVar.set_image(url="attachment://pet.png")
