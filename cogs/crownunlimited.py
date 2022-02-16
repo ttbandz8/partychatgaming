@@ -201,7 +201,7 @@ class CrownUnlimited(commands.Cog):
 
             # Take Chances Button Interaction
             if random_flee_loss <= 10 and selected_mode == "Tales":
-                drop_response = await specific_drops(str(message.author), cards[rand_card]['NAME'], universetitle)
+                drop_response = await specific_drops(str(message.author.id), cards[rand_card]['NAME'], universetitle)
                 embedVar = discord.Embed(title=f"**{drop_response}**", colour=0xf1c40f)
                 embedVar.set_footer(text="Successful Capture!",
                                     icon_url="https://cdn.discordapp.com/emojis/877233426770583563.gif?v=1")
@@ -18507,7 +18507,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                             if randomized_battle:
                                 bounty = abyss_scaling
-                                drop_response = await specific_drops(str(o_user['DISNAME']), t_card, t_universe)
+                                drop_response = await specific_drops(str(o_user['DID']), t_card, t_universe)
                                 await bless(bounty, str(o_user['DID']))
                                 embedVar = discord.Embed(title=f"VICTORY\n:coin: {bounty} Bounty Received!\n**{o_card} says**\n{o_win_description}\nThe game lasted {turn_total} rounds.\n\n{drop_response}",description=textwrap.dedent(f"""
                                 {previous_moves_into_embed}
@@ -19495,9 +19495,9 @@ async def drops(player, universe, matchcount):
 
 
 async def specific_drops(player, card, universe):
-    vault_query = {'DID': str(player.id)}
+    vault_query = {'DID': str(player)}
     vault = db.queryVault(vault_query)
-    user_query = {'DID': str(player.id)}
+    user_query = {'DID': str(player)}
     user = db.queryUser(user_query)
     rebirth = user['REBIRTH']
     owned_destinies = []
@@ -19506,7 +19506,7 @@ async def specific_drops(player, card, universe):
 
     try:
         if len(vault['CARDS']) >= 25:
-            await bless(3000, player.id)
+            await bless(3000, player)
             return f"You're maxed out on Cards! You earned :coin: 3,000 instead!"
         # Check if already owned
         card_lvls_owned = False
@@ -19518,14 +19518,14 @@ async def specific_drops(player, card, universe):
             card_owned = True
 
         if card_owned and card_lvls_owned:
-            await cardlevel(self, card, player.id, "Tales", universe)
+            await cardlevel(self, card, player, "Tales", universe)
             message = ""
-            await bless(5000, player.id)
+            await bless(5000, player)
             return f"You earned EXP for _Card:_ **{card}** + :coin: 5,000 in addition to the card bounty."
         elif card_lvls_owned:
-            await cardlevel(self, card, player.id, "Tales", universe)
+            await cardlevel(self, card, player, "Tales", universe)
             message = ""
-            await bless(5000, player.id)
+            await bless(5000, player)
             return f"You earned EXP for _Card:_ **{card}** + :coin: 5,000 in addition to the card bounty."
         else:
             card_data = db.queryCard({'NAME': str(card)})
@@ -19542,7 +19542,7 @@ async def specific_drops(player, card, universe):
                     db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
                     message = f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault."
 
-            await bless(50, player.id)
+            await bless(50, player)
             return f"You earned _Card:_ **{card}**!\n{message}"
     except Exception as ex:
         trace = []
