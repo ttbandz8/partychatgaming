@@ -506,8 +506,8 @@ class CrownUnlimited(commands.Cog):
             cteam = oteam
             cfam = ofam
             
-            if sowner['LEVEL'] < 51:
-                await ctx.send(f"🔓 Unlock **Duo** by completing **Floor 50** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
+            if sowner['LEVEL'] < 10:
+                await ctx.send(f"🔓 Unlock **Duo** by completing **Floor 9** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
                 return
             if mode in D_modes and sowner['LEVEL'] < 81:
                 await ctx.send("🔓 Unlock **Duo Dungeons** by completing **Floor 80** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
@@ -595,12 +595,12 @@ class CrownUnlimited(commands.Cog):
             sowner = db.queryUser({'DID': str(ctx.author.id)})
             companion = db.queryUser({'DID': str(user.id)})
 
-            if sowner['LEVEL'] < 26:
-                await ctx.send(f"🔓 Unlock **Co-op** by completing **Floor 25** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
+            if sowner['LEVEL'] < 8:
+                await ctx.send(f"🔓 Unlock **Co-op** by completing **Floor 7** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
                 return
             
-            if companion['LEVEL'] < 26:
-                await ctx.send(f"🔓 {user.mention} Has not unlocked **Co-op**! Complete **Floor 25** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
+            if companion['LEVEL'] < 8:
+                await ctx.send(f"🔓 {user.mention} Has not unlocked **Co-op**! Complete **Floor 7** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
                 return
             
             if mode in D_modes and sowner['LEVEL'] < 41:
@@ -965,8 +965,8 @@ class CrownUnlimited(commands.Cog):
     async def arena(self, ctx: SlashContext, mode: str):
         try:
             player = db.queryUser({"DID": str(ctx.author.id)})
-            if player['LEVEL'] < 16:
-                await ctx.send(f"🔓 Unlock **PVP** by completing **Floor 15** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
+            if player['LEVEL'] < 7:
+                await ctx.send(f"🔓 Unlock **PVP** by completing **Floor 6** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
                 return
 
             association = player['GUILD']
@@ -1352,11 +1352,11 @@ class CrownUnlimited(commands.Cog):
             sowner = db.queryUser({'DID': str(ctx.author.id)})
             opponent = db.queryUser({'DID': str(player.id)})
 
-            if sowner['LEVEL'] < 16:
-                await ctx.send(f"🔓 Unlock **PVP** by completing **Floor 15** of the 🌑 Abyss! Use /abyss to enter the abyss.")
+            if sowner['LEVEL'] < 7:
+                await ctx.send(f"🔓 Unlock **PVP** by completing **Floor 6** of the 🌑 Abyss! Use /abyss to enter the abyss.")
                 return
-            if opponent['LEVEL'] < 16:
-                await ctx.send(f"🔓 {player.mention} Has not unlocked **PVP**! Complete **Floor 15** of the 🌑 Abyss! Use /abyss to enter the abyss.")
+            if opponent['LEVEL'] < 7:
+                await ctx.send(f"🔓 {player.mention} Has not unlocked **PVP**! Complete **Floor 6** of the 🌑 Abyss! Use /abyss to enter the abyss.")
                 return
 
             oteam = sowner['TEAM']
