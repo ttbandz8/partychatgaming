@@ -3632,7 +3632,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
 
     if mode == "ABYSS":
         opponent_scaling = abyss_scaling
-        opponent_health_scaling = 100
+        opponent_health_scaling = 25
         enemy_arm = "ARM"
     if mode in B_modes:
         bossname = boss['CARD']
@@ -4001,7 +4001,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                     tcard_lvl_hlt_buff = 438
                 elif mode == "ABYSS":
                     tpet_lvl = 3
-                    tpet_bond = 1
+                    tpet_bond = 2
                     tcard_lvl = abyss_scaling
                     tcard_lvl_ap_buff = round(abyss_scaling / 3)
                     tcard_lvl_attack_defense_buff = round(abyss_scaling / 2)
@@ -4028,7 +4028,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             t_gif = t['GIF']
             t_card_path = t['PATH']
             t_rcard_path = t['RPATH']
-            t_health = t['HLT'] + (30 * currentopponent) + opponent_health_scaling + tcard_lvl_hlt_buff
+            t_health = t['HLT'] + (10 * currentopponent) + opponent_health_scaling + tcard_lvl_hlt_buff
             t_max_health = t_health
             t_stamina = t['STAM']
             t_max_stamina = t['STAM']

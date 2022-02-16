@@ -1933,9 +1933,9 @@ destiny = [
         "NAME": "The First Kenpachi",
         "WINS": 0,
         "REQUIRED": 5,
-        "DEFEAT": "Captain Unohana",
-        "USE_CARDS": ["Captain Kenpachi"],
-        "EARN": "Captain Unohana",
+        "DEFEAT": "Retsu Unohana",
+        "USE_CARDS": ["Kenpachi Zaraki"],
+        "EARN": "Retsu Unohana",
         "COMPLETED": False,
         "UNIVERSE": "Bleach"
     },
