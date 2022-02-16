@@ -1418,8 +1418,8 @@ async def gift(ctx, player: User, amount: int):
    tax = amount * .09
    amount_plus_tax = amount + tax
 
-   if balance <= int(amount):
-      await ctx.send("You do not have that amount to gift.")
+   if balance <= int(amount_plus_tax):
+      await ctx.send(f"You do not have that amount (:coin{amount_plus_tax}) to gift.")
    else:
       await bless(int(amount), user2.id)
       await curse(amount_plus_tax, ctx.author.id)
