@@ -562,9 +562,11 @@ class Profile(commands.Cog):
                         
                         elif button_ctx.custom_id == "Dismantle":
                             card_data = db.queryCard({'NAME': selected_card})
+                            card_tier =  card_data['TIER']
+                            card_health = card_data['HLT']
                             card_name = card_data['NAME']
                             selected_universe = card_data['UNIVERSE']
-                            dismantle_amount = round(card_data['PRICE'] * .05)
+                            dismantle_amount = (35000 * card_tier) + card_health
                             if card_name == current_card:
                                 await button_ctx.send("You cannot dismantle equipped cards.")
                             elif card_name in updated_vault['CARDS']:
@@ -931,7 +933,7 @@ class Profile(commands.Cog):
                             title_data = db.queryTitle({'TITLE': selected_title})
                             title_name = title_data['TITLE']
                             selected_universe = title_data['UNIVERSE']
-                            dismantle_amount = round(title_data['PRICE'] * .05)
+                            dismantle_amount = 5000
                             if title_name == current_title:
                                 await button_ctx.send("You cannot resell equipped titles.")
                             elif title_name in updated_vault['TITLES']:
@@ -1307,7 +1309,7 @@ class Profile(commands.Cog):
                             arm_data = db.queryArm({'ARM': selected_arm})
                             arm_name = arm_data['ARM']
                             selected_universe = arm_data['UNIVERSE']
-                            dismantle_amount = round(arm_data['PRICE'] * .03)
+                            dismantle_amount = 10000
                             if arm_name == current_arm:
                                 await button_ctx.send("You cannot dismantle equipped arms.")
                             elif arm_name == "Stock" or arm_name == "Reborn Stock" or arm_name == "Deadgun" or arm_name == "Glaive" or arm_name == "Kings Glaive" or arm_name == "Legendary Weapon":
@@ -2439,7 +2441,7 @@ class Profile(commands.Cog):
                     elif button_ctx.custom_id == "t1card":
                         updated_vault = db.queryVault({'DID': user['DID']})
                         current_cards = updated_vault['CARDS']
-                        price = price_adjuster(30000, universe, completed_tales, completed_dungeons)['C1']
+                        price = price_adjuster(100000, universe, completed_tales, completed_dungeons)['C1']
                         if len(current_cards) >= 25:
                             await button_ctx.send("You have max amount of Cards. Transaction cancelled.")
                             self.stop = True
@@ -2496,7 +2498,7 @@ class Profile(commands.Cog):
                     elif button_ctx.custom_id == "t2card":
                         updated_vault = db.queryVault({'DID': user['DID']})
                         current_cards = updated_vault['CARDS']
-                        price = price_adjuster(300000, universe, completed_tales, completed_dungeons)['C2']
+                        price = price_adjuster(450000, universe, completed_tales, completed_dungeons)['C2']
                         if len(current_cards) >=25:
                             await button_ctx.send("You have max amount of Cards. Transaction cancelled.")
                             self.stop = True
@@ -2696,7 +2698,7 @@ class Profile(commands.Cog):
                 🌹 **Universe Soul:** 💎 500,000
                 *Grants double exp in this Universe*
 
-                ✨ **Destiny Line:** 💎 100,000
+                ✨ **Destiny Line:** 💎 800,000
                 *Grants win for a Destiny Line*
                 """), colour=0x7289da)
                 embedVar.set_image(url=universe_image)
@@ -2735,7 +2737,7 @@ class Profile(commands.Cog):
                             self.stop = True
                     if button_ctx.custom_id == "Destiny":
                         await button_ctx.defer(ignore=True)
-                        price = 100000
+                        price = 800000
                         response = await craft_adjuster(self, ctx, vault, universe, price, card_info)
                         if not response['SUCCESS']:
                             await button_ctx.send(f"{response['MESSAGE']}")
@@ -2930,8 +2932,8 @@ def price_adjuster(price, selected_universe, completed_tales, completed_dungeons
     new_price = price
     title_price = 50000
     arm_price = 25000
-    c1 = 30000
-    c2 = 300000
+    c1 = 100000
+    c2 = 450000
     c3 = 6000000
     message = ""
     if selected_universe in completed_tales:
@@ -2946,9 +2948,9 @@ def price_adjuster(price, selected_universe, completed_tales, completed_dungeons
         new_price = round(price * .50)
         title_price = round(50000 * .50)
         arm_price = round(25000 * .50)
-        c1 = round(30000 * .50)
-        c2 = round(300000 * .50)
-        c3 = round(6000000 * .50)
+        c1 = round(c1 * .50)
+        c2 = round(c2 * .50)
+        c3 = round(c3 * .50)
         message = "**50% Sale**"
 
     response = {'NEW_PRICE': new_price,
