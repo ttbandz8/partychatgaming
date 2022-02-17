@@ -7430,7 +7430,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     embedVar = discord.Embed(title=f"{o_card} Heals from Hashirama Cells",
                                                                             description=f"**{o_card} says**\n{o_resolve_description}",
                                                                             colour=0xe91e63)
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Hashirama Cells heal you for {o_naruto_heal_buff}")
+                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Hashirama Cells heal you for **{o_naruto_heal_buff}**")
                                                     await button_ctx.defer(ignore=True)
                                                     turn_total = turn_total + 1
                                                     turn = 1
@@ -7941,8 +7941,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                             previous_moves.append(f"*{turn_total}:* **{o_card}**'s Barrier Disabled!")
 
-                                                        previous_moves.append(f"*{turn_total}:* **{t_card}**: Substitution Jutsu")
-                                                        previous_moves.append(f"*{turn_total}:* 🩸**{t_stored_damage}** has been stored. 🩸**{t_naruto_heal_buff}** total stored.")
+                                                        previous_moves.append(f"*{turn_total}:* 🩸**{t_card}**: Substitution Jutsu")
+                                                        if not t_used_resolve:
+                                                            previous_moves.append(f"*{turn_total}:* 🩸**{t_stored_damage}** Hasirama Cells stored. 🩸**{t_naruto_heal_buff}** total stored.")
 
                                                        # await button_ctx.defer(ignore=True)
                                                     elif tarm_shield_active:
@@ -7951,7 +7952,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health 
                                                             if tshield_value <=0:
                                                                 embedVar = discord.Embed(title=f"{t_card}'s' **Shield** Shattered!", description=f"{o_card} breaks the **Shield**!", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* **{t_card}**: Shield Shattered!")
+                                                                previous_moves.append(f"*{turn_total}:* 🩸**{t_card}**: Shield Shattered!")
                                                                 if oarm_barrier_active:
                                                                     oarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -7960,8 +7961,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                          #       await button_ctx.defer(ignore=True)
                                                                 tarm_shield_active = False
                                                             else:
-                                                                embedVar = discord.Embed(title=f"{t_card} Activates **Shield** 🌐", description=f"**{o_card}** strikes the Shield 🌐 **{tshield_value} Shield** Left!", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* **{o_card}** strikes **{t_card}**'s Shield 🌐 **{tshield_value} Shield** Left!")
+                                                                embedVar = discord.Embed(title=f"{t_card} Activates **Shield** 🌐", description=f"**{o_card}** strikes the Shield 🌐\n**{tshield_value} Shield** Left!", colour=0xe91e63)
+                                                                previous_moves.append(f"*{turn_total}:* **{o_card}** strikes **{t_card}**'s Shield 🌐\n**{tshield_value} Shield** Left!")
                                                                 if oarm_barrier_active:
                                                                     oarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -8598,8 +8599,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         embedVar = discord.Embed(title=f"{t_card} Heals from Hashirama Cells",
                                                                                 description=f"**{t_card} says**\n{t_resolve_description}",
                                                                                 colour=0xe91e63)
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Hashirama Cells heal you for {t_naruto_heal_buff}")
-                                                        await button_ctx.defer(ignore=True)
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Hashirama Cells heal you for **{t_naruto_heal_buff}**")
+                                                        
                                                         turn_total = turn_total + 1
                                                         turn = 0
 
@@ -9081,8 +9082,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                 previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
 
-                                                            previous_moves.append(f"*{turn_total}:* **{o_card}**: Substitution Jutsu")
-                                                            previous_moves.append(f"*{turn_total}:* 🩸**{o_stored_damage}** has been stored. 🩸**{o_naruto_heal_buff}** total stored.")
+                                                            previous_moves.append(f"*{turn_total}:* 🩸**{o_card}**: Substitution Jutsu")
+                                                            if not o_used_resolve:
+                                                                previous_moves.append(f"*{turn_total}:* 🩸**{o_stored_damage}** Hasirama Cells stored. 🩸**{o_naruto_heal_buff}** total stored.")
                                                             await button_ctx.defer(ignore=True)
 
                                                         elif oarm_shield_active:
@@ -9091,7 +9093,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_health = o_health 
                                                                 if oshield_value <=0:
                                                                     embedVar = discord.Embed(title=f"{o_card}'s' **Shield** Shattered!", description=f"{t_card} breaks the **Shield**!", colour=0xe91e63)
-                                                                    previous_moves.append(f"*{turn_total}:* **{o_card}**: Shield Shattered!")
+                                                                    previous_moves.append(f"*{turn_total}:* 🩸**{o_card}**: Shield Shattered!")
                                                                     if tarm_barrier_active:
                                                                         tarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -9100,8 +9102,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     oarm_shield_active = False
                                                                     await button_ctx.defer(ignore=True)
                                                                 else:
-                                                                    embedVar = discord.Embed(title=f"{o_card} Activates **Shield** 🌐", description=f"**{t_card}** strikes the Shield 🌐 **{oshield_value} Shield** Left!", colour=0xe91e63)
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}** strikes **{o_card}**'s Shield 🌐 **{oshield_value} Shield** Left!")
+                                                                    embedVar = discord.Embed(title=f"{o_card} Activates **Shield** 🌐", description=f"**{t_card}** strikes the Shield 🌐\n**{oshield_value} Shield** Left!", colour=0xe91e63)
+                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}** strikes **{o_card}**'s Shield 🌐\n**{oshield_value} Shield** Left!")
                                                                     if tarm_barrier_active:
                                                                         tarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -9500,7 +9502,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     embedVar = discord.Embed(title=f"{t_card} Heals from Hashirama Cells",
                                                                             description=f"**{t_card} says**\n{t_resolve_description}",
                                                                             colour=0xe91e63)
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Hashirama Cells heal you for {t_naruto_heal_buff}")
+                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Hashirama Cells heal you for **{t_naruto_heal_buff}**")
                                                     turn_total = turn_total + 1
                                                     turn = 0
 
@@ -9952,8 +9954,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_naruto_heal_buff = o_naruto_heal_buff + o_stored_damage
                                                         o_health = o_health 
                                                         embedVar = discord.Embed(title=f"{o_card}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
-                                                        previous_moves.append(f"*{turn_total}:* **{o_card}**: Substitution Jutsu")
-                                                        previous_moves.append(f"*{turn_total}:* 🩸**{o_stored_damage}** has been stored. 🩸**{o_naruto_heal_buff}** total stored.")
+                                                        previous_moves.append(f"*{turn_total}:* 🩸**{o_card}**: Substitution Jutsu")
+                                                        if not o_used_resolve:
+                                                            previous_moves.append(f"*{turn_total}:* 🩸**{o_stored_damage}** Hasirama Cells stored. 🩸**{o_naruto_heal_buff}** total stored.")
                                                         if tarm_barrier_active:
                                                             tarm_barrier_active=False
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -9971,8 +9974,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
                                                                 oarm_shield_active = False
                                                             else:
-                                                                embedVar = discord.Embed(title=f"{o_card} Activates **Shield** 🌐", description=f"**{t_card}** strikes the Shield 🌐 **{oshield_value} Shield** Left!", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* **{t_card}** strikes **{o_card}**'s Shield 🌐 **{oshield_value} Shield** Left!")
+                                                                embedVar = discord.Embed(title=f"{o_card} Activates **Shield** 🌐", description=f"**{t_card}** strikes the Shield 🌐\n**{oshield_value} Shield** Left!", colour=0xe91e63)
+                                                                previous_moves.append(f"*{turn_total}:* **{t_card}** strikes **{o_card}**'s Shield 🌐\n**{oshield_value} Shield** Left!")
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -10607,7 +10610,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     embedVar = discord.Embed(title=f"{o_card} Heals from Hashirama Cells",
                                                                             description=f"**{o_card} says**\n{o_resolve_description}",
                                                                             colour=0xe91e63)
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Hashirama Cells heal you for {o_naruto_heal_buff}")
+                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Hashirama Cells heal you for **{o_naruto_heal_buff}**")
                                                     await button_ctx.defer(ignore=True)
                                                     turn_total = turn_total + 1
                                                     turn = 1
@@ -11374,7 +11377,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         embedVar = discord.Embed(title=f"{o_card} Heals from Hashirama Cells",
                                                                                 description=f"**{o_card} says**\n{o_resolve_description}",
                                                                                 colour=0xe91e63)
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Hashirama Cells heal you for {o_naruto_heal_buff}")
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Hashirama Cells heal you for **{o_naruto_heal_buff}**")
                                                         await button_ctx.defer(ignore=True)
                                                         turn_total = turn_total + 1
                                                         turn = 1
@@ -12149,8 +12152,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                 previous_moves.append(f"*{turn_total}:* **{o_card}**'s Barrier Disabled!")
 
-                                                            previous_moves.append(f"*{turn_total}:* **{t_card}**: Substitution Jutsu")
-                                                            previous_moves.append(f"*{turn_total}:* 🩸**{t_stored_damage}** has been stored. 🩸**{t_naruto_heal_buff}** total stored.")
+                                                            previous_moves.append(f"*{turn_total}:* 🩸**{t_card}**: Substitution Jutsu")
+                                                            if not t_used_resolve:
+                                                                previous_moves.append(f"*{turn_total}:* 🩸**{t_stored_damage}** Hasirama Cells stored. 🩸**{t_naruto_heal_buff}** total stored.")
                                                             if not botActive:
                                                                 await button_ctx.defer(ignore=True)
                                                         elif tarm_shield_active:
@@ -12160,7 +12164,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = t_health 
                                                                 if tshield_value <=0:
                                                                     embedVar = discord.Embed(title=f"{t_card}'s' **Shield** Shattered!", description=f"{o_card} breaks the **Shield**!", colour=0xe91e63)
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}**: Shield Shattered!")
+                                                                    previous_moves.append(f"*{turn_total}:* 🩸**{t_card}**: Shield Shattered!")
                                                                     if oarm_barrier_active:
                                                                         oarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -12169,8 +12173,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                         await button_ctx.defer(ignore=True)
                                                                     tarm_shield_active = False
                                                                 else:
-                                                                    embedVar = discord.Embed(title=f"{t_card} Activates **Shield** 🌐", description=f"**{o_card}** strikes the Shield 🌐 **{tshield_value} Shield** Left!", colour=0xe91e63)
-                                                                    previous_moves.append(f"*{turn_total}:* **{o_card}** strikes **{t_card}**'s Shield 🌐 **{tshield_value} Shield** Left!")
+                                                                    embedVar = discord.Embed(title=f"{t_card} Activates **Shield** 🌐", description=f"**{o_card}** strikes the Shield 🌐\n**{tshield_value} Shield** Left!", colour=0xe91e63)
+                                                                    previous_moves.append(f"*{turn_total}:* **{o_card}** strikes **{t_card}**'s Shield 🌐\n**{tshield_value} Shield** Left!")
                                                                     if oarm_barrier_active:
                                                                         oarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -12922,8 +12926,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 embedVar = discord.Embed(title=f"{t_card} Heals from Hashirama Cells",
                                                                         description=f"**{t_card} says**\n{t_resolve_description}",
                                                                         colour=0xe91e63)
-                                                previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Hashirama Cells heal you for {t_naruto_heal_buff}")
-                                                await button_ctx.defer(ignore=True)
+                                                previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Hashirama Cells heal you for **{t_naruto_heal_buff}**")
+                                               
                                                 turn_total = turn_total + 1
                                                 turn = 0
 
@@ -13700,7 +13704,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if mode not in AUTO_BATTLE_modes:
                                                                 embedVar = discord.Embed(title=f"{c_card}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
                                                                 previous_moves.append(f"*{turn_total}:* {c_card}: Substitution Jutsu")
-                                                                previous_moves.append(f"*{turn_total}:* 🩸**{c_stored_damage}** has been stored. 🩸**{c_naruto_heal_buff}** total stored.")
+                                                                if not c_used_resolve:
+                                                                    previous_moves.append(f"*{turn_total}:* 🩸**{c_stored_damage}** Hasirama Cells stored. 🩸**{c_naruto_heal_buff}** total stored.")
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -13718,7 +13723,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                         previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
                                                                     carm_shield_active = False
                                                                 else:
-                                                                    embedVar = discord.Embed(title=f"{c_card} Activates **Shield** 🌐", description=f"**{t_card}** strikes the Shield 🌐 **{cshield_value} Shield** Left!", colour=0xe91e63)
+                                                                    embedVar = discord.Embed(title=f"{c_card} Activates **Shield** 🌐", description=f"**{t_card}** strikes the Shield 🌐\n**{cshield_value} Shield** Left!", colour=0xe91e63)
                                                                     if tarm_barrier_active:
                                                                         tarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -13964,7 +13969,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health
                                                             if mode not in AUTO_BATTLE_modes:
                                                                 embedVar = discord.Embed(title=f"{o_card}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* **{o_card}**: Substitution Jutsu")
+                                                                previous_moves.append(f"*{turn_total}:* 🩸**{o_card}**: Substitution Jutsu")
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -13982,8 +13987,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                         previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
                                                                     oarm_shield_active = False
                                                                 else:
-                                                                    embedVar = discord.Embed(title=f"{o_card} Activates **Shield** 🌐", description=f"**{t_card}** strikes the Shield 🌐 **{oshield_value} Shield** Left!", colour=0xe91e63)
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}** strikes **{o_card}**'s Shield 🌐 **{oshield_value} Shield** Left!")
+                                                                    embedVar = discord.Embed(title=f"{o_card} Activates **Shield** 🌐", description=f"**{t_card}** strikes the Shield 🌐\n**{oshield_value} Shield** Left!", colour=0xe91e63)
+                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}** strikes **{o_card}**'s Shield 🌐\n**{oshield_value} Shield** Left!")
                                                                     if tarm_barrier_active:
                                                                         tarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -14231,8 +14236,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_health = o_health 
                                                         if mode not in AUTO_BATTLE_modes:
                                                             embedVar = discord.Embed(title=f"{o_card}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
-                                                            previous_moves.append(f"*{turn_total}:* **{o_card}**: Substitution Jutsu")
-                                                            previous_moves.append(f"*{turn_total}:* 🩸**{o_stored_damage}** has been stored. 🩸**{o_naruto_heal_buff}** total stored.")
+                                                            previous_moves.append(f"*{turn_total}:* 🩸**{o_card}**: Substitution Jutsu")
+                                                            if not o_used_resolve:
+                                                                previous_moves.append(f"*{turn_total}:* 🩸**{o_stored_damage}** Hasirama Cells stored. 🩸**{o_naruto_heal_buff}** total stored.")
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -14250,8 +14256,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
                                                                 oarm_shield_active = False
                                                             else:
-                                                                embedVar = discord.Embed(title=f"{o_card} Activates **Shield** 🌐", description=f"**{t_card}** strikes the Shield 🌐 **{oshield_value} Shield** Left!", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* **{t_card}** strikes **{o_card}**'s Shield 🌐 **{oshield_value} Shield** Left!")
+                                                                embedVar = discord.Embed(title=f"{o_card} Activates **Shield** 🌐", description=f"**{t_card}** strikes the Shield 🌐\n**{oshield_value} Shield** Left!", colour=0xe91e63)
+                                                                previous_moves.append(f"*{turn_total}:* **{t_card}** strikes **{o_card}**'s Shield 🌐\n**{oshield_value} Shield** Left!")
                                                                 if tarm_barrier_active: 
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -14952,7 +14958,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         embedVar = discord.Embed(title=f"{c_card} Heals from Hashirama Cells",
                                                                                 description=f"**{c_card} says**\n{c_resolve_description}",
                                                                                 colour=0xe91e63)
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: Hashirama Cells heal you for {c_naruto_heal_buff}!")
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: Hashirama Cells heal you for **{c_naruto_heal_buff}**!")
                                                         
                                                         turn_total = turn_total + 1
                                                         turn = 0
@@ -15539,8 +15545,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_naruto_heal_buff = t_naruto_heal_buff + t_stored_damage
                                                             t_health = t_health 
                                                             embedVar = discord.Embed(title=f"{t_card}: Substitution Jutsu", description=f"{c_card} strikes a log", colour=0xe91e63)
-                                                            previous_moves.append(f"*{turn_total}:* **{t_card}**: Substitution Jutsu")
-                                                            previous_moves.append(f"*{turn_total}:* 🩸**{t_stored_damage}** has been stored. 🩸**{t_naruto_heal_buff}** total stored.")
+                                                            previous_moves.append(f"*{turn_total}:* 🩸**{t_card}**: Substitution Jutsu")
+                                                            if not t_used_resolve:
+                                                                previous_moves.append(f"*{turn_total}:* 🩸**{t_stored_damage}** Hasirama Cells stored. 🩸**{t_naruto_heal_buff}** total stored.")
                                                             if carm_barrier_active:
                                                                 carm_barrier_active=False
                                                                 embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -15560,8 +15567,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     #await private_channel.send(embed=embedVar)
                                                                     tarm_shield_active = False
                                                                 else:
-                                                                    embedVar = discord.Embed(title=f"{t_card} Activates **Shield** 🌐", description=f"**{c_card}** strikes the Shield 🌐 **{tshield_value} Shield** Left!", colour=0xe91e63)
-                                                                    previous_moves.append(f"*{turn_total}:* **{c_card}** strikes **{t_card}**'s Shield 🌐 **{tshield_value} Shield** Left!")
+                                                                    embedVar = discord.Embed(title=f"{t_card} Activates **Shield** 🌐", description=f"**{c_card}** strikes the Shield 🌐\n**{tshield_value} Shield** Left!", colour=0xe91e63)
+                                                                    previous_moves.append(f"*{turn_total}:* **{c_card}** strikes **{t_card}**'s Shield 🌐\n**{tshield_value} Shield** Left!")
                                                                     if carm_barrier_active:
                                                                         carm_barrier_active=False
                                                                         embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -15986,7 +15993,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             embedVar = discord.Embed(title=f"{c_card} Heals from Hashirama Cells",
                                                                                     description=f"**{c_card} says**\n{c_resolve_description}",
                                                                                     colour=0xe91e63)
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: Hashirama Cells heal you for {c_naruto_heal_buff}")
+                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: Hashirama Cells heal you for **{c_naruto_heal_buff}**")
                                                             await button_ctx.defer(ignore=True)
                                                             turn_total = turn_total + 1
                                                             turn = 0
@@ -16598,8 +16605,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_naruto_heal_buff = t_naruto_heal_buff + t_stored_damage
                                                                 t_health = t_health 
                                                                 embedVar = discord.Embed(title=f"{t_card}: Substitution Jutsu", description=f"{c_card} strikes a log", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* **{t_card}**: Substitution Jutsu")
-                                                                previous_moves.append(f"*{turn_total}:* 🩸**{t_stored_damage}** has been stored. 🩸**{t_naruto_heal_buff}** total stored.")
+                                                                previous_moves.append(f"*{turn_total}:* 🩸**{t_card}**: Substitution Jutsu")
+                                                                if not t_used_resolve:
+                                                                    previous_moves.append(f"*{turn_total}:* 🩸**{t_stored_damage}** Hasirama Cells stored. 🩸**{t_naruto_heal_buff}** total stored.")
                                                                 if carm_barrier_active:
                                                                     carm_barrier_active=False
                                                                     embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -16621,8 +16629,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                         tarm_shield_active = False
                                                                         await button_ctx.defer(ignore=True)
                                                                     else:
-                                                                        embedVar = discord.Embed(title=f"{t_card} Activates **Shield** 🌐", description=f"**{c_card}** strikes the Shield 🌐 **{tshield_value} Shield** Left!", colour=0xe91e63)
-                                                                        previous_moves.append(f"*{turn_total}:* **{c_card}** strikes **{t_card}**'s Shield 🌐 **{tshield_value} Shield** Left!")
+                                                                        embedVar = discord.Embed(title=f"{t_card} Activates **Shield** 🌐", description=f"**{c_card}** strikes the Shield 🌐\n**{tshield_value} Shield** Left!", colour=0xe91e63)
+                                                                        previous_moves.append(f"*{turn_total}:* **{c_card}** strikes **{t_card}**'s Shield 🌐\n**{tshield_value} Shield** Left!")
                                                                         if carm_barrier_active:
                                                                             carm_barrier_active=False
                                                                             embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -17299,7 +17307,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     embedVar = discord.Embed(title=f"{t_card} Heals from Hashirama Cells",
                                                                             description=f"**{t_card} says**\n{t_resolve_description}",
                                                                             colour=0xe91e63)
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Hashirama Cells heal you for {t_naruto_heal_buff}")
+                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Hashirama Cells heal you for **{t_naruto_heal_buff}**")
                                                     turn_total = turn_total + 1
                                                     turn = 0
 
@@ -17917,8 +17925,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_naruto_heal_buff = o_naruto_heal_buff + o_stored_damage
                                                             o_health = o_health 
                                                             embedVar = discord.Embed(title=f"{o_card}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
-                                                            previous_moves.append(f"*{turn_total}:* **{o_card}**: Substitution Jutsu")
-                                                            previous_moves.append(f"*{turn_total}:* 🩸**{o_stored_damage}** has been stored. 🩸**{o_naruto_heal_buff}** total stored.")
+                                                            previous_moves.append(f"*{turn_total}:* 🩸**{o_card}**: Substitution Jutsu")
+                                                            if not o_used_resolve:
+                                                                previous_moves.append(f"*{turn_total}:* 🩸**{o_stored_damage}** Hasirama Cells stored. 🩸**{o_naruto_heal_buff}** total stored.")
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -17938,8 +17947,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     #await private_channel.send(embed=embedVar)
                                                                     oarm_shield_active = False
                                                                 else:
-                                                                    embedVar = discord.Embed(title=f"{o_card} Activates **Shield** 🌐", description=f"**{t_card}** strikes the Shield 🌐 **{oshield_value} Shield** Left!", colour=0xe91e63)
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}** strikes **{o_card}**'s Shield 🌐 **{oshield_value} Shield** Left!")
+                                                                    embedVar = discord.Embed(title=f"{o_card} Activates **Shield** 🌐", description=f"**{t_card}** strikes the Shield 🌐\n**{oshield_value} Shield** Left!", colour=0xe91e63)
+                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}** strikes **{o_card}**'s Shield 🌐\n**{oshield_value} Shield** Left!")
                                                                     if tarm_barrier_active:
                                                                         tarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -18188,8 +18197,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             c_naruto_heal_buff = c_naruto_heal_buff + c_stored_damage
                                                             c_health = c_health 
                                                             embedVar = discord.Embed(title=f"{c_card}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
-                                                            previous_moves.append(f"*{turn_total}:* **{c_card}**: Substitution Jutsu")
-                                                            previous_moves.append(f"*{turn_total}:* 🩸**{c_stored_damage}** has been stored. 🩸**{c_naruto_heal_buff}** total stored.")
+                                                            previous_moves.append(f"*{turn_total}:* 🩸**{c_card}**: Substitution Jutsu")
+                                                            if not c_used_resolve:
+                                                                previous_moves.append(f"*{turn_total}:* 🩸**{c_stored_damage}** Hasirama Cells stored. 🩸**{c_naruto_heal_buff}** total stored.")
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -18209,8 +18219,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     #await private_channel.send(embed=embedVar)
                                                                     carm_shield_active = False
                                                                 else:
-                                                                    embedVar = discord.Embed(title=f"{c_card} Activates **Shield** 🌐", description=f"**{t_card}** strikes the Shield 🌐 **{cshield_value} Shield** Left!", colour=0xe91e63)
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}** strikes **{c_card}**'s Shield 🌐 **{cshield_value} Shield** Left!")
+                                                                    embedVar = discord.Embed(title=f"{c_card} Activates **Shield** 🌐", description=f"**{t_card}** strikes the Shield 🌐\n**{cshield_value} Shield** Left!", colour=0xe91e63)
+                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}** strikes **{c_card}**'s Shield 🌐\n**{cshield_value} Shield** Left!")
                                                                     if tarm_barrier_active:
                                                                         tarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
