@@ -17,11 +17,11 @@ traits = [{
 },{
     'NAME': 'Naruto',
     'EFFECT': 'Substitution',
-    'TRAIT': 'If Focused, you cannot be hit.'
+    'TRAIT': 'If Focused, you cannot be hit. Hashirama Cells heal you on resolve with damage stored during damage taken on Substitution.'
 },{
     'NAME': 'Chainsawman',
     'EFFECT': 'Devilization',
-    'TRAIT': 'When Health reaches 50% gain Double ATK and Double DEF. Strong Fear Infliction.'
+    'TRAIT': 'When Health reaches 50% gain Double ATK, Double DEF, and Double Max Health. Strong Fear Infliction.'
 },{
     'NAME': 'Bleach',
     'EFFECT': 'Bankai',
