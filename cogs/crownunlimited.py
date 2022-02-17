@@ -7939,7 +7939,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if oarm_barrier_active:
                                                             oarm_barrier_active=False
                                                             embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                            previous_moves.append(f"*{turn_total}:* **{o_card}**'s Barrier Disabled!")
+                                                            previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
 
                                                         previous_moves.append(f"*{turn_total}:* 🩸**{t_card}**: Substitution Jutsu")
                                                         if not t_used_resolve:
@@ -7952,11 +7952,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health 
                                                             if tshield_value <=0:
                                                                 embedVar = discord.Embed(title=f"{t_card}'s' **Shield** Shattered!", description=f"{o_card} breaks the **Shield**!", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* 🩸**{t_card}**: Shield Shattered!")
+                                                                previous_moves.append(f"*{turn_total}:* 🌐**{t_card}**: Shield Shattered!")
                                                                 if oarm_barrier_active:
                                                                     oarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* **{o_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
                                                                 
                                                          #       await button_ctx.defer(ignore=True)
                                                                 tarm_shield_active = False
@@ -7966,7 +7966,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if oarm_barrier_active:
                                                                     oarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* **{o_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
                                                                 
                                                          #       await button_ctx.defer(ignore=True)
 
@@ -7978,7 +7978,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if oarm_barrier_active:
                                                                 oarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* **{o_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
                                                             
                                                       #      await button_ctx.defer(ignore=True)
                                                             tbarrier_count = tbarrier_count - 1
@@ -7989,7 +7989,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if oarm_barrier_active:
                                                                 oarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* **{o_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
                                                             
                                                     #        await button_ctx.defer(ignore=True)
                                                             tarm_barrier_active = False
@@ -8005,7 +8005,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if oarm_barrier_active:
                                                                 oarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* **{o_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
                                                             
                                                     #        await button_ctx.defer(ignore=True)
                                                             
@@ -8020,7 +8020,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if oarm_barrier_active:
                                                                 oarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* **{o_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
                                                             
                                                    #         await button_ctx.defer(ignore=True)
                                                             tarm_parry_active = False
@@ -8039,7 +8039,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if oarm_barrier_active:
                                                             oarm_barrier_active=False
                                                             embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                            previous_moves.append(f"*{turn_total}:* **{o_card}**'s Barrier Disabled!")
+                                                            previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
                                                 #        await button_ctx.defer(ignore=True)
                                                     if t_health <= 0:
                                                         if t_final_stand==True:
@@ -8049,7 +8049,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if oarm_barrier_active:
                                                                     oarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* **{o_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
                                                                 previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Transformation: Last Stand!!!")
                                                 #             await button_ctx.defer(ignore=True)
                                                                 t_health = int(.75 * (t_attack + t_defense))
@@ -8064,7 +8064,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if oarm_barrier_active:
                                                                     oarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* **{o_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
                                                                 soul_damage = turn_total * t_stamina
                                                                 if soul_damage <= 0:
                                                                     soul_damage = 0
@@ -9080,7 +9080,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
 
                                                             previous_moves.append(f"*{turn_total}:* 🩸**{o_card}**: Substitution Jutsu")
                                                             if not o_used_resolve:
@@ -9093,11 +9093,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_health = o_health 
                                                                 if oshield_value <=0:
                                                                     embedVar = discord.Embed(title=f"{o_card}'s' **Shield** Shattered!", description=f"{t_card} breaks the **Shield**!", colour=0xe91e63)
-                                                                    previous_moves.append(f"*{turn_total}:* 🩸**{o_card}**: Shield Shattered!")
+                                                                    previous_moves.append(f"*{turn_total}:* 🌐**{o_card}**: Shield Shattered!")
                                                                     if tarm_barrier_active:
                                                                         tarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* **{o_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
                                                                     
                                                                     oarm_shield_active = False
                                                                     await button_ctx.defer(ignore=True)
@@ -9107,7 +9107,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     if tarm_barrier_active:
                                                                         tarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                                     await button_ctx.defer(ignore=True)
 
                                                         elif oarm_barrier_active:
@@ -9118,7 +9118,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                                 await button_ctx.defer(ignore=True)
                                                                 obarrier_count = obarrier_count - 1
                                                             elif obarrier_count==1:
@@ -9128,7 +9128,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                                 await button_ctx.defer(ignore=True)
                                                                 oarm_barrier_active = False
                                                         
@@ -9143,7 +9143,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                                 await button_ctx.defer(ignore=True)
                                                                 
                                                             elif oparry_count==1:
@@ -9156,7 +9156,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                                 await button_ctx.defer(ignore=True)
                                                                 oarm_parry_active = False
                                                         
@@ -9176,7 +9176,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                             await button_ctx.defer(ignore=True)
                                                         if o_health <= 0:
                                                             if o_final_stand==True:
@@ -9186,7 +9186,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     if tarm_barrier_active:
                                                                         tarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                                     previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Transformation: Last Stand!!!")
                                                                     
                                                                     o_health = int(.75 * (o_attack + o_defense))
@@ -9202,7 +9202,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     if tarm_barrier_active:
                                                                         tarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                                     soul_damage = turn_total * o_stamina
                                                                     if soul_damage <= 0:
                                                                         soul_damage = 0
@@ -9945,7 +9945,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     if tarm_barrier_active:
                                                         tarm_barrier_active=False
                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                        previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                        previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                     turn_total = turn_total + 1
                                                     turn = 0
                                                 else:
@@ -9960,18 +9960,18 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if tarm_barrier_active:
                                                             tarm_barrier_active=False
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                            previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                            previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                     elif oarm_shield_active:
                                                         if oshield_value > 0:
                                                             oshield_value = oshield_value -dmg['DMG']
                                                             o_health = o_health 
                                                             if oshield_value <=0:
                                                                 embedVar = discord.Embed(title=f"{o_card}'s' **Shield** Shattered!", description=f"{t_card} breaks the **Shield**!", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* **{o_card}'s** Shield Shattered!")
+                                                                previous_moves.append(f"*{turn_total}:* 🌐**{o_card}'s** Shield Shattered!")
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                                 oarm_shield_active = False
                                                             else:
                                                                 embedVar = discord.Embed(title=f"{o_card} Activates **Shield** 🌐", description=f"**{t_card}** strikes the Shield 🌐\n**{oshield_value} Shield** Left!", colour=0xe91e63)
@@ -9979,7 +9979,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
 
                                                     elif oarm_barrier_active:
                                                         if obarrier_count >1:
@@ -9989,7 +9989,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                             obarrier_count = obarrier_count - 1
                                                         elif obarrier_count==1:
                                                             embedVar = discord.Embed(title=f"{o_card}'s **Barrier** Broken!", description=f"{t_card} destroys the **Barrier**", colour=0xe91e63)
@@ -9998,7 +9998,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                             oarm_barrier_active = False
                                                     elif oarm_parry_active:
                                                         if oparry_count > 1:
@@ -10011,7 +10011,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                             
                                                         elif oparry_count==1:
                                                             oparry_damage = round(dmg['DMG'])
@@ -10023,7 +10023,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                             oarm_parry_active = False
                                                     else:
                                                         o_health = o_health - int(dmg['DMG'])
@@ -10040,7 +10040,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if tarm_barrier_active:
                                                             tarm_barrier_active=False
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                            previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                            previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                     if o_health <= 0:
                                                         if o_final_stand==True:
                                                             if o_universe == "Dragon Ball Z":
@@ -10050,7 +10050,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!") 
+                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!") 
                                                                 o_health = int(.75 * (o_attack + o_defense))
                                                                 
                                                                 o_stamina = 100
@@ -10064,7 +10064,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                                 soul_damage = turn_total * o_stamina
                                                                 icon = ':anger:'
                                                                 if soul_damage >=3000:
@@ -12136,7 +12136,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if oarm_barrier_active:
                                                             oarm_barrier_active=False
                                                             embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                            previous_moves.append(f"*{turn_total}:* **{o_card}**'s Barrier Disabled!")
+                                                            previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
                                                         previous_moves.append(f"*{turn_total}:* **{o_card}**: {dmg['MESSAGE']}")
                                                         turn_total = turn_total + 1
                                                         turn = 1
@@ -12150,7 +12150,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if oarm_barrier_active:
                                                                 oarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* **{o_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
 
                                                             previous_moves.append(f"*{turn_total}:* 🩸**{t_card}**: Substitution Jutsu")
                                                             if not t_used_resolve:
@@ -12164,11 +12164,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = t_health 
                                                                 if tshield_value <=0:
                                                                     embedVar = discord.Embed(title=f"{t_card}'s' **Shield** Shattered!", description=f"{o_card} breaks the **Shield**!", colour=0xe91e63)
-                                                                    previous_moves.append(f"*{turn_total}:* 🩸**{t_card}**: Shield Shattered!")
+                                                                    previous_moves.append(f"*{turn_total}:* 🌐**{t_card}**: Shield Shattered!")
                                                                     if oarm_barrier_active:
                                                                         oarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* **{o_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
                                                                     if not botActive:
                                                                         await button_ctx.defer(ignore=True)
                                                                     tarm_shield_active = False
@@ -12178,7 +12178,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     if oarm_barrier_active:
                                                                         oarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* **{o_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
                                                                     if not botActive:
                                                                         await button_ctx.defer(ignore=True)
 
@@ -12190,7 +12190,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if oarm_barrier_active:
                                                                     oarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* **{o_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
                                                                 if not botActive:
                                                                     await button_ctx.defer(ignore=True)
                                                                 tbarrier_count = tbarrier_count - 1
@@ -12201,7 +12201,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if oarm_barrier_active:
                                                                     oarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* **{o_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
                                                                 if not botActive:
                                                                     await button_ctx.defer(ignore=True)
                                                                 tarm_barrier_active = False
@@ -12217,7 +12217,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if oarm_barrier_active:
                                                                     oarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* **{o_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
                                                                 if not botActive:
                                                                     await button_ctx.defer(ignore=True)
                                                                 
@@ -12232,7 +12232,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if oarm_barrier_active:
                                                                     oarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* **{o_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
                                                                 if not botActive:
                                                                     await button_ctx.defer(ignore=True)
                                                                 tarm_parry_active = False
@@ -12252,7 +12252,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if oarm_barrier_active:
                                                                 oarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* **{o_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
                                                             if not botActive:
                                                                 await button_ctx.defer(ignore=True)
                                                         if t_health <= 0:
@@ -12263,7 +12263,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     if oarm_barrier_active:
                                                                         oarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* **{o_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
                                                                     previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Transformation: Last Stand!!!")
                                                                     if not botActive:
                                                                         await button_ctx.defer(ignore=True)
@@ -12279,7 +12279,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     if oarm_barrier_active:
                                                                         oarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* **{o_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
                                                                     soul_damage = turn_total * t_stamina
                                                                     icon = ':anger:'
                                                                     if soul_damage >=3000:
@@ -13692,7 +13692,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                             previous_moves.append(f"*{turn_total}:* **{t_card}**: {dmg['MESSAGE']}")
                                                         turn_total = turn_total + 1
                                                         turn = turn_selector
@@ -13709,18 +13709,18 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                         elif carm_shield_active:
                                                             if cshield_value > 0:
                                                                 cshield_value = cshield_value -dmg['DMG']
                                                                 c_health = c_health 
                                                                 if cshield_value <=0:
                                                                     embedVar = discord.Embed(title=f"{c_card}'s' **Shield** Shattered!", description=f"{t_card} breaks the **Shield**!", colour=0xe91e63)
-                                                                    previous_moves.append(f"*{turn_total}:* {c_card}'s Shield Shattered!")
+                                                                    previous_moves.append(f"*{turn_total}:* 🌐{c_card}'s Shield Shattered!")
                                                                     if tarm_barrier_active:
                                                                         tarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                                     carm_shield_active = False
                                                                 else:
                                                                     embedVar = discord.Embed(title=f"{c_card} Activates **Shield** 🌐", description=f"**{t_card}** strikes the Shield 🌐\n**{cshield_value} Shield** Left!", colour=0xe91e63)
@@ -13737,7 +13737,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                                 cbarrier_count = cbarrier_count - 1
                                                             elif cbarrier_count==1:
                                                                 embedVar = discord.Embed(title=f"{c_card}'s **Barrier** Broken!", description=f"{t_card} destroys the **Barrier**", colour=0xe91e63)
@@ -13746,7 +13746,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                                 carm_barrier_active = False
                                                         elif carm_parry_active:
                                                             if cparry_count > 1:
@@ -13760,7 +13760,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                                 
                                                             elif cparry_count==1:
                                                                 c_health = c_health
@@ -13773,7 +13773,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                                 carm_parry_active = False
                                                         else:
                                                             c_health = c_health - int(dmg['DMG'])
@@ -13792,7 +13792,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                             
-                                                                previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                         if c_health <= 0:
                                                             if c_final_stand==True:
                                                                 if c_universe == "Dragon Ball Z":
@@ -13802,7 +13802,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     if tarm_barrier_active:
                                                                         tarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                                     c_health = int(.75 * (c_attack + c_defense))
                                                                     
                                                                     c_used_resolve = True
@@ -13815,7 +13815,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     if tarm_barrier_active:
                                                                         tarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                                     soul_damage = turn_total * c_stamina
                                                                     icon = ':anger:'
                                                                     if soul_damage >=3000:
@@ -13961,7 +13961,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* 🦠 **{t_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"*{turn_total}:* 🦠 💠**{t_card}**'s Barrier Disabled!")
                                                         turn_total = turn_total + 1
                                                         turn = turn_selector
                                                     else:
@@ -13973,18 +13973,18 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                         elif oarm_shield_active:
                                                             if oshield_value > 0:
                                                                 oshield_value = oshield_value -dmg['DMG']
                                                                 o_health = o_health 
                                                                 if oshield_value <=0:
                                                                     embedVar = discord.Embed(title=f"{o_card}'s' **Shield** Shattered!", description=f"{t_card} breaks the **Shield**!", colour=0xe91e63)
-                                                                    previous_moves.append(f"*{turn_total}:* **{o_card}'s** Shield Shattered!")
+                                                                    previous_moves.append(f"*{turn_total}:* 🌐**{o_card}'s** Shield Shattered!")
                                                                     if tarm_barrier_active:
                                                                         tarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                                     oarm_shield_active = False
                                                                 else:
                                                                     embedVar = discord.Embed(title=f"{o_card} Activates **Shield** 🌐", description=f"**{t_card}** strikes the Shield 🌐\n**{oshield_value} Shield** Left!", colour=0xe91e63)
@@ -13992,7 +13992,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     if tarm_barrier_active:
                                                                         tarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
 
                                                         elif oarm_barrier_active:
                                                             if obarrier_count >1:
@@ -14002,7 +14002,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                                 obarrier_count = obarrier_count - 1
                                                             elif obarrier_count==1:
                                                                 embedVar = discord.Embed(title=f"{o_card}'s **Barrier** Broken!", description=f"{t_card} destroys the **Barrier**", colour=0xe91e63)
@@ -14011,7 +14011,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                                 oarm_barrier_active = False
                                                         elif oarm_parry_active:
                                                             if oparry_count > 1:
@@ -14024,7 +14024,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                                 
                                                             elif oparry_count==1:
                                                                 oparry_damage = round(dmg['DMG'])
@@ -14036,7 +14036,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     private_channel.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                                 oarm_parry_active = False
                                                         else:
                                                             o_health = o_health - int(dmg['DMG'])
@@ -14054,7 +14054,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     private_channel.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                         if o_health <= 0:
                                                             if o_final_stand == True:
                                                                 if mode not in AUTO_BATTLE_modes:
@@ -14065,7 +14065,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                         if tarm_barrier_active:
                                                                             tarm_barrier_active=False
                                                                             private_channel.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                            previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                            previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                                         o_health = int(.75 * (o_attack + o_defense))
                                                                         o_attack = o_attack + (.50 * o_attack)
                                                                         o_defense = o_defense + (.50 * o_defense)
@@ -14080,7 +14080,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                         if tarm_barrier_active:
                                                                             tarm_barrier_active=False
                                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                            previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                            previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                                         soul_damage = turn_total * o_stamina
                                                                         icon = ':anger:'
                                                                         if soul_damage >=3000:
@@ -14225,7 +14225,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if tarm_barrier_active:
                                                             tarm_barrier_active=False
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                            previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                            previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                         
                                                     turn_total = turn_total + 1
                                                     turn = turn_selector
@@ -14242,18 +14242,18 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                     elif oarm_shield_active:
                                                         if oshield_value > 0:
                                                             oshield_value = oshield_value -dmg['DMG']
                                                             o_health = o_health 
                                                             if oshield_value <=0:
                                                                 embedVar = discord.Embed(title=f"{o_card}'s' **Shield** Shattered!", description=f"{t_card} breaks the **Shield**!", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* **{o_card}'s** Shield Shattered!")
+                                                                previous_moves.append(f"*{turn_total}:* 🌐**{o_card}'s** Shield Shattered!")
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                                 oarm_shield_active = False
                                                             else:
                                                                 embedVar = discord.Embed(title=f"{o_card} Activates **Shield** 🌐", description=f"**{t_card}** strikes the Shield 🌐\n**{oshield_value} Shield** Left!", colour=0xe91e63)
@@ -14261,7 +14261,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if tarm_barrier_active: 
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
 
                                                     elif oarm_barrier_active:
                                                         if obarrier_count >1:
@@ -14271,7 +14271,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                             obarrier_count = obarrier_count - 1
                                                         elif obarrier_count==1:
                                                             embedVar = discord.Embed(title=f"{o_card}'s **Barrier** Broken!", description=f"{t_card} destroys the **Barrier**", colour=0xe91e63)
@@ -14280,7 +14280,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                             oarm_barrier_active = False
                                                     elif oarm_parry_active:
                                                         if oparry_count > 1:
@@ -14293,7 +14293,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                             
                                                         elif oparry_count==1:
                                                             oparry_damage = round(dmg['DMG'])
@@ -14305,7 +14305,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                             oarm_parry_active = False
                                                     else:
                                                         o_health = o_health - int(dmg['DMG'])
@@ -14323,7 +14323,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                     if o_health <= 0:
                                                         if o_final_stand == True:
                                                             if mode not in AUTO_BATTLE_modes:
@@ -14334,7 +14334,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     if tarm_barrier_active:
                                                                         tarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!") 
+                                                                        previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!") 
                                                                     o_health = int(.75 * (o_attack + o_defense))
                                                                     o_attack = o_attack + (.50 * o_attack)
                                                                     o_defense = o_defense + (.50 * o_defense)
@@ -14349,7 +14349,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     if tarm_barrier_active:
                                                                         tarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                                     soul_damage = turn_total * o_stamina
                                                                     icon = ':anger:'
                                                                     if soul_damage >=3000:
@@ -15535,7 +15535,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         previous_moves.append(f"*{turn_total}:* **{c_card}**: {dmg['MESSAGE']}")
                                                         if carm_barrier_active:
                                                             carm_barrier_active=False
-                                                            previous_moves.append(f"*{turn_total}:* **{c_card}**'s Barrier Disabled!")
+                                                            previous_moves.append(f"*{turn_total}:* 💠**{c_card}**'s Barrier Disabled!")
                                                         
                                                         turn_total = turn_total + 1
                                                         turn = 3
@@ -15551,7 +15551,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if carm_barrier_active:
                                                                 carm_barrier_active=False
                                                                 embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* **{c_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"*{turn_total}:* 💠**{c_card}**'s Barrier Disabled!")
                                                             #await private_channel.send(embed=embedVar)
                                                         elif tarm_shield_active:
                                                             if tshield_value > 0:
@@ -15559,11 +15559,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = t_health 
                                                                 if tshield_value <=0:
                                                                     embedVar = discord.Embed(title=f"{t_card}'s' **Shield** Shattered!", description=f"{c_card} breaks the **Shield**!", colour=0xe91e63)
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}'s** Shield Shattered!")
+                                                                    previous_moves.append(f"*{turn_total}:* 🌐**{t_card}'s** Shield Shattered!")
                                                                     if carm_barrier_active:
                                                                         carm_barrier_active=False
                                                                         embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* **{c_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"*{turn_total}:* 💠**{c_card}**'s Barrier Disabled!")
                                                                     #await private_channel.send(embed=embedVar)
                                                                     tarm_shield_active = False
                                                                 else:
@@ -15572,7 +15572,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     if carm_barrier_active:
                                                                         carm_barrier_active=False
                                                                         embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* **{c_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"*{turn_total}:* 💠**{c_card}**'s Barrier Disabled!")
                                                                     #await private_channel.send(embed=embedVar)
 
                                                         elif tarm_barrier_active:
@@ -15583,7 +15583,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if carm_barrier_active:
                                                                     carm_barrier_active=False
                                                                     embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* **{c_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"*{turn_total}:* 💠**{c_card}**'s Barrier Disabled!")
                                                                 #await private_channel.send(embed=embedVar)
                                                                 tbarrier_count = tbarrier_count - 1
                                                             elif tbarrier_count==1:
@@ -15593,7 +15593,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if carm_barrier_active:
                                                                     carm_barrier_active=False
                                                                     embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* **{c_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"*{turn_total}:* 💠**{c_card}**'s Barrier Disabled!")
                                                                 #await private_channel.send(embed=embedVar)
                                                                 tarm_barrier_active = False
                                                         elif tarm_parry_active:
@@ -15608,7 +15608,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if carm_barrier_active:
                                                                     carm_barrier_active=False
                                                                     embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* **{c_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"*{turn_total}:* 💠**{c_card}**'s Barrier Disabled!")
                                                                 #await private_channel.send(embed=embedVar)
                                                                 
                                                             elif tparry_count==1:
@@ -15622,7 +15622,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if carm_barrier_active:
                                                                     carm_barrier_active=False
                                                                     embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* **{c_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"*{turn_total}:* 💠**{c_card}**'s Barrier Disabled!")
                                                                 #await private_channel.send(embed=embedVar)
                                                                 tarm_parry_active = False
                                                         else:
@@ -15641,7 +15641,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if carm_barrier_active:
                                                                 carm_barrier_active=False
                                                                 embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* **{c_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"*{turn_total}:* 💠**{c_card}**'s Barrier Disabled!")
                                                             #await private_channel.send(embed=embedVar)
                                                         if t_health <= 0:
                                                             if t_final_stand==True:
@@ -15652,7 +15652,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     if carm_barrier_active:
                                                                         carm_barrier_active=False
                                                                         embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* **{c_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"*{turn_total}:* 💠**{c_card}**'s Barrier Disabled!")
                                                                     #await private_channel.send(embed=embedVar)
                                                                     t_health = int(.75 * (t_attack + t_defense))
                                                                     
@@ -15666,7 +15666,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     if carm_barrier_active:
                                                                         carm_barrier_active=False
                                                                         embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* **{c_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"*{turn_total}:* 💠**{c_card}**'s Barrier Disabled!")
                                                                     soul_damage = turn_total * t_stamina
                                                                     icon = ':anger:'
                                                                     if soul_damage >=3000:
@@ -16594,7 +16594,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if carm_barrier_active:
                                                                 carm_barrier_active=False
                                                                 embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* **{c_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"*{turn_total}:* 💠**{c_card}**'s Barrier Disabled!")
                                                             #await button_ctx.send(embed=embedVar)
                                                             turn_total = turn_total + 1
                                                             turn = 3
@@ -16611,7 +16611,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if carm_barrier_active:
                                                                     carm_barrier_active=False
                                                                     embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* **{c_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"*{turn_total}:* 💠**{c_card}**'s Barrier Disabled!")
                                                                 #await private_channel.send(embed=embedVar)
                                                                 await button_ctx.defer(ignore=True)
                                                             elif tarm_shield_active:
@@ -16620,11 +16620,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     t_health = t_health 
                                                                     if tshield_value <=0:
                                                                         embedVar = discord.Embed(title=f"{t_card}'s' **Shield** Shattered!", description=f"{c_card} breaks the **Shield**!", colour=0xe91e63)
-                                                                        previous_moves.append(f"*{turn_total}:* **{t_card}'s** Shield Shattered!")
+                                                                        previous_moves.append(f"*{turn_total}:* 🌐**{t_card}'s** Shield Shattered!")
                                                                         if carm_barrier_active:
                                                                             carm_barrier_active=False
                                                                             embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                            previous_moves.append(f"*{turn_total}:* **{c_card}**'s Barrier Disabled!")
+                                                                            previous_moves.append(f"*{turn_total}:* 💠**{c_card}**'s Barrier Disabled!")
                                                                         #await private_channel.send(embed=embedVar)
                                                                         tarm_shield_active = False
                                                                         await button_ctx.defer(ignore=True)
@@ -16634,7 +16634,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                         if carm_barrier_active:
                                                                             carm_barrier_active=False
                                                                             embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                            previous_moves.append(f"*{turn_total}:* **{c_card}**'s Barrier Disabled!")
+                                                                            previous_moves.append(f"*{turn_total}:* 💠**{c_card}**'s Barrier Disabled!")
                                                                         #await private_channel.send(embed=embedVar)
                                                                         await button_ctx.defer(ignore=True)
 
@@ -16646,7 +16646,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     if carm_barrier_active:
                                                                         carm_barrier_active=False
                                                                         embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* **{c_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"*{turn_total}:* 💠**{c_card}**'s Barrier Disabled!")
                                                                     #await private_channel.send(embed=embedVar)
                                                                     await button_ctx.defer(ignore=True)
                                                                     tbarrier_count = tbarrier_count - 1
@@ -16657,7 +16657,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     if carm_barrier_active:
                                                                         carm_barrier_active=False
                                                                         embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* **{c_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"*{turn_total}:* 💠**{c_card}**'s Barrier Disabled!")
                                                                     #await private_channel.send(embed=embedVar)
                                                                     await button_ctx.defer(ignore=True)
                                                                     tarm_barrier_active = False
@@ -16673,7 +16673,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     if carm_barrier_active:
                                                                         carm_barrier_active=False
                                                                         embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* **{c_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"*{turn_total}:* 💠**{c_card}**'s Barrier Disabled!")
                                                                     #await private_channel.send(embed=embedVar)
                                                                     await button_ctx.defer(ignore=True)
                                                                     
@@ -16688,7 +16688,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     if carm_barrier_active:
                                                                         carm_barrier_active=False
                                                                         embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* **{c_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"*{turn_total}:* 💠**{c_card}**'s Barrier Disabled!")
                                                                     #await private_channel.send(embed=embedVar)
                                                                     tarm_parry_active = False
                                                                     await button_ctx.defer(ignore=True)
@@ -16708,7 +16708,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if carm_barrier_active:
                                                                     carm_barrier_active=False
                                                                     embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* **{c_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"*{turn_total}:* 💠**{c_card}**'s Barrier Disabled!")
                                                                 #await private_channel.send(embed=embedVar)
                                                                 await button_ctx.defer(ignore=True)
                                                             if t_health <= 0:
@@ -16720,7 +16720,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                         if carm_barrier_active:
                                                                             carm_barrier_active=False
                                                                             embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                            previous_moves.append(f"*{turn_total}:* **{c_card}**'s Barrier Disabled!")
+                                                                            previous_moves.append(f"*{turn_total}:* 💠**{c_card}**'s Barrier Disabled!")
                                                                         #await private_channel.send(embed=embedVar)
                                                                         t_health = int(.75 * (t_attack + t_defense))
                                                                         
@@ -16735,7 +16735,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                         if carm_barrier_active:
                                                                             carm_barrier_active=False
                                                                             embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                            previous_moves.append(f"*{turn_total}:* **{c_card}**'s Barrier Disabled!")
+                                                                            previous_moves.append(f"*{turn_total}:* 💠**{c_card}**'s Barrier Disabled!")
                                                                         soul_damage = turn_total * t_stamina
                                                                         icon = ':anger:'
                                                                         if soul_damage >=3000:
@@ -17915,7 +17915,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if tarm_barrier_active:
                                                             tarm_barrier_active=False
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                            previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                            previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                         #await private_channel.send(embed=embedVar)
                                                         turn_total = turn_total + 1
                                                         turn = 0
@@ -17931,7 +17931,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                             #await private_channel.send(embed=embedVar)
                                                         elif oarm_shield_active:
                                                             if oshield_value > 0:
@@ -17939,11 +17939,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_health = o_health 
                                                                 if oshield_value <=0:
                                                                     embedVar = discord.Embed(title=f"{o_card}'s' **Shield** Shattered!", description=f"{t_card} breaks the **Shield**!", colour=0xe91e63)
-                                                                    previous_moves.append(f"*{turn_total}:* **{o_card}'s** Shield Shattered!")
+                                                                    previous_moves.append(f"*{turn_total}:* 🌐**{o_card}'s** Shield Shattered!")
                                                                     if tarm_barrier_active:
                                                                         tarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                                     #await private_channel.send(embed=embedVar)
                                                                     oarm_shield_active = False
                                                                 else:
@@ -17952,7 +17952,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     if tarm_barrier_active:
                                                                         tarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                                     #await private_channel.send(embed=embedVar)
 
                                                         elif oarm_barrier_active:
@@ -17963,7 +17963,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                                 #await private_channel.send(embed=embedVar)
                                                                 obarrier_count = obarrier_count - 1
                                                             elif obarrier_count==1:
@@ -17973,7 +17973,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                                 #await private_channel.send(embed=embedVar)
                                                                 oarm_barrier_active = False
                                                         elif oarm_parry_active:
@@ -17987,7 +17987,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                                 #await private_channel.send(embed=embedVar)
                                                                 
                                                             elif oparry_count==1:
@@ -18000,7 +18000,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                                 #await private_channel.send(embed=embedVar)
                                                                 oarm_parry_active = False
                                                         else:
@@ -18018,7 +18018,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                             #await private_channel.send(embed=embedVar)
                                                         if o_health <= 0:
                                                             if o_final_stand==True:
@@ -18029,7 +18029,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     if tarm_barrier_active:
                                                                         tarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                                     #await private_channel.send(embed=embedVar)
                                                                     o_health = int(.75 * (o_attack + o_defense))
                                                                     
@@ -18044,7 +18044,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     if tarm_barrier_active:
                                                                         tarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                                     soul_damage = turn_total * o_stamina
                                                                     icon = ':anger:'
                                                                     if soul_damage >=3000:
@@ -18187,7 +18187,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if tarm_barrier_active:
                                                             tarm_barrier_active=False
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                            previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                            previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                         #await private_channel.send(embed=embedVar)
                                                         turn_total = turn_total + 1
                                                         turn = 0
@@ -18203,7 +18203,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                             #await private_channel.send(embed=embedVar)
                                                         elif carm_shield_active:
                                                             if cshield_value > 0:
@@ -18211,11 +18211,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 c_health = c_health 
                                                                 if cshield_value <=0:
                                                                     embedVar = discord.Embed(title=f"{c_card}'s' **Shield** Shattered!", description=f"{t_card} breaks the **Shield**!", colour=0xe91e63)
-                                                                    previous_moves.append(f"*{turn_total}:* **{c_card}'s** Shield Shattered!")
+                                                                    previous_moves.append(f"*{turn_total}:* 🌐**{c_card}'s** Shield Shattered!")
                                                                     if tarm_barrier_active:
                                                                         tarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                                     #await private_channel.send(embed=embedVar)
                                                                     carm_shield_active = False
                                                                 else:
@@ -18224,7 +18224,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     if tarm_barrier_active:
                                                                         tarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                                     #await private_channel.send(embed=embedVar)
 
                                                         elif carm_barrier_active:
@@ -18235,7 +18235,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                                 #await private_channel.send(embed=embedVar)
                                                                 cbarrier_count = cbarrier_count - 1
                                                             elif cbarrier_count==1:
@@ -18245,7 +18245,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                                 #await private_channel.send(embed=embedVar)
                                                                 carm_barrier_active = False
                                                         elif carm_parry_active:
@@ -18260,7 +18260,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!**")
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                                 #await private_channel.send(embed=embedVar)
                                                                 
                                                             elif cparry_count==1:
@@ -18274,7 +18274,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                                 #await private_channel.send(embed=embedVar)
                                                                 carm_parry_active = False
                                                         else:
@@ -18292,7 +18292,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                             #await private_channel.send(embed=embedVar)
                                                         if c_health <= 0:
                                                             if c_final_stand==True:
@@ -18303,7 +18303,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     if tarm_barrier_active:
                                                                         tarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                                     #await private_channel.send(embed=embedVar)
                                                                     c_health = int(.75 * (c_attack + c_defense))
                                                                     
@@ -18317,7 +18317,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     if tarm_barrier_active:
                                                                         tarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
                                                                     soul_damage = turn_total * c_stamina
                                                                     icon = ':anger:'
                                                                     if soul_damage >=3000:
