@@ -7555,11 +7555,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     if turn_total >= 50:
                                                         o_max_health = o_max_health + 1000
                                                         o_health = o_health + 1000
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Gigantomax Evolution!!")
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Gigantomax Evolution!!! Gained **1000** HP!!!")
                                                     elif turn_total >=30:
                                                         o_max_health = o_max_health + 500
                                                         o_health = o_health + 500
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Mega Evolution!!")
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Mega Evolution!! Gained **300** HP!")
                                                     else:
                                                         previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Evolution!")
                                                     await button_ctx.defer(ignore=True)
@@ -8695,11 +8695,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if turn_total >= 50:
                                                             t_max_health = t_max_health + 1000
                                                             t_health = t_health + 1000
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Gigantomax Evolution!!")
+                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Gigantomax Evolution!!! Gained **1000** HP!!!")
                                                         elif turn_total >= 30:
                                                             t_max_health = t_max_health + 300
                                                             t_health = t_health + 300
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Mega Evolution!!")
+                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Mega Evolution!! Gained **300** HP!")
                                                         else:
                                                             previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Evolution!")
                                                         await button_ctx.defer(ignore=True)
@@ -9556,11 +9556,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     if turn_total >= 50:
                                                         t_max_health = t_max_health + 1000
                                                         t_health = t_health + 1000
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Gigantomax Evolution!!")
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Gigantomax Evolution!!! Gained **1000** HP!!!")
                                                     elif turn_total >= 30:
                                                         t_max_health = t_max_health + 300
                                                         t_health = t_health + 300
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Mega Evolution!!")
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Mega Evolution!! Gained **300** HP!")
                                                     else:
                                                         previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Evolution!")
                                                     turn_total = turn_total + 1
@@ -11405,11 +11405,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if turn_total >= 50:
                                                             o_max_health = o_max_health + 1000
                                                             o_health = o_health + 1000
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Gigantomax Evolution!!")
+                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Gigantomax Evolution!!! Gained **1000** HP!!!")
                                                         elif turn_total >= 30:
                                                             o_max_health = o_max_health + 300
                                                             o_health = o_health + 300
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Mega Evolution!!")
+                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Mega Evolution!! Gained **300** HP!")
                                                         else:
                                                             previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Evolution!")
                                                         await button_ctx.defer(ignore=True)
@@ -12884,11 +12884,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     if turn_total >= 50:
                                                         t_max_health = t_max_health + 1000
                                                         t_health = t_health + 1000
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Gigantomax Evolution!!")
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Gigantomax Evolution!!! Gained **1000** HP!!!")
                                                     elif turn_total >= 30:
                                                         t_max_health = t_max_health + 300
                                                         t_health = t_health + 300
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Mega Evolution!!")
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Mega Evolution!! Gained **300** HP!")
                                                     else:
                                                         previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Evolution!")
                                                 turn_total = turn_total + 1
@@ -14876,11 +14876,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if turn_total >= 50:
                                                             c_max_health = c_max_health + 1000
                                                             c_health = c_health + 1000
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: Gigantomax Evolution!!")
+                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: Gigantomax Evolution!!! Gained **1000** HP!!!")
                                                         elif turn_total >= 30:
                                                             c_max_health = c_max_health + 300
                                                             c_health = c_health + 300
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: Mega Evolution!!")
+                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: Mega Evolution!! Gained **300** HP!")
                                                         else:
                                                             previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: Evolution!")
                                                         turn_total = turn_total + 1
@@ -15884,11 +15884,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if turn_total >= 50:
                                                                 c_max_health = c_max_health + 1000
                                                                 c_health = c_health + 1000
-                                                                previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: Gigantomax Evolution!!")
+                                                                previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: Gigantomax Evolution!!! Gained **1000** HP!!!")
                                                             elif turn_total >= 30:
                                                                 c_max_health = c_max_health + 300
                                                                 c_health = c_health + 300
-                                                                previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: Mega Evolution!!")
+                                                                previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: Mega Evolution!! Gained **300** HP!")
                                                             else:
                                                                 previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: Evolution!")
                                                             turn_total = turn_total + 1
@@ -17166,11 +17166,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     if turn_total >= 50:
                                                         t_max_health = t_max_health + 1000
                                                         t_health = t_health + 1000
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Gigantomax Evolution!!")
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Gigantomax Evolution!!! Gained **1000** HP!!!")
                                                     elif turn_total >= 30:
                                                         t_max_health = t_max_health + 300
                                                         t_health = t_health + 300
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Mega Evolution!!")
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Mega Evolution!! Gained **300** HP!")
                                                     else:
                                                         previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Evolution!")
                                                     #await private_channel.send(embed=embedVar)
