@@ -6668,6 +6668,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 c_defend_used = stats['c_defend_used']
                 c_final_stand = stats['c_final_stand']
                 c_focus_count = 0
+                if c_universe == "Solo Leveling":
+                    temp_tarm_shield_active = stats['tarm_shield_active']
+                    temp_tshield_value = stats['tshield_value']
+                    temp_tarm_barrier_active = stats['tarm_barrier_active']
+                    temp_tbarrier_count = stats['tbarrier_count']
+                    temp_tarm_parry_active = stats['tarm_parry_active']
+                    temp_tparry_count = stats['tparry_count']
+                    c_swapped = False
 
             # Turn iterator
             o_focus_count = 0
@@ -6684,6 +6692,27 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             o_naruto_heal_buff = 0
             t_naruto_heal_buff = 0
             c_naruto_heal_buff = 0
+
+            if o_universe == "Solo Leveling":
+                temp_tarm_shield_active = stats['tarm_shield_active']
+                temp_tshield_value = stats['tshield_value']
+                temp_tarm_barrier_active = stats['tarm_barrier_active']
+                temp_tbarrier_count = stats['tbarrier_count']
+                temp_tarm_parry_active = stats['tarm_parry_active']
+                temp_tparry_count = stats['tparry_count']
+                o_swapped = False
+
+            if t_universe == "Solo Leveling":
+                temp_oarm_shield_active = stats['oarm_shield_active']
+                temp_oshield_value = stats['oshield_value']
+                temp_oarm_barrier_active = stats['oarm_barrier_active']
+                temp_obarrier_count = stats['obarrier_count']
+                temp_oarm_parry_active = stats['oarm_parry_active']
+                temp_oparry_count = stats['oparry_count']
+                t_swapped = False
+
+
+
 
             # Enhance Turn Iterators
             eo = 0
@@ -6880,6 +6909,41 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     o_defense = 999
                                 if o_health >= o_max_health:
                                     o_health = o_max_health
+
+                                
+                                if o_universe == "Solo Leveling" and not o_swapped:
+                                    if temp_tarm_shield_active and not tarm_shield_active:
+                                        if oarm_shield_active:
+                                            oshield_value = oshield_value + temp_tshield_value
+                                            previous_moves.append(f"🩸 **{o_card}** **ARISE!** *{tarm_name}* has returned to you")
+                                            o_swapped = True
+                                        elif not oarm_shield_active:
+                                            oarm_shield_active = True
+                                            oshield_value = temp_tshield_value
+                                            previous_moves.append(f"🩸 **{o_card}** **ARISE!** *{tarm_name}* has returned to you")
+                                            o_swapped = True
+                                    elif temp_tarm_barrier_active and not tarm_barrier_active:
+                                        if oarm_barrier_active:
+                                            obarrier_count = obarrier_count + temp_tbarrier_count
+                                            previous_moves.append(f"🩸 **{o_card}** **ARISE!** *{tarm_name}* has returned to you")
+                                            o_swapped = True
+                                        elif not oarm_barrier_active:
+                                            oarm_barrier_active = True
+                                            obarrier_count = temp_tbarrier_count
+                                            previous_moves.append(f"🩸 **{o_card}** **ARISE!** *{tarm_name}* has returned to you")
+                                            o_swapped = True
+                                    elif temp_tarm_parry_active and not tarm_parry_active:
+                                        if oarm_parry_active:
+                                            oparry_count = oparry_count + temp_tparry_count
+                                            previous_moves.append(f"🩸 **{o_card}** **ARISE!** *{tarm_name}* has returned to you")
+                                            o_swapped = True
+                                        elif not oarm_parry_active:
+                                            oarm_parry_active = True
+                                            oparry_count = temp_tparry_count
+                                            previous_moves.append(f"🩸 **{o_card}** **ARISE!** *{tarm_name}* has returned to you")
+                                            o_swapped = True
+                                   
+
 
                                 # Tutorial Instructions
                                 if turn_total == 0:
@@ -8139,6 +8203,42 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             description=f"**{t_card} says**\nYou will die in 50  turns...",
                                                             colour=0xe91e63)
                                     previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Scheduled Death 📓")
+                                
+                                
+                                if t_universe == "Solo Leveling" and not t_swapped:
+                                    if temp_oarm_shield_active and not oarm_shield_active:
+                                        if tarm_shield_active:
+                                            tshield_value = tshield_value + temp_oshield_value
+                                            previous_moves.append(f"🩸 **{t_card}** **ARISE!** *{oarm_name}* has returned to you")
+                                            t_swapped = True
+                                        elif not tarm_shield_active:
+                                            tarm_shield_active = True
+                                            tshield_value = temp_oshield_value
+                                            previous_moves.append(f"🩸 **{t_card}** **ARISE!** *{oarm_name}* has returned to you")
+                                            t_swapped = True
+                                    elif temp_tarm_barrier_active and not tarm_barrier_active:
+                                        if tarm_barrier_active:
+                                            tbarrier_count = tbarrier_count + temp_obarrier_count
+                                            previous_moves.append(f"🩸 **{t_card}** **ARISE!** *{oarm_name}* has returned to you")
+                                            t_swapped = True
+                                        elif not tarm_barrier_active:
+                                            tarm_barrier_active = True
+                                            tbarrier_count = temp_obarrier_count
+                                            previous_moves.append(f"🩸 **{t_card}** **ARISE!** *{oarm_name}* has returned to you")
+                                            t_swapped = True
+                                    elif temp_tarm_parry_active and not tarm_parry_active:
+                                        if tarm_parry_active:
+                                            tparry_count = tparry_count + temp_oparry_count
+                                            previous_moves.append(f"🩸 **{t_card}** **ARISE!** *{oarm_name}* has returned to you")
+                                            t_swapped = True
+                                        elif not tarm_parry_active:
+                                            tarm_parry_active = True
+                                            tparry_count = temp_oparry_count
+                                            previous_moves.append(f"🩸 **{t_card}** **ARISE!** *{oarm_name}* has returned to you")
+                                            t_swapped = True
+                                   
+
+                                
                                 if t_block_used == True:
                                     t_block_used = False
                                     t_defense = int(t_defense / 2)
@@ -10149,6 +10249,41 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             colour=0xe91e63)
                                     # await private_channel.send(embed=embedVar)
                                     previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Scheduled Death 📓")
+                                
+                                if o_universe == "Solo Leveling" and not o_swapped:
+                                    if temp_tarm_shield_active and not tarm_shield_active:
+                                        if oarm_shield_active:
+                                            oshield_value = oshield_value + temp_tshield_value
+                                            previous_moves.append(f"🩸 **{o_card}** **ARISE!** *{tarm_name}* has returned to you")
+                                            o_swapped = True
+                                        elif not oarm_shield_active:
+                                            oarm_shield_active = True
+                                            oshield_value = temp_tshield_value
+                                            previous_moves.append(f"🩸 **{o_card}** **ARISE!** *{tarm_name}* has returned to you")
+                                            o_swapped = True
+                                    elif temp_tarm_barrier_active and not tarm_barrier_active:
+                                        if oarm_barrier_active:
+                                            obarrier_count = obarrier_count + temp_tbarrier_count
+                                            previous_moves.append(f"🩸 **{o_card}** **ARISE!** *{tarm_name}* has returned to you")
+                                            o_swapped = True
+                                        elif not oarm_barrier_active:
+                                            oarm_barrier_active = True
+                                            obarrier_count = temp_tbarrier_count
+                                            previous_moves.append(f"🩸 **{o_card}** **ARISE!** *{tarm_name}* has returned to you")
+                                            o_swapped = True
+                                    elif temp_tarm_parry_active and not tarm_parry_active:
+                                        if oarm_parry_active:
+                                            oparry_count = oparry_count + temp_tparry_count
+                                            previous_moves.append(f"🩸 **{o_card}** **ARISE!** *{tarm_name}* has returned to you")
+                                            o_swapped = True
+                                        elif not oarm_parry_active:
+                                            oarm_parry_active = True
+                                            oparry_count = temp_tparry_count
+                                            previous_moves.append(f"🩸 **{o_card}** **ARISE!** *{tarm_name}* has returned to you")
+                                            o_swapped = True
+                                   
+
+                                
                                 if o_attack <= 25:
                                     o_attack = 25
                                 if o_defense <= 30:
@@ -12378,6 +12513,39 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     embedVar.set_footer(text=f"{t_card} begins his assault")
                                     await private_channel.send(embed=embedVar)
                                     await asyncio.sleep(2)
+                                                               
+                                if t_universe == "Solo Leveling" and not t_swapped:
+                                    if temp_oarm_shield_active and not oarm_shield_active:
+                                        if tarm_shield_active:
+                                            tshield_value = tshield_value + temp_oshield_value
+                                            previous_moves.append(f"🩸 **{t_card}** **ARISE!** *{oarm_name}* has returned to you")
+                                            t_swapped = True
+                                        elif not tarm_shield_active:
+                                            tarm_shield_active = True
+                                            tshield_value = temp_oshield_value
+                                            previous_moves.append(f"🩸 **{t_card}** **ARISE!** *{oarm_name}* has returned to you")
+                                            t_swapped = True
+                                    elif temp_tarm_barrier_active and not tarm_barrier_active:
+                                        if tarm_barrier_active:
+                                            tbarrier_count = tbarrier_count + temp_obarrier_count
+                                            previous_moves.append(f"🩸 **{t_card}** **ARISE!** *{oarm_name}* has returned to you")
+                                            t_swapped = True
+                                        elif not tarm_barrier_active:
+                                            tarm_barrier_active = True
+                                            tbarrier_count = temp_obarrier_count
+                                            previous_moves.append(f"🩸 **{t_card}** **ARISE!** *{oarm_name}* has returned to you")
+                                            t_swapped = True
+                                    elif temp_tarm_parry_active and not tarm_parry_active:
+                                        if tarm_parry_active:
+                                            tparry_count = tparry_count + temp_oparry_count
+                                            previous_moves.append(f"🩸 **{t_card}** **ARISE!** *{oarm_name}* has returned to you")
+                                            t_swapped = True
+                                        elif not tarm_parry_active:
+                                            tarm_parry_active = True
+                                            tparry_count = temp_oparry_count
+                                            previous_moves.append(f"🩸 **{t_card}** **ARISE!** *{oarm_name}* has returned to you")
+                                            t_swapped = True
+                                                                  
                                 if t_block_used == True:
                                     t_block_used = False
                                     t_defense = int(t_defense / 2)
@@ -14394,6 +14562,40 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             elif mode in co_op_modes and turn != (0 or 1):
                                 # Companion Turn Start
                                 if turn == 2:
+                                
+                                    if c_universe == "Solo Leveling" and not c_swapped:
+                                        if temp_tarm_shield_active and not tarm_shield_active:
+                                            if carm_shield_active:
+                                                cshield_value = cshield_value + temp_tshield_value
+                                                previous_moves.append(f"🩸 **{c_card}** **ARISE!** *{tarm_name}* has returned to you")
+                                                c_swapped = True
+                                            elif not carm_shield_active:
+                                                carm_shield_active = True
+                                                cshield_value = temp_tshield_value
+                                                previous_moves.append(f"🩸 **{c_card}** **ARISE!** *{tarm_name}* has returned to you")
+                                                c_swapped = True
+                                        elif temp_tarm_barrier_active and not tarm_barrier_active:
+                                            if carm_barrier_active:
+                                                cbarrier_count = cbarrier_count + temp_tbarrier_count
+                                                previous_moves.append(f"🩸 **{c_card}** **ARISE!** *{tarm_name}* has returned to you")
+                                                c_swapped = True
+                                            elif not carm_barrier_active:
+                                                carm_barrier_active = True
+                                                cbarrier_count = temp_tbarrier_count
+                                                previous_moves.append(f"🩸 **{c_card}** **ARISE!** *{tarm_name}* has returned to you")
+                                                c_swapped = True
+                                        elif temp_tarm_parry_active and not tarm_parry_active:
+                                            if carm_parry_active:
+                                                cparry_count = cparry_count + temp_tparry_count
+                                                previous_moves.append(f"🩸 **{c_card}** **ARISE!** *{tarm_name}* has returned to you")
+                                                c_swapped = True
+                                            elif not carm_parry_active:
+                                                carm_parry_active = True
+                                                cparry_count = temp_tparry_count
+                                                previous_moves.append(f"🩸 **{c_card}** **ARISE!** *{tarm_name}* has returned to you")
+                                                c_swapped = True
+                                   
+
                                     # await asyncio.sleep(2)
                                     if c_block_used == True:
                                         c_defense = int(c_defense / 2)
@@ -16806,7 +17008,40 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     'trace': trace
                                                 }))
                                 # Opponent Turn Start
-                                elif turn == 3:
+                                elif turn == 3:                            
+                                    if t_universe == "Solo Leveling" and not t_swapped:
+                                        if temp_carm_shield_active and not carm_shield_active:
+                                            if tarm_shield_active:
+                                                tshield_value = tshield_value + temp_cshield_value
+                                                previous_moves.append(f"🩸 **{t_card}** **ARISE!** *{carm_name}* has returned to you")
+                                                t_swapped = True
+                                            elif not tarm_shield_active:
+                                                tarm_shield_active = True
+                                                tshield_value = temp_cshield_value
+                                                previous_moves.append(f"🩸 **{t_card}** **ARISE!** *{carm_name}* has returned to you")
+                                                t_swapped = True
+                                        elif temp_tarm_barrier_active and not tarm_barrier_active:
+                                            if tarm_barrier_active:
+                                                tbarrier_count = tbarrier_count + temp_cbarrier_count
+                                                previous_moves.append(f"🩸 **{t_card}** **ARISE!** *{carm_name}* has returned to you")
+                                                t_swapped = True
+                                            elif not tarm_barrier_active:
+                                                tarm_barrier_active = True
+                                                tbarrier_count = temp_cbarrier_count
+                                                previous_moves.append(f"🩸 **{t_card}** **ARISE!** *{carm_name}* has returned to you")
+                                                t_swapped = True
+                                        elif temp_tarm_parry_active and not tarm_parry_active:
+                                            if tarm_parry_active:
+                                                tparry_count = tparry_count + temp_cparry_count
+                                                previous_moves.append(f"🩸 **{t_card}** **ARISE!** *{carm_name}* has returned to you")
+                                                t_swapped = True
+                                            elif not tarm_parry_active:
+                                                tarm_parry_active = True
+                                                tparry_count = temp_cparry_count
+                                                previous_moves.append(f"🩸 **{t_card}** **ARISE!** *{carm_name}* has returned to you")
+                                                t_swapped = True
+                                   
+
                                     # await asyncio.sleep(2)
                                     if t_block_used == True:
                                         t_block_used = False
