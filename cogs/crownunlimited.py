@@ -3696,6 +3696,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         oarm_universe = oarm['UNIVERSE']
         oarm_passive = oarm['ABILITIES'][0]
         oarm_name = oarm['ARM']
+        oarm_price = oarm['PRICE']
 
         vault = db.queryVault({'DID': str(o_user['DID']), 'PETS.NAME': o_user['PET']})
         
@@ -3704,7 +3705,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             if fee >= balance:
                 await ctx.send(f"{tguild} requires a payment of {fee} to battle the Shield.")
                 return
-        update_durability_message = update_arm_durability(self, vault, oarm, universe)
+        update_durability_message = update_arm_durability(self, vault, oarm, oarm_universe, oarm_price, o)
         if update_durability_message['MESSAGE']:
             await ctx.author.send(f"{update_durability_message['MESSAGE']}")
         opet = {}
@@ -3793,6 +3794,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 carm_universe = carm['UNIVERSE']
                 carm_passive = carm['ABILITIES'][0]
                 carm_name = carm['ARM']
+                carm_price = carm['PRICE']
             else:
                 cperformance = c_user['PERFORMANCE']
                 cvault = db.queryVault({'DID': c_user['DID'], 'PETS.NAME': c_user['PET']})
@@ -3801,7 +3803,9 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                     if c_user['PET'] == pet['NAME']:
                         cpet = pet
                 carm = db.queryArm({'ARM': c_user['ARM']})
-                cupdate_durability_message = update_arm_durability(self, cvault, carm, universe)
+                carm_universe = carm['UNIVERSE']
+                carm_price = carm['PRICE']
+                cupdate_durability_message = update_arm_durability(self, cvault, carm, carm_universe, carm_price, c)
                 if cupdate_durability_message['MESSAGE']:
                     await ctx.send(f"{cupdate_durability_message['MESSAGE']}")
 
@@ -3887,9 +3891,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             tarm_universe = tarm['UNIVERSE']
             tarm_passive = tarm['ABILITIES'][0]
             tarm_name = tarm['ARM']
+            tarm_price = tarm['PRICE']
 
             tvault = db.queryVault({'DID': str(t_user['DID']), 'PETS.NAME': t_user['PET']})
-            tupdate_durability_message = update_arm_durability(self, tvault, tarm, universe)
+            tupdate_durability_message = update_arm_durability(self, tvault, tarm, tarm_universe, tarm_price, t)
             if tupdate_durability_message['MESSAGE']:
                 await ctx.send(f"{tupdate_durability_message['MESSAGE']}")
 
@@ -19831,17 +19836,22 @@ async def save_spot(self, ctx, universe, mode, currentopponent):
 
         
 
-def update_arm_durability(self, vault, arm, universe):
+def update_arm_durability(self, vault, arm, arm_universe, arm_price, card):
     try:
+        decrease_value = -1
+        break_value = 1
+        if arm_universe != card['UNIVERSE'] and arm_universe != "Unbound":
+            decrease_value = -10
+            break_value = 10
+
         for a in vault['ARMS']:
             if a['ARM'] == str(arm['ARM']):
                 current_durability = a['DUR']
-                if current_durability == 1:
+                if current_durability == break_value:
                     selected_arm = arm['ARM']
-                    arm_data = db.queryArm({'ARM': selected_arm})
-                    arm_name = arm_data['ARM']
-                    selected_universe = arm_data['UNIVERSE']
-                    dismantle_amount = round(arm_data['PRICE'] * .09)
+                    arm_name = arm['ARM']
+                    selected_universe = arm_universe
+                    dismantle_amount = 5000
                     current_gems = []
                     for gems in vault['GEMS']:
                         current_gems.append(gems['UNIVERSE'])
@@ -19865,7 +19875,7 @@ def update_arm_durability(self, vault, arm, universe):
                     return {"MESSAGE": f"**{arm['ARM']}** has been dismantled after losing all ⚒️ durability, you earn 💎 {str(dismantle_amount)}. Your arm will be **Stock** after your next match."}
                 else:
                     query = {'DID': str(vault['DID'])}
-                    update_query = {'$inc': {'ARMS.$[type].' + 'DUR': -1}}
+                    update_query = {'$inc': {'ARMS.$[type].' + 'DUR': decrease_value}}
                     filter_query = [{'type.' + "ARM": str(arm['ARM'])}]
                     resp = db.updateVault(query, update_query, filter_query)
                     return {"MESSAGE": False}
