@@ -2403,12 +2403,12 @@ async def cardlevel(self, card: str, player, mode: str, universe: str):
     has_universe_heart = False
     has_universe_soul = False
 
-    
-    for gems in vault['GEMS']:
-        if gems['UNIVERSE'] == card_uni and gems['UNIVERSE_HEART']:
-            has_universe_heart = True
-        if gems['UNIVERSE'] == card_uni and gems['UNIVERSE_SOUL']:
-            has_universe_soul = True
+    if universe != "n/a":
+        for gems in vault['GEMS']:
+            if gems['UNIVERSE'] == card_uni and gems['UNIVERSE_HEART']:
+                has_universe_heart = True
+            if gems['UNIVERSE'] == card_uni and gems['UNIVERSE_SOUL']:
+                has_universe_soul = True
 
 
     lvl = cardinfo['LVL']
@@ -19527,10 +19527,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     continued = True
                             
                                 if currentopponent == (total_legends):
+                                    uid = o_DID
+                                    ouser = await self.bot.fetch_user(uid)
                                     floor = universe['FLOOR']
                                     new_level = floor + 1
                                     response = db.updateUserNoFilter({'DID': str(ctx.author.id)}, {'$set': {'LEVEL': new_level}})
                                     abyss_message = abyss_level_up_message(str(ctx.author.id), floor, t_card, t_title, tarm_name)
+                                    cardlogger = await cardlevel(self, o_card, ouser.id, "Purchase", "n/a")
                                     abyss_drop_message = "\n".join(abyss_message['DROP_MESSAGE'])
                                     bless_amount = 100000 + (10000 * floor)
                                     await bless(bless_amount, ctx.author.id)
