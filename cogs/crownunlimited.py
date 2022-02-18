@@ -6715,6 +6715,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             o_naruto_heal_buff = 0
             t_naruto_heal_buff = 0
             c_naruto_heal_buff = 0
+            o_gow_resolve = False
+            t_gow_resolve = False
+            c_gow_resolve = False
 
             if o_universe == "Solo Leveling":
                 temp_tarm_shield_active = stats['tarm_shield_active']
@@ -7115,6 +7118,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             colour=0xe91e63)
                                         previous_moves.append(f"*{turn_total}:* 🩸 Ruler's Authority... Opponent loses **{60 + turn_total}** 🛡️ 🔻")
                                         t_defense = round(t_defense - (60 + turn_total))
+
+                                    elif o_universe == "Dragon Ball Z":
+                                        o_health = o_health + t_stamina + turn_total
+                                        previous_moves.append(f"*{turn_total}:* 🩸 Saiyan Spirit... You heal for **{t_stamina + turn_total}** ❤️")
 
                                     elif o_universe == "Attack On Titan":
                                         embedVar = discord.Embed(title=f"Rally! **{o_card}** Increased Max Health ❤️",
@@ -7625,6 +7632,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     o_defense = round(o_defense - o_resolve_defense)
                                                     o_used_resolve = True
                                                     o_pet_used = False
+
+                                                    if not o_gow_resolve:
+                                                        o_used_resolve = False
+                                                        o_gow_resolve = True
+                                                        o_defense = 125
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Pre Resolve: Pre Ascension!")
+
                                                     embedVar = discord.Embed(title=f"{o_card} ASCENDED :zap:",
                                                                             description=f"**{o_card} says**\n{o_resolve_description}",
                                                                             colour=0xe91e63)
@@ -8398,6 +8412,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 colour=0xe91e63)
                                         previous_moves.append(f"*{turn_total}:* 🩸 Turret Shot hits **{o_card}** for **60** Damage 💥")
                                         o_health = round(o_health - (60 + turn_total))
+
+                                    elif t_universe == "Dragon Ball Z":
+                                        t_health = t_health + o_stamina + turn_total
+                                        previous_moves.append(f"*{turn_total}:* 🩸 Saiyan Spirit... You heal for **{o_stamina + turn_total}** ❤️")
+
+
                                     elif t_universe == "Solo Leveling":
                                         embedVar = discord.Embed(
                                             title=f"Ruler's Authority... {o_card} loses **{60 + turn_total}** 🛡️ 🔻",
@@ -8851,6 +8871,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_defense = round(t_defense - t_resolve_defense)
                                                         t_used_resolve = True
                                                         t_pet_used = False
+
+                                                        if not t_gow_resolve:
+                                                            t_used_resolve = False
+                                                            t_gow_resolve = True
+                                                            t_defense = 125
+                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Pre Resolve: Pre Ascension!")
+
 
                                                         embedVar = discord.Embed(title=f"{t_card} STRENGTHENED RESOLVE :zap:",
                                                                                 description=f"**{t_card} says**\n{t_resolve_description}",
@@ -9803,6 +9830,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_defense = round(t_defense - t_resolve_defense)
                                                     t_used_resolve = True
 
+                                                    if not t_gow_resolve:
+                                                        t_used_resolve = False
+                                                        t_gow_resolve = True
+                                                        t_defense = 125
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Pre Resolve: Pre Ascension!")
+
+
                                                     embedVar = discord.Embed(title=f"{t_card} STRENGTHENED RESOLVE :zap:",
                                                                             description=f"**{t_card} says**\n{t_resolve_description}",
                                                                             colour=0xe91e63)
@@ -10534,6 +10568,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         
                                         previous_moves.append(f"*{turn_total}:* 🩸 Turret Shot hits **{t_card}** for **60** Damage 💥")
 
+
+                                    elif o_universe == "Dragon Ball Z":
+                                        o_health = o_health + t_stamina + turn_total
+                                        previous_moves.append(f"*{turn_total}:* 🩸 Saiyan Spirit... You heal for **{t_stamina + turn_total}** ❤️")
+
+
                                     elif o_universe == "Solo Leveling":
                                         embedVar = discord.Embed(
                                             title=f"Ruler's Authority... Opponent loses **{60 + turn_total}** 🛡️ 🔻",
@@ -10947,6 +10987,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     o_defense = round(o_defense - o_resolve_defense)
                                                     o_used_resolve = True
                                                     o_pet_used = False
+
+                                                    if not o_gow_resolve:
+                                                        o_used_resolve = False
+                                                        o_gow_resolve = True
+                                                        o_defense = 125
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Pre Resolve: Pre Ascension!")
+
+
                                                     turn_total = turn_total + 1
                                                     turn = 1
                                                 elif o_universe == "Fate":  # Fate Trait
@@ -11790,6 +11838,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_defense = round(o_defense - o_resolve_defense)
                                                         o_used_resolve = True
                                                         o_pet_used = False
+
+                                                        if not o_gow_resolve:
+                                                            o_used_resolve = False
+                                                            o_gow_resolve = True
+                                                            o_defense = 125
+                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Pre Resolve: Pre Ascension!")
+
+
                                                         embedVar = discord.Embed(title=f"{o_card} STRENGTHENED RESOLVE :zap:",
                                                                                 description=f"**{o_card} says**\n{o_resolve_description}",
                                                                                 colour=0xe91e63)
@@ -12835,6 +12891,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         previous_moves.append(f"*{turn_total}:* 🩸 Turret Shot hits **{o_card}** for **60** Damage 💥")
                                         o_health = round(o_health - (60 + turn_total))
 
+                                    elif t_universe == "Dragon Ball Z":
+                                        t_health = t_health + o_stamina + turn_total
+                                        previous_moves.append(f"*{turn_total}:* 🩸 Saiyan Spirit... You heal for **{o_stamina + turn_total}** ❤️")
+
+
                                     elif t_universe == "Solo Leveling":
                                         embedVar = discord.Embed(
                                             title=f"Ruler's Authority... {o_card} loses **{60 + turn_total}** 🛡️ 🔻",
@@ -13412,6 +13473,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 t_defense = round(t_defense - t_resolve_defense)
                                                 t_used_resolve = True
                                                 t_pet_used = False
+
+                                                if not t_gow_resolve:
+                                                    t_used_resolve = False
+                                                    t_gow_resolve = True
+                                                    t_defense = 125
+                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Pre Resolve: Pre Ascension!")
+
+
                                                 if mode not in AUTO_BATTLE_modes:
                                                     embedVar = discord.Embed(title=f"{t_card} ASCENDED :zap:",
                                                                             description=f"**{t_card} says**\n{t_resolve_description}",
@@ -14940,6 +15009,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             previous_moves.append(f"*{turn_total}:* 🩸 Turret Shot hits **{c_card}** for **60** Damage 💥")
                                             t_health = round(t_health - (60 + turn_total))
 
+                                        elif c_universe == "Dragon Ball Z":
+                                            c_health = c_health + t_stamina + turn_total
+                                            previous_moves.append(f"*{turn_total}:* 🩸 Saiyan Spirit... You heal for **{t_stamina + turn_total}** ❤️")
+
+
                                         elif c_universe == "Solo Leveling":
                                             embedVar = discord.Embed(
                                                 title=f"Ruler's Authority... {t_card} loses **{60 + turn_total}** 🛡️ 🔻",
@@ -15502,6 +15576,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         c_defense = round(c_defense - c_resolve_defense)
                                                         c_used_resolve = True
                                                         c_pet_used = False
+
+                                                        if not c_gow_resolve:
+                                                            c_used_resolve = False
+                                                            c_gow_resolve = True
+                                                            c_defense = 125
+                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Pre Resolve: Pre Ascension!")
+
+
                                                         embedVar = discord.Embed(title=f"{c_card} ASCENDED :zap:",
                                                                                 description=f"**{c_card} says**\n{c_resolve_description}",
                                                                                 colour=0xe91e63)
@@ -16591,6 +16673,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             c_defense = round(c_defense - c_resolve_defense)
                                                             c_used_resolve = True
                                                             c_pet_used = False
+
+                                                            if not c_gow_resolve:
+                                                                c_used_resolve = False
+                                                                c_gow_resolve = True
+                                                                c_defense = 125
+
+
                                                             embedVar = discord.Embed(
                                                                 title=f"{c_card} STRENGTHENED RESOLVE :zap:",
                                                                 description=f"**{c_card} says**\n{c_resolve_description}",
@@ -17449,6 +17538,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             previous_moves.append(f"*{turn_total}:* 🩸 Turret Shot hits **{c_card}** for **60** Damage 💥")
                                             c_health = round(c_health - (60 + turn_total))
 
+                                        elif t_universe == "Dragon Ball Z":
+                                            t_health = t_health + c_stamina
+                                            previous_moves.append(f"*{turn_total}:* 🩸 Saiyan Spirit... You heal for **{c_stamina + turn_total}** ❤️")
+
+
                                         elif t_universe == "Solo Leveling":
                                             embedVar = discord.Embed(
                                                 title=f"Ruler's Authority... {c_card} loses **{60 + turn_total}** 🛡️ 🔻",
@@ -17969,6 +18063,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_defense = round(t_defense - t_resolve_defense)
                                                     t_used_resolve = True
                                                     t_pet_used = False
+                                                    if not t_gow_resolve:
+                                                        t_used_resolve = False
+                                                        t_gow_resolve = True
+                                                        t_defense = 125
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Pre Resolve: Pre Ascension!")
 
                                                     embedVar = discord.Embed(title=f"{t_card} STRENGTHENED RESOLVE :zap:",
                                                                             description=f"**{t_card} says**\n{t_resolve_description}",

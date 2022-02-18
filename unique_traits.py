@@ -45,7 +45,7 @@ traits = [{
 },{
     'NAME': 'God Of War',
     'EFFECT': 'Ascension',
-    'TRAIT': 'On Resolve Refill Health.'
+    'TRAIT': 'On Resolve Refill Health. You can Resolve twice.'
 },{
     'NAME': '7ds',
     'EFFECT': 'Power Of Friendship',
@@ -69,7 +69,7 @@ traits = [{
 },{
     'NAME': 'Dragon Ball Z',
     'EFFECT': 'Final Stand',
-    'TRAIT': 'When you die, Resolve with 75% ATK + DEF as Health'
+    'TRAIT': 'When you die, Resolve with 75% ATK + DEF as Health. Saiyan Spirit! On focus, heal for opponent Stamina amount + turn count.'
 },{
     'NAME': 'Crown Rift Slayers',
     'EFFECT': 'Feint Attack',
