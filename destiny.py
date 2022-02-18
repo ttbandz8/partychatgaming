@@ -1762,7 +1762,7 @@ destiny = [
     {
         "NAME": "Save Eri",
         "WINS": 0,
-        "REQUIRED": 10,
+        "REQUIRED": 8,
         "DEFEAT": "Overhaul",
         "USE_CARDS": ["Mirio"],
         "EARN": "Overhaul",
@@ -1792,7 +1792,7 @@ destiny = [
     {
         "NAME": "Sibling Rivalry",
         "WINS": 0,
-        "REQUIRED": 15,
+        "REQUIRED": 10,
         "DEFEAT": "Dabi",
         "USE_CARDS": ["Todoroki"],
         "EARN": "Dabi",
@@ -1802,7 +1802,7 @@ destiny = [
     {
         "NAME": "Deku vs Kacchan",
         "WINS": 0,
-        "REQUIRED": 8,
+        "REQUIRED": 3,
         "DEFEAT": "Bakugo",
         "USE_CARDS": ["Deku"],
         "EARN": "Bakugo",
