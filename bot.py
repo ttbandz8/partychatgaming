@@ -1637,6 +1637,20 @@ async def trinketshop(ctx):
       return
 
    current_arm = user['ARM']
+   arm_info = db.queryArm({'ARM': str(current_arm)})
+   boss_arm = False
+   dungeon_arm = False
+   boss_message = "Nice Arm!"
+   durability_message = "100,000"
+   if arm_info['AVAILABLE'] == False and arm_info['EXCLUSIVE'] == False:
+      boss_arm = True
+   elif arm_info['AVAILABLE'] == True and arm_info['EXCLUSIVE'] == True:
+      dungeon_arm= True
+   if boss_arm:
+      boss_message = "Cannot Repair"
+      durability_message = "UNAVAILABLE"
+   elif dungeon_arm:
+      boss_message = "Dungeon eh?!"
    vault = db.altQueryVault({'DID' : str(ctx.author.id)})
    current_card = user['CARD']
    has_gabes_purse = user['TOURNAMENT_WINS']
@@ -1697,7 +1711,8 @@ async def trinketshop(ctx):
    Welcome {ctx.author.mention}!
    Purchase **Card XP** and **Arm Durability**!
    🎴 Card:  **{current_card}**
-   🦾 Arm: **{current_arm}**
+   🦾 Arm: **{current_arm}** *{boss_message}*
+   
 
    🔋 1️⃣ **10 Levels** for :coin: **80,000**
    
@@ -1705,7 +1720,7 @@ async def trinketshop(ctx):
 
    🔋 3️⃣ **100 Levels** for :moneybag: **650,000**
 
-   ⚒️ 4️⃣ **50 Durability** for :dollar: **100,000**
+   ⚒️ 4️⃣ **50 Durability** for :dollar: **{durability_message}**
 
    Purchase **Gabe's Purse** to Keep ALL ITEMS when **Rebirthing**
    *You will not be able to select a new starting universe!*
@@ -1793,6 +1808,9 @@ async def trinketshop(ctx):
             return
       
       if button_ctx.custom_id == "5":
+         if boss_arm:
+            await button_ctx.send("Sorry I can't repair **Boss** Arms ...", hidden=True)
+            return
          if price > balance:
             await button_ctx.send("Insufficent funds.", hidden=True)
             return
