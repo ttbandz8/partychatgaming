@@ -7040,11 +7040,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         if o_health <= o_max_health:
                                             o_newhealth = o_health + o_healthcalc
                                             if o_newhealth > o_max_health:
-                                                healmessage = "the injuries dissapeared"
+                                                healmessage = "the injuries dissapeared!"
                                                 messagenumber = 1
                                                 o_health = o_max_health
                                             else:
-                                                healmessage = "regained some vitality"
+                                                healmessage = "regained some vitality."
                                                 messagenumber = 2
                                                 o_health = o_newhealth
                                         else:
@@ -7102,7 +7102,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         embedVar = discord.Embed(title=f"Turret Shot hits {t_card} for **60** Damage 💥",
                                                                 colour=0xe91e63)
                                         previous_moves.append(f"*{turn_total}:* 🩸 Turret Shot hits **{t_card}** for **60** Damage 💥")
-                                        t_health = round(t_health - 60)
+                                        t_health = round(t_health - (60 + turn_total))
 
                                     elif o_universe == "Solo Leveling":
                                         embedVar = discord.Embed(
@@ -7731,7 +7731,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Pentakill! Dealing {(60 * (o_focus_count + t_focus_count))} damage.")
                                                         await button_ctx.defer(ignore=True)
                                                     elif o_universe == "Souls":
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Phase 2: Enhanced Moveset unlocked!")
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Phase 2: Enhanced Moveset!")
                                                         await button_ctx.defer(ignore=True)
                                                     else:
                                                         embedVar = discord.Embed(title=f"{o_card} STRENGTHENED RESOLVE :zap:",
@@ -8392,7 +8392,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         embedVar = discord.Embed(title=f"Turret Shot hits {o_card} for **60** Damage 💥",
                                                                 colour=0xe91e63)
                                         previous_moves.append(f"*{turn_total}:* 🩸 Turret Shot hits **{o_card}** for **60** Damage 💥")
-                                        o_health = round(o_health - 60)
+                                        o_health = round(o_health - (60 + turn_total))
                                     elif t_universe == "Solo Leveling":
                                         embedVar = discord.Embed(
                                             title=f"Ruler's Authority... {o_card} loses **{60 + turn_total}** 🛡️ 🔻",
@@ -8961,7 +8961,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Pentakill! Dealing {(60 * (c_focus_count + t_focus_count))} damage.")
                                                             await button_ctx.defer(ignore=True)
                                                         elif t_universe == "Souls":
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Phase 2: Enhanced Moveset unlocked!")
+                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Phase 2: Enhanced Moveset!")
                                                             await button_ctx.defer(ignore=True)
                                                         else:
                                                             embedVar = discord.Embed(
@@ -9905,7 +9905,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                         value=f"**{t_card}** dealt **{(60 * (o_focus_count + t_focus_count))}** damage.")
                                                         previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Pentakill! Dealing {(60 * (o_focus_count + t_focus_count))} damage.")
                                                     elif t_universe == "Souls":
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Phase 2: Enhanced Moveset unlocked!")
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Phase 2: Enhanced Moveset!")
                                                         
                                                     else:
                                                         embedVar = discord.Embed(title=f"{t_card} STRENGTHENED RESOLVE :zap:",
@@ -10471,11 +10471,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         if o_health <= o_max_health:
                                             o_newhealth = o_health + o_healthcalc
                                             if o_newhealth > o_max_health:
-                                                healmessage = "the injuries dissapeared"
+                                                healmessage = "the injuries dissapeared!"
                                                 messagenumber = 1
                                                 o_health = o_max_health
                                             else:
-                                                healmessage = "regained some vitality"
+                                                healmessage = "regained some vitality."
                                                 messagenumber = 2
                                                 o_health = o_newhealth
                                         else:
@@ -10525,7 +10525,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         embedVar = discord.Embed(title=f"Turret Shot hits {t_card} for **60** Damage 💥",
                                                                 colour=0xe91e63)
                                         # await private_channel.send(embed=embedVar)
-                                        t_health = round(t_health - 60)
+                                        t_health = round(t_health - (60 + turn_total))
                                         
                                         previous_moves.append(f"*{turn_total}:* 🩸 Turret Shot hits **{t_card}** for **60** Damage 💥")
 
@@ -11921,7 +11921,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Pentakill! Dealing {(60 * (o_focus_count + t_focus_count))} damage.")
                                                             await button_ctx.defer(ignore=True)
                                                         elif o_universe == "Souls":
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Phase 2: Enhanced Moveset unlocked!")
+                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Phase 2: Enhanced Moveset!")
                                                             await button_ctx.defer(ignore=True)
                                                         else:
                                                             embedVar = discord.Embed(
@@ -12828,7 +12828,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         embedVar = discord.Embed(title=f"Turret Shot hits {o_card} for **60** Damage 💥",
                                                                 colour=0xe91e63)
                                         previous_moves.append(f"*{turn_total}:* 🩸 Turret Shot hits **{o_card}** for **60** Damage 💥")
-                                        o_health = round(o_health - 60)
+                                        o_health = round(o_health - (60 + turn_total))
 
                                     elif t_universe == "Solo Leveling":
                                         embedVar = discord.Embed(
@@ -13538,7 +13538,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                             value=f"**{t_card}** dealt **{(60 * (o_focus_count + t_focus_count))}** damage.")
                                                             previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Pentakill! Dealing {(60 * (o_focus_count + t_focus_count))} damage.")
                                                     elif t_universe == "Souls":
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Phase 2: Enhanced Moveset unlocked!")
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Phase 2: Enhanced Moveset!")
                                                         
                                                     else:
                                                         embedVar = discord.Embed(title=f"{t_card} STRENGTHENED RESOLVE :zap:",
@@ -14881,11 +14881,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             if c_health <= c_max_health:
                                                 c_newhealth = c_health + c_healthcalc
                                                 if c_newhealth > c_max_health:
-                                                    healmessage = "the injuries dissapeared"
+                                                    healmessage = "the injuries dissapeared!"
                                                     messagenumber = 1
                                                     c_health = c_max_health
                                                 else:
-                                                    healmessage = "regained some vitality"
+                                                    healmessage = "regained some vitality."
                                                     messagenumber = 2
                                                     c_health = c_newhealth
                                             else:
@@ -14938,7 +14938,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     colour=0xe91e63)
                                             #await private_channel.send(embed=embedVar)
                                             previous_moves.append(f"*{turn_total}:* 🩸 Turret Shot hits **{c_card}** for **60** Damage 💥")
-                                            t_health = round(t_health - 60)
+                                            t_health = round(t_health - (60 + turn_total))
 
                                         elif c_universe == "Solo Leveling":
                                             embedVar = discord.Embed(
@@ -15614,7 +15614,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                             value=f"**{c_card}** dealt **{(60 * (c_focus_count + t_focus_count))}** damage.")
                                                             previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: Pentakill! Dealing {(60 * (c_focus_count + t_focus_count))} damage.")
                                                         elif c_universe == "Souls":
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Phase 2: Enhanced Moveset unlocked!")
+                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Phase 2: Enhanced Moveset!")
                                                             
                                                         else:
                                                             embedVar = discord.Embed(
@@ -16708,7 +16708,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: Pentakill! Dealing {(60 * (c_focus_count + t_focus_count))} damage.")
                                                                 await button_ctx.defer(ignore=True)
                                                             elif c_universe == "Souls":
-                                                                previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Phase 2: Enhanced Moveset unlocked!")
+                                                                previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Phase 2: Enhanced Moveset!")
                                                                 await button_ctx.defer(ignore=True)
                                                             else:
                                                                 embedVar = discord.Embed(
@@ -17447,7 +17447,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     colour=0xe91e63)
                                             #await private_channel.send(embed=embedVar)
                                             previous_moves.append(f"*{turn_total}:* 🩸 Turret Shot hits **{c_card}** for **60** Damage 💥")
-                                            c_health = round(c_health - 30)
+                                            c_health = round(c_health - (60 + turn_total))
 
                                         elif t_universe == "Solo Leveling":
                                             embedVar = discord.Embed(
@@ -18101,7 +18101,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                             value=f"**{t_card}** dealt **{(60 * (c_focus_count + t_focus_count))}** damage.")
                                                             previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Pentakill! Dealing {(60 * (c_focus_count + t_focus_count))} damage.")
                                                     elif t_universe == "Souls":
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Phase 2: Enhanced Moveset unlocked!")
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Phase 2: Enhanced Moveset!")
                                                         
                                                     else:
                                                         embedVar = discord.Embed(title=f"{t_card} STRENGTHENED RESOLVE :zap:",
