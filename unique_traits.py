@@ -5,7 +5,7 @@ traits = [{
 },{
     'NAME': 'League Of Legends',
     'EFFECT': 'Turret Shot',
-    'TRAIT': 'When you Focus you deal 60 damage to Opponent. Upon Resolve, you deal 60 x (Total Focus Count) damage.'
+    'TRAIT': 'When you Focus you deal (60 + Turn Count) Damage to Opponent. Upon Resolve, you deal 60 x (Total Focus Count) Damage.'
 },{
     'NAME': 'Pokemon',
     'EFFECT': 'Evolution',
@@ -17,7 +17,7 @@ traits = [{
 },{
     'NAME': 'Naruto',
     'EFFECT': 'Substitution',
-    'TRAIT': 'If Focused, you cannot be hit. On Resolve, Hashirama Cells heal from damage stored during Substitution.'
+    'TRAIT': 'If Focused, you cannot be hit. On Resolve, Hashirama Cells heal from Damage stored during Substitution.'
 },{
     'NAME': 'Chainsawman',
     'EFFECT': 'Devilization',
@@ -37,7 +37,7 @@ traits = [{
 },{
     'NAME': 'Fate',
     'EFFECT': 'Command Seal',
-    'TRAIT': 'On Resolve, Strike with Ultimate with no mana cost.'
+    'TRAIT': 'On Resolve, Strike with Ultimate with no Stamina cost.'
 },{
     'NAME': 'Demon Slayer',
     'EFFECT': 'Total Concentration Constant',
@@ -85,5 +85,5 @@ traits = [{
 },{
     'NAME': 'Persona',
     'EFFECT': 'Summoner',
-    'TRAIT': 'Pet deals damage equal to your :boom: attack, in addition to their status effect.'
+    'TRAIT': 'Pet deals Damage equal to your :boom: attack, in addition to their status effect.'
 }]
