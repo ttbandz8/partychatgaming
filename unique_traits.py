@@ -57,11 +57,11 @@ traits = [{
 },{
     'NAME': 'Solo Leveling',
     'EFFECT': 'Rulers Authority',
-    'TRAIT': 'When you Focus, opponent loses (60 + turn count) Defense.'
+    'TRAIT': 'On Focus, opponent loses (60 + turn count) Defense. Arise! When Opponent Arm Breaks it revives as your Arm.'
 },{
     'NAME': 'Souls',
     'EFFECT': 'Combo Recognition',
-    'TRAIT': 'When your opponent Focus, gain (60 + turn count) Attack.'
+    'TRAIT': 'On opponent Focus, gain (60 + turn count) Attack. Second Phase! On Resolve, 💥 becomes your ☄️, and your ☄️ becomes another 🏵️.'
 },{
     'NAME': 'Death Note',
     'EFFECT': 'Scheduled Death',
