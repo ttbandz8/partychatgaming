@@ -8038,7 +8038,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     await button_ctx.defer(ignore=True)
                                                 else:
                                                     if t_universe == "Naruto" and t_stamina < 10:
-                                                        t_stored_damage = round(dmg['DMG'] * .25)
+                                                        t_stored_damage = round(dmg['DMG'] * .45)
                                                         t_naruto_heal_buff = t_naruto_heal_buff + t_stored_damage
                                                         t_health = t_health
                                                         embedVar = discord.Embed(title=f"{t_card}: Substitution Jutsu", description=f"{o_card} strikes a log", colour=0xe91e63)
@@ -9235,7 +9235,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         turn = 0
                                                     else:
                                                         if o_universe == "Naruto" and o_stamina < 10:
-                                                            o_stored_damage = round(dmg['DMG'] * .25)
+                                                            o_stored_damage = round(dmg['DMG'] * .45)
                                                             o_naruto_heal_buff = o_naruto_heal_buff + o_stored_damage
                                                             o_health = o_health 
                                                             embedVar = discord.Embed(title=f"{o_card}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
@@ -10165,7 +10165,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     turn = 0
                                                 else:
                                                     if o_universe == "Naruto" and o_stamina < 10:
-                                                        o_stored_damage = round(dmg['DMG'] * .25)
+                                                        o_stored_damage = round(dmg['DMG'] * .45)
                                                         o_naruto_heal_buff = o_naruto_heal_buff + o_stored_damage
                                                         o_health = o_health 
                                                         embedVar = discord.Embed(title=f"{o_card}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
@@ -12452,7 +12452,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         await button_ctx.defer(ignore=True)
                                                     else:
                                                         if t_universe == "Naruto" and t_stamina < 10:
-                                                            t_stored_damage = round(dmg['DMG'] * .25)
+                                                            t_stored_damage = round(dmg['DMG'] * .45)
                                                             t_naruto_heal_buff = t_naruto_heal_buff + t_stored_damage
                                                             t_health = t_health 
                                                             embedVar = discord.Embed(title=f"{t_card}: Substitution Jutsu", description=f"{o_card} strikes a log", colour=0xe91e63)
@@ -14106,7 +14106,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         turn = turn_selector
                                                     else:
                                                         if c_universe == "Naruto" and c_stamina < 10:
-                                                            c_stored_damage = round(dmg['DMG'] * .25)
+                                                            c_stored_damage = round(dmg['DMG'] * .45)
                                                             c_naruto_heal_buff = c_naruto_heal_buff + c_stored_damage
                                                             c_health = c_health 
                                                             if mode not in AUTO_BATTLE_modes:
@@ -14639,7 +14639,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     turn = turn_selector
                                                 else:
                                                     if o_universe == "Naruto" and o_stamina < 10:
-                                                        o_stored_damage = round(dmg['DMG'] * .25)
+                                                        o_stored_damage = round(dmg['DMG'] * .45)
                                                         o_naruto_heal_buff = o_naruto_heal_buff + o_stored_damage
                                                         o_health = o_health 
                                                         if mode not in AUTO_BATTLE_modes:
@@ -16001,7 +16001,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         turn = 3
                                                     else:
                                                         if t_universe == "Naruto" and t_stamina < 10:
-                                                            t_stored_damage = round(dmg['DMG'] * .25)
+                                                            t_stored_damage = round(dmg['DMG'] * .45)
                                                             t_naruto_heal_buff = t_naruto_heal_buff + t_stored_damage
                                                             t_health = t_health 
                                                             embedVar = discord.Embed(title=f"{t_card}: Substitution Jutsu", description=f"{c_card} strikes a log", colour=0xe91e63)
@@ -17112,7 +17112,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             await button_ctx.defer(ignore=True)
                                                         else:
                                                             if t_universe == "Naruto" and t_stamina < 10:
-                                                                t_stored_damage = round(dmg['DMG'] * .25)
+                                                                t_stored_damage = round(dmg['DMG'] * .45)
                                                                 t_naruto_heal_buff = t_naruto_heal_buff + t_stored_damage
                                                                 t_health = t_health 
                                                                 embedVar = discord.Embed(title=f"{t_card}: Substitution Jutsu", description=f"{c_card} strikes a log", colour=0xe91e63)
@@ -18499,7 +18499,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         turn = 0
                                                     else:
                                                         if o_universe == "Naruto" and o_stamina < 10:
-                                                            o_stored_damage = round(dmg['DMG'] * .25)
+                                                            o_stored_damage = round(dmg['DMG'] * .45)
                                                             o_naruto_heal_buff = o_naruto_heal_buff + o_stored_damage
                                                             o_health = o_health 
                                                             embedVar = discord.Embed(title=f"{o_card}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
@@ -18771,7 +18771,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         turn = 0
                                                     else:
                                                         if c_universe == "Naruto" and c_stamina < 10:
-                                                            c_stored_damage = round(dmg['DMG'] * .25)
+                                                            c_stored_damage = round(dmg['DMG'] * .45)
                                                             c_naruto_heal_buff = c_naruto_heal_buff + c_stored_damage
                                                             c_health = c_health 
                                                             embedVar = discord.Embed(title=f"{c_card}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
