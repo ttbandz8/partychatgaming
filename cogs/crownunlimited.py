@@ -13237,7 +13237,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             if t_universe == "Souls" and t_used_resolve:
                                                 dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_stamina,
                                                                 t_enhancer_used, t_health, o_health, o_stamina, t_max_health,
-                                                                c_attack, t_special_move_description, turn_total,
+                                                                o_attack, t_special_move_description, turn_total,
                                                                 tcard_lvl_ap_buff, t_1)
                                             else:
                                                 dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense, t_stamina,
