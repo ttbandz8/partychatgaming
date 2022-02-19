@@ -1329,9 +1329,9 @@ async def daily(ctx):
       q2 = random.randint(0, oppponent_len)
       q3 = random.randint(0, oppponent_len)
 
-      q1_earn = round(random.randint(50000, 300000))
-      q2_earn = round(random.randint(100000, 900000))
-      q3_earn = round(random.randint(300000, 1000000))
+      q1_earn = round(random.randint(50000, 200000))
+      q2_earn = round(random.randint(200000, 300000))
+      q3_earn = round(random.randint(400000, 600000))
 
       quests = [{'OPPONENT': opponents[q1], 'TYPE': 'Tales', 'GOAL': 1, 'WINS': 0, 'REWARD': q1_earn },{'OPPONENT': opponents[q2], 'TYPE': 'Tales', 'GOAL': 2, 'WINS': 0, 'REWARD': q2_earn }, {'OPPONENT': opponents[q3], 'TYPE': 'Tales', 'GOAL': 3, 'WINS': 0, 'REWARD': q3_earn }]
       db.updateVaultNoFilter({'DID': str(ctx.author.id)}, {'$set': {'QUESTS': quests}})

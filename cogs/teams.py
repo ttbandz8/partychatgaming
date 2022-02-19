@@ -38,26 +38,33 @@ class Teams(commands.Cog):
         if user['LEVEL'] < 11:
             await ctx.send("🔓 Unlock Guilds by completing Floor 10 of the 🌑 Abyss! Use /abyss to enter the abyss.")
             return
-        team = guild
-        team_name = team
-        if team_name == "":
-            return
-        team_query = {'OWNER': str(ctx.author), 'TNAME': team_name, 'MEMBERS': [str(ctx.author)], 'GAMES': ["Crown Unlimited"]}
+        team_name = guild.lower()
+        team_display_name = guild
+        transaction_message = f"{user['DISNAME']} has joined the guild."
+
+
+        team_query = {
+            'OWNER': str(ctx.author), 
+            'TEAM_NAME': team_name, 
+            'TEAM_DISPLAY_NAME': team_display_name, 
+            'MEMBERS': [str(ctx.author)],
+            'TRANSACTIONS': [transaction_message]
+            }
 
         team_buttons = [
             manage_components.create_button(
                 style=ButtonStyle.blue,
-                label="✔️",
+                label="Create",
                 custom_id="Yes"
             ),
             manage_components.create_button(
                 style=ButtonStyle.red,
-                label="❌",
+                label="Cancel",
                 custom_id="No"
             )
         ]
         team_buttons_action_row = manage_components.create_actionrow(*team_buttons)
-        await ctx.send(f"Do you want to create the Guild **{team_name}**?".format(self), components=[team_buttons_action_row])
+        msg = await ctx.send(f"Create the Guild **{team_display_name}**?".format(self), components=[team_buttons_action_row])
 
 
         def check(button_ctx):
@@ -67,20 +74,21 @@ class Teams(commands.Cog):
             button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[team_buttons_action_row], check=check)
 
             if button_ctx.custom_id == "No":
-                await button_ctx.send("Guild not created.")
+                await msg.delete()
                 return
             
             if button_ctx.custom_id == "Yes":
                 
-                response = db.createTeam(data.newTeam(team_query), str(ctx.author))
+                response = db.createTeam(data.newTeam(team_query), str(ctx.author.id))
                 await button_ctx.send(response)
+                await msg.delete()
         except:
-            print("Guild creation ended unexpectedly. ")
-
+            await ctx.send("Guild already exists")
+    
     @cog_ext.cog_slash(description="Recruit Guild member", guild_ids=main.guild_ids)
     async def recruit(self, ctx, player: User):
         owner_profile = db.queryUser({'DID': str(ctx.author.id)})
-        team_profile = db.queryTeam({'TNAME': owner_profile['TEAM']})
+        team_profile = db.queryTeam({'TEAM_NAME': owner_profile['TEAM']})
         if owner_profile['LEVEL'] < 11:
             await ctx.send("🔓 Unlock Guilds by completing Floor 10 of the 🌑 Abyss! Use /abyss to enter the abyss.")
             return
@@ -99,7 +107,7 @@ class Teams(commands.Cog):
 
                 # If user is part of a team you cannot add them to your team
                 if member_profile['TEAM'] == 'PCG':
-                    await main.DM(ctx, player, f"{ctx.author.mention}" + f" has invited you to join **{team_profile['TNAME']}** !" + f" React in server to join **{team_profile['TNAME']}**" )
+                    await main.DM(ctx, player, f"{ctx.author.mention}" + f" has invited you to join **{team_profile['TEAM_NAME']}** !" + f" React in server to join **{team_profile['TEAM_NAME']}**" )
 
                     team_buttons = [
                         manage_components.create_button(
@@ -114,7 +122,7 @@ class Teams(commands.Cog):
                         )
                     ]
                     team_buttons_action_row = manage_components.create_actionrow(*team_buttons)
-                    await ctx.send(f"{player.mention}" +f" do you want to join Guild **{team_profile['TNAME']}**?".format(self), components=[team_buttons_action_row])
+                    await ctx.send(f"{player.mention}" +f" do you want to join Guild **{team_profile['TEAM_NAME']}**?".format(self), components=[team_buttons_action_row])
 
                     def check(button_ctx):
                         return str(button_ctx.author) == str(player)
@@ -127,7 +135,7 @@ class Teams(commands.Cog):
                             return
 
                         if button_ctx.custom_id == "Yes":
-                            team_query = {'TNAME': team_profile['TNAME']}
+                            team_query = {'TEAM_NAME': team_profile['TEAM_NAME']}
                             new_value_query = {'$push': {'MEMBERS': str(player)}}
                             response = db.addTeamMember(team_query, new_value_query, str(ctx.author), str(player))
                             await button_ctx.send(response)
@@ -142,7 +150,7 @@ class Teams(commands.Cog):
     @cog_ext.cog_slash(description="Apply for a Guild", guild_ids=main.guild_ids)
     async def apply(self, ctx, owner: User):
         owner_profile = db.queryUser({'DID': str(owner.id)})
-        team_profile = db.queryTeam({'TNAME': owner_profile['TEAM']})
+        team_profile = db.queryTeam({'TEAM_NAME': owner_profile['TEAM']})
 
         if owner_profile['TEAM'] == 'PCG':
             await ctx.send(m.USER_NOT_ON_TEAM, delete_after=5)
@@ -156,7 +164,7 @@ class Teams(commands.Cog):
 
                 # If user is part of a team you cannot add them to your team
                 if member_profile['TEAM'] != 'PCG':
-                    await main.DM(ctx, owner, f"{ctx.author.mention}" + f" Applied to join **{team_profile['TNAME']}** !" + f" You may accept or deny in server." )
+                    await main.DM(ctx, owner, f"{ctx.author.mention}" + f" Applied to join **{team_profile['TEAM_NAME']}** !" + f" You may accept or deny in server." )
                     
                     team_buttons = [
                         manage_components.create_button(
@@ -185,7 +193,7 @@ class Teams(commands.Cog):
                             return
 
                         if button_ctx.custom_id == "Yes":
-                            team_query = {'TNAME': team_profile['TNAME']}
+                            team_query = {'TEAM_NAME': team_profile['TEAM_NAME']}
                             new_value_query = {'$push': {'MEMBERS': str(ctx.author)}}
                             response = db.addTeamMember(team_query, new_value_query, str(owner), str(ctx.author))
                             await button_ctx.send(response)
@@ -199,7 +207,7 @@ class Teams(commands.Cog):
     @cog_ext.cog_slash(description="Delete guild member", guild_ids=main.guild_ids)
     async def deletemember(self, ctx, member: User):
         owner_profile = db.queryUser({'DID': str(ctx.author.id)})
-        team_profile = db.queryTeam({'TNAME': owner_profile['TEAM']})
+        team_profile = db.queryTeam({'TEAM_NAME': owner_profile['TEAM']})
         if team_profile:
             if owner_profile['DISNAME'] == team_profile['OWNER']:  
                 team_buttons = [
@@ -215,7 +223,7 @@ class Teams(commands.Cog):
                     )
                 ]
                 team_buttons_action_row = manage_components.create_actionrow(*team_buttons)
-                await ctx.send(f"Do you want to remove {member.mention} from the **{team_profile['TNAME']}**?".format(self), components=[team_buttons_action_row])
+                await ctx.send(f"Do you want to remove {member.mention} from the **{team_profile['TEAM_NAME']}**?".format(self), components=[team_buttons_action_row])
 
                 def check(button_ctx):
                     return button_ctx.author == ctx.author
@@ -228,7 +236,7 @@ class Teams(commands.Cog):
                         return
 
                     if button_ctx.custom_id == "Yes":    
-                        team_query = {'TNAME': team_profile['TNAME']}
+                        team_query = {'TEAM_NAME': team_profile['TEAM_NAME']}
                         new_value_query = {'$pull': {'MEMBERS': str(member)}}
                         response = db.deleteTeamMember(team_query, new_value_query, str(member))
                         await button_ctx.send(response)
@@ -242,22 +250,27 @@ class Teams(commands.Cog):
     @cog_ext.cog_slash(description="Leave a guild", guild_ids=main.guild_ids)
     async def leaveguild(self, ctx):
         member_profile = db.queryUser({'DID': str(ctx.author.id)})
-        team_profile = db.queryTeam({'TNAME': member_profile['TEAM']})
+        team_profile = db.queryTeam({'TEAM_NAME': member_profile['TEAM'].lower()})
+        
         if team_profile:
+            team_display_name = team_profile['TEAM_DISPLAY_NAME']
+            team_name = team_profile['TEAM_NAME'].lower()
+            transaction_message = f"{member_profile['DISNAME']} has left the guild."
+
             team_buttons = [
                 manage_components.create_button(
                     style=ButtonStyle.blue,
-                    label="✔️",
+                    label="Leave",
                     custom_id="Yes"
                 ),
                 manage_components.create_button(
                     style=ButtonStyle.red,
-                    label="❌",
+                    label="Stay",
                     custom_id="No"
                 )
             ]
             team_buttons_action_row = manage_components.create_actionrow(*team_buttons)
-            await ctx.send(f"Do you want to leave guild **{member_profile['TEAM']}**?".format(self), components=[team_buttons_action_row])
+            msg = await ctx.send(f"Leave guild **{team_display_name}**?".format(self), components=[team_buttons_action_row])
 
             def check(button_ctx):
                 return button_ctx.author == ctx.author
@@ -266,48 +279,54 @@ class Teams(commands.Cog):
                 button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[team_buttons_action_row], check=check)
 
                 if button_ctx.custom_id == "No":
-                    await button_ctx.send("Stayed in Guild.")
+                    await msg.delete()
                     return
                 
                 if button_ctx.custom_id == "Yes":
-                    team_query = {'TNAME': member_profile['TEAM']}
-                    new_value_query = {'$pull': {'MEMBERS': str(ctx.author)}}
-                    response = db.deleteTeamMember(team_query, new_value_query, str(ctx.author))
+                    team_query = {'TEAM_NAME': team_name}
+                    new_value_query = {
+                        '$pull': {'MEMBERS': member_profile['DISNAME']}, 
+                        '$addToSet': {'TRANSACTIONS': transaction_message}
+                        }
+                    response = db.deleteTeamMember(team_query, new_value_query, str(ctx.author.id))
                     await ctx.send(response)
+                    await msg.delete()
             except:
                 print("Guild not Left. ")
-
         else:
             await ctx.send(m.TEAM_DOESNT_EXIST, delete_after=5)
 
     @cog_ext.cog_slash(description="Delete a guild", guild_ids=main.guild_ids)
     async def deleteguild(self, ctx, guild: str):
-        team = guild
-        team_name = team
-        team_query = {'OWNER': str(ctx.author), 'TNAME': team_name}
+        team_query = {'TEAM_NAME': guild.lower()}
         team = db.queryTeam(team_query)
+        user = db.queryUser({'DID': str(ctx.author.id)})
         guildteam=False
         if team:
+            team_name = team['TEAM_NAME']
+            team_display_name = team['TEAM_DISPLAY_NAME']
+            
+            # ASSOCIATION CHECK
             guildname = team['GUILD']
             if guildname != 'PCG':
                 guildteam=True
-            if team['OWNER'] == str(ctx.author):
 
+            if team['OWNER'] == user['DISNAME']:
                 team_buttons = [
                     manage_components.create_button(
                         style=ButtonStyle.blue,
-                        label="✔️",
+                        label="Delete",
                         custom_id="Yes"
                     ),
                     manage_components.create_button(
                         style=ButtonStyle.red,
-                        label="❌",
+                        label="Cancel",
                         custom_id="No"
                     )
                 ]
                 team_buttons_action_row = manage_components.create_actionrow(*team_buttons)
 
-                await ctx.send(f"Do you want to delete the {team['GAMES'][0]} Guild **{team_name}**?".format(self), components=[team_buttons_action_row])
+                msg = await ctx.send(f"Delete Guild **{team_display_name}**?".format(self), components=[team_buttons_action_row])
 
                 def check(button_ctx):
                     return button_ctx.author == ctx.author
@@ -316,16 +335,17 @@ class Teams(commands.Cog):
                     button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[team_buttons_action_row], check=check)
 
                     if button_ctx.custom_id == "No":
-                        await button_ctx.send("Guild not deleted.")
+                        await msg.delete()
                         return
 
                     if button_ctx.custom_id == "Yes":
-                        response = db.deleteTeam(team, str(ctx.author))
+                        response = db.deleteTeam(team, str(ctx.author.id))
                         user_query = {'DID': str(ctx.author.id)}
                         new_value = {'$set': {'TEAM': 'PCG'}}
                         db.updateUserNoFilter(user_query, new_value)
                         await button_ctx.send(response)
                         if guildteam:
+                            # ASSOCIATION CHECK
                             guild_query = {'GNAME' : str(guildname)}
                             guild_info = db.queryGuildAlt(guild_query)
                             new_query = {'FOUNDER' : str(guild_info['FOUNDER'])}

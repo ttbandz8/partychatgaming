@@ -347,7 +347,7 @@ def addGuildSword(query, add_to_guild_query, user, new_team):
             guild_col.update_one(query, add_to_guild_query, upsert=True)
 
              # Add Guild to Guild Profile as well
-            query = {'TNAME': new_team}
+            query = {'TEAM_NAME': new_team}
             new_value = {'$set': {'GUILD': guild['GNAME']}}
             teams_col.update_one(query, new_value) 
             return f"{new_team} enlisted as a {guild['GNAME']} Sword!. "
@@ -364,7 +364,7 @@ def deleteGuildSword(query, value, user, new_team):
             if user == guild['FOUNDER'] or guild['SWORN']:
                 update = guild_col.update_one(query, value, upsert=True)
                 # Add Guild to User Profile as well
-                query = {'TNAME': new_team}
+                query = {'TEAM_NAME': new_team}
                 new_value = {'$set': {'GUILD': 'PCG'}}
                 teams_col.update_one(query, new_value) 
                 return f"{new_team} renounced their oath to {guild['GNAME']}!."
@@ -383,7 +383,7 @@ def deleteGuildSwordAlt(query, value, new_team):
             guild = guild_col.find_one(query)
             update = guild_col.update_one(query, value, upsert=True)
             # Add Guild to User Profile as well
-            query = {'TNAME': new_team}
+            query = {'TEAM_NAME': new_team}
             new_value = {'$set': {'GUILD': 'PCG'}}
             teams_col.update_one(query, new_value) 
             return f"{new_team} renounced their oath to {guild['GNAME']}!."
@@ -732,7 +732,7 @@ def updateGods(query, new_value):
         return m.TOURNEY_DOES_NOT_EXIST
 
 def addTeamMember(query, add_to_team_query, user, new_user):
-    exists = team_exists({'TNAME': query['TNAME']})
+    exists = team_exists({'TEAM_NAME': query['TEAM_NAME']})
     if exists:
         team = teams_col.find_one(query)
         if user == team['OWNER']:
@@ -740,7 +740,7 @@ def addTeamMember(query, add_to_team_query, user, new_user):
 
              # Add Guild to User Profile as well
             query = {'DISNAME': new_user}
-            new_value = {'$set': {'TEAM': team['TNAME']}}
+            new_value = {'$set': {'TEAM': team['TEAM_NAME']}}
             users_col.update_one(query, new_value)
             return "User added to the Guild. "
         else:
@@ -1441,18 +1441,18 @@ def updateManyTeams(new_value):
 
 def queryTeam(team):
     try:
-        exists = team_exists({'TNAME': team['TNAME']})
+        exists = team_exists({'TEAM_NAME': team['TEAM_NAME']})
         if exists:
             data = teams_col.find_one(team)
             return data
         else:
            return False
     except:
-        print("Find Guild failed.")
+        return False
 
 def updateTeam(query, new_value):
     try:
-        exists = team_exists({'TNAME': query['TNAME']})
+        exists = team_exists({'TEAM_NAME': query['TEAM_NAME']})
         if exists:
             data = teams_col.update_one(query, new_value)
             return data
@@ -1467,36 +1467,33 @@ def queryAllTeams(team):
 
 def createTeam(team, user):
     try:
-        find_user = queryUser({'DISNAME': user})
-        if find_user['TEAM'] and find_user['TEAM'] != 'PCG':
-            return "User is already part of a Guild. "
+        find_user = queryUser({'DID': user})
+        if find_user['TEAM'].lower and find_user['TEAM'] != 'PCG':
+            return "You're already in a Guild"
         else:
-            exists = team_exists({'TNAME': team['TNAME']})
+            exists = team_exists({'TEAM_NAME': team['TEAM_NAME']})
             if exists:
-                return "Guild already exists."
+                return False
             else:
-                print("Inserting new Guild.")
                 teams_col.insert_one(team)
 
                 # Add Guild to User Profile as well
-                query = {'DISNAME': user}
-                new_value = {'$set': {'TEAM': team['TNAME']}}
+                query = {'DID': user}
+                new_value = {'$set': {'TEAM': team['TEAM_DISPLAY_NAME']}}
                 users_col.update_one(query, new_value)
-                return "Guild has been created. "
+                return "Guild has been successfully created. "
     except:
         return "Cannot create Guild."
 
 def deleteTeam(team, user):
     try:
-        exists = team_exists({'TNAME': team['TNAME']})
+        exists = team_exists({'TEAM_NAME': team['TEAM_NAME']})
         if exists:
             team = teams_col.find_one(team)
-            if user == team['OWNER']:
-                users_col.update_many({'TEAM': team['TNAME']}, {'$set': {'TEAM': "PCG"}})
-                teams_col.delete_one({'TNAME': team['TNAME']})
-                return "Guild deleted."
-            else:
-                return "This user is not a member of the Guild."
+            users_col.update_many({'TEAM': team['TEAM_DISPLAY_NAME']}, {'$set': {'TEAM': "PCG"}})
+            teams_col.delete_one({'TEAM_NAME': team['TEAM_NAME']})
+            return f"**{team['TEAM_DISPLAY_NAME']}** has been deleted."
+
         else:
             return "Guild does not exist."
 
@@ -1505,19 +1502,17 @@ def deleteTeam(team, user):
 
 def deleteTeamMember(query, value, user):
     try:
-        exists = team_exists({'TNAME': query['TNAME']})
+        exists = team_exists({'TEAM_NAME': query['TEAM_NAME']})
         if exists:
             team = teams_col.find_one(query)
-            if user in team['MEMBERS']:
-
-                update = teams_col.update_one(query, value, upsert=True)
-                # Add Guild to User Profile as well
-                query = {'DISNAME': str(user)}
-                new_value = {'$set': {'TEAM': 'PCG'}}
-                users_col.update_one(query, new_value)
-                return "User has been removed from Guild. "
-            else:
-                return "This user is not a member of the Guild."
+            update = teams_col.update_one(query, value, upsert=True)
+            
+            
+            # Remove user guild and make it PCG
+            user_query = {'DID': str(user)}
+            new_value = {'$set': {'TEAM': 'PCG'}}
+            users_col.update_one(user_query, new_value)
+            return f"You've successfully left **{team['TEAM_DISPLAY_NAME']}**"
         else:
             return "Guild does not exist."
 
@@ -1525,7 +1520,7 @@ def deleteTeamMember(query, value, user):
         print("Delete Guild Member failed.")
 
 def addTeamMember(query, add_to_team_query, user, new_user):
-    exists = team_exists({'TNAME': query['TNAME']})
+    exists = team_exists({'TEAM_NAME': query['TEAM_NAME']})
     if exists:
         team = teams_col.find_one(query)
         if user == team['OWNER']:
@@ -1533,7 +1528,7 @@ def addTeamMember(query, add_to_team_query, user, new_user):
 
              # Add Guild to User Profile as well
             query = {'DISNAME': new_user}
-            new_value = {'$set': {'TEAM': team['TNAME']}}
+            new_value = {'$set': {'TEAM': team['TEAM_NAME']}}
             users_col.update_one(query, new_value)
             return "User added to the Guild. "
         else:

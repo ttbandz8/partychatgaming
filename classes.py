@@ -1,4 +1,5 @@
 from dataclasses import dataclass, asdict, field
+from logging import captureWarnings
 import time
 
 now = time.asctime()
@@ -84,17 +85,27 @@ class GUILD():
 @dataclass(frozen=True, order=True)
 class TEAMS():
     OWNER: str
-    TNAME: str
     MEMBERS: list
+    TEAM_NAME: str
+    TEAM_DISPLAY_NAME:  str = field(default_factory=lambda: '')
+    OFFICERS: list[str] = field(default_factory=lambda: []) 
+    CAPTAINS: list[str] = field(default_factory=lambda: [])
+    TRANSACTIONS: list[str] = field(default_factory=lambda: [])
+    STORAGE: list[str] = field(default_factory=lambda: [])
+    GUILD_BUFF_AVAILABLE: bool = field(default_factory=lambda: False)
+    GUILD_BUFF_ON: bool = field(default_factory=lambda: False)
+    GUILD_BUFF: list[str] = field(default_factory=lambda: []) 
     GUILD: str = field(default_factory=lambda: 'PCG')
     TOURNAMENT_WINS: int = field(default_factory=lambda: 0)
     BANK: int = field(default_factory=lambda: 0)
-    SCRIM_WINS: int = field(default_factory=lambda: 0)
-    SCRIM_LOSSES: int = field(default_factory=lambda: 0)
-    GAMES: list[str] = field(default_factory=lambda: ['PCG'])
+    WINS: int = field(default_factory=lambda: 0)
+    LOSSES: int = field(default_factory=lambda: 0)
     LOGO_URL: str = field(default_factory=lambda: '')
     LOGO_FLAG: bool = field(default_factory=lambda: False)
     BADGES: list[str] = field(default_factory=lambda: ['New Team'])
+    GUILD_MISSION: list[str] = field(default_factory=lambda: [])
+    COMPLETED_MISSIONS: int = field(default_factory=lambda: 0)
+    MEMBER_COUNT: int = field(default_factory=lambda: 1)
     TIMESTAMP: str = now
 
 
