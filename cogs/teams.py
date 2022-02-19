@@ -136,7 +136,10 @@ class Teams(commands.Cog):
 
                         if button_ctx.custom_id == "Yes":
                             team_query = {'TEAM_NAME': team_profile['TEAM_NAME']}
-                            new_value_query = {'$push': {'MEMBERS': str(player)}}
+                            new_value_query = {
+                                '$push': {'MEMBERS': str(player)},
+                                '$inc': {'MEMBER_COUNT': 1}
+                                }
                             response = db.addTeamMember(team_query, new_value_query, str(ctx.author), str(player))
                             await button_ctx.send(response)
                     except:
@@ -237,7 +240,10 @@ class Teams(commands.Cog):
 
                     if button_ctx.custom_id == "Yes":    
                         team_query = {'TEAM_NAME': team_profile['TEAM_NAME']}
-                        new_value_query = {'$pull': {'MEMBERS': str(member)}}
+                        new_value_query = {
+                            '$pull': {'MEMBERS': str(member)},
+                            '$inc': {'MEMBER_COUNT': -1}
+                            }
                         response = db.deleteTeamMember(team_query, new_value_query, str(member))
                         await button_ctx.send(response)
                 except:
@@ -286,7 +292,8 @@ class Teams(commands.Cog):
                     team_query = {'TEAM_NAME': team_name}
                     new_value_query = {
                         '$pull': {'MEMBERS': member_profile['DISNAME']}, 
-                        '$addToSet': {'TRANSACTIONS': transaction_message}
+                        '$addToSet': {'TRANSACTIONS': transaction_message},
+                        '$inc': {'MEMBER_COUNT': -1}
                         }
                     response = db.deleteTeamMember(team_query, new_value_query, str(ctx.author.id))
                     await ctx.send(response)

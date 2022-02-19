@@ -65,7 +65,7 @@ class Lookup(commands.Cog):
                 team = d['TEAM']
                 guild = d['GUILD']
                 if team != "PCG":
-                    team_info = db.queryTeam({'TNAME' : str(team)})
+                    team_info = db.queryTeam({'TEAM_NAME' : str(team)})
                     guild = team_info['GUILD']
                 family = d['FAMILY']
                 titles = d['TITLE']
@@ -230,73 +230,119 @@ class Lookup(commands.Cog):
             return
 
     @cog_ext.cog_slash(description="Lookup Guild stats", guild_ids=main.guild_ids)
-    async def guild(self, ctx, guild: str):
-        team = guild
-        team_name = team
-        team_query = {'TNAME': team_name}
-        team = db.queryTeam(team_query)
-        owner_name = ""
-        if team:
-            team_name = team['TNAME']
-            owner_name = team['OWNER']
-            games = team['GAMES']
-            # avatar = game['IMAGE_URL']
-            badges = team['BADGES']
-            scrim_wins = team['SCRIM_WINS']
-            scrim_losses = team['SCRIM_LOSSES']
-            tournament_wins = team['TOURNAMENT_WINS']
-            logo = team['LOGO_URL']
-            balance = team['BANK']
-            icon = ":coin:"
-            guild = team['GUILD']
-            if balance >= 500000:
-                icon = ":money_with_wings:"
-            elif balance >=300000:
-                icon = ":moneybag:"
-            elif balance >= 150000:
-                icon = ":dollar:"
-            
+    async def guild(self, ctx, guild = None):
+        try:
+            if guild:
+                team_name = guild.lower()
+                team_query = {'TEAM_NAME': team_name}
+                team = db.queryTeam(team_query)
+                team_display_name = team['TEAM_DISPLAY_NAME']
+            else:
+                user = db.queryUser({'DID': str(ctx.author.id)})
+                team = db.queryTeam({'TEAM_NAME': user['TEAM'].lower()})
+                team_name = team['TEAM_NAME']
+                team_display_name = team['TEAM_DISPLAY_NAME']
 
-            team_list = []
-            for members in team['MEMBERS']:
-                mem_query = db.queryUser({'DISNAME': members})
-                ign_list = [x for x in mem_query['IGN']]
-                ign_list_keys = [k for k in ign_list[0].keys()]
-                if ign_list_keys == games:
-                    team_list.append(f"{ign_list[0][games[0]]}") 
-                else:
-                    team_list.append(f"{members}")
+            if team:
+                is_owner = False
+                is_officer = False
+                is_captain = False
+                is_member = False
+                    
+                owner = team['OWNER']
+                officers = team['OFFICERS']
+                captains = team['CAPTAINS']
+                members = team['MEMBERS']
+                member_count = team['MEMBER_COUNT']
+
+                formatted_list_of_members = []
+                for member in members:
+                    index = members.index(member)
+                    officer = False
+                    captain = False
+                    owns = False
+                    if member in officers:
+                        officer = True
+                        formatted_name = f"🅾️ **{member}**"
+                    elif member in captains:
+                        captain = True
+                        formatted_name = f"🇨 **{member}**"
+                    elif member == owner:
+                        owns = True
+                        formatted_name = f"👑 **{member}**"
+                    else:
+                        formatted_name = f"🔰 **{member}**"
+                    
+                    formatted_list_of_members.append(formatted_name)
+
+                transactions = team['TRANSACTIONS']
+                storage = team['STORAGE']
+                balance = team['BANK']
+
+                guild_buff_available = team['GUILD_BUFF_AVAILABLE']
+                guild_buff_on = team['GUILD_BUFF_ON']
+                guild_buff = team['GUILD_BUFF']
+                
+                association = team['GUILD']
+
+                tournament_wins = team['TOURNAMENT_WINS']
+                wins = team['WINS']
+                losses = team['LOSSES']
+
+                guild_mission = team['GUILD_MISSION']
+                completed_missions = team['COMPLETED_MISSIONS']
+
+                icon = ":coin:"
+                guild = team['GUILD']
+                if balance >= 500000:
+                    icon = ":money_with_wings:"
+                elif balance >=300000:
+                    icon = ":moneybag:"
+                elif balance >= 150000:
+                    icon = ":dollar:"
+                
+
+                team_list = []
+                for members in team['MEMBERS']:
+                    mem_query = db.queryUser({'DISNAME': members})
+                    ign_list = [x for x in mem_query['IGN']]
+                    ign_list_keys = [k for k in ign_list[0].keys()]
+                    if ign_list_keys == games:
+                        team_list.append(f"{ign_list[0][games[0]]}") 
+                    else:
+                        team_list.append(f"{members}")
 
 
-            embed1 = discord.Embed(title=f":checkered_flag: | {team_name} Guild Card - {icon} {'{:,}'.format(balance)}".format(self), description=":bank: | Party Chat Gaming Database", colour=000000)
-            if team['LOGO_FLAG']:
-                embed1.set_image(url=logo)
-            embed1.add_field(name=":man_detective: | **~ Owner ~**", value= owner_name.split("#",1)[0], inline=True)
-            embed1.add_field(name=":flags: | **~ Association ~** ", value= guild, inline=False)
-            embed1.add_field(name=":medal: | **~ Ranked Wins ~**", value=scrim_wins)
-            embed1.add_field(name=":crossed_swords: | **~ Ranked Losses ~**", value=scrim_losses)
-            embed1.add_field(name=":fireworks: | **~ Guild War Victories ~**", value=tournament_wins, inline=False)
-            
-            embed2 = discord.Embed(title=f":checkered_flag: | {team_name} Guild Members - {icon} {'{:,}'.format(balance)}".format(self), description=":bank: | Party Chat Gaming Database", colour=000000)
-            if team['LOGO_FLAG']:
-                embed2.set_image(url=logo)
-            embed2.add_field(name=":military_helmet: | **~ Members ~**", value="\n".join(f'{t}'.format(self) for t in team_list), inline=False)
+                embed1 = discord.Embed(title=f":checkered_flag: | {team_name} Guild Card - {icon} {'{:,}'.format(balance)}".format(self), description=":bank: | Party Chat Gaming Database", colour=000000)
+                if team['LOGO_FLAG']:
+                    embed1.set_image(url=logo)
+                embed1.add_field(name=":man_detective: | **~ Owner ~**", value= owner_name.split("#",1)[0], inline=True)
+                embed1.add_field(name=":flags: | **~ Association ~** ", value= guild, inline=False)
+                embed1.add_field(name=":medal: | **~ Ranked Wins ~**", value=scrim_wins)
+                embed1.add_field(name=":crossed_swords: | **~ Ranked Losses ~**", value=scrim_losses)
+                embed1.add_field(name=":fireworks: | **~ Guild War Victories ~**", value=tournament_wins, inline=False)
+                
+                embed2 = discord.Embed(title=f":checkered_flag: | {team_name} Guild Members - {icon} {'{:,}'.format(balance)}".format(self), description=":bank: | Party Chat Gaming Database", colour=000000)
+                if team['LOGO_FLAG']:
+                    embed2.set_image(url=logo)
+                embed2.add_field(name=":military_helmet: | **~ Members ~**", value="\n".join(f'{t}'.format(self) for t in team_list), inline=False)
 
-            embed3 = discord.Embed(title=f":checkered_flag: | {team_name} Guild Members - {icon} {'{:,}'.format(balance)}".format(self), description=":bank: | Party Chat Gaming Database", colour=000000)
-            if team['LOGO_FLAG']:
-                embed3.set_image(url=logo)
-            embed3.add_field(name=":video_game: | Games ", value="\n".join(games), inline=False)
-            paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
-            paginator.add_reaction('⏮️', "first")
-            paginator.add_reaction('⬅️', "back")
-            paginator.add_reaction('🔐', "lock")
-            paginator.add_reaction('➡️', "next")
-            paginator.add_reaction('⏭️', "last")
-            embeds = [embed1, embed2, embed3]
-            await paginator.run(embeds)
-        else:
-            await ctx.send(m.TEAM_DOESNT_EXIST)
-
+                embed3 = discord.Embed(title=f":checkered_flag: | {team_name} Guild Members - {icon} {'{:,}'.format(balance)}".format(self), description=":bank: | Party Chat Gaming Database", colour=000000)
+                if team['LOGO_FLAG']:
+                    embed3.set_image(url=logo)
+                embed3.add_field(name=":video_game: | Games ", value="\n".join(games), inline=False)
+                paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+                paginator.add_reaction('⏮️', "first")
+                paginator.add_reaction('⬅️', "back")
+                paginator.add_reaction('🔐', "lock")
+                paginator.add_reaction('➡️', "next")
+                paginator.add_reaction('⏭️', "last")
+                embeds = [embed1, embed2, embed3]
+                await paginator.run(embeds)
+            else:
+                await ctx.send(m.TEAM_DOESNT_EXIST)
+        except Exception as e:
+            await ctx.send(e)
     @cog_ext.cog_slash(description="Lookup Association", guild_ids=main.guild_ids)
     async def association(self, ctx, association: str):
         guild_name = association
@@ -356,7 +402,7 @@ class Lookup(commands.Cog):
             for swords in guild['SWORDS']:
                 blade_count = 0
                 sword_count = sword_count + 1
-                sword_team = db.queryTeam({'TNAME': swords})
+                sword_team = db.queryTeam({'TEAM_NAME': swords})
                 dubs = sword_team['SCRIM_WINS']
                 els = sword_team['SCRIM_LOSSES']
                 for blades in sword_team['MEMBERS']:

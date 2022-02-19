@@ -1479,7 +1479,10 @@ def createTeam(team, user):
 
                 # Add Guild to User Profile as well
                 query = {'DID': user}
-                new_value = {'$set': {'TEAM': team['TEAM_DISPLAY_NAME']}}
+                new_value = {
+                    '$set': {'TEAM': team['TEAM_DISPLAY_NAME']},
+                    '$inc': {'MEMBER_COUNT': 1}
+                    }
                 users_col.update_one(query, new_value)
                 return "Guild has been successfully created. "
     except:
