@@ -13127,8 +13127,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     elif t_stamina >= 110:
                                         aiMove = 2
                                     elif t_stamina >= 100 and (t_health >= o_health):
-                                        if t_enhancer['TYPE'] in Gamble_Enhancer_Check or t_enhancer[
-                                            'TYPE'] in Healer_Enhancer_Check:
+                                        if t_enhancer['TYPE'] in Gamble_Enhancer_Check or t_enhancer['TYPE'] in Healer_Enhancer_Check:
                                             aiMove = 3
                                         elif t_enhancer['TYPE'] in Support_Enhancer_Check or t_enhancer[
                                             'TYPE'] in Stamina_Enhancer_Check or t_enhancer['TYPE'] in Turn_Enhancer_Check:
@@ -13142,8 +13141,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     elif t_stamina >= 90:
                                         if t_enhancer['TYPE'] in Gamble_Enhancer_Check:
                                             aiMove = 3
-                                        elif t_enhancer['TYPE'] in Support_Enhancer_Check or t_enhancer[
-                                            'TYPE'] in Stamina_Enhancer_Check or t_enhancer['TYPE'] in Sacrifice_Enhancer_Check:
+                                        elif t_enhancer['TYPE'] in Support_Enhancer_Check or t_enhancer['TYPE'] in Stamina_Enhancer_Check or t_enhancer['TYPE'] in Sacrifice_Enhancer_Check:
                                             aiMove = 4
                                         else:
                                             aiMove = 1
@@ -13186,8 +13184,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             aiMove = 5
                                         elif t_used_focus == False:
                                             aiMove = 2
-                                        elif t_enhancer['TYPE'] in Support_Enhancer_Check or t_enhancer[
-                                            'TYPE'] in Stamina_Enhancer_Check:
+                                        elif t_enhancer['TYPE'] in Support_Enhancer_Check or t_enhancer['TYPE'] in Stamina_Enhancer_Check:
                                             aiMove = 4
                                         else:
                                             aiMove = 1
@@ -13198,8 +13195,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     elif t_stamina >= 30 and (t_health >= o_health):
                                         if t_enhancer['TYPE'] in Gamble_Enhancer_Check:
                                             aiMove = 1
-                                        elif t_enhancer['TYPE'] in Support_Enhancer_Check or t_enhancer[
-                                            'TYPE'] in Stamina_Enhancer_Check:
+                                        elif t_enhancer['TYPE'] in Support_Enhancer_Check or t_enhancer['TYPE'] in Stamina_Enhancer_Check:
                                             aiMove = 2
                                         else:
                                             aiMove = await ai_enhancer_moves(turn_total,t_used_focus,t_used_resolve,t_pet_used,t_stamina,
@@ -13212,8 +13208,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     elif t_stamina >= 20:
                                         if t_enhancer['TYPE'] in Gamble_Enhancer_Check:
                                             aiMove = 1
-                                        elif t_enhancer['TYPE'] in Support_Enhancer_Check or t_enhancer[
-                                            'TYPE'] in Stamina_Enhancer_Check:
+                                        elif t_enhancer['TYPE'] in Support_Enhancer_Check or t_enhancer['TYPE'] in Stamina_Enhancer_Check:
                                             aiMove = 1
                                         else:
                                             aiMove = 4
@@ -13240,8 +13235,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 tcard_lvl_ap_buff, None)
                                         else:
                                             if t_universe == "Souls" and t_used_resolve:
-                                                dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, c_defense, t_stamina,
-                                                                t_enhancer_used, t_health, c_health, c_stamina, t_max_health,
+                                                dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_stamina,
+                                                                t_enhancer_used, t_health, o_health, o_stamina, t_max_health,
                                                                 c_attack, t_special_move_description, turn_total,
                                                                 tcard_lvl_ap_buff, t_1)
                                             else:
