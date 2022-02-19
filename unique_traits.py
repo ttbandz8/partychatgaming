@@ -1,7 +1,7 @@
 traits = [{
     'NAME': 'My Hero Academia',
     'EFFECT': 'Plus Ultra!',
-    'TRAIT': 'You do not lose a turn after you Resolve. AP of all abilities is increased by 80 + turn count + current Stamina.'
+    'TRAIT': 'You do not lose a turn after you Resolve. AP of all abilities is increased by 80 + turn count.'
 },{
     'NAME': 'League Of Legends',
     'EFFECT': 'Turret Shot',
