@@ -262,7 +262,7 @@ destiny = [
     {
         "NAME": "My Brothers Keeper",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 8,
         "DEFEAT": "Itachi",
         "USE_CARDS": ["Sasuke"],
         "EARN": "Awakened Itachi",
@@ -1762,7 +1762,7 @@ destiny = [
     {
         "NAME": "Save Eri",
         "WINS": 0,
-        "REQUIRED": 10,
+        "REQUIRED": 8,
         "DEFEAT": "Overhaul",
         "USE_CARDS": ["Mirio"],
         "EARN": "Overhaul",
@@ -1792,7 +1792,7 @@ destiny = [
     {
         "NAME": "Sibling Rivalry",
         "WINS": 0,
-        "REQUIRED": 15,
+        "REQUIRED": 10,
         "DEFEAT": "Dabi",
         "USE_CARDS": ["Todoroki"],
         "EARN": "Dabi",
@@ -1802,7 +1802,7 @@ destiny = [
     {
         "NAME": "Deku vs Kacchan",
         "WINS": 0,
-        "REQUIRED": 8,
+        "REQUIRED": 3,
         "DEFEAT": "Bakugo",
         "USE_CARDS": ["Deku"],
         "EARN": "Bakugo",
@@ -1840,19 +1840,9 @@ destiny = [
         "UNIVERSE": "My Hero Academia"
     },
     {
-        "NAME": "Otsutsuki Bloodline",
-        "WINS": 0,
-        "REQUIRED": 10,
-        "DEFEAT": "Kaguya",
-        "USE_CARDS": ["Boruto"],
-        "EARN": "Avenger Boruto",
-        "COMPLETED": False,
-        "UNIVERSE": "Naruto"
-    },
-    {
         "NAME": "You Let Rin Die",
         "WINS": 0,
-        "REQUIRED": 15,
+        "REQUIRED": 8,
         "DEFEAT": "Obito",
         "USE_CARDS": ["Kakashi"],
         "EARN": "Awakened Obito",
@@ -1862,7 +1852,7 @@ destiny = [
     {
         "NAME": "Uchiha Retribution",
         "WINS": 0,
-        "REQUIRED": 15,
+        "REQUIRED": 8,
         "DEFEAT": "Itachi",
         "USE_CARDS": ["Mangekyo Sasuke"],
         "EARN": "Awakened Itachi",
@@ -1892,7 +1882,7 @@ destiny = [
     {
         "NAME": "Protect Rin",
         "WINS": 0,
-        "REQUIRED": 10,
+        "REQUIRED": 8,
         "DEFEAT": "Kakashi",
         "USE_CARDS": ["Awakened Obito"],
         "EARN": "Awakened Kakashi",
@@ -3152,7 +3142,7 @@ destiny = [
     {
         "NAME": "Ahjin",
         "WINS": 0,
-        "REQUIRED": 30,
+        "REQUIRED": 15,
         "DEFEAT": "Jin Woo",
         "USE_CARDS": ["Yoo Jinho"],
         "EARN": "Jin Woo", 
@@ -3162,7 +3152,7 @@ destiny = [
     {
         "NAME": "The Shadow Vs The Dragon",
         "WINS": 0,
-        "REQUIRED": 30,
+        "REQUIRED": 10,
         "DEFEAT": "Antares",
         "USE_CARDS": ["Jin Woo"],
         "EARN": "Antares", 
@@ -3172,7 +3162,7 @@ destiny = [
     {
         "NAME": "The Grand Marshal",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 5,
         "DEFEAT": "Bellion",
         "USE_CARDS": ["Jin Woo"],
         "EARN": "Bellion", 
@@ -3182,7 +3172,7 @@ destiny = [
     {
         "NAME": "The Fallen Chairman",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 1,
         "DEFEAT": "Go Gunhee",
         "USE_CARDS": ["Jin Woo"],
         "EARN": "Go Gunhee", 
@@ -3192,7 +3182,7 @@ destiny = [
     {
         "NAME": "Blood Commander",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 3,
         "DEFEAT": "Idris Shadow",
         "USE_CARDS": ["Jin Woo"],
         "EARN": "Idris Shadow", 
@@ -3202,7 +3192,7 @@ destiny = [
     {
         "NAME": "The Ant King",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 3,
         "DEFEAT": "Beru Shadow",
         "USE_CARDS": ["Jin Woo"],
         "EARN": "Beru Shadow", 
@@ -3212,7 +3202,7 @@ destiny = [
     {
         "NAME": "The Father of the Monarch",
         "WINS": 0,
-        "REQUIRED": 28,
+        "REQUIRED": 5,
         "DEFEAT": "Sung Hwan",
         "USE_CARDS": ["Jin Woo"],
         "EARN": "Sung Hwan", 
@@ -3222,7 +3212,7 @@ destiny = [
     {
         "NAME": "The Monarch That Escaped",
         "WINS": 0,
-        "REQUIRED": 18,
+        "REQUIRED": 10,
         "DEFEAT": "Frost Monarch",
         "USE_CARDS": ["Go Gunhee"],
         "EARN": "Frost Monarch", 
@@ -3232,7 +3222,7 @@ destiny = [
     {
         "NAME": "Letter From The Grave",
         "WINS": 0,
-        "REQUIRED": 35,
+        "REQUIRED": 20,
         "DEFEAT": "Ashborn",
         "USE_CARDS": ["Sung Hwan"],
         "EARN": "Ashborn", 
@@ -3242,7 +3232,7 @@ destiny = [
     {
         "NAME": "Find The Proper Suitor",
         "WINS": 0,
-        "REQUIRED": 35,
+        "REQUIRED": 5,
         "DEFEAT": "Architect",
         "USE_CARDS": ["Ashborn"],
         "EARN": "Architect", 
@@ -3252,7 +3242,7 @@ destiny = [
     {
         "NAME": "Bow Or Die",
         "WINS": 0,
-        "REQUIRED": 50,
+        "REQUIRED": 5,
         "DEFEAT": "Statue Of God",
         "USE_CARDS": ["Architect"],
         "EARN": "Statue Of God", 
@@ -3272,7 +3262,7 @@ destiny = [
     {
         "NAME": "Haze The New Recruit",
         "WINS": 0,
-        "REQUIRED": 15,
+        "REQUIRED": 2,
         "DEFEAT": "Magna",
         "USE_CARDS": ["Asta"],
         "EARN": "Magna",
@@ -3282,7 +3272,7 @@ destiny = [
     {
         "NAME": "You Inspired Me To Grow Stronger",
         "WINS": 0,
-        "REQUIRED": 20,
+        "REQUIRED": 10,
         "DEFEAT": "Fuegoleon",
         "USE_CARDS": ["Asta"],
         "EARN": "Fuegoleon",
@@ -3292,7 +3282,7 @@ destiny = [
     {
         "NAME": "You Are The Weak One",
         "WINS": 0,
-        "REQUIRED": 10,
+        "REQUIRED": 5,
         "DEFEAT": "Mars",
         "USE_CARDS": ["Asta"],
         "EARN": "Mars",
@@ -3312,7 +3302,7 @@ destiny = [
     {
         "NAME": "Until One Of Us Dies",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 20,
         "DEFEAT": "Dante Zogratis",
         "USE_CARDS": ["Magna"],
         "EARN": "Dante Zogratis",
@@ -3322,7 +3312,7 @@ destiny = [
     {
         "NAME": "Captain Of The Golden Dawn",
         "WINS": 0,
-        "REQUIRED": 15,
+        "REQUIRED": 10,
         "DEFEAT": "William Vangeance",
         "USE_CARDS": ["Yuno"],
         "EARN": "William Vangeance",
@@ -3342,7 +3332,7 @@ destiny = [
     {
         "NAME": "The One True King",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 20,
         "DEFEAT": "Zenon Zogratis",
         "USE_CARDS": ["Yuno"],
         "EARN": "Zenon Zogratis",
@@ -3352,7 +3342,7 @@ destiny = [
     {
         "NAME": "Reveng Of The Elves",
         "WINS": 0,
-        "REQUIRED": 20,
+        "REQUIRED": 10,
         "DEFEAT": "Zagred",
         "USE_CARDS": ["Licht"],
         "EARN": "Zagred",
@@ -3362,7 +3352,7 @@ destiny = [
     {
         "NAME": "My Sister And My Rival",
         "WINS": 0,
-        "REQUIRED": 15,
+        "REQUIRED": 5,
         "DEFEAT": "Mereoleona",
         "USE_CARDS": ["Fuegoleon"],
         "EARN": "Mereoleona",
@@ -3372,7 +3362,7 @@ destiny = [
     {
         "NAME": "The Forgiven Brother",
         "WINS": 0,
-        "REQUIRED": 20,
+        "REQUIRED": 10,
         "DEFEAT": "Nozel Silva",
         "USE_CARDS": ["Noelle Silva"],
         "EARN": "Nozel Silva",
