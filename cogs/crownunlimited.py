@@ -2205,6 +2205,8 @@ async def destiny(player, opponent, mode):
     vault = db.queryVault({'DID': str(player.id)})
     user = db.queryUser({"DID": str(player.id)})
     vault_query = {'DID': str(player.id)}
+    card_info = db.queryCard({"NAME": str(user['CARD'])})
+    skin_for = card_info['SKIN_FOR']
     owned_destinies = []
     for destiny in vault['DESTINY']:
         owned_destinies.append(destiny['NAME'])
@@ -2218,7 +2220,7 @@ async def destiny(player, opponent, mode):
         if vault['DESTINY']:
             # TALES
             for destiny in vault['DESTINY']:
-                if user['CARD'] in destiny['USE_CARDS'] and opponent == destiny['DEFEAT'] and mode == "Tales":
+                if (user['CARD'] in destiny['USE_CARDS'] or skin_for in destiny['USE_CARDS']) and opponent == destiny['DEFEAT'] and mode == "Tales":
                     if destiny['WINS'] < destiny['REQUIRED']:
                         message = f"Secured a win toward **{destiny['NAME']}**. Keep it up!"
                         completion = destiny['REQUIRED'] - (destiny['WINS'] + 1)
