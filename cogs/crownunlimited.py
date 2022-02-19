@@ -7472,7 +7472,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         (.30 * o_defense) * (o_resolve / (.50 * o_defense)))
                                                     o_resolve_defense = round(
                                                         (.30 * o_defense) * (o_resolve / (.50 * o_defense)))
-                                                    ocard_lvl_ap_buff = ocard_lvl_ap_buff + 80 + turn_total
+                                                    ocard_lvl_ap_buff = ocard_lvl_ap_buff + 80 + turn_total  + o_stamina
 
                                                     o_stamina = o_stamina + o_resolve
                                                     o_health = o_health + o_resolve_health
@@ -8711,7 +8711,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             (.30 * t_defense) * (t_resolve / (.50 * t_defense)))
                                                         t_resolve_defense = round(
                                                             (.30 * t_defense) * (t_resolve / (.50 * t_defense)))
-                                                        tcard_lvl_ap_buff = tcard_lvl_ap_buff + 80 + turn_total
+                                                        tcard_lvl_ap_buff = tcard_lvl_ap_buff + 80 + turn_total  + t_stamina
 
                                                         t_stamina = t_stamina + t_resolve
                                                         t_health = t_health + t_resolve_health
@@ -9675,7 +9675,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         (.30 * t_defense) * (t_resolve / (.50 * t_defense)))
                                                     t_resolve_defense = round(
                                                         (.30 * t_defense) * (t_resolve / (.50 * t_defense)))
-                                                    tcard_lvl_ap_buff = tcard_lvl_ap_buff + 80 + turn_total
+                                                    tcard_lvl_ap_buff = tcard_lvl_ap_buff + 80 + turn_total  + t_stamina
 
                                                     t_stamina = t_stamina + t_resolve
                                                     t_health = t_health + t_resolve_health
@@ -10854,7 +10854,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     o_defense = round(o_defense - o_resolve_defense)
                                                     o_used_resolve = True
                                                     o_pet_used = False
-                                                    ocard_lvl_ap_buff = ocard_lvl_ap_buff + 80 + turn_total
+                                                    ocard_lvl_ap_buff = ocard_lvl_ap_buff + 80 + turn_total  + o_stamina
 
                                                     turn_total = turn_total + 1
                                                     turn = 0
@@ -11657,7 +11657,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             (.30 * o_defense) * (o_resolve / (.50 * o_defense)))
                                                         o_resolve_defense = round(
                                                             (.30 * o_defense) * (o_resolve / (.50 * o_defense)))
-                                                        ocard_lvl_ap_buff = ocard_lvl_ap_buff + 80 + turn_total
+                                                        ocard_lvl_ap_buff = ocard_lvl_ap_buff + 80 + turn_total  + o_stamina
 
                                                         o_stamina = o_stamina + o_resolve
                                                         o_health = o_health + o_resolve_health
@@ -13127,8 +13127,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     elif t_stamina >= 110:
                                         aiMove = 2
                                     elif t_stamina >= 100 and (t_health >= o_health):
-                                        if t_enhancer['TYPE'] in Gamble_Enhancer_Check or t_enhancer[
-                                            'TYPE'] in Healer_Enhancer_Check:
+                                        if t_enhancer['TYPE'] in Gamble_Enhancer_Check or t_enhancer['TYPE'] in Healer_Enhancer_Check:
                                             aiMove = 3
                                         elif t_enhancer['TYPE'] in Support_Enhancer_Check or t_enhancer[
                                             'TYPE'] in Stamina_Enhancer_Check or t_enhancer['TYPE'] in Turn_Enhancer_Check:
@@ -13142,8 +13141,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     elif t_stamina >= 90:
                                         if t_enhancer['TYPE'] in Gamble_Enhancer_Check:
                                             aiMove = 3
-                                        elif t_enhancer['TYPE'] in Support_Enhancer_Check or t_enhancer[
-                                            'TYPE'] in Stamina_Enhancer_Check or t_enhancer['TYPE'] in Sacrifice_Enhancer_Check:
+                                        elif t_enhancer['TYPE'] in Support_Enhancer_Check or t_enhancer['TYPE'] in Stamina_Enhancer_Check or t_enhancer['TYPE'] in Sacrifice_Enhancer_Check:
                                             aiMove = 4
                                         else:
                                             aiMove = 1
@@ -13186,8 +13184,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             aiMove = 5
                                         elif t_used_focus == False:
                                             aiMove = 2
-                                        elif t_enhancer['TYPE'] in Support_Enhancer_Check or t_enhancer[
-                                            'TYPE'] in Stamina_Enhancer_Check:
+                                        elif t_enhancer['TYPE'] in Support_Enhancer_Check or t_enhancer['TYPE'] in Stamina_Enhancer_Check:
                                             aiMove = 4
                                         else:
                                             aiMove = 1
@@ -13198,8 +13195,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     elif t_stamina >= 30 and (t_health >= o_health):
                                         if t_enhancer['TYPE'] in Gamble_Enhancer_Check:
                                             aiMove = 1
-                                        elif t_enhancer['TYPE'] in Support_Enhancer_Check or t_enhancer[
-                                            'TYPE'] in Stamina_Enhancer_Check:
+                                        elif t_enhancer['TYPE'] in Support_Enhancer_Check or t_enhancer['TYPE'] in Stamina_Enhancer_Check:
                                             aiMove = 2
                                         else:
                                             aiMove = await ai_enhancer_moves(turn_total,t_used_focus,t_used_resolve,t_pet_used,t_stamina,
@@ -13212,8 +13208,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     elif t_stamina >= 20:
                                         if t_enhancer['TYPE'] in Gamble_Enhancer_Check:
                                             aiMove = 1
-                                        elif t_enhancer['TYPE'] in Support_Enhancer_Check or t_enhancer[
-                                            'TYPE'] in Stamina_Enhancer_Check:
+                                        elif t_enhancer['TYPE'] in Support_Enhancer_Check or t_enhancer['TYPE'] in Stamina_Enhancer_Check:
                                             aiMove = 1
                                         else:
                                             aiMove = 4
@@ -13240,8 +13235,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 tcard_lvl_ap_buff, None)
                                         else:
                                             if t_universe == "Souls" and t_used_resolve:
-                                                dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, c_defense, t_stamina,
-                                                                t_enhancer_used, t_health, c_health, c_stamina, t_max_health,
+                                                dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_stamina,
+                                                                t_enhancer_used, t_health, o_health, o_stamina, t_max_health,
                                                                 c_attack, t_special_move_description, turn_total,
                                                                 tcard_lvl_ap_buff, t_1)
                                             else:
@@ -13324,7 +13319,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 t_resolve_health = round(fortitude + (.5 * t_resolve))
                                                 t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
                                                 t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
-                                                tcard_lvl_ap_buff = tcard_lvl_ap_buff + 80 + turn_total
+                                                tcard_lvl_ap_buff = tcard_lvl_ap_buff + 80 + turn_total  + t_stamina
 
                                                 t_stamina = t_stamina + t_resolve
                                                 t_health = t_health + t_resolve_health
@@ -15418,7 +15413,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             (.30 * c_defense) * (c_resolve / (.50 * c_defense)))
                                                         c_resolve_defense = round(
                                                             (.30 * c_defense) * (c_resolve / (.50 * c_defense)))
-                                                        ccard_lvl_ap_buff = ccard_lvl_ap_buff + 80 + turn_total
+                                                        ccard_lvl_ap_buff = ccard_lvl_ap_buff + 80 + turn_total  + c_stamina
 
                                                         c_stamina = c_stamina + c_resolve
                                                         c_health = c_health + c_resolve_health
@@ -16513,7 +16508,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 (.30 * c_defense) * (c_resolve / (.50 * c_defense)))
                                                             c_resolve_defense = round(
                                                                 (.30 * c_defense) * (c_resolve / (.50 * c_defense)))
-                                                            ccard_lvl_ap_buff = ccard_lvl_ap_buff + 80 + turn_total
+                                                            ccard_lvl_ap_buff = ccard_lvl_ap_buff + 80 + turn_total  + c_stamina
 
                                                             c_stamina = c_stamina + c_resolve
                                                             c_health = c_health + c_resolve_health
@@ -17907,7 +17902,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         (.30 * t_defense) * (t_resolve / (.50 * t_defense)))
                                                     t_resolve_defense = round(
                                                         (.30 * t_defense) * (t_resolve / (.50 * t_defense)))
-                                                    tcard_lvl_ap_buff = tcard_lvl_ap_buff + 80 + turn_total
+                                                    tcard_lvl_ap_buff = tcard_lvl_ap_buff + 80 + turn_total  + t_stamina
 
                                                     t_stamina = t_stamina + t_resolve
                                                     t_health = t_health + t_resolve_health
