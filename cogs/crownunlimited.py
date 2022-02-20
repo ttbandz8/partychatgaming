@@ -2197,7 +2197,7 @@ async def quest(player, opponent, mode):
             'trace': trace
         }))
         await ctx.send(
-            "There's an issue with your Quest. Please use /ff to close this channel and start anew. Alert support.")
+            "There's an issue with your Quest. Alert support.")
         return
 
 
@@ -2321,7 +2321,7 @@ async def destiny(player, opponent, mode):
             'trace': trace
         }))
         await ctx.send(
-            "There's an issue with your Destiny. Please use /ff to close this channel and start anew. Alert support.")
+            "There's an issue with your Destiny. Alert support.")
         return
 
 
@@ -2388,7 +2388,7 @@ async def summonlevel(pet, player):
             'trace': trace
         }))
         await ctx.send(
-            "There's an issue with leveling your Summon. Please use /ff to close this channel and start anew. Alert support.")
+            "There's an issue with leveling your Summon. Alert support.")
         return
 
 
@@ -20498,7 +20498,7 @@ async def drops(player, universe, matchcount):
             'trace': trace
         }))
         await ctx.send(
-            "There's an issue with the Drops. Please use /ff to close this channel and start anew. Alert support.")
+            "There's an issue with the Drops. Alert support.")
         return
 
 
@@ -20568,7 +20568,7 @@ async def specific_drops(player, card, universe):
             'trace': trace
         }))
         await ctx.send(
-            "There's an issue with the Drops. Please use /ff to close this channel and start anew. Alert support.")
+            "There's an issue with the Drops. Alert support.")
         return
 
 
@@ -20743,7 +20743,7 @@ async def dungeondrops(player, universe, matchcount):
             'trace': trace
         }))
         await ctx.send(
-            "There's an issue with Dungeon Drops. Please use /ff to close this channel and start anew. Alert support.")
+            "There's an issue with Dungeon Drops. Alert support.")
         return
 
 
@@ -20941,7 +20941,7 @@ async def bossdrops(player, universe):
             'trace': trace
         }))
         await ctx.send(
-            "There's an issue with Boss Drops. Please use /ff to close this channel and start anew. Alert support.")
+            "There's an issue with Boss Drops. Alert support.")
         return
 
 async def ai_enhancer_moves(turn_total,focus, resolve, summon, stamina, enhancer_type, health, maxhealth, attack, defense, oppstamina, oppattack, oppdefense, opphealth):
