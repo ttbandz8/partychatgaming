@@ -7109,9 +7109,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             await button_ctx.send(embed=embedVar)
 
                                     elif o_universe == "League Of Legends":
-                                        embedVar = discord.Embed(title=f"Turret Shot hits {t_card} for **60** Damage 💥",
+                                        embedVar = discord.Embed(title=f"Turret Shot hits {t_card} for **{60 + turn_total}** Damage 💥",
                                                                 colour=0xe91e63)
-                                        previous_moves.append(f"*{turn_total}:* 🩸 Turret Shot hits **{t_card}** for **60** Damage 💥")
+                                        previous_moves.append(f"*{turn_total}:* 🩸 Turret Shot hits **{t_card}** for **{60 + turn_total}** Damage 💥")
                                         t_health = round(t_health - (60 + turn_total))
 
                                     elif o_universe == "Solo Leveling":
@@ -7204,32 +7204,32 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         if temp_tarm_shield_active and not tarm_shield_active:
                                             if oarm_shield_active:
                                                 oshield_value = oshield_value + temp_tshield_value
-                                                previous_moves.append(f"🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
                                                 o_swapped = True
                                             elif not oarm_shield_active:
                                                 oarm_shield_active = True
                                                 oshield_value = temp_tshield_value
-                                                previous_moves.append(f"🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
                                                 o_swapped = True
                                         elif temp_tarm_barrier_active and not tarm_barrier_active:
                                             if oarm_barrier_active:
                                                 obarrier_count = obarrier_count + temp_tbarrier_count
-                                                previous_moves.append(f"🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
                                                 o_swapped = True
                                             elif not oarm_barrier_active:
                                                 oarm_barrier_active = True
                                                 obarrier_count = temp_tbarrier_count
-                                                previous_moves.append(f"🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
                                                 o_swapped = True
                                         elif temp_tarm_parry_active and not tarm_parry_active:
                                             if oarm_parry_active:
                                                 oparry_count = oparry_count + temp_tparry_count
-                                                previous_moves.append(f"🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
                                                 o_swapped = True
                                             elif not oarm_parry_active:
                                                 oarm_parry_active = True
                                                 oparry_count = temp_tparry_count
-                                                previous_moves.append(f"🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
                                                 o_swapped = True
 
 
@@ -8410,9 +8410,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         else:
                                             previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Transformation: Digivolve")
                                     elif t_universe == "League Of Legends":
-                                        embedVar = discord.Embed(title=f"Turret Shot hits {o_card} for **60** Damage 💥",
+                                        embedVar = discord.Embed(title=f"Turret Shot hits {o_card} for **{60 + turn_total}** Damage 💥",
                                                                 colour=0xe91e63)
-                                        previous_moves.append(f"*{turn_total}:* 🩸 Turret Shot hits **{o_card}** for **60** Damage 💥")
+                                        previous_moves.append(f"*{turn_total}:* 🩸 Turret Shot hits **{o_card}** for **{60 + turn_total}** Damage 💥")
                                         o_health = round(o_health - (60 + turn_total))
 
                                     elif t_universe == "Dragon Ball Z":
@@ -8501,32 +8501,32 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         if temp_oarm_shield_active and not oarm_shield_active:
                                             if tarm_shield_active:
                                                 tshield_value = tshield_value + temp_oshield_value
-                                                previous_moves.append(f"🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
                                                 t_swapped = True
                                             elif not tarm_shield_active:
                                                 tarm_shield_active = True
                                                 tshield_value = temp_oshield_value
-                                                previous_moves.append(f"🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
                                                 t_swapped = True
                                         elif temp_oarm_barrier_active and not oarm_barrier_active:
                                             if tarm_barrier_active:
                                                 tbarrier_count = tbarrier_count + temp_obarrier_count
-                                                previous_moves.append(f"🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
                                                 t_swapped = True
                                             elif not tarm_barrier_active:
                                                 tarm_barrier_active = True
                                                 tbarrier_count = temp_obarrier_count
-                                                previous_moves.append(f"🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
                                                 t_swapped = True
                                         elif temp_oarm_parry_active and not oarm_parry_active:
                                             if tarm_parry_active:
                                                 tparry_count = tparry_count + temp_oparry_count
-                                                previous_moves.append(f"🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
                                                 t_swapped = True
                                             elif not tarm_parry_active:
                                                 tarm_parry_active = True
                                                 tparry_count = temp_oparry_count
-                                                previous_moves.append(f"🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
                                                 t_swapped = True
                                    
 
@@ -9479,32 +9479,32 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             if temp_oarm_shield_active and not oarm_shield_active:
                                                 if tarm_shield_active:
                                                     tshield_value = tshield_value + temp_oshield_value
-                                                    previous_moves.append(f"🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
                                                     t_swapped = True
                                                 elif not tarm_shield_active:
                                                     tarm_shield_active = True
                                                     tshield_value = temp_oshield_value
-                                                    previous_moves.append(f"🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
                                                     t_swapped = True
                                             elif temp_oarm_barrier_active and not oarm_barrier_active:
                                                 if tarm_barrier_active:
                                                     tbarrier_count = tbarrier_count + temp_obarrier_count
-                                                    previous_moves.append(f"🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
                                                     t_swapped = True
                                                 elif not tarm_barrier_active:
                                                     tarm_barrier_active = True
                                                     tbarrier_count = temp_obarrier_count
-                                                    previous_moves.append(f"🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
                                                     t_swapped = True
                                             elif temp_oarm_parry_active and not oarm_parry_active:
                                                 if tarm_parry_active:
                                                     tparry_count = tparry_count + temp_oparry_count
-                                                    previous_moves.append(f"🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
                                                     t_swapped = True
                                                 elif not tarm_parry_active:
                                                     tarm_parry_active = True
                                                     tparry_count = temp_oparry_count
-                                                    previous_moves.append(f"🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
                                                     t_swapped = True
                                         tembedVar = discord.Embed(title=f"_Turn_ {turn_total}", description=textwrap.dedent(f"""\
                                         {previous_moves_into_embed}
@@ -10563,12 +10563,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Transformation: Digivolve")
 
                                     elif o_universe == "League Of Legends":
-                                        embedVar = discord.Embed(title=f"Turret Shot hits {t_card} for **60** Damage 💥",
+                                        embedVar = discord.Embed(title=f"Turret Shot hits {t_card} for **{60 + turn_total}** Damage 💥",
                                                                 colour=0xe91e63)
                                         # await private_channel.send(embed=embedVar)
                                         t_health = round(t_health - (60 + turn_total))
                                         
-                                        previous_moves.append(f"*{turn_total}:* 🩸 Turret Shot hits **{t_card}** for **60** Damage 💥")
+                                        previous_moves.append(f"*{turn_total}:* 🩸 Turret Shot hits **{t_card}** for **{60 + turn_total}** Damage 💥")
 
 
                                     elif o_universe == "Dragon Ball Z":
@@ -10659,32 +10659,32 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             if temp_tarm_shield_active and not tarm_shield_active:
                                                 if oarm_shield_active:
                                                     oshield_value = oshield_value + temp_tshield_value
-                                                    previous_moves.append(f"🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
                                                     o_swapped = True
                                                 elif not oarm_shield_active:
                                                     oarm_shield_active = True
                                                     oshield_value = temp_tshield_value
-                                                    previous_moves.append(f"🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
                                                     o_swapped = True
                                             elif temp_tarm_barrier_active and not tarm_barrier_active:
                                                 if oarm_barrier_active:
                                                     obarrier_count = obarrier_count + temp_tbarrier_count
-                                                    previous_moves.append(f"🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
                                                     o_swapped = True
                                                 elif not oarm_barrier_active:
                                                     oarm_barrier_active = True
                                                     obarrier_count = temp_tbarrier_count
-                                                    previous_moves.append(f"🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
                                                     o_swapped = True
                                             elif temp_tarm_parry_active and not tarm_parry_active:
                                                 if oarm_parry_active:
                                                     oparry_count = oparry_count + temp_tparry_count
-                                                    previous_moves.append(f"🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
                                                     o_swapped = True
                                                 elif not oarm_parry_active:
                                                     oarm_parry_active = True
                                                     oparry_count = temp_tparry_count
-                                                    previous_moves.append(f"🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
                                                     o_swapped = True
                                         
                                         aiMove = 0
@@ -11347,32 +11347,32 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             if temp_tarm_shield_active and not tarm_shield_active:
                                                 if oarm_shield_active:
                                                     oshield_value = oshield_value + temp_tshield_value
-                                                    previous_moves.append(f"🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
                                                     o_swapped = True
                                                 elif not oarm_shield_active:
                                                     oarm_shield_active = True
                                                     oshield_value = temp_tshield_value
-                                                    previous_moves.append(f"🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
                                                     o_swapped = True
                                             elif temp_tarm_barrier_active and not tarm_barrier_active:
                                                 if oarm_barrier_active:
                                                     obarrier_count = obarrier_count + temp_tbarrier_count
-                                                    previous_moves.append(f"🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
                                                     o_swapped = True
                                                 elif not oarm_barrier_active:
                                                     oarm_barrier_active = True
                                                     obarrier_count = temp_tbarrier_count
-                                                    previous_moves.append(f"🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
                                                     o_swapped = True
                                             elif temp_tarm_parry_active and not tarm_parry_active:
                                                 if oarm_parry_active:
                                                     oparry_count = oparry_count + temp_tparry_count
-                                                    previous_moves.append(f"🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
                                                     o_swapped = True
                                                 elif not oarm_parry_active:
                                                     oarm_parry_active = True
                                                     oparry_count = temp_tparry_count
-                                                    previous_moves.append(f"🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
                                                     o_swapped = True
                                    
 
@@ -12888,9 +12888,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             await asyncio.sleep(2)
 
                                     elif t_universe == "League Of Legends":
-                                        embedVar = discord.Embed(title=f"Turret Shot hits {o_card} for **60** Damage 💥",
+                                        embedVar = discord.Embed(title=f"Turret Shot hits {o_card} for **{60 + turn_total}** Damage 💥",
                                                                 colour=0xe91e63)
-                                        previous_moves.append(f"*{turn_total}:* 🩸 Turret Shot hits **{o_card}** for **60** Damage 💥")
+                                        previous_moves.append(f"*{turn_total}:* 🩸 Turret Shot hits **{o_card}** for **{60 + turn_total}** Damage 💥")
                                         o_health = round(o_health - (60 + turn_total))
 
                                     elif t_universe == "Dragon Ball Z":
@@ -12969,32 +12969,32 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         if temp_oarm_shield_active and not oarm_shield_active:
                                             if tarm_shield_active:
                                                 tshield_value = tshield_value + temp_oshield_value
-                                                previous_moves.append(f"🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
                                                 t_swapped = True
                                             elif not tarm_shield_active:
                                                 tarm_shield_active = True
                                                 tshield_value = temp_oshield_value
-                                                previous_moves.append(f"🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
                                                 t_swapped = True
                                         elif temp_oarm_barrier_active and not oarm_barrier_active:
                                             if tarm_barrier_active:
                                                 tbarrier_count = tbarrier_count + temp_obarrier_count
-                                                previous_moves.append(f"🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
                                                 t_swapped = True
                                             elif not tarm_barrier_active:
                                                 tarm_barrier_active = True
                                                 tbarrier_count = temp_obarrier_count
-                                                previous_moves.append(f"🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
                                                 t_swapped = True
                                         elif temp_oarm_parry_active and not oarm_parry_active:
                                             if tarm_parry_active:
                                                 tparry_count = tparry_count + temp_oparry_count
-                                                previous_moves.append(f"🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
                                                 t_swapped = True
                                             elif not tarm_parry_active:
                                                 tarm_parry_active = True
                                                 tparry_count = temp_oparry_count
-                                                previous_moves.append(f"🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
                                                 t_swapped = True
                                                                   
 
@@ -13028,32 +13028,32 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             if temp_oarm_shield_active and not oarm_shield_active:
                                                 if tarm_shield_active:
                                                     tshield_value = tshield_value + temp_oshield_value
-                                                    previous_moves.append(f"🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
                                                     t_swapped = True
                                                 elif not tarm_shield_active:
                                                     tarm_shield_active = True
                                                     tshield_value = temp_oshield_value
-                                                    previous_moves.append(f"🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
                                                     t_swapped = True
                                             elif temp_oarm_barrier_active and not oarm_barrier_active:
                                                 if tarm_barrier_active:
                                                     tbarrier_count = tbarrier_count + temp_obarrier_count
-                                                    previous_moves.append(f"🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
                                                     t_swapped = True
                                                 elif not tarm_barrier_active:
                                                     tarm_barrier_active = True
                                                     tbarrier_count = temp_obarrier_count
-                                                    previous_moves.append(f"🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
                                                     t_swapped = True
                                             elif temp_oarm_parry_active and not oarm_parry_active:
                                                 if tarm_parry_active:
                                                     tparry_count = tparry_count + temp_oparry_count
-                                                    previous_moves.append(f"🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
                                                     t_swapped = True
                                                 elif not tarm_parry_active:
                                                     tarm_parry_active = True
                                                     tparry_count = temp_oparry_count
-                                                    previous_moves.append(f"🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
                                                     t_swapped = True
                                         
                                         tembedVar = discord.Embed(title=f"_Turn_ {turn_total}", description=textwrap.dedent(f"""\
@@ -15005,10 +15005,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
 
                                         elif c_universe == "League Of Legends":
-                                            embedVar = discord.Embed(title=f"Turret Shot hits {t_card} for **60** Damage 💥",
+                                            embedVar = discord.Embed(title=f"Turret Shot hits {t_card} for **{60 + turn_total}** Damage 💥",
                                                                     colour=0xe91e63)
                                             #await private_channel.send(embed=embedVar)
-                                            previous_moves.append(f"*{turn_total}:* 🩸 Turret Shot hits **{c_card}** for **60** Damage 💥")
+                                            previous_moves.append(f"*{turn_total}:* 🩸 Turret Shot hits **{c_card}** for **{60 + turn_total}** Damage 💥")
                                             t_health = round(t_health - (60 + turn_total))
 
                                         elif c_universe == "Dragon Ball Z":
@@ -15108,32 +15108,32 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 if temp_tarm_shield_active and not tarm_shield_active:
                                                     if carm_shield_active:
                                                         cshield_value = cshield_value + temp_tshield_value
-                                                        previous_moves.append(f"🩸 **{c_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** **ARISE!** *{tarm_name}* is now yours")
                                                         c_swapped = True
                                                     elif not carm_shield_active:
                                                         carm_shield_active = True
                                                         cshield_value = temp_tshield_value
-                                                        previous_moves.append(f"🩸 **{c_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** **ARISE!** *{tarm_name}* is now yours")
                                                         c_swapped = True
                                                 elif temp_tarm_barrier_active and not tarm_barrier_active:
                                                     if carm_barrier_active:
                                                         cbarrier_count = cbarrier_count + temp_tbarrier_count
-                                                        previous_moves.append(f"🩸 **{c_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** **ARISE!** *{tarm_name}* is now yours")
                                                         c_swapped = True
                                                     elif not carm_barrier_active:
                                                         carm_barrier_active = True
                                                         cbarrier_count = temp_tbarrier_count
-                                                        previous_moves.append(f"🩸 **{c_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** **ARISE!** *{tarm_name}* is now yours")
                                                         c_swapped = True
                                                 elif temp_tarm_parry_active and not tarm_parry_active:
                                                     if carm_parry_active:
                                                         cparry_count = cparry_count + temp_tparry_count
-                                                        previous_moves.append(f"🩸 **{c_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** **ARISE!** *{tarm_name}* is now yours")
                                                         c_swapped = True
                                                     elif not carm_parry_active:
                                                         carm_parry_active = True
                                                         cparry_count = temp_tparry_count
-                                                        previous_moves.append(f"🩸 **{c_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** **ARISE!** *{tarm_name}* is now yours")
                                                         c_swapped = True
 
                                             #await private_channel.send(file=companion_card)
@@ -16275,32 +16275,32 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 if temp_tarm_shield_active and not tarm_shield_active:
                                                     if carm_shield_active:
                                                         cshield_value = cshield_value + temp_tshield_value
-                                                        previous_moves.append(f"🩸 **{c_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** **ARISE!** *{tarm_name}* is now yours")
                                                         c_swapped = True
                                                     elif not carm_shield_active:
                                                         carm_shield_active = True
                                                         cshield_value = temp_tshield_value
-                                                        previous_moves.append(f"🩸 **{c_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** **ARISE!** *{tarm_name}* is now yours")
                                                         c_swapped = True
                                                 elif temp_tarm_barrier_active and not tarm_barrier_active:
                                                     if carm_barrier_active:
                                                         cbarrier_count = cbarrier_count + temp_tbarrier_count
-                                                        previous_moves.append(f"🩸 **{c_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** **ARISE!** *{tarm_name}* is now yours")
                                                         c_swapped = True
                                                     elif not carm_barrier_active:
                                                         carm_barrier_active = True
                                                         cbarrier_count = temp_tbarrier_count
-                                                        previous_moves.append(f"🩸 **{c_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** **ARISE!** *{tarm_name}* is now yours")
                                                         c_swapped = True
                                                 elif temp_tarm_parry_active and not tarm_parry_active:
                                                     if carm_parry_active:
                                                         cparry_count = cparry_count + temp_tparry_count
-                                                        previous_moves.append(f"🩸 **{c_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** **ARISE!** *{tarm_name}* is now yours")
                                                         c_swapped = True
                                                     elif not carm_parry_active:
                                                         carm_parry_active = True
                                                         cparry_count = temp_tparry_count
-                                                        previous_moves.append(f"🩸 **{c_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** **ARISE!** *{tarm_name}* is now yours")
                                                         c_swapped = True
 
 
@@ -17534,10 +17534,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
 
                                         elif t_universe == "League Of Legends":
-                                            embedVar = discord.Embed(title=f"Turret Shot hits {c_card} for **60** Damage 💥",
+                                            embedVar = discord.Embed(title=f"Turret Shot hits {c_card} for **{60 + turn_total}** Damage 💥",
                                                                     colour=0xe91e63)
                                             #await private_channel.send(embed=embedVar)
-                                            previous_moves.append(f"*{turn_total}:* 🩸 Turret Shot hits **{c_card}** for **60** Damage 💥")
+                                            previous_moves.append(f"*{turn_total}:* 🩸 Turret Shot hits **{c_card}** for **{60 + turn_total}** Damage 💥")
                                             c_health = round(c_health - (60 + turn_total))
 
                                         elif t_universe == "Dragon Ball Z":
@@ -17639,32 +17639,32 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             if temp_carm_shield_active and not carm_shield_active:
                                                 if tarm_shield_active:
                                                     tshield_value = tshield_value + temp_cshield_value
-                                                    previous_moves.append(f"🩸 **{t_card}** **ARISE!** *{carm_name}* is now yours")
+                                                    previous_moves.append(f"*{turn_total}:* *{turn_total}:* 🩸 **{t_card}** **ARISE!** *{carm_name}* is now yours")
                                                     t_swapped = True
                                                 elif not tarm_shield_active:
                                                     tarm_shield_active = True
                                                     tshield_value = temp_cshield_value
-                                                    previous_moves.append(f"🩸 **{t_card}** **ARISE!** *{carm_name}* is now yours")
+                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{carm_name}* is now yours")
                                                     t_swapped = True
                                             elif temp_carm_barrier_active and not carm_barrier_active:
                                                 if tarm_barrier_active:
                                                     tbarrier_count = tbarrier_count + temp_cbarrier_count
-                                                    previous_moves.append(f"🩸 **{t_card}** **ARISE!** *{carm_name}* is now yours")
+                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{carm_name}* is now yours")
                                                     t_swapped = True
                                                 elif not tarm_barrier_active:
                                                     tarm_barrier_active = True
                                                     tbarrier_count = temp_cbarrier_count
-                                                    previous_moves.append(f"🩸 **{t_card}** **ARISE!** *{carm_name}* is now yours")
+                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{carm_name}* is now yours")
                                                     t_swapped = True
                                             elif temp_carm_parry_active and not carm_parry_active:
                                                 if tarm_parry_active:
                                                     tparry_count = tparry_count + temp_cparry_count
-                                                    previous_moves.append(f"🩸 **{t_card}** **ARISE!** *{carm_name}* is now yours")
+                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{carm_name}* is now yours")
                                                     t_swapped = True
                                                 elif not tarm_parry_active:
                                                     tarm_parry_active = True
                                                     tparry_count = temp_cparry_count
-                                                    previous_moves.append(f"🩸 **{t_card}** **ARISE!** *{carm_name}* is now yours")
+                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{carm_name}* is now yours")
                                                     t_swapped = True
 
 
@@ -19943,7 +19943,7 @@ def update_arm_durability(self, vault, arm, arm_universe, arm_price, card):
         for a in vault['ARMS']:
             if a['ARM'] == str(arm['ARM']):
                 current_durability = a['DUR']
-                if current_durability == break_value:
+                if current_durability <= 0:
                     selected_arm = arm['ARM']
                     arm_name = arm['ARM']
                     selected_universe = arm_universe
