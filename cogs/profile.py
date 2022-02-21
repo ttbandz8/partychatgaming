@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 from pymongo import response
+from soupsieve import select
 import bot as main
 import db
 import classes as data
@@ -18,7 +19,7 @@ from PIL import Image, ImageFont, ImageDraw
 import requests
 from collections import ChainMap
 import DiscordUtils
-from .crownunlimited import showcard, cardback, enhancer_mapping, title_enhancer_mapping, enhancer_suffix_mapping, title_enhancer_suffix_mapping, passive_enhancer_suffix_mapping, Crest_dict, cardlevel, destiny as update_destiny_call
+from .crownunlimited import showcard, cardback, enhancer_mapping, title_enhancer_mapping, enhancer_suffix_mapping, title_enhancer_suffix_mapping, passive_enhancer_suffix_mapping, battle_commands, Crest_dict, cardlevel, destiny as update_destiny_call
 import random
 import textwrap
 from discord_slash import cog_ext, SlashContext
@@ -1904,9 +1905,9 @@ class Profile(commands.Cog):
                 virus_message = ""
 
                 if not server_buff:
-                    buff_message = f"There are no active server buffs in **{server_name}**"
+                    buff_message = f"No active buffs in **{server_name}**"
                 if not server_virus:
-                    virus_message = f"There are no active server viruses in **{server_name}**"
+                    virus_message = f"No active viruses in **{server_name}**"
 
                 for quest in quests:
                     opponent = db.queryCard({'NAME': quest['OPPONENT']})
@@ -1948,7 +1949,7 @@ class Profile(commands.Cog):
 
 
                     embedVar = discord.Embed(title=f"{opponent_name}", description=textwrap.dedent(f"""\
-                    **Quest**: Defeat {opponent_name} *{str(goal)}* times!
+                    **Quest**: Defeat {opponent_name} **{str(goal)}** times!
                     **Universe:** 🌍 {opponent['UNIVERSE']}
                     **Reward:** {icon} {reward}
 
@@ -1963,21 +1964,103 @@ class Profile(commands.Cog):
                     {virus_message}
                     """))
 
-                    embedVar.set_image(url=opponent_universe_image)
+                    embedVar.set_thumbnail(url=opponent_universe_image)
                     # embedVar.set_footer(text="Use /tales to complete daily quest!", icon_url="https://cdn.discordapp.com/emojis/784402243519905792.gif?v=1")
                     embed_list.append(embedVar)
 
                 buttons = [
-                    manage_components.create_button(style=3, label="Blah", custom_id="Blah"),
+                    manage_components.create_button(style=3, label="Start Tales", custom_id="quests_tales"),
+                    manage_components.create_button(style=3, label="Start Dungeon", custom_id="quests_dungeon"),
                 ]
                 custom_action_row = manage_components.create_actionrow(*buttons)
 
                 async def custom_function(self, button_ctx):
                     if button_ctx.author == ctx.author:
                         selected_quest = str(button_ctx.origin_message.embeds[0].title)
-                        if button_ctx.custom_id == "Blah":
-                            await button_ctx.send(f"Blah toward Quest **{selected_quest}**")
+                        if button_ctx.custom_id == "quests_tales":
+                            mode = "Tales"
+                            await button_ctx.defer(ignore=True)
+                            card = db.queryCard({"NAME": selected_quest})
+                            user = db.queryUser({'DID': str(ctx.author.id)})
+                            universe = db.queryUniverse({"TITLE": card['UNIVERSE']})
+                            selected_universe = universe['TITLE']
+                            completed_universes = user['CROWN_TALES']
+                            oguild = "PCG"
+                            crestlist = []
+                            crestsearch = False
+                            guild = server_name
+                            oteam = user['TEAM']
+                            ofam = user['FAMILY']
+                            
+
+                            if user['LEVEL'] < 4:
+                                await button_ctx.send("🔓 Unlock **Tales** by completing **Floor 3** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
+                                self.stop = True
+                                return
+
+                            if oteam != 'PCG':
+                                team_info = db.queryTeam({'TEAM_NAME': oteam.lower()})
+                                guildname = team_info['GUILD']
+                                if guildname != "PCG":
+                                    oguild = db.queryGuildAlt({'GNAME': guildname})
+                                    if oguild:
+                                        crestlist = oguild['CREST']
+                                        crestsearch = True
+
+                            
+                            
+                            currentopponent = 0
+
+                            await battle_commands(self, ctx, mode, universe, selected_universe, completed_universes, oguild,
+                                    crestlist, crestsearch, sowner, oteam, ofam, currentopponent, None, None, None,
+                                    None, None, None, None, None)
+                            
                             self.stop = True
+                        if button_ctx.custom_id == "quests_dungeon":
+                            await button_ctx.defer(ignore=True)
+                            mode = "Dungeon"
+                            card = db.queryCard({"NAME": selected_quest})
+                            user = db.queryUser({'DID': str(ctx.author.id)})
+                            universe = db.queryUniverse({"TITLE": card['UNIVERSE']})
+                            selected_universe = universe['TITLE']
+                            completed_universes = user['CROWN_TALES']
+                            oguild = "PCG"
+                            crestlist = []
+                            crestsearch = False
+                            guild = server_name
+                            oteam = user['TEAM']
+                            ofam = user['FAMILY']
+                            sowner = user
+
+                            if mode == "Dungeon" and sowner['LEVEL'] < 41:
+                                await button_ctx.send("🔓 Unlock **Dungeons** by completing **Floor 40** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
+                                self.stop = True
+                                return
+
+                            if universe['TITLE'] not in completed_universes:
+                                await button_ctx.send("You have not unlocked this dungeon.")
+                                self.stop = True
+                                return
+
+
+                            if oteam != 'PCG':
+                                team_info = db.queryTeam({'TEAM_NAME': oteam.lower()})
+                                guildname = team_info['GUILD']
+                                if guildname != "PCG":
+                                    oguild = db.queryGuildAlt({'GNAME': guildname})
+                                    if oguild:
+                                        crestlist = oguild['CREST']
+                                        crestsearch = True
+
+                            
+                            currentopponent = 0
+
+                            await battle_commands(self, ctx, mode, universe, selected_universe, completed_universes, oguild,
+                                    crestlist, crestsearch, sowner, oteam, ofam, currentopponent, None, None, None,
+                                    None, None, None, None, None)
+                            
+                            self.stop = True
+
                     else:
                         await ctx.send("This is not your Title list.")
 
