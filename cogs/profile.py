@@ -1884,8 +1884,9 @@ class Profile(commands.Cog):
         query = {'DID': str(ctx.author.id)}
         d = db.queryUser(query)
         vault = db.queryVault({'DID': d['DID']})
+        server = db.queryServer({"GNAME": str(ctx.author.guild)})
         if not vault['QUESTS']:
-            await ctx.send("No Quests available at this time!", hidden=True)
+            await ctx.send("You have no quests available at this time!", hidden=True)
             return
         if vault:
             try:
@@ -1893,26 +1894,98 @@ class Profile(commands.Cog):
                 avatar = d['AVATAR']
                 balance = vault['BALANCE']
                 quests = vault['QUESTS']
-
+                server_buff = server['SERVER_BUFF_BOOL']
+                server_virus = server['SERVER_VIRUS_BOOL']
+                server_name = server['GNAME']
+                embed_list = []
                 quest_messages = []
+
+                buff_message = ""
+                virus_message = ""
+
+                if not server_buff:
+                    buff_message = f"There are no active server buffs in **{server_name}**"
+                if not server_virus:
+                    virus_message = f"There are no active server viruses in **{server_name}**"
+
                 for quest in quests:
+                    opponent = db.queryCard({'NAME': quest['OPPONENT']})
+                    opponent_universe = db.queryUniverse({'TITLE': opponent['UNIVERSE']})
+                    opponent_name = opponent['NAME']
+                    opponent_universe_image = opponent_universe['PATH']
+                    tales = opponent_universe['CROWN_TALES']
+                    dungeon = opponent_universe['DUNGEONS']
+                    goal = quest['GOAL']
+                    wins = quest['WINS']
+                    reward = '{:,}'.format(quest['REWARD'])
+                    tales_message = ""
+                    dungeon_message = ""
+                    tales_index = 0
+                    dungeon_index = 0
+                    if opponent_name in tales:
+                        for opp in tales:
+                            tales_index = tales.index(opponent_name)
+                        tales_message = f"**{opponent_name}** is fight number ⚔️ **{tales_index + 1}** in **Tales**"
+                    
+                    if opponent_name in dungeon:
+                        for opp in tales:
+                            dungeon_index = tales.index(opponent_name)
+                        dungeon_message = f"**{opponent_name}** is fight number ⚔️ **{dungeon_index + 1}** in **Dungeon**"
+                    
                     completed = ""
                     if quest['GOAL'] == quest['WINS']:
                         completed = "🟢"
                     else:
                         completed = "🔴"
-                    quest_messages.append(textwrap.dedent(f"""\
-                    Defeat **{quest['OPPONENT']}** {quest['GOAL']} times in {quest['TYPE']}
-                    **Reward**: :coin:{'{:,}'.format(quest['REWARD'])}! : {completed}
-                    **Current Progress:** {quest['WINS']}/{quest['GOAL']}\n
+
+                    icon = ":coin:"
+                    if balance >= 150000:
+                        icon = ":money_with_wings:"
+                    elif balance >=100000:
+                        icon = ":moneybag:"
+                    elif balance >= 50000:
+                        icon = ":dollar:"
+
+
+                    embedVar = discord.Embed(title=f"{opponent_name}", description=textwrap.dedent(f"""\
+                    **Quest**: Defeat {opponent_name} *{str(goal)}* times!
+                    **Universe:** 🌍 {opponent['UNIVERSE']}
+                    **Reward:** {icon} {reward}
+
+                    **Wins so far:** {str(wins)}
+                    **Completed:** {completed}
+
+                    {tales_message}
+                    {dungeon_message}
+
+                    {buff_message}
+                    
+                    {virus_message}
                     """))
-                
-                embedVar = discord.Embed(title= f":notepad_spiral: Quest Board", description=textwrap.dedent(f"""
-                    **Balance**: :coin:{'{:,}'.format(balance)}
-                    \n{"".join(quest_messages)}
-                    """), colour=0x7289da)
-                embedVar.set_footer(text="Use /tales to complete daily quest!", icon_url="https://cdn.discordapp.com/emojis/784402243519905792.gif?v=1")
-                await ctx.send(embed=embedVar)
+
+                    embedVar.set_image(url=opponent_universe_image)
+                    # embedVar.set_footer(text="Use /tales to complete daily quest!", icon_url="https://cdn.discordapp.com/emojis/784402243519905792.gif?v=1")
+                    embed_list.append(embedVar)
+
+                buttons = [
+                    manage_components.create_button(style=3, label="Blah", custom_id="Blah"),
+                ]
+                custom_action_row = manage_components.create_actionrow(*buttons)
+
+                async def custom_function(self, button_ctx):
+                    if button_ctx.author == ctx.author:
+                        selected_quest = str(button_ctx.origin_message.embeds[0].title)
+                        if button_ctx.custom_id == "Blah":
+                            await button_ctx.send(f"Blah toward Quest **{selected_quest}**")
+                            self.stop = True
+                    else:
+                        await ctx.send("This is not your Title list.")
+
+                await Paginator(bot=self.bot, disableAfterTimeout=True, ctx=ctx, pages=embed_list, timeout=60, customActionRow=[
+                    custom_action_row,
+                    custom_function,
+                ]).run()
+
             except Exception as ex:
                 trace = []
                 tb = ex.__traceback__

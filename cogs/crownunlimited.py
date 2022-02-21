@@ -2152,24 +2152,34 @@ async def quest(player, opponent, mode):
             completion = quest_data['GOAL'] - (quest_data['WINS'] + 1)
             reward = int(quest_data['REWARD'])
 
-            if str(mode) == "Dungeon" and quest_data['TYPE'] == "Dungeon" and completion >= 0:
-                message = "Dungeon Quest progressed!"
+            if str(mode) == "Dungeon" and completion >= 0:
+                message = "Quest progressed!"
                 if completion == 0:
                     await bless(reward, player.id)
-                    message = f"Dungeon Quest Completed! :coin:{reward} has been added to your balance."
+                    message = f"Quest Completed! :coin:{reward} has been added to your balance."
+
+                    server_query = {'GNAME': str(player.guild)}
+                    update_server_query = {
+                        '$inc': {'SERVER_BALANCE': 10000}
+                    }
+                    updated_server = db.updateServer(server_query, update_server_query)
 
                 query = {'DID': str(player.id)}
-                update_query = {'$inc': {'QUESTS.$[type].' + "WINS": 1}}
+                update_query = {'$inc': {'QUESTS.$[type].' + "WINS": 2}}
                 filter_query = [{'type.' + "OPPONENT": opponent}]
                 resp = db.updateVault(query, update_query, filter_query)
                 return message
 
-            elif str(mode) == "Tales" and quest_data['TYPE'] == "Tales" and completion >= 0:
-                message = "Tales Quest progressed!"
+            elif str(mode) == "Tales" and completion >= 0:
+                message = "Quest progressed!"
                 if completion == 0:
                     await bless(reward, player.id)
-                    message = f"Tales Quest Completed! :coin:{reward} has been added to your balance."
-
+                    message = f"Quest Completed! :coin:{reward} has been added to your balance."
+                    server_query = {'GNAME': str(player.guild)}
+                    update_server_query = {
+                        '$inc': {'SERVER_BALANCE': 5000}
+                    }
+                    updated_server = db.updateServer(server_query, update_server_query)
 
                 query = {'DID': str(player.id)}
                 update_query = {'$inc': {'QUESTS.$[type].' + "WINS": 1}}

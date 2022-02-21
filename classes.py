@@ -40,6 +40,7 @@ class USER():
     PERFORMANCE: bool = field(default_factory=lambda: False)
     TRADING: bool = field(default_factory=lambda: False)
     BOSS_FOUGHT: bool = field(default_factory=lambda: False)
+    SERVER: str = field(default_factory=lambda: "N/A")
 
 @dataclass(frozen=True, order=True)
 class TRADE():
@@ -64,6 +65,15 @@ class TRADE():
 class SERVER():
     GNAME: str = field(default_factory=lambda: '')
     EXP_CHANNEL: str = field(default_factory=lambda: '')
+    SERVER_BUFF_BOOL: bool = field(default_factory=lambda:False)
+    SERVER_BUFF: list[str] = field(default_factory=lambda: [])
+    SERVER_VIRUS_BOOL: bool = field(default_factory=lambda:False)
+    SERVER_VIRUS: list[str] = field(default_factory=lambda: [])
+    SERVER_PLAYERS: list[str] = field(default_factory=lambda: [])
+    SERVER_TEAMS: list[str] = field(default_factory=lambda: [])
+    SPECIAL_SERVER_CARDS: list[str] = field(default_factory=lambda: [])
+    SPECIAL_SERVER_SUMMONS: list[str] = field(default_factory=lambda: [])
+    SERVER_BALANCE: int = field(default_factory=lambda: 0)
     TIMESTAMP: str = now
         
 

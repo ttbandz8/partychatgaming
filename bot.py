@@ -559,6 +559,7 @@ async def crown(ctx):
 async def register(ctx):
    reg_query = {'DID' : str(ctx.author.id)}
    applied = db.queryUser(reg_query)
+   server_created = db.queryServer({"GNAME": str(ctx.author.guild)})
    if applied:
       vault_query = {'DID':str(ctx.author.id)}
       registered = db.queryVault(vault_query)
@@ -573,9 +574,20 @@ async def register(ctx):
    else:
       disname = str(ctx.author)
       name = disname.split("#",1)[0]
-      user = {'DISNAME': disname, 'NAME': name, 'DID' : str(ctx.author.id), 'AVATAR': str(ctx.author.avatar_url)}
+      user = {'DISNAME': disname, 'NAME': name, 'DID' : str(ctx.author.id), 'AVATAR': str(ctx.author.avatar_url), 'SERVER': str(ctx.author.guild)}
       r_response = db.createUsers(data.newUser(user))
+
+      if not server_created:
+         create_server_query = {'GNAME': str(ctx.author.guild)}
+         created_server = db.createServer(data.newServer(create_server_query))
+
    if r_response:
+      server_query = {'GNAME': str(ctx.author.guild)}
+      update_server_query = {
+         '$inc': {'SERVER_BALANCE': 1000},
+         '$addToSet': {'SERVER_PLAYERS': str(ctx.author.id)}
+      }
+      updated_server = db.updateServer(server_query, update_server_query)
 
       embedVar = discord.Embed(title=f"**Welcome to Crown Unlimited**!", description=textwrap.dedent(f"""
       Welcome {ctx.author.mention}!                                                                                           
@@ -1317,6 +1329,13 @@ async def daily(ctx):
       user_data = db.queryUser({'DID': str(ctx.author.id)})
       user_completed_tales = user_data['CROWN_TALES']
       universes = db.queryAllUniverse()
+
+      server_query = {'GNAME': str(ctx.author.guild)}
+      update_server_query = {
+         '$inc': {'SERVER_BALANCE': 1000}
+      }
+      updated_server = db.updateServer(server_query, update_server_query)
+
 
       user_available_opponents = []
 
