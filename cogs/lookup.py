@@ -248,12 +248,12 @@ class Lookup(commands.Cog):
                 is_officer = False
                 is_captain = False
                 is_member = False
-                    
+                user = db.queryUser({'DID': str(ctx.author.id)})
                 owner = team['OWNER']
                 officers = team['OFFICERS']
                 captains = team['CAPTAINS']
                 members = team['MEMBERS']
-                member_count = team['MEMBER_COUNT']
+                member_count = len(members)
 
                 formatted_list_of_members = []
                 for member in members:
@@ -261,6 +261,9 @@ class Lookup(commands.Cog):
                     officer = False
                     captain = False
                     owns = False
+                    if user['DISNAME'] == member:
+                        is_member = True
+
                     if member in officers:
                         officer = True
                         formatted_name = f"🅾️ **{member}**"
@@ -275,7 +278,17 @@ class Lookup(commands.Cog):
                     
                     formatted_list_of_members.append(formatted_name)
 
+                members_list_joined = ", ".join(formatted_list_of_members)
+
                 transactions = team['TRANSACTIONS']
+                transactions_embed = ""
+                if transactions:
+                    transactions_len = len(transactions)
+                    if transactions_len >= 10:
+                        transactions = transations[-10:]
+                        transactions_embed = "\n".join(transactions)
+                    else:
+                        transactions_embed = "\n".join(transactions)
                 storage = team['STORAGE']
                 balance = team['BANK']
 
@@ -300,45 +313,71 @@ class Lookup(commands.Cog):
                     icon = ":moneybag:"
                 elif balance >= 150000:
                     icon = ":dollar:"
-                
 
-                team_list = []
-                for members in team['MEMBERS']:
-                    mem_query = db.queryUser({'DISNAME': members})
-                    ign_list = [x for x in mem_query['IGN']]
-                    ign_list_keys = [k for k in ign_list[0].keys()]
-                    if ign_list_keys == games:
-                        team_list.append(f"{ign_list[0][games[0]]}") 
+                embedVar1 = discord.Embed(title="First Page", description=textwrap.dedent(f"""
+                **{team_display_name}**
+
+                Member Count {member_count}
+                """), colour=0x7289da)
+
+                embed_list = []
+
+                buttons = []
+
+                if not is_member:
+                    buttons.append(
+                        manage_components.create_button(style=3, label="Apply", custom_id="guild_apply")
+                    )
+                
+                if is_owner:
+                    buttons.append(
+                        manage_components.create_button(style=3, label="Admin Control", custom_id="admin_control"),
+                        manage_components.create_button(style=3, label="Buffs", custom_id="guild_buffs"),
+                        manage_components.create_button(style=3, label="Pay", custom_id="guild_pay"),
+                        manage_components.create_button(style=3, label="Storage", custom_id="guild_storage"),
+                        manage_components.create_button(style=3, label="Leave", custom_id="leave_guild")
+                    )
+
+                if is_officer:
+                    buttons.append(
+                        manage_components.create_button(style=3, label="Admin Control", custom_id="admin_control"),
+                        manage_components.create_button(style=3, label="Buffs", custom_id="guild_buffs"),
+                        manage_components.create_button(style=3, label="Pay", custom_id="guild_pay"),
+                        manage_components.create_button(style=3, label="Storage", custom_id="guild_storage"),
+                        manage_components.create_button(style=3, label="Leave", custom_id="leave_guild")
+                    )
+
+                if is_captain:
+                    buttons.append(
+                        manage_components.create_button(style=3, label="Admin Control", custom_id="admin_control"),
+                        manage_components.create_button(style=3, label="Storage", custom_id="guild_storage"),
+                        manage_components.create_button(style=3, label="Leave", custom_id="leave_guild")
+                    )
+
+                if is_member:
+                    buttons.append(
+                        manage_components.create_button(style=3, label="Leave", custom_id="leave_guild")
+                    )
+
+
+
+                custom_action_row = manage_components.create_actionrow(*buttons)
+
+
+                async def custom_function(self, button_ctx):
+                    if button_ctx.author == ctx.author:
+                        await button_ctx.send("Hello World")
+                        self.stop = True
                     else:
-                        team_list.append(f"{members}")
+                        await button_ctx.send("World Hello")
+                        self.stop = True
 
 
-                embed1 = discord.Embed(title=f":checkered_flag: | {team_name} Guild Card - {icon} {'{:,}'.format(balance)}".format(self), description=":bank: | Party Chat Gaming Database", colour=000000)
-                if team['LOGO_FLAG']:
-                    embed1.set_image(url=logo)
-                embed1.add_field(name=":man_detective: | **~ Owner ~**", value= owner_name.split("#",1)[0], inline=True)
-                embed1.add_field(name=":flags: | **~ Association ~** ", value= guild, inline=False)
-                embed1.add_field(name=":medal: | **~ Ranked Wins ~**", value=scrim_wins)
-                embed1.add_field(name=":crossed_swords: | **~ Ranked Losses ~**", value=scrim_losses)
-                embed1.add_field(name=":fireworks: | **~ Guild War Victories ~**", value=tournament_wins, inline=False)
+                await Paginator(bot=self.bot, useQuitButton=True, disableAfterTimeout=True, ctx=ctx, pages=embed_list, timeout=60, customActionRow=[
+                    custom_action_row,
+                    custom_function,
+                ]).run()
                 
-                embed2 = discord.Embed(title=f":checkered_flag: | {team_name} Guild Members - {icon} {'{:,}'.format(balance)}".format(self), description=":bank: | Party Chat Gaming Database", colour=000000)
-                if team['LOGO_FLAG']:
-                    embed2.set_image(url=logo)
-                embed2.add_field(name=":military_helmet: | **~ Members ~**", value="\n".join(f'{t}'.format(self) for t in team_list), inline=False)
-
-                embed3 = discord.Embed(title=f":checkered_flag: | {team_name} Guild Members - {icon} {'{:,}'.format(balance)}".format(self), description=":bank: | Party Chat Gaming Database", colour=000000)
-                if team['LOGO_FLAG']:
-                    embed3.set_image(url=logo)
-                embed3.add_field(name=":video_game: | Games ", value="\n".join(games), inline=False)
-                paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
-                paginator.add_reaction('⏮️', "first")
-                paginator.add_reaction('⬅️', "back")
-                paginator.add_reaction('🔐', "lock")
-                paginator.add_reaction('➡️', "next")
-                paginator.add_reaction('⏭️', "last")
-                embeds = [embed1, embed2, embed3]
-                await paginator.run(embeds)
             else:
                 await ctx.send(m.TEAM_DOESNT_EXIST)
         except Exception as e:

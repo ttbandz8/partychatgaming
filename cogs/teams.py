@@ -85,7 +85,6 @@ class Teams(commands.Cog):
         except:
             await ctx.send("Guild already exists")
     
-    @cog_ext.cog_slash(description="Recruit Guild member", guild_ids=main.guild_ids)
     async def recruit(self, ctx, player: User):
         owner_profile = db.queryUser({'DID': str(ctx.author.id)})
         team_profile = db.queryTeam({'TEAM_NAME': owner_profile['TEAM']})
@@ -150,7 +149,6 @@ class Teams(commands.Cog):
             else:
                 await ctx.send(m.OWNER_ONLY_COMMAND, delete_after=5)
 
-    @cog_ext.cog_slash(description="Apply for a Guild", guild_ids=main.guild_ids)
     async def apply(self, ctx, owner: User):
         owner_profile = db.queryUser({'DID': str(owner.id)})
         team_profile = db.queryTeam({'TEAM_NAME': owner_profile['TEAM']})
@@ -207,7 +205,6 @@ class Teams(commands.Cog):
             else:
                 await ctx.send(m.OWNER_ONLY_COMMAND, delete_after=5)
 
-    @cog_ext.cog_slash(description="Delete guild member", guild_ids=main.guild_ids)
     async def deletemember(self, ctx, member: User):
         owner_profile = db.queryUser({'DID': str(ctx.author.id)})
         team_profile = db.queryTeam({'TEAM_NAME': owner_profile['TEAM']})
@@ -253,7 +250,6 @@ class Teams(commands.Cog):
         else:
             await ctx.send(m.TEAM_DOESNT_EXIST, delete_after=5)
 
-    @cog_ext.cog_slash(description="Leave a guild", guild_ids=main.guild_ids)
     async def leaveguild(self, ctx):
         member_profile = db.queryUser({'DID': str(ctx.author.id)})
         team_profile = db.queryTeam({'TEAM_NAME': member_profile['TEAM'].lower()})
