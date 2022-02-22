@@ -3033,13 +3033,12 @@ def abyss_level_up_message(did, floor, card, title, arm):
                         drop_message.append(f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.")
                         
 
-
+        if floor == 1:
+            message = "🎊 Congratulations! 🎊 You unlocked **Shop!**. Use the **/shop** command to purchase Cards, Titles and Arms!"
+            new_unlock = True
+        
         if floor == 3:
             message = "🎊 Congratulations! 🎊 You unlocked **Tales!**. Use the **/tales** command to battle through Universes to earn Cards, Titles, Arms, Summons, and Money!"
-            new_unlock = True
-
-        if floor == 5:
-            message = "🎊 Congratulations! 🎊 You unlocked **Shop!**. Use the **/shop** command to purchase Cards, Titles and Arms!"
             new_unlock = True
 
         if floor == 8:
@@ -5885,7 +5884,9 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             }))
             return
     if oteam != 'PCG':
+        print(oteam)
         team_info = db.queryTeam({'TNAME': oteam})
+        print(team_info)
         guildname = team_info['GUILD']
         if guildname != "PCG":
             oguild = db.queryGuildAlt({'GNAME': guildname})
@@ -17369,12 +17370,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     t_health = 0
                                                                     c_stamina = c_stamina - dmg['STAMINA_USED']
                                                                     turn_total = turn_total + 1
-                                                                    await button_ctx.defer(ignore=True)
+                                                                    #await button_ctx.defer(ignore=True)
                                                             else:
                                                                 c_stamina = c_stamina - dmg['STAMINA_USED']
                                                                 turn_total = turn_total + 1
                                                                 turn = 3
-                                                                await button_ctx.defer(ignore=True)
+                                                                #await button_ctx.defer(ignore=True)
                                                     else:
                                                         emessage = m.NOT_ENOUGH_STAMINA
                                                         embedVar = discord.Embed(title=emessage,

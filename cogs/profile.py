@@ -2277,7 +2277,7 @@ class Profile(commands.Cog):
             user = db.queryUser({'DID': str(ctx.author.id)})
 
             if user['LEVEL'] < 6:
-                await ctx.send("🔓 Unlock the Shop by completeing Floor 5 of the 🌑 Abyss! Use /abyss to enter the abyss.")
+                await ctx.send("🔓 Unlock the Shop by completing Floor 0 of the 🌑 Abyss! Use /abyss to enter the abyss.")
                 return
 
             completed_tales = user['CROWN_TALES']
