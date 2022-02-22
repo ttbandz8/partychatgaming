@@ -1632,8 +1632,8 @@ async def cursefamily(amount, family):
 async def trinketshop(ctx):
    user_query = {'DID': str(ctx.author.id)}
    user = db.queryUser(user_query)
-   if user['LEVEL'] < 15:
-      await ctx.send(f"🔓 Unlock the Trinket Shop by completing Floor 15 of the 🌑 Abyss! Use /abyss to enter the abyss.")
+   if user['LEVEL'] < 11:
+      await ctx.send(f"🔓 Unlock the Trinket Shop by completing Floor 10 of the 🌑 Abyss! Use /abyss to enter the abyss.")
       return
 
    current_arm = user['ARM']

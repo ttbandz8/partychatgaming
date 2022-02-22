@@ -125,7 +125,7 @@ class CrownUnlimited(commands.Cog):
 
             # Pull Character Information
             player = db.queryUser({'DID': str(message.author.id)})
-            if player['LEVEL'] < 35:
+            if player['LEVEL'] < 26:
                 return
                 # await message.channel.send(f"🔓 Unlock the Explore Mode by completing Floor 35 of the 🌑 Abyss! Use /abyss to enter the abyss.")
                 # return
@@ -506,11 +506,11 @@ class CrownUnlimited(commands.Cog):
             cteam = oteam
             cfam = ofam
             
-            if sowner['LEVEL'] < 10:
-                await ctx.send(f"🔓 Unlock **Duo** by completing **Floor 9** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
+            if sowner['LEVEL'] < 8:
+                await ctx.send(f"🔓 Unlock **Duo** by completing **Floor 7** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
                 return
-            if mode in D_modes and sowner['LEVEL'] < 81:
-                await ctx.send("🔓 Unlock **Duo Dungeons** by completing **Floor 80** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
+            if mode in D_modes and sowner['LEVEL'] < 41:
+                await ctx.send("🔓 Unlock **Duo Dungeons** by completing **Floor 40** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
                 return
 
 
@@ -595,8 +595,8 @@ class CrownUnlimited(commands.Cog):
             sowner = db.queryUser({'DID': str(ctx.author.id)})
             companion = db.queryUser({'DID': str(user.id)})
 
-            if sowner['LEVEL'] < 8:
-                await ctx.send(f"🔓 Unlock **Co-op** by completing **Floor 7** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
+            if sowner['LEVEL'] < 5:
+                await ctx.send(f"🔓 Unlock **Co-op** by completing **Floor 4** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
                 return
             
             if companion['LEVEL'] < 8:
@@ -1078,8 +1078,8 @@ class CrownUnlimited(commands.Cog):
             # await ctx.defer()
 
             sowner = db.queryUser({'DID': str(ctx.author.id)})
-            if sowner['LEVEL'] < 4:
-                await ctx.send("🔓 Unlock **Tales** by completing **Floor 3** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
+            if sowner['LEVEL'] < 2:
+                await ctx.send("🔓 Unlock **Tales** by completing **Floor 2** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
                 return
 
             if mode in D_modes and sowner['LEVEL'] < 41:
@@ -3034,11 +3034,11 @@ def abyss_level_up_message(did, floor, card, title, arm):
                         
 
 
-        if floor == 3:
+        if floor == 2:
             message = "🎊 Congratulations! 🎊 You unlocked **Tales!**. Use the **/tales** command to battle through Universes to earn Cards, Titles, Arms, Summons, and Money!"
             new_unlock = True
 
-        if floor == 5:
+        if floor == 1:
             message = "🎊 Congratulations! 🎊 You unlocked **Shop!**. Use the **/shop** command to purchase Cards, Titles and Arms!"
             new_unlock = True
 
@@ -3046,27 +3046,31 @@ def abyss_level_up_message(did, floor, card, title, arm):
             message = "🎊 Congratulations! 🎊 You unlocked **Crafting!**. Use the **/craft** command to craft Universe Items such as Universe Souls, or even Destiny Line Wins toward Destiny Cards!"
             new_unlock = True
 
-        if floor == 10:
-            message = "🎊 Congratulations! 🎊 You unlocked **Trading, Guilds, and Families!**. Use the **/trade** command to Trade Cards, Titles and Arms with other players!\nYou're now able to create Guilds and Families now! Use /help to learn more about Guild and Family commands!"
+        if floor == 9:
+            message = "🎊 Congratulations! 🎊 You unlocked **Guilds, and Families!**. Use the **/trade** command to Trade Cards, Titles and Arms with other players!\nYou're now able to create Guilds and Families now! Use /help to learn more about Guild and Family commands!"
             new_unlock = True
 
-        if floor == 15:
-            message = "🎊 Congratulations! 🎊 You unlocked **PVP & Trinket Shop!**. Use the **/trinketshop** command to purchase Level Ups, Arm Durability Increases and more!\nUse the /**battle** command to PVP against other players!"
+        if floor == 10:
+            message = "🎊 Congratulations! 🎊 You unlocked **Trading & Trinket Shop!**. Use the **/trade** command to Trade Cards, Titles and Arms with other players!\nYou're now able to create Guilds and Families now! Use /help to learn more about Guild and Family commands!"
+            new_unlock = True
+
+        if floor == 6:
+            message = "🎊 Congratulations! 🎊 You unlocked **PVP**. Use the **/trinketshop** command to purchase Level Ups, Arm Durability Increases and more!\nUse the /**battle** command to PVP against other players!"
             new_unlock = True
 
         if floor == 20:
             message = "🎊 Congratulations! 🎊 You unlocked **Gifting**. Use the **/gift** command to gift players money!"
             new_unlock = True
         
-        if floor == 25:
+        if floor == 4:
             message = "🎊 Congratulations! 🎊 You unlocked **Co-Op**. Use the **/coop** to traverse Tales with other players!"
             new_unlock = True
             
-        if floor == 30:
+        if floor == 9:
             message = "🎊 Congratulations! 🎊 You unlocked **Associations**. Use the **/oath** to create an association with another Guild Owner!"
             new_unlock = True
 
-        if floor == 35:
+        if floor == 25:
             message = "🎊 Congratulations! 🎊 You unlocked **Explore Mode**. Explore Mode allows for Cards to spawn randomly with Bounties! If you defeat the Card you will earn that Card + it's Bounty! Happy Hunting!"
             new_unlock = True
 
@@ -3074,7 +3078,7 @@ def abyss_level_up_message(did, floor, card, title, arm):
             message = "🎊 Congratulations! 🎊 You unlocked **Dungeons**. Use the **/tales** command and select Dungeons to battle through the Hard Mode of Universes to earn super rare Cards, Titles, and Arms!"
             new_unlock = True
             
-        if floor == 50:
+        if floor == 7:
             message = "🎊 Congratulations! 🎊 You unlocked **Duo**. Use the **/duo** command and select a Difficulty and a Preset to bring into Tales with you!"
             new_unlock = True
 
@@ -3082,7 +3086,7 @@ def abyss_level_up_message(did, floor, card, title, arm):
             message = "🎊 Congratulations! 🎊 You unlocked **Bosses**. Use the **/tales** command and select Boss to battle Universe Bosses too earn ultra rare Cards, Titles, and Arms!"
             new_unlock = True
             
-        if floor == 80:
+        if floor == 40:
             message = "🎊 Congratulations! 🎊 You unlocked **Duo Dungeons**. Use the **/duo** command and select Dungeons to battle battle through the Hard Mode of Universes to earn super rare Cards, Titles, and Arms!"
             new_unlock = True
             
