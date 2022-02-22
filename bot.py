@@ -75,7 +75,7 @@ bot.remove_command("help")
 
 
 @slash.slash(name="Help", description="List of Commands", guild_ids=guild_ids,)
-async def help(ctx: SlashContext, topic: str):
+async def help(ctx: SlashContext):
    avatar="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png"
 
    embedVar1 = discord.Embed(title= f"Bot Commands", description=h.BOT_COMMANDS, colour=0x7289da)

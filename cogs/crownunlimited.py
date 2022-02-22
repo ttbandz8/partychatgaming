@@ -5889,7 +5889,9 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             }))
             return
     if oteam != 'PCG':
+        print(oteam)
         team_info = db.queryTeam({'TNAME': oteam})
+        print(team_info)
         guildname = team_info['GUILD']
         if guildname != "PCG":
             oguild = db.queryGuildAlt({'GNAME': guildname})
@@ -17373,12 +17375,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     t_health = 0
                                                                     c_stamina = c_stamina - dmg['STAMINA_USED']
                                                                     turn_total = turn_total + 1
-                                                                    await button_ctx.defer(ignore=True)
+                                                                    #await button_ctx.defer(ignore=True)
                                                             else:
                                                                 c_stamina = c_stamina - dmg['STAMINA_USED']
                                                                 turn_total = turn_total + 1
                                                                 turn = 3
-                                                                await button_ctx.defer(ignore=True)
+                                                                #await button_ctx.defer(ignore=True)
                                                     else:
                                                         emessage = m.NOT_ENOUGH_STAMINA
                                                         embedVar = discord.Embed(title=emessage,
