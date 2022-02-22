@@ -1827,7 +1827,7 @@ async def trinketshop(ctx):
                filter_query = [{'type.' + "ARM": str(current_arm)}]
                resp = db.updateVault(query, update_query, filter_query)
 
-               await curse(price, str(ctx.author))
+               await curse(price, str(ctx.author.id))
                await button_ctx.send(f"{current_arm}'s ⚒️ durability has increased by **{levels_gained}**!")
                return
             except:
