@@ -38,6 +38,7 @@ class Lookup(commands.Cog):
     async def cog_check(self, ctx):
         return await main.validate_user(ctx)
 
+    
     @cog_ext.cog_slash(description="Lookup player stats", guild_ids=main.guild_ids)
     async def player(self, ctx, player: User):
         await ctx.defer()
@@ -234,6 +235,7 @@ class Lookup(commands.Cog):
             await ctx.send("There's an issue with your lookup command. Check with support.")
             return
 
+    
     @cog_ext.cog_slash(description="Lookup Guild stats", guild_ids=main.guild_ids)
     async def guild(self, ctx, guild = None):
         try:
@@ -245,8 +247,12 @@ class Lookup(commands.Cog):
             else:
                 user = db.queryUser({'DID': str(ctx.author.id)})
                 team = db.queryTeam({'TEAM_NAME': user['TEAM'].lower()})
-                team_name = team['TEAM_NAME']
-                team_display_name = team['TEAM_DISPLAY_NAME']
+                if team:
+                    team_name = team['TEAM_NAME']
+                    team_display_name = team['TEAM_DISPLAY_NAME']
+                else:
+                    await ctx.send("You are not a part of a Guild.")
+                    return
 
             if team:
                 is_owner = False
@@ -256,31 +262,44 @@ class Lookup(commands.Cog):
                 user = db.queryUser({'DID': str(ctx.author.id)})
 
                 owner = team['OWNER']
+                owner_data = db.queryUser({'DISNAME': owner})
+                owner_object = await self.bot.fetch_user(owner_data['DID'])
                 officers = team['OFFICERS']
                 captains = team['CAPTAINS']
                 members = team['MEMBERS']
                 member_count = len(members)
                 formatted_list_of_members = []
+                formatted_list_of_officers = []
+                formatted_list_of_captains = []
+                formatted_owner = ""
                 for member in members:
                     index = members.index(member)
                     if user['DISNAME'] == member:
                         is_member = True
 
                     if member in officers:
-                        is_officer = True
-                        formatted_name = f"🅾️ **{member}**"
+                        formatted_name = f"🅾️ [{str(index)}] **{member}**"
+                        formatted_list_of_officers.append(formatted_name)
                     elif member in captains:
-                        is_captain = True
-                        formatted_name = f"🇨 **{member}**"
+                        formatted_name = f"🇨 [{str(index)}] **{member}**"
+                        formatted_list_of_captains.append(formatted_name)
                     elif member == owner:
-                        is_owner = True
-                        formatted_name = f"👑 **{member}**"
-                    else:
-                        formatted_name = f"🔰 **{member}**"
-                    
-                    formatted_list_of_members.append(formatted_name)
+                        formatted_name = f"👑 [{str(index)}] **{member}**"
+                        formatted_owner = formatted_name
+                    elif member not in officers and member not in captains and member != owner:
+                        formatted_name = f"🔰 [{str(index)}] **{member}**"
+                        formatted_list_of_members.append(formatted_name)
+
                 members_list_joined = ", ".join(formatted_list_of_members)
-                
+                if user['DISNAME'] in officers:
+                    is_officer = True
+                elif user['DISNAME'] in captains:
+                    is_captain = True
+                elif user['DISNAME'] == owner:
+                    is_owner = True
+                elif user['DISNAME'] in  members:
+                    is_member = True
+
                 transactions = team['TRANSACTIONS']
                 transactions_embed = ""
                 if transactions:
@@ -316,20 +335,33 @@ class Lookup(commands.Cog):
                 elif balance >= 150000:
                     icon = ":dollar:"
 
-                first_page = discord.Embed(title="First Page", description=textwrap.dedent(f"""
-                **{team_display_name}**
+                first_page = discord.Embed(title="Members", description=textwrap.dedent(f"""
+                **Guild Name**
+                {team_display_name}
 
-                Members {members_list_joined}
+                👑 **Owner** 
+                {formatted_owner}
 
-                Member Count {member_count}
+                🅾️ **Officers**
+                {formatted_list_of_officers}
+
+                🇨 **Captains**
+                {formatted_list_of_captains}
+
+                🔰 **Members**
+                {members_list_joined}
+               
+                **Guild Membership Count** 
+                {member_count}
+
+                **Bank** 
+                {icon} {balance}
                 """), colour=0x7289da)
 
-                second_page = discord.Embed(title="Second Page", description=textwrap.dedent(f"""
+                second_page = discord.Embed(title="History", description=textwrap.dedent(f"""
                 **{team_display_name}**
 
                 {transactions_embed}
-
-                Bank {icon} {balance}
                 """), colour=0x7289da)
 
                 embed_list = [first_page, second_page]
@@ -377,6 +409,10 @@ class Lookup(commands.Cog):
 
                 async def custom_function(self, button_ctx):
                     if button_ctx.author == ctx.author:
+                        if button_ctx.custom_id == "guild_apply":
+                            await button_ctx.defer(ignore=True)
+                            self.stop = True
+                            await apply(self, ctx, owner_object)
                         await button_ctx.send("Hello World")
                         self.stop = True
                     else:
@@ -406,6 +442,8 @@ class Lookup(commands.Cog):
                 'message': str(ex),
                 'trace': trace
             }))
+    
+    
     @cog_ext.cog_slash(description="Lookup Association", guild_ids=main.guild_ids)
     async def association(self, ctx, association: str):
         guild_name = association
@@ -576,6 +614,65 @@ def setup(bot):
 def most_frequent(List):
     occurence_count = Counter(List)
     return occurence_count.most_common(1)[0][0]
+
+
+async def apply(self, ctx, owner: User):
+    owner_profile = db.queryUser({'DID': str(owner.id)})
+    team_profile = db.queryTeam({'TEAM_NAME': owner_profile['TEAM'].lower()})
+
+    if owner_profile['TEAM'] == 'PCG':
+        await ctx.send(m.USER_NOT_ON_TEAM, delete_after=5)
+    else:
+
+        if owner_profile['DISNAME'] == team_profile['OWNER']:
+            member_profile = db.queryUser({'DID': str(ctx.author.id)})
+            if member_profile['LEVEL'] < 11:
+                await ctx.send(f"🔓 Unlock Guilds by completing Floor 10 of the 🌑 Abyss! Use /abyss to enter the abyss.")
+                return
+
+            # If user is part of a team you cannot add them to your team
+            if member_profile['TEAM'] != 'PCG':
+                await ctx.send("You're already in a Guild. You may not join another guild.")
+                return
+            else:
+                team_buttons = [
+                    manage_components.create_button(
+                        style=ButtonStyle.blue,
+                        label="Accept",
+                        custom_id="Yes"
+                    ),
+                    manage_components.create_button(
+                        style=ButtonStyle.red,
+                        label="Deny",
+                        custom_id="No"
+                    )
+                ]
+                team_buttons_action_row = manage_components.create_actionrow(*team_buttons)
+                
+                msg = await ctx.send(f"{ctx.author.mention}  applies to join **{team_profile['TEAM_DISPLAY_NAME']}**. Owner, Officers, or Captains - Please accept or deny".format(self), components=[team_buttons_action_row])
+
+                def check(button_ctx):
+                    return str(button_ctx.author) == str(owner)
+
+                try:
+                    button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[team_buttons_action_row], timeout=120, check=check)
+                    
+                    if button_ctx.custom_id == "No":
+                        await button_ctx.send("Application Denied.")
+                        await msg.delete()
+                        return
+
+                    if button_ctx.custom_id == "Yes":
+                        team_query = {'TEAM_NAME': team_profile['TEAM_NAME'].lower()}
+                        new_value_query = {'$push': {'MEMBERS': member_profile['DISNAME']}}
+                        response = db.addTeamMember(team_query, new_value_query, owner_profile['DISNAME'], member_profile['DISNAME'])
+                        await button_ctx.send(response)
+                except:
+                    await msg.delete()
+        else:
+            await ctx.send(m.OWNER_ONLY_COMMAND, delete_after=5)
+
+
 
 Crest_dict = {'Unbound': ':ideograph_advantage:',
               'My Hero Academia': ':sparkle:',

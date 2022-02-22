@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from pymongo import response
-from soupsieve import select
+# from soupsieve import select
 import bot as main
 import db
 import classes as data

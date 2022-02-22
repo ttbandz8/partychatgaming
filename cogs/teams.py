@@ -151,7 +151,7 @@ class Teams(commands.Cog):
 
     async def apply(self, ctx, owner: User):
         owner_profile = db.queryUser({'DID': str(owner.id)})
-        team_profile = db.queryTeam({'TEAM_NAME': owner_profile['TEAM']})
+        team_profile = db.queryTeam({'TEAM_NAME': owner_profile['TEAM'].lower()})
 
         if owner_profile['TEAM'] == 'PCG':
             await ctx.send(m.USER_NOT_ON_TEAM, delete_after=5)
@@ -165,43 +165,43 @@ class Teams(commands.Cog):
 
                 # If user is part of a team you cannot add them to your team
                 if member_profile['TEAM'] != 'PCG':
-                    await main.DM(ctx, owner, f"{ctx.author.mention}" + f" Applied to join **{team_profile['TEAM_NAME']}** !" + f" You may accept or deny in server." )
-                    
+                    await ctx.send("You're already in a Guild. You may not join another guild.")
+                    return
+                else:
                     team_buttons = [
                         manage_components.create_button(
                             style=ButtonStyle.blue,
-                            label="✔️",
+                            label="Accept",
                             custom_id="Yes"
                         ),
                         manage_components.create_button(
                             style=ButtonStyle.red,
-                            label="❌",
+                            label="Deny",
                             custom_id="No"
                         )
                     ]
                     team_buttons_action_row = manage_components.create_actionrow(*team_buttons)
                     
-                    await ctx.send(f"{ctx.author.mention}" + " applies to join "+f"{owner.mention}" +f" do you accept...?".format(self), components=[team_buttons_action_row])
+                    msg = await ctx.send(f"{ctx.author.mention}  applies to join **{team_profile['TEAM_DISPLAY_NAME']}**. Owner, Officers, or Captains - Please accept or Deny".format(self), components=[team_buttons_action_row])
 
                     def check(button_ctx):
                         return str(button_ctx.author) == str(owner)
 
                     try:
-                        button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[team_buttons_action_row], check=check)
+                        button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[team_buttons_action_row], timeout=120, check=check)
                         
                         if button_ctx.custom_id == "No":
                             await button_ctx.send("Application Denied.")
+                            await msg.delete()
                             return
 
                         if button_ctx.custom_id == "Yes":
-                            team_query = {'TEAM_NAME': team_profile['TEAM_NAME']}
-                            new_value_query = {'$push': {'MEMBERS': str(ctx.author)}}
-                            response = db.addTeamMember(team_query, new_value_query, str(owner), str(ctx.author))
+                            team_query = {'TEAM_NAME': team_profile['TEAM_NAME'].lower()}
+                            new_value_query = {'$push': {'MEMBERS': member_profile['DISNAME']}}
+                            response = db.addTeamMember(team_query, new_value_query, owner_profile['DISNAME'], member_profile['DISNAME'])
                             await button_ctx.send(response)
                     except:
-                        await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=3)
-                else:
-                    await ctx.send(m.USER_ALREADY_ON_TEAM, delete_after=5)
+                        await msg.delete()
             else:
                 await ctx.send(m.OWNER_ONLY_COMMAND, delete_after=5)
 
