@@ -17,6 +17,11 @@ import DiscordUtils
 import textwrap
 from collections import Counter
 from discord_slash import cog_ext, SlashContext
+from dinteractions_Paginator import Paginator
+from discord_slash import SlashCommand
+from discord_slash.utils import manage_components
+from discord_slash.model import ButtonStyle
+
 
 emojis = ['👍', '👎']
 
@@ -34,7 +39,7 @@ class Lookup(commands.Cog):
         return await main.validate_user(ctx)
 
     @cog_ext.cog_slash(description="Lookup player stats", guild_ids=main.guild_ids)
-    async def lookup(self, ctx, player: User):
+    async def player(self, ctx, player: User):
         await ctx.defer()
         try:
             query = {'DID': str(player.id)}
@@ -65,7 +70,7 @@ class Lookup(commands.Cog):
                 team = d['TEAM']
                 guild = d['GUILD']
                 if team != "PCG":
-                    team_info = db.queryTeam({'TEAM_NAME' : str(team)})
+                    team_info = db.queryTeam({'TEAM_NAME' : str(team.lower())})
                     guild = team_info['GUILD']
                 family = d['FAMILY']
                 titles = d['TITLE']
@@ -249,37 +254,33 @@ class Lookup(commands.Cog):
                 is_captain = False
                 is_member = False
                 user = db.queryUser({'DID': str(ctx.author.id)})
+
                 owner = team['OWNER']
                 officers = team['OFFICERS']
                 captains = team['CAPTAINS']
                 members = team['MEMBERS']
                 member_count = len(members)
-
                 formatted_list_of_members = []
                 for member in members:
                     index = members.index(member)
-                    officer = False
-                    captain = False
-                    owns = False
                     if user['DISNAME'] == member:
                         is_member = True
 
                     if member in officers:
-                        officer = True
+                        is_officer = True
                         formatted_name = f"🅾️ **{member}**"
                     elif member in captains:
-                        captain = True
+                        is_captain = True
                         formatted_name = f"🇨 **{member}**"
                     elif member == owner:
-                        owns = True
+                        is_owner = True
                         formatted_name = f"👑 **{member}**"
                     else:
                         formatted_name = f"🔰 **{member}**"
                     
                     formatted_list_of_members.append(formatted_name)
-
                 members_list_joined = ", ".join(formatted_list_of_members)
-
+                
                 transactions = team['TRANSACTIONS']
                 transactions_embed = ""
                 if transactions:
@@ -289,6 +290,7 @@ class Lookup(commands.Cog):
                         transactions_embed = "\n".join(transactions)
                     else:
                         transactions_embed = "\n".join(transactions)
+                
                 storage = team['STORAGE']
                 balance = team['BANK']
 
@@ -314,13 +316,23 @@ class Lookup(commands.Cog):
                 elif balance >= 150000:
                     icon = ":dollar:"
 
-                embedVar1 = discord.Embed(title="First Page", description=textwrap.dedent(f"""
+                first_page = discord.Embed(title="First Page", description=textwrap.dedent(f"""
                 **{team_display_name}**
+
+                Members {members_list_joined}
 
                 Member Count {member_count}
                 """), colour=0x7289da)
 
-                embed_list = []
+                second_page = discord.Embed(title="Second Page", description=textwrap.dedent(f"""
+                **{team_display_name}**
+
+                {transactions_embed}
+
+                Bank {icon} {balance}
+                """), colour=0x7289da)
+
+                embed_list = [first_page, second_page]
 
                 buttons = []
 
@@ -330,35 +342,34 @@ class Lookup(commands.Cog):
                     )
                 
                 if is_owner:
-                    buttons.append(
+                    buttons = [
                         manage_components.create_button(style=3, label="Admin Control", custom_id="admin_control"),
                         manage_components.create_button(style=3, label="Buffs", custom_id="guild_buffs"),
                         manage_components.create_button(style=3, label="Pay", custom_id="guild_pay"),
                         manage_components.create_button(style=3, label="Storage", custom_id="guild_storage"),
                         manage_components.create_button(style=3, label="Leave", custom_id="leave_guild")
-                    )
+                    ]
 
-                if is_officer:
-                    buttons.append(
+                elif is_officer:
+                    buttons = [
                         manage_components.create_button(style=3, label="Admin Control", custom_id="admin_control"),
                         manage_components.create_button(style=3, label="Buffs", custom_id="guild_buffs"),
                         manage_components.create_button(style=3, label="Pay", custom_id="guild_pay"),
                         manage_components.create_button(style=3, label="Storage", custom_id="guild_storage"),
                         manage_components.create_button(style=3, label="Leave", custom_id="leave_guild")
-                    )
+                    ]
 
-                if is_captain:
-                    buttons.append(
+                elif is_captain:
+                    buttons = [
                         manage_components.create_button(style=3, label="Admin Control", custom_id="admin_control"),
                         manage_components.create_button(style=3, label="Storage", custom_id="guild_storage"),
                         manage_components.create_button(style=3, label="Leave", custom_id="leave_guild")
-                    )
+                    ]
 
-                if is_member:
-                    buttons.append(
+                elif is_member and not is_owner and not is_captain and not is_officer:
+                    buttons = [
                         manage_components.create_button(style=3, label="Leave", custom_id="leave_guild")
-                    )
-
+                    ]
 
 
                 custom_action_row = manage_components.create_actionrow(*buttons)
@@ -380,8 +391,21 @@ class Lookup(commands.Cog):
                 
             else:
                 await ctx.send(m.TEAM_DOESNT_EXIST)
-        except Exception as e:
-            await ctx.send(e)
+        except Exception as ex:
+            trace = []
+            tb = ex.__traceback__
+            while tb is not None:
+                trace.append({
+                    "filename": tb.tb_frame.f_code.co_filename,
+                    "name": tb.tb_frame.f_code.co_name,
+                    "lineno": tb.tb_lineno
+                })
+                tb = tb.tb_next
+            print(str({
+                'type': type(ex).__name__,
+                'message': str(ex),
+                'trace': trace
+            }))
     @cog_ext.cog_slash(description="Lookup Association", guild_ids=main.guild_ids)
     async def association(self, ctx, association: str):
         guild_name = association
