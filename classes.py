@@ -74,6 +74,9 @@ class SERVER():
     SPECIAL_SERVER_CARDS: list[str] = field(default_factory=lambda: [])
     SPECIAL_SERVER_SUMMONS: list[str] = field(default_factory=lambda: [])
     SERVER_BALANCE: int = field(default_factory=lambda: 0)
+    WAR_FLAG: bool = field(default_factory=lambda:False)
+    WAR_OPPONENT: str = field(default_factory=lambda: '')
+    WAR_WINS: list[str] = field(default_factory=lambda: [])
     TIMESTAMP: str = now
         
 
@@ -89,6 +92,9 @@ class GUILD():
     BOUNTY: int = field(default_factory=lambda: 500000)
     CREST: list[str] = field(default_factory=lambda: ['Unbound'])
     HALL: str = field(default_factory=lambda: 'Mine')
+    WAR_FLAG: bool = field(default_factory=lambda:False)
+    WAR_OPPONENT: str = field(default_factory=lambda: '')
+    WAR_WINS: list[str] = field(default_factory=lambda: [])
     TIMESTAMP: str = now
 
 
@@ -116,6 +122,9 @@ class TEAMS():
     GUILD_MISSION: list[str] = field(default_factory=lambda: [])
     COMPLETED_MISSIONS: int = field(default_factory=lambda: 0)
     MEMBER_COUNT: int = field(default_factory=lambda: 1)
+    WAR_FLAG: bool = field(default_factory=lambda:False)
+    WAR_OPPONENT: str = field(default_factory=lambda: '')
+    WAR_WINS: list[str] = field(default_factory=lambda: [])
     TIMESTAMP: str = now
 
 

@@ -322,6 +322,9 @@ class Lookup(commands.Cog):
                 tournament_wins = team['TOURNAMENT_WINS']
                 wins = team['WINS']
                 losses = team['LOSSES']
+                in_war = team['WAR_FLAG']
+                war_opponent = team['WAR_OPPONENT']
+                war_wins = team['WAR_WINS']
 
                 guild_mission = team['GUILD_MISSION']
                 completed_missions = team['COMPLETED_MISSIONS']
@@ -335,10 +338,7 @@ class Lookup(commands.Cog):
                 elif balance >= 150000:
                     icon = ":dollar:"
 
-                first_page = discord.Embed(title="Members", description=textwrap.dedent(f"""
-                **Guild Name**
-                {team_display_name}
-
+                first_page = discord.Embed(title=f"{team_display_name}", description=textwrap.dedent(f"""
                 👑 **Owner** 
                 {formatted_owner}
 
