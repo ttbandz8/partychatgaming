@@ -42,6 +42,12 @@ class Teams(commands.Cog):
         team_display_name = guild
         transaction_message = f"{user['DISNAME']} has joined the guild."
 
+        
+        team_exists = db.queryTeam({'TEAM_NAME': guild.lower()})
+        if team_exists:
+            await ctx.send(f"{guild} already exists.")
+            return
+
 
         team_query = {
             'OWNER': str(ctx.author), 
@@ -79,7 +85,11 @@ class Teams(commands.Cog):
                 return
             
             if button_ctx.custom_id == "Yes":
-                
+                server_query = {'GNAME': str(ctx.author.guild)}
+                server_update_query = {
+                    '$addToSet': {'SERVER_GUILDS': str(guild)}
+                }
+                r = db.updateServer(server_query, server_update_query)
                 response = db.createTeam(data.newTeam(team_query), str(ctx.author.id))
                 await button_ctx.send(response)
                 await msg.delete()
@@ -246,7 +256,11 @@ class Teams(commands.Cog):
                 if button_ctx.custom_id == "Yes":
                     team_query = {'TEAM_NAME': team_name}
                     new_value_query = {
-                        '$pull': {'MEMBERS': member_profile['DISNAME']}, 
+                        '$pull': {
+                            'MEMBERS': member_profile['DISNAME'],
+                            'OFFICERS': member_profile['DISNAME'],
+                            'CAPTAINS': member_profile['DISNAME'],
+                        },
                         '$addToSet': {'TRANSACTIONS': transaction_message},
                         '$inc': {'MEMBER_COUNT': -1}
                         }

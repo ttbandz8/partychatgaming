@@ -60,6 +60,7 @@ class Profile(commands.Cog):
             ]
             accept_buttons_action_row = manage_components.create_actionrow(*accept_buttons)
 
+            team = db.queryTeam({'TEAM_NAME': user_is_validated['TEAM'].lower()})
 
             await ctx.send(f"{ctx.author.mention}, are you sure you want to delete your account? " + "\n" + "All of your wins, purchases and other earnings will be removed from the system and can not be recovered. ", hidden=True, components=[accept_buttons_action_row])
 
@@ -74,6 +75,19 @@ class Profile(commands.Cog):
                     return
 
                 if button_ctx.custom_id == "yes":
+                    if team:
+                        transaction_message = f"{user_is_validated['DISNAME']} left the game."
+                        team_query = {'TEAM_NAME': team['TEAM_NAME']}
+                        new_value_query = {
+                            '$pull': {
+                                'MEMBERS': user_is_validated['DISNAME'],
+                                'OFFICERS': user_is_validated['DISNAME'],
+                                'CAPTAINS': user_is_validated['DISNAME'],
+                            },
+                            '$addToSet': {'TRANSACTIONS': transaction_message},
+                            '$inc': {'MEMBER_COUNT': -1}
+                            }
+                        response = db.deleteTeamMember(team_query, new_value_query, str(ctx.author.id))
                     response = db.deleteVault({'DID': str(ctx.author.id)})
                     delete_user_resp = db.deleteUser(user)
                     await button_ctx.send("Account successfully deleted.")

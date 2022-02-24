@@ -583,14 +583,16 @@ async def register(ctx):
       if not server_created:
          create_server_query = {'GNAME': str(ctx.author.guild)}
          created_server = db.createServer(data.newServer(create_server_query))
+         await asyncio.sleep(1)
+         server_query = {'GNAME': str(ctx.author.guild)}
+         update_server_query = {
+            '$inc': {'SERVER_BALANCE': 1000},
+            '$addToSet': {'SERVER_PLAYERS': str(ctx.author.id)}
+         }
+         updated_server = db.updateServer(server_query, update_server_query)
+
 
    if r_response:
-      server_query = {'GNAME': str(ctx.author.guild)}
-      update_server_query = {
-         '$inc': {'SERVER_BALANCE': 1000},
-         '$addToSet': {'SERVER_PLAYERS': str(ctx.author.id)}
-      }
-      updated_server = db.updateServer(server_query, update_server_query)
 
       embedVar = discord.Embed(title=f"**Welcome to Crown Unlimited**!", description=textwrap.dedent(f"""
       Welcome {ctx.author.mention}!                                                                                           
@@ -1733,9 +1735,11 @@ async def deletemember(ctx, member: User):
                if button_ctx.custom_id == "Yes":    
                   team_query = {'TEAM_NAME': team_profile['TEAM_NAME']}
                   new_value_query = {
-                        '$pull': {'MEMBERS': str(member)},
-                        '$pull': {'CAPTAINS': str(member)},
-                        '$pull': {'OFFICERS': str(member)},
+                        '$pull': {
+                            'MEMBERS': str(member),
+                            'OFFICERS': str(member),
+                            'CAPTAINS': str(member),
+                        },
                         '$inc': {'MEMBER_COUNT': -1},
                         '$push': {'TRANSACTIONS': transaction_message},
                         }
