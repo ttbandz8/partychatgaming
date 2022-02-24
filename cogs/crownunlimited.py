@@ -2526,7 +2526,7 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, stamina, en
         enh = list(ability.values())[2]
 
     # Do I have enough stamina to use this move?
-    if stamina >= move_stamina:
+    if stamina >= move_stamina or move_stamina==15:
         can_use_move_flag = True
     else:
         can_use_move_flag = False
@@ -5889,9 +5889,8 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             }))
             return
     if oteam != 'PCG':
-        print(oteam)
+        
         team_info = db.queryTeam({'TNAME': oteam})
-        print(team_info)
         guildname = team_info['GUILD']
         if guildname != "PCG":
             oguild = db.queryGuildAlt({'GNAME': guildname})
