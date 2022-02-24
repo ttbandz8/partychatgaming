@@ -8498,38 +8498,38 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 
 
                                 
-                                    if t_universe == "Solo Leveling" and not t_swapped:
-                                        if temp_oarm_shield_active and not oarm_shield_active:
-                                            if tarm_shield_active:
-                                                tshield_value = tshield_value + temp_oshield_value
-                                                previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
-                                                t_swapped = True
-                                            elif not tarm_shield_active:
-                                                tarm_shield_active = True
-                                                tshield_value = temp_oshield_value
-                                                previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
-                                                t_swapped = True
-                                        elif temp_oarm_barrier_active and not oarm_barrier_active:
-                                            if tarm_barrier_active:
-                                                tbarrier_count = tbarrier_count + temp_obarrier_count
-                                                previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
-                                                t_swapped = True
-                                            elif not tarm_barrier_active:
-                                                tarm_barrier_active = True
-                                                tbarrier_count = temp_obarrier_count
-                                                previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
-                                                t_swapped = True
-                                        elif temp_oarm_parry_active and not oarm_parry_active:
-                                            if tarm_parry_active:
-                                                tparry_count = tparry_count + temp_oparry_count
-                                                previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
-                                                t_swapped = True
-                                            elif not tarm_parry_active:
-                                                tarm_parry_active = True
-                                                tparry_count = temp_oparry_count
-                                                previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
-                                                t_swapped = True
-                                   
+                                        if t_universe == "Solo Leveling" and not t_swapped:
+                                            if temp_oarm_shield_active and not oarm_shield_active:
+                                                if tarm_shield_active:
+                                                    tshield_value = tshield_value + temp_oshield_value
+                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                    t_swapped = True
+                                                elif not tarm_shield_active:
+                                                    tarm_shield_active = True
+                                                    tshield_value = temp_oshield_value
+                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                    t_swapped = True
+                                            elif temp_oarm_barrier_active and not oarm_barrier_active:
+                                                if tarm_barrier_active:
+                                                    tbarrier_count = tbarrier_count + temp_obarrier_count
+                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                    t_swapped = True
+                                                elif not tarm_barrier_active:
+                                                    tarm_barrier_active = True
+                                                    tbarrier_count = temp_obarrier_count
+                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                    t_swapped = True
+                                            elif temp_oarm_parry_active and not oarm_parry_active:
+                                                if tarm_parry_active:
+                                                    tparry_count = tparry_count + temp_oparry_count
+                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                    t_swapped = True
+                                                elif not tarm_parry_active:
+                                                    tarm_parry_active = True
+                                                    tparry_count = temp_oparry_count
+                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                    t_swapped = True
+                                    
 
 
                                         # await private_channel.send(file=player_2_card)
