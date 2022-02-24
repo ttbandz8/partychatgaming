@@ -35,7 +35,7 @@ class Teams(commands.Cog):
     @cog_ext.cog_slash(description="Create a new guild", guild_ids=main.guild_ids)
     async def createguild(self, ctx, guild: str):
         user = db.queryUser({'DID': str(ctx.author.id)})
-        if user['LEVEL'] < 11:
+        if user['LEVEL'] < 10:
             await ctx.send("🔓 Unlock Guilds by completing Floor 10 of the 🌑 Abyss! Use /abyss to enter the abyss.")
             return
         team = guild
