@@ -48,7 +48,8 @@ class Teams(commands.Cog):
             'TEAM_NAME': team_name, 
             'TEAM_DISPLAY_NAME': team_display_name, 
             'MEMBERS': [str(ctx.author)],
-            'TRANSACTIONS': [transaction_message]
+            'TRANSACTIONS': [transaction_message],
+            'BANK': 150000
             }
 
         team_buttons = [
@@ -181,7 +182,7 @@ class Teams(commands.Cog):
                         )
                     ]
                     team_buttons_action_row = manage_components.create_actionrow(*team_buttons)
-                    
+                    transaction_message = f"{member_profile['DISNAME']} has joined the guild."
                     msg = await ctx.send(f"{ctx.author.mention}  applies to join **{team_profile['TEAM_DISPLAY_NAME']}**. Owner, Officers, or Captains - Please accept or Deny".format(self), components=[team_buttons_action_row])
 
                     def check(button_ctx):
@@ -197,59 +198,17 @@ class Teams(commands.Cog):
 
                         if button_ctx.custom_id == "Yes":
                             team_query = {'TEAM_NAME': team_profile['TEAM_NAME'].lower()}
-                            new_value_query = {'$push': {'MEMBERS': member_profile['DISNAME']}}
+                            new_value_query = {
+                                '$push': {'MEMBERS': member_profile['DISNAME']},
+                                '$addToSet': {'TRANSACTIONS': transaction_message}
+                                }
                             response = db.addTeamMember(team_query, new_value_query, owner_profile['DISNAME'], member_profile['DISNAME'])
                             await button_ctx.send(response)
                     except:
                         await msg.delete()
             else:
                 await ctx.send(m.OWNER_ONLY_COMMAND, delete_after=5)
-
-    async def deletemember(self, ctx, member: User):
-        owner_profile = db.queryUser({'DID': str(ctx.author.id)})
-        team_profile = db.queryTeam({'TEAM_NAME': owner_profile['TEAM']})
-        if team_profile:
-            if owner_profile['DISNAME'] == team_profile['OWNER']:  
-                team_buttons = [
-                    manage_components.create_button(
-                        style=ButtonStyle.blue,
-                        label="✔️",
-                        custom_id="Yes"
-                    ),
-                    manage_components.create_button(
-                        style=ButtonStyle.red,
-                        label="❌",
-                        custom_id="No"
-                    )
-                ]
-                team_buttons_action_row = manage_components.create_actionrow(*team_buttons)
-                await ctx.send(f"Do you want to remove {member.mention} from the **{team_profile['TEAM_NAME']}**?".format(self), components=[team_buttons_action_row])
-
-                def check(button_ctx):
-                    return button_ctx.author == ctx.author
-
-                try:
-                    button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[team_buttons_action_row], check=check)
-                    
-                    if button_ctx.custom_id == "No":
-                        await button_ctx.send("Member Not Deleted.")
-                        return
-
-                    if button_ctx.custom_id == "Yes":    
-                        team_query = {'TEAM_NAME': team_profile['TEAM_NAME']}
-                        new_value_query = {
-                            '$pull': {'MEMBERS': str(member)},
-                            '$inc': {'MEMBER_COUNT': -1}
-                            }
-                        response = db.deleteTeamMember(team_query, new_value_query, str(member))
-                        await button_ctx.send(response)
-                except:
-                    print("Guild not created. ")
-            else:
-                await ctx.send(m.OWNER_ONLY_COMMAND, delete_after=5)
-        else:
-            await ctx.send(m.TEAM_DOESNT_EXIST, delete_after=5)
-
+    
     async def leaveguild(self, ctx):
         member_profile = db.queryUser({'DID': str(ctx.author.id)})
         team_profile = db.queryTeam({'TEAM_NAME': member_profile['TEAM'].lower()})
@@ -300,11 +259,22 @@ class Teams(commands.Cog):
             await ctx.send(m.TEAM_DOESNT_EXIST, delete_after=5)
 
     @cog_ext.cog_slash(description="Delete a guild", guild_ids=main.guild_ids)
-    async def deleteguild(self, ctx, guild: str):
-        team_query = {'TEAM_NAME': guild.lower()}
-        team = db.queryTeam(team_query)
-        user = db.queryUser({'DID': str(ctx.author.id)})
-        guildteam=False
+    async def disbandguild(self, ctx, guild = None):
+        if guild:
+            team_name = guild.lower()
+            team_query = {'TEAM_NAME': team_name}
+            team = db.queryTeam(team_query)
+            team_display_name = team['TEAM_DISPLAY_NAME']
+        else:
+            user = db.queryUser({'DID': str(ctx.author.id)})
+            team = db.queryTeam({'TEAM_NAME': user['TEAM'].lower()})
+            if team:
+                team_name = team['TEAM_NAME']
+                team_display_name = team['TEAM_DISPLAY_NAME']
+            else:
+                await ctx.send("You are not a part of a Guild.")
+                return
+
         if team:
             team_name = team['TEAM_NAME']
             team_display_name = team['TEAM_DISPLAY_NAME']

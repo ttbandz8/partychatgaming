@@ -2108,7 +2108,7 @@ class Profile(commands.Cog):
                 elif balance >= 100000:
                     icon = ":dollar:"
                 if d['TEAM'] != 'PCG':
-                    t = db.queryTeam({'TNAME' : d['TEAM']})
+                    t = db.queryTeam({'TEAM_NAME' : d['TEAM'].lower()})
                     tbal = t['BANK']
                     if d['FAMILY'] != 'PCG':
                         f = db.queryFamily({'HEAD': d['FAMILY']})

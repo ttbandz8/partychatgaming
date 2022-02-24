@@ -1531,7 +1531,7 @@ def addTeamMember(query, add_to_team_query, user, new_user):
 
              # Add Guild to User Profile as well
             query = {'DISNAME': new_user}
-            new_value = {'$set': {'TEAM': team['TEAM_NAME']}}
+            new_value = {'$set': {'TEAM': team['TEAM_DISPLAY_NAME']}}
             users_col.update_one(query, new_value)
             return "User added to the Guild. "
         else:

@@ -1,4 +1,6 @@
 import asyncio
+from operator import is_
+from urllib import response
 import db
 import time
 import classes as data
@@ -17,6 +19,7 @@ from discord_slash.model import ButtonStyle
 import textwrap
 from discord_slash import cog_ext, SlashContext
 from dinteractions_Paginator import Paginator
+from discord_slash.utils.manage_commands import create_option, create_choice
 import os
 import logging
 from decouple import config
@@ -1453,7 +1456,7 @@ async def donate(ctx, amount, guild: str):
    vault = db.queryVault({'DID': str(ctx.author.id)})
    balance = vault['BALANCE']
    dteam = team
-   query = {'TNAME': str(dteam)}
+   query = {'TEAM_NAME': str(dteam)}
    team_data = db.queryTeam(query)
    if team_data:
       if balance <= int(amount):
@@ -1489,27 +1492,263 @@ async def invest(ctx, amount):
 @slash.slash(name="Pay", description="Pay a Guild Member", guild_ids=guild_ids)
 @commands.check(validate_user)
 async def pay(ctx, player: User, amount):
-   user2 = player
-   user = db.queryUser({'DID': str(ctx.author.id)})
-   team = db.queryTeam({'TNAME': user['TEAM']})
+   try:
+      user = db.queryUser({'DID': str(ctx.author.id)})
+      team = db.queryTeam({'TEAM_NAME': user['TEAM'].lower()})
+      access = False
 
-   if user['TEAM'] == 'PCG' or user['DISNAME'] != team['OWNER']:
-      await ctx.send("You must be owner of team to pay members. ")
-      return
+      if user['TEAM'] == 'PCG':
+         await ctx.send("You are not a part of a guild.")
+         return
 
-   if str(user2) not in team['MEMBERS']:
-      await ctx.send("You can only pay team members. ")
-      return
+      if user['DISNAME'] == team['OWNER']:
+         access = True
+
+      if user['DISNAME'] in team['OFFICERS']:
+         access = True
+      
+      if not access:
+         await ctx.send("You must be owner or officer of guild to pay members. ")
+         return
+      
+      if str(player) not in team['MEMBERS']:
+         await ctx.send("You can only pay guild members. ")
+         return
 
 
-   balance = team['BANK']
-   if balance <= int(amount):
-      await ctx.send("You do not have that amount to pay.")
+      icon = ":coin:"
+      if int(amount) >= 500000:
+         icon = ":money_with_wings:"
+      elif int(amount) >=300000:
+         icon = ":moneybag:"
+      elif int(amount) >= 150000:
+         icon = ":dollar:"
+
+
+      balance = team['BANK']
+      if balance <= int(amount):
+         await ctx.send("Your guild does not have that amount to pay.")
+      else:
+         await bless(int(amount), player.id)
+         await curseteam(int(amount), team['TEAM_NAME'])
+         await ctx.send(f"{icon} **{'{:,}'.format(int(amount))}** has been paid to {player.mention}.")
+         transaction_message = f"{str(ctx.author)} paid {str(player)} {'{:,}'.format(int(amount))}."
+         team_query = {'TEAM_NAME': team['TEAM_NAME']}
+         new_value_query = {
+               '$addToSet': {'TRANSACTIONS': transaction_message},
+               }
+         await db.updateTeam(team_query, new_value_query)
+         return
+   except:
+      trace = []
+      tb = ex.__traceback__
+      while tb is not None:
+            trace.append({
+               "filename": tb.tb_frame.f_code.co_filename,
+               "name": tb.tb_frame.f_code.co_name,
+               "lineno": tb.tb_lineno
+            })
+            tb = tb.tb_next
+      print(str({
+            'type': type(ex).__name__,
+            'message': str(ex),
+            'trace': trace
+      }))
+
+
+@slash.slash(description="Promote, Demote, or Remove Guild Members", options=[
+   create_option(
+         name="player",
+         description="Player to update",
+         option_type=6,
+         required=True
+   ),
+
+   create_option(
+         name="operation",
+         description="Operation to perform",
+         option_type=3,
+         required=True,
+         choices=[
+            create_choice(
+               name="Promote",
+               value="Promote"
+            ),
+            create_choice(
+               name="Demote",
+               value="Demote"
+            ),
+            create_choice(
+               name="Remove",
+               value="Remove"
+            ),
+
+         ]
+   )
+   ],
+guild_ids=guild_ids)
+@commands.check(validate_user)
+async def guildoperations(ctx, player: User, operation: str):
+   try:
+      user = db.queryUser({'DID': str(ctx.author.id)})
+      query = {'TEAM_NAME': user['TEAM'].lower()}
+      team = db.queryTeam(query)
+      team_officers = team['OFFICERS']
+      team_captains = team['CAPTAINS']
+      team_owner = team['OWNER']
+      team_display_name = team['TEAM_DISPLAY_NAME']
+      update_message = ""
+      transaction_message = ""
+      team_query = {}
+      access = False
+      is_officer = False
+      is_captain = False
+      is_owner = False
+
+      if user['TEAM'] == 'PCG':
+         await ctx.send("You are not a part of a guild.")
+         return
+
+      if str(player) not in team['MEMBERS']:
+         await ctx.send("You can only utilize Guild Controls on Guild members.")
+         return
+
+      if operation == "Remove":
+         await deletemember(ctx, player)
+         return
+
+      if user['DISNAME'] == team['OWNER']:
+         access = True
+
+      if user['DISNAME'] in team['OFFICERS']:
+         access = True
+        
+      if not access:
+         await ctx.send("You must be owner or officer of guild to promote members. ")
+         return
+      
+      if str(player) == team_owner:
+         await ctx.send("Guild Owners can not be promoted.")
+
+
+      if str(player) in team_officers:
+         is_officer = True
+         if operation == "Promote":
+            await ctx.send("You can not promote a guild member higher than an Officer position.")
+            return
+         elif operation == "Demote":
+            transaction_message = f"{str(player)} was demoted to Captain"
+            team_query = {
+               '$pull': {'OFFICERS': str(player)},
+               '$push': {'CAPTAINS': str(player)},
+               '$addToSet': {'TRANSACTIONS': transaction_message}
+            }
+            update_message = f"{player.mention} has been demoted to a **Captain** of **{team['TEAM_DISPLAY_NAME']}**"
+
+
+      if str(player) in team_captains:
+         is_captain = True
+         if operation == "Promote":
+            transaction_message = f"{str(player)} was promoted to Officer"
+            team_query = {
+               '$pull': {'CAPTAINS': str(player)},
+               '$push': {'OFFICERS': str(player)},
+               '$addToSet': {'TRANSACTIONS': transaction_message}
+            }
+            update_message = f"{player.mention} has been promoted to an **Officer** of **{team['TEAM_DISPLAY_NAME']}**"
+         elif operation == "Demote":
+            transaction_message = f"{str(player)} was demoted to basic membership"
+            team_query = {
+               '$pull': {'CAPTAINS': str(player)},
+               '$addToSet': {'TRANSACTIONS': transaction_message}
+            }
+            update_message = f"{player.mention} has been demoted to a **Member** of **{team['TEAM_DISPLAY_NAME']}**"
+           
+
+      if not is_captain and not is_officer and not is_owner:
+         if operation == "Promote":
+            transaction_message = f"{str(player)} was promoted to Captain"
+            team_query = {
+               '$push': {'CAPTAINS': str(player)},
+               '$addToSet': {'TRANSACTIONS': transaction_message}
+            }
+            update_message = f"{player.mention} has been promoted to a **Captain** of **{team['TEAM_DISPLAY_NAME']}**"
+         elif operation == "Demote":
+            await ctx.send("Guild Members can not be demoted from basic membership.")
+            return
+        
+      response = db.updateTeam(query, team_query)
+      if response:
+         await ctx.send(update_message)
+         return
+   except:
+      trace = []
+      tb = ex.__traceback__
+      while tb is not None:
+            trace.append({
+               "filename": tb.tb_frame.f_code.co_filename,
+               "name": tb.tb_frame.f_code.co_name,
+               "lineno": tb.tb_lineno
+            })
+            tb = tb.tb_next
+      print(str({
+            'type': type(ex).__name__,
+            'message': str(ex),
+            'trace': trace
+      }))
+
+
+async def deletemember(ctx, member: User):
+   owner_profile = db.queryUser({'DID': str(ctx.author.id)})
+   team_profile = db.queryTeam({'TEAM_NAME': owner_profile['TEAM'].lower()})
+   
+   if team_profile:
+      if owner_profile['DISNAME'] == team_profile['OWNER']:  
+            team_buttons = [
+               manage_components.create_button(
+                  style=ButtonStyle.blue,
+                  label="✔️",
+                  custom_id="Yes"
+               ),
+               manage_components.create_button(
+                  style=ButtonStyle.red,
+                  label="❌",
+                  custom_id="No"
+               )
+            ]
+            transaction_message = f"{str(member)} was removed from guild."
+            team_buttons_action_row = manage_components.create_actionrow(*team_buttons)
+            await ctx.send(f"Do you want to remove {member.mention} from the **{team_profile['TEAM_DISPLAY_NAME']}**?".format(bot), components=[team_buttons_action_row])
+
+            def check(button_ctx):
+               return button_ctx.author == ctx.author
+
+            try:
+               button_ctx: ComponentContext = await manage_components.wait_for_component(bot, components=[team_buttons_action_row], check=check)
+               
+               if button_ctx.custom_id == "No":
+                  await button_ctx.send("Member Not Deleted.")
+                  return
+
+               if button_ctx.custom_id == "Yes":    
+                  team_query = {'TEAM_NAME': team_profile['TEAM_NAME']}
+                  new_value_query = {
+                        '$pull': {'MEMBERS': str(member)},
+                        '$pull': {'CAPTAINS': str(member)},
+                        '$pull': {'OFFICERS': str(member)},
+                        '$inc': {'MEMBER_COUNT': -1},
+                        '$push': {'TRANSACTIONS': transaction_message},
+                        }
+                  response = db.deleteTeamMember(team_query, new_value_query, str(member.id))
+                  if response:
+                     await button_ctx.send(f"{member.mention} has been removed from **{team_profile['TEAM_DISPLAY_NAME']}**")
+            except:
+               print("Guild not created. ")
+      else:
+            await ctx.send(m.OWNER_ONLY_COMMAND, delete_after=5)
    else:
-      await bless(int(amount), user2.id)
-      await curseteam(int(amount), team['TNAME'])
-      await ctx.send(f":coin:{amount} has been paid to {user2.mention}.")
-      return
+      await ctx.send(m.TEAM_DOESNT_EXIST, delete_after=5)
+
 
 
 @slash.slash(name="Traits", description="List of Universe Traits", guild_ids=guild_ids)
@@ -1528,7 +1767,7 @@ async def traits(ctx):
 async def blessteam(amount, team):
    blessAmount = amount
    posBlessAmount = 0 + abs(int(blessAmount))
-   query = {'TNAME': str(team)}
+   query = {'TEAM_NAME': str(team)}
    team_data = db.queryTeam(query)
    if team_data:
       update_query = {"$inc": {'BANK': posBlessAmount}}
@@ -1540,7 +1779,7 @@ async def blessteam(amount, team):
 async def curseteam(amount, team):
       curseAmount = amount
       negCurseAmount = 0 - abs(int(curseAmount))
-      query = {'TNAME': str(team)}
+      query = {'TEAM_NAME': str(team)}
       team_data = db.queryTeam(query)
       if team_data:
          update_query = {"$inc": {'BANK': int(negCurseAmount)}}
@@ -1925,7 +2164,7 @@ async def sponsor(ctx, guild: str, amount):
       return
 
    team_name = team
-   team_data = db.queryTeam({'TNAME' : team_name})
+   team_data = db.queryTeam({'TEAM_NAME' : team_name})
 
    if not team_data:
       await ctx.send(m.TEAM_DOESNT_EXIST, delete_after=5)
@@ -1951,7 +2190,7 @@ async def sponsor(ctx, guild: str, amount):
 async def fund(ctx, amount):
    try:
       user = db.queryUser({'DID': str(ctx.author.id)})
-      team = db.queryTeam({'TNAME': user['TEAM']})
+      team = db.queryTeam({'TEAM_NAME': user['TEAM'].lower()})
       team_guild = team['GUILD']
       if team_guild =="PCG":
          await ctx.send("Your team must join a Association First!")
@@ -1964,7 +2203,7 @@ async def fund(ctx, amount):
       if balance <= int(amount):
          await ctx.send("You do not have that amount to fund.")
       else:
-         await curseteam(int(amount), team['TNAME'])
+         await curseteam(int(amount), team['TEAM_NAME'])
          await blessguild_Alt(int(amount), str(team_guild))
          await ctx.send(f"{team_guild} has been funded :coin: {amount}.")
          return

@@ -305,7 +305,7 @@ class Lookup(commands.Cog):
                 if transactions:
                     transactions_len = len(transactions)
                     if transactions_len >= 10:
-                        transactions = transations[-10:]
+                        transactions = transactions[-10:]
                         transactions_embed = "\n".join(transactions)
                     else:
                         transactions_embed = "\n".join(transactions)
@@ -316,6 +316,11 @@ class Lookup(commands.Cog):
                 guild_buff_available = team['GUILD_BUFF_AVAILABLE']
                 guild_buff_on = team['GUILD_BUFF_ON']
                 guild_buff = team['GUILD_BUFF']
+                guild_buff_message = ""
+                if guild_buff_available:
+                    guild_buff_message = "Guild buff active"
+                else:
+                    guild_buff_message = "No Guild Buff Active"
                 
                 association = team['GUILD']
 
@@ -325,9 +330,22 @@ class Lookup(commands.Cog):
                 in_war = team['WAR_FLAG']
                 war_opponent = team['WAR_OPPONENT']
                 war_wins = team['WAR_WINS']
+                war_message = ""
+                if in_war:
+                    war_message = "Guild in War"
+                else:
+                    war_message = "No Guild War"
+                
+
 
                 guild_mission = team['GUILD_MISSION']
                 completed_missions = team['COMPLETED_MISSIONS']
+                guild_mission_message = ""
+                if guild_mission:
+                    guild_mission_message = "Guild Mission Active"
+                else:
+                    guild_mission_message = "No Active Guild Mission"
+
 
                 icon = ":coin:"
                 guild = team['GUILD']
@@ -348,23 +366,53 @@ class Lookup(commands.Cog):
                 🇨 **Captains**
                 {formatted_list_of_captains}
 
-                🔰 **Members**
-                {members_list_joined}
-               
+                **Guild Buff**
+                {guild_buff_message}
+                
                 **Guild Membership Count** 
                 {member_count}
 
+                **Association**
+                {association}
+
                 **Bank** 
-                {icon} {balance}
+                {icon} {'{:,}'.format(balance)}
+                """), colour=0x7289da)
+                # first_page.set_footer(text=f"")
+                
+                membership_pages = discord.Embed(title=f"Members", description=textwrap.dedent(f"""
+                🔰 **Members**
+                {members_list_joined}
+               
                 """), colour=0x7289da)
 
-                second_page = discord.Embed(title="History", description=textwrap.dedent(f"""
-                **{team_display_name}**
+                
+                guild_mission_embed = discord.Embed(title=f"Guild Missions", description=textwrap.dedent(f"""
+                **Guild Mission**
+                {guild_mission_message}
 
+                **Completed Guild Missions**
+                {str(completed_missions)}
+               
+                """), colour=0x7289da)
+
+
+                war_embed = discord.Embed(title=f"Guild War", description=textwrap.dedent(f"""
+                **War**
+                {war_message}
+
+                **Wars Won**
+                {str(war_wins)}
+
+               
+                """), colour=0x7289da)
+
+
+                activity_page = discord.Embed(title="Recent Guild Activity", description=textwrap.dedent(f"""
                 {transactions_embed}
                 """), colour=0x7289da)
 
-                embed_list = [first_page, second_page]
+                embed_list = [first_page, membership_pages, guild_mission_embed, war_embed, activity_page]
 
                 buttons = []
 
@@ -375,32 +423,25 @@ class Lookup(commands.Cog):
                 
                 if is_owner:
                     buttons = [
-                        manage_components.create_button(style=3, label="Admin Control", custom_id="admin_control"),
-                        manage_components.create_button(style=3, label="Buffs", custom_id="guild_buffs"),
-                        manage_components.create_button(style=3, label="Pay", custom_id="guild_pay"),
+                        manage_components.create_button(style=3, label="Buff Toggle", custom_id="guild_buffs"),
+                        manage_components.create_button(style=3, label="Buff Shop", custom_id="guild_buff_shop"),
                         manage_components.create_button(style=3, label="Storage", custom_id="guild_storage"),
-                        manage_components.create_button(style=3, label="Leave", custom_id="leave_guild")
                     ]
 
                 elif is_officer:
                     buttons = [
-                        manage_components.create_button(style=3, label="Admin Control", custom_id="admin_control"),
-                        manage_components.create_button(style=3, label="Buffs", custom_id="guild_buffs"),
-                        manage_components.create_button(style=3, label="Pay", custom_id="guild_pay"),
+                        manage_components.create_button(style=3, label="Buff Toggle", custom_id="guild_buffs"),
+                        manage_components.create_button(style=3, label="Buff Shop", custom_id="guild_buff_shop"),
                         manage_components.create_button(style=3, label="Storage", custom_id="guild_storage"),
-                        manage_components.create_button(style=3, label="Leave", custom_id="leave_guild")
                     ]
 
                 elif is_captain:
                     buttons = [
-                        manage_components.create_button(style=3, label="Admin Control", custom_id="admin_control"),
-                        manage_components.create_button(style=3, label="Storage", custom_id="guild_storage"),
-                        manage_components.create_button(style=3, label="Leave", custom_id="leave_guild")
+                        manage_components.create_button(style=3, label="Buff Toggle", custom_id="guild_buffs"),
                     ]
 
                 elif is_member and not is_owner and not is_captain and not is_officer:
                     buttons = [
-                        manage_components.create_button(style=3, label="Leave", custom_id="leave_guild")
                     ]
 
 
@@ -411,9 +452,9 @@ class Lookup(commands.Cog):
                     if button_ctx.author == ctx.author:
                         if button_ctx.custom_id == "guild_apply":
                             await button_ctx.defer(ignore=True)
-                            self.stop = True
                             await apply(self, ctx, owner_object)
-                        await button_ctx.send("Hello World")
+                            self.stop = True
+                            return
                         self.stop = True
                     else:
                         await button_ctx.send("World Hello")
