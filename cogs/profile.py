@@ -3115,7 +3115,7 @@ async def craft_adjuster(self, player, vault, universe, price, item, skin_list):
                     if item == "UNIVERSE_HEART" and universe_heart:
                         response = {"HAS_GEMS_FOR": True, "SUCCESS":  True, "MESSAGE": "You already have the Universe Heart for this universe!"}
                         return response
-                    if item == "UNIVERSE_SOUL" and universe_heart:
+                    if item == "UNIVERSE_SOUL" and universe_soul:
                         response = {"HAS_GEMS_FOR": True, "SUCCESS":  True, "MESSAGE": "You already have the Universe Soul for this universe!"}
                         return response
 
