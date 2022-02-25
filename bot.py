@@ -1888,6 +1888,135 @@ async def cursefamily(amount, family):
       else:
          print("cant find family")
 
+async def buffshop(ctx, player, team):
+   team_query = {'TEAM_NAME': team['TEAM_NAME']}
+   guild_buff_available = team['GUILD_BUFF_AVAILABLE']
+   balance = team['BANK']
+   icon = "💳"
+
+   if guild_buff_available:
+      guild_buff_length = len(team['GUILD_BUFFS'])
+      if guild_buff_length == 3:
+         await ctx.send("Guilds may only have up to 3 Guild Buffs at one time, max.")
+         return
+   war_tax = 0
+   war_message = ""
+   if team['WAR_FLAG']:
+      war_tax = 15000000
+      war_message = "War tax applied"
+   quest_buff_cost = 20000000 + war_tax
+   level_buff_cost = 15000000 + war_tax
+   stat_buff_cost = 10000000 + war_tax
+
+   sell_buttons = [
+         manage_components.create_button(
+            style=ButtonStyle.green,
+            label="🔋 1️⃣",
+            custom_id="1"
+         ),
+         manage_components.create_button(
+            style=ButtonStyle.blue,
+            label="🔋 2️⃣",
+            custom_id="2"
+         ),
+         manage_components.create_button(
+            style=ButtonStyle.red,
+            label="🔋 3️⃣",
+            custom_id="3"
+         ),
+         manage_components.create_button(
+            style=ButtonStyle.grey,
+            label="Cancel",
+            custom_id="cancel"
+         )
+      ]
+   sell_buttons_action_row = manage_components.create_actionrow(*sell_buttons)
+   embedVar = discord.Embed(title=f":tickets: | **Buff Shop** - {icon}{'{:,}'.format(balance)} ", description=textwrap.dedent(f"""\
+   Welcome {team['TEAM_DISPLAY_NAME']}!
+   {war_message}
+   🔋 1️⃣ **Quest Buff** for :money_with_wings: **{'{:,}'.format(quest_buff_cost)}**
+   
+   🔋 2️⃣ **Level Buff** for :money_with_wings: **{'{:,}'.format(level_buff_cost)}**
+
+   🔋 3️⃣ **Stat Buff** for :money_with_wings: **{'{:,}'.format(stat_buff_cost)}**
+
+   All Buffs are available for 100 uses.
+
+   What would you like to buy?
+   """), colour=0xf1c40f)
+   msg = await ctx.send(embed=embedVar, components=[sell_buttons_action_row])
+   def check(button_ctx):
+      return button_ctx.author == ctx.author
+
+   try:
+      button_ctx: ComponentContext = await manage_components.wait_for_component(bot, components=[sell_buttons_action_row], timeout=120,check=check)
+      uses = 100
+      price = 0
+      update_query = {}
+      
+      if button_ctx.custom_id == "cancel":
+         await button_ctx.defer(ignore=True)
+         await msg.edit(components=[])
+         return
+
+      if button_ctx.custom_id == "1":
+         price = quest_buff_cost
+         if price > balance:
+            await button_ctx.send("Insufficent Balance.", hidden=True)
+            await msg.edit(components=[])
+            return
+
+         update_query = {
+            '$set': {'GUILD_BUFF_AVAILABLE': True, 'ACTIVE_GUILD_BUFF': 'Quest'},
+            '$push': {'TRANSACTIONS': f"{player['DISNAME']} purchased Quest Buff", 'GUILD_BUFFS': {'TYPE': 'Quest', 'USES': 100}}
+         }
+     
+      if button_ctx.custom_id == "2":
+         price = level_buff_cost
+         if price > balance:
+            await button_ctx.send("Insufficent Balance.", hidden=True)
+            return
+
+         update_query = {
+            '$set': {'GUILD_BUFF_AVAILABLE': True, 'ACTIVE_GUILD_BUFF': 'Level'},
+            '$push': {'TRANSACTIONS': f"{player['DISNAME']} purchased Level Buff", 'GUILD_BUFFS': {'TYPE': 'Level', 'USES': 100}}
+         }
+
+      if button_ctx.custom_id == "3":
+         price= stat_buff_cost
+         if price > balance:
+            await button_ctx.send("Insufficent Balance.", hidden=True)
+            return
+
+         update_query = {
+            '$set': {'GUILD_BUFF_AVAILABLE': True, 'ACTIVE_GUILD_BUFF': 'Stat'},
+            '$push': {'TRANSACTIONS': f"{player['DISNAME']} purchased Stat Buff", 'GUILD_BUFFS': {'TYPE': 'Stat', 'USES': 100}}
+         }
+
+      response = db.updateTeam(team_query, update_query)
+      if response:
+         await curseteam(int(price), team['TEAM_NAME'])
+         await button_ctx.send("Guild buff purchased successfuly.")
+         return
+   
+   except Exception as ex:
+      trace = []
+      tb = ex.__traceback__
+      while tb is not None:
+            trace.append({
+               "filename": tb.tb_frame.f_code.co_filename,
+               "name": tb.tb_frame.f_code.co_name,
+               "lineno": tb.tb_lineno
+            })
+            tb = tb.tb_next
+      print(str({
+            'type': type(ex).__name__,
+            'message': str(ex),
+            'trace': trace
+      }))
+
+
+
 
 @slash.slash(description="Purchase Boosts", guild_ids=guild_ids)
 @commands.check(validate_user)

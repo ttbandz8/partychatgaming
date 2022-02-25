@@ -291,6 +291,8 @@ class Lookup(commands.Cog):
                         formatted_list_of_members.append(formatted_name)
 
                 members_list_joined = ", ".join(formatted_list_of_members)
+                captains_list_joined = ", ".join(formatted_list_of_captains)
+                officers_list_joined = ", ".join(formatted_list_of_officers)
                 if user['DISNAME'] in officers:
                     is_officer = True
                 elif user['DISNAME'] in captains:
@@ -315,12 +317,27 @@ class Lookup(commands.Cog):
 
                 guild_buff_available = team['GUILD_BUFF_AVAILABLE']
                 guild_buff_on = team['GUILD_BUFF_ON']
-                guild_buff = team['GUILD_BUFF']
-                guild_buff_message = ""
-                if guild_buff_available:
-                    guild_buff_message = "Guild buff active"
+                gbon_status = ""
+                if guild_buff_on:
+                    gbon_status ="🟢"
                 else:
-                    guild_buff_message = "No Guild Buff Active"
+                    gbon_status ="🔴"
+                guild_buffs = team['GUILD_BUFFS']
+                active_guild_buff = team['ACTIVE_GUILD_BUFF']
+                active_guild_buff_use_cases = ""
+                guild_buff_message = ""
+                guild_buff_message_active = "No Active Guild Buff"
+                if guild_buff_available:
+                    guild_buff_message = "Guild Buff Available"
+                    if guild_buffs:
+                        for buff in guild_buffs:
+                            if buff['TYPE'] == active_guild_buff:
+                                active_guild_buff_use_cases = str(buff['USES'])
+                        guild_buff_message_active = f"{gbon_status} {active_guild_buff} Buff: {active_guild_buff_use_cases} uses left!"
+                    else:
+                        guild_buff_message_active = ""
+                else:
+                    guild_buff_message = "No Guild Buff Available"
                 
                 association = team['GUILD']
 
@@ -347,33 +364,31 @@ class Lookup(commands.Cog):
                     guild_mission_message = "No Active Guild Mission"
 
 
-                icon = ":coin:"
+                icon = "💳"
                 guild = team['GUILD']
-                if balance >= 500000:
-                    icon = ":money_with_wings:"
-                elif balance >=300000:
-                    icon = ":moneybag:"
-                elif balance >= 150000:
-                    icon = ":dollar:"
+
 
                 first_page = discord.Embed(title=f"{team_display_name}", description=textwrap.dedent(f"""
                 👑 **Owner** 
                 {formatted_owner}
 
                 🅾️ **Officers**
-                {formatted_list_of_officers}
+                {officers_list_joined}
 
                 🇨 **Captains**
-                {formatted_list_of_captains}
-
-                **Guild Buff**
-                {guild_buff_message}
+                {captains_list_joined}
                 
                 **Guild Membership Count** 
                 {member_count}
 
                 **Association**
                 {association}
+
+                **Guild Buff**
+                {guild_buff_message}
+
+                **Active Buff**
+                {guild_buff_message_active}
 
                 **Bank** 
                 {icon} {'{:,}'.format(balance)}
@@ -423,21 +438,23 @@ class Lookup(commands.Cog):
                 
                 if is_owner:
                     buttons = [
-                        manage_components.create_button(style=3, label="Buff Toggle", custom_id="guild_buffs"),
+                        manage_components.create_button(style=3, label="Buff Toggle", custom_id="guild_buff_toggle"),
+                        manage_components.create_button(style=3, label="Buff Swap", custom_id="guild_buff_swap"),
                         manage_components.create_button(style=3, label="Buff Shop", custom_id="guild_buff_shop"),
                         manage_components.create_button(style=3, label="Storage", custom_id="guild_storage"),
                     ]
 
                 elif is_officer:
                     buttons = [
-                        manage_components.create_button(style=3, label="Buff Toggle", custom_id="guild_buffs"),
+                        manage_components.create_button(style=3, label="Buff Toggle", custom_id="guild_buff_toggle"),
+                        manage_components.create_button(style=3, label="Buff Swap", custom_id="guild_buff_swap"),
                         manage_components.create_button(style=3, label="Buff Shop", custom_id="guild_buff_shop"),
                         manage_components.create_button(style=3, label="Storage", custom_id="guild_storage"),
                     ]
 
                 elif is_captain:
                     buttons = [
-                        manage_components.create_button(style=3, label="Buff Toggle", custom_id="guild_buffs"),
+                        manage_components.create_button(style=3, label="Buff Toggle", custom_id="guild_buff_toggle"),
                     ]
 
                 elif is_member and not is_owner and not is_captain and not is_officer:
@@ -455,6 +472,17 @@ class Lookup(commands.Cog):
                             await apply(self, ctx, owner_object)
                             self.stop = True
                             return
+                        elif button_ctx.custom_id == "guild_buff_toggle":
+                            response = guild_buff_toggle(user, team)
+                            if response:
+                                await button_ctx.send(f"{response['MSG']}")
+                            else:
+                                await button_ctx.send("Error in toggling buff. Please seek support https://discord.gg/yWAD5HkDXU")
+                            self.stop = True
+                        elif button_ctx.custom_id == "guild_buff_shop":
+                            await button_ctx.defer(ignore=True)
+                            await main.buffshop(ctx, user, team)
+                            self.stop = True
                         self.stop = True
                     else:
                         await button_ctx.send("World Hello")
@@ -655,6 +683,34 @@ def setup(bot):
 def most_frequent(List):
     occurence_count = Counter(List)
     return occurence_count.most_common(1)[0][0]
+
+def guild_buff_toggle(player, team):
+    guild_buff_on = team['GUILD_BUFF_ON']
+    team_query = {'TEAM_NAME': team['TEAM_NAME']}
+    return_message = {}
+    
+    if guild_buff_on:
+        transaction_message = f"{player['DISNAME']} turned off Guild Buff."
+        new_value_query = {
+            '$set': {'GUILD_BUFF_ON': False},
+            '$push': {'TRANSACTIONS': transaction_message}
+            }
+        response = db.updateTeam(team_query, new_value_query)
+        if response:
+            return {"MSG": "Guild Buff has been turned off."}
+        else:
+            return False
+    else:
+        transaction_message = f"{player['DISNAME']} turned on Guild Buff."
+        new_value_query = {
+            '$set': {'GUILD_BUFF_ON': True},
+            '$push': {'TRANSACTIONS': transaction_message}
+            }
+        response = db.updateTeam(team_query, new_value_query)
+        if response:
+            return {"MSG": "Guild Buff has been turned on."}
+        else:
+            return False
 
 
 async def apply(self, ctx, owner: User):
