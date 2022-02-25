@@ -255,7 +255,7 @@ async def crown(ctx):
    
    embedVar11 = discord.Embed(title= f"Card Types", description=textwrap.dedent(f"""                                                                           
    🎴 **Universe Cards** - Purchasable in the **Shop** and Drops in **Tales**
-   ⚪ **Card Skins** - Purchasable in the **Shop**
+   🃏 **Card Skins** - Craftable in the **Craft**
    🔥 **Dungeon Cards** - Drops in **Dungeons**
    ✨ **Destiny Cards** - Earned via **Destinies**
    👹 **Boss Cards** - Exchange for **Boss Souls**
@@ -284,6 +284,9 @@ async def crown(ctx):
 
    ✨ **Destinies**
    Card Specific Quest that earn **Destiny Cards**
+   
+   🃏 **Skins**
+   Card Skins have different stats and abilities but can complete the main card **Destinies** !
  
    """), colour=0x7289da)
    embedVar11.set_thumbnail(url=avatar)
@@ -1632,7 +1635,7 @@ async def cursefamily(amount, family):
 async def trinketshop(ctx):
    user_query = {'DID': str(ctx.author.id)}
    user = db.queryUser(user_query)
-   if user['LEVEL'] < 15:
+   if user['LEVEL'] < 11:
       await ctx.send(f"🔓 Unlock the Trinket Shop by completing Floor 15 of the 🌑 Abyss! Use /abyss to enter the abyss.")
       return
 

@@ -183,6 +183,7 @@ class CrownUnlimited(commands.Cog):
             # Lose / Bounty
             take_chances_response = ""
             random_flee_loss = random.randint(1, 50)
+            random_flee_loss = 5
             bounty = random.randint(1, 30000)
 
             if bounty >= 150000:
@@ -200,14 +201,9 @@ class CrownUnlimited(commands.Cog):
                 random_flee_loss = 100
 
             # Take Chances Button Interaction
-            if random_flee_loss <= 10 and selected_mode == "Tales":
-                drop_response = await specific_drops(str(message.author.id), cards[rand_card]['NAME'], universetitle)
-                embedVar = discord.Embed(title=f"**{drop_response}**", colour=0xf1c40f)
-                embedVar.set_footer(text="Successful Capture!",
-                                    icon_url="https://cdn.discordapp.com/emojis/877233426770583563.gif?v=1")
-                take_chances_response = embedVar
 
-            elif random_flee_loss <= 100:
+
+            if random_flee_loss <= 100:
                 if selected_mode == "Tales":
                     found_amount = round(bounty / 3)
                 else:
@@ -304,6 +300,12 @@ class CrownUnlimited(commands.Cog):
                     random_battle_buttons_action_row], timeout=120, check=check)
 
                 if button_ctx.custom_id == "exploreNo":
+                    if random_flee_loss <= 10 and selected_mode == "Tales":
+                        drop_response = await specific_drops(str(message.author.id), cards[rand_card]['NAME'], universetitle)
+                        embedVar = discord.Embed(title=f"**{drop_response}**", colour=0xf1c40f)
+                        embedVar.set_footer(text="Successful Capture!",
+                                            icon_url="https://cdn.discordapp.com/emojis/877233426770583563.gif?v=1")
+                        take_chances_response = embedVar
                     await curse(random_flee_loss, message.author.id)
                     await button_ctx.send(embed=take_chances_response)
                     await msg.edit(components=[])
@@ -2959,6 +2961,7 @@ def abyss_level_up_message(did, floor, card, title, arm):
         new_unlock = False
         vault_query = {'DID': did}
         vault = db.altQueryVault(vault_query)
+        arm_arm = arm['ARM']
 
         card_drop = card
         title_drop = title
@@ -2996,7 +2999,7 @@ def abyss_level_up_message(did, floor, card, title, arm):
                 current_arms.append(arm['ARM'])
             if len(current_arms) >=25:
                 maxed_out_messages.append("You have max amount of Arms. You did not receive the **Floor Arm**.")
-            elif arm in current_arms:
+            elif arm_arm in current_arms:
                 maxed_out_messages.append(f"You already own {arm_drop} so you did not receive it.")
             else:
                 db.updateVaultNoFilter(vault_query,{'$addToSet':{'ARMS': {'ARM': str(arm_drop), 'DUR': 25}}})
@@ -7643,14 +7646,15 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_used_resolve = False
                                                         o_gow_resolve = True
                                                         o_defense = 125
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Pre Resolve: Pre Ascension!")
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Crushed Blood Orb: Health Refill")
 
                                                     embedVar = discord.Embed(title=f"{o_card} ASCENDED :zap:",
                                                                             description=f"**{o_card} says**\n{o_resolve_description}",
                                                                             colour=0xe91e63)
                                                     embedVar.add_field(name=f"Transformation: Ascension",
                                                                     value="On Resolve Refill Health.")
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Ascension!")
+                                                    if o_gow_resolve:
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Ascension!")
                                                     await button_ctx.defer(ignore=True)
                                                     turn_total = turn_total + 1
                                                     turn = 1
@@ -8035,8 +8039,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_health = round(o_health + dmg['DMG'])
                                                     elif enh_type == 'DESTRUCTION':
                                                         t_max_health = round(t_max_health - dmg['DMG'])
-                                                    if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check:
-                                                        t_stamina = t_stamina
+                                                    if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check or enh_type in Control_Enhancer_Check:
+                                                        o_stamina = o_stamina
                                                     else:
                                                         o_stamina = o_stamina - int(dmg['STAMINA_USED'])
 
@@ -8882,7 +8886,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_used_resolve = False
                                                             t_gow_resolve = True
                                                             t_defense = 125
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Pre Resolve: Pre Ascension!")
+                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Crushed Blood Orb: Health Refill")
 
 
                                                         embedVar = discord.Embed(title=f"{t_card} STRENGTHENED RESOLVE :zap:",
@@ -8890,7 +8894,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                                 colour=0xe91e63)
                                                         embedVar.add_field(name=f"Transformation: Ascension",
                                                                         value="On Resolve Refill Health.")
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Ascension!")
+                                                        if t_gow_resolve:
+                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Ascension!")
                                                         await button_ctx.defer(ignore=True)
                                                         turn_total = turn_total + 1
                                                         turn = 0
@@ -9108,7 +9113,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if dmg['DMG'] >= 100:
                                                                 dmg['DMG'] = 100
                                                             o_max_health = round(o_max_health - dmg['DMG'])
-                                                            
+                                                        
                                                         t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
                                                         if t_universe == "Persona":
@@ -9250,7 +9255,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         elif enh_type == 'DESTRUCTION':
                                                             o_max_health = round(o_max_health - dmg['DMG'])
                                                             
-                                                        if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check:
+                                                        if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check or enh_type in Control_Enhancer_Check:
                                                             t_stamina = t_stamina
                                                         else:
                                                             t_stamina = t_stamina - int(dmg['STAMINA_USED'])
@@ -9840,7 +9845,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_used_resolve = False
                                                         t_gow_resolve = True
                                                         t_defense = 125
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Pre Resolve: Pre Ascension!")
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Crushed Blood Orb: Health Refill")
 
 
                                                     embedVar = discord.Embed(title=f"{t_card} STRENGTHENED RESOLVE :zap:",
@@ -9848,7 +9853,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                             colour=0xe91e63)
                                                     embedVar.add_field(name=f"Transformation: Ascension",
                                                                     value="On Resolve Refill Health.")
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Ascension!")
+                                                    if t_gow_resolve:
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Ascension!")
                                                     turn_total = turn_total + 1
                                                     turn = 0
                                                 elif t_universe == "Fate":  # Fate Trait
@@ -10189,7 +10195,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = round(t_health + dmg['DMG'])
                                                     elif enh_type == 'DESTRUCTION':
                                                         o_max_health = round(o_max_health - dmg['DMG'])
-                                                    if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check:
+                                                    if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check or enh_type in Control_Enhancer_Check:
                                                         t_stamina = t_stamina
                                                     else:
                                                         t_stamina = t_stamina - int(dmg['STAMINA_USED'])
@@ -10998,7 +11004,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_used_resolve = False
                                                         o_gow_resolve = True
                                                         o_defense = 125
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Pre Resolve: Pre Ascension!")
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Crushed Blood Orb: Health Refill")
 
 
                                                     turn_total = turn_total + 1
@@ -11288,8 +11294,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     elif enh_type == 'DESTRUCTION':
                                                         t_max_health = round(t_max_health - dmg['DMG'])
 
-                                                    if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check:
-                                                        t_stamina = t_stamina
+                                                    if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check or enh_type in Control_Enhancer_Check:
+                                                        o_stamina = o_stamina
                                                     else:
                                                         o_stamina = o_stamina - int(dmg['STAMINA_USED'])
 
@@ -11849,7 +11855,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_used_resolve = False
                                                             o_gow_resolve = True
                                                             o_defense = 125
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Pre Resolve: Pre Ascension!")
+                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Crushed Blood Orb: Health Refill")
 
 
                                                         embedVar = discord.Embed(title=f"{o_card} STRENGTHENED RESOLVE :zap:",
@@ -11862,7 +11868,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                             inline=False)
                                                             embedVar.set_footer(text=f"{o_card} this is your chance!")
 
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Ascension!")
+                                                        if o_gow_resolve:
+                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Ascension!")
                                                         await button_ctx.defer(ignore=True)
 
                                                         turn_total = turn_total + 1
@@ -12494,8 +12501,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         elif enh_type == 'DESTRUCTION':
                                                             t_max_health = round(t_max_health - dmg['DMG'])
 
-                                                        if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check:
-                                                            t_stamina = t_stamina
+                                                        if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check or enh_type in Control_Enhancer_Check:
+                                                            o_stamina = o_stamina
                                                         else:
                                                             o_stamina = o_stamina - int(dmg['STAMINA_USED'])
 
@@ -13484,7 +13491,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_used_resolve = False
                                                     t_gow_resolve = True
                                                     t_defense = 125
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Pre Resolve: Pre Ascension!")
+                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Crushed Blood Orb: Health Refill")
 
 
                                                 if mode not in AUTO_BATTLE_modes:
@@ -13493,7 +13500,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                             colour=0xe91e63)
                                                     embedVar.add_field(name=f"Transformation: Ascension",
                                                                     value="On Resolve Refill Health.")
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Ascension!")
+                                                    if t_gow_resolve:
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Ascension!")
                                                 turn_total = turn_total + 1
                                                 turn = turn_selector
                                             elif t_universe == "Fate":  # Fate Trait
@@ -14157,7 +14165,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = round(t_health + dmg['DMG'])
                                                         elif enh_type == 'DESTRUCTION':
                                                             c_max_health = round(c_max_health - dmg['DMG'])
-                                                        if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check:
+                                                        if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check or enh_type in Control_Enhancer_Check:
                                                             t_stamina = t_stamina
                                                         else:
                                                             t_stamina = t_stamina - int(dmg['STAMINA_USED'])
@@ -14425,7 +14433,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = round(t_health + dmg['DMG'])
                                                         elif enh_type == 'DESTRUCTION':
                                                             o_max_health = round(o_max_health - dmg['DMG'])
-                                                        if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check:
+                                                        if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check or enh_type in Control_Enhancer_Check:
                                                             t_stamina = t_stamina
                                                         else:
                                                             t_stamina = t_stamina - int(dmg['STAMINA_USED'])
@@ -14690,7 +14698,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = round(t_health + dmg['DMG'])
                                                     elif enh_type == 'DESTRUCTION':
                                                         o_max_health = round(o_max_health - dmg['DMG'])
-                                                    if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check:
+                                                    if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check or enh_type in Control_Enhancer_Check:
                                                         t_stamina = t_stamina
                                                     else:
                                                         t_stamina = t_stamina - int(dmg['STAMINA_USED'])
@@ -15587,7 +15595,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             c_used_resolve = False
                                                             c_gow_resolve = True
                                                             c_defense = 125
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Pre Resolve: Pre Ascension!")
+                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Crushed Blood Orb: Health Refill")
 
 
                                                         embedVar = discord.Embed(title=f"{c_card} ASCENDED :zap:",
@@ -15596,7 +15604,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         embedVar.add_field(name=f"Transformation: Ascension",
                                                                         value="On Resolve Refill Health.")
                                                         #await private_channel.send(embed=embedVar)
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: Ascension!")
+                                                        if c_gow_resolve:
+                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: Ascension!")
                                                         turn_total = turn_total + 1
                                                         turn = 3
                                                     elif c_universe == "Fate":  # Fate Trait
@@ -15847,8 +15856,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         turn = 2
                                                     else:
                                                         #await private_channel.send(f"{cpet_name} needs a turn to rest...")
-                                                        previous_moves.append(f"*{turn_total}:* **{c_card}** Summoned 🧬 **{cpet_name}**: {dmg['MESSAGE']}")
-                                                        turn_total = turn_total + 1
+                                                        previous_moves.append(f"*{turn_total}:* {c_card} Could not summon 🧬 **{cpet_name}**. Needs rest")
                                                         turn = 2
                                                 else:
                                                     #await private_channel.send(f"{cpet_name} needs a turn to rest...")
@@ -15940,8 +15948,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     elif enh_type == 'DESTRUCTION':
                                                         t_max_health = round(t_max_health - dmg['DMG'])
                                                     
-                                                    if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check:
-                                                        t_stamina = t_stamina
+                                                    if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check or enh_type in Control_Enhancer_Check:
+                                                        c_stamina = c_stamina
                                                     else:
                                                         c_stamina = c_stamina - int(dmg['STAMINA_USED'])
 
@@ -16065,8 +16073,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         elif enh_type == 'DESTRUCTION':
                                                             t_max_health = round(t_max_health - dmg['DMG'])
 
-                                                        if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check:
-                                                            t_stamina = t_stamina
+                                                        if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check or enh_type in Control_Enhancer_Check:
+                                                            c_stamina = c_stamina
                                                         else:
                                                             c_stamina = c_stamina - int(dmg['STAMINA_USED'])
 
@@ -16684,6 +16692,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 c_used_resolve = False
                                                                 c_gow_resolve = True
                                                                 c_defense = 125
+                                                                previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Crushed Blood Orb: Health Refill")
 
 
                                                             embedVar = discord.Embed(
@@ -16693,7 +16702,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             embedVar.add_field(name=f"Transformation: Ascension",
                                                                             value="On Resolve Refill Health.")
                                                             #await button_ctx.send(embed=embedVar)
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: Ascension!")
+                                                            if c_gow_resolve:
+                                                                previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: Ascension!")
                                                             await button_ctx.defer(ignore=True)
                                                             turn_total = turn_total + 1
                                                             turn = 3
@@ -17050,8 +17060,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         elif enh_type == 'DESTRUCTION':
                                                             t_max_health = round(t_max_health - dmg['DMG'])
                                                         
-                                                        if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check:
-                                                            t_stamina = t_stamina
+                                                        if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check or enh_type in Control_Enhancer_Check:
+                                                            c_stamina = c_stamina
                                                         else:
                                                             c_stamina = c_stamina - int(dmg['STAMINA_USED'])
 
@@ -17180,8 +17190,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             elif enh_type == 'DESTRUCTION':
                                                                 t_max_health = round(t_max_health - dmg['DMG'])
                                                             
-                                                            if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check:
-                                                                t_stamina = t_stamina
+                                                            if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check or enh_type in Control_Enhancer_Check:
+                                                                c_stamina = c_stamina
                                                             else:
                                                                 c_stamina = c_stamina - int(dmg['STAMINA_USED'])
 
@@ -18073,14 +18083,15 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_used_resolve = False
                                                         t_gow_resolve = True
                                                         t_defense = 125
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Pre Resolve: Pre Ascension!")
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Crushed Blood Orb: Health Refill")
 
                                                     embedVar = discord.Embed(title=f"{t_card} STRENGTHENED RESOLVE :zap:",
                                                                             description=f"**{t_card} says**\n{t_resolve_description}",
                                                                             colour=0xe91e63)
                                                     embedVar.add_field(name=f"Transformation: Ascension",
                                                                     value="On Resolve Refill Health.")
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Ascension!")
+                                                    if t_gow_resolve:
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Ascension!")
                                                     #await private_channel.send(embed=embedVar)
                                                     turn_total = turn_total + 1
                                                     turn = 0
@@ -18581,7 +18592,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         elif enh_type == 'DESTRUCTION':
                                                             o_max_health = round(o_max_health - dmg['DMG'])
                                                         
-                                                        if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check:
+                                                        if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check or enh_type in Control_Enhancer_Check:
                                                             t_stamina = t_stamina
                                                         else:
                                                             t_stamina = t_stamina - int(dmg['STAMINA_USED'])
@@ -18853,7 +18864,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = round(t_health + dmg['DMG'])
                                                         elif enh_type == 'DESTRUCTION':
                                                             c_max_health = round(c_max_health - dmg['DMG'])
-                                                        if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check:
+                                                        if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check or enh_type in Control_Enhancer_Check:
                                                             t_stamina = t_stamina
                                                         else:
                                                             t_stamina = t_stamina - int(dmg['STAMINA_USED'])
