@@ -3036,7 +3036,7 @@ def abyss_level_up_message(did, floor, card, title, arm):
                         drop_message.append(f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.")
                         
 
-        if floor == 1:
+        if floor == 0:
             message = "🎊 Congratulations! 🎊 You unlocked **Shop!**. Use the **/shop** command to purchase Cards, Titles and Arms!"
             new_unlock = True
         
