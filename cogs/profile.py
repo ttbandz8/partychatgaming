@@ -2276,13 +2276,8 @@ class Profile(commands.Cog):
             all_universes = db.queryAllUniverse()
             user = db.queryUser({'DID': str(ctx.author.id)})
 
-<<<<<<< HEAD
-            if user['LEVEL'] < 2:
-                await ctx.send("🔓 Unlock the Shop by completeing Floor 1 of the 🌑 Abyss! Use /abyss to enter the abyss.")
-=======
             if user['LEVEL'] < 1:
                 await ctx.send("🔓 Unlock the Shop by completing Floor 0 of the 🌑 Abyss! Use /abyss to enter the abyss.")
->>>>>>> fix
                 return
 
             completed_tales = user['CROWN_TALES']

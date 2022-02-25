@@ -1636,11 +1636,7 @@ async def trinketshop(ctx):
    user_query = {'DID': str(ctx.author.id)}
    user = db.queryUser(user_query)
    if user['LEVEL'] < 11:
-<<<<<<< HEAD
-      await ctx.send(f"🔓 Unlock the Trinket Shop by completing Floor 10 of the 🌑 Abyss! Use /abyss to enter the abyss.")
-=======
       await ctx.send(f"🔓 Unlock the Trinket Shop by completing Floor 15 of the 🌑 Abyss! Use /abyss to enter the abyss.")
->>>>>>> fix
       return
 
    current_arm = user['ARM']
