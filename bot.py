@@ -117,6 +117,8 @@ async def validate_user(ctx):
 @bot.event
 async def on_ready():
    print('Bot is ready! ')
+   for server in bot.guilds:
+        print(server.name)
 
 @slash.slash(name="Enhancers", description="List of Enhancers", guild_ids=guild_ids)
 async def enhancers(ctx):
@@ -1373,6 +1375,33 @@ async def updatestock(ctx, stock: int):
    else:
       print(m.ADMIN_ONLY_COMMAND)
 
+@bot.command()
+@commands.check(validate_user)
+async def servers(ctx):
+   if ctx.author.guild_permissions.administrator == True:
+      try:
+         for server in bot.guilds:
+            await ctx.send(server.name)
+            print(server.name)
+      except Exception as ex:
+         trace = []
+         tb = ex.__traceback__
+         while tb is not None:
+               trace.append({
+                  "filename": tb.tb_frame.f_code.co_filename,
+                  "name": tb.tb_frame.f_code.co_name,
+                  "lineno": tb.tb_lineno
+               })
+               tb = tb.tb_next
+         print(str({
+               'type': type(ex).__name__,
+               'message': str(ex),
+               'trace': trace
+            }))
+         
+   else:
+      await ctx.send("Admin only.")
+
 
 @bot.event
 async def on_command_error(ctx, error):
@@ -1601,6 +1630,7 @@ async def blessfamily(amount, family):
       db.updateFamily(query, update_query)
    else:
       print("Cannot find family")
+
 
 
 async def blessfamily_Alt(amount, family):
