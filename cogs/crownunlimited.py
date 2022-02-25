@@ -7641,20 +7641,21 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     o_defense = round(o_defense - o_resolve_defense)
                                                     o_used_resolve = True
                                                     o_pet_used = False
-
-                                                    if not o_gow_resolve:
+                                                    
+                                                    if o_gow_resolve:
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Ascension!")
+                                                    elif not o_gow_resolve:
                                                         o_used_resolve = False
                                                         o_gow_resolve = True
                                                         o_defense = 125
                                                         previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Crushed Blood Orb: Health Refill")
-
+                                                    
                                                     embedVar = discord.Embed(title=f"{o_card} ASCENDED :zap:",
                                                                             description=f"**{o_card} says**\n{o_resolve_description}",
                                                                             colour=0xe91e63)
                                                     embedVar.add_field(name=f"Transformation: Ascension",
                                                                     value="On Resolve Refill Health.")
-                                                    if o_gow_resolve:
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Ascension!")
+                                                    
                                                     await button_ctx.defer(ignore=True)
                                                     turn_total = turn_total + 1
                                                     turn = 1
@@ -8894,20 +8895,21 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_used_resolve = True
                                                         t_pet_used = False
 
-                                                        if not t_gow_resolve:
+                                                        if t_gow_resolve:
+                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Ascension!")
+                                                        elif not t_gow_resolve:
                                                             t_used_resolve = False
                                                             t_gow_resolve = True
                                                             t_defense = 125
                                                             previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Crushed Blood Orb: Health Refill")
-
+                                                        
 
                                                         embedVar = discord.Embed(title=f"{t_card} STRENGTHENED RESOLVE :zap:",
                                                                                 description=f"**{t_card} says**\n{t_resolve_description}",
                                                                                 colour=0xe91e63)
                                                         embedVar.add_field(name=f"Transformation: Ascension",
                                                                         value="On Resolve Refill Health.")
-                                                        if t_gow_resolve:
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Ascension!")
+                                                        
                                                         await button_ctx.defer(ignore=True)
                                                         turn_total = turn_total + 1
                                                         turn = 0
@@ -9866,20 +9868,21 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_defense = round(t_defense - t_resolve_defense)
                                                     t_used_resolve = True
 
-                                                    if not t_gow_resolve:
+                                                    if t_gow_resolve:
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Ascension!")
+                                                    elif not t_gow_resolve:
                                                         t_used_resolve = False
                                                         t_gow_resolve = True
                                                         t_defense = 125
                                                         previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Crushed Blood Orb: Health Refill")
-
+                                                    
 
                                                     embedVar = discord.Embed(title=f"{t_card} STRENGTHENED RESOLVE :zap:",
                                                                             description=f"**{t_card} says**\n{t_resolve_description}",
                                                                             colour=0xe91e63)
                                                     embedVar.add_field(name=f"Transformation: Ascension",
                                                                     value="On Resolve Refill Health.")
-                                                    if t_gow_resolve:
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Ascension!")
+                                                    
                                                     turn_total = turn_total + 1
                                                     turn = 0
                                                 elif t_universe == "Fate":  # Fate Trait
@@ -11886,12 +11889,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_used_resolve = True
                                                         o_pet_used = False
 
-                                                        if not o_gow_resolve:
+                                                        if t_gow_resolve:
+                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Ascension!")
+                                                        elif not o_gow_resolve:
                                                             o_used_resolve = False
                                                             o_gow_resolve = True
                                                             o_defense = 125
                                                             previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Crushed Blood Orb: Health Refill")
-
+                                                        
 
                                                         embedVar = discord.Embed(title=f"{o_card} STRENGTHENED RESOLVE :zap:",
                                                                                 description=f"**{o_card} says**\n{o_resolve_description}",
@@ -11903,8 +11908,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                             inline=False)
                                                             embedVar.set_footer(text=f"{o_card} this is your chance!")
 
-                                                        if o_gow_resolve:
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Ascension!")
+                                                        
                                                         await button_ctx.defer(ignore=True)
 
                                                         turn_total = turn_total + 1
@@ -12165,7 +12169,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if not operformance:
                                                                 summon_file = showsummon(opet_image, opet_name, dmg['MESSAGE'], opet_lvl, opet_bond)
                                                                 embedVar.set_image(url="attachment://pet.png")
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **Persona!** : **{tpet_name}** was summoned from **{t_card}'s** soul dealing **{petdmg['DMG']}** damage!\n**{o_card}** summon disabled!")
+                                                            previous_moves.append(f"*{turn_total}:* 🩸 **Persona!** : **{opet_name}** was summoned from **{o_card}'s** soul dealing **{petdmg['DMG']}** damage!\n**{t_card}** summon disabled!")
                                                             o_pet_used = True
                                                             # await button_ctx.defer(ignore=True)
                                                             #embedVar.set_image(url="attachment://pet.png")
@@ -13538,11 +13542,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 t_used_resolve = True
                                                 t_pet_used = False
 
-                                                if not t_gow_resolve:
+                                                if t_gow_resolve:
+                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Ascension!")
+                                                elif not t_gow_resolve:
                                                     t_used_resolve = False
                                                     t_gow_resolve = True
                                                     t_defense = 125
                                                     previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Crushed Blood Orb: Health Refill")
+                                                
 
 
                                                 if mode not in AUTO_BATTLE_modes:
@@ -13551,8 +13558,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                             colour=0xe91e63)
                                                     embedVar.add_field(name=f"Transformation: Ascension",
                                                                     value="On Resolve Refill Health.")
-                                                    if t_gow_resolve:
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Ascension!")
+                                                    
                                                 turn_total = turn_total + 1
                                                 turn = turn_selector
                                             elif t_universe == "Fate":  # Fate Trait
@@ -15674,12 +15680,15 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         c_used_resolve = True
                                                         c_pet_used = False
 
-                                                        if not c_gow_resolve:
+                                                        
+                                                        if c_gow_resolve:
+                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: Ascension!")
+                                                        elif not c_gow_resolve:
                                                             c_used_resolve = False
                                                             c_gow_resolve = True
                                                             c_defense = 125
                                                             previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Crushed Blood Orb: Health Refill")
-
+                                                        
 
                                                         embedVar = discord.Embed(title=f"{c_card} ASCENDED :zap:",
                                                                                 description=f"**{c_card} says**\n{c_resolve_description}",
@@ -15687,8 +15696,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         embedVar.add_field(name=f"Transformation: Ascension",
                                                                         value="On Resolve Refill Health.")
                                                         #await private_channel.send(embed=embedVar)
-                                                        if c_gow_resolve:
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: Ascension!")
+                                                        
                                                         turn_total = turn_total + 1
                                                         turn = 3
                                                     elif c_universe == "Fate":  # Fate Trait
@@ -16779,12 +16787,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             c_used_resolve = True
                                                             c_pet_used = False
 
-                                                            if not c_gow_resolve:
+                                                            if c_gow_resolve:
+                                                                previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: Ascension!")
+                                                            elif not c_gow_resolve:
                                                                 c_used_resolve = False
                                                                 c_gow_resolve = True
                                                                 c_defense = 125
                                                                 previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Crushed Blood Orb: Health Refill")
-
+                                                            
 
                                                             embedVar = discord.Embed(
                                                                 title=f"{c_card} STRENGTHENED RESOLVE :zap:",
@@ -16793,8 +16803,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             embedVar.add_field(name=f"Transformation: Ascension",
                                                                             value="On Resolve Refill Health.")
                                                             #await button_ctx.send(embed=embedVar)
-                                                            if c_gow_resolve:
-                                                                previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: Ascension!")
+                                                            
                                                             await button_ctx.defer(ignore=True)
                                                             turn_total = turn_total + 1
                                                             turn = 3
@@ -18176,7 +18185,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_defense = round(t_defense - t_resolve_defense)
                                                     t_used_resolve = True
                                                     t_pet_used = False
-                                                    if not t_gow_resolve:
+                                                    if t_gow_resolve:
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Ascension!")
+                                                    elif not t_gow_resolve:
                                                         t_used_resolve = False
                                                         t_gow_resolve = True
                                                         t_defense = 125
@@ -18187,8 +18198,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                             colour=0xe91e63)
                                                     embedVar.add_field(name=f"Transformation: Ascension",
                                                                     value="On Resolve Refill Health.")
-                                                    if t_gow_resolve:
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Ascension!")
+                                                   
                                                     #await private_channel.send(embed=embedVar)
                                                     turn_total = turn_total + 1
                                                     turn = 0
