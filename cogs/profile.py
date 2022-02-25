@@ -2276,8 +2276,13 @@ class Profile(commands.Cog):
             all_universes = db.queryAllUniverse()
             user = db.queryUser({'DID': str(ctx.author.id)})
 
+<<<<<<< HEAD
             if user['LEVEL'] < 2:
                 await ctx.send("🔓 Unlock the Shop by completeing Floor 1 of the 🌑 Abyss! Use /abyss to enter the abyss.")
+=======
+            if user['LEVEL'] < 1:
+                await ctx.send("🔓 Unlock the Shop by completing Floor 0 of the 🌑 Abyss! Use /abyss to enter the abyss.")
+>>>>>>> fix
                 return
 
             completed_tales = user['CROWN_TALES']
@@ -2650,13 +2655,21 @@ class Profile(commands.Cog):
         # Craft with Gems
         # Craft Universe Heart, Universe Soul, Skin Box
         try:
+            gems = 0
             all_universes = db.queryAllUniverse()
             user = db.queryUser({'DID': str(ctx.author.id)})
             card_info = db.queryCard({"NAME": user['CARD']})
+            destiny_alert_message = f"No Skins or Destinies available for {card_info['NAME']}"
+            destiny_alert = False
             if user['LEVEL'] < 9:
                 await ctx.send("🔓 Unlock Crafting by completeing Floor 8 of the 🌑 Abyss! Use /abyss to enter the abyss.")
                 return
 
+            
+            
+            #skin_alert_message = f"No Skins for {card_info['NAME']}"
+            
+                #skin_alert_message = f"No Skins for {card_info['NAME']}"
             available_universes = []
             riftShopOpen = False
             shopName = ':shopping_cart: Crown Shop'
@@ -2679,27 +2692,88 @@ class Profile(commands.Cog):
             owned_card_levels_list = []
             for c in vault['CARD_LEVELS']:
                 owned_card_levels_list.append(c['CARD'])
+                
+            #Card skin query 
+            list_of_card_skins = False
+            skin_alert = False
+            card_skin_message = "No Skins"
+            
+            new_skin_list = []
+            list_of_card_skins = [x for x in db.queryAllCardsBasedOnUniverse({'SKIN_FOR' : card_info['NAME']})]
+            if list_of_card_skins: 
+                for skin in list_of_card_skins:
+                    if skin['NAME'] not in current_cards:
+                        new_skin_list.append(skin)
+                card_skin_message = f" {card_info['UNIVERSE']} Skins Available!"
+                skin_alert = True
 
             owned_destinies = []
             for destiny in vault['DESTINY']:
                 owned_destinies.append(destiny['NAME'])
-
-
+                d_card = ' '.join(destiny['USE_CARDS'])
+                d_card_info = db.queryCard({"NAME": str(d_card)})
+                if card_info['NAME'] == destiny['USE_CARDS'] or card_info['SKIN_FOR'] == d_card_info['NAME']:
+                    #destiny_alert_message = f"{card_info['UNIVERSE']} Destinies Availble"
+                    destiny_alert = True
+                    
+            if skin_alert == True and destiny_alert ==True:
+                destiny_alert_message = f"{card_info['NAME']} Skins and Destinies Available!"
+            elif skin_alert == True:
+                destiny_alert_message = f"{card_info['NAME']} Skins Available!"
+            elif destiny_alert == True:
+                destiny_alert_message = f"{card_info['NAME']} Destinies Available!"
+            
+                    
             embed_list = []
             for universe in available_universes:
                 universe_name = universe['TITLE']
                 universe_image = universe['PATH']
+                universe_heart = False
+                universe_soul = False
+                gems = 0
+                for uni in vault['GEMS']:
+                    if uni['UNIVERSE'] == universe_name:
+                        gems = uni['GEMS']
+                        universe_heart = uni['UNIVERSE_HEART']
+                        universe_soul = uni['UNIVERSE_SOUL']
+                heart_message = "Cannot Afford"
+                soul_message = "Cannot Afford"
+                destiny_message = "Cannot Afford"
+                if universe_heart:
+                    heart_message = "Owned"
+                elif gems >= 1000000:
+                    heart_message = "Craftable"
+                if universe_soul:
+                    soul_message = "Owned"
+                elif gems >= 500000:
+                    soul_message = "Craftable"
+                if gems >= 800000 and universe_name == card_info['UNIVERSE'] and destiny_alert:
+                    destiny_message = f"Destinies available"
+                elif gems >= 800000 and destiny_alert:
+                    destiny_message = f"{universe_name} Destinies available"
+                elif gems >= 800000:
+                    destiny_message = f"Affordable!"
+                if universe_name != card_info['UNIVERSE']:
+                    card_skin_message = f"{card_info['UNIVERSE']} Skin Available!"
+                    
                 embedVar = discord.Embed(title= f"{universe_name}", description=textwrap.dedent(f"""
                 Welcome {ctx.author.mention}!
-                Your equipped card is **{card_info['NAME']}**
-                💟 **Universe Heart:** 💎 1,000,000
+                You have 💎 *{'{:,}'.format(gems)}* **{universe_name}** gems !
+                
+                🎴 Card:  **{card_info['NAME']}** *{card_info['UNIVERSE']}*
+                *{destiny_alert_message}*
+                
+                💟 **Universe Heart:** 💎 1,000,000 *{heart_message}*
                 *Grants ability to level past 200*
 
-                🌹 **Universe Soul:** 💎 500,000
+                🌹 **Universe Soul:** 💎 500,000 *{soul_message}*
                 *Grants double exp in this Universe*
 
-                ✨ **Destiny Line:** 💎 800,000
+                ✨ **Destiny Line:** 💎 800,000 *{destiny_message}*
                 *Grants win for a Destiny Line*
+                
+                🃏 **Card Skins:** 💎 2,000,000 *{card_skin_message}*
+                *Grants Card Skin*
                 """), colour=0x7289da)
                 embedVar.set_image(url=universe_image)
                 embed_list.append(embedVar)
@@ -2708,7 +2782,8 @@ class Profile(commands.Cog):
             buttons = [
                 manage_components.create_button(style=3, label="💟", custom_id="UNIVERSE_HEART"),
                 manage_components.create_button(style=1, label="🌹", custom_id="UNIVERSE_SOUL"),
-                manage_components.create_button(style=1, label="✨", custom_id="Destiny")
+                manage_components.create_button(style=1, label="✨", custom_id="Destiny"),
+                manage_components.create_button(style=1, label="🃏", custom_id="Skin")
             ]
 
             custom_action_row = manage_components.create_actionrow(*buttons)
@@ -2718,7 +2793,7 @@ class Profile(commands.Cog):
                     universe = str(button_ctx.origin_message.embeds[0].title)
                     if button_ctx.custom_id == "UNIVERSE_HEART":
                         price = 1000000
-                        response = await craft_adjuster(self, ctx, vault, universe, price, button_ctx.custom_id)
+                        response = await craft_adjuster(self, ctx, vault, universe, price, button_ctx.custom_id, None)
                         if response['SUCCESS']:
                             await button_ctx.send(f"{response['MESSAGE']}")
                             self.stop = True
@@ -2728,7 +2803,7 @@ class Profile(commands.Cog):
 
                     if button_ctx.custom_id == "UNIVERSE_SOUL":
                         price = 500000
-                        response = await craft_adjuster(self, ctx, vault, universe, price, button_ctx.custom_id)
+                        response = await craft_adjuster(self, ctx, vault, universe, price, button_ctx.custom_id, None)
                         if response['SUCCESS']:
                             await button_ctx.send(f"{response['MESSAGE']}")
                             self.stop = True
@@ -2738,7 +2813,15 @@ class Profile(commands.Cog):
                     if button_ctx.custom_id == "Destiny":
                         await button_ctx.defer(ignore=True)
                         price = 800000
-                        response = await craft_adjuster(self, ctx, vault, universe, price, card_info)
+                        response = await craft_adjuster(self, ctx, vault, universe, price, card_info, None)
+                        if not response['SUCCESS']:
+                            await button_ctx.send(f"{response['MESSAGE']}")
+                            self.stop = True
+                    if button_ctx.custom_id == "Skin":
+                        await button_ctx.defer(ignore=True)
+                        price = 2000000
+                        response = await craft_adjuster(self, ctx, vault, universe, price, card_info, new_skin_list)
+                        print(response)
                         if not response['SUCCESS']:
                             await button_ctx.send(f"{response['MESSAGE']}")
                             self.stop = True
@@ -2773,8 +2856,9 @@ class Profile(commands.Cog):
     #     storage = vault['STORAGE']
     #     hand = vault['CARDS']
 
-async def craft_adjuster(self, player, vault, universe, price, item):
+async def craft_adjuster(self, player, vault, universe, price, item, skin_list):
     try:
+        base_title = db.queryTitle({'TITLE':'Starter'})
         item_bools = [
             'UNIVERSE_HEART', 
             'UNIVERSE_SOUL'
@@ -2791,74 +2875,221 @@ async def craft_adjuster(self, player, vault, universe, price, item):
                 universe_heart = uni['UNIVERSE_HEART']
                 universe_soul = uni['UNIVERSE_SOUL']
                 has_gems_for = True
+        #owned levels
+        owned_card_levels_list = []
+        for c in vault['CARD_LEVELS']:
+            owned_card_levels_list.append(c['CARD'])
+            
+        #owned Destinies
+        owned_destinies = []
+        for destiny in vault['DESTINY']:
+            owned_destinies.append(destiny['NAME'])
 
         if has_gems_for:
             if gems >= price:
                 if item not in item_bools:
-                    card_universe = item['UNIVERSE']
-                    card_name = item['NAME']
-                    card_has_destiny = False
-                    destiny_wins = 0
-                    destiny_required_wins = 0
-                    destiny_name = ""
-                    destiny_earn = ""
-                    destiny_universe = ""
-                    destiny_defeat = ""
-                    cards_destiny_list = []
-                    
-                    if card_universe != universe:
-                        response = {"HAS_GEMS_FOR": True, "SUCCESS":  False, "MESSAGE": f"Your **{card_name}** does not have a Destiny Line in **{universe}**!"}
-                        # await player.send(f"Your **{card_name}** does not have a Destiny Line in **{universe}**!")
-                        return response
-                    
-                    if vault['DESTINY']:
-                        for destiny in vault['DESTINY']:
-                            if card_name in destiny['USE_CARDS'] and not destiny['COMPLETED'] and card_universe == universe:
-                                card_has_destiny = True
-                                cards_destiny_list.append(destiny)
-                                destiny_wins = destiny['WINS']
-                                destiny_required_wins = destiny['REQUIRED']
-                                destiny_name = destiny['NAME']
-                                destiny_earn = destiny['EARN']
-                                destiny_universe = destiny['UNIVERSE']
-                                destiny_defeat = destiny['DEFEAT']
-    
-                    if card_has_destiny:
-                        embed_list = []
-                        for destiny in cards_destiny_list:
-                            embedVar = discord.Embed(title= f"{destiny['DEFEAT']}", description=textwrap.dedent(f"""
-                            ✨ **{destiny['NAME']}**
-
-                            **Wins** - *{destiny['WINS']}*
-                            **Wins Required To Complete** - *{destiny['REQUIRED']}*
-                            **Defeat** - *{destiny['DEFEAT']}*
-                            **Reward** - **{destiny['EARN']}**
-                            """), colour=0x7289da)
-                            embedVar.set_footer(text=f"Select a Destiny Line to apply win to")
-                            embed_list.append(embedVar)
+                    if not skin_list:
+                        if price == 2000000: #check if price is for skins
+                            response = {"HAS_GEMS_FOR": True, "SUCCESS":  False, "MESSAGE": f"Your **{item['NAME']}** does not have Skins in **{universe}**!"}
+                            return response
+                        card_universe = item['UNIVERSE']
+                        card_name = item['NAME']
+                        card_has_destiny = False
+                        destiny_wins = 0
+                        destiny_required_wins = 0
+                        destiny_name = ""
+                        destiny_earn = ""
+                        destiny_universe = ""
+                        destiny_defeat = ""
+                        cards_destiny_list = []
                         
+                        if card_universe != universe:
+                            response = {"HAS_GEMS_FOR": True, "SUCCESS":  False, "MESSAGE": f"Your **{card_name}** does not have a Destiny Line in **{universe}**!"}
+                            # await player.send(f"Your **{card_name}** does not have a Destiny Line in **{universe}**!")
+                            return response
+                        
+                        if vault['DESTINY']:
+                            for destiny in vault['DESTINY']:
+                                d_card = ' '.join(destiny['USE_CARDS'])
+                                d_card_info = db.queryCard({"NAME": str(d_card)})
+                                if card_name in destiny['USE_CARDS'] and not destiny['COMPLETED'] and card_universe == universe or item['SKIN_FOR'] == d_card_info['NAME']:
+                                    card_has_destiny = True
+                                    cards_destiny_list.append(destiny)
+                                    destiny_wins = destiny['WINS']
+                                    destiny_required_wins = destiny['REQUIRED']
+                                    destiny_name = destiny['NAME']
+                                    destiny_earn = destiny['EARN']
+                                    destiny_universe = destiny['UNIVERSE']
+                                    destiny_defeat = destiny['DEFEAT']
+        
+                        if card_has_destiny:
+                            embed_list = []
+                            for destiny in cards_destiny_list:
+                                embedVar = discord.Embed(title= f"{destiny['DEFEAT']}", description=textwrap.dedent(f"""
+                                ✨ **{destiny['NAME']}**
 
+                                **Wins** - *{destiny['WINS']}*
+                                **Wins Required To Complete** - *{destiny['REQUIRED']}*
+                                **Defeat** - *{destiny['DEFEAT']}*
+                                **Reward** - **{destiny['EARN']}**
+                                """), colour=0x7289da)
+                                embedVar.set_footer(text=f"Select a Destiny Line to apply win to")
+                                embed_list.append(embedVar)
+                            
+
+                            try:
+
+                                buttons = [
+                                    manage_components.create_button(style=3, label="Craft Win", custom_id="craft_d_win")
+                                ]
+                                custom_action_row = manage_components.create_actionrow(*buttons)
+
+                                async def custom_function(self, button_ctx):
+                                    if button_ctx.author == player.author:
+                                        selected_destiny = str(button_ctx.origin_message.embeds[0].title)
+                                        if button_ctx.custom_id == "craft_d_win":
+                                            r = await update_destiny_call(button_ctx.author, selected_destiny, "Tales")
+                                           
+                                            query = {'DID': str(vault['DID'])}
+                                            update_query = {
+                                                '$inc': {'GEMS.$[type].' + "GEMS": int(negPriceAmount)}
+                                            }
+                                            filter_query = [{'type.' + "UNIVERSE": universe}]
+                                            res = db.updateVault(query, update_query, filter_query)
+                                            await button_ctx.send(f"Craft Success!")
+                                            response = {"HAS_GEMS_FOR": True, "SUCCESS":  True, "MESSAGE": "Craft Success!"}
+                                            return response
+                                            self.stop = True
+
+                                await Paginator(bot=self.bot, disableAfterTimeout=True,useQuitButton=True, ctx=player, pages=embed_list, timeout=60, customActionRow=[
+                                custom_action_row,
+                                custom_function,
+                                ]).run()
+
+                            except Exception as ex:
+                                trace = []
+                                tb = ex.__traceback__
+                                while tb is not None:
+                                    trace.append({
+                                        "filename": tb.tb_frame.f_code.co_filename,
+                                        "name": tb.tb_frame.f_code.co_name,
+                                        "lineno": tb.tb_lineno
+                                    })
+                                    tb = tb.tb_next
+                                print(str({
+                                    'type': type(ex).__name__,
+                                    'message': str(ex),
+                                    'trace': trace
+                                }))
+                                response = {"HAS_GEMS_FOR": True, "SUCCESS":  False, "MESSAGE": f"Craft Failed!"}
+                                return response
+                        else:
+                            response = {"HAS_GEMS_FOR": True, "SUCCESS":  False, "MESSAGE": f"Your **{card_name}** does not have a Destiny Line in **{universe}**!"}
+                            return response
+                    else:
+                        available_skins = skin_list
+                        card_universe = item['UNIVERSE']
+                        card_name = item['NAME']
+                        card_has_skin = True
+                        if card_universe != universe:
+                            response = {"HAS_GEMS_FOR": True, "SUCCESS":  False, "MESSAGE": f"Your **{card_name}** does not have a Skin in **{universe}**!"}
+                            return response
+                        
+                        if card_has_skin:
+                            embed_list = []
+                            for skins in skin_list:
+                                s_moveset = skins['MOVESET']
+                                s_passive = skins['PASS'][0]
+                                s_enhancer = s_moveset[3]
+                                move1 = s_moveset[0] 
+                                move2 = s_moveset[1] 
+                                move3 = s_moveset[2] 
+                                
+                                move1name = list(move1.keys())[0]
+                                move2name = list(move2.keys())[0]
+                                move3name = list(move2.keys())[0]
+                                
+                                move1ap = list(move1.values())[0]
+                                move2ap = list(move2.values())[0]
+                                move3ap = list(move3.values())[0]
+                                
+                                enhmove = list(s_enhancer.keys())[0]
+                                enhap = list(s_enhancer.values())[0]
+                                enh = list(s_enhancer.values())[2]
+                                
+                                passive_name = list(s_passive.keys())[0]
+                                passive_num = list(s_passive.values())[0]
+                                passive_type = list(s_passive.values())[1]
+                                
+                                traits = ut.traits
+                                mytrait = {}
+                                traitmessage = ''
+                                o_show = skins['UNIVERSE']
+                                for trait in traits:
+                                    if trait['NAME'] == o_show:
+                                        mytrait = trait
+                                    if o_show == 'Kanto Region' or o_show == 'Johto Region' or o_show == 'Kalos Region' or o_show == 'Unova Region' or o_show == 'Sinnoh Region' or o_show == 'Hoenn Region' or o_show == 'Galar Region' or o_show == 'Alola Region':
+                                        if trait['NAME'] == 'Pokemon':
+                                            mytrait = trait
+                                if mytrait:
+                                    traitmessage = f"**{mytrait['EFFECT']}:** {mytrait['TRAIT']}"
+                                    
+                                skin_stats = showcard(skins, skins['HLT'],skins['HLT'], skins['STAM'],skins['STAM'], False, base_title, False, skins['ATK'], skins['DEF'], 0, move1ap, move2ap, move3ap, enhap, enh, 0, None )
+                                embedVar = discord.Embed(title= f"{skins['NAME']}", description=textwrap.dedent(f"""
+                                :mahjong: {skins['TIER']}: 🃏 **{skins['SKIN_FOR']}** 
+                                :heart: **{skins['HLT']}** :dagger: **{skins['ATK']}** :shield: **{skins['DEF']}**
+                                
+                                💥 **{move1name}:** {move1ap}
+                                ☄️ **{move2name}:** {move2ap}
+                                🏵️ **{move3name}:** {move3ap}
+                                🦠 **{enhmove}:** {enh} {enhap}{enhancer_suffix_mapping[enh]}
+
+                                🩸 **{passive_name}:** {passive_type} {passive_num}{passive_enhancer_suffix_mapping[passive_type]}
+                                ♾️ {traitmessage}
+                                **Universe** - *{skins['UNIVERSE']}*
+                                """), colour=0x7289da)
+                                embedVar.set_footer(text=f"Select a Skin!")
+                                embedVar.set_image(url="attachment://image.png")
+                                embed_list.append(embedVar)
                         try:
 
                             buttons = [
-                                manage_components.create_button(style=3, label="Craft Win", custom_id="craft_d_win")
+                                manage_components.create_button(style=3, label="Craft Skin", custom_id="craft_skin")
                             ]
                             custom_action_row = manage_components.create_actionrow(*buttons)
 
                             async def custom_function(self, button_ctx):
                                 if button_ctx.author == player.author:
-                                    selected_destiny = str(button_ctx.origin_message.embeds[0].title)
-                                    if button_ctx.custom_id == "craft_d_win":
-                                        r = await update_destiny_call(button_ctx.author, selected_destiny, "Tales")
-                                        response = {"HAS_GEMS_FOR": True, "SUCCESS":  True, "MESSAGE": "Craft Success!"}
+                                    selected_skin = str(button_ctx.origin_message.embeds[0].title)
+                                    if button_ctx.custom_id == "craft_skin":
+                                        #r = await update_destiny_call(button_ctx.author, selected_destiny, "Tales")
+                                        
                                         query = {'DID': str(vault['DID'])}
+                                        skin_response = db.updateVaultNoFilter(query,{'$addToSet': {'CARDS': str(selected_skin)}})
+                                        
+                                        # Add Card Level config
+                                        if selected_skin not in owned_card_levels_list:
+                                            update_query = {'$addToSet': {
+                                                'CARD_LEVELS': {'CARD': str(selected_skin), 'LVL': 0, 'TIER': int(0),
+                                                                'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
+                                            r = db.updateVaultNoFilter(query, update_query)
+                                        
+                                        #Add Destiny
+                                        for destiny in d.destiny:
+                                            if selected_skin in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
+                                                db.updateVaultNoFilter(query, {'$addToSet': {'DESTINY': destiny}})
+                                                await button_ctx.send(
+                                                    f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.", hidden=True)
                                         update_query = {
                                             '$inc': {'GEMS.$[type].' + "GEMS": int(negPriceAmount)}
                                         }
                                         filter_query = [{'type.' + "UNIVERSE": universe}]
                                         res = db.updateVault(query, update_query, filter_query)
                                         await button_ctx.send(f"Craft Success!")
+                                        response = {"HAS_GEMS_FOR": True, "SUCCESS":  True, "MESSAGE": "Craft Success!"}
+                                        return response
                                         self.stop = True
+                                        
 
                             await Paginator(bot=self.bot, disableAfterTimeout=True,useQuitButton=True, ctx=player, pages=embed_list, timeout=60, customActionRow=[
                             custom_action_row,
@@ -2882,9 +3113,8 @@ async def craft_adjuster(self, player, vault, universe, price, item):
                             }))
                             response = {"HAS_GEMS_FOR": True, "SUCCESS":  False, "MESSAGE": f"Craft Failed!"}
                             return response
-                    else:
-                        response = {"HAS_GEMS_FOR": True, "SUCCESS":  False, "MESSAGE": f"Your **{card_name}** does not have a Destiny Line in **{universe}**!"}
-                        return response
+                        
+                        
 
                 if item in item_bools:
                     if item == "UNIVERSE_HEART" and universe_heart:

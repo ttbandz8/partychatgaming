@@ -183,6 +183,7 @@ class CrownUnlimited(commands.Cog):
             # Lose / Bounty
             take_chances_response = ""
             random_flee_loss = random.randint(1, 50)
+            random_flee_loss = 5
             bounty = random.randint(1, 30000)
 
             if bounty >= 150000:
@@ -200,14 +201,9 @@ class CrownUnlimited(commands.Cog):
                 random_flee_loss = 100
 
             # Take Chances Button Interaction
-            if random_flee_loss <= 10 and selected_mode == "Tales":
-                drop_response = await specific_drops(str(message.author.id), cards[rand_card]['NAME'], universetitle)
-                embedVar = discord.Embed(title=f"**{drop_response}**", colour=0xf1c40f)
-                embedVar.set_footer(text="Successful Capture!",
-                                    icon_url="https://cdn.discordapp.com/emojis/877233426770583563.gif?v=1")
-                take_chances_response = embedVar
 
-            elif random_flee_loss <= 100:
+
+            if random_flee_loss <= 100:
                 if selected_mode == "Tales":
                     found_amount = round(bounty / 3)
                 else:
@@ -304,6 +300,12 @@ class CrownUnlimited(commands.Cog):
                     random_battle_buttons_action_row], timeout=120, check=check)
 
                 if button_ctx.custom_id == "exploreNo":
+                    if random_flee_loss <= 10 and selected_mode == "Tales":
+                        drop_response = await specific_drops(str(message.author.id), cards[rand_card]['NAME'], universetitle)
+                        embedVar = discord.Embed(title=f"**{drop_response}**", colour=0xf1c40f)
+                        embedVar.set_footer(text="Successful Capture!",
+                                            icon_url="https://cdn.discordapp.com/emojis/877233426770583563.gif?v=1")
+                        take_chances_response = embedVar
                     await curse(random_flee_loss, message.author.id)
                     await button_ctx.send(embed=take_chances_response)
                     await msg.edit(components=[])
@@ -2959,6 +2961,7 @@ def abyss_level_up_message(did, floor, card, title, arm):
         new_unlock = False
         vault_query = {'DID': did}
         vault = db.altQueryVault(vault_query)
+        arm_arm = arm['ARM']
 
         card_drop = card
         title_drop = title
@@ -2996,7 +2999,7 @@ def abyss_level_up_message(did, floor, card, title, arm):
                 current_arms.append(arm['ARM'])
             if len(current_arms) >=25:
                 maxed_out_messages.append("You have max amount of Arms. You did not receive the **Floor Arm**.")
-            elif arm in current_arms:
+            elif arm_arm in current_arms:
                 maxed_out_messages.append(f"You already own {arm_drop} so you did not receive it.")
             else:
                 db.updateVaultNoFilter(vault_query,{'$addToSet':{'ARMS': {'ARM': str(arm_drop), 'DUR': 25}}})
@@ -3033,12 +3036,7 @@ def abyss_level_up_message(did, floor, card, title, arm):
                         drop_message.append(f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.")
                         
 
-
-        if floor == 2:
-            message = "🎊 Congratulations! 🎊 You unlocked **Tales!**. Use the **/tales** command to battle through Universes to earn Cards, Titles, Arms, Summons, and Money!"
-            new_unlock = True
-
-        if floor == 1:
+        if floor == 0:
             message = "🎊 Congratulations! 🎊 You unlocked **Shop!**. Use the **/shop** command to purchase Cards, Titles and Arms!"
             new_unlock = True
         
@@ -7648,14 +7646,15 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_used_resolve = False
                                                         o_gow_resolve = True
                                                         o_defense = 125
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Pre Resolve: Pre Ascension!")
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Crushed Blood Orb: Health Refill")
 
                                                     embedVar = discord.Embed(title=f"{o_card} ASCENDED :zap:",
                                                                             description=f"**{o_card} says**\n{o_resolve_description}",
                                                                             colour=0xe91e63)
                                                     embedVar.add_field(name=f"Transformation: Ascension",
                                                                     value="On Resolve Refill Health.")
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Ascension!")
+                                                    if o_gow_resolve:
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Ascension!")
                                                     await button_ctx.defer(ignore=True)
                                                     turn_total = turn_total + 1
                                                     turn = 1
@@ -7899,30 +7898,42 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         embedVar = discord.Embed(
                                                             title=f"**Persona!**\n{opet_name} was summoned from {o_card}'s soul dealing **{petdmg['DMG']}** damage!!",
                                                             colour=0xe91e63)
+                                                        await battle_msg.delete(delay=None)
                                                         if not operformance:
                                                             summon_file = showsummon(opet_image, opet_name, dmg['MESSAGE'], opet_lvl, opet_bond)
-                                                        embedVar.set_image(url="attachment://pet.png")
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 Persona! **{opet_name}** was summoned from **{o_card}**'s soul dealing **{petdmg['DMG']}** damage!")
-                                                        await battle_msg.delete(delay=None)
+                                                            embedVar.set_image(url="attachment://pet.png")
+                                                            # await asyncio.sleep(2)
+                                                            # battle_msg = await private_channel.send(embed=embedVar, file=summon_file)
+                                                            # await asyncio.sleep(2)
+                                                        #embedVar.set_image(url="attachment://pet.png")
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **Persona**! : **{opet_name}** was summoned from **{o_card}'s** soul dealing **{petdmg['DMG']}** damage!\n**{t_card}** summon disabled!")
+                                                        t_pet_used = True
                                                         if not operformance:
                                                             await asyncio.sleep(2)
                                                             battle_msg = await private_channel.send(embed=embedVar, file=summon_file)
                                                             await asyncio.sleep(2)
-
+                                                            await battle_msg.delete(delay=None)
+                                                        await button_ctx.defer(ignore=True)
+                                                        
 
                                                     else:
                                                         embedVar = discord.Embed(
                                                             title=f"{o_card} Summoned 🧬 **{opet_name}**",
                                                             colour=0xe91e63)
+                                                        await battle_msg.delete(delay=None)
                                                         if not operformance:
                                                             summon_file = showsummon(opet_image, opet_name, dmg['MESSAGE'], opet_lvl, opet_bond)
+                                                            
                                                         embedVar.set_image(url="attachment://pet.png")
                                                         previous_moves.append(f"*{turn_total}:* **{o_card}** Summoned 🧬 **{opet_name}**: {dmg['MESSAGE']}")
-                                                        await battle_msg.delete(delay=None)
+                                                        
                                                         if not operformance:
                                                             await asyncio.sleep(2)
                                                             battle_msg = await private_channel.send(embed=embedVar, file=summon_file)
                                                             await asyncio.sleep(2)
+                                                            await battle_msg.delete(delay=None)
+                                                        await button_ctx.defer(ignore=True)
+                                                        
                                                     turn = 0
                                                 else:
                                                     previous_moves.append(f"*{turn_total}:* 🧬 **{opet_name}** needs a turn to rest...")
@@ -8040,8 +8051,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_health = round(o_health + dmg['DMG'])
                                                     elif enh_type == 'DESTRUCTION':
                                                         t_max_health = round(t_max_health - dmg['DMG'])
-                                                    if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check:
-                                                        t_stamina = t_stamina
+                                                    if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check or enh_type in Control_Enhancer_Check:
+                                                        o_stamina = o_stamina
                                                     else:
                                                         o_stamina = o_stamina - int(dmg['STAMINA_USED'])
 
@@ -8229,9 +8240,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     await button_ctx.defer(ignore=True)    
                                             else:
                                                 previous_moves.append(f"*{turn_total}:* **{o_card}**: Not enough Stamina to use this ability.")
-                                                embedVar = discord.Embed(title=emessage,
-                                                                        description=f"Use abilities to Increase `STAM` or enter `FOCUS STATE`!",
-                                                                        colour=0xe91e63)
+                                                # embedVar = discord.Embed(title=emessage,
+                                                #                         description=f"Use abilities to Increase `STAM` or enter `FOCUS STATE`!",
+                                                #                         colour=0xe91e63)
                                                 turn = 0
                                                 await button_ctx.defer(ignore=True)
                                     # except Exception as e:
@@ -8887,7 +8898,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_used_resolve = False
                                                             t_gow_resolve = True
                                                             t_defense = 125
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Pre Resolve: Pre Ascension!")
+                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Crushed Blood Orb: Health Refill")
 
 
                                                         embedVar = discord.Embed(title=f"{t_card} STRENGTHENED RESOLVE :zap:",
@@ -8895,7 +8906,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                                 colour=0xe91e63)
                                                         embedVar.add_field(name=f"Transformation: Ascension",
                                                                         value="On Resolve Refill Health.")
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Ascension!")
+                                                        if t_gow_resolve:
+                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Ascension!")
                                                         await button_ctx.defer(ignore=True)
                                                         turn_total = turn_total + 1
                                                         turn = 0
@@ -9113,7 +9125,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if dmg['DMG'] >= 100:
                                                                 dmg['DMG'] = 100
                                                             o_max_health = round(o_max_health - dmg['DMG'])
-                                                            
+                                                        
                                                         t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
                                                         if t_universe == "Persona":
@@ -9127,24 +9139,37 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             embedVar = discord.Embed(
                                                                 title=f"**PERSONA!**\n{tpet_name} was summoned from {t_card}'s soul dealing **{petdmg['DMG']}** damage!!",
                                                                 colour=0xe91e63)
+                                                            await battle_msg.delete(delay=2)
                                                             if not operformance:
                                                                 tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
-                                                            embedVar.set_image(url="attachment://pet.png")
-                                                        else:
-                                                            if not operformance:
-                                                                tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
-
-                                                            embedVar = discord.Embed(title=f"{t_card} Summoned 🧬 **{tpet_name}**", colour=0xe91e63)
+                                                                embedVar.set_image(url="attachment://pet.png")
+                                                                await asyncio.sleep(2)
+                                                                battle_msg = await private_channel.send(embed=embedVar, file=tsummon_file)
+                                                                await asyncio.sleep(2)
+                                                                await battle_msg.delete(delay=None)
+                                                            previous_moves.append(f"*{turn_total}:* 🩸 **Persona!** : **{tpet_name}** was summoned from **{t_card}'s** soul dealing **{petdmg['DMG']}** damage!\n**{o_card}** summon disabled!")
+                                                            o_pet_used = True
+                                                            await button_ctx.defer(ignore=True)
                                                             
-                                                            embedVar.set_image(url="attachment://pet.png")
+                                                            
+                                                            #embedVar.set_image(url="attachment://pet.png")
+                                                        else:
+                                                            embedVar = discord.Embed(title=f"{t_card} Summoned 🧬 **{tpet_name}**", colour=0xe91e63)
+                                                            await battle_msg.delete(delay=2)
+                                                            if not operformance:
+                                                                tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
+                                                                embedVar.set_image(url="attachment://pet.png")
+                                                                await asyncio.sleep(2)
+                                                                battle_msg = await private_channel.send(embed=embedVar, file=tsummon_file)
+                                                                await asyncio.sleep(2)
+                                                                await battle_msg.delete(delay=2)
+
+                                                            
+                                                            
+                                                            #embedVar.set_image(url="attachment://pet.png")
 
                                                             previous_moves.append(f"*{turn_total}:* **{t_card}** Summoned 🧬 **{tpet_name}**: {dmg['MESSAGE']}")
-                                                        await battle_msg.delete(delay=2)
-                                                        
-                                                        if not operformance:
-                                                            await asyncio.sleep(2)
-                                                            battle_msg = await private_channel.send(embed=embedVar, file=tsummon_file)
-                                                            await asyncio.sleep(2)
+                                                            
                                                         turn = 1
                                                     else:
                                                         previous_moves.append(f"*{turn_total}:* 🧬 **{opet_name}** needs a turn to rest...")
@@ -9255,7 +9280,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         elif enh_type == 'DESTRUCTION':
                                                             o_max_health = round(o_max_health - dmg['DMG'])
                                                             
-                                                        if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check:
+                                                        if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check or enh_type in Control_Enhancer_Check:
                                                             t_stamina = t_stamina
                                                         else:
                                                             t_stamina = t_stamina - int(dmg['STAMINA_USED'])
@@ -9845,7 +9870,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_used_resolve = False
                                                         t_gow_resolve = True
                                                         t_defense = 125
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Pre Resolve: Pre Ascension!")
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Crushed Blood Orb: Health Refill")
 
 
                                                     embedVar = discord.Embed(title=f"{t_card} STRENGTHENED RESOLVE :zap:",
@@ -9853,7 +9878,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                             colour=0xe91e63)
                                                     embedVar.add_field(name=f"Transformation: Ascension",
                                                                     value="On Resolve Refill Health.")
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Ascension!")
+                                                    if t_gow_resolve:
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Ascension!")
                                                     turn_total = turn_total + 1
                                                     turn = 0
                                                 elif t_universe == "Fate":  # Fate Trait
@@ -10077,28 +10103,38 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         embedVar = discord.Embed(
                                                             title=f"**PERSONA!**\n{tpet_name} was summoned from {t_card}'s soul dealing **{petdmg['DMG']}** damage!!",
                                                             colour=0xe91e63)
+                                                        await battle_msg.delete(delay=2)
                                                         if not operformance:
                                                             tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
-                                                        embedVar.set_image(url="attachment://pet.png")
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 Persona! {tpet_name} was summoned from {t_card}'s soul dealing {petdmg['DMG']} damage!")
+                                                            embedVar.set_image(url="attachment://pet.png")
+                                                            await asyncio.sleep(2)
+                                                            battle_msg = await private_channel.send(embed=embedVar, file=tsummon_file)
+                                                            await asyncio.sleep(2)
+                                                            await battle_msg.delete(delay=2)
+                                                        #embedVar.set_image(url="attachment://pet.png")
+    
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **Persona!** : **{tpet_name}** was summoned from **{t_card}'s** soul dealing **{petdmg['DMG']}** damage!\n**{o_card}** summon disabled!")
+                                                        o_pet_used = True
+                                                        #await button_ctx.defer(ignore=True)
+                                                        #await battle_msg.delete(delay=2)
                                                     else:
                                                         embedVar = discord.Embed(
                                                             title=f"{t_card} Summoned 🧬 **{tpet_name}**",
                                                             colour=0xe91e63)
-                                                        
+                                                        await battle_msg.delete(delay=2)
                                                         if not operformance:
                                                             tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
+                                                            embedVar.set_image(url="attachment://pet.png")
+                                                            await asyncio.sleep(2)
+                                                            battle_msg = await private_channel.send(embed=embedVar, file=tsummon_file)
+                                                            await asyncio.sleep(2)
+                                                            await battle_msg.delete(delay=None)
                                                         
                                                         
-                                                        embedVar.set_image(url="attachment://pet.png")
+                                                        #embedVar.set_image(url="attachment://pet.png")
 
                                                         previous_moves.append(f"*{turn_total}:* **{t_card}** Summoned 🧬 **{tpet_name}**: {dmg['MESSAGE']}")
-                                                    await battle_msg.delete(delay=2)
-                                                   
-                                                    if not operformance:
-                                                        await asyncio.sleep(2)
-                                                        battle_msg = await private_channel.send(embed=embedVar, file=tsummon_file)
-                                                        await asyncio.sleep(2)
+                                                            
                                                     turn = 1
                                             else:
                                                 previous_moves.append(f"*{turn_total}:* {t_card} Could not summon 🧬 **{tpet_name}**. Needs rest")
@@ -10194,7 +10230,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = round(t_health + dmg['DMG'])
                                                     elif enh_type == 'DESTRUCTION':
                                                         o_max_health = round(o_max_health - dmg['DMG'])
-                                                    if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check:
+                                                    if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check or enh_type in Control_Enhancer_Check:
                                                         t_stamina = t_stamina
                                                     else:
                                                         t_stamina = t_stamina - int(dmg['STAMINA_USED'])
@@ -11003,7 +11039,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_used_resolve = False
                                                         o_gow_resolve = True
                                                         o_defense = 125
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Pre Resolve: Pre Ascension!")
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Crushed Blood Orb: Health Refill")
 
 
                                                     turn_total = turn_total + 1
@@ -11293,8 +11329,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     elif enh_type == 'DESTRUCTION':
                                                         t_max_health = round(t_max_health - dmg['DMG'])
 
-                                                    if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check:
-                                                        t_stamina = t_stamina
+                                                    if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check or enh_type in Control_Enhancer_Check:
+                                                        o_stamina = o_stamina
                                                     else:
                                                         o_stamina = o_stamina - int(dmg['STAMINA_USED'])
 
@@ -11854,7 +11890,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_used_resolve = False
                                                             o_gow_resolve = True
                                                             o_defense = 125
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Pre Resolve: Pre Ascension!")
+                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Crushed Blood Orb: Health Refill")
 
 
                                                         embedVar = discord.Embed(title=f"{o_card} STRENGTHENED RESOLVE :zap:",
@@ -11867,7 +11903,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                             inline=False)
                                                             embedVar.set_footer(text=f"{o_card} this is your chance!")
 
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Ascension!")
+                                                        if o_gow_resolve:
+                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Ascension!")
                                                         await button_ctx.defer(ignore=True)
 
                                                         turn_total = turn_total + 1
@@ -12124,32 +12161,48 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             embedVar = discord.Embed(
                                                                 title=f"**PERSONA!**\n{opet_name} was summoned from {o_card}'s soul dealing **{petdmg['DMG']}** damage!!",
                                                                 colour=0xe91e63)
+                                                            await battle_msg.delete(delay=2)
                                                             if not operformance:
                                                                 summon_file = showsummon(opet_image, opet_name, dmg['MESSAGE'], opet_lvl, opet_bond)
-                                                            embedVar.set_image(url="attachment://pet.png")
+                                                                embedVar.set_image(url="attachment://pet.png")
+                                                            previous_moves.append(f"*{turn_total}:* 🩸 **Persona!** : **{tpet_name}** was summoned from **{t_card}'s** soul dealing **{petdmg['DMG']}** damage!\n**{o_card}** summon disabled!")
+                                                            o_pet_used = True
+                                                            # await button_ctx.defer(ignore=True)
+                                                            #embedVar.set_image(url="attachment://pet.png")
                                                             
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 Persona! **{opet_name}** was summoned from **{o_card}**'s soul dealing **{petdmg['DMG']}** damage!")
-                                                            await battle_msg.delete(delay=None)
+                                                            #previous_moves.append(f"*{turn_total}:* 🩸 Persona! **{opet_name}** was summoned from **{o_card}**'s soul dealing **{petdmg['DMG']}** damage!")
+                                                            
                                                             if not operformance:
                                                                 await asyncio.sleep(1)
                                                                 battle_msg = await private_channel.send(embed=embedVar, file=summon_file)
                                                                 await asyncio.sleep(2)
-
+                                                                await battle_msg.delete(delay=None)
+                                                            await button_ctx.defer(ignore=True)
+                                                                
                                                             # await button_ctx.send(embed=embedVar, file=summon_file)
                                                         else:
                                                             embedVar = discord.Embed(
                                                                 title=f"{o_card} Summoned 🧬 **{opet_name}**",
                                                                 colour=0xe91e63)
+                                                            await battle_msg.delete(delay=None)
                                                             if not operformance:
                                                                 summon_file = showsummon(opet_image, opet_name, dmg['MESSAGE'], opet_lvl, opet_bond)
-                                                            embedVar.set_image(url="attachment://pet.png")
+                                                                embedVar.set_image(url="attachment://pet.png")
+                                                                # await asyncio.sleep(2)
+                                                                # battle_msg = await private_channel.send(embed=embedVar, file=summon_file)
+                                                                # await asyncio.sleep(2)
+                                                            #embedVar.set_image(url="attachment://pet.png")
                                                             
                                                             previous_moves.append(f"*{turn_total}:* **{o_card}** Summoned 🧬 **{opet_name}**: {dmg['MESSAGE']}")
-                                                            await battle_msg.delete(delay=None)
+                                                            # await button_ctx.defer(ignore=True)
+                                                            # await battle_msg.delete(delay=None)
                                                             if not operformance:
                                                                 await asyncio.sleep(1)
                                                                 battle_msg = await private_channel.send(embed=embedVar, file=summon_file)
                                                                 await asyncio.sleep(2)
+                                                                await battle_msg.delete(delay=None)
+                                                            await button_ctx.defer(ignore=True)
+                                                            #await battle_msg.delete(delay=None)
                                                         turn = 0
                                                     else:
                                                         previous_moves.append(f"*{turn_total}:* 🧬 **{opet_name}** needs a turn to rest...")
@@ -12499,8 +12552,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         elif enh_type == 'DESTRUCTION':
                                                             t_max_health = round(t_max_health - dmg['DMG'])
 
-                                                        if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check:
-                                                            t_stamina = t_stamina
+                                                        if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check or enh_type in Control_Enhancer_Check:
+                                                            o_stamina = o_stamina
                                                         else:
                                                             o_stamina = o_stamina - int(dmg['STAMINA_USED'])
 
@@ -13489,7 +13542,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_used_resolve = False
                                                     t_gow_resolve = True
                                                     t_defense = 125
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Pre Resolve: Pre Ascension!")
+                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Crushed Blood Orb: Health Refill")
 
 
                                                 if mode not in AUTO_BATTLE_modes:
@@ -13498,7 +13551,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                             colour=0xe91e63)
                                                     embedVar.add_field(name=f"Transformation: Ascension",
                                                                     value="On Resolve Refill Health.")
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Ascension!")
+                                                    if t_gow_resolve:
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Ascension!")
                                                 turn_total = turn_total + 1
                                                 turn = turn_selector
                                             elif t_universe == "Fate":  # Fate Trait
@@ -13739,24 +13793,33 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                                     tcard_lvl_ap_buff, None)
 
                                                                 c_health = c_health - petdmg['DMG']
-                                                                if not operformance:
-                                                                    tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
-
+                                                                
                                                                 embedVar = discord.Embed(
                                                                     title=f"**PERSONA!**\n{tpet_name} was summoned from {t_card}'s soul dealing **{petdmg['DMG']}** damage!!",
                                                                     colour=0xe91e63)
-                                                                embedVar.add_field(
-                                                                    name=f"{tpet_name} used a follow up attack dealing **{petdmg['DMG']}** damage!",
-                                                                    value=f"Enhanced **{tpet_type}** by **{tpet_dmg}**")
-                                                                embedVar.set_image(url="attachment://pet.png")
-                                                                previous_moves.append(f"*{turn_total}:* 🩸 Persona! {tpet_name} was summoned from {t_card}'s soul dealing {petdmg['DMG']} damage!")
-                                                            else:
+                                                                
+                                                                await battle_msg.delete(delay=2)
                                                                 if not operformance:
                                                                     tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
-
+                                                                    embedVar.set_image(url="attachment://pet.png")
+                                                                    await asyncio.sleep(2)
+                                                                    battle_msg = await private_channel.send(embed=embedVar, file=tsummon_file)
+                                                                    await asyncio.sleep(2)
+                                                                    await battle_msg.delete(delay=2)
+                                                                #embedVar.set_image(url="attachment://pet.png")
+                                                                previous_moves.append(f"*{turn_total}:* 🩸 **Persona!** : **{tpet_name}** was summoned from **{t_card}'s** soul dealing **{petdmg['DMG']}** damage!\n**{c_card}** summon disabled!")
+                                                                c_pet_used = True
+                                                                
+                                                            else:
                                                                 embedVar = discord.Embed(
                                                                     title=f"{t_card} Summoned 🧬 **{tpet_name}**",
                                                                     colour=0xe91e63)
+                                                                await battle_msg.delete(delay=2)
+                                                                if not operformance:
+                                                                    tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
+                                                                    
+                                                                    
+                                                                
                                                                 
 
                                                                 embedVar.set_image(url="attachment://pet.png")
@@ -13764,19 +13827,20 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 previous_moves.append(f"*{turn_total}:* **{t_card}** Summoned 🧬 **{tpet_name}**: {dmg['MESSAGE']}")
 
 
-                                                            await battle_msg.delete(delay=2)
-                                                            
-                                                            if not operformance:
-                                                                await asyncio.sleep(2)
-                                                                battle_msg = await private_channel.send(embed=embedVar, file=tsummon_file)
-                                                                await asyncio.sleep(2)
+                                                                #await battle_msg.delete(delay=2)
+                                                                
+                                                                if not operformance:
+                                                                    await asyncio.sleep(2)
+                                                                    battle_msg = await private_channel.send(embed=embedVar, file=tsummon_file)
+                                                                    await asyncio.sleep(2)                                                    
+                                                                    await battle_msg.delete(delay=2)
 
-                                                        if t_universe == "Persona":
-                                                            petdmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense,
-                                                                                c_defense, t_stamina, t_enhancer_used, t_health,
-                                                                                c_health, c_stamina, t_max_health, c_attack,
-                                                                                t_special_move_description, turn_total,
-                                                                                tcard_lvl_ap_buff, None)
+                                                        # if t_universe == "Persona":
+                                                        #     petdmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense,
+                                                        #                         c_defense, t_stamina, t_enhancer_used, t_health,
+                                                        #                         c_health, c_stamina, t_max_health, c_attack,
+                                                        #                         t_special_move_description, turn_total,
+                                                        #                         tcard_lvl_ap_buff, None)
 
                                                         turn = turn_selector
                                                     else:
@@ -13891,37 +13955,47 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 embedVar = discord.Embed(
                                                                     title=f"**PERSONA!**\n{tpet_name} was summoned from {t_card}'s soul dealing **{petdmg['DMG']}** damage!!",
                                                                     colour=0xe91e63)
-                                                                embedVar.add_field(
-                                                                    name=f"{tpet_name} used **{tpetmove_text}**!",
-                                                                    value=f"{dmg['MESSAGE']}")
+                                                                await battle_msg.delete(delay=2)
+                                                                # embedVar.add_field(
+                                                                #     name=f"{tpet_name} used **{tpetmove_text}**!",
+                                                                #     value=f"{dmg['MESSAGE']}")
                                                                 if not operformance:
                                                                     tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
-                                                                embedVar.set_image(url="attachment://pet.png")
-                                                                previous_moves.append(f"*{turn_total}:* 🩸 Persona! {tpet_name} was summoned from {t_card}'s soul dealing {petdmg['DMG']} damage!")
+                                                                    embedVar.set_image(url="attachment://pet.png")
+                                                                    await asyncio.sleep(2)
+                                                                    battle_msg = await private_channel.send(embed=embedVar, file=tsummon_file)
+                                                                    await asyncio.sleep(2)
+                                                                    await battle_msg.delete(delay=2)
+                                                                #embedVar.set_image(url="attachment://pet.png")
+                                                                previous_moves.append(f"*{turn_total}:* 🩸 **Persona!** : **{tpet_name}** was summoned from **{t_card}'s** soul dealing **{petdmg['DMG']}** damage!\n**{c_card}** summon disabled!")
+                                                                c_pet_used = True
+                                                                
                                                             else:
                                                                 embedVar = discord.Embed(
                                                                     title=f"{t_card} Summoned 🧬 **{tpet_name}**",
                                                                     colour=0xe91e63)
-                                                                
+                                                                await battle_msg.delete(delay=2)
                                                                 if not operformance:
                                                                     tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
+                                                                    
                                                                 embedVar.set_image(url="attachment://pet.png")
                                                                 previous_moves.append(f"*{turn_total}:* **{t_card}** Summoned 🧬 **{tpet_name}**: {dmg['MESSAGE']}")
 
-                                                            await battle_msg.delete(delay=2)
-                                                            
-                                                            if not operformance:
-                                                                await asyncio.sleep(2)
-                                                                battle_msg = await private_channel.send(embed=embedVar, file=tsummon_file)
-                                                                await asyncio.sleep(2)
+                                                                #await battle_msg.delete(delay=2)
+                                                                
+                                                                if not operformance:
+                                                                    await asyncio.sleep(2)
+                                                                    battle_msg = await private_channel.send(embed=embedVar, file=tsummon_file)
+                                                                    await asyncio.sleep(2)                                                                
+                                                                    await battle_msg.delete(delay=2)
 
-                                                        if t_universe == "Persona":
-                                                            petdmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense,
-                                                                                c_defense, t_stamina, t_enhancer_used, t_health,
-                                                                                c_health, c_stamina, t_max_health, c_attack,
-                                                                                t_special_move_description, turn_total,
-                                                                                tcard_lvl_ap_buff, None)
-                                                            o_health = o_health - petdmg['DMG']
+                                                        # if t_universe == "Persona":
+                                                        #     petdmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense,
+                                                        #                         c_defense, t_stamina, t_enhancer_used, t_health,
+                                                        #                         c_health, c_stamina, t_max_health, c_attack,
+                                                        #                         t_special_move_description, turn_total,
+                                                        #                         tcard_lvl_ap_buff, None)
+                                                        #     o_health = o_health - petdmg['DMG']
                                                         turn = 1
                                                     else:
                                                         previous_moves.append(f"*{turn_total}:* {t_card} Could not summon 🧬 **{tpet_name}**. Needs rest")
@@ -14036,23 +14110,35 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 colour=0xe91e63)
                                                             # embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!",
                                                             #         value=f"{dmg['MESSAGE']}")
+                                                            await battle_msg.delete(delay=2)
                                                             if not operformance:
                                                                 tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
-                                                            embedVar.set_image(url="attachment://pet.png")
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 Persona! {tpet_name} was summoned from {t_card}'s soul dealing {petdmg['DMG']} damage!")
+                                                                embedVar.set_image(url="attachment://pet.png")
+                                                                await asyncio.sleep(2)
+                                                                battle_msg = await private_channel.send(embed=embedVar, file=tsummon_file)
+                                                                await asyncio.sleep(2)
+                                                                await battle_msg.delete(delay=2)
+                                                            #embedVar.set_image(url="attachment://pet.png")
+                                                            previous_moves.append(f"*{turn_total}:* 🩸 **Persona!** : **{tpet_name}** was summoned from **{t_card}'s** soul dealing **{petdmg['DMG']}** damage!\n**{o_card}** summon disabled!")
+                                                            o_pet_used = True
+                                                            
                                                         else:
-                                                            if not operformance:
-                                                                tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
                                                             embedVar = discord.Embed(title=f"{t_card} Summoned 🧬 **{tpet_name}**", colour=0xe91e63)                                                            
                                                             embedVar.set_image(url="attachment://pet.png")
+                                                            await battle_msg.delete(delay=2)
+                                                            if not operformance:
+                                                                tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
+                                                                
+                                                            
                                                             previous_moves.append(f"*{turn_total}:* **{t_card}** Summoned 🧬 **{tpet_name}**: {dmg['MESSAGE']}")
                                                     
-                                                        await battle_msg.delete(delay=2)
+                                                            #await battle_msg.delete(delay=2)
                                                         
-                                                        if not operformance:
-                                                            await asyncio.sleep(2)
-                                                            battle_msg = await private_channel.send(embed=embedVar, file=tsummon_file)
-                                                            await asyncio.sleep(2)
+                                                            if not operformance:
+                                                                await asyncio.sleep(2)
+                                                                battle_msg = await private_channel.send(embed=embedVar, file=tsummon_file)
+                                                                await asyncio.sleep(2)
+                                                                await battle_msg.delete(delay=2)
 
                                                     turn = 1
                                                 else:
@@ -14162,7 +14248,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = round(t_health + dmg['DMG'])
                                                         elif enh_type == 'DESTRUCTION':
                                                             c_max_health = round(c_max_health - dmg['DMG'])
-                                                        if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check:
+                                                        if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check or enh_type in Control_Enhancer_Check:
                                                             t_stamina = t_stamina
                                                         else:
                                                             t_stamina = t_stamina - int(dmg['STAMINA_USED'])
@@ -14430,7 +14516,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = round(t_health + dmg['DMG'])
                                                         elif enh_type == 'DESTRUCTION':
                                                             o_max_health = round(o_max_health - dmg['DMG'])
-                                                        if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check:
+                                                        if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check or enh_type in Control_Enhancer_Check:
                                                             t_stamina = t_stamina
                                                         else:
                                                             t_stamina = t_stamina - int(dmg['STAMINA_USED'])
@@ -14695,7 +14781,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = round(t_health + dmg['DMG'])
                                                     elif enh_type == 'DESTRUCTION':
                                                         o_max_health = round(o_max_health - dmg['DMG'])
-                                                    if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check:
+                                                    if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check or enh_type in Control_Enhancer_Check:
                                                         t_stamina = t_stamina
                                                     else:
                                                         t_stamina = t_stamina - int(dmg['STAMINA_USED'])
@@ -15017,7 +15103,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             embedVar = discord.Embed(title=f"Turret Shot hits {t_card} for **{60 + turn_total}** Damage 💥",
                                                                     colour=0xe91e63)
                                             #await private_channel.send(embed=embedVar)
-                                            previous_moves.append(f"*{turn_total}:* 🩸 Turret Shot hits **{c_card}** for **{60 + turn_total}** Damage 💥")
+                                            previous_moves.append(f"*{turn_total}:* 🩸 Turret Shot hits **{t_card}** for **{60 + turn_total}** Damage 💥")
                                             t_health = round(t_health - (60 + turn_total))
 
                                         elif c_universe == "Dragon Ball Z":
@@ -15592,7 +15678,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             c_used_resolve = False
                                                             c_gow_resolve = True
                                                             c_defense = 125
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Pre Resolve: Pre Ascension!")
+                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Crushed Blood Orb: Health Refill")
 
 
                                                         embedVar = discord.Embed(title=f"{c_card} ASCENDED :zap:",
@@ -15601,7 +15687,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         embedVar.add_field(name=f"Transformation: Ascension",
                                                                         value="On Resolve Refill Health.")
                                                         #await private_channel.send(embed=embedVar)
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: Ascension!")
+                                                        if c_gow_resolve:
+                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: Ascension!")
                                                         turn_total = turn_total + 1
                                                         turn = 3
                                                     elif c_universe == "Fate":  # Fate Trait
@@ -15829,31 +15916,38 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             embedVar = discord.Embed(
                                                                 title=f"**PERSONA!**\n{cpet_name} was summoned from {c_card}'s soul dealing **{petdmg['DMG']}** damage!!",
                                                                 colour=0xe91e63)
+                                                            await battle_msg.delete(delay=2)
                                                             if not operformance: #FindMeT
                                                                 csummon_file = showsummon(cpet_image, cpet_name, dmg['MESSAGE'], cpet_lvl, cpet_bond)
+                                                                embedVar.set_image(url="attachment://pet.png")
                                                                 await asyncio.sleep(2)
                                                                 battle_msg = await private_channel.send(embed=embedVar, file=csummon_file)
                                                                 await asyncio.sleep(2)
+                                                                await battle_msg.delete(delay=None)
 
                                                             #await private_channel.send(embed=embedVar)
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 Persona! {cpet_name} was summoned from {c_card}'s soul dealing {petdmg['DMG']} damage!")
+                                                            previous_moves.append(f"*{turn_total}:* 🩸 **Persona!** : **{cpet_name}** was summoned from **{c_card}'s** soul dealing **{petdmg['DMG']}** damage!")
+                                                            
                                                         else:
                                                             embedVar = discord.Embed(#Findmet
                                                                 title=f"{c_card} Summoned 🧬 {cpet_name}",
                                                                 colour=0xe91e63)
+                                                            await battle_msg.delete(delay=None)
                                                             if not operformance: #FindMeT
                                                                 csummon_file = showsummon(cpet_image, cpet_name, dmg['MESSAGE'], cpet_lvl, cpet_bond)
+                                                                embedVar.set_image(url="attachment://pet.png")
                                                                 await asyncio.sleep(2)
                                                                 battle_msg = await private_channel.send(embed=embedVar, file=csummon_file)
                                                                 await asyncio.sleep(2)
-                                                            #await private_channel.send(embed=embedVar)
+                                                                await battle_msg.delete(delay=2)
+                                                            
                                                             previous_moves.append(f"*{turn_total}:* **{c_card}** Summoned 🧬 **{cpet_name}**: {dmg['MESSAGE']}")
-                                                            turn_total = turn_total + 1
+                                                            t_pet_used = True
+                                                            
                                                         turn = 2
                                                     else:
                                                         #await private_channel.send(f"{cpet_name} needs a turn to rest...")
-                                                        previous_moves.append(f"*{turn_total}:* **{c_card}** Summoned 🧬 **{cpet_name}**: {dmg['MESSAGE']}")
-                                                        turn_total = turn_total + 1
+                                                        previous_moves.append(f"*{turn_total}:* {c_card} Could not summon 🧬 **{cpet_name}**. Needs rest")
                                                         turn = 2
                                                 else:
                                                     #await private_channel.send(f"{cpet_name} needs a turn to rest...")
@@ -15942,11 +16036,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     elif cenh_type == 'CREATION':
                                                         o_max_health = round(o_max_health + dmg['DMG'])
                                                         o_health = round(o_health + dmg['DMG'])
-                                                    elif enh_type == 'DESTRUCTION':
+                                                    elif cenh_type == 'DESTRUCTION':
                                                         t_max_health = round(t_max_health - dmg['DMG'])
                                                     
-                                                    if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check:
-                                                        t_stamina = t_stamina
+                                                    if cenh_type in Stamina_Enhancer_Check or cenh_type in Time_Enhancer_Check or cenh_type in Control_Enhancer_Check:
+                                                        c_stamina = c_stamina
                                                     else:
                                                         c_stamina = c_stamina - int(dmg['STAMINA_USED'])
 
@@ -16070,8 +16164,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         elif enh_type == 'DESTRUCTION':
                                                             t_max_health = round(t_max_health - dmg['DMG'])
 
-                                                        if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check:
-                                                            t_stamina = t_stamina
+                                                        if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check or enh_type in Control_Enhancer_Check:
+                                                            c_stamina = c_stamina
                                                         else:
                                                             c_stamina = c_stamina - int(dmg['STAMINA_USED'])
 
@@ -16689,6 +16783,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 c_used_resolve = False
                                                                 c_gow_resolve = True
                                                                 c_defense = 125
+                                                                previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Crushed Blood Orb: Health Refill")
 
 
                                                             embedVar = discord.Embed(
@@ -16698,7 +16793,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             embedVar.add_field(name=f"Transformation: Ascension",
                                                                             value="On Resolve Refill Health.")
                                                             #await button_ctx.send(embed=embedVar)
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: Ascension!")
+                                                            if c_gow_resolve:
+                                                                previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: Ascension!")
                                                             await button_ctx.defer(ignore=True)
                                                             turn_total = turn_total + 1
                                                             turn = 3
@@ -16934,32 +17030,38 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 embedVar = discord.Embed(
                                                                     title=f"**PERSONA!**\n{cpet_name} was summoned from {c_card}'s soul dealing **{petdmg['DMG']}** damage!!",
                                                                     colour=0xe91e63)
+                                                                await battle_msg.delete(delay=None)
                                                                 if not operformance:
                                                                     csummon_file = showsummon(cpet_image, cpet_name, dmg['MESSAGE'], cpet_lvl, cpet_bond)
+                                                                    embedVar.set_image(url="attachment://pet.png")
                                                                     await asyncio.sleep(2)
                                                                     battle_msg = await private_channel.send(embed=embedVar, file=csummon_file)
                                                                     await asyncio.sleep(2)
-                                                                embedVar.set_footer(text=f"{cpet_type}: {enhancer_mapping[cpet_type]}")
-
-                                                                embedVar.set_thumbnail(url=cpet_image)
-                                                                embedVar.set_image(url="attachment://pet.png")
+                                                                    await battle_msg.delete(delay=None)
+                                                                
                                                                 #await button_ctx.send(embed=embedVar, file=csummon_file)
-                                                                previous_moves.append(f"*{turn_total}:* 🩸 Persona! {cpet_name} was summoned from {c_card}'s soul dealing {petdmg['DMG']} damage!")
+                                                                previous_moves.append(f"*{turn_total}:* 🩸 **Persona!** : **{cpet_name}** was summoned from **{c_card}'s** soul dealing **{petdmg['DMG']}** damage!\n**{t_card}** summon disabled!")
+                                                                t_pet_used = True
                                                                 await button_ctx.defer(ignore=True)
+                                                                
                                                             else:
                                                                 embedVar = discord.Embed(
                                                                     title=f"{c_card} Summoned 🧬 {cpet_name}",
                                                                     colour=0xe91e63)
 
                                                                 #await private_channel.send(embed=embedVar)
+                                                                await battle_msg.delete(delay=None)
                                                                 if not operformance: #FindMeT
                                                                     csummon_file = showsummon(cpet_image, cpet_name, dmg['MESSAGE'], cpet_lvl, cpet_bond)
+                                                                    embedVar.set_image(url="attachment://pet.png")
                                                                     await asyncio.sleep(2)
                                                                     battle_msg = await private_channel.send(embed=embedVar, file=csummon_file)
                                                                     await asyncio.sleep(2)
+                                                                    await battle_msg.delete(delay=None)
                                                                 previous_moves.append(f"*{turn_total}:* **{c_card}** Summoned 🧬 **{cpet_name}**: {dmg['MESSAGE']}")
                                                                 
                                                                 await button_ctx.defer(ignore=True)
+                                                                
                                                             turn = 2
                                                         else:
                                                             previous_moves.append(f"*{turn_total}:* {c_card} Could not summon 🧬 **{cpet_name}**. Needs rest")
@@ -17055,8 +17157,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         elif enh_type == 'DESTRUCTION':
                                                             t_max_health = round(t_max_health - dmg['DMG'])
                                                         
-                                                        if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check:
-                                                            t_stamina = t_stamina
+                                                        if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check or enh_type in Control_Enhancer_Check:
+                                                            c_stamina = c_stamina
                                                         else:
                                                             c_stamina = c_stamina - int(dmg['STAMINA_USED'])
 
@@ -17185,8 +17287,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             elif enh_type == 'DESTRUCTION':
                                                                 t_max_health = round(t_max_health - dmg['DMG'])
                                                             
-                                                            if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check:
-                                                                t_stamina = t_stamina
+                                                            if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check or enh_type in Control_Enhancer_Check:
+                                                                c_stamina = c_stamina
                                                             else:
                                                                 c_stamina = c_stamina - int(dmg['STAMINA_USED'])
 
@@ -18078,14 +18180,15 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_used_resolve = False
                                                         t_gow_resolve = True
                                                         t_defense = 125
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Pre Resolve: Pre Ascension!")
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Crushed Blood Orb: Health Refill")
 
                                                     embedVar = discord.Embed(title=f"{t_card} STRENGTHENED RESOLVE :zap:",
                                                                             description=f"**{t_card} says**\n{t_resolve_description}",
                                                                             colour=0xe91e63)
                                                     embedVar.add_field(name=f"Transformation: Ascension",
                                                                     value="On Resolve Refill Health.")
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Ascension!")
+                                                    if t_gow_resolve:
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Ascension!")
                                                     #await private_channel.send(embed=embedVar)
                                                     turn_total = turn_total + 1
                                                     turn = 0
@@ -18334,24 +18437,38 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             embedVar = discord.Embed(
                                                                 title=f"**PERSONA!**\n{tpet_name} was summoned from {t_card}'s soul dealing **{petdmg['DMG']}** damage!!",
                                                                 colour=0xe91e63)
+                                                            await battle_msg.delete(delay=2)
                                                             if not operformance:
                                                                 tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
+                                                                await asyncio.sleep(2)
+                                                                battle_msg = await private_channel.send(embed=embedVar, file=tsummon_file)
+                                                                await asyncio.sleep(2)
+                                                                await battle_msg.delete(delay=2)
                                                             
                                                             
                                                             embedVar.set_image(url="attachment://pet.png")
                                                             #await button_ctx.send(embed=embedVar)
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 Persona! {tpet_name} was summoned from {t_card}'s soul dealing {petdmg['DMG']} damage!")
+                                                            previous_moves.append(f"*{turn_total}:* 🩸 **Persona!** : **{tpet_name}** was summoned from **{t_card}'s** soul dealing **{petdmg['DMG']}** damage!\n**{c_card}** summon disabled!")
+                                                            c_pet_used = True
+                                                            
+                                                            
                                                         else:
                                                             embedVar = discord.Embed(
                                                                 title=f"{t_card} Summoned 🧬 **{tpet_name}**",
                                                                 colour=0xe91e63)
+                                                            await battle_msg.delete(delay=2)
                                                             if not operformance:
                                                                 tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
+                                                                await asyncio.sleep(2)
+                                                                battle_msg = await private_channel.send(embed=embedVar, file=tsummon_file)
+                                                                await asyncio.sleep(2)
+                                                                await battle_msg.delete(delay=2)
                                                             
                                                             
                                                             embedVar.set_image(url="attachment://pet.png")
                                                             #await private_channel.send(embed=embedVar)
                                                             previous_moves.append(f"*{turn_total}:* **{t_card}** Summoned 🧬 **{tpet_name}**: {dmg['MESSAGE']}")
+                                                            
                                                         turn = 3
                                                     else:
                                                         previous_moves.append(f"*{turn_total}:* {t_card} Could not summon 🧬 **{tpet_name}**. Needs rest")
@@ -18461,24 +18578,38 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             embedVar = discord.Embed(
                                                                 title=f"**PERSONA!**\n{tpet_name} was summoned from {t_card}'s soul dealing **{petdmg['DMG']}** damage!!",
                                                                 colour=0xe91e63)
+                                                            await battle_msg.delete(delay=2)
                                                             if not operformance:
                                                                 tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
+                                                                embedVar.set_image(url="attachment://pet.png")
+                                                                await asyncio.sleep(2)
+                                                                battle_msg = await private_channel.send(embed=embedVar, file=tsummon_file)
+                                                                await asyncio.sleep(2)
+                                                                await battle_msg.delete(delay=2)
                                                             
                                                             
-                                                            embedVar.set_image(url="attachment://pet.png")
+                                                            #embedVar.set_image(url="attachment://pet.png")
                                                             #await button_ctx.send(embed=embedVar)
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 Persona! {tpet_name} was summoned from {t_card}'s soul dealing {petdmg['DMG']} damage!")
+                                                            previous_moves.append(f"*{turn_total}:* 🩸 **Persona!** : **{tpet_name}** was summoned from **{t_card}'s** soul dealing **{petdmg['DMG']}** damage!\n**{c_card}** summon disabled!")
+                                                            c_pet_used = True
+                                                            
                                                         else:
                                                             embedVar = discord.Embed(
                                                                 title=f"{t_card} Summoned 🧬 **{tpet_name}**",
                                                                 colour=0xe91e63)
+                                                            await battle_msg.delete(delay=2)
                                                             if not operformance:
                                                                 tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
+                                                                embedVar.set_image(url="attachment://pet.png")
+                                                                await asyncio.sleep(2)
+                                                                battle_msg = await private_channel.send(embed=embedVar, file=tsummon_file)
+                                                                await asyncio.sleep(2)
+                                                                await battle_msg.delete(delay=2)
                                                             
                                                             
-                                                            embedVar.set_image(url="attachment://pet.png")
-                                                            #await private_channel.send(embed=embedVar)
+                                                            
                                                             previous_moves.append(f"*{turn_total}:* **{t_card}** Summoned 🧬 **{tpet_name}**: {dmg['MESSAGE']}")
+                                                            
                                                         turn = 3
                                                     else:
                                                         previous_moves.append(f"*{turn_total}:* {t_card} Could not summon 🧬 **{tpet_name}**. Needs rest")
@@ -18586,7 +18717,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         elif enh_type == 'DESTRUCTION':
                                                             o_max_health = round(o_max_health - dmg['DMG'])
                                                         
-                                                        if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check:
+                                                        if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check or enh_type in Control_Enhancer_Check:
                                                             t_stamina = t_stamina
                                                         else:
                                                             t_stamina = t_stamina - int(dmg['STAMINA_USED'])
@@ -18858,7 +18989,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = round(t_health + dmg['DMG'])
                                                         elif enh_type == 'DESTRUCTION':
                                                             c_max_health = round(c_max_health - dmg['DMG'])
-                                                        if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check:
+                                                        if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check or enh_type in Control_Enhancer_Check:
                                                             t_stamina = t_stamina
                                                         else:
                                                             t_stamina = t_stamina - int(dmg['STAMINA_USED'])
@@ -19296,6 +19427,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 """),colour=0x1abc9c)
                                 embedVar.add_field(name="**Co-Op Bonus**",
                                                 value=f"{bonus_message}")
+                            elif mode in co_op_modes and mode in ai_co_op_modes:
+                                embedVar = discord.Embed(title=f":zap: **{t_card}** wins the match!\n\n**{o_user['NAME']}** and **{c_card}** will you play again?\nThe game lasted {turn_total} rounds.\n**{t_card} says**\n`{t_win_description}`", description=textwrap.dedent(f"""
+                                {previous_moves_into_embed}
+                                
+                                """),colour=0x1abc9c)
+                                embedVar.add_field(name="**Duo Tips**",
+                                                value=f"Create Duos that compliment each others Weaknesses")
                             if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
                                 embedVar.set_footer(text=f"Battle Time: {gameClock[2]} Seconds.")
                             elif int(gameClock[0]) == 0:
