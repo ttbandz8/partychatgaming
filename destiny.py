@@ -3082,7 +3082,7 @@ destiny = [
     {
         "NAME": "Protect The Boy",
         "WINS": 0,
-        "REQUIRED": 35,
+        "REQUIRED": 10,
         "DEFEAT": "Minato Arisato",
         "USE_CARDS": ["Aigis"],
         "EARN": "Minato Arisato", 
@@ -3092,7 +3092,7 @@ destiny = [
     {
         "NAME": "Fate vs Destiny",
         "WINS": 0,
-        "REQUIRED": 100,
+        "REQUIRED": 25,
         "DEFEAT": "Nyx",
         "USE_CARDS": ["Minato Arisato"],
         "EARN": "Nyx", 
@@ -3112,7 +3112,7 @@ destiny = [
     {
         "NAME": "Friends Long Ago and Always",
         "WINS": 0,
-        "REQUIRED": 20,
+        "REQUIRED": 10,
         "DEFEAT": "Ann Takamaki",
         "USE_CARDS": ["Ryuji Sakamoto"],
         "EARN": "Ann Takamaki", 
@@ -3122,7 +3122,7 @@ destiny = [
     {
         "NAME": "Stupid Ryuji",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 10,
         "DEFEAT": "Ryuji Sakamoto",
         "USE_CARDS": ["Morgana"],
         "EARN": "Ryuji Sakamoto", 
@@ -3132,7 +3132,7 @@ destiny = [
     {
         "NAME": "We will Always Be",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 20,
         "DEFEAT": "Yu Narukami",
         "USE_CARDS": ["Yukiko Amagi"],
         "EARN": "Yu Narukami", 
