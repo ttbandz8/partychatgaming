@@ -301,7 +301,7 @@ class CrownUnlimited(commands.Cog):
 
                 if button_ctx.custom_id == "exploreNo":
                     if random_flee_loss <= 10 and selected_mode == "Tales":
-                        drop_response = await specific_drops(str(message.author.id), cards[rand_card]['NAME'], universetitle)
+                        drop_response = await specific_drops(self,str(message.author.id), cards[rand_card]['NAME'], universetitle)
                         embedVar = discord.Embed(title=f"**{drop_response}**", colour=0xf1c40f)
                         embedVar.set_footer(text="Successful Capture!",
                                             icon_url="https://cdn.discordapp.com/emojis/877233426770583563.gif?v=1")
@@ -19664,7 +19664,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                             if randomized_battle:
                                 bounty = abyss_scaling
-                                drop_response = await specific_drops(str(o_user['DID']), t_card, t_universe)
+                                drop_response = await specific_drops(self,str(o_user['DID']), t_card, t_universe)
                                 await bless(bounty, str(o_user['DID']))
                                 embedVar = discord.Embed(title=f"VICTORY\n:coin: {bounty} Bounty Received!\n**{o_card} says**\n{o_win_description}\nThe game lasted {turn_total} rounds.\n\n{drop_response}",description=textwrap.dedent(f"""
                                 {previous_moves_into_embed}
@@ -20659,7 +20659,7 @@ async def drops(player, universe, matchcount):
         return
 
 
-async def specific_drops(player, card, universe):
+async def specific_drops(self,player, card, universe):
     vault_query = {'DID': str(player)}
     vault = db.queryVault(vault_query)
     user_query = {'DID': str(player)}
