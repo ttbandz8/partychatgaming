@@ -3260,16 +3260,6 @@ destiny = [
         "UNIVERSE": "Black Clover"
     },
     {
-        "NAME": "Haze The New Recruit",
-        "WINS": 0,
-        "REQUIRED": 2,
-        "DEFEAT": "Magna",
-        "USE_CARDS": ["Asta"],
-        "EARN": "Magna",
-        "COMPLETED": False,
-        "UNIVERSE": "Black Clover"
-    },
-    {
         "NAME": "You Inspired Me To Grow Stronger",
         "WINS": 0,
         "REQUIRED": 10,
