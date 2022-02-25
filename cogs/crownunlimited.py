@@ -12170,7 +12170,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 summon_file = showsummon(opet_image, opet_name, dmg['MESSAGE'], opet_lvl, opet_bond)
                                                                 embedVar.set_image(url="attachment://pet.png")
                                                             previous_moves.append(f"*{turn_total}:* 🩸 **Persona!** : **{opet_name}** was summoned from **{o_card}'s** soul dealing **{petdmg['DMG']}** damage!\n**{t_card}** summon disabled!")
-                                                            o_pet_used = True
+                                                            t_pet_used = True
                                                             # await button_ctx.defer(ignore=True)
                                                             #embedVar.set_image(url="attachment://pet.png")
                                                             
@@ -15935,7 +15935,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                             #await private_channel.send(embed=embedVar)
                                                             previous_moves.append(f"*{turn_total}:* 🩸 **Persona!** : **{cpet_name}** was summoned from **{c_card}'s** soul dealing **{petdmg['DMG']}** damage!")
-                                                            
+                                                            t_pet_used=True
                                                         else:
                                                             embedVar = discord.Embed(#Findmet
                                                                 title=f"{c_card} Summoned 🧬 {cpet_name}",
@@ -15950,7 +15950,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 await battle_msg.delete(delay=2)
                                                             
                                                             previous_moves.append(f"*{turn_total}:* **{c_card}** Summoned 🧬 **{cpet_name}**: {dmg['MESSAGE']}")
-                                                            t_pet_used = True
+                                                            
                                                             
                                                         turn = 2
                                                     else:
