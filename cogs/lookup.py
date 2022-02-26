@@ -58,6 +58,7 @@ class Lookup(commands.Cog):
                 all_pets = len(v['PETS'])
 
                 name = d['DISNAME'].split("#",1)[0]
+                difficulty = d['DIFFICULTY']
                 games = d['GAMES']
                 abyss_level = d['LEVEL']
                 card = d['CARD']
@@ -149,6 +150,7 @@ class Lookup(commands.Cog):
 
 
                 embed1 = discord.Embed(title= f"{icon} | " + f"{name}".format(self), description=textwrap.dedent(f"""\
+                ⚙️ **Difficulty** {difficulty.lower()}
                 :new_moon: | **Abyss Rank**: {abyss_level}
                 :flower_playing_cards: | **Card:** {card}
                 :reminder_ribbon:** | Title: **{titles}

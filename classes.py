@@ -39,6 +39,7 @@ class USER():
     PERFORMANCE: bool = field(default_factory=lambda: False)
     TRADING: bool = field(default_factory=lambda: False)
     BOSS_FOUGHT: bool = field(default_factory=lambda: False)
+    DIFFICULTY: str = field(default_factory=lambda: "EASY")
 
 @dataclass(frozen=True, order=True)
 class TRADE():

@@ -125,6 +125,10 @@ class CrownUnlimited(commands.Cog):
 
             # Pull Character Information
             player = db.queryUser({'DID': str(message.author.id)})
+
+            if player['DIFFICULTY'] == "EASY":
+                return
+
             if player['LEVEL'] < 26:
                 return
                 # await message.channel.send(f"🔓 Unlock the Explore Mode by completing Floor 35 of the 🌑 Abyss! Use /abyss to enter the abyss.")
@@ -338,8 +342,6 @@ class CrownUnlimited(commands.Cog):
                 # await message.channel.send("Something ain't right, my guy.Check with support.")
                 # print("")
 
-                
-
     @cog_ext.cog_slash(description="Toggle Explore Mode On/Off", guild_ids=main.guild_ids)
     @commands.cooldown(1, 15, commands.BucketType.user)
     async def explore(self, ctx: SlashContext):
@@ -507,10 +509,16 @@ class CrownUnlimited(commands.Cog):
             cowner = sowner
             cteam = oteam
             cfam = ofam
+            if sowner['DIFFICULTY'] != "EASY":
+                if sowner['LEVEL'] < 8:
+                    await ctx.send(f"🔓 Unlock **Duo** by completing **Floor 9** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
+                    return
             
-            if sowner['LEVEL'] < 8:
-                await ctx.send(f"🔓 Unlock **Duo** by completing **Floor 9** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
+            if sowner['DIFFICULTY'] == "EASY" and mode in D_modes or mode in B_MODES:
+                await ctx.send("Dungeons and Boss fights unavailable on Easy Mode! Use /difficulty to change your difficulty setting.")
                 return
+
+
             if mode in D_modes and sowner['LEVEL'] < 41:
                 await ctx.send("🔓 Unlock **Duo Dungeons** by completing **Floor 40** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
                 return
@@ -595,16 +603,23 @@ class CrownUnlimited(commands.Cog):
             B_MODES = ['Boss', 'CBoss']
 
             sowner = db.queryUser({'DID': str(ctx.author.id)})
-            companion = db.queryUser({'DID': str(user.id)})
 
-            if sowner['LEVEL'] < 4:
-                await ctx.send(f"🔓 Unlock **Co-op** by completing **Floor 7** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
+
+            companion = db.queryUser({'DID': str(user.id)})
+            if sowner['DIFFICULTY'] != "EASY":
+                if sowner['LEVEL'] < 4:
+                    await ctx.send(f"🔓 Unlock **Co-op** by completing **Floor 7** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
+                    return
+                
+                elif companion['LEVEL'] < 4:
+                    await ctx.send(f"🔓 {user.mention} Has not unlocked **Co-op**! Complete **Floor 7** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
+                    return
+
+            if sowner['DIFFICULTY'] == "EASY" and mode in D_modes or mode in B_MODES:
+                await ctx.send("Dungeons and Boss fights unavailable on Easy Mode! Use /difficulty to change your difficulty setting.")
                 return
-            
-            elif companion['LEVEL'] < 4:
-                await ctx.send(f"🔓 {user.mention} Has not unlocked **Co-op**! Complete **Floor 7** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
-                return
-            
+
+
             if mode in D_modes and sowner['LEVEL'] < 41:
                 await ctx.send("🔓 Unlock **Dungeons** by completing **Floor 40** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
                 return
@@ -967,6 +982,10 @@ class CrownUnlimited(commands.Cog):
     async def arena(self, ctx: SlashContext, mode: str):
         try:
             player = db.queryUser({"DID": str(ctx.author.id)})
+            if player['DIFFICULTY'] == "EASY":
+                await ctx.send("PVP is unavailable on Easy Mode! Use /difficulty to change your difficulty setting.")
+                return
+
             if player['LEVEL'] < 7:
                 await ctx.send(f"🔓 Unlock **PVP** by completing **Floor 6** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
                 return
@@ -1080,10 +1099,14 @@ class CrownUnlimited(commands.Cog):
             # await ctx.defer()
 
             sowner = db.queryUser({'DID': str(ctx.author.id)})
-            if sowner['LEVEL'] < 3:
-                await ctx.send("🔓 Unlock **Tales** by completing **Floor 3** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
+            if sowner['DIFFICULTY'] != "EASY":
+                if sowner['LEVEL'] < 3:
+                    await ctx.send("🔓 Unlock **Tales** by completing **Floor 3** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
+                    return
+            if sowner['DIFFICULTY'] == "EASY" and mode in D_modes or mode in B_MODES:
+                await ctx.send("Dungeons and Boss fights unavailable on Easy Mode! Use /difficulty to change your difficulty setting.")
                 return
-
+               
             if mode in D_modes and sowner['LEVEL'] < 41:
                 await ctx.send("🔓 Unlock **Dungeons** by completing **Floor 40** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
                 return
@@ -1156,6 +1179,10 @@ class CrownUnlimited(commands.Cog):
 
         try:
             sowner = db.queryUser({'DID': str(ctx.author.id)})
+            if sowner['DIFFICULTY'] == "EASY":
+                await ctx.send("The Abyss is unavailable on Easy Mode! Use /difficulty to change your difficulty setting.")
+                return
+
             vault = db.altQueryVault({'DID': str(ctx.author.id)})
             maxed_out_messages = []
             bad_message = ""
@@ -1352,6 +1379,10 @@ class CrownUnlimited(commands.Cog):
 
             # Get Session Owner Disname for scoring
             sowner = db.queryUser({'DID': str(ctx.author.id)})
+            if sowner['DIFFICULTY'] == "EASY":
+                await ctx.send("PVP is unavailable on Easy Mode! Use /difficulty to change your difficulty setting.")
+                return
+
             opponent = db.queryUser({'DID': str(player.id)})
 
             if sowner['LEVEL'] < 7:
@@ -1488,6 +1519,10 @@ class CrownUnlimited(commands.Cog):
 
             # Get Session Owner Disname for scoring
             sowner = db.queryUser({'DID': str(ctx.author.id)})
+            if sowner['DIFFICULTY'] == "EASY":
+                await ctx.send("Raiding is unavailable on Easy Mode! Use /difficulty to change your difficulty setting.")
+                return
+
             oteam = sowner['TEAM']
             oteam_info = db.queryTeam({'TNAME': oteam})
             oguild_name = "PCG"
@@ -2104,16 +2139,16 @@ class CrownUnlimited(commands.Cog):
         embeds = embed_list
         await paginator.run(embeds)
 
-    @cog_ext.cog_slash(description="Quit and Close your private channel", guild_ids=main.guild_ids)
-    async def forcequit(self, ctx: SlashContext):
-        private_channel = ctx
-        ov = private_channel.channel.overwrites
-        validator = False
-        for o in ov:
-            if str(ctx.author) == str(o):
-                validator = True
-        if private_channel.guild and validator:
-            await discord.TextChannel.delete(private_channel.channel, reason=None)
+    # @cog_ext.cog_slash(description="Quit and Close your private channel", guild_ids=main.guild_ids)
+    # async def forcequit(self, ctx: SlashContext):
+    #     private_channel = ctx
+    #     ov = private_channel.channel.overwrites
+    #     validator = False
+    #     for o in ov:
+    #         if str(ctx.author) == str(o):
+    #             validator = True
+    #     if private_channel.guild and validator:
+    #         await discord.TextChannel.delete(private_channel.channel, reason=None)
 
 
 async def score(owner, user: User):
@@ -2396,6 +2431,12 @@ async def summonlevel(pet, player):
 
 async def cardlevel(self, card: str, player, mode: str, universe: str):
     vault = db.queryVault({'DID': str(player)})
+    player_info = db.queryUser({'DID': str(player)})
+
+    if player_info['DIFFICULTY'] == "EASY":
+        return
+
+
     card_uni = db.queryCard({'NAME': card})['UNIVERSE']
     user = await self.bot.fetch_user(vault['DID'])
 
@@ -3642,6 +3683,28 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
     pvp_modes = ['PVP']
     opponent_pet_modes = ['Dungeon', 'DDungeon', 'CDungeon']
     raid_modes = ['RAID']
+    health_debuff_from_difficulty = 0
+    stat_debuff_from_difficulty = 0
+    health_buff_from_difficulty = 0
+    stat_buff_from_difficulty = 0
+    difficulty = sowner['DIFFICULTY']
+
+    if difficulty == "EASY":
+        health_debuff_from_difficulty = 400
+        stat_debuff_from_difficulty = 150
+
+    if difficulty == "HARD":
+        health_buff_from_difficulty = 1000
+        stat_buff_from_difficulty = 300
+        if mode in D_modes:
+            health_buff_from_difficulty = 2500
+            stat_buff_from_difficulty = 300
+        if mode in B_modes:
+            health_buff_from_difficulty = 5000
+            stat_buff_from_difficulty = 300
+
+
+
     if mode not in pvp_modes and mode not in raid_modes:
         opponent_scaling = 15
         opponent_health_scaling = 0
@@ -3713,9 +3776,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             if fee >= balance:
                 await ctx.send(f"{tguild} requires a payment of {fee} to battle the Shield.")
                 return
-        update_durability_message = update_arm_durability(self, vault, oarm, oarm_universe, oarm_price, o)
-        if update_durability_message['MESSAGE']:
-            await ctx.author.send(f"{update_durability_message['MESSAGE']}")
+        if difficulty != "EASY":
+            update_durability_message = update_arm_durability(self, vault, oarm, oarm_universe, oarm_price, o)
+            if update_durability_message['MESSAGE']:
+                await ctx.author.send(f"{update_durability_message['MESSAGE']}")
         opet = {}
         for pet in vault['PETS']:
             if o_user['PET'] == pet['NAME']:
@@ -4059,13 +4123,13 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             t_gif = t['GIF']
             t_card_path = t['PATH']
             t_rcard_path = t['RPATH']
-            t_health = t['HLT'] + (10 * currentopponent) + opponent_health_scaling + tcard_lvl_hlt_buff
+            t_health = t['HLT'] + (10 * currentopponent) + opponent_health_scaling + tcard_lvl_hlt_buff  + health_buff_from_difficulty - health_debuff_from_difficulty
             t_max_health = t_health
             t_stamina = t['STAM']
             t_max_stamina = t['STAM']
             t_moveset = t['MOVESET']
-            t_attack = t['ATK'] + (10 * currentopponent) + opponent_scaling + tcard_lvl_attack_defense_buff
-            t_defense = t['DEF'] + (10 * currentopponent) + opponent_scaling + tcard_lvl_attack_defense_buff
+            t_attack = t['ATK'] + (10 * currentopponent) + opponent_scaling + tcard_lvl_attack_defense_buff  + stat_buff_from_difficulty - stat_debuff_from_difficulty
+            t_defense = t['DEF'] + (10 * currentopponent) + opponent_scaling + tcard_lvl_attack_defense_buff  + stat_buff_from_difficulty - stat_debuff_from_difficulty
             t_type = t['TYPE']
 
             t_passive = t['PASS'][0]
@@ -5834,7 +5898,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
     oguild = "PCG"
     prevault = db.queryVault({'DID': sowner['DID']})
     balance = prevault['BALANCE']
-    
+    difficulty = sowner['DIFFICULTY']
     crestlist = []
     crestsearch = False
     autoBattle = False
@@ -5921,9 +5985,10 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                 if uni['HAS_CROWN_TALES'] == True or uni['TIER'] == 9:
                     if uni['TITLE'] in completed_crown_tales:
                         save_spot_text = "No Save Data"
-                        for save in saved_spots:
-                            if save['UNIVERSE'] == uni['TITLE'] and save['MODE'] in U_modes:
-                                save_spot_text = str(save['CURRENTOPPONENT'])
+                        if difficulty == "NORMAL":
+                            for save in saved_spots:
+                                if save['UNIVERSE'] == uni['TITLE'] and save['MODE'] in U_modes:
+                                    save_spot_text = str(save['CURRENTOPPONENT'])
 
                         embedVar = discord.Embed(title= f"{uni['TITLE']}", description=textwrap.dedent(f"""
                         {Crest_dict[uni['TITLE']]} **Number of Fights**: :crossed_swords: **{len(uni['CROWN_TALES'])}**
@@ -5937,9 +6002,10 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                         universe_embed_list.append(embedVar)
                     else:
                         save_spot_text = "No Save Data"
-                        for save in saved_spots:
-                            if save['UNIVERSE'] == uni['TITLE'] and save['MODE'] in U_modes:
-                                save_spot_text = str(save['CURRENTOPPONENT'])
+                        if difficulty == "NORMAL":
+                            for save in saved_spots:
+                                if save['UNIVERSE'] == uni['TITLE'] and save['MODE'] in U_modes:
+                                    save_spot_text = str(save['CURRENTOPPONENT'])
 
                         embedVar = discord.Embed(title= f"{uni['TITLE']}", description=textwrap.dedent(f"""
                         {Crest_dict[uni['TITLE']]} **Number of Fights**: :crossed_swords: **{len(uni['CROWN_TALES'])}**
@@ -5956,9 +6022,10 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                 if uni['HAS_CROWN_TALES'] == True and uni['TIER'] != 9:
                     if uni['TITLE'] in completed_crown_tales:
                         save_spot_text = "No Save Data"
-                        for save in saved_spots:
-                            if save['UNIVERSE'] == uni['TITLE'] and save['MODE'] in U_modes:
-                                save_spot_text = str(save['CURRENTOPPONENT'])
+                        if difficulty == "NORMAL":
+                            for save in saved_spots:
+                                if save['UNIVERSE'] == uni['TITLE'] and save['MODE'] in U_modes:
+                                    save_spot_text = str(save['CURRENTOPPONENT'])
 
                         embedVar = discord.Embed(title= f"{uni['TITLE']}", description=textwrap.dedent(f"""
                         {Crest_dict[uni['TITLE']]} **Number of Fights**: :crossed_swords: **{len(uni['CROWN_TALES'])}**
@@ -5972,9 +6039,10 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                         universe_embed_list.append(embedVar)
                     else:
                         save_spot_text = "No Save Data"
-                        for save in saved_spots:
-                            if save['UNIVERSE'] == uni['TITLE'] and save['MODE'] in U_modes:
-                                save_spot_text = str(save['CURRENTOPPONENT'])
+                        if difficulty == "NORMAL":
+                            for save in saved_spots:
+                                if save['UNIVERSE'] == uni['TITLE'] and save['MODE'] in U_modes:
+                                    save_spot_text = str(save['CURRENTOPPONENT'])
 
                         embedVar = discord.Embed(title= f"{uni['TITLE']}", description=textwrap.dedent(f"""
                         {Crest_dict[uni['TITLE']]} **Number of Fights**: :crossed_swords: **{len(uni['CROWN_TALES'])}**
@@ -6048,7 +6116,11 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             # await private_channel.send(f"{ctx.author.mention} private channel has been opened for you. Good luck!")
             
             # React to Saved Spots
-            currentopponent = update_save_spot(self, ctx, saved_spots, selected_universe, U_modes)
+            currentopponent = 0
+            if difficulty == "NORMAL":
+                currentopponent = update_save_spot(self, ctx, saved_spots, selected_universe, U_modes)
+            else:
+                currentopponent = 0
             return {'SELECTED_UNIVERSE': selected_universe,
                     'UNIVERSE_DATA': universe, 'CREST_LIST': crestlist, 'CREST_SEARCH': crestsearch,
                     'COMPLETED_TALES': completed_crown_tales, 'OGUILD': oguild, 'CURRENTOPPONENT': currentopponent}
@@ -6416,6 +6488,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 stats = await build_player_stats(self, randomized_battle, ctx, sowner, o, otitle, t, ttitle, mode,
                                                  universe, currentopponent, oteam, ofam, abyss_scaling, None, None,
                                                  None, None, None, None, None, None, None, None)
+            difficulty = sowner['DIFFICULTY']
             operformance = stats['operformance']
             o_card = stats['o_card']
             ocard_lvl = stats['ocard_lvl']
@@ -6815,14 +6888,15 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             ]
             if tutorial ==False and mode not in PVP_MODES and mode not in RAID_MODES and mode not in B_modes and mode != "ABYSS":
                 if currentopponent > 0 and not randomized_battle and mode not in PVP_MODES and mode not in B_modes:
-                    start_tales_buttons.append(
+                    if difficulty != "EASY":
+                        start_tales_buttons.append(
 
-                        manage_components.create_button(
-                            style=ButtonStyle.green,
-                            label="Save Game",
-                            custom_id="save_tales_yes"
+                            manage_components.create_button(
+                                style=ButtonStyle.green,
+                                label="Save Game",
+                                custom_id="save_tales_yes"
+                            )
                         )
-                    )
 
             start_tales_buttons_action_row = manage_components.create_actionrow(*start_tales_buttons)
 
@@ -11482,7 +11556,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             ),
                                         ]
 
-                                        if not randomized_battle and mode != "ABYSS" or mode !="ABYSS":
+                                        if not randomized_battle and difficulty == "NORMAL" and mode != "ABYSS" or mode !="ABYSS":
                                                 util_buttons.append(             
                                                     manage_components.create_button(
                                                     style=ButtonStyle.red,
@@ -19692,14 +19766,21 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 db.updateUserNoFilter({'DID': str(ctx.author.id)}, {'$set': {'BOSS_FOUGHT': True}})
                                 match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']),
                                                         str(oarm['ARM']), "N/A", "Boss", o['EXCLUSIVE'])
+                                bank_amount = 100000
+                                fam_amount = 50000
+                                if difficulty == "HARD":
+                                    bank_amount = 500000
+                                    fam_amount = 250000
+
+
                                 if mode == "CBoss":
                                     # cmatch = await savematch(str(user2), str(c_card), str(c_card_path), str(ctitle['TITLE']),
                                     #                         str(carm['ARM']), "N/A", "Boss", c['EXCLUSIVE'])
-                                    cfambank = await blessfamily(80000, cfam)
-                                    cteambank = await blessteam(80000, cteam)
+                                    cfambank = await blessfamily(bank_amount, cfam)
+                                    cteambank = await blessteam(bank_amount, cteam)
                                     cpetlogger = await summonlevel(cpet_name, user2)
                                     ccardlogger = await cardlevel(self, c_card, user2.id, "Dungeon", selected_universe)
-                                    await bless(50, str(user2.id))
+                                    await bless(50000, str(user2.id))
                                     teammates = False
                                     fam_members =False
                                     stat_bonus = 0
@@ -19732,8 +19813,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     
                                     """),colour=0x1abc9c)
                                 await bless(25000, str(ctx.author.id))
-                                ofambank = await blessfamily(20000, ofam)
-                                oteambank = await blessteam(20000, oteam)
+                                ofambank = await blessfamily(fam_amount, ofam)
+                                oteambank = await blessteam(bank_amount, oteam)
                                 petlogger = await summonlevel(opet_name, ouser)
                                 cardlogger = await cardlevel(self, o_card, ouser.id, "Dungeon", selected_universe)
 
@@ -19758,9 +19839,16 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 battle_msg = await private_channel.send(embed=embedVar)
 
                                 if t_card not in sowner['BOSS_WINS']:
-                                    await bless(15000000, str(ctx.author.id))
+                                    if difficulty == "HARD":
+                                        await bless(5000000, str(ctx.author.id))
+                                    else:
+                                        await bless(15000000, str(ctx.author.id))
                                     if mode == "CBoss":
-                                        await bless(15000000, str(user2.id))
+                                        if difficulty == "HARD":
+                                            await bless(5000000, str(user2.id))
+                                        else:
+                                            await bless(15000000, str(user2.id))
+
                                     query = {'DISNAME': sowner['DISNAME']}
                                     new_query = {'$addToSet': {'BOSS_WINS': t_card}}
                                     resp = db.updateUserNoFilter(query, new_query)
@@ -19823,10 +19911,22 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 s_playtime = int(wintime[17:19])
                                 gameClock = getTime(int(h_gametime), int(m_gametime), int(s_gametime), h_playtime, m_playtime,
                                                     s_playtime)
+
+                                bank_amount = 1000
+                                fam_amount = 1000
                                 if mode in D_modes:
-                                    teambank = await blessteam(2500, oteam)
+                                    bank_amount = 5000
+                                    fam_amount = 2500
+
+                                if difficulty == "HARD":
+                                    bank_amount = 15000
+                                    fam_amount = 10000
+
+
+                                if mode in D_modes:
+                                    teambank = await blessteam(bank_amount, oteam)
                                 else:
-                                    teambank = await blessteam(500, oteam)
+                                    teambank = await blessteam(bank_amount, oteam)
                                 if o_user['RIFT'] == 1:
                                     response = db.updateUserNoFilter({'DISNAME': str(o_user['DISNAME'])}, {'$set': {'RIFT': 0}})
 
@@ -19835,9 +19935,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 elif mode in U_modes:
                                     drop_response = await drops(ouser, selected_universe, currentopponent)
                                 if mode in D_modes:
-                                    ofambank = await blessfamily(5000, ofam)
+                                    ofambank = await blessfamily(fam_amount, ofam)
                                 else:
-                                    ofambank = await blessfamily(2000, ofam)
+                                    ofambank = await blessfamily(fam_amount, ofam)
                                 match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']),
                                                         str(oarm['ARM']), str(selected_universe), tale_or_dungeon_only,
                                                         o['EXCLUSIVE'])
@@ -19873,25 +19973,25 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     cuid = c_DID
                                     cuser = await self.bot.fetch_user(cuid)
                                     if mode in D_modes:
-                                        teambank = await blessteam(2500, oteam)
-                                        cteambank = await blessteam(5000, oteam)
+                                        teambank = await blessteam(bank_amount, oteam)
+                                        cteambank = await blessteam(bank_amount, oteam)
                                     else:
-                                        teambank = await blessteam(500, oteam)
-                                        cteambank = await blessteam(1000, oteam)
+                                        teambank = await blessteam(bank_amount, oteam)
+                                        cteambank = await blessteam(bank_amount, oteam)
                                     if mode in D_modes:
                                         cdrop_response = await dungeondrops(user2, selected_universe, currentopponent)
                                     elif mode in U_modes:
                                         cdrop_response = await drops(user2, selected_universe, currentopponent)
                                     if mode in D_modes:
-                                        cfambank = await blessfamily(10000, cfam)
-                                        ofambank = await blessfamily(5000, ofam)
+                                        cfambank = await blessfamily(fam_amount, cfam)
+                                        ofambank = await blessfamily(fam_amount, ofam)
                                     else:
-                                        cfambank = await blessfamily(4000, cfam)
-                                        ofambank = await blessfamily(2000, ofam)
+                                        cfambank = await blessfamily(fam_amount, cfam)
+                                        ofambank = await blessfamily(fam_amount, ofam)
                                     # cmatch = await savematch(str(user2), str(c_card), str(c_card_path), str(ctitle['TITLE']),
                                     #                         str(carm['ARM']), str(selected_universe), tale_or_dungeon_only, c['EXCLUSIVE'])
-                                    cfambank = await blessfamily(10000, cfam)
-                                    cteambank = await blessteam(10000, cteam)
+                                    cfambank = await blessfamily(fam_amount, cfam)
+                                    cteambank = await blessteam(bank_amount, cteam)
                                     cpetlogger = await summonlevel(cpet_name, user2)
                                     ccardlogger = await cardlevel(self, c_card, user2.id, tale_or_dungeon_only, selected_universe)
                                     await bless(5000, str(user2.id))
@@ -19943,12 +20043,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         embedVar.add_field(name="Additional Reward",
                                                         value=f"You earned additional rewards in your vault! Take a look.")
                                         embedVar.set_footer(text="The /shop has been updated with new CARDS, TITLES and ARMS!")
-                                        upload_query = {'DID': str(ctx.author.id)}
-                                        new_upload_query = {'$addToSet': {'DUNGEONS': selected_universe}}
-                                        r = db.updateUserNoFilter(upload_query, new_upload_query)
+                                        if difficulty != "EASY":
+                                            upload_query = {'DID': str(ctx.author.id)}
+                                            new_upload_query = {'$addToSet': {'DUNGEONS': selected_universe}}
+                                            r = db.updateUserNoFilter(upload_query, new_upload_query)
                                         if selected_universe in completed_universes:
                                             await bless(300000, ctx.author.id)
-                                            teambank = await blessteam(80000, oteam)
+                                            teambank = await blessteam(bank_amount, oteam)
                                             # await bless(125, user2)
                                             # await ctx.send(embed=embedVar)
                                             await battle_msg.delete(delay=2)
@@ -19958,7 +20059,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             await ctx.send(
                                                 f"You were awarded :coin: 300,000 for completing the {selected_universe} Dungeon again!")
                                         else:
-                                            await bless(8000000, ctx.author.id)
+                                            await bless(6000000, ctx.author.id)
                                             teambank = await blessteam(1500000, oteam)
                                             # await ctx.send(embed=embedVar)
                                             await battle_msg.delete(delay=2)
@@ -19966,7 +20067,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             battle_msg = await private_channel.send(embed=embedVar)
 
                                             await ctx.send(
-                                                f"You were awarded :coin: 8,000,000 for completing the {selected_universe} Dungeon! ")
+                                                f"You were awarded :coin: 6,000,000 for completing the {selected_universe} Dungeon! ")
                                         if mode in co_op_modes and mode not in ai_co_op_modes:
                                             cuid = c_DID
                                             cuser = await self.bot.fetch_user(cuid)
@@ -19984,13 +20085,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         embedVar = discord.Embed(title=f":crown: UNIVERSE CONQUERED",
                                                                 description=f"**{selected_universe}** has been conquered\n\n{drop_response}",
                                                                 colour=0xe91e63)
-                                        embedVar.set_author(name=f"{selected_universe} Dungeon has been unlocked!")
                                         embedVar.add_field(name="Additional Reward",
                                                         value=f"You earned additional rewards in your vault! Take a look.")
                                         embedVar.set_footer(text="The /shop has been updated with new CARDS, TITLES and ARMS!")
-                                        upload_query = {'DID': str(ctx.author.id)}
-                                        new_upload_query = {'$addToSet': {'CROWN_TALES': selected_universe}}
-                                        r = db.updateUserNoFilter(upload_query, new_upload_query)
+                                        if difficulty != "EASY":
+                                            embedVar.set_author(name=f"{selected_universe} Dungeon has been unlocked!")
+                                            upload_query = {'DID': str(ctx.author.id)}
+                                            new_upload_query = {'$addToSet': {'CROWN_TALES': selected_universe}}
+                                            r = db.updateUserNoFilter(upload_query, new_upload_query)
                                         if selected_universe in completed_universes:
                                             await bless(100000, ctx.author.id)
                                             teambank = await blessteam(25000, oteam)
@@ -20091,6 +20193,10 @@ async def save_spot(self, ctx, universe, mode, currentopponent):
 
 def update_arm_durability(self, vault, arm, arm_universe, arm_price, card):
     try:
+        player_info = db.queryUser({'DID': str(vault['DID'])})
+        if player_info['DIFFICULTY'] == "EASY":
+            return
+
         decrease_value = -1
         break_value = 1
         if arm_universe != card['UNIVERSE'] and arm_universe != "Unbound":
@@ -20457,6 +20563,24 @@ async def drops(player, universe, matchcount):
     all_available_drop_pets = db.queryDropPets(universe)
     vault_query = {'DID': str(player.id)}
     vault = db.queryVault(vault_query)
+    player_info = db.queryUser({'DID': str(vault['DID'])})
+    difficulty = player_info['DIFFICULTY']
+    if difficulty == "EASY":
+        bless_amount = 100
+        await bless(bless_amount, player.id)
+        return f"You earned :coin: **{bless_amount}**!"
+
+    if matchcount <= 2:
+        bless_amount = (2500 + (1000 * matchcount)) * (1 + rebirth)
+        if difficulty == "HARD":
+            bless_amount = (9000 + (2500 * matchcount)) * (1 + rebirth)
+        await bless(bless_amount, player.id)
+        return f"You earned :coin: **{bless_amount}**!"
+
+
+
+            
+
     owned_arms = []
     for arm in vault['ARMS']:
         owned_arms.append(arm['ARM'])
@@ -20532,10 +20656,21 @@ async def drops(player, universe, matchcount):
     card_drop = 200  # 200
     drop_rate = random.randint((0 + (rebirth * rebirth) * (1 + rebirth)), 200)
     durability = random.randint(1, 45)
+    if difficulty == "HARD":
+        gold_drop = 30  
+        rift_rate = 65  
+        title_drop = 75  
+        arm_drop = 100  
+        pet_drop = 180  
+        card_drop = 200 
+        drop_rate = random.randint((0 + (rebirth * rebirth) * (1 + rebirth)), 200)
+        durability = random.randint(35, 50)
 
     try:
         if drop_rate <= gold_drop:
-            bless_amount = (1000 + (100 * matchcount)) * (1 + rebirth)
+            bless_amount = (2500 + (1000 * matchcount)) * (1 + rebirth)
+            if difficulty == "HARD":
+                bless_amount = (9000 + (2500 * matchcount)) * (1 + rebirth)
             await bless(bless_amount, player.id)
             return f"You earned :coin: **{bless_amount}**!"
         elif drop_rate <= rift_rate and drop_rate > gold_drop:
@@ -20664,6 +20799,12 @@ async def specific_drops(self,player, card, universe):
     vault = db.queryVault(vault_query)
     user_query = {'DID': str(player)}
     user = db.queryUser(user_query)
+
+    if user['DIFFICULTY'] == "EASY":
+        bless_amount = 100
+        await bless(100, player)
+        return f"You earned :coin: **{bless_amount}**!"
+
     rebirth = user['REBIRTH']
     owned_destinies = []
     for destiny in vault['DESTINY']:
@@ -20743,6 +20884,23 @@ async def dungeondrops(player, universe, matchcount):
 
     user_query = {'DID': str(player.id)}
     user = db.queryUser(user_query)
+
+    player_info = db.queryUser({'DID': str(vault['DID'])})
+    difficulty = player_info['DIFFICULTY']
+    if difficulty == "EASY":
+        bless_amount = 100
+        await bless(bless_amount, player.id)
+        return f"You earned :coin: **{bless_amount}**!"
+
+    if matchcount <= 3:
+        bless_amount = (8000 + (2000 * matchcount)) * (1 + rebirth)
+        if difficulty == "HARD":
+            bless_amount = (20000 + (5000 * matchcount)) * (1 + rebirth)
+        await bless(bless_amount, player.id)
+        return f"You earned :coin: **{bless_amount}**!"
+
+
+
     rebirth = user['REBIRTH']
     owned_destinies = []
     for destiny in vault['DESTINY']:
@@ -20799,10 +20957,21 @@ async def dungeondrops(player, universe, matchcount):
     card_drop = 400  #
     drop_rate = random.randint((0 + (rebirth * rebirth) * (1 + rebirth)), 400)
     durability = random.randint(10, 75)
+    if difficulty == "HARD":
+        gold_drop = 30  
+        rift_rate = 65  
+        title_drop = 75  
+        arm_drop = 100  
+        pet_drop = 250  
+        card_drop = 300 
+        drop_rate = random.randint((0 + (rebirth * rebirth) * (1 + rebirth)), 300)
+        durability = 100
 
     try:
         if drop_rate <= gold_drop:
-            bless_amount = (5000 + (250 * matchcount)) * (1 + rebirth)
+            bless_amount = (8000 + (2000 * matchcount)) * (1 + rebirth)
+            if difficulty == "HARD":
+                bless_amount = (20000 + (5000 * matchcount)) * (1 + rebirth)
             await bless(bless_amount, player.id)
             return f"You earned :coin: **{bless_amount}**!"
         elif drop_rate <= rift_rate and drop_rate > gold_drop:
@@ -20919,6 +21088,7 @@ async def bossdrops(player, universe):
 
     user_query = {'DID': str(player.id)}
     user = db.queryUser(user_query)
+    difficulty = user['DIFFICULTY']
     rebirth = user['REBIRTH']
 
     cards = []
@@ -20984,6 +21154,8 @@ async def bossdrops(player, universe):
     try:
         if drop_rate <= gold_drop:
             bless_amount = 80000 * (1 + rebirth)
+            if difficulty == "HARD":
+                bless_amount = 150000 * (1 + rebirth)
             await bless(bless_amount, player.id)
             return f"You earned :coin: {bless_amount}!"
         elif drop_rate <= title_drop and drop_rate > gold_drop:

@@ -17,6 +17,7 @@ from discord_slash.model import ButtonStyle
 import textwrap
 from discord_slash import cog_ext, SlashContext
 from dinteractions_Paginator import Paginator
+from discord_slash.utils.manage_commands import create_option, create_choice
 import os
 import logging
 from decouple import config
@@ -1960,6 +1961,60 @@ async def sponsor(ctx, guild: str, amount):
    await ctx.send(f"{guild_name} sponsored {team_name} :coin:{amount}!!!")
    return
 
+@slash.slash(name="Difficulty", description="Change the difficulty setting of Crown Unlimited",
+                    options=[
+                        create_option(
+                            name="mode",
+                            description="Difficulty Level",
+                            option_type=3,
+                            required=True,
+                            choices=[
+                                # create_choice(
+                                #     name="Auto Battler",
+                                #     value="ATales"
+                                # ),
+                                create_choice(
+                                    name="Normal",
+                                    value="NORMAL"
+                                ),
+                                create_choice(
+                                    name="Easy",
+                                    value="EASY"
+                                ),
+                                create_choice(
+                                    name="Hard",
+                                    value="HARD"
+                                )
+                            ]
+                        )
+                    ]
+        ,guild_ids=guild_ids)
+@commands.check(validate_user)
+async def difficulty(ctx, mode):
+   try:
+      player = db.queryUser({'DID': str(ctx.author.id)})
+      query = {'DID': str(ctx.author.id)}
+      update_query = {'$set': {'DIFFICULTY': mode}}
+      response = db.updateUserNoFilter(query, update_query)
+      if response:
+         await ctx.send(f"{ctx.author.mention} has been updated to ⚙️ **{mode.lower()}** mode.")
+   except Exception as ex:
+      trace = []
+      tb = ex.__traceback__
+      while tb is not None:
+            trace.append({
+               "filename": tb.tb_frame.f_code.co_filename,
+               "name": tb.tb_frame.f_code.co_name,
+               "lineno": tb.tb_lineno
+            })
+            tb = tb.tb_next
+      print(str({
+            'type': type(ex).__name__,
+            'message': str(ex),
+            'trace': trace
+      }))
+      
+
 @slash.slash(name="Fund", description="Fund Association From Guild Bank", guild_ids=guild_ids)
 @commands.check(validate_user)
 async def fund(ctx, amount):
@@ -2056,40 +2111,40 @@ async def curseguild(amount, guild):
    
 
 
-# @bot.command()
-# @commands.check(validate_user)
-# async def addfield(ctx, collection, new_field, field_type):
-#    if ctx.author.guild_permissions.administrator == True:
+@bot.command()
+@commands.check(validate_user)
+async def addfield(ctx, collection, new_field, field_type):
+   if ctx.author.guild_permissions.administrator == True:
 
-#       if field_type == 'string':
-#          field_type = ""
-#       elif field_type == 'int':
-#          field_type = 1
-#       elif field_type == 'list':
-#          field_type = []
-#       elif field_type == 'bool':
-#          field_type = False
+      if field_type == 'string':
+         field_type = "EASY"
+      elif field_type == 'int':
+         field_type = 1
+      elif field_type == 'list':
+         field_type = []
+      elif field_type == 'bool':
+         field_type = False
 
-#       if collection == 'cards':
-#          response = db.updateManyCards({'$set': {new_field: field_type}})
-#       elif collection == 'titles':
-#          response = db.updateManyTitles({'$set': {new_field: field_type}})
-#       elif collection == 'vaults':
-#          response = db.updateManyVaults({'$set': {new_field: field_type}})
-#       elif collection == 'users':
-#          response = db.updateManyUsers({'$set': {new_field: field_type}})
-#       elif collection == 'universe':
-#          response = db.updateManyUniverses({'$set': {new_field: field_type}})
-#       elif collection == 'boss':
-#          response = db.updateManyBosses({'$set': {new_field: field_type}})
-#       elif collection == 'arms':
-#          response = db.updateManyArms({'$set': {new_field: field_type}})
-#       elif collection == 'pets':
-#          response = db.updateManyPets({'$set': {new_field: field_type}})
-#       elif collection == 'teams':
-#          response = db.updateManyTeams({'$set': {new_field: field_type}})
-#    else:
-#       print(m.ADMIN_ONLY_COMMAND)
+      if collection == 'cards':
+         response = db.updateManyCards({'$set': {new_field: field_type}})
+      elif collection == 'titles':
+         response = db.updateManyTitles({'$set': {new_field: field_type}})
+      elif collection == 'vaults':
+         response = db.updateManyVaults({'$set': {new_field: field_type}})
+      elif collection == 'users':
+         response = db.updateManyUsers({'$set': {new_field: field_type}})
+      elif collection == 'universe':
+         response = db.updateManyUniverses({'$set': {new_field: field_type}})
+      elif collection == 'boss':
+         response = db.updateManyBosses({'$set': {new_field: field_type}})
+      elif collection == 'arms':
+         response = db.updateManyArms({'$set': {new_field: field_type}})
+      elif collection == 'pets':
+         response = db.updateManyPets({'$set': {new_field: field_type}})
+      elif collection == 'teams':
+         response = db.updateManyTeams({'$set': {new_field: field_type}})
+   else:
+      print(m.ADMIN_ONLY_COMMAND)
 
 # @slash.slash(name="Update", description="function to update stuff", guild_ids=guild_ids)
 # async def update(ctx):
