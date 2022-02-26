@@ -6409,6 +6409,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
 
         try:
             # Universe Cost
+            selected_universe = custom_function.selected_universe
             universe = db.queryUniverse({'TITLE': str(selected_universe)})
             universe_owner = universe['GUILD']
             #Universe Cost
@@ -6440,8 +6441,23 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                     'UNIVERSE_DATA': universe, 'CREST_LIST': crestlist, 'CREST_SEARCH': crestsearch,
                     'COMPLETED_DUNGEONS': completed_dungeons, 'OGUILD': oguild, 'BOSS_NAME': universe['UNIVERSE_BOSS'],
                     'CURRENTOPPONENT': currentopponent}
-        except:
-            embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", delete_after=30, colour=0xe91e63)
+        except Exception as ex:
+            trace = []
+            tb = ex.__traceback__
+            while tb is not None:
+                trace.append({
+                    "filename": tb.tb_frame.f_code.co_filename,
+                    "name": tb.tb_frame.f_code.co_name,
+                    "lineno": tb.tb_lineno
+                })
+                tb = tb.tb_next
+            print(str({
+                'PLAYER': str(ctx.author),
+                'type': type(ex).__name__,
+                'message': str(ex),
+                'trace': trace
+            }))
+            embedVar = discord.Embed(title=f"Unable to start boss fight. Seek support in the Crown Unlimited support server https://discord.gg/cqP4M92", delete_after=30, colour=0xe91e63)
             await ctx.send(embed=embedVar)
             return
 
