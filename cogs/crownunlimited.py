@@ -118,11 +118,6 @@ class CrownUnlimited(commands.Cog):
             if not server_channel:
                 return
 
-            # Check if currently in a match
-            # channel_exists_response = existing_channel_check(self, message)
-            # if channel_exists_response:
-            #     return
-
             # Pull Character Information
             player = db.queryUser({'DID': str(message.author.id)})
 
@@ -5851,11 +5846,6 @@ async def enemy_approached(self, message, channel, player, selected_mode, univer
     try:
         private_channel = channel
         mode = selected_mode
-
-        # channel_exists_response = existing_channel_check(self, message)
-        # if channel_exists_response:
-        #     await private_channel.send(m.ALREADY_IN_TALES)
-        #     return
 
         sowner = player
         # guild = message.guild
