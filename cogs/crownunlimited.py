@@ -20574,12 +20574,6 @@ async def drops(player, universe, matchcount):
         await bless(bless_amount, player.id)
         return f"You earned :coin: **{bless_amount}**!"
 
-    if matchcount <= 2:
-        bless_amount = (2500 + (1000 * matchcount)) * (1 + rebirth)
-        if difficulty == "HARD":
-            bless_amount = (9000 + (2500 * matchcount)) * (1 + rebirth)
-        await bless(bless_amount, player.id)
-        return f"You earned :coin: **{bless_amount}**!"
 
 
 
@@ -20603,6 +20597,14 @@ async def drops(player, universe, matchcount):
     titles = []
     arms = []
     pets = []
+
+    if matchcount <= 2:
+        bless_amount = (2500 + (1000 * matchcount)) * (1 + rebirth)
+        if difficulty == "HARD":
+            bless_amount = (9000 + (2500 * matchcount)) * (1 + rebirth)
+        await bless(bless_amount, player.id)
+        return f"You earned :coin: **{bless_amount}**!"
+
 
 
     if all_available_drop_cards:
@@ -20896,12 +20898,6 @@ async def dungeondrops(player, universe, matchcount):
         await bless(bless_amount, player.id)
         return f"You earned :coin: **{bless_amount}**!"
 
-    if matchcount <= 3:
-        bless_amount = (8000 + (2000 * matchcount)) * (1 + rebirth)
-        if difficulty == "HARD":
-            bless_amount = (20000 + (5000 * matchcount)) * (1 + rebirth)
-        await bless(bless_amount, player.id)
-        return f"You earned :coin: **{bless_amount}**!"
 
 
 
@@ -20914,6 +20910,14 @@ async def dungeondrops(player, universe, matchcount):
     titles = []
     arms = []
     pets = []
+
+    if matchcount <= 3:
+        bless_amount = (8000 + (2000 * matchcount)) * (1 + rebirth)
+        if difficulty == "HARD":
+            bless_amount = (20000 + (5000 * matchcount)) * (1 + rebirth)
+        await bless(bless_amount, player.id)
+        return f"You earned :coin: **{bless_amount}**!"
+
 
     for card in all_available_drop_cards:
         cards.append(card['NAME'])
