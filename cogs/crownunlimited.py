@@ -1103,7 +1103,7 @@ class CrownUnlimited(commands.Cog):
                 if sowner['LEVEL'] < 3:
                     await ctx.send("🔓 Unlock **Tales** by completing **Floor 3** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
                     return
-            if sowner['DIFFICULTY'] == "EASY" and mode in D_modes or mode in B_MODES:
+            if sowner['DIFFICULTY'] == "EASY" and (mode in D_modes or mode in B_MODES):
                 await ctx.send("Dungeons and Boss fights unavailable on Easy Mode! Use /difficulty to change your difficulty setting.")
                 return
                
@@ -3687,6 +3687,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
     stat_debuff_from_difficulty = 0
     health_buff_from_difficulty = 0
     stat_buff_from_difficulty = 0
+    ap_buff_from_difficulty = 0
     difficulty = sowner['DIFFICULTY']
 
     if difficulty == "EASY":
@@ -3694,14 +3695,17 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         stat_debuff_from_difficulty = 150
 
     if difficulty == "HARD":
-        health_buff_from_difficulty = 1000
+        health_buff_from_difficulty = 1500
         stat_buff_from_difficulty = 300
+        ap_buff_from_difficulty = 100
         if mode in D_modes:
-            health_buff_from_difficulty = 2500
-            stat_buff_from_difficulty = 300
+            health_buff_from_difficulty = 3000
+            stat_buff_from_difficulty = 200
+            ap_buff_from_difficulty = 180
         if mode in B_modes:
-            health_buff_from_difficulty = 5000
-            stat_buff_from_difficulty = 300
+            health_buff_from_difficulty = 3000
+            ap_buff_from_difficulty = 250
+            stat_buff_from_difficulty = 0
 
 
 
@@ -4069,14 +4073,14 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 tpet_lvl = 10
                 tpet_bond = 3
                 tcard_lvl = 350
-                tcard_lvl_ap_buff = 116
+                tcard_lvl_ap_buff = 116 + ap_buff_from_difficulty
                 tcard_lvl_attack_defense_buff = 175
                 tcard_lvl_hlt_buff = 438
             elif mode in B_modes:
                 tpet_lvl = 10
                 tpet_bond = 3
                 tcard_lvl = 500
-                tcard_lvl_ap_buff = 200
+                tcard_lvl_ap_buff = 200 + ap_buff_from_difficulty
                 tcard_lvl_attack_defense_buff = 200
                 tcard_lvl_hlt_buff = 200
             else:
@@ -4084,14 +4088,14 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                         tpet_lvl = 6
                         tpet_bond = 2
                         tcard_lvl = ocard_lvl
-                        tcard_lvl_ap_buff = ocard_lvl_ap_buff + 50
+                        tcard_lvl_ap_buff = ocard_lvl_ap_buff + 50 + ap_buff_from_difficulty
                         tcard_lvl_attack_defense_buff = ocard_lvl_attack_buff + 50
                         tcard_lvl_hlt_buff = ocard_lvl_hlt_buff + 50
                 elif mode in co_op_modes and mode in D_modes:
                     tpet_lvl = 10
                     tpet_bond = 3
                     tcard_lvl = 350
-                    tcard_lvl_ap_buff = 116
+                    tcard_lvl_ap_buff = 116 + ap_buff_from_difficulty
                     tcard_lvl_attack_defense_buff = 175
                     tcard_lvl_hlt_buff = 438
                 elif mode == "ABYSS":
@@ -4102,18 +4106,18 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                     tcard_lvl_attack_defense_buff = round(abyss_scaling / 2)
                     tcard_lvl_hlt_buff = round((abyss_scaling / 20) * 25)
                 else:
-                    if ocard_lvl >= 100:
+                    if ocard_lvl >= 150:
                         tpet_lvl = 3
                         tpet_bond = 1
-                        tcard_lvl = 100
-                        tcard_lvl_ap_buff = 33
-                        tcard_lvl_attack_defense_buff = 50
-                        tcard_lvl_hlt_buff = 150
+                        tcard_lvl = 150
+                        tcard_lvl_ap_buff = 50 + ap_buff_from_difficulty
+                        tcard_lvl_attack_defense_buff = 75
+                        tcard_lvl_hlt_buff = 187
                     else:
                         tpet_lvl = 3
                         tpet_bond = 2
                         tcard_lvl = ocard_lvl
-                        tcard_lvl_ap_buff = ocard_lvl_ap_buff
+                        tcard_lvl_ap_buff = ocard_lvl_ap_buff + ap_buff_from_difficulty
                         tcard_lvl_attack_defense_buff = ocard_lvl_attack_buff
                         tcard_lvl_hlt_buff = ocard_lvl_hlt_buff
 
