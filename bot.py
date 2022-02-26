@@ -78,7 +78,7 @@ bot.remove_command("help")
 
 
 @slash.slash(name="Help", description="List of Commands", guild_ids=guild_ids,)
-async def help(ctx: SlashContext, topic: str):
+async def help(ctx: SlashContext):
    avatar="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png"
 
    embedVar1 = discord.Embed(title= f"Bot Commands", description=h.BOT_COMMANDS, colour=0x7289da)
@@ -120,6 +120,8 @@ async def validate_user(ctx):
 @bot.event
 async def on_ready():
    print('Bot is ready! ')
+   for server in bot.guilds:
+        print(server.name)
 
 @slash.slash(name="Enhancers", description="List of Enhancers", guild_ids=guild_ids)
 async def enhancers(ctx):
@@ -258,7 +260,7 @@ async def crown(ctx):
    
    embedVar11 = discord.Embed(title= f"Card Types", description=textwrap.dedent(f"""                                                                           
    🎴 **Universe Cards** - Purchasable in the **Shop** and Drops in **Tales**
-   ⚪ **Card Skins** - Purchasable in the **Shop**
+   🃏 **Card Skins** - Craftable in the **Craft**
    🔥 **Dungeon Cards** - Drops in **Dungeons**
    ✨ **Destiny Cards** - Earned via **Destinies**
    👹 **Boss Cards** - Exchange for **Boss Souls**
@@ -287,6 +289,9 @@ async def crown(ctx):
 
    ✨ **Destinies**
    Card Specific Quest that earn **Destiny Cards**
+   
+   🃏 **Skins**
+   Card Skins have different stats and abilities but can complete the main card **Destinies** !
  
    """), colour=0x7289da)
    embedVar11.set_thumbnail(url=avatar)
@@ -625,6 +630,7 @@ async def register(ctx):
       **/crown** - Read Game Manual
       **/help** - Help Menu
       **/enhancers** - Enhancer Help Menu
+      **/difficulty** - Change difficulty setting!
       """), colour=0xe91e63)
       embedVar.set_footer(text="Changing your Discord Account Name or Numbers will break your Crown Unlimited Account.")
       await ctx.author.send(embed=embedVar)
@@ -787,6 +793,8 @@ async def register(ctx):
                         embedVar = discord.Embed(title=f":crown: Create your **Build!**",description=textwrap.dedent(f"""
                         *Nice Choice {ctx.author.mention}!*
                         Create a **/build** with your **Starting Items**
+                        Use **/difficulty** to change your difficulty settings
+                        By default, you start on Easy mode
                         
                         """),colour=0x1abc9c)
                         embedVar.add_field(name=f"🎴 **Cards** */cards to open your Cards*", value=f"{card_drop_message_into_embded}", inline=True)
@@ -1394,6 +1402,33 @@ async def updatestock(ctx, stock: int):
    else:
       print(m.ADMIN_ONLY_COMMAND)
 
+@bot.command()
+@commands.check(validate_user)
+async def servers(ctx):
+   if ctx.author.guild_permissions.administrator == True:
+      try:
+         for server in bot.guilds:
+            await ctx.send(server.name)
+            print(server.name)
+      except Exception as ex:
+         trace = []
+         tb = ex.__traceback__
+         while tb is not None:
+               trace.append({
+                  "filename": tb.tb_frame.f_code.co_filename,
+                  "name": tb.tb_frame.f_code.co_name,
+                  "lineno": tb.tb_lineno
+               })
+               tb = tb.tb_next
+         print(str({
+               'type': type(ex).__name__,
+               'message': str(ex),
+               'trace': trace
+            }))
+         
+   else:
+      await ctx.send("Admin only.")
+
 
 @bot.event
 async def on_command_error(ctx, error):
@@ -1862,6 +1897,7 @@ async def blessfamily(amount, family):
       print("Cannot find family")
 
 
+
 async def blessfamily_Alt(amount, family):
    blessAmount = amount
    posBlessAmount = 0 + abs(int(blessAmount))
@@ -2023,7 +2059,7 @@ async def buffshop(ctx, player, team):
 async def trinketshop(ctx):
    user_query = {'DID': str(ctx.author.id)}
    user = db.queryUser(user_query)
-   if user['LEVEL'] < 15:
+   if user['LEVEL'] < 11:
       await ctx.send(f"🔓 Unlock the Trinket Shop by completing Floor 15 of the 🌑 Abyss! Use /abyss to enter the abyss.")
       return
 
@@ -2218,7 +2254,7 @@ async def trinketshop(ctx):
                filter_query = [{'type.' + "ARM": str(current_arm)}]
                resp = db.updateVault(query, update_query, filter_query)
 
-               await curse(price, str(ctx.author))
+               await curse(price, str(ctx.author.id))
                await button_ctx.send(f"{current_arm}'s ⚒️ durability has increased by **{levels_gained}**!")
                return
             except:
@@ -2318,6 +2354,60 @@ async def sponsor(ctx, guild: str, amount):
    await ctx.send(f"{guild_name} sponsored {team_name} :coin:{amount}!!!")
    return
 
+@slash.slash(name="Difficulty", description="Change the difficulty setting of Crown Unlimited",
+                    options=[
+                        create_option(
+                            name="mode",
+                            description="Difficulty Level",
+                            option_type=3,
+                            required=True,
+                            choices=[
+                                # create_choice(
+                                #     name="Auto Battler",
+                                #     value="ATales"
+                                # ),
+                                create_choice(
+                                    name="Normal",
+                                    value="NORMAL"
+                                ),
+                                create_choice(
+                                    name="Easy",
+                                    value="EASY"
+                                ),
+                                create_choice(
+                                    name="Hard",
+                                    value="HARD"
+                                )
+                            ]
+                        )
+                    ]
+        ,guild_ids=guild_ids)
+@commands.check(validate_user)
+async def difficulty(ctx, mode):
+   try:
+      player = db.queryUser({'DID': str(ctx.author.id)})
+      query = {'DID': str(ctx.author.id)}
+      update_query = {'$set': {'DIFFICULTY': mode}}
+      response = db.updateUserNoFilter(query, update_query)
+      if response:
+         await ctx.send(f"{ctx.author.mention} has been updated to ⚙️ **{mode.lower()}** mode.")
+   except Exception as ex:
+      trace = []
+      tb = ex.__traceback__
+      while tb is not None:
+            trace.append({
+               "filename": tb.tb_frame.f_code.co_filename,
+               "name": tb.tb_frame.f_code.co_name,
+               "lineno": tb.tb_lineno
+            })
+            tb = tb.tb_next
+      print(str({
+            'type': type(ex).__name__,
+            'message': str(ex),
+            'trace': trace
+      }))
+      
+
 @slash.slash(name="Fund", description="Fund Association From Guild Bank", guild_ids=guild_ids)
 @commands.check(validate_user)
 async def fund(ctx, amount):
@@ -2414,40 +2504,40 @@ async def curseguild(amount, guild):
    
 
 
-# @bot.command()
-# @commands.check(validate_user)
-# async def addfield(ctx, collection, new_field, field_type):
-#    if ctx.author.guild_permissions.administrator == True:
+@bot.command()
+@commands.check(validate_user)
+async def addfield(ctx, collection, new_field, field_type):
+   if ctx.author.guild_permissions.administrator == True:
 
-#       if field_type == 'string':
-#          field_type = ""
-#       elif field_type == 'int':
-#          field_type = 1
-#       elif field_type == 'list':
-#          field_type = []
-#       elif field_type == 'bool':
-#          field_type = False
+      if field_type == 'string':
+         field_type = "EASY"
+      elif field_type == 'int':
+         field_type = 1
+      elif field_type == 'list':
+         field_type = []
+      elif field_type == 'bool':
+         field_type = False
 
-#       if collection == 'cards':
-#          response = db.updateManyCards({'$set': {new_field: field_type}})
-#       elif collection == 'titles':
-#          response = db.updateManyTitles({'$set': {new_field: field_type}})
-#       elif collection == 'vaults':
-#          response = db.updateManyVaults({'$set': {new_field: field_type}})
-#       elif collection == 'users':
-#          response = db.updateManyUsers({'$set': {new_field: field_type}})
-#       elif collection == 'universe':
-#          response = db.updateManyUniverses({'$set': {new_field: field_type}})
-#       elif collection == 'boss':
-#          response = db.updateManyBosses({'$set': {new_field: field_type}})
-#       elif collection == 'arms':
-#          response = db.updateManyArms({'$set': {new_field: field_type}})
-#       elif collection == 'pets':
-#          response = db.updateManyPets({'$set': {new_field: field_type}})
-#       elif collection == 'teams':
-#          response = db.updateManyTeams({'$set': {new_field: field_type}})
-#    else:
-#       print(m.ADMIN_ONLY_COMMAND)
+      if collection == 'cards':
+         response = db.updateManyCards({'$set': {new_field: field_type}})
+      elif collection == 'titles':
+         response = db.updateManyTitles({'$set': {new_field: field_type}})
+      elif collection == 'vaults':
+         response = db.updateManyVaults({'$set': {new_field: field_type}})
+      elif collection == 'users':
+         response = db.updateManyUsers({'$set': {new_field: field_type}})
+      elif collection == 'universe':
+         response = db.updateManyUniverses({'$set': {new_field: field_type}})
+      elif collection == 'boss':
+         response = db.updateManyBosses({'$set': {new_field: field_type}})
+      elif collection == 'arms':
+         response = db.updateManyArms({'$set': {new_field: field_type}})
+      elif collection == 'pets':
+         response = db.updateManyPets({'$set': {new_field: field_type}})
+      elif collection == 'teams':
+         response = db.updateManyTeams({'$set': {new_field: field_type}})
+   else:
+      print(m.ADMIN_ONLY_COMMAND)
 
 # @slash.slash(name="Update", description="function to update stuff", guild_ids=guild_ids)
 # async def update(ctx):

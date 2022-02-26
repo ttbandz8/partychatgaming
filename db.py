@@ -1798,7 +1798,7 @@ def updateManyTrade(new_value):
 
 def createTrade(trade):
     try:
-        tradeexists = trade_exists({'MERCHANT': trade['MERCHANT'], 'BUYER': trade['BUYER'], 'OPEN': trade['OPEN']})
+        tradeexists = trade_exists({'MDID': trade['MDID'], 'BDID': trade['BDID'], 'OPEN': trade['OPEN']})
         if tradeexists:
             return "Trade already exists."
         else:
@@ -1816,7 +1816,7 @@ def updateTrade(trade_query, new_value):
 
 def deleteTrade(query):
     try:
-        tradeexists = trade_exists({'MERCHANT': query['MERCHANT'], 'BUYER': query['BUYER'], 'OPEN': query['OPEN']})
+        tradeexists = trade_exists({'MDID': query['MDID'], 'BDID': query['BDID'], 'OPEN': query['OPEN']})
         if tradeexists:
             trade_col.delete_one(query)
             return True

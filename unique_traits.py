@@ -71,6 +71,11 @@ traits = [{
     'EFFECT': 'Final Stand',
     'TRAIT': 'When you die, Resolve with 75% ATK + DEF as Health. Saiyan Spirit! On focus, heal for opponent Stamina amount + turn count.'
 },{
+    'NAME': 'Persona',
+    'EFFECT': 'Summoner',
+    'TRAIT': 'Summon deals Damage equal to your :boom: attack, in addition to their status effect. Using your summon will disable opponents summon.'
+},
+{
     'NAME': 'Crown Rift Slayers',
     'EFFECT': 'Feint Attack',
     'TRAIT': 'If you miss, Crit!'
@@ -82,8 +87,4 @@ traits = [{
     'NAME': 'Crown Rift Madness',
     'EFFECT': 'Madness',
     'TRAIT': 'Do not lose turn on Focus, but also do not Heal.'
-},{
-    'NAME': 'Persona',
-    'EFFECT': 'Summoner',
-    'TRAIT': 'Pet deals Damage equal to your :boom: attack, in addition to their status effect.'
 }]

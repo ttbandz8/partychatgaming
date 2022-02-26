@@ -64,6 +64,7 @@ class Lookup(commands.Cog):
                 all_pets = len(v['PETS'])
 
                 name = d['DISNAME'].split("#",1)[0]
+                difficulty = d['DIFFICULTY']
                 games = d['GAMES']
                 abyss_level = d['LEVEL']
                 card = d['CARD']
@@ -177,7 +178,7 @@ class Lookup(commands.Cog):
                 :military_helmet: | **Guild: **{team} 
                 :family_mwgb: | **Family: **{family}
 
-                
+                ⚙️ **Difficulty** {difficulty.lower().capitalize()}
                 """), colour=000000)
                 embed1.set_thumbnail(url=avatar)
                 # embed1.add_field(name="Team" + " :military_helmet:", value=team)
