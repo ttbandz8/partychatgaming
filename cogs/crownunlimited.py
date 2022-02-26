@@ -19945,14 +19945,15 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']),
                                                         str(oarm['ARM']), str(selected_universe), tale_or_dungeon_only,
                                                         o['EXCLUSIVE'])
-                                questlogger = await quest(ouser, t_card, tale_or_dungeon_only)
-                                destinylogger = await destiny(ouser, t_card, tale_or_dungeon_only)
-                                petlogger = await summonlevel(opet_name, ouser)
-                                cardlogger = await cardlevel(self, o_card, ouser.id, tale_or_dungeon_only, selected_universe)
-                                if questlogger:
-                                    await private_channel.send(questlogger)
-                                if destinylogger:
-                                    await private_channel.send(destinylogger)
+                                if difficulty != "EASY":
+                                    questlogger = await quest(ouser, t_card, tale_or_dungeon_only)
+                                    destinylogger = await destiny(ouser, t_card, tale_or_dungeon_only)
+                                    petlogger = await summonlevel(opet_name, ouser)
+                                    cardlogger = await cardlevel(self, o_card, ouser.id, tale_or_dungeon_only, selected_universe)
+                                    if questlogger:
+                                        await private_channel.send(questlogger)
+                                    if destinylogger:
+                                        await private_channel.send(destinylogger)
                                 
                                 if mode in co_op_modes and mode not in ai_co_op_modes:
                                     teammates = False
