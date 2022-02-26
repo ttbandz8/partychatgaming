@@ -14360,7 +14360,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     if tarm_barrier_active:
                                                                         tarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    await private_channel.send(embed=embedVar)
+                                                                    #await private_channel.send(embed=embedVar)
 
                                                         elif carm_barrier_active:
                                                             if cbarrier_count >1:
