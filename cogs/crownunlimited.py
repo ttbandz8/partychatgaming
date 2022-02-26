@@ -17609,7 +17609,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 embedVar = discord.Embed(title=f"{t_card}'s Devilization",
                                                                         description=f"**{t_card}** Doubles Stats",
                                                                         colour=0xe91e63)
-                                                await private_channel.send(embed=embedVar)
+                                                previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}**'s Devilization")
 
                                     elif t_health <= (t_max_health * .50):
                                         embed_color_t = 0xe67e22
@@ -17623,7 +17623,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 embedVar = discord.Embed(title=f"{t_card}'s Devilization",
                                                                         description=f"**{t_card}** Doubles Stats",
                                                                         colour=0xe91e63)
-                                                await private_channel.send(embed=embedVar)
+                                                previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}**'s Devilization")
                                     elif t_health <= (t_max_health * .75):
                                         embed_color_t = 0xf1c40f
                                     else:

@@ -70,16 +70,16 @@ class Trade(commands.Cog):
                 await ctx.send("🔓 Unlock Trading by completeing Floor 10 of the 🌑 Abyss! Use /abyss to enter the abyss.")
                 return
 
-            buyer = db.queryUser({'DISNAME': str(buyer_name)})
+            buyer = db.queryUser({'DID': str(player.id)})
             if buyer['LEVEL'] < 11:
                 await ctx.send(f"🔓 {str(player)} has not unlocked Trading by completing Floor 10 of the 🌑.")
                 return
 
             mvault = db.queryVault({'DID': str(ctx.author.id)})
-            trade_query={'MERCHANT': str(ctx.author) , 'BUYER' : str(player), 'OPEN' : True}
+            trade_query={'MERCHANT' : str(merchant['NAME']), 'BUYER' : str(buyer['NAME']), 'MDID': str(ctx.author.id) , 'BDID' : str(player.id), 'OPEN' : True}
             if mode == 'New':
-                m_query = {'MERCHANT': str(ctx.author), 'OPEN': True}
-                b_query = {'BUYER': str(buyer), 'OPEN': True}
+                m_query = {'MDID': str(ctx.author.id), 'OPEN': True}
+                b_query = {'BDID': str(buyer['DID']), 'OPEN': True}
                 m_check = db.queryTrade(m_query)
                 b_check = db.queryTrade(b_query)
                 if m_check or b_check:
@@ -157,7 +157,7 @@ class Trade(commands.Cog):
                             await ctx.send(f"ERROR:\nTYPE: {type(ex).__name__}\nMESSAGE: {str(ex)}\nLINE: {trace} ")
                             return
             elif mode == 'Open':
-                m_query = {'MERCHANT': str(ctx.author), 'OPEN': True}
+                m_query = {'MDID': str(ctx.author.id), 'OPEN': True}
                 trade_check = db.queryTrade(m_query)
                 if trade_check:
                     mcards = ", ".join(trade_check['MCARDS'])
@@ -170,7 +170,8 @@ class Trade(commands.Cog):
                     barms = ", ".join(trade_check['BARMS'])
                     bsummons = ", ".join(trade_check['BSUMMONS'])
                     buyer = trade_check['BUYER']
-                    buyer_info = db.queryUser({'DISNAME': str(buyer)})
+                    buyer_id = trade_check['BDID']
+                    buyer_info = db.queryUser({'DID': str(buyer_id)})
                     bvault = db.queryVault({'DID' : buyer_info['DID']})
                     embedVar = discord.Embed(title= f"{trade_check['MERCHANT']}'s Current Trade", description=textwrap.dedent(f"""
                     👨‍🏫 **{trade_check['MERCHANT']}** :coin: ~ {'{:,}'.format(trade_check['MCOIN'])}
@@ -216,8 +217,8 @@ class Trade(commands.Cog):
                             return
                         if button_ctx.custom_id == "no":
                             await button_ctx.send("Trade **Cancelled**")                
-                            await main.bless(trade_check['MCOIN'], str(ctx.author))
-                            await main.bless(trade_check['BCOIN'], str(trade_check['BUYER']))
+                            await main.bless(trade_check['MCOIN'], str(ctx.author.id))
+                            await main.bless(trade_check['BCOIN'], str(buyer_info['DID']))
                             resp = db.deleteTrade(trade_check)
                             self.stop = True
                             return
@@ -237,7 +238,7 @@ class Trade(commands.Cog):
                                 tax = trade_check['TAX']
                                 tax_split = tax/2
                             
-                                mvault = db.queryVault({'OWNER' : trade_check['MERCHANT']})
+                                mvault = db.queryVault({'DID' : trade_check['MDID']})
                                 m_destinies = mvault['DESTINY']
                                 m_owned_destinies = []
                                 for mdestiny in m_destinies:
@@ -284,26 +285,26 @@ class Trade(commands.Cog):
                                             card_level_exist=True
                                     if card_level_exist==False:
                                         update_query = {'$addToSet': {'CARD_LEVELS': {'CARD': str(c), 'LVL': 0, 'TIER': 0, 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
-                                        db.updateVaultNoFilter({'OWNER': str(buyer)}, update_query)
-                                    db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'CARDS': str(c)}})
-                                    db.updateVaultNoFilter({'OWNER': str(buyer)},{'$addToSet':{'CARDS': str(c)}})
+                                        db.updateVaultNoFilter({'DID': str(buyer_info['DID'])}, update_query)
+                                    db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'CARDS': str(c)}})
+                                    db.updateVaultNoFilter({'DID': str(buyer_info['DID'])},{'$addToSet':{'CARDS': str(c)}})
                                     
                                     for dest in d.destiny:
                                         if c in dest["USE_CARDS"] and dest['NAME'] not in b_owned_destinies:
-                                            db.updateVaultNoFilter({'OWNER': str(buyer)},{'$addToSet':{'DESTINY': dest}})
+                                            db.updateVaultNoFilter({'DID': str(buyer_info['DID'])},{'$addToSet':{'DESTINY': dest}})
                                             await ctx.send(f"**DESTINY AWAITS!**\n**{dest['NAME']}** has been added to your vault.")
                                 
                                 for t in m_titles:
-                                    db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'TITLES': str(t)}})
-                                    db.updateVaultNoFilter({'OWNER': str(buyer)},{'$addToSet':{'TITLES': str(t)}})
+                                    db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'TITLES': str(t)}})
+                                    db.updateVaultNoFilter({'DID': str(buyer_info['DID'])},{'$addToSet':{'TITLES': str(t)}})
                                     
                                 for a in m_arms:
                                     dur = mvault['ARMS']
                                     for b in dur:
                                         if a == b['ARM']:
                                             durability = b['DUR']
-                                    db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'ARMS': {'ARM': str(a)}}})
-                                    db.updateVaultNoFilter({'OWNER': str(buyer)},{'$addToSet':{'ARMS': {'ARM': str(a), 'DUR': durability}}})
+                                    db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'ARMS': {'ARM': str(a)}}})
+                                    db.updateVaultNoFilter({'DID': str(buyer_info['DID'])},{'$addToSet':{'ARMS': {'ARM': str(a), 'DUR': durability}}})
                                     
                                 for s in m_summons:
                                     summons = mvault['PETS']
@@ -314,8 +315,8 @@ class Trade(commands.Cog):
                                             pet_ability = list(l.keys())[3]
                                             pet_ability_power = list(l.values())[3]
                                             pet_info = {'NAME': l['NAME'], 'LVL': l['LVL'], 'EXP': l['EXP'], pet_ability: pet_ability_power, 'TYPE': l['TYPE'], 'BOND': 0, 'BONDEXP': 0, 'PATH': l['PATH']}
-                                    db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'PETS': {'NAME': str(s)}}})
-                                    db.updateVaultNoFilter({'OWNER': str(buyer)},{'$addToSet':{'PETS': pet_info }})
+                                    db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'PETS': {'NAME': str(s)}}})
+                                    db.updateVaultNoFilter({'DID': str(buyer_info['DID'])},{'$addToSet':{'PETS': pet_info }})
                                 
                                 #buyer  
                                 card_level_exist=False
@@ -325,26 +326,26 @@ class Trade(commands.Cog):
                                             card_level_exist=True
                                     if card_level_exist==False:
                                         update_query = {'$addToSet': {'CARD_LEVELS': {'CARD': str(c), 'LVL': 0, 'TIER': 0, 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
-                                        db.updateVaultNoFilter({'OWNER': str(ctx.author)}, update_query)
-                                    db.updateVaultNoFilter({'OWNER': str(buyer)},{'$pull':{'CARDS': str(c)}})
-                                    db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$addToSet':{'CARDS': str(c)}})
+                                        db.updateVaultNoFilter({'DID': str(ctx.author.id)}, update_query)
+                                    db.updateVaultNoFilter({'DID': str(buyer_info['DID'])},{'$pull':{'CARDS': str(c)}})
+                                    db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$addToSet':{'CARDS': str(c)}})
                                     
                                     for dest in d.destiny:
                                         if c in dest["USE_CARDS"] and dest['NAME'] not in m_owned_destinies:
-                                            db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$addToSet':{'DESTINY': dest}})
+                                            db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$addToSet':{'DESTINY': dest}})
                                             await ctx.send(f"**DESTINY AWAITS!**\n**{dest['NAME']}** has been added to your vault.")
                                 
                                 for t in b_titles:
-                                    db.updateVaultNoFilter({'OWNER': str(buyer)},{'$pull':{'TITLES': str(t)}})
-                                    db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$addToSet':{'TITLES': str(t)}})
+                                    db.updateVaultNoFilter({'DID': str(buyer_info['DID'])},{'$pull':{'TITLES': str(t)}})
+                                    db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$addToSet':{'TITLES': str(t)}})
                                     
                                 for a in b_arms:
                                     dur = bvault['ARMS']
                                     for b in dur:
                                         if a == b['ARM']:
                                             durability = b['DUR']
-                                    db.updateVaultNoFilter({'OWNER': str(buyer)},{'$pull':{'ARMS': {'ARM': str(a)}}})
-                                    db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$addToSet':{'ARMS': {'ARM': str(a), 'DUR': durability}}})
+                                    db.updateVaultNoFilter({'DID': str(buyer_info['DID'])},{'$pull':{'ARMS': {'ARM': str(a)}}})
+                                    db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$addToSet':{'ARMS': {'ARM': str(a), 'DUR': durability}}})
                                     
                                 for s in b_summons:
                                     summons = bvault['PETS']
@@ -355,13 +356,13 @@ class Trade(commands.Cog):
                                             pet_ability = list(l.keys())[3]
                                             pet_ability_power = list(l.values())[3]
                                             pet_info = {'NAME': l['NAME'], 'LVL': l['LVL'], 'EXP': l['EXP'], pet_ability: pet_ability_power, 'TYPE': l['TYPE'], 'BOND': 0, 'BONDEXP': 0, 'PATH': l['PATH']}
-                                    db.updateVaultNoFilter({'OWNER': str(buyer)},{'$pull':{'PETS': {'NAME': str(s)}}})
-                                    db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$addToSet':{'PETS': pet_info }})
+                                    db.updateVaultNoFilter({'DID': str(buyer_info['DID'])},{'$pull':{'PETS': {'NAME': str(s)}}})
+                                    db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$addToSet':{'PETS': pet_info }})
                                     
-                                await main.curse(m_fees, str(ctx.author))
-                                await main.curse(b_fees, str(buyer_info['DISNAME']))
-                                await main.bless(b_coins, str(ctx.author))
-                                await main.bless(m_coins, str(buyer_info['DISNAME']))
+                                await main.curse(m_fees, str(ctx.author.id))
+                                await main.curse(b_fees, str(buyer_info['DID']))
+                                await main.bless(b_coins, str(ctx.author.id))
+                                await main.bless(m_coins, str(buyer_info['DID']))
                                 
                                 micon = '⚪'
                                 if m_coin_diff > 0:
@@ -432,7 +433,7 @@ class Trade(commands.Cog):
                         await ctx.send(f"ERROR:\nTYPE: {type(ex).__name__}\nMESSAGE: {str(ex)}\nLINE: {trace} ")
                         return
                 else:
-                    b_query = {'BUYER': str(ctx.author), 'OPEN': True}
+                    b_query = {'BDID': str(ctx.author.id), 'OPEN': True}
                     trade_check2 = db.queryTrade(b_query)
                     if trade_check2:
                         mcards = ", ".join(trade_check2['MCARDS'])
@@ -570,11 +571,11 @@ class Trade(commands.Cog):
             if user:
                 vault = db.queryVault({'DID': str(ctx.author.id)})
                 if vault:
-                    mtrade = db.queryTrade({'MERCHANT' : str(ctx.author), 'OPEN' : True})
+                    mtrade = db.queryTrade({'MDID' : str(ctx.author.id), 'OPEN' : True})
                     if mtrade:
                         mvalidation=True
                     else:
-                        btrade = db.queryTrade({'BUYER' : str(ctx.author), 'OPEN' : True})
+                        btrade = db.queryTrade({'BDID' : str(ctx.author.id), 'OPEN' : True})
                         if btrade:
                             bvalidation=True
                         else:
@@ -593,11 +594,11 @@ class Trade(commands.Cog):
                         if bank >= coins:
                             await main.curse(coins, ctx.author)
                             if mvalidation ==True:
-                                trade_query = {'MERCHANT' : str(ctx.author), 'BUYER': str(mtrade['BUYER']), 'OPEN' : True}
+                                trade_query = {'MDID' : str(ctx.author.id), 'BDID': str(mtrade['BDID']), 'OPEN' : True}
                                 update_query = {"$inc" : {'MCOIN': int(coins)}}
                                 resp = db.updateTrade(trade_query, update_query)
                             elif bvalidation==True:
-                                trade_query = {'MERCHANT' : str(btrade['MERCHANT']),'BUYER': str(ctx.author), 'OPEN' : True}
+                                trade_query = {'MDID' : str(btrade['MDID']),'BDID': str(ctx.author.id), 'OPEN' : True}
                                 update_query = {"$inc" : {'BCOIN': int(coins)}}
                                 resp = db.updateTrade(trade_query, update_query)
                             else:
@@ -616,12 +617,12 @@ class Trade(commands.Cog):
                             await main.bless(refund, ctx.author)
                             if mvalidation:
                                 write_off = 0 - refund
-                                trade_query = {'MERCHANT' : str(ctx.author), 'BUYER' : str(mtrade['BUYER']), 'OPEN' : True}
+                                trade_query = {'MDID' : str(ctx.author.id), 'BDID' : str(mtrade['BDID']), 'OPEN' : True}
                                 update_query = {"$inc" : {'MCOIN': int(write_off)}}
                                 resp = db.updateTrade(trade_query, update_query)
                             elif bvalidation:
                                 write_off = 0 - refund
-                                trade_query = {'MERCHANT' : str(btrade['MERCHANT']),'BUYER' : str(ctx.author), 'OPEN' : True}
+                                trade_query = {'MDID' : str(btrade['MDID']),'BDID' : str(ctx.author.id), 'OPEN' : True}
                                 update_query = {"$inc" : {'BCOIN': int(write_off)}}
                                 resp = db.updateTrade(trade_query, update_query)
                             else:

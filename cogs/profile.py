@@ -634,7 +634,7 @@ class Profile(commands.Cog):
                             card_data = db.queryCard({'NAME' : selected_card})
                             card_name= card_data['NAME']
                             sell_price = card_data['PRICE'] * .10
-                            mtrade = db.queryTrade({'MERCHANT' : str(ctx.author), 'OPEN' : True})
+                            mtrade = db.queryTrade({'MDID' : str(ctx.author.id), 'OPEN' : True})
                             mvalidation=False
                             bvalidation=False
                             item_already_in_trade=False
@@ -647,7 +647,7 @@ class Profile(commands.Cog):
                                         item_already_in_trade=True
                                     mvalidation=True
                                 else:
-                                    btrade = db.queryTrade({'BUYER' : str(ctx.author), 'OPEN' : True})
+                                    btrade = db.queryTrade({'BDID' : str(ctx.author.id), 'OPEN' : True})
                                     if btrade:
                                         if selected_card in btrade['BCARDS']:
                                             await ctx.send(f"{ctx.author.mention} card already in **Trade**")
@@ -684,13 +684,13 @@ class Profile(commands.Cog):
                                         if button_ctx.custom_id == "yes":
                                             neg_sell_price = 0 - abs(int(sell_price))
                                             if mvalidation:
-                                                trade_query = {'MERCHANT' : str(button_ctx.author), 'BUYER' : str(mtrade['BUYER']), 'OPEN' : True}
+                                                trade_query = {'MDID' : str(button_ctx.author.id), 'BDID' : str(mtrade['BDID']), 'OPEN' : True}
                                                 update_query = {"$pull" : {'MCARDS': selected_card}, "$inc" : {'TAX' : int(neg_sell_price)}}
                                                 resp = db.updateTrade(trade_query, update_query)
                                                 await button_ctx.send("Returned.")
                                                 self.stop = True
                                             elif bvalidation:
-                                                trade_query = {'MERCHANT' : str(btrade['MERCHANT']),'BUYER' : str(button_ctx.author), 'OPEN' : True}
+                                                trade_query = {'MDID' : str(btrade['MDID']),'BDID' : str(button_ctx.author.id), 'OPEN' : True}
                                                 update_query = {"$pull" : {'BCARDS': selected_card}, "$inc" : {'TAX' : int(neg_sell_price)}}
                                                 resp = db.updateTrade(trade_query, update_query)
                                                 await button_ctx.send("Returned.")
@@ -736,13 +736,13 @@ class Profile(commands.Cog):
                                                 self.stop = True
                                         if button_ctx.custom_id == "yes":
                                             if mvalidation:
-                                                trade_query = {'MERCHANT' : str(ctx.author), 'BUYER' : str(mtrade['BUYER']), 'OPEN' : True}
+                                                trade_query = {'MDID' : str(ctx.author.id), 'BDID' : str(mtrade['BDID']), 'OPEN' : True}
                                                 update_query = {"$push" : {'MCARDS': selected_card}, "$inc" : {'TAX' : int(sell_price)}}
                                                 resp = db.updateTrade(trade_query, update_query)
                                                 await button_ctx.send("Traded.")
                                                 self.stop = True
                                             elif bvalidation:
-                                                trade_query = {'MERCHANT' : str(btrade['MERCHANT']),'BUYER' : str(ctx.author), 'OPEN' : True}
+                                                trade_query = {'MDID' : str(btrade['MDID']),'BDID' : str(ctx.author.id), 'OPEN' : True}
                                                 update_query = {"$push" : {'BCARDS': selected_card}, "$inc" : {'TAX' : int(sell_price)}}
                                                 resp = db.updateTrade(trade_query, update_query)
                                                 await button_ctx.send("Traded.")
@@ -1003,7 +1003,7 @@ class Profile(commands.Cog):
                                 await button_ctx.send("You cannot trade equipped titles.")
                                 return
                             sell = title_data['PRICE'] * .10
-                            mtrade = db.queryTrade({'MERCHANT' : str(ctx.author), 'OPEN' : True})
+                            mtrade = db.queryTrade({'MDID' : str(ctx.author.id), 'OPEN' : True})
                             mvalidation=False
                             bvalidation=False
                             item_already_in_trade=False
@@ -1013,7 +1013,7 @@ class Profile(commands.Cog):
                                     item_already_in_trade=True
                                 mvalidation=True
                             else:
-                                btrade = db.queryTrade({'BUYER' : str(ctx.author), 'OPEN' : True})
+                                btrade = db.queryTrade({'BDID' : str(ctx.author.id), 'OPEN' : True})
                                 if btrade:
                                     if selected_title in btrade['BTITLES']:
                                         await ctx.send(f"{ctx.author.mention} title already in **Trade**")
@@ -1050,13 +1050,13 @@ class Profile(commands.Cog):
                                     if button_ctx.custom_id == "yes":
                                         neg_sell_price = 0 - abs(int(sell_price))
                                         if mvalidation:
-                                            trade_query = {'MERCHANT' : str(button_ctx.author), 'BUYER' : str(mtrade['BUYER']), 'OPEN' : True}
+                                            trade_query = {'MDID' : str(button_ctx.author.id), 'BDID' : str(mtrade['BDID']), 'OPEN' : True}
                                             update_query = {"$pull" : {'MTITLES': selected_title}, "$inc" : {'TAX' : int(neg_sell_price)}}
                                             resp = db.updateTrade(trade_query, update_query)
                                             await button_ctx.send("Returned.")
                                             self.stop = True
                                         elif bvalidation:
-                                            trade_query = {'MERCHANT' : str(btrade['MERCHANT']),'BUYER' : str(button_ctx.author), 'OPEN' : True}
+                                            trade_query = {'MDID' : str(btrade['MDID']),'BDID' : str(button_ctx.author.id), 'OPEN' : True}
                                             update_query = {"$pull" : {'BTITLES': selected_title}, "$inc" : {'TAX' : int(neg_sell_price)}}
                                             resp = db.updateTrade(trade_query, update_query)
                                             await button_ctx.send("Returned.")
@@ -1102,13 +1102,13 @@ class Profile(commands.Cog):
                                             self.stop = True
                                     if button_ctx.custom_id == "yes":
                                         if mvalidation:
-                                            trade_query = {'MERCHANT' : str(ctx.author), 'BUYER' : str(mtrade['BUYER']), 'OPEN' : True}
+                                            trade_query = {'MDID' : str(ctx.author.id), 'BDID' : str(mtrade['BDID']), 'OPEN' : True}
                                             update_query = {"$push" : {'MTITLES': selected_title}, "$inc" : {'TAX' : int(sell_price)}}
                                             resp = db.updateTrade(trade_query, update_query)
                                             await button_ctx.send("Traded.")
                                             self.stop = True
                                         elif bvalidation:
-                                            trade_query = {'MERCHANT' : str(btrade['MERCHANT']),'BUYER' : str(ctx.author), 'OPEN' : True}
+                                            trade_query = {'MDID' : str(btrade['MDID']),'BDID' : str(ctx.author.id), 'OPEN' : True}
                                             update_query = {"$push" : {'BTITLES': selected_title}, "$inc" : {'TAX' : int(sell_price)}}
                                             resp = db.updateTrade(trade_query, update_query)
                                             await button_ctx.send("Traded.")
@@ -1381,7 +1381,7 @@ class Profile(commands.Cog):
                                 await button_ctx.send("You cannot trade equipped arms.")
                                 return
                             sell_price = arm_data['PRICE'] * .10
-                            mtrade = db.queryTrade({'MERCHANT' : str(ctx.author), 'OPEN' : True})
+                            mtrade = db.queryTrade({'MDID' : str(ctx.author.id), 'OPEN' : True})
                             mvalidation=False
                             bvalidation=False
                             item_already_in_trade=False
@@ -1391,7 +1391,7 @@ class Profile(commands.Cog):
                                     item_already_in_trade=True
                                 mvalidation=True
                             else:
-                                btrade = db.queryTrade({'BUYER' : str(ctx.author), 'OPEN' : True})
+                                btrade = db.queryTrade({'BDID' : str(ctx.author.id), 'OPEN' : True})
                                 if btrade:
                                     if selected_arm in btrade['BARMS']:
                                         await ctx.send(f"{ctx.author.mention} arm already in **Trade**")
@@ -1428,13 +1428,13 @@ class Profile(commands.Cog):
                                     if button_ctx.custom_id == "yes":
                                         neg_sell_price = 0 - abs(int(sell_price))
                                         if mvalidation:
-                                            trade_query = {'MERCHANT' : str(button_ctx.author), 'BUYER' : str(mtrade['BUYER']), 'OPEN' : True}
+                                            trade_query = {'MDID' : str(button_ctx.author.id), 'BDID' : str(mtrade['BDID']), 'OPEN' : True}
                                             update_query = {"$pull" : {'MARMS': selected_arm}, "$inc" : {'TAX' : int(neg_sell_price)}}
                                             resp = db.updateTrade(trade_query, update_query)
                                             await button_ctx.send("Returned.")
                                             self.stop = True
                                         elif bvalidation:
-                                            trade_query = {'MERCHANT' : str(btrade['MERCHANT']),'BUYER' : str(button_ctx.author), 'OPEN' : True}
+                                            trade_query = {'MDID' : str(btrade['MDID']),'BDID' : str(button_ctx.author.id), 'OPEN' : True}
                                             update_query = {"$pull" : {'BARMS': selected_arm}, "$inc" : {'TAX' : int(neg_sell_price)}}
                                             resp = db.updateTrade(trade_query, update_query)
                                             await button_ctx.send("Returned.")
@@ -1480,13 +1480,13 @@ class Profile(commands.Cog):
                                             self.stop = True
                                     if button_ctx.custom_id == "yes":
                                         if mvalidation:
-                                            trade_query = {'MERCHANT' : str(ctx.author), 'BUYER' : str(mtrade['BUYER']), 'OPEN' : True}
+                                            trade_query = {'MDID' : str(ctx.author.id), 'BDID' : str(mtrade['BDID']), 'OPEN' : True}
                                             update_query = {"$push" : {'MARMS': selected_arm}, "$inc" : {'TAX' : int(sell_price)}}
                                             resp = db.updateTrade(trade_query, update_query)
                                             await button_ctx.send("Traded.")
                                             self.stop = True
                                         elif bvalidation:
-                                            trade_query = {'MERCHANT' : str(btrade['MERCHANT']),'BUYER' : str(ctx.author), 'OPEN' : True}
+                                            trade_query = {'MDID' : str(btrade['MDID']),'BDID' : str(ctx.author.id), 'OPEN' : True}
                                             update_query = {"$push" : {'BARMS': selected_arm}, "$inc" : {'TAX' : int(sell_price)}}
                                             resp = db.updateTrade(trade_query, update_query)
                                             await button_ctx.send("Traded.")
@@ -1629,7 +1629,7 @@ class Profile(commands.Cog):
                                 await button_ctx.send("You cannot trade equipped summons.")
                                 return
                             sell_price = 5000
-                            mtrade = db.queryTrade({'MERCHANT' : str(ctx.author), 'OPEN' : True})
+                            mtrade = db.queryTrade({'MDID' : str(ctx.author.id), 'OPEN' : True})
                             mvalidation=False
                             bvalidation=False
                             item_already_in_trade=False
@@ -1639,7 +1639,7 @@ class Profile(commands.Cog):
                                     item_already_in_trade=True
                                 mvalidation=True
                             else:
-                                btrade = db.queryTrade({'BUYER' : str(ctx.author), 'OPEN' : True})
+                                btrade = db.queryTrade({'BDID' : str(ctx.author.id), 'OPEN' : True})
                                 if btrade:
                                     if selected_summon in btrade['BSUMMONS']:
                                         await ctx.send(f"{ctx.author.mention} summon already in **Trade**")
@@ -1675,13 +1675,13 @@ class Profile(commands.Cog):
                                     if button_ctx.custom_id == "yes":
                                         neg_sell_price = 0 - abs(int(sell_price))
                                         if mvalidation:
-                                            trade_query = {'MERCHANT' : str(button_ctx.author), 'BUYER' : str(mtrade['BUYER']), 'OPEN' : True}
+                                            trade_query = {'MDID' : str(button_ctx.author.id), 'BDID' : str(mtrade['BDID']), 'OPEN' : True}
                                             update_query = {"$pull" : {'MSUMMONS': selected_summon}, "$inc" : {'TAX' : int(neg_sell_price)}}
                                             resp = db.updateTrade(trade_query, update_query)
                                             await button_ctx.send("Returned.")
                                             self.stop = True
                                         elif bvalidation:
-                                            trade_query = {'MERCHANT' : str(btrade['MERCHANT']),'BUYER' : str(button_ctx.author), 'OPEN' : True}
+                                            trade_query = {'MDID' : str(btrade['MDID']),'BDID' : str(button_ctx.author.id), 'OPEN' : True}
                                             update_query = {"$pull" : {'BSUMMONS': selected_summon}, "$inc" : {'TAX' : int(neg_sell_price)}}
                                             resp = db.updateTrade(trade_query, update_query)
                                             await button_ctx.send("Returned.")
@@ -1727,13 +1727,13 @@ class Profile(commands.Cog):
                                             self.stop = True
                                     if button_ctx.custom_id == "yes":
                                         if mvalidation:
-                                            trade_query = {'MERCHANT' : str(ctx.author), 'BUYER' : str(mtrade['BUYER']), 'OPEN' : True}
+                                            trade_query = {'MDID' : str(ctx.author.id), 'BDID' : str(mtrade['BDID']), 'OPEN' : True}
                                             update_query = {"$push" : {'MSUMMONS': selected_summon}, "$inc" : {'TAX' : int(sell_price)}}
                                             resp = db.updateTrade(trade_query, update_query)
                                             await button_ctx.send("Traded.")
                                             self.stop = True
                                         elif bvalidation:
-                                            trade_query = {'MERCHANT' : str(btrade['MERCHANT']),'BUYER' : str(ctx.author), 'OPEN' : True}
+                                            trade_query = {'MDID' : str(btrade['MDID']),'BDID' : str(ctx.author.id), 'OPEN' : True}
                                             update_query = {"$push" : {'BSUMMONS': selected_summon}, "$inc" : {'TAX' : int(sell_price)}}
                                             resp = db.updateTrade(trade_query, update_query)
                                             await button_ctx.send("Traded.")
