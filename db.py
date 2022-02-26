@@ -178,7 +178,7 @@ def updateManyGuild(new_value):
 
 def queryGuild(guild):
     try:
-        exists = guild_exists({'FOUNDER': guild['FOUNDER']})
+        exists = guild_exists({'FDID': guild['FDID']})
         if exists:
             data = guild_col.find_one(guild)
             return data
@@ -200,7 +200,7 @@ def queryGuildAlt(guild):
 
 def updateGuild(query, new_value):
     try:
-        exists = guild_exists({'FOUNDER': query['FOUNDER']})
+        exists = guild_exists({'FDID': query['FDID']})
         if exists:
             data = guild_col.update_one(query, new_value)
             return data
@@ -226,12 +226,14 @@ def queryAllGuild(guild):
 
 def createGuild(guild, user, name):
     guild_name = name
+    
     try:
-        find_user = queryUser({'DISNAME': user})
-        if find_user['GUILD'] and find_user['GUILD'] != 'PCG':
+        find_user = queryUser({'DID': str(user.id)})
+        
+        if find_user['GUILD'] != 'PCG':
             return "User is already part of a Association. "
         else:
-            exists = guild_exists({'FOUNDER': guild['FOUNDER']})
+            exists = guild_exists({'FDID': guild['FDID']})
             if exists:
                 return "Association already exists."
             else:
@@ -239,24 +241,38 @@ def createGuild(guild, user, name):
                 guild_col.insert_one(guild)
 
                 # Add Guild to User Profile as well
-                query = {'DISNAME': user}
+                query = {'DID': str(user.id)}
                 new_value = {'$set': {'GUILD': guild_name}}
                 users_col.update_one(query, new_value)
-                find_user = queryUser({'DISNAME': user})
-                return f"{user} has founded the Association: {find_user['GUILD']} . "
-    except:
-        return "Cannot create Association."
+                find_user = queryUser({'DID': str(user.id)})
+                return f":flags: **{find_user['NAME']}** has founded the Association: **{find_user['GUILD']}** . "
+    except Exception as ex:
+        trace = []
+        tb = ex.__traceback__
+        while tb is not None:
+            trace.append({
+                "filename": tb.tb_frame.f_code.co_filename,
+                "name": tb.tb_frame.f_code.co_name,
+                "lineno": tb.tb_lineno
+            })
+            tb = tb.tb_next
+        print(str({
+            'type': type(ex).__name__,
+            'message': str(ex),
+            'trace': trace
+        }))
 
 def deleteGuild(guild, user):
     try:
-        exists = guild_exists({'FOUNDER': guild['FOUNDER']})
+        exists = guild_exists({'FDID': guild['FDID']})
         if exists:
             guild = guild_col.find_one(guild)
-            if user == guild['FOUNDER']:
+            if str(user.id) == guild['FDID']:
                 users_col.update_many({'GUILD': guild['GNAME']}, {'$set': {'GUILD': 'PCG'}})
                 teams_col.update_many({'GUILD': guild['GNAME']}, {'$set': {'GUILD': 'PCG'}})
-                guild_col.delete_one({'FOUNDER': guild['FOUNDER']})
-                return f"Guild {guild['GNAME']} deleted."
+                universe_col.update_many({'GUILD': guild['GNAME']}, {'$set': {'GUILD': 'PCG'}})
+                guild_col.delete_one({'FDID': guild['FDID']})
+                return f":flags: Association **{guild['GNAME']}** deleted."
             else:
                 return "This user is not a member of the Association."
         else:
@@ -267,114 +283,205 @@ def deleteGuild(guild, user):
 
 def deleteGuildSworn(query, value, user, new_user):
     try:
-        exists = guild_exists({'FOUNDER': query['FOUNDER']})
+        exists = guild_exists({'FDID': query['FDID']})
         if exists:
             guild = guild_col.find_one(query)
-            if user == guild['FOUNDER']:
+            if str(user.id) == guild['FDID']:
                 update = guild_col.update_one(query, value, upsert=True)
                 # Add Guild to User Profile as well
-                query = {'DISNAME': str(new_user)}
+                query = {'DID': str(new_user.id)}
                 new_value = {'$set': {'GUILD': 'PCG'}}
                 users_col.update_one(query, new_value)
-                return f"{new_user} has been removed from {guild['GNAME']}. "
+                find_user = queryUser({'DID': str(new_user.id)})
+                return f":flags: **{find_user['NAME']}** has been removed from **{guild['GNAME']}**. "
             else:
                 return "This user is not a member of the Association."
         else:
             return "Association does not exist."
 
-    except:
-        print("Delete Association Member failed.")
+    except Exception as ex:
+        trace = []
+        tb = ex.__traceback__
+        while tb is not None:
+            trace.append({
+                "filename": tb.tb_frame.f_code.co_filename,
+                "name": tb.tb_frame.f_code.co_name,
+                "lineno": tb.tb_lineno
+            })
+            tb = tb.tb_next
+        print(str({
+            'type': type(ex).__name__,
+            'message': str(ex),
+            'trace': trace
+        }))
 
 def deleteGuildSwornAlt(query, value, user):
     try:
-        exists = guild_exists({'FOUNDER': query['FOUNDER']})
+        exists = guild_exists({'FDID': query['FDID']})
         if exists:
             guild = guild_col.find_one(query)
-            if user in guild['SWORN']:
+            if str(user.id) == guild['WDID']:
                 update = guild_col.update_one(query, value, upsert=True)
                 # Add Guild to User Profile as well
-                query = {'DISNAME': str(user)}
+                query = {'DID': str(user.id)}
                 new_value = {'$set': {'GUILD': 'PCG'}}
                 users_col.update_one(query, new_value)
-                return f"{new_user} has been removed from {guild['GNAME']}."
+                find_user = queryUser({'DID': str(user.id)})
+                return f":flags: **{find_user['NAME']}** has been removed from **{guild['GNAME']}**."
             else:
                 return "This user is not a member of the Association."
         else:
             return "Association does not exist."
 
-    except:
-        print("Delete Association Member failed.")
+    except Exception as ex:
+        trace = []
+        tb = ex.__traceback__
+        while tb is not None:
+            trace.append({
+                "filename": tb.tb_frame.f_code.co_filename,
+                "name": tb.tb_frame.f_code.co_name,
+                "lineno": tb.tb_lineno
+            })
+            tb = tb.tb_next
+        print(str({
+            'type': type(ex).__name__,
+            'message': str(ex),
+            'trace': trace
+        }))
 
 def addGuildShield(query, add_to_guild_query, user, new_user):
-    exists = guild_exists({'FOUNDER': query['FOUNDER']})
-    if exists:
-        guild = guild_col.find_one(query)
-        if user == guild['FOUNDER'] or guild['SWORN']:
-            guild_col.update_one(query, add_to_guild_query, upsert=True)
+    try:
+        exists = guild_exists({'FDID': query['FDID']})
+        if exists:
+            guild = guild_col.find_one(query)
+            if str(user.id) == guild['FDID'] or str(user.id) == guild['WDID']:
+                guild_col.update_one(query, add_to_guild_query, upsert=True)
 
-             # Add Guild to User Profile as well
-            query = {'DISNAME': new_user}
-            new_value = {'$set': {'GUILD': guild['GNAME']}}
-            users_col.update_one(query, new_value)
-            return f"{new_user} became the Shield of {guild['GNAME']}. "
+                # Add Guild to User Profile as well
+                query = {'DID': str(new_user.id)}
+                new_value = {'$set': {'GUILD': guild['GNAME']}}
+                users_col.update_one(query, new_value)
+                find_user = queryUser({'DID': str(new_user.id)})
+                return f":flags: **{find_user['NAME']}** became the **Shield** of **{guild['GNAME']}**. "
+            else:
+                return "The Owner of the Association can add new members. "
         else:
-            return "The Owner of the Association can add new members. "
-    else:
-        return "Cannot add user to the Association."
+            return "Cannot add user to the Association."
+    except Exception as ex:
+        trace = []
+        tb = ex.__traceback__
+        while tb is not None:
+            trace.append({
+                "filename": tb.tb_frame.f_code.co_filename,
+                "name": tb.tb_frame.f_code.co_name,
+                "lineno": tb.tb_lineno
+            })
+            tb = tb.tb_next
+        print(str({
+            'type': type(ex).__name__,
+            'message': str(ex),
+            'trace': trace
+        }))
 
 def addGuildSworn(query, add_to_guild_query, user, new_user):
-    exists = guild_exists({'FOUNDER': query['FOUNDER']})
-    if exists:
-        guild = guild_col.find_one(query)
-        if user == guild['FOUNDER']:
-            guild_col.update_one(query, add_to_guild_query, upsert=True)
+    try:
+        exists = guild_exists({'FDID': query['FDID']})
+        if exists:
+            guild = guild_col.find_one(query)
+            if str(user.id) == guild['FDID']:
+                guild_col.update_one(query, add_to_guild_query, upsert=True)
 
-             # Add Guild to User Profile as well
-            query = {'DISNAME': new_user}
-            new_value = {'$set': {'GUILD': guild['GNAME']}}
-            users_col.update_one(query, new_value)
-            return f"{new_user} became the Sworn of {guild['GNAME']}. "
+                # Add Guild to User Profile as well
+                query = {'DID': str(new_user.id)}
+                new_value = {'$set': {'GUILD': guild['GNAME']}}
+                users_col.update_one(query, new_value)
+                find_user = queryUser({'DID': str(new_user.id)})
+                return f":flags: **{find_user['NAME']}** became the **Sworn** of **{guild['GNAME']}**. "
+            else:
+                return "The Owner of the Association can add new members. "
         else:
-            return "The Owner of the Association can add new members. "
-    else:
-        return "Cannot add user to the Association."
+            return "Cannot add user to the Association."
+    except Exception as ex:
+        trace = []
+        tb = ex.__traceback__
+        while tb is not None:
+            trace.append({
+                "filename": tb.tb_frame.f_code.co_filename,
+                "name": tb.tb_frame.f_code.co_name,
+                "lineno": tb.tb_lineno
+            })
+            tb = tb.tb_next
+        print(str({
+            'type': type(ex).__name__,
+            'message': str(ex),
+            'trace': trace
+        }))
     
 def addGuildSword(query, add_to_guild_query, user, new_team):
-    exists = guild_exists({'FOUNDER': query['FOUNDER']})
-    if exists:
-        guild = guild_col.find_one(query)
-        if user == guild['FOUNDER'] or guild['SWORN']:
-            guild_col.update_one(query, add_to_guild_query, upsert=True)
+    try:
+        exists = guild_exists({'FDID': query['FDID']})
+        if exists:
+            guild = guild_col.find_one(query)
+            if str(user.id) == guild['FDID'] or  str(user.id) == guild['WDID'] or str(user.id) == guild['SDID']:
+                guild_col.update_one(query, add_to_guild_query, upsert=True)
 
-             # Add Guild to Guild Profile as well
-            query = {'TNAME': new_team}
-            new_value = {'$set': {'GUILD': guild['GNAME']}}
-            teams_col.update_one(query, new_value) 
-            return f"{new_team} enlisted as a {guild['GNAME']} Sword!. "
+                # Add Guild to Guild Profile as well
+                query = {'TNAME': new_team}
+                new_value = {'$set': {'GUILD': guild['GNAME']}}
+                teams_col.update_one(query, new_value) 
+                return f":flags: **{new_team}** enlisted as a {guild['GNAME']} **Sword**!. "
+            else:
+                return "The Leaders of Associations can add new members. "
         else:
-            return "The Owner of the Association can add new members. "
-    else:
-        return "Cannot add user to the Association."
+            return "Cannot add user to the Association."
+    except Exception as ex:
+        trace = []
+        tb = ex.__traceback__
+        while tb is not None:
+            trace.append({
+                "filename": tb.tb_frame.f_code.co_filename,
+                "name": tb.tb_frame.f_code.co_name,
+                "lineno": tb.tb_lineno
+            })
+            tb = tb.tb_next
+        print(str({
+            'type': type(ex).__name__,
+            'message': str(ex),
+            'trace': trace
+        }))
     
 def deleteGuildSword(query, value, user, new_team):
     try:
-        exists = guild_exists({'FOUNDER': query['FOUNDER']})
+        exists = guild_exists({'FDID': query['FDID']})
         if exists:
             guild = guild_col.find_one(query)
-            if user == guild['FOUNDER'] or guild['SWORN']:
+            if str(user.id) == guild['FDID'] or str(user.id) == guild['WDID'] or str(user.id) == guild['SDID']:
                 update = guild_col.update_one(query, value, upsert=True)
                 # Add Guild to User Profile as well
                 query = {'TNAME': new_team}
                 new_value = {'$set': {'GUILD': 'PCG'}}
                 teams_col.update_one(query, new_value) 
-                return f"{new_team} renounced their oath to {guild['GNAME']}!."
+                return f":flags: **{new_team}** renounced their oath to **{guild['GNAME']}**!."
             else:
                 return "This user is not a member of the Association."
         else:
             return "Association does not exist."
 
-    except:
-        print("Delete Association Member failed.")
+    except Exception as ex:
+        trace = []
+        tb = ex.__traceback__
+        while tb is not None:
+            trace.append({
+                "filename": tb.tb_frame.f_code.co_filename,
+                "name": tb.tb_frame.f_code.co_name,
+                "lineno": tb.tb_lineno
+            })
+            tb = tb.tb_next
+        print(str({
+            'type': type(ex).__name__,
+            'message': str(ex),
+            'trace': trace
+        }))
         
 def deleteGuildSwordAlt(query, value, new_team):
     try:
@@ -386,12 +493,25 @@ def deleteGuildSwordAlt(query, value, new_team):
             query = {'TNAME': new_team}
             new_value = {'$set': {'GUILD': 'PCG'}}
             teams_col.update_one(query, new_value) 
-            return f"{new_team} renounced their oath to {guild['GNAME']}!."
+            return f":flags: **{new_team}** renounced their oath to **{guild['GNAME']}**!."
         else:
             return "Association does not exist."
 
-    except:
-        print("Delete Association Member failed.")
+    except Exception as ex:
+        trace = []
+        tb = ex.__traceback__
+        while tb is not None:
+            trace.append({
+                "filename": tb.tb_frame.f_code.co_filename,
+                "name": tb.tb_frame.f_code.co_name,
+                "lineno": tb.tb_lineno
+            })
+            tb = tb.tb_next
+        print(str({
+            'type': type(ex).__name__,
+            'message': str(ex),
+            'trace': trace
+        }))
 
 ########################################################################      
 ''' FAMILY '''

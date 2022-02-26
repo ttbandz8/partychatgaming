@@ -1547,10 +1547,11 @@ class CrownUnlimited(commands.Cog):
                 await ctx.send(m.GUILD_DOESNT_EXIST, delete_after=5)
                 return
             guild_shield = guild_info['SHIELD']
+            shield_id = guild_info['SDID']
             guild_hall = guild_info['HALL']
             hall_info = db.queryHall({'HALL': str(guild_hall)})
             hall_def = hall_info['DEFENSE']
-            t_user = db.queryUser({'DISNAME': guild_shield})
+            t_user = db.queryUser({'DID': shield_id})
             tteam_name = t_user['TEAM']
             tteam_info = db.queryTeam({'TNAME': tteam_name})
             tteam = tteam_info['TNAME']
@@ -3965,9 +3966,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             tarm_price = tarm['PRICE']
 
             tvault = db.queryVault({'DID': str(t_user['DID']), 'PETS.NAME': t_user['PET']})
-            tupdate_durability_message = update_arm_durability(self, tvault, tarm, tarm_universe, tarm_price, t)
-            if tupdate_durability_message['MESSAGE']:
-                await ctx.send(f"{tupdate_durability_message['MESSAGE']}")
+            if mode in pvp_modes:
+                tupdate_durability_message = update_arm_durability(self, tvault, tarm, tarm_universe, tarm_price, t)
+                if tupdate_durability_message['MESSAGE']:
+                    await ctx.send(f"{tupdate_durability_message['MESSAGE']}")
 
             tpet = {}
             for pet in tvault['PETS']:
@@ -5177,7 +5179,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             't_defend_used': t_defend_used
         }
 
-        if mode in pvp_modes or mode in raid_modes:
+        if mode in pvp_modes:
             STATS = {
                 'operformance': operformance,
                 'o_card': o_card,
@@ -5304,7 +5306,133 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 't_block_used': t_block_used,
                 't_defend_used': t_defend_used
             }
-
+        if mode == "RAID":
+            STATS = {
+                'operformance': operformance,
+                'o_card': o_card,
+                'ocard_lvl': ocard_lvl,
+                'o_card_path': o_card_path,
+                'oarm': oarm,
+                'oarm_passive_type' : oarm_passive_type,
+                'oarm_passive_value' : oarm_passive_value,
+                'o_user': o_user,
+                'o_universe': o_universe,
+                'o_attack': o_attack,
+                'o_defense': o_defense,
+                'o_stamina': o_stamina,
+                'o_max_stamina': o_max_stamina,
+                'o_health': o_health,
+                'o_max_health': o_max_health,
+                'o_DID': o_DID,
+                'o_chainsaw': o_chainsaw,
+                'o_atk_chainsaw': o_atk_chainsaw,
+                'o_def_chainsaw': o_def_chainsaw,
+                'omove1_text': omove1_text,
+                'omove2_text': omove2_text,
+                'omove3_text': omove3_text,
+                'omove_enhanced_text': omove_enhanced_text,
+                'o_1': o_1,
+                'o_2': o_2,
+                'o_3': o_3,
+                'oarm_shield_active': oarm_shield_active,
+                'oshield_value': oshield_value,
+                'oarm_barrier_active': oarm_barrier_active,
+                'obarrier_count': obarrier_count,
+                'oarm_parry_active': oarm_parry_active,
+                'oparry_count': oparry_count,
+                'oarm_siphon_active': oarm_siphon_active,
+                'osiphon_value': osiphon_value,
+                'o_gif': o_gif,
+                'o_enhancer': o_enhancer,
+                'o_speed': o_speed,
+                'o_special_move_description': o_special_move_description,
+                'o_greeting_description': o_greeting_description,
+                'o_focus_description': o_focus_description,
+                'o_resolve_description': o_resolve_description,
+                'o_special_move_description': o_special_move_description,
+                'o_win_description': o_win_description,
+                'o_lose_description': o_lose_description,
+                'ocard_lvl_ap_buff': ocard_lvl_ap_buff,
+                'opet_name': opet_name,
+                'opet_move': opet_move,
+                'opetmove_text': opetmove_text,
+                'opet_image': opet_image,
+                'o_pet_used': o_pet_used,
+                'user1': user1,
+                'o_focus': o_focus,
+                'o_used_focus': o_used_focus,
+                'o_resolve': o_resolve,
+                'o_used_resolve': o_used_resolve,
+                'o_block_used': o_block_used,
+                'o_defend_used': o_defend_used,
+                'o_enhancer_used': o_enhancer_used,
+                'o_final_stand': o_final_stand,
+                'opet_lvl': opet_lvl,
+                'opet_bond': opet_bond,
+                'tpet_lvl': tpet_lvl,
+                'tpet_bond': tpet_bond,
+                't_card': t_card,
+                'tcard_lvl': tcard_lvl,
+                'tperformance': operformance,
+                'tarm': tarm_name,
+                'tarm_name': tarm_name,
+                'tarm_passive_type' : tarm_passive_type,
+                'tarm_passive_value' : tarm_passive_value,
+                't_universe': t_universe,
+                't_attack': t_attack,
+                't_defense': t_defense,
+                't_health': t_health,
+                't_max_health': t_max_health,
+                't_chainsaw': t_chainsaw,
+                't_atk_chainsaw': t_atk_chainsaw,
+                't_def_chainsaw': t_def_chainsaw,
+                't_stamina': t_stamina,
+                't_max_stamina': t_max_stamina,
+                't_1': t_1,
+                't_2': t_2,
+                't_3': t_3,
+                'tarm_shield_active': tarm_shield_active,
+                'tshield_value': tshield_value,
+                'tarm_barrier_active': tarm_barrier_active,
+                'tbarrier_count': tbarrier_count,
+                'tarm_parry_active': tarm_parry_active,
+                'tparry_count': tparry_count,
+                'tarm_siphon_active': tarm_siphon_active,
+                'tsiphon_value': tsiphon_value,
+                'tmove1_text': tmove1_text,
+                'tmove2_text': tmove2_text,
+                'tmove3_text': tmove3_text,
+                'tmove_enhanced_text': tmove_enhanced_text,
+                't_enhancer': t_enhancer,
+                't_enhancer_used': t_enhancer_used,
+                't_speed': t_speed,
+                't_special_move_description': t_special_move_description,
+                't_gif': t_gif,
+                't_greeting_description': t_greeting_description,
+                't_focus_description': t_focus_description,
+                't_resolve_description': t_resolve_description,
+                't_special_move_description': t_special_move_description,
+                't_win_description': t_win_description,
+                't_lose_description': t_lose_description,
+                't_focus': t_focus,
+                't_used_focus': t_used_focus,
+                't_resolve': t_resolve,
+                't_used_resolve': t_used_resolve,
+                't_final_stand': t_final_stand,
+                'tcard_lvl_ap_buff': tcard_lvl_ap_buff,
+                'tpet_name': tpet_name,
+                'tpet_move': tpet_move,
+                'tpetmove_text': tpetmove_text,
+                'tpet_image': tpet_image,
+                't_pet_used': t_pet_used,
+                'user2': user2,
+                't_DID': t_DID,
+                't_card_path': t_card_path,
+                'tarm': tarm,
+                't_user': t_user,
+                't_block_used': t_block_used,
+                't_defend_used': t_defend_used
+            }
         if mode == "Boss":
             STATS = {
                 'operformance': operformance,
@@ -6338,7 +6466,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
         m_gametime = starttime[14:16]
         s_gametime = starttime[17:19]
 
-        if mode not in B_modes and not randomized_battle and mode not in PVP_MODES and mode not in D_modes and mode not in RAID_MODES and mode != "ABYSS":
+        if mode not in B_modes and not randomized_battle and mode not in PVP_MODES and mode not in D_modes and mode not in RAID_MODES and mode != "ABYSS" and mode != "RAID":
             legends = [x for x in universe['CROWN_TALES']]
             total_legends = len(legends)
             # currentopponent = 0
@@ -6350,11 +6478,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             ttitle = db.queryTitle({'TITLE': universe['TITLE']})
             abyss_scaling = deckNumber
 
-        if mode not in B_modes and not randomized_battle and mode not in PVP_MODES and mode not in D_modes and mode != "ABYSS":
+        if mode not in B_modes and not randomized_battle and mode not in PVP_MODES and mode not in D_modes and mode != "ABYSS" and mode != "RAID":
             legends = [x for x in universe['CROWN_TALES']]
             total_legends = len(legends)
             # currentopponent = 0
-        if mode not in B_modes and not randomized_battle and mode not in PVP_MODES and mode in D_modes and mode != "ABYSS":
+        if mode not in B_modes and not randomized_battle and mode not in PVP_MODES and mode in D_modes and mode != "ABYSS" and mode != "RAID":
             legends = [x for x in universe['DUNGEONS']]
             total_legends = len(legends)
             # currentopponent = 0
@@ -6538,7 +6666,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
 
             if mode in PVP_MODES or mode in RAID_MODES:
-                tperformance = stats['tperformance']
+                if mode in RAID_MODES:
+                    tperformance = stats['operformance']
+                else:
+                    tperformance = stats['tperformance']
                 tpet_lvl = stats['tpet_lvl']
                 tpet_bond = stats['tpet_bond']
                 t_card = stats['t_card']
@@ -19263,8 +19394,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             try:
                                 # await ctx.send(f":zap: {user2.mention} you win the match!")
                                 uid = t_DID
+                                ouid = sowner['DID']
                                 tuser = await self.bot.fetch_user(uid)
-                                ouser = await self.bot.fetch_user(uid)
+                                ouser = await self.bot.fetch_user(ouid)
                                 wintime = time.asctime()
                                 h_playtime = int(wintime[11:13])
                                 m_playtime = int(wintime[14:16])
@@ -19273,10 +19405,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     s_playtime)
                                 match = await savematch(str(tuser), str(t_card), str(t_card_path), str(ttitle['TITLE']),
                                                         str(tarm['ARM']), "N/A", "PVP", o['EXCLUSIVE'])
-                                ouid = sowner['DID']
+                                
                                 sownerctx = await self.bot.fetch_user(ouid)
                                 if mode == "RAID":
-                                    guild_query = {'FOUNDER': oguild['FOUNDER']}
+                                    guild_query = {'FDID': oguild['FDID']}
+                                    guild_info = db.queryGuild(guild_query)
+                                    fee = universe['FEE']
                                     guildwin = db.updateGuild(guild_query, {'$inc': {'BOUNTY': fee, 'STREAK': 1}})
                                     bounty = oguild['BOUNTY']
                                     bonus = oguild['STREAK']
@@ -19352,7 +19486,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         embedVar.add_field(name="🌀 Most Focused", value=f"**{o_card}**")
                                     else:
                                         embedVar.add_field(name="🌀 Most Focused", value=f"**{t_card}**")
-                                    await ctx.send(embed=embedVar)
+                                        await battle_msg.delete(delay=2)
+                                    battle_msg = await private_channel.send(embed=embedVar)
+                                    continued =False
+                                    return
                                 else:
                                     victory_message = f":zap: VICTORY"
                                     victory_description = f"Match concluded in {turn_total} turns."
@@ -19397,6 +19534,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     'message': str(ex),
                                     'trace': trace
                                 }))
+                            continued = False
+                            return
                         else:
                             # await private_channel.send(f":zap: {user2.mention} you win the match!")
                             wintime = time.asctime()
