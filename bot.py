@@ -614,6 +614,7 @@ async def register(ctx):
       **/crown** - Read Game Manual
       **/help** - Help Menu
       **/enhancers** - Enhancer Help Menu
+      **/difficulty** - Change difficulty setting!
       """), colour=0xe91e63)
       embedVar.set_footer(text="Changing your Discord Account Name or Numbers will break your Crown Unlimited Account.")
       await ctx.author.send(embed=embedVar)
@@ -776,6 +777,8 @@ async def register(ctx):
                         embedVar = discord.Embed(title=f":crown: Create your **Build!**",description=textwrap.dedent(f"""
                         *Nice Choice {ctx.author.mention}!*
                         Create a **/build** with your **Starting Items**
+                        Use **/difficulty** to change your difficulty settings
+                        By default, you start on Easy mode
                         
                         """),colour=0x1abc9c)
                         embedVar.add_field(name=f"🎴 **Cards** */cards to open your Cards*", value=f"{card_drop_message_into_embded}", inline=True)
