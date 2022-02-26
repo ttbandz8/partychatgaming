@@ -904,7 +904,7 @@ async def rebirth(ctx):
                               db.updateUserNoFilter({'DID': str(ctx.author.id)}, {'$set': {'DUNGEONS': ['']}})
                               db.updateUserNoFilter({'DID': str(ctx.author.id)}, {'$set': {'BOSS_WINS': ['']}})
                               db.updateUserNoFilter(query, {'$inc': {'REBIRTH': 1 }})
-                              db.updateVaultNoFilter({"OWNER" : user_is_validated['DISNAME']}, {'$set': {'BALANCE' : 1500}})
+                              db.updateVaultNoFilter({"OWNER" : user_is_validated['DISNAME']}, {'$set': {'BALANCE' : 1000000}})
                               await button_ctx.send(f":heart_on_fire: | You are now Rebirth Level: {user_is_validated['REBIRTH'] + 1}")
                               db.updateUserNoFilter(query, {'$set': {'TOURNAMENT_WINS': 0 }})
                               return
@@ -944,7 +944,7 @@ async def rebirth(ctx):
                               db.updateUserNoFilter({'DID': str(ctx.author.id)}, {'$set': {'DUNGEONS': ['']}})
                               db.updateUserNoFilter({'DID': str(ctx.author.id)}, {'$set': {'BOSS_WINS': ['']}})
                               db.updateUserNoFilter(query, {'$inc': {'REBIRTH': 1 }})
-                              db.updateVaultNoFilter({"OWNER" : user_is_validated['DISNAME']}, {'$set': {'BALANCE' : 1500}})
+                              db.updateVaultNoFilter({"DID" : user_is_validated['DID']}, {'$set': {'BALANCE' : 1000000}})
                               await button_ctx.send(f":heart_on_fire: | You are now Rebirth Level: {user_is_validated['REBIRTH'] + 1}")
                               db.updateUserNoFilter(query, {'$set': {'TOURNAMENT_WINS': 0 }})
                               return
@@ -984,7 +984,7 @@ async def rebirth(ctx):
                               db.updateUserNoFilter({'DID': str(ctx.author.id)}, {'$set': {'DUNGEONS': ['']}})
                               db.updateUserNoFilter({'DID': str(ctx.author.id)}, {'$set': {'BOSS_WINS': ['']}})
                               db.updateUserNoFilter(query, {'$inc': {'REBIRTH': 1 }})
-                              db.updateVaultNoFilter({"DID" : user_is_validated['DID']}, {'$set': {'BALANCE' : 1500}})
+                              db.updateVaultNoFilter({"DID" : user_is_validated['DID']}, {'$set': {'BALANCE' : 1000000}})
                               await button_ctx.send(f":heart_on_fire: | You are now Rebirth Level: {user_is_validated['REBIRTH'] + 1}")
                               db.updateUserNoFilter(query, {'$set': {'TOURNAMENT_WINS': 0 }})
                               return
@@ -1024,7 +1024,7 @@ async def rebirth(ctx):
                               db.updateUserNoFilter({'DID': str(ctx.author.id)}, {'$set': {'DUNGEONS': ['']}})
                               db.updateUserNoFilter({'DID': str(ctx.author.id)}, {'$set': {'BOSS_WINS': ['']}})
                               db.updateUserNoFilter(query, {'$inc': {'REBIRTH': 1 }})
-                              db.updateVaultNoFilter({"OWNER" : user_is_validated['DISNAME']}, {'$set': {'BALANCE' : 1500}})
+                              db.updateVaultNoFilter({"DID" : user_is_validated['DID']}, {'$set': {'BALANCE' : 1000000}})
                               await button_ctx.send(f":heart_on_fire: | You are now Rebirth Level: {user_is_validated['REBIRTH'] + 1}")
                               db.updateUserNoFilter(query, {'$set': {'TOURNAMENT_WINS': 0 }})
                               return
@@ -1064,7 +1064,7 @@ async def rebirth(ctx):
                               db.updateUserNoFilter({'DID': str(ctx.author.id)}, {'$set': {'DUNGEONS': ['']}})
                               db.updateUserNoFilter({'DID': str(ctx.author.id)}, {'$set': {'BOSS_WINS': ['']}})
                               db.updateUserNoFilter(query, {'$inc': {'REBIRTH': 1 }})
-                              db.updateVaultNoFilter({"OWNER" : user_is_validated['DISNAME']}, {'$set': {'BALANCE' : 1500}})
+                              db.updateVaultNoFilter({"DID" : user_is_validated['DID']}, {'$set': {'BALANCE' : 1000000}})
                               await button_ctx.send(f":heart_on_fire: | You are now Rebirth Level: {user_is_validated['REBIRTH'] + 1}")
                               db.updateUserNoFilter(query, {'$set': {'TOURNAMENT_WINS': 0 }})
                               return

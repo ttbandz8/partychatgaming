@@ -57,6 +57,9 @@ class Guild(commands.Cog):
                     await ctx.send(f"{guildsearch_name} NEW OATH!")
                     sworn_profile = db.queryUser({'DID': str(owner.id)}) 
                     if sworn_profile['LEVEL'] < 31:
+                        await ctx.send("🔓 Sworn Must Unlock Associations by completing Floor 30 of the 🌑 Abyss! Use /abyss to enter the abyss.")
+                        return
+                    if sworn_profile['LEVEL'] < 31:
                         await ctx.send(f"🔓 {sworn.mention} Has not Unlocked Associations! Complete Floor 30 of the 🌑 Abyss! Use /abyss to enter the abyss.")
                         return             
                     if sworn_profile['GUILD'] != 'PCG' and guildsearch['SHIELD'] != sworn_profile['DISNAME']:
