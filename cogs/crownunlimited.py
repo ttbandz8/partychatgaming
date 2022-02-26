@@ -6078,11 +6078,6 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
         
 
         try:
-            channel_exists_response = existing_channel_check(self, ctx)
-            if channel_exists_response:
-                await ctx.send(m.ALREADY_IN_TALES)
-                return
-
             # print(custom_function.selected_universez
             selected_universe = custom_function.selected_universe
             if selected_universe == "":
@@ -6196,11 +6191,6 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
         ]).run()
 
         try:
-            selected_universe = custom_function.selected_universe
-            channel_exists_response = existing_channel_check(self, ctx)
-            if channel_exists_response:
-                await ctx.send(m.ALREADY_IN_TALES)
-                return
             # Universe Cost
             universe = db.queryUniverse({'TITLE': str(selected_universe)})
             universe_owner = universe['GUILD']
@@ -6297,11 +6287,6 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
         ]).run()
 
         try:
-            selected_universe = custom_function.selected_universe
-            channel_exists_response = existing_channel_check(self, ctx)
-            if channel_exists_response:
-                await ctx.send(m.ALREADY_IN_TALES)
-                return
             # Universe Cost
             universe = db.queryUniverse({'TITLE': str(selected_universe)})
             universe_owner = universe['GUILD']
@@ -20338,45 +20323,6 @@ def health_and_stamina_bars(health, stamina, max_health, max_stamina, resolved):
             stamina_response = f"⚫⚫⚫⚫⚫"
 
     return {"HEALTH": health_response, "STAMINA": stamina_response}
-
-
-def existing_channel_check(self, ctx):
-    try:
-        text_channel_list = []
-        channel_exists = False
-        name_check = str(ctx.author).split("#", 1)[0]
-        punc = '''!()-[];:'"\,<>./?@#$%^&*_~'''
-        for ele in name_check:
-            if ele in punc:
-                name_check = name_check.replace(ele, "")
-        for guild in self.bot.guilds:
-            for channel in guild.text_channels:
-                text_channel_list.append(channel.name)
-        for text_channel in text_channel_list:
-
-            if text_channel.startswith(name_check.lower()):
-                channel_exists = True
-
-        if channel_exists:
-            return True
-        else:
-            return False
-    except Exception as ex:
-        trace = []
-        tb = ex.__traceback__
-        while tb is not None:
-            trace.append({
-                "filename": tb.tb_frame.f_code.co_filename,
-                "name": tb.tb_frame.f_code.co_name,
-                "lineno": tb.tb_lineno
-            })
-            tb = tb.tb_next
-        print(str({
-            'type': type(ex).__name__,
-            'message': str(ex),
-            'trace': trace
-        }))
-        return
 
 
 def getTime(hgame, mgame, sgame, hnow, mnow, snow):
