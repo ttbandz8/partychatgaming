@@ -537,7 +537,7 @@ class Profile(commands.Cog):
                                         self.stop = True
                                     if button_ctx.custom_id == "yes":
                                         db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'CARDS': card_name}})
-                                        await main.bless(sell_price, ctx.author)
+                                        await main.bless(sell_price, ctx.author.id)
                                         await button_ctx.send("Sold.")
                                 except Exception as ex:
                                     trace = []
@@ -605,7 +605,7 @@ class Profile(commands.Cog):
                                             response = db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$addToSet':{'GEMS': {'UNIVERSE': selected_universe, 'GEMS': dismantle_amount, 'UNIVERSE_HEART': False, 'UNIVERSE_SOUL': False}}})
 
                                         db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'CARDS': card_name}})
-                                        await main.bless(sell_price, ctx.author)
+                                        await main.bless(sell_price, ctx.author.id)
                                         await button_ctx.send("Dismantled.")
                                         self.stop = True
                                 except Exception as ex:
@@ -906,7 +906,7 @@ class Profile(commands.Cog):
                                         self.stop = True
                                     if button_ctx.custom_id == "yes":
                                         db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'TITLES': title_name}})
-                                        await main.bless(sell_price, ctx.author)
+                                        await main.bless(sell_price, ctx.author.id)
                                         await button_ctx.send("Sold.")
                                 except Exception as ex:
                                     trace = []
@@ -972,7 +972,7 @@ class Profile(commands.Cog):
                                             response = db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$addToSet':{'GEMS': {'UNIVERSE': selected_universe, 'GEMS': dismantle_amount, 'UNIVERSE_HEART': False, 'UNIVERSE_SOUL': False}}})
 
                                         db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'TITLES': title_name}})
-                                        await main.bless(sell_price, ctx.author)
+                                        await main.bless(sell_price, ctx.author.id)
                                         await button_ctx.send("Dismantled.")
                                         self.stop = True
                                 except Exception as ex:
@@ -1282,7 +1282,7 @@ class Profile(commands.Cog):
                                         self.stop = True
                                     if button_ctx.custom_id == "yes":
                                         db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'ARMS': {'ARM': str(arm_name)}}})
-                                        await main.bless(sell_price, ctx.author)
+                                        await main.bless(sell_price, ctx.author.id)
                                         await button_ctx.send("Sold.")
                                 except Exception as ex:
                                     trace = []
@@ -1350,7 +1350,7 @@ class Profile(commands.Cog):
                                             response = db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$addToSet':{'GEMS': {'UNIVERSE': selected_universe, 'GEMS': dismantle_amount, 'UNIVERSE_HEART': False, 'UNIVERSE_SOUL': False}}})
 
                                         db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'ARMS': {'ARM': str(arm_name)}}})
-                                        await main.bless(sell_price, ctx.author)
+                                        await main.bless(sell_price, ctx.author.id)
                                         await button_ctx.send("Dismantled.")
                                         self.stop = True
                                 except Exception as ex:
