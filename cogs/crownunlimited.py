@@ -5979,7 +5979,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                 if uni['HAS_CROWN_TALES'] == True or uni['TIER'] == 9:
                     if uni['TITLE'] in completed_crown_tales:
                         save_spot_text = "No Save Data"
-                        if difficulty == "NORMAL":
+                        if difficulty != "EASY":
                             for save in saved_spots:
                                 if save['UNIVERSE'] == uni['TITLE'] and save['MODE'] in U_modes:
                                     save_spot_text = str(save['CURRENTOPPONENT'])
@@ -5991,12 +5991,13 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                         🧬 **Universe Summon**: {uni['UPET']}
 
                         **Saved Game**: :crossed_swords: *{save_spot_text}*
+                        **Difficulty**: ⚙️ {difficulty.lower().capitalize()}
                         """))
                         embedVar.set_image(url=uni['PATH'])
                         universe_embed_list.append(embedVar)
                     else:
                         save_spot_text = "No Save Data"
-                        if difficulty == "NORMAL":
+                        if difficulty != "EASY":
                             for save in saved_spots:
                                 if save['UNIVERSE'] == uni['TITLE'] and save['MODE'] in U_modes:
                                     save_spot_text = str(save['CURRENTOPPONENT'])
@@ -6008,6 +6009,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                         🧬 **Universe Summon**: {uni['UPET']}
 
                         **Saved Game**: :crossed_swords: *{save_spot_text}*
+                        **Difficulty**: ⚙️ {difficulty.lower().capitalize()}
                         """))
                         embedVar.set_image(url=uni['PATH'])
                         universe_embed_list.append(embedVar)
@@ -6016,7 +6018,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                 if uni['HAS_CROWN_TALES'] == True and uni['TIER'] != 9:
                     if uni['TITLE'] in completed_crown_tales:
                         save_spot_text = "No Save Data"
-                        if difficulty == "NORMAL":
+                        if difficulty != "EASY":
                             for save in saved_spots:
                                 if save['UNIVERSE'] == uni['TITLE'] and save['MODE'] in U_modes:
                                     save_spot_text = str(save['CURRENTOPPONENT'])
@@ -6028,12 +6030,13 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                         🧬 **Universe Summon**: {uni['UPET']}
 
                         **Saved Game**: :crossed_swords: *{save_spot_text}*
+                        **Difficulty**: ⚙️ {difficulty.lower().capitalize()}
                         """))
                         embedVar.set_image(url=uni['PATH'])
                         universe_embed_list.append(embedVar)
                     else:
                         save_spot_text = "No Save Data"
-                        if difficulty == "NORMAL":
+                        if difficulty != "EASY":
                             for save in saved_spots:
                                 if save['UNIVERSE'] == uni['TITLE'] and save['MODE'] in U_modes:
                                     save_spot_text = str(save['CURRENTOPPONENT'])
@@ -6045,6 +6048,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                         🧬 **Universe Summon**: {uni['UPET']}
 
                         **Saved Game**: :crossed_swords: *{save_spot_text}*
+                        **Difficulty**: ⚙️ {difficulty.lower().capitalize()}
                         """))
                         embedVar.set_image(url=uni['PATH'])
                         universe_embed_list.append(embedVar)
@@ -6106,14 +6110,13 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             
             # React to Saved Spots
             currentopponent = 0
-            if difficulty == "NORMAL":
+            if difficulty != "EASY":
                 currentopponent = update_save_spot(self, ctx, saved_spots, selected_universe, U_modes)
             else:
                 currentopponent = 0
             return {'SELECTED_UNIVERSE': selected_universe,
                     'UNIVERSE_DATA': universe, 'CREST_LIST': crestlist, 'CREST_SEARCH': crestsearch,
                     'COMPLETED_TALES': completed_crown_tales, 'OGUILD': oguild, 'CURRENTOPPONENT': currentopponent}
-
             
         except Exception as ex:
             trace = []
@@ -6174,7 +6177,6 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                 await ctx.send("This is not your button.", hidden=True)
 
             
-
         await Paginator(bot=self.bot, ctx=ctx, useQuitButton=True, deleteAfterTimeout=True, pages=universe_embed_list, timeout=60,  customButton=[
             custom_button,
             custom_function,
@@ -6182,6 +6184,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
 
         try:
             # Universe Cost
+            selected_universe = custom_function.selected_universe
             universe = db.queryUniverse({'TITLE': str(selected_universe)})
             universe_owner = universe['GUILD']
             if not universe['HAS_DUNGEON']:
