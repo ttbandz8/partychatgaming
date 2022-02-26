@@ -150,7 +150,6 @@ class Lookup(commands.Cog):
 
 
                 embed1 = discord.Embed(title= f"{icon} | " + f"{name}".format(self), description=textwrap.dedent(f"""\
-                ⚙️ **Difficulty** {difficulty.lower()}
                 :new_moon: | **Abyss Rank**: {abyss_level}
                 :flower_playing_cards: | **Card:** {card}
                 :reminder_ribbon:** | Title: **{titles}
@@ -173,7 +172,7 @@ class Lookup(commands.Cog):
                 :military_helmet: | **Guild: **{team} 
                 :family_mwgb: | **Family: **{family}
 
-                
+                ⚙️ **Difficulty** {difficulty.lower().capitalize()}
                 """), colour=000000)
                 embed1.set_thumbnail(url=avatar)
                 # embed1.add_field(name="Team" + " :military_helmet:", value=team)
