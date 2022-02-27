@@ -381,6 +381,7 @@ class Profile(commands.Cog):
                     card_tier = 0
                     lvl = ""
                     tier = ""
+                    speed = 0
                     card_tier = f":mahjong: {resp['TIER']}"
                     card_available = resp['AVAILABLE']
                     card_exclusive = resp['EXCLUSIVE']
@@ -414,6 +415,7 @@ class Profile(commands.Cog):
                             card_lvl_attack_buff = cl['ATK']
                             card_lvl_defense_buff = cl['DEF']
                             card_lvl_hlt_buff = cl['HLT']
+                            
                     
                     o_passive = resp['PASS'][0] 
                     o_moveset = resp['MOVESET']
@@ -463,7 +465,7 @@ class Profile(commands.Cog):
                     embedVar = discord.Embed(title= f"{resp['NAME']}", description=textwrap.dedent(f"""
                     {icon} **[{index}]** 
                     {card_tier}: {lvl}
-                    :heart: **{resp['HLT']}** :dagger: **{resp['ATK']}** :shield: **{resp['DEF']}**
+                    :heart: **{resp['HLT']}** :dagger: **{resp['ATK']}** :shield: **{resp['DEF']}** 🏃 **{resp['SPD']}**
                     
                     💥 **{move1}:** {move1ap}
                     ☄️ **{move2}:** {move2ap}
@@ -2710,6 +2712,8 @@ class Profile(commands.Cog):
                 if card_info['NAME'] == destiny['USE_CARDS'] or card_info['SKIN_FOR'] == d_card_info['NAME']:
                     #destiny_alert_message = f"{card_info['UNIVERSE']} Destinies Availble"
                     destiny_alert = True
+            if len(owned_destinies) >= 1:
+                destiny_Alert = True
                     
             if skin_alert == True and destiny_alert ==True:
                 destiny_alert_message = f"{card_info['NAME']} Skins and Destinies Available!"
