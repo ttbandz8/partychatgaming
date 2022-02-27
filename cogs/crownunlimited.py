@@ -3135,10 +3135,6 @@ def abyss_level_up_message(did, floor, card, title, arm):
             message = "🎊 Congratulations! 🎊 You unlocked **Bosses**. Use the **/tales** command and select Boss to battle Universe Bosses too earn ultra rare Cards, Titles, and Arms!"
             new_unlock = True
             
-        if floor == 40:
-            message = "🎊 Congratulations! 🎊 You unlocked **Duo Dungeons**. Use the **/duo** command and select Dungeons to battle battle through the Hard Mode of Universes to earn super rare Cards, Titles, and Arms!"
-            new_unlock = True
-            
         if floor == 100:
             message = "🎊 Congratulations! 🎊 You unlocked **Soul Exchange**. Use the **/exchange** command and Exchange any boss souls for cards from their respective universe! This will Reset your Abyss Level!"
             new_unlock = True
@@ -9228,7 +9224,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                                     colour=0xe91e63)
                                                             embedVar.add_field(name=f"Nexus Destroyed",
                                                                             value=f"**{t_card}** dealt **{(60 * (o_focus_count + t_focus_count))}** damage.")
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Pentakill! Dealing {(60 * (c_focus_count + t_focus_count))} damage.")
+                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Pentakill! Dealing {(60 * (o_focus_count + t_focus_count))} damage.")
                                                             await button_ctx.defer(ignore=True)
                                                         elif t_universe == "Souls":
                                                             previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Phase 2: Enhanced Moveset!")
