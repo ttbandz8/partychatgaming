@@ -161,12 +161,12 @@ async def enhancers(ctx):
       embedVar7.add_field(name="`FORTITUDE`", value="**GROWTH**- Decrease Your Max Health by AP %, Increase Your Attack and Defense by AP %\n\n**FEAR** - Decrease Your Max Health by AP %, Decrease Opponent Attack and Defense by AP %\n\n")
       embedVar7.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
 
-      embedVar8 = discord.Embed(title= f"Title Enhancer Type: Damage",colour=0x7289da)
+      embedVar8 = discord.Embed(title= f"Active Enhancer Type: Damage",colour=0x7289da)
       embedVar8.set_thumbnail(url=avatar)
       embedVar8.add_field(name="`DAMAGE`", value="**WAVE** - Deal Flat AP Damage to Opponent. AP Decreases each turn (Can Crit). *If used on turn that is divisible by 10 you will deal 75% AP Damage.*\n\n**BLAST** - Deal Flat AP Damage to Opponent. AP Increases each turn.\n\n")
       embedVar8.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
 
-      embedVar9 = discord.Embed(title= f"Title Enhancer Type: Divinity",colour=0x7289da)
+      embedVar9 = discord.Embed(title= f"Active Enhancer Type: Divinity",colour=0x7289da)
       embedVar9.set_thumbnail(url=avatar)
       embedVar9.add_field(name="`DIVINITY`", value="**CREATION** - Increase Max Health by Flat AP. AP Decreases each turn (Can Crit). *If used on turn that is divisible by 10 you will heal Health & Max Health for 75% AP.*\n\n**DESTRUCTION** - Decrease Opponent Max Health by Flat AP. AP Increases each turn.\n\n")
       embedVar9.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
@@ -204,7 +204,7 @@ async def enhancers(ctx):
             await ctx.send("Hmm something ain't right. Check with support.", hidden=True)
             return
 
-@slash.slash(name="Crown", description="Crown Unlimited Tutorial", guild_ids=guild_ids)
+@slash.slash(name="Crown", description="Crown Unlimited Manual", guild_ids=guild_ids)
 async def crown(ctx):
    avatar="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png"
 
@@ -216,6 +216,8 @@ async def crown(ctx):
    **Crown Unlimited** is a Multiplatform Card Game exploring **Universes** from your favorite Video Game and Anime Series!
 
    Explore Tales, Dungeons, and Bosses! Play **Solo**, or with **Friends**!
+   
+   Customize your experince by setting your personal /difficulty!
    """))
 
    embedVar2 = discord.Embed(title= f"Getting Started", description=textwrap.dedent(f"""\
@@ -351,6 +353,47 @@ async def crown(ctx):
 
    """) ,colour=0x7289da)
    embedVar6.set_thumbnail(url=avatar)
+   
+   embedVar16 = discord.Embed(title= f"Difficulty & Progression", description=textwrap.dedent(f"""\
+   ⚙️**Difficulty**
+   Crown Unlimited allows you to tailor your experience to your desired level.
+   
+   **3 Difficulties**
+   **Easy** *Play the game freely and casually*
+   - Lower Enemy Scaling
+   - Bypass Abyss Requirements for Tales, Coop and Duo
+   - No Destinies, Dungeons, Bosses, Drops, Raids or Abyss
+   
+   **Normal** *Play Crown Unlmited the Intended Way*
+   - Traverse the **/abyss** to earn levels and unlock modes
+   - Standard drop rates for items in game modes
+   - Rebirth for increase in base stats and drop rates
+   
+   **Hard** *Not for the faint of Heart*
+   - Normal Mode but with increasing scaling, drops and rewards
+   - Clout
+   
+   🌑**Abyss** *Seasonal Ranking System*
+   - Climb the Abyss each season for new Rewards!
+   - 100 Floors with customized battles
+   - Earn unqiue Abyssal build every 10 floors
+   - Earn Title of God on completion of Floor 100
+   
+   🎊**Abyss Floor Unlocks**
+   0 - Shop
+   2 - Tales
+   3 - Coop
+   6 - PVP
+   8 - Crafting
+   9 - Guilds & Families
+   10- Trading and Trinketshop
+   20 - Gifting
+   25 - Explore Mode
+   40 - Dungeons
+   60 - Bosses
+   100 - Boss Soul Exchange
+   """),colour=0x7289da)
+   embedVar16.set_thumbnail(url=avatar)
 
    embedVar7 = discord.Embed(title= f"Single Player", description=textwrap.dedent(f"""\
    **Single Player**
@@ -359,9 +402,6 @@ async def crown(ctx):
    **Tales:** Single player adventures where you traverse through your favorite universes as characters from various worlds!
    **Dungeon:** Hard version of tales with better loot and better drop rates! (Unlocks after completing **Crown Tale**)
    **Boss:** End Game battles featuring Iconic Villians from Crown Universes. (Unlocks after completing **Crown Dungeon**)
-   
-   **PATREON ONLY**
-   **Auto Battler:** Auto-Battle Tales
    
    👥 **Duo**/duo
    **Tales Deck(1-3):** Battle with your favorite AI preset in this Duo Tale!
@@ -557,7 +597,7 @@ async def crown(ctx):
 
 
 
-   embeds = [embedVar1, embedVar2, embedVar3, embedVar11, embedVar4, embedVar5, embedVar6, embedVar7, embedVar8,embedVar9, embedVar10,embedVar15,embedVar12,embedVar13,embedVar14]
+   embeds = [embedVar1, embedVar2, embedVar3, embedVar11, embedVar4, embedVar5, embedVar6, embedVar16, embedVar7, embedVar8,embedVar9, embedVar10,embedVar15,embedVar12,embedVar13,embedVar14]
    await Paginator(bot=bot, ctx=ctx, pages=embeds, timeout=60).run()
   
 

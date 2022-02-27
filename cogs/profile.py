@@ -2712,6 +2712,8 @@ class Profile(commands.Cog):
                 if card_info['NAME'] == destiny['USE_CARDS'] or card_info['SKIN_FOR'] == d_card_info['NAME']:
                     #destiny_alert_message = f"{card_info['UNIVERSE']} Destinies Availble"
                     destiny_alert = True
+            if len(owned_destinies) >= 1:
+                destiny_Alert = True
                     
             if skin_alert == True and destiny_alert ==True:
                 destiny_alert_message = f"{card_info['NAME']} Skins and Destinies Available!"
