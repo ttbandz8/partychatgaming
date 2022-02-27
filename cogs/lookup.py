@@ -41,13 +41,22 @@ class Lookup(commands.Cog):
 
     
     @cog_ext.cog_slash(description="Lookup player stats", guild_ids=main.guild_ids)
-    async def player(self, ctx, player: User):
+    async def player(self, ctx, player = None):
         await ctx.defer()
         try:
-            query = {'DID': str(player.id)}
+            if player:
+                player = player.replace("<","")
+                player = player.replace(">","")
+                player = player.replace("@","")
+                player = player.replace("!","")
+                # print(player)
+                # print(str(ctx.author.id))
+            else:
+                player = ctx.author.id
+            query = {'DID': str(player)}
             d = db.queryUser(query)
-            m = db.queryManyMatchesPerPlayer({'PLAYER': str(player)})
-            v = db.queryVault({'DID': str(player.id)})
+            m = db.queryManyMatchesPerPlayer({'PLAYER': d['DISNAME']})
+            v = db.queryVault({'DID': str(player)})
             if d:
                 balance = v['BALANCE']
                 if balance >= 150000:
@@ -443,7 +452,6 @@ class Lookup(commands.Cog):
                         manage_components.create_button(style=3, label="Buff Toggle", custom_id="guild_buff_toggle"),
                         manage_components.create_button(style=3, label="Buff Swap", custom_id="guild_buff_swap"),
                         manage_components.create_button(style=3, label="Buff Shop", custom_id="guild_buff_shop"),
-                        manage_components.create_button(style=3, label="Storage", custom_id="guild_storage"),
                     ]
 
                 elif is_officer:
@@ -451,7 +459,6 @@ class Lookup(commands.Cog):
                         manage_components.create_button(style=3, label="Buff Toggle", custom_id="guild_buff_toggle"),
                         manage_components.create_button(style=3, label="Buff Swap", custom_id="guild_buff_swap"),
                         manage_components.create_button(style=3, label="Buff Shop", custom_id="guild_buff_shop"),
-                        manage_components.create_button(style=3, label="Storage", custom_id="guild_storage"),
                     ]
 
                 elif is_captain:
