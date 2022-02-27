@@ -2145,8 +2145,6 @@ async def buffswap(ctx, player, team):
 
    buttons_action_row = manage_components.create_actionrow(*buttons)
    embedVar = discord.Embed(title=f"Swap Guild Buffs", description=textwrap.dedent(f"""\
-   Welcome **{team['TEAM_DISPLAY_NAME']}**!
-
    {guild_buff_msg_joined}
 
    """), colour=0xf1c40f)
@@ -2184,6 +2182,7 @@ async def buffswap(ctx, player, team):
 
       response = db.updateTeam(team_query, update_query)
       if response:
+         await msg.edit(components=[])
          await button_ctx.send("Guild buff swapped successfuly.")
          return
    
