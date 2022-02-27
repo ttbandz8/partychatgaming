@@ -482,12 +482,24 @@ class Lookup(commands.Cog):
                             self.stop = True
                             return
                         elif button_ctx.custom_id == "guild_buff_toggle":
-                            response = guild_buff_toggle(user, team)
-                            if response:
-                                await button_ctx.send(f"{response['MSG']}")
+                            if guild_buff_available:
+                                response = guild_buff_toggle(user, team)
+                                if response:
+                                    await button_ctx.send(f"{response['MSG']}")
+                                else:
+                                    await button_ctx.send("Error in toggling buff. Please seek support https://discord.gg/yWAD5HkDXU")
+                                self.stop = True
                             else:
-                                await button_ctx.send("Error in toggling buff. Please seek support https://discord.gg/yWAD5HkDXU")
-                            self.stop = True
+                                await button_ctx.send(f"No Active Guild Buff.")
+                        
+                        elif button_ctx.custom_id == "guild_buff_swap":
+                            if guild_buff_available:
+                                await button_ctx.defer(ignore=True)
+                                await main.buffswap(ctx, user, team)
+                                self.stop = True
+                            else:
+                                await button_ctx.send(f"No Active Guild Buff.")
+
                         elif button_ctx.custom_id == "guild_buff_shop":
                             await button_ctx.defer(ignore=True)
                             await main.buffshop(ctx, user, team)

@@ -1967,8 +1967,13 @@ async def cursefamily(amount, family):
 async def buffshop(ctx, player, team):
    team_query = {'TEAM_NAME': team['TEAM_NAME']}
    guild_buff_available = team['GUILD_BUFF_AVAILABLE']
+   team_member_count = len(team['MEMBERS'])
    balance = team['BANK']
    icon = "💳"
+
+   # if team_member_count <= 2:
+   #    await ctx.send("Guilds must have at least **3** guild members to purchase Guild Buffs.")
+   #    return
 
    if guild_buff_available:
       guild_buff_length = len(team['GUILD_BUFFS'])
@@ -1981,6 +1986,7 @@ async def buffshop(ctx, player, team):
       war_tax = 15000000
       war_message = "War tax applied"
    quest_buff_cost = 20000000 + war_tax
+   rift_buff_cost = 18000000 + war_tax
    level_buff_cost = 15000000 + war_tax
    stat_buff_cost = 10000000 + war_tax
 
@@ -2001,6 +2007,12 @@ async def buffshop(ctx, player, team):
             custom_id="3"
          ),
          manage_components.create_button(
+            style=ButtonStyle.red,
+            label="🔋 4️⃣",
+            custom_id="4"
+         ),
+
+         manage_components.create_button(
             style=ButtonStyle.grey,
             label="Cancel",
             custom_id="cancel"
@@ -2015,6 +2027,8 @@ async def buffshop(ctx, player, team):
    🔋 2️⃣ **Level Buff** for :money_with_wings: **{'{:,}'.format(level_buff_cost)}**
 
    🔋 3️⃣ **Stat Buff** for :money_with_wings: **{'{:,}'.format(stat_buff_cost)}**
+
+   🔋 4️⃣ **Rift Buff** for :money_with_wings: **{'{:,}'.format(rift_buff_cost)}**
 
    All Buffs are available for 100 uses.
 
@@ -2069,6 +2083,18 @@ async def buffshop(ctx, player, team):
             '$push': {'TRANSACTIONS': f"{player['DISNAME']} purchased Stat Buff", 'GUILD_BUFFS': {'TYPE': 'Stat', 'USES': 100}}
          }
 
+      if button_ctx.custom_id == "4":
+         price= rift_buff_cost
+         if price > balance:
+            await button_ctx.send("Insufficent Balance.", hidden=True)
+            return
+
+         update_query = {
+            '$set': {'GUILD_BUFF_AVAILABLE': True, 'ACTIVE_GUILD_BUFF': 'Rift'},
+            '$push': {'TRANSACTIONS': f"{player['DISNAME']} purchased Stat Buff", 'GUILD_BUFFS': {'TYPE': 'Rift', 'USES': 100}}
+         }
+
+
       response = db.updateTeam(team_query, update_query)
       if response:
          await curseteam(int(price), team['TEAM_NAME'])
@@ -2091,6 +2117,91 @@ async def buffshop(ctx, player, team):
             'trace': trace
       }))
 
+
+
+async def buffswap(ctx, player, team):
+   team_query = {'TEAM_NAME': team['TEAM_NAME']}
+   guild_buff_available = team['GUILD_BUFF_AVAILABLE']
+   guild_buffs = team['GUILD_BUFFS']
+   active_guild_buff = team['ACTIVE_GUILD_BUFF']
+   team_member_count = len(team['MEMBERS'])
+   balance = team['BANK']
+
+   guild_buff_msg = []
+   buttons = []
+
+   for buff in guild_buffs:
+      index = guild_buffs.index(buff)
+      buttons.append(
+         manage_components.create_button(
+            style=ButtonStyle.green,
+            label=f"[{str(index)}] {buff['TYPE']}",
+            custom_id=f"{str(index)}"
+         )
+      )
+      guild_buff_msg.append(f"[{str(index)}] **{buff['TYPE']}** buff: {buff['USES']} uses left!")
+
+   guild_buff_msg_joined = "\n".join(guild_buff_msg)
+
+   buttons_action_row = manage_components.create_actionrow(*buttons)
+   embedVar = discord.Embed(title=f"Swap Guild Buffs", description=textwrap.dedent(f"""\
+   Welcome **{team['TEAM_DISPLAY_NAME']}**!
+
+   {guild_buff_msg_joined}
+
+   """), colour=0xf1c40f)
+   msg = await ctx.send(embed=embedVar, components=[buttons_action_row])
+   def check(button_ctx):
+      return button_ctx.author == ctx.author
+
+   try:
+      button_ctx: ComponentContext = await manage_components.wait_for_component(bot, components=[buttons_action_row], timeout=120,check=check)
+      update_query = {}
+      
+      if button_ctx.custom_id == "cancel":
+         await button_ctx.defer(ignore=True)
+         await msg.edit(components=[])
+         return
+
+      if button_ctx.custom_id == "0":
+         update_query = {
+            '$set': {'GUILD_BUFF_AVAILABLE': True, 'ACTIVE_GUILD_BUFF': f"{guild_buffs[0]['TYPE']}"},
+            '$push': {'TRANSACTIONS': f"{player['DISNAME']} swapped to {guild_buffs[0]['TYPE']} Buff"}
+         }
+     
+      if button_ctx.custom_id == "1":
+         update_query = {
+            '$set': {'GUILD_BUFF_AVAILABLE': True, 'ACTIVE_GUILD_BUFF': f"{guild_buffs[1]['TYPE']}"},
+            '$push': {'TRANSACTIONS': f"{player['DISNAME']} swapped to {guild_buffs[1]['TYPE']} Buff"}
+         }
+
+      if button_ctx.custom_id == "2":
+         update_query = {
+            '$set': {'GUILD_BUFF_AVAILABLE': True, 'ACTIVE_GUILD_BUFF': f"{guild_buffs[2]['TYPE']}"},
+            '$push': {'TRANSACTIONS': f"{player['DISNAME']} swapped to {guild_buffs[2]['TYPE']} Buff"}
+         }
+
+
+      response = db.updateTeam(team_query, update_query)
+      if response:
+         await button_ctx.send("Guild buff swapped successfuly.")
+         return
+   
+   except Exception as ex:
+      trace = []
+      tb = ex.__traceback__
+      while tb is not None:
+            trace.append({
+               "filename": tb.tb_frame.f_code.co_filename,
+               "name": tb.tb_frame.f_code.co_name,
+               "lineno": tb.tb_lineno
+            })
+            tb = tb.tb_next
+      print(str({
+            'type': type(ex).__name__,
+            'message': str(ex),
+            'trace': trace
+      }))
 
 
 

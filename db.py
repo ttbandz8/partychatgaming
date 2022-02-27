@@ -1572,9 +1572,8 @@ def queryTeam(team):
 
 def updateTeam(query, new_value):
     try:
-        exists = team_exists({'TEAM_NAME': query['TEAM_NAME']})
-        if exists:
-            data = teams_col.update_one(query, new_value)
+        data = teams_col.update_one(query, new_value)
+        if data:
             return data
         else:
            return False
