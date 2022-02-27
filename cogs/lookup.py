@@ -23,6 +23,7 @@ from discord_slash.utils import manage_components
 from discord_slash.model import ButtonStyle
 
 
+
 emojis = ['👍', '👎']
 
 class Lookup(commands.Cog):
@@ -547,11 +548,11 @@ class Lookup(commands.Cog):
             picon = ":shield:"
             sicon = ":beginner:"
             icon = ":coin:"
-            if balance >= 1000000:
+            if balance >= 50000000:
                 icon = ":money_with_wings:"
-            elif balance >=500000:
+            elif balance >=25000000:
                 icon = ":moneybag:"
-            elif balance >= 300000:
+            elif balance >= 5000000:
                 icon = ":dollar:"
                 
             if streak >= 100:
@@ -779,7 +780,7 @@ Crest_dict = {'Unbound': ':ideograph_advantage:',
               'Naruto': ':u7121:',
               'Bleach': ':u6709:',
               'God Of War': ':u7533:',
-              'Chainsawman' : ':accept:',
+              'Chainsawman': ':accept:',
               'One Punch Man': ':u55b6:',
               'Johto Region': ':u6708:',
               'Black Clover': ':ophiuchus:',
@@ -796,4 +797,5 @@ Crest_dict = {'Unbound': ':ideograph_advantage:',
               'Death Note': ':white_flower:',
               'Crown Rift Awakening': ':u7a7a:',
               'Crown Rift Slayers': ':sa:',
-              'Crown Rift Madness': ':loop:'}
+              'Crown Rift Madness': ':m:',
+              'Persona': ':o:'}
