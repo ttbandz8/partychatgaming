@@ -1478,7 +1478,7 @@ class CrownUnlimited(commands.Cog):
             # universe = "Naruto"
             # selected_universe = {"TITLE": "Naruto"}
             if private_channel:
-                await battle_commands(self, ctx, mode, None, None, None, oguild, None, None, sowner, oteam, None, opponent, tteam, tguild, None, None, None, None, None, None)
+                await battle_commands(self, ctx, mode, None, None, None, oguild, None, None, sowner, oteam, None, opponent, tteam, tguild, None, None, None, None, None, "Tutorial")
             else:
                 await ctx.send("Failed to start battle!")
         except Exception as ex:
@@ -3964,7 +3964,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             tvault = db.queryVault({'DID': str(t_user['DID']), 'PETS.NAME': t_user['PET']})
             if mode in pvp_modes:
                 tupdate_durability_message = update_arm_durability(self, tvault, tarm, tarm_universe, tarm_price, t)
-                if tupdate_durability_message['MESSAGE']:
+                if tupdate_durability_message:
                     await ctx.send(f"{tupdate_durability_message['MESSAGE']}")
 
             tpet = {}
