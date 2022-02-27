@@ -20694,7 +20694,7 @@ async def drops(self,player, universe, matchcount):
     pets = []
 
     if matchcount <= 2:
-        bless_amount = (1000 + (1000 * matchcount)) * (1 + rebirth)
+        bless_amount = (500 + (1000 * matchcount)) * (1 + rebirth)
         if difficulty == "HARD":
             bless_amount = (5000 + (2500 * matchcount)) * (1 + rebirth)
         await bless(bless_amount, player.id)
@@ -20769,9 +20769,9 @@ async def drops(self,player, universe, matchcount):
 
     try:
         if drop_rate <= gold_drop:
-            bless_amount = (2500 + (1000 * matchcount)) * (1 + rebirth)
+            bless_amount = (500 + (1000 * matchcount)) * (1 + rebirth)
             if difficulty == "HARD":
-                bless_amount = (9000 + (2500 * matchcount)) * (1 + rebirth)
+                bless_amount = (5000 + (2500 * matchcount)) * (1 + rebirth)
             await bless(bless_amount, player.id)
             return f"You earned :coin: **{bless_amount}**!"
         elif drop_rate <= rift_rate and drop_rate > gold_drop:
