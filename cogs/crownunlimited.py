@@ -19895,7 +19895,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 s_playtime = int(wintime[17:19])
                                 gameClock = getTime(int(h_gametime), int(m_gametime), int(s_gametime), h_playtime, m_playtime,
                                                     s_playtime)
-                                drop_response = await bossdrops(ctx.author, t_universe)
+                                drop_response = await bossdrops(self,ctx.author, t_universe)
                                 db.updateUserNoFilter({'DID': str(ctx.author.id)}, {'$set': {'BOSS_FOUGHT': True}})
                                 match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']),
                                                         str(oarm['ARM']), "N/A", "Boss", o['EXCLUSIVE'])
@@ -20064,9 +20064,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     response = db.updateUserNoFilter({'DISNAME': str(o_user['DISNAME'])}, {'$set': {'RIFT': 0}})
 
                                 if mode in D_modes:
-                                    drop_response = await dungeondrops(ouser, selected_universe, currentopponent)
+                                    drop_response = await dungeondrops(self,ouser, selected_universe, currentopponent)
                                 elif mode in U_modes:
-                                    drop_response = await drops(ouser, selected_universe, currentopponent)
+                                    drop_response = await drops(self,ouser, selected_universe, currentopponent)
                                 if mode in D_modes:
                                     ofambank = await blessfamily(fam_amount, ofam)
                                 else:
@@ -20113,9 +20113,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         teambank = await blessteam(bank_amount, oteam)
                                         cteambank = await blessteam(bank_amount, oteam)
                                     if mode in D_modes:
-                                        cdrop_response = await dungeondrops(user2, selected_universe, currentopponent)
+                                        cdrop_response = await dungeondrops(self,user2, selected_universe, currentopponent)
                                     elif mode in U_modes:
-                                        cdrop_response = await drops(user2, selected_universe, currentopponent)
+                                        cdrop_response = await drops(self,user2, selected_universe, currentopponent)
                                     if mode in D_modes:
                                         cfambank = await blessfamily(fam_amount, cfam)
                                         ofambank = await blessfamily(fam_amount, ofam)
@@ -20651,7 +20651,7 @@ async def movecrest(universe, guild):
         print("Association not found: Crest")
 
 
-async def drops(player, universe, matchcount):
+async def drops(self,player, universe, matchcount):
     all_available_drop_cards = db.queryDropCards(universe)
     all_available_drop_titles = db.queryDropTitles(universe)
     all_available_drop_arms = db.queryDropArms(universe)
@@ -20690,9 +20690,9 @@ async def drops(player, universe, matchcount):
     pets = []
 
     if matchcount <= 2:
-        bless_amount = (2500 + (1000 * matchcount)) * (1 + rebirth)
+        bless_amount = (500 + (1000 * matchcount)) * (1 + rebirth)
         if difficulty == "HARD":
-            bless_amount = (9000 + (2500 * matchcount)) * (1 + rebirth)
+            bless_amount = (5000 + (2500 * matchcount)) * (1 + rebirth)
         await bless(bless_amount, player.id)
         return f"You earned :coin: **{bless_amount}**!"
 
@@ -20765,9 +20765,9 @@ async def drops(player, universe, matchcount):
 
     try:
         if drop_rate <= gold_drop:
-            bless_amount = (2500 + (1000 * matchcount)) * (1 + rebirth)
+            bless_amount = (500 + (1000 * matchcount)) * (1 + rebirth)
             if difficulty == "HARD":
-                bless_amount = (9000 + (2500 * matchcount)) * (1 + rebirth)
+                bless_amount = (5000 + (2500 * matchcount)) * (1 + rebirth)
             await bless(bless_amount, player.id)
             return f"You earned :coin: **{bless_amount}**!"
         elif drop_rate <= rift_rate and drop_rate > gold_drop:
@@ -20967,7 +20967,7 @@ async def specific_drops(self,player, card, universe):
         return
 
 
-async def dungeondrops(player, universe, matchcount):
+async def dungeondrops(self, player, universe, matchcount):
     all_available_drop_cards = db.queryExclusiveDropCards(universe)
     all_available_drop_titles = db.queryExclusiveDropTitles(universe)
     all_available_drop_arms = db.queryExclusiveDropArms(universe)
@@ -21068,7 +21068,7 @@ async def dungeondrops(player, universe, matchcount):
 
     try:
         if drop_rate <= gold_drop:
-            bless_amount = (8000 + (2000 * matchcount)) * (1 + rebirth)
+            bless_amount = (3000 + (2000 * matchcount)) * (1 + rebirth)
             if difficulty == "HARD":
                 bless_amount = (20000 + (5000 * matchcount)) * (1 + rebirth)
             await bless(bless_amount, player.id)
@@ -21167,12 +21167,10 @@ async def dungeondrops(player, universe, matchcount):
             'message': str(ex),
             'trace': trace
         }))
-        await ctx.send(
-            "There's an issue with Dungeon Drops. Alert support.")
         return
 
 
-async def bossdrops(player, universe):
+async def bossdrops(self,player, universe):
     all_available_drop_cards = db.queryExclusiveDropCards(universe)
     all_available_drop_titles = db.queryExclusiveDropTitles(universe)
     all_available_drop_arms = db.queryExclusiveDropArms(universe)
