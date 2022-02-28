@@ -2438,7 +2438,7 @@ async def summonlevel(pet, player):
 async def cardlevel(self, card: str, player, mode: str, universe: str):
     vault = db.queryVault({'DID': str(player)})
     player_info = db.queryUser({'DID': str(player)})
-
+    guild_buff = guild_buff_update_function(self, player_info['TEAM'].lower())
     if player_info['DIFFICULTY'] == "EASY":
         return
 
@@ -2487,6 +2487,10 @@ async def cardlevel(self, card: str, player, mode: str, universe: str):
     ap_buff = 0
 
     if lvl < 200:
+        if guild_buff['Level']:
+            exp_gain = 150
+            update_team_response = db.updateTeam(guild_buff['QUERY'], guild_buff['UPDATE_QUERY'])
+
         # Experience Code
         if exp < (lvl_req - 1):
             query = {'DID': str(player)}
@@ -2512,6 +2516,10 @@ async def cardlevel(self, card: str, player, mode: str, universe: str):
             await user.send(f"**{card}** leveled up!")
 
     if lvl < 500 and lvl >= 200 and has_universe_heart:
+        if guild_buff['Level']:
+            exp_gain = 150
+            update_team_response = db.updateTeam(guild_buff['QUERY'], guild_buff['UPDATE_QUERY'])
+
         # Experience Code
         if exp < (lvl_req - 1):
             query = {'DID': str(player)}
@@ -3809,15 +3817,24 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         ocard_lvl_ap_buff = 0
         ocard_lvl_hlt_buff = 0
 
+        guild_buff = guild_buff_update_function(self, oteam.lower())
+        if guild_buff['Stat']:
+            ocard_lvl_attack_buff = 50
+            ocard_lvl_defense_buff = 50
+            ocard_lvl_ap_buff = 30
+            ocard_lvl_hlt_buff = 100
+            update_team_response = db.updateTeam(guild_buff['QUERY'], guild_buff['UPDATE_QUERY'])
+           
+
         for x in vault['CARD_LEVELS']:
             if x['CARD'] == o_card:
                 ocard_lvl = x['LVL']
                 ocard_tier = x['TIER']
                 ocard_exp = x['EXP']
-                ocard_lvl_ap_buff = x['AP']
-                ocard_lvl_attack_buff = x['ATK']
-                ocard_lvl_defense_buff = x['DEF']
-                ocard_lvl_hlt_buff = x['HLT']
+                ocard_lvl_ap_buff = ocard_lvl_ap_buff + x['AP']
+                ocard_lvl_attack_buff = ocard_lvl_attack_buff + x['ATK']
+                ocard_lvl_defense_buff = ocard_lvl_defense_buff + x['DEF']
+                ocard_lvl_hlt_buff = ocard_lvl_hlt_buff + x['HLT']
 
         o_gif = o['GIF']
         o_destiny = o['HAS_COLLECTION']
@@ -3912,15 +3929,25 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             ccard_lvl_ap_buff = 0
             ccard_lvl_hlt_buff = 0
 
+            guild_buff = guild_buff_update_function(self, cteam.lower())
+            if guild_buff['Stat']:
+                ccard_lvl_attack_buff = 50
+                ccard_lvl_defense_buff = 50
+                ccard_lvl_ap_buff = 30
+                ccard_lvl_hlt_buff = 100
+                if oteam != cteam:
+                    update_team_response = db.updateTeam(guild_buff['QUERY'], guild_buff['UPDATE_QUERY'])
+
+
             for x in cvault['CARD_LEVELS']:
                 if x['CARD'] == c_card:
                     ccard_lvl = x['LVL']
                     ccard_tier = x['TIER']
                     ccard_exp = x['EXP']
-                    ccard_lvl_ap_buff = x['AP']
-                    ccard_lvl_attack_buff = x['ATK']
-                    ccard_lvl_defense_buff = x['DEF']
-                    ccard_lvl_hlt_buff = x['HLT']
+                    ccard_lvl_ap_buff = ccard_lvl_ap_buff + x['AP']
+                    ccard_lvl_attack_buff = ccard_lvl_attack_buff + x['ATK']
+                    ccard_lvl_defense_buff = ccard_lvl_defense_buff + x['DEF']
+                    ccard_lvl_hlt_buff = ccard_lvl_hlt_buff + x['HLT']
 
             c_gif = c['GIF']
             c_destiny = c['HAS_COLLECTION']

@@ -2043,8 +2043,6 @@ class Profile(commands.Cog):
                                         currentopponent = universe['CROWN_TALES'].index(opp)
                                         update_team_response = db.updateTeam(guild_buff['QUERY'], guild_buff['UPDATE_QUERY'])
                                        
-
-
                             await battle_commands(self, ctx, mode, universe, selected_universe, completed_universes, oguild,
                                     crestlist, crestsearch, sowner, oteam, ofam, currentopponent, None, None, None,
                                     None, None, None, None, None)
