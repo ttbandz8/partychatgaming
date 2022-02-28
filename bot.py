@@ -1971,14 +1971,21 @@ async def sponsor(ctx, guild: str, amount):
       return
    guild_query = {'GNAME' :guild_name}
    guild = db.queryGuildAlt(guild_query)
-   founder = guild['FOUNDER']
-   sworn = guild['SWORN']
+   founder = guild['FDID']
+   sworn = guild['WDID']
+   shield = guild['SDID']
    guild_bank = guild['BANK']
    if int(amount) >= guild['BANK']:
       await ctx.send("Association does not have that much :coin:", delete_after=5)
       return
 
-   if user['DISNAME'] != founder and user['DISNAME'] != sworn:
+   if user['DID'] != founder:
+      await ctx.send(m.NOT_LEADER, delete_after=5)
+      return
+   elif user['DID'] != sworn:
+      await ctx.send(m.NOT_LEADER, delete_after=5)
+      return
+   elif user['DID'] != shield:
       await ctx.send(m.NOT_LEADER, delete_after=5)
       return
 

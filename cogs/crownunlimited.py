@@ -3040,10 +3040,10 @@ def abyss_level_up_message(did, floor, card, title, arm):
             if len(current_arms) >=25:
                 maxed_out_messages.append("You have max amount of Arms. You did not receive the **Floor Arm**.")
             elif arm_arm in current_arms:
-                maxed_out_messages.append(f"You already own {arm_drop} so you did not receive it.")
+                maxed_out_messages.append(f"You already own {arm_drop['ARM']} so you did not receive it.")
             else:
                 db.updateVaultNoFilter(vault_query,{'$addToSet':{'ARMS': {'ARM': str(arm_drop['ARM']), 'DUR': 25}}})
-                drop_message.append(f"🦾 **{arm_drop}** has been added to your vault!")
+                drop_message.append(f"🦾 **{arm_drop['ARM']}** has been added to your vault!")
 
             current_cards = vault['CARDS']
             if len(current_cards) >= 25:
@@ -20022,18 +20022,18 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     Counquer the **Abyss** to unlock **Abyssal Rewards** and **New Game Modes.**
                                     
                                     🎊**Abyss Floor Unlocks**
-                                    **0 - Shop
-                                    2 - Tales
-                                    3 - Coop
-                                    6 - PVP
-                                    8 - Crafting
-                                    9 - Guilds & Families
-                                    10- Trading and Trinketshop
-                                    20 - Gifting
-                                    25 - Explore Mode
-                                    40 - Dungeons
-                                    60 - Bosses
-                                    100 - Boss Soul Exchange**
+                                    **0** - *Shop*
+                                    **2** - *Tales*
+                                    **3** - *Coop*
+                                    **6** - *PVP*
+                                    **8** - *Crafting*
+                                    **9** - *Guilds & Families*
+                                    **10**- *Trading and Trinketshop*
+                                    **20** - *Gifting*
+                                    **25** - *Explore Mode*
+                                    **40** - *Dungeons*
+                                    **60** - *Bosses*
+                                    **100** - *Boss Soul Exchange*
                                     """),colour=0x1abc9c)
 
                                     embedVar.set_author(name=f"{t_card} lost!")
