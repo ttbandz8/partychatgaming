@@ -3709,8 +3709,8 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         currentopponent = 0
     t_user = ""
     if mode == "RAID":
-        tguild = player2guild
-        tteam = player2team
+        tguild = cteam
+        tteam = ctitle
         hall = universe
         hall_def = hall['DEFENSE']
         fee = hall['FEE']
