@@ -1580,6 +1580,19 @@ def updateTeam(query, new_value):
     except:
         print("Find Guild failed.")
 
+def updateTeamWithFilter(query, new_value, arrayFilter):
+    try:
+        print(query)
+        print(new_value)
+        data = teams_col.update_one(query, new_value, array_filters=arrayFilter)
+        if data:
+            print("hi")
+            return data
+        else:
+           return False
+    except:
+        print("Find Guild failed.")
+
 def queryAllTeams(team):
     data = teams_col.find()
     return data

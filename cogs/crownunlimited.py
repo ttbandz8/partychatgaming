@@ -831,8 +831,8 @@ class CrownUnlimited(commands.Cog):
                                 opponent = db.queryUser({'DISNAME': str(guild2_ready_player)})
                                 oteam = sowner['TEAM']
                                 tteam = opponent['TEAM']
-                                oteam_info = db.queryTeam({'TNAME':str(oteam)})
-                                tteam_info = db.queryTeam({'TNAME':str(tteam)})
+                                oteam_info = db.queryTeam({'TEAM_NAME':str(oteam)})
+                                tteam_info = db.queryTeam({'TEAM_NAME':str(tteam)})
                                 if oteam_info:
                                     oguild = oteam_info['GUILD']
                                 else:
@@ -1389,8 +1389,8 @@ class CrownUnlimited(commands.Cog):
 
             oteam = sowner['TEAM']
             tteam = opponent['TEAM']
-            oteam_info = db.queryTeam({'TNAME':str(oteam)})
-            tteam_info = db.queryTeam({'TNAME':str(tteam)})
+            oteam_info = db.queryTeam({'TEAM_NAME':str(oteam)})
+            tteam_info = db.queryTeam({'TEAM_NAME':str(tteam)})
             if oteam_info:
                 oguild = oteam_info['GUILD']
             else:
@@ -1458,8 +1458,8 @@ class CrownUnlimited(commands.Cog):
             opponent = db.queryUser({'DISNAME': str(tutorial_user)})
             oteam = sowner['TEAM']
             tteam = opponent['TEAM']
-            oteam_info = db.queryTeam({'TNAME':str(oteam)})
-            tteam_info = db.queryTeam({'TNAME':str(tteam)})
+            oteam_info = db.queryTeam({'TEAM_NAME':str(oteam)})
+            tteam_info = db.queryTeam({'TEAM_NAME':str(tteam)})
             if oteam_info:
                 oguild = oteam_info['GUILD']
             else:
@@ -1519,7 +1519,7 @@ class CrownUnlimited(commands.Cog):
                 return
 
             oteam = sowner['TEAM']
-            oteam_info = db.queryTeam({'TNAME': oteam})
+            oteam_info = db.queryTeam({'TEAM_NAME': oteam.lower()})
             oguild_name = "PCG"
             shield_test_active = False
             shield_training_active = False
@@ -1553,10 +1553,10 @@ class CrownUnlimited(commands.Cog):
             hall_def = hall_info['DEFENSE']
             t_user = db.queryUser({'DID': shield_id})
             tteam_name = t_user['TEAM']
-            tteam_info = db.queryTeam({'TNAME': tteam_name})
-            tteam = tteam_info['TNAME']
+            tteam_info = db.queryTeam({'TEAM_NAME': tteam_name})
+            tteam = tteam_info['TEAM_NAME']
             tguild = tteam_info['GUILD']
-            tteam_info = db.queryTeam({'TNAME': tteam})
+            tteam_info = db.queryTeam({'TEAM_NAME': tteam.lower()})
             if tteam_info:
                 tguild = tteam_info['GUILD']
             tarm = db.queryArm({'ARM': t_user['ARM']})
@@ -6031,7 +6031,14 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
     crestsearch = False
     autoBattle = False
     guild = ctx.guild
+    rift_on = False
+    team_query = {'TEAM_NAME': oteam.lower()}
+    guild_buff_update_query = {}
+    filter_query = {}
     overwrites = { guild.default_role: discord.PermissionOverwrite(read_messages=False), guild.me: discord.PermissionOverwrite(read_messages=True), ctx.author: discord.PermissionOverwrite(read_messages=True),}    
+
+    if sowner['RIFT'] == 1:
+        rift_on = True
 
     if mode in C_MODES:
         await user.send(f"{sowner['NAME']} needs your help! React in server to join their Coop Tale!!")
@@ -6082,9 +6089,16 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                 'trace': trace
             }))
             return
+    
     if oteam != 'PCG':
-        
-        team_info = db.queryTeam({'TNAME': oteam})
+        team_info = db.queryTeam(team_query)
+        team_buff = guild_buff_update_function(self, oteam)
+        if team_buff:
+            if team_buff['Rift']:
+                rift_on = True
+                guild_buff_update_query = team_buff['UPDATE_QUERY']
+                filter_query = team_buff['FILTER_QUERY']
+
         guildname = team_info['GUILD']
         if guildname != "PCG":
             oguild = db.queryGuildAlt({'GNAME': guildname})
@@ -6108,7 +6122,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
         universe_menu = []
         selected_universe = ""
         universe_embed_list = []
-        if sowner['RIFT'] == 1:
+        if rift_on:
             for uni in all_universes:
                 if uni['HAS_CROWN_TALES'] == True or uni['TIER'] == 9:
                     if uni['TITLE'] in completed_crown_tales:
@@ -6248,6 +6262,9 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                 currentopponent = update_save_spot(self, ctx, saved_spots, selected_universe, U_modes)
             else:
                 currentopponent = 0
+
+            if rift_on:
+                update_team_response = db.updateTeamWithFilter(team_query, guild_buff_update_query, filter_query)
             return {'SELECTED_UNIVERSE': selected_universe,
                     'UNIVERSE_DATA': universe, 'CREST_LIST': crestlist, 'CREST_SEARCH': crestsearch,
                     'COMPLETED_TALES': completed_crown_tales, 'OGUILD': oguild, 'CURRENTOPPONENT': currentopponent}
@@ -6467,6 +6484,113 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             await ctx.send(embed=embedVar)
             return
 
+
+def guild_buff_update_function(self, team):
+    try:
+        team_query = {'TEAM_NAME': team.lower()}
+        team_info = db.queryTeam(team_query)
+        guild_buff_count = len(team_info['GUILD_BUFFS'])
+        guild_buff_active = team_info['GUILD_BUFF_ON']
+        guild_buffs = team_info['GUILD_BUFFS']
+
+
+        if guild_buff_active:
+            filter_query = [{'type.' + "TYPE": guild_buff_active}]
+            guild_buff_update_query = {}
+            quest_buff = False
+            rift_buff = False
+            level_buff = False
+            stat_buff = False
+            index = 0
+
+            active_guild_buff = team_info['ACTIVE_GUILD_BUFF']
+            for buff in guild_buffs:
+                if buff['TYPE'] == active_guild_buff:
+                    index = guild_buffs.index(buff)
+
+                    if buff['TYPE'] == "Rift":
+                        rift_buff = True
+                    
+                    if buff['TYPE'] == "Quest":
+                        quest_buff = True
+
+                    if buff['TYPE'] == "Level":
+                        level_buff = True
+
+                    if buff['TYPE'] == "Stat":
+                        stat_buff = True
+                    
+                    if buff['USES'] == 1:
+                        
+                        if guild_buff_count == 1:
+                            guild_buff_update_query = {
+                                    '$pull': {
+                                        'GUILD_BUFFS': {'TYPE': active_guild_buff}
+                                    },
+                                    '$set': {
+                                        'GUILD_BUFF_ON': False,
+                                        'GUILD_BUFF_AVAILABLE': False,
+                                        'ACTIVE_GUILD_BUFF': "",
+                                        'TRANSACTIONS': f"{active_guild_buff} Buff has been used up"
+                                    },
+                                    '$inc': {
+                                        'GUILD_BUFFS.$[type].' + "USES": -1
+                                    }
+                                }
+
+                        else:
+                            guild_buff_update_query = {
+                                    '$pull': {
+                                        'GUILD_BUFFS': {'TYPE': active_guild_buff}
+                                    },
+                                    '$set': {
+                                        'ACTIVE_GUILD_BUFF': "",
+                                        'TRANSACTIONS': f"{active_guild_buff} Buff has been used up"
+                                    },
+                                    '$inc': {
+                                        'GUILD_BUFFS.$[type].' + "USES": -1
+                                    }
+                                }
+                    
+                    else:
+                        guild_buff_update_query = {
+                            '$inc': {
+                                'GUILD_BUFFS.$[type].' + "USES": -1
+                            }
+
+                        }
+            
+            response = {
+                'Quest': quest_buff,
+                'Rift': rift_buff,
+                'Level': level_buff,
+                'Stat': stat_buff,
+                'QUERY': team_query,
+                'UPDATE_QUERY': guild_buff_update_query,
+                'FILTER_QUERY': filter_query
+                }
+            
+            return response
+        else:
+            return False                     
+
+    except Exception as ex:
+        trace = []
+        tb = ex.__traceback__
+        while tb is not None:
+            trace.append({
+                "filename": tb.tb_frame.f_code.co_filename,
+                "name": tb.tb_frame.f_code.co_name,
+                "lineno": tb.tb_lineno
+            })
+            tb = tb.tb_next
+        print(str({
+            'PLAYER': str(ctx.author),
+            'type': type(ex).__name__,
+            'message': str(ex),
+            'trace': trace
+        }))
+        return False    
 
 async def battle_commands(self, ctx, mode, universe, selected_universe, completed_universes, oguild, crestlist,
                           crestsearch, sowner, oteam, ofam, currentopponent, cowner, cteam, cfam, deckNumber, user, arena_flag, arena_owner, arena_type):
@@ -20515,7 +20639,7 @@ async def bless(amount, user):
 async def blessteam(amount, team):
     blessAmount = amount
     posBlessAmount = 0 + abs(int(blessAmount))
-    query = {'TNAME': str(team)}
+    query = {'TEAM_NAME': str(team)}
     team_data = db.queryTeam(query)
     if team_data:
         guild_mult = 1.0
@@ -20603,7 +20727,7 @@ async def curse(amount, user):
 async def curseteam(amount, team):
     curseAmount = amount
     negCurseAmount = 0 - abs(int(curseAmount))
-    query = {'TNAME': str(team)}
+    query = {'TEAM_NAME': str(team)}
     team_data = db.queryTeam(query)
     if team_data:
         update_query = {"$inc": {'BANK': int(negCurseAmount)}}
@@ -20625,7 +20749,7 @@ async def curseguild(amount, guild):
 
 
 async def teamwin(team):
-    query = {'TNAME': str(team)}
+    query = {'TEAM_NAME': str(team)}
     team_data = db.queryTeam(query)
     if team_data:
         update_query = {"$inc": {'SCRIM_WINS': 1}}
@@ -20635,7 +20759,7 @@ async def teamwin(team):
 
 
 async def teamloss(team):
-    query = {'TNAME': str(team)}
+    query = {'TEAM_NAME': str(team)}
     team_data = db.queryTeam(query)
     if team_data:
         update_query = {"$inc": {'SCRIM_LOSSES': 1}}
