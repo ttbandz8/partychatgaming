@@ -1582,8 +1582,7 @@ def updateTeam(query, new_value):
 
 def updateTeamWithFilter(query, new_value, arrayFilter):
     try:
-        print(query)
-        print(new_value)
+
         data = teams_col.update_one(query, new_value, array_filters=arrayFilter)
         if data:
             print("hi")

@@ -340,13 +340,12 @@ class Lookup(commands.Cog):
                 guild_buff_message_active = "No Active Guild Buff"
                 if guild_buff_available:
                     guild_buff_message = "Guild Buff Available"
-                    if guild_buffs:
+                    if active_guild_buff:
                         for buff in guild_buffs:
                             if buff['TYPE'] == active_guild_buff:
                                 active_guild_buff_use_cases = str(buff['USES'])
                         guild_buff_message_active = f"{gbon_status} {active_guild_buff} Buff: {active_guild_buff_use_cases} uses left!"
-                    else:
-                        guild_buff_message_active = ""
+
                 else:
                     guild_buff_message = "No Guild Buff Available"
                 

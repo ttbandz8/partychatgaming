@@ -19,7 +19,7 @@ from PIL import Image, ImageFont, ImageDraw
 import requests
 from collections import ChainMap
 import DiscordUtils
-from .crownunlimited import showcard, cardback, enhancer_mapping, title_enhancer_mapping, enhancer_suffix_mapping, title_enhancer_suffix_mapping, passive_enhancer_suffix_mapping, battle_commands, Crest_dict, cardlevel, destiny as update_destiny_call
+from .crownunlimited import showcard, cardback, enhancer_mapping, title_enhancer_mapping, enhancer_suffix_mapping, title_enhancer_suffix_mapping, passive_enhancer_suffix_mapping, battle_commands, Crest_dict, cardlevel, guild_buff_update_function, destiny as update_destiny_call
 import random
 import textwrap
 from discord_slash import cog_ext, SlashContext
@@ -1907,25 +1907,34 @@ class Profile(commands.Cog):
             return
         if vault:
             try:
+                guild_buff = guild_buff_update_function(self, d['TEAM'].lower())
                 name = d['DISNAME'].split("#",1)[0]
                 avatar = d['AVATAR']
                 balance = vault['BALANCE']
                 quests = vault['QUESTS']
-                server_buff = server['SERVER_BUFF_BOOL']
-                server_virus = server['SERVER_VIRUS_BOOL']
-                server_name = server['GNAME']
                 embed_list = []
                 quest_messages = []
 
                 buff_message = ""
                 virus_message = ""
 
-                if not server_buff:
-                    buff_message = f"No active buffs in **{server_name}**"
-                if not server_virus:
-                    virus_message = f"No active viruses in **{server_name}**"
+                if server:
+                    server_buff = server['SERVER_BUFF_BOOL']
+                    server_virus = server['SERVER_VIRUS_BOOL']
+                    server_name = server['GNAME']
+
+                    if not server_buff:
+                        buff_message = f"No active buffs in **{server_name}**"
+                    if not server_virus:
+                        virus_message = f"No active viruses in **{server_name}**"
 
                 for quest in quests:
+                    guild_buff_msg = "🔴"
+                    if guild_buff:                    
+                        if guild_buff['Quest']:
+                            guild_buff_msg = "🟢"
+
+
                     opponent = db.queryCard({'NAME': quest['OPPONENT']})
                     opponent_universe = db.queryUniverse({'TITLE': opponent['UNIVERSE']})
                     opponent_name = opponent['NAME']
@@ -1969,6 +1978,8 @@ class Profile(commands.Cog):
                     **Universe:** 🌍 {opponent['UNIVERSE']}
                     **Reward:** {icon} {reward}
 
+                    **Guild Quest Buff:**  {guild_buff_msg}
+                   
                     **Wins so far:** {str(wins)}
                     **Completed:** {completed}
 
@@ -1997,19 +2008,20 @@ class Profile(commands.Cog):
                             mode = "Tales"
                             await button_ctx.defer(ignore=True)
                             card = db.queryCard({"NAME": selected_quest})
-                            user = db.queryUser({'DID': str(ctx.author.id)})
+                            sowner = db.queryUser({'DID': str(ctx.author.id)})
                             universe = db.queryUniverse({"TITLE": card['UNIVERSE']})
                             selected_universe = universe['TITLE']
-                            completed_universes = user['CROWN_TALES']
+                            completed_universes = sowner['CROWN_TALES']
                             oguild = "PCG"
                             crestlist = []
                             crestsearch = False
-                            guild = server_name
-                            oteam = user['TEAM']
-                            ofam = user['FAMILY']
+                            # guild = server_name
+                            oteam = sowner['TEAM']
+                            ofam = sowner['FAMILY']
+                            guild_buff = guild_buff_update_function(self, sowner['TEAM'].lower())
                             
 
-                            if user['LEVEL'] < 4:
+                            if sowner['LEVEL'] < 4:
                                 await button_ctx.send("🔓 Unlock **Tales** by completing **Floor 3** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
                                 self.stop = True
                                 return
@@ -2023,9 +2035,15 @@ class Profile(commands.Cog):
                                         crestlist = oguild['CREST']
                                         crestsearch = True
 
-                            
-                            
                             currentopponent = 0
+
+                            if guild_buff['Quest']:
+                                for opp in universe['CROWN_TALES']:
+                                    if opp == card['NAME']:
+                                        currentopponent = universe['CROWN_TALES'].index(opp)
+                                        update_team_response = db.updateTeam(guild_buff['QUERY'], guild_buff['UPDATE_QUERY'])
+                                       
+
 
                             await battle_commands(self, ctx, mode, universe, selected_universe, completed_universes, oguild,
                                     crestlist, crestsearch, sowner, oteam, ofam, currentopponent, None, None, None,
@@ -2080,7 +2098,7 @@ class Profile(commands.Cog):
                     else:
                         await ctx.send("This is not your Title list.")
 
-                await Paginator(bot=self.bot, disableAfterTimeout=True, ctx=ctx, pages=embed_list, timeout=60, customActionRow=[
+                await Paginator(bot=self.bot, disableAfterTimeout=True, useQuitButton=True, ctx=ctx, pages=embed_list, timeout=60, customActionRow=[
                     custom_action_row,
                     custom_function,
                 ]).run()

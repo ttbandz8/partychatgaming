@@ -6264,7 +6264,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                 currentopponent = 0
 
             if rift_on:
-                update_team_response = db.updateTeamWithFilter(team_query, guild_buff_update_query, filter_query)
+                update_team_response = db.updateTeam(team_query, guild_buff_update_query)
             return {'SELECTED_UNIVERSE': selected_universe,
                     'UNIVERSE_DATA': universe, 'CREST_LIST': crestlist, 'CREST_SEARCH': crestsearch,
                     'COMPLETED_TALES': completed_crown_tales, 'OGUILD': oguild, 'CURRENTOPPONENT': currentopponent}
@@ -6525,37 +6525,36 @@ def guild_buff_update_function(self, team):
                         if guild_buff_count == 1:
                             guild_buff_update_query = {
                                     '$pull': {
-                                        'GUILD_BUFFS': {'TYPE': active_guild_buff}
+                                        'GUILD_BUFFS': {'TYPE': active_guild_buff, 'USES': 1}
                                     },
                                     '$set': {
                                         'GUILD_BUFF_ON': False,
                                         'GUILD_BUFF_AVAILABLE': False,
                                         'ACTIVE_GUILD_BUFF': "",
-                                        'TRANSACTIONS': f"{active_guild_buff} Buff has been used up"
                                     },
-                                    '$inc': {
-                                        'GUILD_BUFFS.$[type].' + "USES": -1
+                                    '$push': {
+                                        'TRANSACTIONS': f"{active_guild_buff} Buff has been used up"
                                     }
                                 }
 
                         else:
                             guild_buff_update_query = {
-                                    '$pull': {
-                                        'GUILD_BUFFS': {'TYPE': active_guild_buff}
+                                    "$pull": {
+                                        'GUILD_BUFFS': {'TYPE': active_guild_buff, 'USES': 1}
                                     },
                                     '$set': {
+                                        'GUILD_BUFF_ON': False,
                                         'ACTIVE_GUILD_BUFF': "",
-                                        'TRANSACTIONS': f"{active_guild_buff} Buff has been used up"
                                     },
-                                    '$inc': {
-                                        'GUILD_BUFFS.$[type].' + "USES": -1
+                                    '$push': {
+                                        'TRANSACTIONS': f"{active_guild_buff} Buff has been used up"
                                     }
                                 }
                     
                     else:
                         guild_buff_update_query = {
                             '$inc': {
-                                'GUILD_BUFFS.$[type].' + "USES": -1
+                                 f"GUILD_BUFFS.{index}.USES": -1
                             }
 
                         }
