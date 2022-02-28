@@ -36,7 +36,7 @@ class Teams(commands.Cog):
     async def createguild(self, ctx, guild: str):
         user = db.queryUser({'DID': str(ctx.author.id)})
         if user['LEVEL'] < 10:
-            await ctx.send("🔓 Unlock Guilds by completing Floor 10 of the 🌑 Abyss! Use /abyss to enter the abyss.")
+            await ctx.send("🔓 Unlock Guilds by completing Floor 9 of the 🌑 Abyss! Use /abyss to enter the abyss.")
             return
         team = guild
         team_name = team
@@ -81,8 +81,8 @@ class Teams(commands.Cog):
     async def recruit(self, ctx, player: User):
         owner_profile = db.queryUser({'DID': str(ctx.author.id)})
         team_profile = db.queryTeam({'TNAME': owner_profile['TEAM']})
-        if owner_profile['LEVEL'] < 11:
-            await ctx.send("🔓 Unlock Guilds by completing Floor 10 of the 🌑 Abyss! Use /abyss to enter the abyss.")
+        if owner_profile['LEVEL'] < 10:
+            await ctx.send("🔓 Unlock Guilds by completing Floor 9 of the 🌑 Abyss! Use /abyss to enter the abyss.")
             return
 
 
@@ -150,8 +150,8 @@ class Teams(commands.Cog):
 
             if owner_profile['DISNAME'] == team_profile['OWNER']:
                 member_profile = db.queryUser({'DID': str(ctx.author.id)})
-                if member_profile['LEVEL'] < 11:
-                    await ctx.send(f"🔓 Unlock Guilds by completing Floor 10 of the 🌑 Abyss! Use /abyss to enter the abyss.")
+                if member_profile['LEVEL'] < 10:
+                    await ctx.send(f"🔓 Unlock Guilds by completing Floor 9 of the 🌑 Abyss! Use /abyss to enter the abyss.")
                     return
 
                 # If user is part of a team you cannot add them to your team

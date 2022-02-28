@@ -506,7 +506,7 @@ class CrownUnlimited(commands.Cog):
             cfam = ofam
             if sowner['DIFFICULTY'] != "EASY":
                 if sowner['LEVEL'] < 8:
-                    await ctx.send(f"🔓 Unlock **Duo** by completing **Floor 9** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
+                    await ctx.send(f"🔓 Unlock **Duo** by completing **Floor 7** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
                     return
             
             if sowner['DIFFICULTY'] == "EASY" and mode in D_modes or mode in B_MODES:
@@ -603,11 +603,11 @@ class CrownUnlimited(commands.Cog):
             companion = db.queryUser({'DID': str(user.id)})
             if sowner['DIFFICULTY'] != "EASY":
                 if sowner['LEVEL'] < 4:
-                    await ctx.send(f"🔓 Unlock **Co-op** by completing **Floor 7** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
+                    await ctx.send(f"🔓 Unlock **Co-op** by completing **Floor 3** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
                     return
                 
                 elif companion['LEVEL'] < 4:
-                    await ctx.send(f"🔓 {user.mention} Has not unlocked **Co-op**! Complete **Floor 7** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
+                    await ctx.send(f"🔓 {user.mention} Has not unlocked **Co-op**! Complete **Floor 3** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
                     return
 
             if sowner['DIFFICULTY'] == "EASY" and mode in D_modes or mode in B_MODES:
@@ -1096,7 +1096,7 @@ class CrownUnlimited(commands.Cog):
             sowner = db.queryUser({'DID': str(ctx.author.id)})
             if sowner['DIFFICULTY'] != "EASY":
                 if sowner['LEVEL'] < 3:
-                    await ctx.send("🔓 Unlock **Tales** by completing **Floor 3** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
+                    await ctx.send("🔓 Unlock **Tales** by completing **Floor 2** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
                     return
             if sowner['DIFFICULTY'] == "EASY" and (mode in D_modes or mode in B_MODES):
                 await ctx.send("Dungeons and Boss fights unavailable on Easy Mode! Use /difficulty to change your difficulty setting.")
@@ -2998,7 +2998,10 @@ def abyss_level_up_message(did, floor, card, title, arm):
         new_unlock = False
         vault_query = {'DID': did}
         vault = db.altQueryVault(vault_query)
+        arm = db.queryArm({'ARM':str(arm)})
         arm_arm = arm['ARM']
+        floor_val = int(floor)
+        coin_drop = round(100000 + (floor_val * 10000))
 
         card_drop = card
         title_drop = title
@@ -3039,7 +3042,7 @@ def abyss_level_up_message(did, floor, card, title, arm):
             elif arm_arm in current_arms:
                 maxed_out_messages.append(f"You already own {arm_drop} so you did not receive it.")
             else:
-                db.updateVaultNoFilter(vault_query,{'$addToSet':{'ARMS': {'ARM': str(arm_drop), 'DUR': 25}}})
+                db.updateVaultNoFilter(vault_query,{'$addToSet':{'ARMS': {'ARM': str(arm_drop['ARM']), 'DUR': 25}}})
                 drop_message.append(f"🦾 **{arm_drop}** has been added to your vault!")
 
             current_cards = vault['CARDS']
@@ -3071,7 +3074,8 @@ def abyss_level_up_message(did, floor, card, title, arm):
                     db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
                     if counter >=1:
                         drop_message.append(f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.")
-                        
+        else:
+            drop_message.append(f":coin: **{'{:,}'.format(coin_drop)}** has been added to your vault!")
 
         if floor == 0:
             message = "🎊 Congratulations! 🎊 You unlocked **Shop!**. Use the **/shop** command to purchase Cards, Titles and Arms!"
@@ -19711,7 +19715,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 ouid = sowner['DID']
                                 sownerctx = await self.bot.fetch_user(ouid)
                                 if mode == "RAID":
-                                    guild_query = {'FOUNDER': oguild['FOUNDER']}
+                                    guild_query = {'FDID': oguild['FDID']}
                                     bounty = oguild['BOUNTY']
                                     bonus = oguild['STREAK']
                                     total_bounty = (bounty + ((bonus / 100) * bounty))
@@ -20001,10 +20005,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     await battle_msg.delete(delay=2)
                                     await asyncio.sleep(2)
                                     battle_msg = await private_channel.send(embed=embedVar)
-
                                     currentopponent = currentopponent + 1
                                     continued = True
-                            
                                 if currentopponent == (total_legends):
                                     uid = o_DID
                                     ouser = await self.bot.fetch_user(uid)
@@ -20012,26 +20014,39 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     new_level = floor + 1
                                     response = db.updateUserNoFilter({'DID': str(ctx.author.id)}, {'$set': {'LEVEL': new_level}})
                                     abyss_message = abyss_level_up_message(str(ctx.author.id), floor, t_card, t_title, tarm_name)
-                                    cardlogger = await cardlevel(self, o_card, ouser.id, "Purchase", "n/a")
+                                    cardlogger = await cardlevel(self, o_card, ctx.author.id, "Purchase", "n/a")
                                     abyss_drop_message = "\n".join(abyss_message['DROP_MESSAGE'])
                                     bless_amount = 100000 + (10000 * floor)
                                     await bless(bless_amount, ctx.author.id)
                                     embedVar = discord.Embed(title=f"🌑 Floor **{floor}** Cleared\n**{o_card} says**\n{o_win_description}\nThe game lasted {turn_total} rounds.",description=textwrap.dedent(f"""
-                                    {previous_moves_into_embed}
+                                    Counquer the **Abyss** to unlock **Abyssal Rewards** and **New Game Modes.**
                                     
+                                    🎊**Abyss Floor Unlocks**
+                                    **0 - Shop
+                                    2 - Tales
+                                    3 - Coop
+                                    6 - PVP
+                                    8 - Crafting
+                                    9 - Guilds & Families
+                                    10- Trading and Trinketshop
+                                    20 - Gifting
+                                    25 - Explore Mode
+                                    40 - Dungeons
+                                    60 - Bosses
+                                    100 - Boss Soul Exchange**
                                     """),colour=0x1abc9c)
 
                                     embedVar.set_author(name=f"{t_card} lost!")
                                     embedVar.set_footer(text=f"Traverse the /abyss to unlock new game modes and features!")
                                     embedVar.add_field(
                                     name=f"Abyssal Rewards",
-                                    value=f"You have been awarded :coin:**{'{:,}'.format(bless_amount)}**!\n{abyss_drop_message}")
+                                    value=f"{abyss_drop_message}")
 
                                     if abyss_message['NEW_UNLOCK']:
                                         await ctx.author.send(abyss_message['MESSAGE'])
                                         await ctx.send(f"{ctx.author.mention} {abyss_message['MESSAGE']}")
  
-                                    battle_msg = await ctx.send(embed=embedVar)
+                                    battle_msg = await private_channel.send(embed=embedVar)
 
                                     continued = False
 
@@ -20556,6 +20571,7 @@ async def blessguild(amount, guild):
             hall_data = db.queryHall({'HALL': hall})
             multiplier = hall_data['MULT']
             posBlessAmount = posBlessAmount * multiplier
+            query = {'FDID': str(guild_data['FDID'])}
             update_query = {"$inc": {'BANK': int(posBlessAmount)}}
             db.updateGuildAlt(query, update_query)
         else:
@@ -20608,6 +20624,7 @@ async def curseguild(amount, guild):
     query = {'GNAME': str(guild)}
     guild_data = db.queryGuildAlt(query)
     if guild_data:
+        query = {'FDID':str(guild_data['FDID'])}
         update_query = {"$inc": {'BANK': int(negCurseAmount)}}
         db.updateGuildAlt(query, update_query)
     else:
@@ -20640,7 +20657,7 @@ async def movecrest(universe, guild):
     guild_query = {'GNAME': guild_name}
     guild_info = db.queryGuildAlt(guild_query)
     if guild_info:
-        alt_query = {'FOUNDER': guild_info['FOUNDER']}
+        alt_query = {'FDID': guild_info['FDID']}
         crest_list = guild_info['CREST']
         pull_query = {'$pull': {'CREST': universe_name}}
         pull = db.updateManyGuild(pull_query)
