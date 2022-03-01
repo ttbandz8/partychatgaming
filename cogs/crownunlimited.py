@@ -3235,29 +3235,34 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
 
             # Font Size Adjustments
             # Name not go over Card
+            
             name_font_size = 62
-            if len(list(d['NAME'])) >= 18 and not resolved:
+            title_font_size = 37
+            basic_font_size = 30
+            super_font_size = 30
+            ultimate_font_size = 30
+            enhancer_font_size = 30
+            if len(list(d['NAME'])) >= 16 and not resolved:
                 name_font_size = 45
-            if len(list(d['RNAME'])) >= 18 and resolved:
+            if len(list(d['RNAME'])) >= 16 and resolved:
                 name_font_size = 45
             if len(list(d['NAME'])) >= 20 and not resolved:
                 name_font_size = 36
             if len(list(d['RNAME'])) >= 20 and resolved:
                 name_font_size = 36
-
-            header = ImageFont.truetype("YesevaOne-Regular.ttf", name_font_size)
-            s = ImageFont.truetype("Roboto-Bold.ttf", 22)
-            h = ImageFont.truetype("YesevaOne-Regular.ttf", 37)
-            m = ImageFont.truetype("Roboto-Bold.ttf", 25)
-            r = ImageFont.truetype("Freedom-10eM.ttf", 40)
-            lvl_font = ImageFont.truetype("Neuton-Bold.ttf", 68)
-            health_and_stamina_font = ImageFont.truetype("Neuton-Light.ttf", 41)
-            attack_and_shield_font = ImageFont.truetype("Neuton-Bold.ttf", 48)
-            moveset_font = ImageFont.truetype("antonio.regular.ttf", 30)
-            rhs = ImageFont.truetype("destructobeambb_bold.ttf", 35)
-            stats = ImageFont.truetype("Freedom-10eM.ttf", 30)
-            card_details_font_size = ImageFont.truetype("destructobeambb_bold.ttf", 25)
-            card_levels = ImageFont.truetype("destructobeambb_bold.ttf", 40)
+            
+            
+            title_len = int(len(list(title['TITLE'])))
+            
+            if title_len >= 18:
+                title_font_size = 34
+            if title_len >= 20:
+                title_font_size = 30
+            if title_len >= 25:
+                title_font_size = 28
+                
+            #Moveset Emojis
+                
             engagement_basic = 0
             engagement_special = 0
             engagement_ultimate = 0
@@ -3273,7 +3278,7 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
                 if defensepower <=0:
                     defensepower = 1
                 basic = ((attack + ap1) / defensepower)
-                if basic > (ap1 * 1.5):
+                if basic > (ap1 * 1.2):
                     engagement_basic = 2
                     ebasic = '‼️'
                 elif basic < (ap1 / 2):
@@ -3282,7 +3287,7 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
             
                     
                 special = ((attack + ap2) / defensepower)
-                if special > (ap2 * 1.5):
+                if special > (ap2 * 1.2):
                     engagement_special = 2
                     especial = '‼️'
                 elif special < (ap2 / 2):
@@ -3290,12 +3295,130 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
                     especial = '❕'
         
                 ultimate = ((attack + ap3) / defensepower)
-                if ultimate > (ap3 * 1.5):
+                if ultimate > (ap3 * 1.2):
                     engagement_ultimate = 2
                     eultimate = '‼️'
                 elif ultimate < (ap3 / 2):
                     engagement_ultimate = 1
                     eultimate = '❕'
+                
+            
+            # Moveset Start
+            moveset = d['MOVESET']
+            
+            if d['UNIVERSE'] == "Souls" and resolved:
+                move3 = moveset[2]
+                move2 = moveset[2]
+                move1 = moveset[1]
+            else:
+                move3 = moveset[2]
+                move2 = moveset[1]
+                move1 = moveset[0]
+                
+            
+            
+            move1_ap = ap1
+            move1_text = f"💥 {list(move1.keys())[0]}: {move1_ap} {ebasic}"
+
+            
+            move2_ap = ap2
+            move2_text = f"☄️ {list(move2.keys())[0]}: {move2_ap} {especial}"
+
+            
+            move3_ap = ap3
+            move3_text = f"🏵️ {list(move3.keys())[0]}: {move3_ap} {eultimate}"
+            
+
+            
+                
+
+            move_enhanced = moveset[3]
+            move_enhanced_ap = enh1
+            move_enhanced_name = enhname
+            turn_crit = False
+            if enhname in Turn_Enhancer_Check:
+                if turn_total == 0:
+                    move_enhanced_ap = round(enh1)
+                    turn_crit = True
+                elif turn_total % 10 == 0:
+                    move_enhanced_ap = round(enh1 * .75)
+                    turn_crit = True
+                elif turn_total >= 1:
+                    move_enhanced_ap = round(enh1 / turn_total)
+                else:
+                    move_enhanced_ap = enh1
+            elif enhname in Damage_Enhancer_Check:
+                if turn_total > 0:
+                    move_enhanced_ap = round(enh1 * turn_total)
+                    if move_enhanced_ap >= 350:
+                        move_enhanced_ap = 350
+                        turn_crit = True
+                else:
+                    move_enhanced_ap = enh1
+            
+            if not turn_crit:
+                move_enhanced_text = f"🦠 {list(move_enhanced.keys())[0]}: {move_enhanced_name} {move_enhanced_ap}{enhancer_suffix_mapping[enhname]}"
+            elif enhname in Damage_Enhancer_Check and move_enhanced_ap == 350:
+                move_enhanced_text = f"🎇 {list(move_enhanced.keys())[0]}: {move_enhanced_name} {move_enhanced_ap}{enhancer_suffix_mapping[enhname]}"
+            elif enhname in Turn_Enhancer_Check and (turn_total % 10 == 0 or turn_total == 0):
+                move_enhanced_text = f"🎇 {list(move_enhanced.keys())[0]}: {move_enhanced_name} {move_enhanced_ap}{enhancer_suffix_mapping[enhname]}"
+
+            #Moveset Length
+            
+            basic_length = int(len(move1_text))
+            super_length = int(len(move2_text))
+            ultimate_length = int(len(move3_text))
+            enhancer_length = int(len(move_enhanced_text))
+            
+            
+            if basic_length >= 53:
+                basic_font_size = 27
+            if basic_length >= 60:
+                basic_font_size = 25
+            if basic_length >= 65:
+                basic_font_size = 23
+                
+            if super_length >= 53:
+                super_font_size = 27
+            if super_length >= 60:
+                super_font_size = 25
+            if super_length >= 65:
+                super_font_size = 23
+                
+            if ultimate_length >= 53:
+                ultimate_font_size = 27
+            if ultimate_length >= 60:
+                ultimate_font_size = 25
+            if ultimate_length >= 65:
+                ultimate_font_size = 23
+                
+            if enhancer_length >= 53:
+                enhancer_font_size = 27
+            if enhancer_length >= 60:
+                enhancer_font_size = 25
+            if enhancer_length >= 65:
+                enhancer_font_size = 23
+                
+            
+
+            header = ImageFont.truetype("YesevaOne-Regular.ttf", name_font_size)
+            title_font = ImageFont.truetype("YesevaOne-Regular.ttf", title_font_size)
+            s = ImageFont.truetype("Roboto-Bold.ttf", 22)
+            h = ImageFont.truetype("YesevaOne-Regular.ttf", 37)
+            m = ImageFont.truetype("Roboto-Bold.ttf", 25)
+            r = ImageFont.truetype("Freedom-10eM.ttf", 40)
+            lvl_font = ImageFont.truetype("Neuton-Bold.ttf", 68)
+            health_and_stamina_font = ImageFont.truetype("Neuton-Light.ttf", 41)
+            attack_and_shield_font = ImageFont.truetype("Neuton-Bold.ttf", 48)
+            moveset_font_1 = ImageFont.truetype("antonio.regular.ttf", basic_font_size)
+            moveset_font_2 = ImageFont.truetype("antonio.regular.ttf", super_font_size)
+            moveset_font_3 = ImageFont.truetype("antonio.regular.ttf", ultimate_font_size)
+            moveset_font_4 = ImageFont.truetype("antonio.regular.ttf", enhancer_font_size)
+            rhs = ImageFont.truetype("destructobeambb_bold.ttf", 35)
+            stats = ImageFont.truetype("Freedom-10eM.ttf", 30)
+            card_details_font_size = ImageFont.truetype("destructobeambb_bold.ttf", 25)
+            card_levels = ImageFont.truetype("destructobeambb_bold.ttf", 40)
+            
 
             if health == max_health:
                 health_bar = f"{max_health}"
@@ -3345,72 +3468,20 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
             draw.text(d_sizing, f"{round(defense)}", (255, 255, 255), font=attack_and_shield_font, stroke_width=1,
                       stroke_fill=(0, 0, 0), align="center")
 
-            # Moveset Start
-            moveset = d['MOVESET']
-            
-            if d['UNIVERSE'] == "Souls" and resolved:
-                move3 = moveset[2]
-                move2 = moveset[2]
-                move1 = moveset[1]
-            else:
-                move3 = moveset[2]
-                move2 = moveset[1]
-                move1 = moveset[0]
-                
             
             
-            move1_ap = ap1
-            move1_text = f"💥 {list(move1.keys())[0]}: {move1_ap} {ebasic}"
-
-            
-            move2_ap = ap2
-            move2_text = f"☄️ {list(move2.keys())[0]}: {move2_ap} {especial}"
-
-            
-            move3_ap = ap3
-            move3_text = f"🏵️ {list(move3.keys())[0]}: {move3_ap} {eultimate}"
-            
-                
-                
-
-            move_enhanced = moveset[3]
-            move_enhanced_ap = enh1
-            move_enhanced_name = enhname
-            turn_crit = False
-            if enhname in Turn_Enhancer_Check:
-                if turn_total == 0:
-                    move_enhanced_ap = round(enh1)
-                elif turn_total % 10 == 0:
-                    move_enhanced_ap = round(enh1 * .75)
-                    turn_crit == True
-                elif turn_total >= 1:
-                    move_enhanced_ap = round(enh1 / turn_total)
-                else:
-                    move_enhanced_ap = enh1
-            elif enhname in Damage_Enhancer_Check:
-                if turn_total > 0:
-                    move_enhanced_ap = round(enh1 * turn_total)
-                    if move_enhanced_ap >= 350:
-                        move_enhanced_ap = 350
-                else:
-                    move_enhanced_ap = enh1
-            if not turn_crit:
-                move_enhanced_text = f"🦠 {list(move_enhanced.keys())[0]}: {move_enhanced_name} {move_enhanced_ap}{enhancer_suffix_mapping[enhname]}"
-            else:
-                move_enhanced_text = f"🎇 {list(move_enhanced.keys())[0]}: {move_enhanced_name} {move_enhanced_ap}{enhancer_suffix_mapping[enhname]}"
-
             # attack_stat = f"🗡️{round(attack)}"
             # defense_stat = f"🛡️{round(defense)}"
             with Pilmoji(im) as pilmoji:
-                pilmoji.text((602, 150), f"🎗️ {title['TITLE']}", (255, 255, 255), font=h, stroke_width=1, stroke_fill=(0, 0, 0),
+                pilmoji.text((602, 150), f"🎗️ {title['TITLE']}", (255, 255, 255), font=title_font, stroke_width=1, stroke_fill=(0, 0, 0),
                       align="left")
-                pilmoji.text((600, 250), move1_text.strip(), (255, 255, 255), font=moveset_font, stroke_width=2,
+                pilmoji.text((600, 250), move1_text.strip(), (255, 255, 255), font=moveset_font_1, stroke_width=2,
                              stroke_fill=(0, 0, 0))
-                pilmoji.text((600, 290), move2_text.strip(), (255, 255, 255), font=moveset_font, stroke_width=2,
+                pilmoji.text((600, 290), move2_text.strip(), (255, 255, 255), font=moveset_font_2, stroke_width=2,
                              stroke_fill=(0, 0, 0))
-                pilmoji.text((600, 330), move3_text.strip(), (255, 255, 255), font=moveset_font, stroke_width=2,
+                pilmoji.text((600, 330), move3_text.strip(), (255, 255, 255), font=moveset_font_3, stroke_width=2,
                              stroke_fill=(0, 0, 0))
-                pilmoji.text((600, 370), move_enhanced_text.strip(), (255, 255, 255), font=moveset_font, stroke_width=2,
+                pilmoji.text((600, 370), move_enhanced_text.strip(), (255, 255, 255), font=moveset_font_4, stroke_width=2,
                              stroke_fill=(0, 0, 0))
 
                 # pilmoji.text((40, 545), "🗡️", (255, 255, 255), font=moveset_font, stroke_width=2,
