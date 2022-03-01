@@ -342,8 +342,8 @@ class CrownUnlimited(commands.Cog):
     async def explore(self, ctx: SlashContext):
         try:
             player = db.queryUser({"DID": str(ctx.author.id)})
-            if player['LEVEL'] < 36:             
-                await ctx.send(f"🔓 Unlock the Explore Mode by completing Floor 35 of the 🌑 Abyss! Use /abyss to enter the abyss.")
+            if player['LEVEL'] < 25:             
+                await ctx.send(f"🔓 Unlock the Explore Mode by completing Floor 25 of the 🌑 Abyss! Use /abyss to enter the abyss.")
                 return
             if not player["EXPLORE"]:
                 await ctx.send(f"Entering Explorer Mode :milky_way: ")
