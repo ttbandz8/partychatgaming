@@ -3049,16 +3049,6 @@ destiny = [
         "UNIVERSE": "Death Note"
     },
     {
-        "NAME": "My Son's Shinigami",
-        "WINS": 0,
-        "REQUIRED": 100,
-        "DEFEAT": "Ryuk",
-        "USE_CARDS": ["Soichiro Yagami"],
-        "EARN": "Ryuk", 
-        "COMPLETED": False,
-        "UNIVERSE": "Death Note"
-    },
-    {
         "NAME": "A New Shinigami",
         "WINS": 0,
         "REQUIRED": 100,
