@@ -86,7 +86,7 @@ class Hall(commands.Cog):
             await ctx.send(embed=embedVar)
 
         else:
-            await ctx.send(m.ARM_DOESNT_EXIST, delete_after=3)
+            await ctx.send(m.HALL_DOESNT_EXIST, delete_after=3)
 
 
 def setup(bot):
