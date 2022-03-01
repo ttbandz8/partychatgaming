@@ -76,7 +76,7 @@ class Hall(commands.Cog):
 
 
             embedVar = discord.Embed(title=f"{hall_hall}\n{price_message}", colour=000000)
-            embedVar.set_thumbnail(url=hall_img)
+            embedVar.set_image(url=hall_img)
             embedVar.add_field(name="Bounty Fee", value=f"**{'{:,}'.format(hall_fee)}** :yen: per **Raid**!", inline=False)
             embedVar.add_field(name="Multiplier", value=f"Association earns **{hall_multiplier}x** :coin: per match!", inline=False)
             embedVar.add_field(name="Split", value=f"**Guilds** earn **{hall_split}x** :coin: per match!", inline=False)
@@ -86,7 +86,7 @@ class Hall(commands.Cog):
             await ctx.send(embed=embedVar)
 
         else:
-            await ctx.send(m.ARM_DOESNT_EXIST, delete_after=3)
+            await ctx.send(m.HALL_DOESNT_EXIST, delete_after=3)
 
 
 def setup(bot):

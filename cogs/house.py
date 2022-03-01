@@ -67,14 +67,14 @@ class House(commands.Cog):
 
 
             embedVar = discord.Embed(title=f"{house_house}\n{price_message}".format(self), colour=000000)
-            embedVar.set_thumbnail(url=house_img)
+            embedVar.set_image(url=house_img)
             embedVar.add_field(name="Income Multiplier", value=f"Family earns **{house_multiplier}x** :coin: per match!", inline=False)
             embedVar.set_footer(text=f"/houses - House Menu")
 
             await ctx.send(embed=embedVar)
 
         else:
-            await ctx.send(m.ARM_DOESNT_EXIST, delete_after=3)
+            await ctx.send(m.HOUSE_DOESNT_EXIST, delete_after=3)
 
 
 

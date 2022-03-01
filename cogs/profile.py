@@ -2460,9 +2460,18 @@ class Profile(commands.Cog):
                             selection = random.randint(1,selection_length)
                             title = list_of_titles[selection]  
                         if title['TITLE'] in current_titles:                 
-                            await button_ctx.send(f"You already own **{title['TITLE']}**. You get a 50% refund!")
-                            bless_amount = price/2
-                            await main.bless(bless_amount, str(ctx.author.id))
+                            bless_amount = price
+                            bless_reduction = 0
+                            if universe_name in completed_tales:
+                                bless_reduction = bless_amount * .25
+                                bless_amount = round((bless_amount - bless_reduction)/2)
+                            if universe_name in completed_dungeons:
+                                bless_reduction = bless_amount * .50
+                                bless_amount = round((bless_amount - bless_reduction)/2)
+                            else: 
+                                bless_amount = round(bless_amount /2)
+                            await button_ctx.send(f"You already own **{title['TITLE']}**. You get a :coin:**{'{:,}'.format(bless_amount)}** refund!") 
+                            await main.curse(bless_amount, str(ctx.author.id))
                         else:
                             response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'TITLES': str(title['TITLE'])}})   
                             await main.curse(price, str(ctx.author.id))
