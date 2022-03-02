@@ -1509,8 +1509,8 @@ async def gift(ctx, player: User, amount: int):
    user2 = player
    vault = db.queryVault({'DID': str(ctx.author.id)})
    user_data = db.queryUser({'DID': str(ctx.author.id)})
-   if user_data['LEVEL'] < 20:
-      await ctx.send(f"🔓 Unlock Gifting by completing Floor 25 of the 🌑 Abyss! Use /abyss to enter the abyss.")
+   if user_data['LEVEL'] < 21:
+      await ctx.send(f"🔓 Unlock Gifting by completing Floor 20 of the 🌑 Abyss! Use /abyss to enter the abyss.")
       return
 
    balance = vault['BALANCE']
@@ -2210,7 +2210,7 @@ async def trinketshop(ctx):
    user_query = {'DID': str(ctx.author.id)}
    user = db.queryUser(user_query)
    if user['LEVEL'] < 11:
-      await ctx.send(f"🔓 Unlock the Trinket Shop by completing Floor 15 of the 🌑 Abyss! Use /abyss to enter the abyss.")
+      await ctx.send(f"🔓 Unlock the Trinket Shop by completing Floor 10 of the 🌑 Abyss! Use /abyss to enter the abyss.")
       return
 
    current_arm = user['ARM']
@@ -2471,14 +2471,21 @@ async def sponsor(ctx, guild: str, amount):
       return
    guild_query = {'GNAME' :guild_name}
    guild = db.queryGuildAlt(guild_query)
-   founder = guild['FOUNDER']
-   sworn = guild['SWORN']
+   founder = guild['FDID']
+   sworn = guild['WDID']
+   shield = guild['SDID']
    guild_bank = guild['BANK']
    if int(amount) >= guild['BANK']:
       await ctx.send("Association does not have that much :coin:", delete_after=5)
       return
 
-   if user['DISNAME'] != founder and user['DISNAME'] != sworn:
+   if user['DID'] != founder:
+      await ctx.send(m.NOT_LEADER, delete_after=5)
+      return
+   elif user['DID'] != sworn:
+      await ctx.send(m.NOT_LEADER, delete_after=5)
+      return
+   elif user['DID'] != shield:
       await ctx.send(m.NOT_LEADER, delete_after=5)
       return
 

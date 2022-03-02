@@ -622,7 +622,7 @@ class Profile(commands.Cog):
                                             response = db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$addToSet':{'GEMS': {'UNIVERSE': selected_universe, 'GEMS': dismantle_amount, 'UNIVERSE_HEART': False, 'UNIVERSE_SOUL': False}}})
 
                                         db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'CARDS': card_name}})
-                                        await main.bless(sell_price, ctx.author.id)
+                                        #await main.bless(sell_price, ctx.author.id)
                                         await button_ctx.send("Dismantled.")
                                         self.stop = True
                                 except Exception as ex:
@@ -1583,6 +1583,9 @@ class Profile(commands.Cog):
                     licon = ":moneybag:"
                 elif balance >= 50000:
                     licon = ":dollar:"
+                current_gems = []
+                for gems in vault['GEMS']:
+                    current_gems.append(gems['UNIVERSE'])
                 bond_message = ""
                 lvl_message = ""
                 embed_list = []
@@ -1623,6 +1626,7 @@ class Profile(commands.Cog):
                 buttons = [
                     manage_components.create_button(style=3, label="Equip", custom_id="Equip"),
                     manage_components.create_button(style=1, label="Trade", custom_id="Trade"),
+                    manage_components.create_button(style=1, label="Dismantle", custom_id="Dismantle"),
                     manage_components.create_button(style=2, label="Exit", custom_id="Exit")
                 ]
                 custom_action_row = manage_components.create_actionrow(*buttons)
@@ -1773,7 +1777,72 @@ class Profile(commands.Cog):
                                     }))
                                     await ctx.send("There's an issue with trading one or all of your items.")
                                     return   
-                                                        
+                        
+                        elif button_ctx.custom_id == "Dismantle":
+                            summon_data = db.queryPet({'PET' : selected_summon})
+                            summon_name = summon_data['PET']
+                            if summon_name == current_summon:
+                                await button_ctx.send("You cannot dismanetle equipped summonss.")
+                                return
+                            dismantle_price = 5000   
+                            level = int(pet['LVL'])
+                            bond = int(pet['BOND'])
+                            dismantle_amount = round((1000* level) + (dismantle_price * bond))
+                            dismantle_buttons = [
+                                manage_components.create_button(
+                                    style=ButtonStyle.green,
+                                    label="Yes",
+                                    custom_id="yes"
+                                ),
+                                manage_components.create_button(
+                                    style=ButtonStyle.blue,
+                                    label="No",
+                                    custom_id="no"
+                                )
+                            ]
+                            dismantle_buttons_action_row = manage_components.create_actionrow(*dismantle_buttons)
+                            await button_ctx.send(f"Are you sure you want to dismantle **{summon_name}** for 💎 {round(dismantle_amount)}?", components=[dismantle_buttons_action_row])
+                            
+                            def check(button_ctx):
+                                return button_ctx.author == ctx.author
+
+                            
+                            try:
+                                button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[dismantle_buttons_action_row], timeout=120, check=check)
+
+                                if button_ctx.custom_id == "no":
+                                    await button_ctx.send("Dismantle cancelled. ")
+                                    self.stop = True
+                                if button_ctx.custom_id == "yes":
+                                    if pet_universe in current_gems:
+                                        query = {'DID': str(ctx.author.id)}
+                                        update_query = {'$inc': {'GEMS.$[type].' + "GEMS": dismantle_amount}}
+                                        filter_query = [{'type.' + "UNIVERSE": selected_universe}]
+                                        response = db.updateVault(query, update_query, filter_query)
+                                    else:
+                                        response = db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$addToSet':{'GEMS': {'UNIVERSE': pet_universe, 'GEMS': dismantle_amount, 'UNIVERSE_HEART': False, 'UNIVERSE_SOUL': False}}})
+                                    
+                                    db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'PETS': {"NAME": str(summon_name)}}})
+                                    #await main.bless(sell_price, ctx.author.id)
+                                    await button_ctx.send("Dismantled.")
+                                    self.stop = True
+                            except Exception as ex:
+                                trace = []
+                                tb = ex.__traceback__
+                                while tb is not None:
+                                    trace.append({
+                                        "filename": tb.tb_frame.f_code.co_filename,
+                                        "name": tb.tb_frame.f_code.co_name,
+                                        "lineno": tb.tb_lineno
+                                    })
+                                    tb = tb.tb_next
+                                print(str({
+                                    'type': type(ex).__name__,
+                                    'message': str(ex),
+                                    'trace': trace
+                                }))
+                                await ctx.send(f"ERROR:\nTYPE: {type(ex).__name__}\nMESSAGE: {str(ex)}\nLINE: {trace} ")
+                                return
                         elif button_ctx.custom_id =="Exit":
                             await button_ctx.defer(ignore=True)
                             self.stop = True
@@ -2577,9 +2646,18 @@ class Profile(commands.Cog):
                             selection = random.randint(1,selection_length)
                             title = list_of_titles[selection]  
                         if title['TITLE'] in current_titles:                 
-                            await button_ctx.send(f"You already own **{title['TITLE']}**. You get a 50% refund!")
-                            bless_amount = price/2
-                            await main.bless(bless_amount, str(ctx.author.id))
+                            bless_amount = price
+                            bless_reduction = 0
+                            if universe_name in completed_tales:
+                                bless_reduction = bless_amount * .25
+                                bless_amount = round((bless_amount - bless_reduction)/2)
+                            if universe_name in completed_dungeons:
+                                bless_reduction = bless_amount * .50
+                                bless_amount = round((bless_amount - bless_reduction)/2)
+                            else: 
+                                bless_amount = round(bless_amount /2)
+                            await button_ctx.send(f"You already own **{title['TITLE']}**. You get a :coin:**{'{:,}'.format(bless_amount)}** refund!") 
+                            await main.curse(bless_amount, str(ctx.author.id))
                         else:
                             response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'TITLES': str(title['TITLE'])}})   
                             await main.curse(price, str(ctx.author.id))

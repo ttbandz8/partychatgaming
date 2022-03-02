@@ -506,7 +506,7 @@ class CrownUnlimited(commands.Cog):
             cfam = ofam
             if sowner['DIFFICULTY'] != "EASY":
                 if sowner['LEVEL'] < 8:
-                    await ctx.send(f"🔓 Unlock **Duo** by completing **Floor 9** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
+                    await ctx.send(f"🔓 Unlock **Duo** by completing **Floor 7** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
                     return
             
             if sowner['DIFFICULTY'] == "EASY" and mode in D_modes or mode in B_MODES:
@@ -603,11 +603,11 @@ class CrownUnlimited(commands.Cog):
             companion = db.queryUser({'DID': str(user.id)})
             if sowner['DIFFICULTY'] != "EASY":
                 if sowner['LEVEL'] < 4:
-                    await ctx.send(f"🔓 Unlock **Co-op** by completing **Floor 7** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
+                    await ctx.send(f"🔓 Unlock **Co-op** by completing **Floor 3** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
                     return
                 
                 elif companion['LEVEL'] < 4:
-                    await ctx.send(f"🔓 {user.mention} Has not unlocked **Co-op**! Complete **Floor 7** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
+                    await ctx.send(f"🔓 {user.mention} Has not unlocked **Co-op**! Complete **Floor 3** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
                     return
 
             if sowner['DIFFICULTY'] == "EASY" and mode in D_modes or mode in B_MODES:
@@ -1096,7 +1096,7 @@ class CrownUnlimited(commands.Cog):
             sowner = db.queryUser({'DID': str(ctx.author.id)})
             if sowner['DIFFICULTY'] != "EASY":
                 if sowner['LEVEL'] < 3:
-                    await ctx.send("🔓 Unlock **Tales** by completing **Floor 3** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
+                    await ctx.send("🔓 Unlock **Tales** by completing **Floor 2** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
                     return
             if sowner['DIFFICULTY'] == "EASY" and (mode in D_modes or mode in B_MODES):
                 await ctx.send("Dungeons and Boss fights unavailable on Easy Mode! Use /difficulty to change your difficulty setting.")
@@ -1478,7 +1478,7 @@ class CrownUnlimited(commands.Cog):
             # universe = "Naruto"
             # selected_universe = {"TITLE": "Naruto"}
             if private_channel:
-                await battle_commands(self, ctx, mode, None, None, None, oguild, None, None, sowner, oteam, None, opponent, tteam, tguild, None, None, None, None, None, None)
+                await battle_commands(self, ctx, mode, None, None, None, oguild, None, None, sowner, oteam, None, opponent, tteam, tguild, None, None, None, None, None, "Tutorial")
             else:
                 await ctx.send("Failed to start battle!")
         except Exception as ex:
@@ -3016,7 +3016,10 @@ def abyss_level_up_message(did, floor, card, title, arm):
         new_unlock = False
         vault_query = {'DID': did}
         vault = db.altQueryVault(vault_query)
+        arm = db.queryArm({'ARM':str(arm)})
         arm_arm = arm['ARM']
+        floor_val = int(floor)
+        coin_drop = round(100000 + (floor_val * 10000))
 
         card_drop = card
         title_drop = title
@@ -3055,10 +3058,10 @@ def abyss_level_up_message(did, floor, card, title, arm):
             if len(current_arms) >=25:
                 maxed_out_messages.append("You have max amount of Arms. You did not receive the **Floor Arm**.")
             elif arm_arm in current_arms:
-                maxed_out_messages.append(f"You already own {arm_drop} so you did not receive it.")
+                maxed_out_messages.append(f"You already own {arm_drop['ARM']} so you did not receive it.")
             else:
-                db.updateVaultNoFilter(vault_query,{'$addToSet':{'ARMS': {'ARM': str(arm_drop), 'DUR': 25}}})
-                drop_message.append(f"🦾 **{arm_drop}** has been added to your vault!")
+                db.updateVaultNoFilter(vault_query,{'$addToSet':{'ARMS': {'ARM': str(arm_drop['ARM']), 'DUR': 25}}})
+                drop_message.append(f"🦾 **{arm_drop['ARM']}** has been added to your vault!")
 
             current_cards = vault['CARDS']
             if len(current_cards) >= 25:
@@ -3089,7 +3092,8 @@ def abyss_level_up_message(did, floor, card, title, arm):
                     db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
                     if counter >=1:
                         drop_message.append(f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.")
-                        
+        else:
+            drop_message.append(f":coin: **{'{:,}'.format(coin_drop)}** has been added to your vault!")
 
         if floor == 0:
             message = "🎊 Congratulations! 🎊 You unlocked **Shop!**. Use the **/shop** command to purchase Cards, Titles and Arms!"
@@ -3249,29 +3253,34 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
 
             # Font Size Adjustments
             # Name not go over Card
+            
             name_font_size = 62
-            if len(list(d['NAME'])) >= 18 and not resolved:
+            title_font_size = 37
+            basic_font_size = 30
+            super_font_size = 30
+            ultimate_font_size = 30
+            enhancer_font_size = 30
+            if len(list(d['NAME'])) >= 16 and not resolved:
                 name_font_size = 45
-            if len(list(d['RNAME'])) >= 18 and resolved:
+            if len(list(d['RNAME'])) >= 16 and resolved:
                 name_font_size = 45
             if len(list(d['NAME'])) >= 20 and not resolved:
                 name_font_size = 36
             if len(list(d['RNAME'])) >= 20 and resolved:
                 name_font_size = 36
-
-            header = ImageFont.truetype("YesevaOne-Regular.ttf", name_font_size)
-            s = ImageFont.truetype("Roboto-Bold.ttf", 22)
-            h = ImageFont.truetype("YesevaOne-Regular.ttf", 37)
-            m = ImageFont.truetype("Roboto-Bold.ttf", 25)
-            r = ImageFont.truetype("Freedom-10eM.ttf", 40)
-            lvl_font = ImageFont.truetype("Neuton-Bold.ttf", 68)
-            health_and_stamina_font = ImageFont.truetype("Neuton-Light.ttf", 41)
-            attack_and_shield_font = ImageFont.truetype("Neuton-Bold.ttf", 48)
-            moveset_font = ImageFont.truetype("antonio.regular.ttf", 30)
-            rhs = ImageFont.truetype("destructobeambb_bold.ttf", 35)
-            stats = ImageFont.truetype("Freedom-10eM.ttf", 30)
-            card_details_font_size = ImageFont.truetype("destructobeambb_bold.ttf", 25)
-            card_levels = ImageFont.truetype("destructobeambb_bold.ttf", 40)
+            
+            
+            title_len = int(len(list(title['TITLE'])))
+            
+            if title_len >= 18:
+                title_font_size = 34
+            if title_len >= 20:
+                title_font_size = 30
+            if title_len >= 25:
+                title_font_size = 28
+                
+            #Moveset Emojis
+                
             engagement_basic = 0
             engagement_special = 0
             engagement_ultimate = 0
@@ -3287,7 +3296,7 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
                 if defensepower <=0:
                     defensepower = 1
                 basic = ((attack + ap1) / defensepower)
-                if basic > (ap1 * 1.5):
+                if basic > (ap1 * 1.2):
                     engagement_basic = 2
                     ebasic = '‼️'
                 elif basic < (ap1 / 2):
@@ -3296,7 +3305,7 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
             
                     
                 special = ((attack + ap2) / defensepower)
-                if special > (ap2 * 1.5):
+                if special > (ap2 * 1.2):
                     engagement_special = 2
                     especial = '‼️'
                 elif special < (ap2 / 2):
@@ -3304,12 +3313,130 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
                     especial = '❕'
         
                 ultimate = ((attack + ap3) / defensepower)
-                if ultimate > (ap3 * 1.5):
+                if ultimate > (ap3 * 1.2):
                     engagement_ultimate = 2
                     eultimate = '‼️'
                 elif ultimate < (ap3 / 2):
                     engagement_ultimate = 1
                     eultimate = '❕'
+                
+            
+            # Moveset Start
+            moveset = d['MOVESET']
+            
+            if d['UNIVERSE'] == "Souls" and resolved:
+                move3 = moveset[2]
+                move2 = moveset[2]
+                move1 = moveset[1]
+            else:
+                move3 = moveset[2]
+                move2 = moveset[1]
+                move1 = moveset[0]
+                
+            
+            
+            move1_ap = ap1
+            move1_text = f"💥 {list(move1.keys())[0]}: {move1_ap} {ebasic}"
+
+            
+            move2_ap = ap2
+            move2_text = f"☄️ {list(move2.keys())[0]}: {move2_ap} {especial}"
+
+            
+            move3_ap = ap3
+            move3_text = f"🏵️ {list(move3.keys())[0]}: {move3_ap} {eultimate}"
+            
+
+            
+                
+
+            move_enhanced = moveset[3]
+            move_enhanced_ap = enh1
+            move_enhanced_name = enhname
+            turn_crit = False
+            if enhname in Turn_Enhancer_Check:
+                if turn_total == 0:
+                    move_enhanced_ap = round(enh1)
+                    turn_crit = True
+                elif turn_total % 10 == 0:
+                    move_enhanced_ap = round(enh1 * .75)
+                    turn_crit = True
+                elif turn_total >= 1:
+                    move_enhanced_ap = round(enh1 / turn_total)
+                else:
+                    move_enhanced_ap = enh1
+            elif enhname in Damage_Enhancer_Check:
+                if turn_total > 0:
+                    move_enhanced_ap = round(enh1 * turn_total)
+                    if move_enhanced_ap >= 350:
+                        move_enhanced_ap = 350
+                        turn_crit = True
+                else:
+                    move_enhanced_ap = enh1
+            
+            if not turn_crit:
+                move_enhanced_text = f"🦠 {list(move_enhanced.keys())[0]}: {move_enhanced_name} {move_enhanced_ap}{enhancer_suffix_mapping[enhname]}"
+            elif enhname in Damage_Enhancer_Check and move_enhanced_ap == 350:
+                move_enhanced_text = f"🎇 {list(move_enhanced.keys())[0]}: {move_enhanced_name} {move_enhanced_ap}{enhancer_suffix_mapping[enhname]}"
+            elif enhname in Turn_Enhancer_Check and (turn_total % 10 == 0 or turn_total == 0):
+                move_enhanced_text = f"🎇 {list(move_enhanced.keys())[0]}: {move_enhanced_name} {move_enhanced_ap}{enhancer_suffix_mapping[enhname]}"
+
+            #Moveset Length
+            
+            basic_length = int(len(move1_text))
+            super_length = int(len(move2_text))
+            ultimate_length = int(len(move3_text))
+            enhancer_length = int(len(move_enhanced_text))
+            
+            
+            if basic_length >= 53:
+                basic_font_size = 27
+            if basic_length >= 60:
+                basic_font_size = 25
+            if basic_length >= 65:
+                basic_font_size = 23
+                
+            if super_length >= 53:
+                super_font_size = 27
+            if super_length >= 60:
+                super_font_size = 25
+            if super_length >= 65:
+                super_font_size = 23
+                
+            if ultimate_length >= 53:
+                ultimate_font_size = 27
+            if ultimate_length >= 60:
+                ultimate_font_size = 25
+            if ultimate_length >= 65:
+                ultimate_font_size = 23
+                
+            if enhancer_length >= 53:
+                enhancer_font_size = 27
+            if enhancer_length >= 60:
+                enhancer_font_size = 25
+            if enhancer_length >= 65:
+                enhancer_font_size = 23
+                
+            
+
+            header = ImageFont.truetype("YesevaOne-Regular.ttf", name_font_size)
+            title_font = ImageFont.truetype("YesevaOne-Regular.ttf", title_font_size)
+            s = ImageFont.truetype("Roboto-Bold.ttf", 22)
+            h = ImageFont.truetype("YesevaOne-Regular.ttf", 37)
+            m = ImageFont.truetype("Roboto-Bold.ttf", 25)
+            r = ImageFont.truetype("Freedom-10eM.ttf", 40)
+            lvl_font = ImageFont.truetype("Neuton-Bold.ttf", 68)
+            health_and_stamina_font = ImageFont.truetype("Neuton-Light.ttf", 41)
+            attack_and_shield_font = ImageFont.truetype("Neuton-Bold.ttf", 48)
+            moveset_font_1 = ImageFont.truetype("antonio.regular.ttf", basic_font_size)
+            moveset_font_2 = ImageFont.truetype("antonio.regular.ttf", super_font_size)
+            moveset_font_3 = ImageFont.truetype("antonio.regular.ttf", ultimate_font_size)
+            moveset_font_4 = ImageFont.truetype("antonio.regular.ttf", enhancer_font_size)
+            rhs = ImageFont.truetype("destructobeambb_bold.ttf", 35)
+            stats = ImageFont.truetype("Freedom-10eM.ttf", 30)
+            card_details_font_size = ImageFont.truetype("destructobeambb_bold.ttf", 25)
+            card_levels = ImageFont.truetype("destructobeambb_bold.ttf", 40)
+            
 
             if health == max_health:
                 health_bar = f"{max_health}"
@@ -3359,72 +3486,20 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
             draw.text(d_sizing, f"{round(defense)}", (255, 255, 255), font=attack_and_shield_font, stroke_width=1,
                       stroke_fill=(0, 0, 0), align="center")
 
-            # Moveset Start
-            moveset = d['MOVESET']
-            
-            if d['UNIVERSE'] == "Souls" and resolved:
-                move3 = moveset[2]
-                move2 = moveset[2]
-                move1 = moveset[1]
-            else:
-                move3 = moveset[2]
-                move2 = moveset[1]
-                move1 = moveset[0]
-                
             
             
-            move1_ap = ap1
-            move1_text = f"💥 {list(move1.keys())[0]}: {move1_ap} {ebasic}"
-
-            
-            move2_ap = ap2
-            move2_text = f"☄️ {list(move2.keys())[0]}: {move2_ap} {especial}"
-
-            
-            move3_ap = ap3
-            move3_text = f"🏵️ {list(move3.keys())[0]}: {move3_ap} {eultimate}"
-            
-                
-                
-
-            move_enhanced = moveset[3]
-            move_enhanced_ap = enh1
-            move_enhanced_name = enhname
-            turn_crit = False
-            if enhname in Turn_Enhancer_Check:
-                if turn_total == 0:
-                    move_enhanced_ap = round(enh1)
-                elif turn_total % 10 == 0:
-                    move_enhanced_ap = round(enh1 * .75)
-                    turn_crit == True
-                elif turn_total >= 1:
-                    move_enhanced_ap = round(enh1 / turn_total)
-                else:
-                    move_enhanced_ap = enh1
-            elif enhname in Damage_Enhancer_Check:
-                if turn_total > 0:
-                    move_enhanced_ap = round(enh1 * turn_total)
-                    if move_enhanced_ap >= 350:
-                        move_enhanced_ap = 350
-                else:
-                    move_enhanced_ap = enh1
-            if not turn_crit:
-                move_enhanced_text = f"🦠 {list(move_enhanced.keys())[0]}: {move_enhanced_name} {move_enhanced_ap}{enhancer_suffix_mapping[enhname]}"
-            else:
-                move_enhanced_text = f"🎇 {list(move_enhanced.keys())[0]}: {move_enhanced_name} {move_enhanced_ap}{enhancer_suffix_mapping[enhname]}"
-
             # attack_stat = f"🗡️{round(attack)}"
             # defense_stat = f"🛡️{round(defense)}"
             with Pilmoji(im) as pilmoji:
-                pilmoji.text((602, 150), f"🎗️ {title['TITLE']}", (255, 255, 255), font=h, stroke_width=1, stroke_fill=(0, 0, 0),
+                pilmoji.text((602, 150), f"🎗️ {title['TITLE']}", (255, 255, 255), font=title_font, stroke_width=1, stroke_fill=(0, 0, 0),
                       align="left")
-                pilmoji.text((600, 250), move1_text.strip(), (255, 255, 255), font=moveset_font, stroke_width=2,
+                pilmoji.text((600, 250), move1_text.strip(), (255, 255, 255), font=moveset_font_1, stroke_width=2,
                              stroke_fill=(0, 0, 0))
-                pilmoji.text((600, 290), move2_text.strip(), (255, 255, 255), font=moveset_font, stroke_width=2,
+                pilmoji.text((600, 290), move2_text.strip(), (255, 255, 255), font=moveset_font_2, stroke_width=2,
                              stroke_fill=(0, 0, 0))
-                pilmoji.text((600, 330), move3_text.strip(), (255, 255, 255), font=moveset_font, stroke_width=2,
+                pilmoji.text((600, 330), move3_text.strip(), (255, 255, 255), font=moveset_font_3, stroke_width=2,
                              stroke_fill=(0, 0, 0))
-                pilmoji.text((600, 370), move_enhanced_text.strip(), (255, 255, 255), font=moveset_font, stroke_width=2,
+                pilmoji.text((600, 370), move_enhanced_text.strip(), (255, 255, 255), font=moveset_font_4, stroke_width=2,
                              stroke_fill=(0, 0, 0))
 
                 # pilmoji.text((40, 545), "🗡️", (255, 255, 255), font=moveset_font, stroke_width=2,
@@ -3727,8 +3802,8 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         currentopponent = 0
     t_user = ""
     if mode == "RAID":
-        tguild = player2guild
-        tteam = player2team
+        tguild = cteam
+        tteam = ctitle
         hall = universe
         hall_def = hall['DEFENSE']
         fee = hall['FEE']
@@ -4001,7 +4076,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             tvault = db.queryVault({'DID': str(t_user['DID']), 'PETS.NAME': t_user['PET']})
             if mode in pvp_modes:
                 tupdate_durability_message = update_arm_durability(self, tvault, tarm, tarm_universe, tarm_price, t)
-                if tupdate_durability_message['MESSAGE']:
+                if tupdate_durability_message:
                     await ctx.send(f"{tupdate_durability_message['MESSAGE']}")
 
             tpet = {}
@@ -19871,7 +19946,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 ouid = sowner['DID']
                                 sownerctx = await self.bot.fetch_user(ouid)
                                 if mode == "RAID":
-                                    guild_query = {'FOUNDER': oguild['FOUNDER']}
+                                    guild_query = {'FDID': oguild['FDID']}
                                     bounty = oguild['BOUNTY']
                                     bonus = oguild['STREAK']
                                     total_bounty = (bounty + ((bonus / 100) * bounty))
@@ -20161,10 +20236,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     await battle_msg.delete(delay=2)
                                     await asyncio.sleep(2)
                                     battle_msg = await private_channel.send(embed=embedVar)
-
                                     currentopponent = currentopponent + 1
                                     continued = True
-                            
                                 if currentopponent == (total_legends):
                                     uid = o_DID
                                     ouser = await self.bot.fetch_user(uid)
@@ -20172,26 +20245,39 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     new_level = floor + 1
                                     response = db.updateUserNoFilter({'DID': str(ctx.author.id)}, {'$set': {'LEVEL': new_level}})
                                     abyss_message = abyss_level_up_message(str(ctx.author.id), floor, t_card, t_title, tarm_name)
-                                    cardlogger = await cardlevel(self, o_card, ouser.id, "Purchase", "n/a")
+                                    cardlogger = await cardlevel(self, o_card, ctx.author.id, "Purchase", "n/a")
                                     abyss_drop_message = "\n".join(abyss_message['DROP_MESSAGE'])
                                     bless_amount = 100000 + (10000 * floor)
                                     await bless(bless_amount, ctx.author.id)
                                     embedVar = discord.Embed(title=f"🌑 Floor **{floor}** Cleared\n**{o_card} says**\n{o_win_description}\nThe game lasted {turn_total} rounds.",description=textwrap.dedent(f"""
-                                    {previous_moves_into_embed}
+                                    Counquer the **Abyss** to unlock **Abyssal Rewards** and **New Game Modes.**
                                     
+                                    🎊**Abyss Floor Unlocks**
+                                    **0** - *Shop*
+                                    **2** - *Tales*
+                                    **3** - *Coop*
+                                    **6** - *PVP*
+                                    **8** - *Crafting*
+                                    **9** - *Guilds & Families*
+                                    **10**- *Trading and Trinketshop*
+                                    **20** - *Gifting*
+                                    **25** - *Explore Mode*
+                                    **40** - *Dungeons*
+                                    **60** - *Bosses*
+                                    **100** - *Boss Soul Exchange*
                                     """),colour=0x1abc9c)
 
                                     embedVar.set_author(name=f"{t_card} lost!")
                                     embedVar.set_footer(text=f"Traverse the /abyss to unlock new game modes and features!")
                                     embedVar.add_field(
                                     name=f"Abyssal Rewards",
-                                    value=f"You have been awarded :coin:**{'{:,}'.format(bless_amount)}**!\n{abyss_drop_message}")
+                                    value=f"{abyss_drop_message}")
 
                                     if abyss_message['NEW_UNLOCK']:
                                         await ctx.author.send(abyss_message['MESSAGE'])
                                         await ctx.send(f"{ctx.author.mention} {abyss_message['MESSAGE']}")
  
-                                    battle_msg = await ctx.send(embed=embedVar)
+                                    battle_msg = await private_channel.send(embed=embedVar)
 
                                     continued = False
 
@@ -20716,6 +20802,7 @@ async def blessguild(amount, guild):
             hall_data = db.queryHall({'HALL': hall})
             multiplier = hall_data['MULT']
             posBlessAmount = posBlessAmount * multiplier
+            query = {'FDID': str(guild_data['FDID'])}
             update_query = {"$inc": {'BANK': int(posBlessAmount)}}
             db.updateGuildAlt(query, update_query)
         else:
@@ -20768,6 +20855,7 @@ async def curseguild(amount, guild):
     query = {'GNAME': str(guild)}
     guild_data = db.queryGuildAlt(query)
     if guild_data:
+        query = {'FDID':str(guild_data['FDID'])}
         update_query = {"$inc": {'BANK': int(negCurseAmount)}}
         db.updateGuildAlt(query, update_query)
     else:
@@ -20800,7 +20888,7 @@ async def movecrest(universe, guild):
     guild_query = {'GNAME': guild_name}
     guild_info = db.queryGuildAlt(guild_query)
     if guild_info:
-        alt_query = {'FOUNDER': guild_info['FOUNDER']}
+        alt_query = {'FDID': guild_info['FDID']}
         crest_list = guild_info['CREST']
         pull_query = {'$pull': {'CREST': universe_name}}
         pull = db.updateManyGuild(pull_query)
