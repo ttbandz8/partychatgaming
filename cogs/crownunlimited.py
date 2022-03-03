@@ -2290,7 +2290,9 @@ async def destiny(player, opponent, mode):
 
                     query = {'DID': str(player.id)}
                     update_query = {'$inc': {'DESTINY.$[type].' + "WINS": 1}}
-                    filter_query = [{'type.' + "DEFEAT": opponent}]
+                    filter_query = [{'type.' + "DEFEAT": opponent, 'type.' + 'USE_CARDS':user['CARD']}]
+                    if user['CARD'] not in destiny['USE_CARDS']:
+                        filter_query = [{'type.' + "DEFEAT": opponent, 'type.' + 'USE_CARDS':skin_for}]
                     resp = db.updateVault(query, update_query, filter_query)
                     await player.send(message)
                     return message
@@ -12576,6 +12578,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             c_health = round(c_health + dmg['DMG'])
                                                         elif comp_enh == 'DESTRUCTION':
                                                             t_max_health = round(t_max_health - dmg['DMG'])
+                                                            if t_max_health <=1:
+                                                                t_max_health = 1
 
                                                         if comp_enh in Stamina_Enhancer_Check or comp_enh in Time_Enhancer_Check:
                                                             t_stamina = t_stamina
@@ -12681,6 +12685,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = round(o_health + dmg['DMG'])
                                                         elif enh_type == 'DESTRUCTION':
                                                             t_max_health = round(t_max_health - dmg['DMG'])
+                                                            if t_max_health <=1:
+                                                                t_max_health = 1
 
                                                         if cenh_type in Stamina_Enhancer_Check or cenh_type in Time_Enhancer_Check:
                                                             t_stamina = t_stamina
@@ -16320,6 +16326,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_health = round(o_health + dmg['DMG'])
                                                     elif cenh_type == 'DESTRUCTION':
                                                         t_max_health = round(t_max_health - dmg['DMG'])
+                                                        if t_max_health <=1:
+                                                            t_max_health = 1
                                                     
                                                     if cenh_type in Stamina_Enhancer_Check or cenh_type in Time_Enhancer_Check or cenh_type in Control_Enhancer_Check:
                                                         c_stamina = c_stamina
@@ -17439,6 +17447,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = round(o_health + dmg['DMG'])
                                                         elif enh_type == 'DESTRUCTION':
                                                             t_max_health = round(t_max_health - dmg['DMG'])
+                                                            if t_max_health <=1:
+                                                                t_max_health = 1
                                                         
                                                         if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check or enh_type in Control_Enhancer_Check:
                                                             c_stamina = c_stamina
