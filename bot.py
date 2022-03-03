@@ -403,7 +403,7 @@ async def crown(ctx):
    **Dungeon:** Hard version of tales with better loot and better drop rates! (Unlocks after completing **Crown Tale**)
    **Boss:** End Game battles featuring Iconic Villians from Crown Universes. (Unlocks after completing **Crown Dungeon**)
    
-   👥 **Duo**/duo
+   👥 **Duo**/duo *Beta*
    **Tales Deck(1-3):** Battle with your favorite AI preset in this Duo Tale!
    **Dungeon Deck(1-3):** Bring your strongest builds through the Darkest Duo Dungeons.
  
@@ -416,10 +416,15 @@ async def crown(ctx):
    embedVar8 = discord.Embed(title= f"Multiplayer", description=textwrap.dedent(f"""\
    **Multiplayer**
    
-   :people_hugging: **Co-Op**/coop
+   :people_hugging: **Co-Op**/coop *Beta*
    **Tales @partner:** Take a companion with your through your favorite tales with higher stakes!
    **Dungeon @partner:** Bring a companion through the darkest dungeons to earn awesome loot together.
    **Boss @partner:** Epic battles between two high level companions and one Incredible Boss.
+   
+   **Coop Mechanics**
+   Coop Adds two new mechanics to gameplayer
+   **Defending** - Your **Block** becomes **Defend** You will gain the **Block** bonus and take damage for your **Companion**
+   **Assist** - Assist applies your enhancer to buff your **Companion**. *Damage dealing enahncers apply to enemy*
 
    🤼 **PVP**
    **/battle @player:** Select your Build and Challenge any Crown Unlimited Player to a quick match!
