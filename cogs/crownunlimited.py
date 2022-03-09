@@ -1998,7 +1998,7 @@ class CrownUnlimited(commands.Cog):
             globals()['embedVar%s' % i] = discord.Embed(title=f"🧬 {universe_data['TITLE']} Summon List",
                                                         description="\n".join(pets_broken_up[i]), colour=0x7289da)
             globals()['embedVar%s' % i].set_footer(
-                text=f"{total_pets} Total Summons\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔴 Boss Drop\n/viewpet 'Summon Name' - View Summon Details")
+                text=f"{total_pets} Total Summons\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔴 Boss Drop\n/viewsummon 'Summon Name' - View Summon Details")
             embed_list.append(globals()['embedVar%s' % i])
 
         paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
@@ -19908,7 +19908,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     embedVar = discord.Embed(title=f"{victory_message}\n**{o_card} says**\n{o_win_description}\n{victory_description}", description=textwrap.dedent(f"""
                                     {previous_moves_into_embed}
                                     
-                                    """),colour=0x1abc9c)
+                                    """),colour=0xe91e63)
                                     embedVar.set_author(name=f"{t_card} says\n{t_lose_description}")
                                     if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
                                         embedVar.set_footer(text=f"Battle Time: {gameClock[2]} Seconds.")
@@ -20107,15 +20107,16 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     **2** - *Tales*
                                     **3** - *Coop*
                                     **6** - *PVP*
+                                    **7** - *Duo*
                                     **8** - *Crafting*
-                                    **9** - *Guilds & Families*
+                                    **9** - *Guilds, Families, Associations*
                                     **10**- *Trading and Trinketshop*
                                     **20** - *Gifting*
                                     **25** - *Explore Mode*
                                     **40** - *Dungeons*
                                     **60** - *Bosses*
                                     **100** - *Boss Soul Exchange*
-                                    """),colour=0x1abc9c)
+                                    """),colour=0xe91e63)
 
                                     embedVar.set_author(name=f"{t_card} lost!")
                                     embedVar.set_footer(text=f"Traverse the /abyss to unlock new game modes and features!")

@@ -53,6 +53,7 @@ class Universe(commands.Cog):
                 tarm = universe['UARM']
                 dtitle = universe['DTITLE']
                 darm = universe['DARM']
+                upet = universe['UPET']
                 dpet = universe['DPET']
                 boss = universe['UNIVERSE_BOSS']
                 tier = universe['TIER']
@@ -92,23 +93,20 @@ class Universe(commands.Cog):
                 {crest} | **{ownermessage}**
                 
                 🗒️ | **Details**
-                
-                :crown: | **Tale Build** 
+                :crown: | **Tales Build**
                 :reminder_ribbon: | **Title** - {ttitle}
                 :mechanical_arm: | **Arm** - {tarm}
+                🧬 | **Universe Summon ** - {upet}
                 
-                :fire: | **Dungeon Build** 
+                :fire: | **Dungeon Build**
                 :reminder_ribbon: | **Title** - {dtitle}
                 :mechanical_arm: | **Arm** - {darm}
-                
-                🧬 | **Universe Summons ** - {dpet}
-                */summonlist {universe_title}*
+                🧬 | **Dungeon Summon ** - {dpet}
                 
                 :japanese_ogre: | **Universe Boss**
                 :flower_playing_cards: | **Card** - {boss}
-                {bossmessage}\n
+                {bossmessage}
                 :infinity: | **Universe Trait** - {traitmessage}
-                :lock: | **Prerequisites:** {prerecmessage}
                 """), colour=000000)
                 embedVar.set_image(url=universe_image)
                 embedVar.set_footer(text=f"{universe_title} Details")
