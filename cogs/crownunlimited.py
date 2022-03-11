@@ -6150,7 +6150,6 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             }))
             return
     if oteam != 'PCG':
-        
         team_info = db.queryTeam({'TNAME': oteam})
         guildname = team_info['GUILD']
         if guildname != "PCG":
