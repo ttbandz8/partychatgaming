@@ -2355,7 +2355,7 @@ async def destiny(player, opponent, mode):
             'message': str(ex),
             'trace': trace
         }))
-        await ctx.send(
+        await player.send(
             "There's an issue with your Destiny. Alert support.")
         return
 
@@ -2680,7 +2680,6 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, stamina, en
 
     # handle different staments for lifesteal and drain
     if enhancer:
-
         enhanced = 0
         if enh_type == "ATK":
             enhanced = atk
@@ -3034,7 +3033,7 @@ def abyss_level_up_message(did, floor, card, title, arm):
                 maxed_out_messages.append(f"You already own {title_drop} so you did not receive it.")
             else:
                 db.updateVaultNoFilter(vault_query,{'$addToSet':{'TITLES': str(title_drop)}}) 
-                drop_message.append(f"🎗️ **{title_drop}** has been added to your vault!")
+                drop_message.append(f"🎗️ **{title_drop}**")
 
             current_arms = []
             for arm in vault['ARMS']:
@@ -3045,7 +3044,7 @@ def abyss_level_up_message(did, floor, card, title, arm):
                 maxed_out_messages.append(f"You already own {arm_drop['ARM']} so you did not receive it.")
             else:
                 db.updateVaultNoFilter(vault_query,{'$addToSet':{'ARMS': {'ARM': str(arm_drop['ARM']), 'DUR': 25}}})
-                drop_message.append(f"🦾 **{arm_drop['ARM']}** has been added to your vault!")
+                drop_message.append(f"🦾 **{arm_drop['ARM']}**")
 
             current_cards = vault['CARDS']
             if len(current_cards) >= 25:
@@ -3054,7 +3053,7 @@ def abyss_level_up_message(did, floor, card, title, arm):
                 maxed_out_messages.append(f"You already own {card_drop} so you did not receive it.")
             else:
                 db.updateVaultNoFilter(vault_query,{'$addToSet': {'CARDS': str(card_drop)}})
-                drop_message.append(f"🎴 **{card_drop}** has been added to your vault!")
+                drop_message.append(f"🎴 **{card_drop}**")
 
             
             owned_card_levels_list = []
@@ -3075,7 +3074,7 @@ def abyss_level_up_message(did, floor, card, title, arm):
                     counter = counter - 1
                     db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
                     if counter >=1:
-                        drop_message.append(f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.")
+                        drop_message.append(f"**DESTINY AWAITS!**")
         else:
             drop_message.append(f":coin: **{'{:,}'.format(coin_drop)}** has been added to your vault!")
 
@@ -4302,7 +4301,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             cmove_enhanced_text = list(c_enhancer.keys())[0]
 
             cpetmove_text = list(cpet.keys())[3]  # Name of the ability
-            cpetmove_ap = (cpet_bond * cpet_lvl) + list(cpet.values())[3]  # Ability Power
+            cpetmove_ap = (int(cpet_bond) *  (int(cpet_lvl) + int(list(cpet.values())[3])))  # Ability Power
 
             cpet_move = {str(cpetmove_text): int(cpetmove_ap), 'STAM': 15, 'TYPE': str(cpet_passive_type)}
 
@@ -4557,7 +4556,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         omove_enhanced_text = list(o_enhancer.keys())[0]
 
         opetmove_text = list(opet.keys())[3]  # Name of the ability
-        opetmove_ap = (opet_bond * opet_lvl) + list(opet.values())[3]  # Ability Power
+        opetmove_ap = (int(opet_bond) * (int(opet_lvl) + int(list(opet.values())[3])))  # Ability Power
 
         opet_move = {str(opetmove_text): int(opetmove_ap), 'STAM': 15, 'TYPE': str(opet_passive_type)}
 
@@ -4790,7 +4789,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             tmove_enhanced_text = list(t_enhancer.keys())[0]
 
             tpetmove_text = list(tpet.keys())[3]  # Name of the ability
-            tpetmove_ap = (tpet_bond * opet_lvl) + list(tpet.values())[3]  # Ability Power
+            tpetmove_ap = (int(tpet_bond) * (int(tpet_lvl) + int(list(tpet.values())[3])))  # Ability Power
             tpet_move = {str(tpetmove_text): int(tpetmove_ap), 'STAM': 15, 'TYPE': str(tpet_passive_type)}
         else:
             t_1 = t_moveset[0]
@@ -4802,8 +4801,9 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             tmove2_text = list(t_2.keys())[0]
             tmove3_text = list(t_3.keys())[0]
             tmove_enhanced_text = list(t_enhancer.keys())[0]
-            tpetmove_text = list(tpet_passive.keys())[0]
-            tpetmove_ap = (tpet_bond * tpet_lvl) + list(opet.values())[3]  # Ability Power
+            tpetmove_text = list(tpet_passive.keys())[0] 
+            
+            tpetmove_ap = (int(tpet_bond) * (int(tpet_lvl) + int(list(tpet.values())[3])))  # Ability Power
             tpetmove_type = list(tpet_passive.values())[1]
             tpet_move = {str(tpetmove_text): int(tpetmove_ap), 'STAM': 15, 'TYPE': tpetmove_type}
 
@@ -13035,8 +13035,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_stamina = o_stamina - dmg['STAMINA_USED']
                                                             turn_total = turn_total + 1
                                                             turn = 1
-                                                            if botActive:
-                                                                await button_ctx.defer(ignore=True)
+                                                            #if botActive:
+                                                                #await button_ctx.defer(ignore=True)
                                                 else:
                                                     previous_moves.append(f"*{turn_total}:* **{o_card}**: Not enough Stamina to use this ability.")
                                                     # embedVar = discord.Embed(title=emessage,
