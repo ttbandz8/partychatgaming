@@ -4789,7 +4789,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             tmove_enhanced_text = list(t_enhancer.keys())[0]
 
             tpetmove_text = list(tpet.keys())[3]  # Name of the ability
-            tpetmove_ap = (int(tpet_bond) * (int(tpet_lvl) + int(list(tpet.values())[3])))  # Ability Power
+            tpetmove_ap = tpet_bond * (tpet_lvl + list(tpet_passive.values())[0]) # Ability Power
             tpet_move = {str(tpetmove_text): int(tpetmove_ap), 'STAM': 15, 'TYPE': str(tpet_passive_type)}
         else:
             t_1 = t_moveset[0]
@@ -4803,7 +4803,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             tmove_enhanced_text = list(t_enhancer.keys())[0]
             tpetmove_text = list(tpet_passive.keys())[0] 
             
-            tpetmove_ap = (int(tpet_bond) * (int(tpet_lvl) + int(list(tpet.values())[3])))  # Ability Power
+            tpetmove_ap = tpet_bond * (tpet_lvl + list(tpet_passive.values())[0])  # Ability Power
             tpetmove_type = list(tpet_passive.values())[1]
             tpet_move = {str(tpetmove_text): int(tpetmove_ap), 'STAM': 15, 'TYPE': tpetmove_type}
 
