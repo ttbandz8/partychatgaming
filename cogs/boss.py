@@ -77,12 +77,12 @@ class Boss(commands.Cog):
                     traitmessage = f"**{mytrait['EFFECT']}**: {mytrait['TRAIT']}"
                 
                 embedVar = discord.Embed(title=f":japanese_ogre: | {uboss_name}\n:earth_africa: | {uboss_show} Boss", description=textwrap.dedent(f"""
-                **{message}**\n
+                *{message}*
                 
                 :flower_playing_cards: | **Card** - {uboss_name}
                 :reminder_ribbon: | **Title** - {uboss_title}: **{title_passive_type}** - {title_passive_value}
                 :mechanical_arm: | **Arm** - {uboss_arm}: **{arm_passive_type}** - {arm_passive_value}
-                :bird: | **Pet** - {uboss_pet}: **{pet_ability_type}**: {pet_ability_value}
+                :dna: | **Summon** - {uboss_pet}: **{pet_ability_type}**: {pet_ability_value}
                 
                 :infinity: | **Universe Trait** - {traitmessage}
                 """), colour=000000)

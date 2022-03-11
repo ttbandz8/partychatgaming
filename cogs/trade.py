@@ -139,23 +139,25 @@ class Trade(commands.Cog):
                                 await ctx.send(embed=embedVar)
                             else:
                                 await ctx.send(f"{ctx.author.mention} Error Reach Out To Support")
+                    except asyncio.TimeoutError:
+                        await ctx.send(f"{ctx.author.mention} your trade request timed out.")
                     except Exception as ex:
-                            trace = []
-                            tb = ex.__traceback__
-                            while tb is not None:
-                                trace.append({
-                                    "filename": tb.tb_frame.f_code.co_filename,
-                                    "name": tb.tb_frame.f_code.co_name,
-                                    "lineno": tb.tb_lineno
-                                })
-                                tb = tb.tb_next
-                            print(str({
-                                'type': type(ex).__name__,
-                                'message': str(ex),
-                                'trace': trace
-                            }))
-                            await ctx.send(f"ERROR:\nTYPE: {type(ex).__name__}\nMESSAGE: {str(ex)}\nLINE: {trace} ")
-                            return
+                        trace = []
+                        tb = ex.__traceback__
+                        while tb is not None:
+                            trace.append({
+                                "filename": tb.tb_frame.f_code.co_filename,
+                                "name": tb.tb_frame.f_code.co_name,
+                                "lineno": tb.tb_lineno
+                            })
+                            tb = tb.tb_next
+                        print(str({
+                            'type': type(ex).__name__,
+                            'message': str(ex),
+                            'trace': trace
+                        }))
+                        await ctx.send(f"ERROR:\nTYPE: {type(ex).__name__}\nMESSAGE: {str(ex)}\nLINE: {trace} ")
+                        return
             elif mode == 'Open':
                 m_query = {'MDID': str(ctx.author.id), 'OPEN': True}
                 trade_check = db.queryTrade(m_query)
