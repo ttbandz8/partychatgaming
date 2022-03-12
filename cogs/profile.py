@@ -1970,7 +1970,7 @@ class Profile(commands.Cog):
         query = {'DID': str(ctx.author.id)}
         d = db.queryUser(query)
         vault = db.queryVault({'DID': d['DID']})
-        server = db.queryServer({"GNAME": str(ctx.author.guild)})
+        # server = db.queryServer({"GNAME": str(ctx.author.guild)})
         if not vault['QUESTS']:
             await ctx.send("You have no quests available at this time!", hidden=True)
             return
@@ -1987,15 +1987,15 @@ class Profile(commands.Cog):
                 buff_message = ""
                 virus_message = ""
 
-                if server:
-                    server_buff = server['SERVER_BUFF_BOOL']
-                    server_virus = server['SERVER_VIRUS_BOOL']
-                    server_name = server['GNAME']
+                # if server:
+                #     server_buff = server['SERVER_BUFF_BOOL']
+                #     server_virus = server['SERVER_VIRUS_BOOL']
+                #     server_name = server['GNAME']
 
-                    if not server_buff:
-                        buff_message = f"No active buffs in **{server_name}**"
-                    if not server_virus:
-                        virus_message = f"No active viruses in **{server_name}**"
+                #     if not server_buff:
+                #         buff_message = f"No active buffs in **{server_name}**"
+                #     if not server_virus:
+                #         virus_message = f"No active viruses in **{server_name}**"
 
                 for quest in quests:
                     guild_buff_msg = "🔴"
@@ -2128,7 +2128,7 @@ class Profile(commands.Cog):
                             oguild = "PCG"
                             crestlist = []
                             crestsearch = False
-                            guild = server_name
+                            # guild = server_name
                             oteam = user['TEAM']
                             ofam = user['FAMILY']
                             sowner = user
