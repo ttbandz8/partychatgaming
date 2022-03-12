@@ -434,9 +434,10 @@ class Lookup(commands.Cog):
 
                 guild_explanations = discord.Embed(title=f"Information", description=textwrap.dedent(f"""
                 **Buff Explanations**
-                - **Quest Buff**: Start Quest from the required fight in the Tale
+                - **Quest Buff**: Start Quest from the required fight in the Tale, not for dungeons
                 - **Level Buff**: Each fight will grant you a level up
                 - **Stat Buff**: Add 50 ATK & DEF, 30 AP, and 100 HLT
+                - **Rift Buff**: Rifts will always be available
 
                 **Guild Position Explanations**
                 - **Owner**:  All operations

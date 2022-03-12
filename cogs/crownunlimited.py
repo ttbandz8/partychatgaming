@@ -2191,11 +2191,11 @@ async def quest(player, opponent, mode):
                     await bless(reward, player.id)
                     message = f"Quest Completed! :coin:{reward} has been added to your balance."
 
-                    server_query = {'GNAME': str(player.guild)}
-                    update_server_query = {
-                        '$inc': {'SERVER_BALANCE': 10000}
-                    }
-                    updated_server = db.updateServer(server_query, update_server_query)
+                    # server_query = {'GNAME': str(player.guild)}
+                    # update_server_query = {
+                    #     '$inc': {'SERVER_BALANCE': 10000}
+                    # }
+                    # updated_server = db.updateServer(server_query, update_server_query)
 
                 query = {'DID': str(player.id)}
                 update_query = {'$inc': {'QUESTS.$[type].' + "WINS": 2}}
@@ -2208,11 +2208,11 @@ async def quest(player, opponent, mode):
                 if completion == 0:
                     await bless(reward, player.id)
                     message = f"Quest Completed! :coin:{reward} has been added to your balance."
-                    server_query = {'GNAME': str(player.guild)}
-                    update_server_query = {
-                        '$inc': {'SERVER_BALANCE': 5000}
-                    }
-                    updated_server = db.updateServer(server_query, update_server_query)
+                    # server_query = {'GNAME': str(player.guild)}
+                    # update_server_query = {
+                    #     '$inc': {'SERVER_BALANCE': 5000}
+                    # }
+                    # updated_server = db.updateServer(server_query, update_server_query)
 
                 query = {'DID': str(player.id)}
                 update_query = {'$inc': {'QUESTS.$[type].' + "WINS": 1}}
@@ -2239,8 +2239,6 @@ async def quest(player, opponent, mode):
             'message': str(ex),
             'trace': trace
         }))
-        await ctx.send(
-            "There's an issue with your Quest. Alert support.")
         return
 
 

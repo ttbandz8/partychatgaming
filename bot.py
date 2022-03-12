@@ -2001,9 +2001,9 @@ async def buffshop(ctx, player, team):
    balance = team['BANK']
    icon = "💳"
 
-   # if team_member_count <= 2:
-   #    await ctx.send("Guilds must have at least **3** guild members to purchase Guild Buffs.")
-   #    return
+   if team_member_count <= 2:
+      await ctx.send("Guilds must have at least **3** guild members to purchase Guild Buffs.")
+      return
 
    if guild_buff_available:
       guild_buff_length = len(team['GUILD_BUFFS'])
