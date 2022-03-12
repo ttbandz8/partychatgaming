@@ -440,8 +440,8 @@ class Lookup(commands.Cog):
 
                 **Guild Position Explanations**
                 - **Owner**:  All operations
-                - **Officer**:  Can Add members, Delete members, Pay members, Buy & Swap buffs
-                - **Captain**:  Can Add members, Delete members, Pay members
+                - **Officer**:  Can Add members, Delete members, Pay members, Buy, Swap, and Toggle Buffs
+                - **Captain**:  Can Toggly Buffs, Pay members
                 - **Member**:  No operations
                 """), colour=0x7289da)
 

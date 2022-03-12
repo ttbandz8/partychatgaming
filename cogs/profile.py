@@ -2105,12 +2105,12 @@ class Profile(commands.Cog):
                                         crestsearch = True
 
                             currentopponent = 0
-
-                            if guild_buff['Quest']:
-                                for opp in universe['CROWN_TALES']:
-                                    if opp == card['NAME']:
-                                        currentopponent = universe['CROWN_TALES'].index(opp)
-                                        update_team_response = db.updateTeam(guild_buff['QUERY'], guild_buff['UPDATE_QUERY'])
+                            if guild_buff:
+                                if guild_buff['Quest']:
+                                    for opp in universe['CROWN_TALES']:
+                                        if opp == card['NAME']:
+                                            currentopponent = universe['CROWN_TALES'].index(opp)
+                                            update_team_response = db.updateTeam(guild_buff['QUERY'], guild_buff['UPDATE_QUERY'])
                                        
                             await battle_commands(self, ctx, mode, universe, selected_universe, completed_universes, oguild,
                                     crestlist, crestsearch, sowner, oteam, ofam, currentopponent, None, None, None,
