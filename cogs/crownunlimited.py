@@ -6597,90 +6597,92 @@ def guild_buff_update_function(self, team):
     try:
         team_query = {'TEAM_NAME': team.lower()}
         team_info = db.queryTeam(team_query)
-        guild_buff_count = len(team_info['GUILD_BUFFS'])
-        guild_buff_active = team_info['GUILD_BUFF_ON']
-        guild_buffs = team_info['GUILD_BUFFS']
+        if team_info:
+            guild_buff_count = len(team_info['GUILD_BUFFS'])
+            guild_buff_active = team_info['GUILD_BUFF_ON']
+            guild_buffs = team_info['GUILD_BUFFS']
 
 
-        if guild_buff_active:
-            filter_query = [{'type.' + "TYPE": guild_buff_active}]
-            guild_buff_update_query = {}
-            quest_buff = False
-            rift_buff = False
-            level_buff = False
-            stat_buff = False
-            index = 0
+            if guild_buff_active:
+                filter_query = [{'type.' + "TYPE": guild_buff_active}]
+                guild_buff_update_query = {}
+                quest_buff = False
+                rift_buff = False
+                level_buff = False
+                stat_buff = False
+                index = 0
 
-            active_guild_buff = team_info['ACTIVE_GUILD_BUFF']
-            for buff in guild_buffs:
-                if buff['TYPE'] == active_guild_buff:
-                    index = guild_buffs.index(buff)
+                active_guild_buff = team_info['ACTIVE_GUILD_BUFF']
+                for buff in guild_buffs:
+                    if buff['TYPE'] == active_guild_buff:
+                        index = guild_buffs.index(buff)
 
-                    if buff['TYPE'] == "Rift":
-                        rift_buff = True
-                    
-                    if buff['TYPE'] == "Quest":
-                        quest_buff = True
-
-                    if buff['TYPE'] == "Level":
-                        level_buff = True
-
-                    if buff['TYPE'] == "Stat":
-                        stat_buff = True
-                    
-                    if buff['USES'] == 1:
+                        if buff['TYPE'] == "Rift":
+                            rift_buff = True
                         
-                        if guild_buff_count == 1:
-                            guild_buff_update_query = {
-                                    '$pull': {
-                                        'GUILD_BUFFS': {'TYPE': active_guild_buff, 'USES': 1}
-                                    },
-                                    '$set': {
-                                        'GUILD_BUFF_ON': False,
-                                        'GUILD_BUFF_AVAILABLE': False,
-                                        'ACTIVE_GUILD_BUFF': "",
-                                    },
-                                    '$push': {
-                                        'TRANSACTIONS': f"{active_guild_buff} Buff has been used up"
-                                    }
-                                }
+                        if buff['TYPE'] == "Quest":
+                            quest_buff = True
 
+                        if buff['TYPE'] == "Level":
+                            level_buff = True
+
+                        if buff['TYPE'] == "Stat":
+                            stat_buff = True
+                        
+                        if buff['USES'] == 1:
+                            
+                            if guild_buff_count == 1:
+                                guild_buff_update_query = {
+                                        '$pull': {
+                                            'GUILD_BUFFS': {'TYPE': active_guild_buff, 'USES': 1}
+                                        },
+                                        '$set': {
+                                            'GUILD_BUFF_ON': False,
+                                            'GUILD_BUFF_AVAILABLE': False,
+                                            'ACTIVE_GUILD_BUFF': "",
+                                        },
+                                        '$push': {
+                                            'TRANSACTIONS': f"{active_guild_buff} Buff has been used up"
+                                        }
+                                    }
+
+                            else:
+                                guild_buff_update_query = {
+                                        "$pull": {
+                                            'GUILD_BUFFS': {'TYPE': active_guild_buff, 'USES': 1}
+                                        },
+                                        '$set': {
+                                            'GUILD_BUFF_ON': False,
+                                            'ACTIVE_GUILD_BUFF': "",
+                                        },
+                                        '$push': {
+                                            'TRANSACTIONS': f"{active_guild_buff} Buff has been used up"
+                                        }
+                                    }
+                        
                         else:
                             guild_buff_update_query = {
-                                    "$pull": {
-                                        'GUILD_BUFFS': {'TYPE': active_guild_buff, 'USES': 1}
-                                    },
-                                    '$set': {
-                                        'GUILD_BUFF_ON': False,
-                                        'ACTIVE_GUILD_BUFF': "",
-                                    },
-                                    '$push': {
-                                        'TRANSACTIONS': f"{active_guild_buff} Buff has been used up"
-                                    }
+                                '$inc': {
+                                    f"GUILD_BUFFS.{index}.USES": -1
                                 }
-                    
-                    else:
-                        guild_buff_update_query = {
-                            '$inc': {
-                                 f"GUILD_BUFFS.{index}.USES": -1
+
                             }
-
-                        }
-            
-            response = {
-                'Quest': quest_buff,
-                'Rift': rift_buff,
-                'Level': level_buff,
-                'Stat': stat_buff,
-                'QUERY': team_query,
-                'UPDATE_QUERY': guild_buff_update_query,
-                'FILTER_QUERY': filter_query
-                }
-            
-            return response
+                
+                response = {
+                    'Quest': quest_buff,
+                    'Rift': rift_buff,
+                    'Level': level_buff,
+                    'Stat': stat_buff,
+                    'QUERY': team_query,
+                    'UPDATE_QUERY': guild_buff_update_query,
+                    'FILTER_QUERY': filter_query
+                    }
+                
+                return response
+            else:
+                return False                     
         else:
-            return False                     
-
+            return False
     except Exception as ex:
         trace = []
         tb = ex.__traceback__
@@ -6692,7 +6694,6 @@ def guild_buff_update_function(self, team):
             })
             tb = tb.tb_next
         print(str({
-            'PLAYER': str(ctx.author),
             'type': type(ex).__name__,
             'message': str(ex),
             'trace': trace
