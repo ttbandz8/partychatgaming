@@ -1534,23 +1534,47 @@ async def gift(ctx, player: User, amount: int):
 
 @slash.slash(name="Donate", description="Donate money to Guild", guild_ids=guild_ids)
 @commands.check(validate_user)
-async def donate(ctx, amount, guild: str):
-   team = guild
-   vault = db.queryVault({'DID': str(ctx.author.id)})
-   balance = vault['BALANCE']
-   dteam = team
-   query = {'TEAM_NAME': str(dteam)}
-   team_data = db.queryTeam(query)
-   if team_data:
-      if balance <= int(amount):
-         await ctx.send("You do not have that amount to donate.")
+async def donate(ctx, amount, guild = None):
+   try:
+      dteam = ""
+      if guild:
+         dteam = guild.lower()
       else:
-         await blessteam(int(amount), dteam)
-         await curse(int(amount), ctx.author.id)
-         await ctx.send(f":coin:{amount} has been gifted to {dteam}.")
-         return
-   else:
-      await ctx.send(f"Guild: {dteam} does not exist")
+         user_query = {"DID": str(ctx.author.id)}
+         user = db.queryUser(user_query)
+         dteam = user['TEAM'].lower()
+
+      vault = db.queryVault({'DID': str(ctx.author.id)})
+      balance = vault['BALANCE']
+      query = {'TEAM_NAME': str(dteam)}
+      team_data = db.queryTeam(query)
+      team_display_name = team_data['TEAM_DISPLAY_NAME']
+      if team_data:
+         if balance <= int(amount):
+            await ctx.send("You do not have that amount to donate.")
+         else:
+            await blessteam(int(amount), dteam)
+            await curse(int(amount), ctx.author.id)
+            await ctx.send(f":coin:{amount} has been gifted to **{team_display_name}**.")
+            return
+      else:
+         await ctx.send(f"Guild: {dteam} does not exist")
+   except Exception as ex:
+      trace = []
+      tb = ex.__traceback__
+      while tb is not None:
+            trace.append({
+               "filename": tb.tb_frame.f_code.co_filename,
+               "name": tb.tb_frame.f_code.co_name,
+               "lineno": tb.tb_lineno
+            })
+            tb = tb.tb_next
+      print(str({
+            'type': type(ex).__name__,
+            'message': str(ex),
+            'trace': trace
+      }))
+
 
 
 @slash.slash(name="Invest", description="Invest money in your Family", guild_ids=guild_ids)

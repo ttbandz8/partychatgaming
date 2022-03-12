@@ -2023,8 +2023,8 @@ class Profile(commands.Cog):
                         tales_message = f"**{opponent_name}** is fight number ⚔️ **{tales_index + 1}** in **Tales**"
                     
                     if opponent_name in dungeon:
-                        for opp in tales:
-                            dungeon_index = tales.index(opponent_name)
+                        for opp in dungeon:
+                            dungeon_index = dungeon.index(opponent_name)
                         dungeon_message = f"**{opponent_name}** is fight number ⚔️ **{dungeon_index + 1}** in **Dungeon**"
                     
                     completed = ""
