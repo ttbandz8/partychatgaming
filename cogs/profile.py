@@ -950,7 +950,7 @@ class Profile(commands.Cog):
                             title_data = db.queryTitle({'TITLE': selected_title})
                             title_name = title_data['TITLE']
                             selected_universe = title_data['UNIVERSE']
-                            dismantle_amount = 5000
+                            dismantle_amount = 1000
                             if title_name == current_title:
                                 await button_ctx.send("You cannot resell equipped titles.")
                             elif title_name in updated_vault['TITLES']:
@@ -1817,7 +1817,7 @@ class Profile(commands.Cog):
                                     if pet_universe in current_gems:
                                         query = {'DID': str(ctx.author.id)}
                                         update_query = {'$inc': {'GEMS.$[type].' + "GEMS": dismantle_amount}}
-                                        filter_query = [{'type.' + "UNIVERSE": selected_universe}]
+                                        filter_query = [{'type.' + "UNIVERSE": pet_universe}]
                                         response = db.updateVault(query, update_query, filter_query)
                                     else:
                                         response = db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$addToSet':{'GEMS': {'UNIVERSE': pet_universe, 'GEMS': dismantle_amount, 'UNIVERSE_HEART': False, 'UNIVERSE_SOUL': False}}})
@@ -2915,6 +2915,7 @@ class Profile(commands.Cog):
     async def craft(self, ctx):
         # Craft with Gems
         # Craft Universe Heart, Universe Soul, Skin Box
+        poke_universes = ['Kanto Region', 'Johto Region', 'Hoenn Region', 'Sinnoh Region']
         try:
             gems = 0
             all_universes = db.queryAllUniverse()
@@ -2958,26 +2959,32 @@ class Profile(commands.Cog):
             list_of_card_skins = False
             skin_alert = False
             card_skin_message = "No Skins"
-            
             new_skin_list = []
+            
             list_of_card_skins = [x for x in db.queryAllCardsBasedOnUniverse({'SKIN_FOR' : card_info['NAME']})]
+            
             if list_of_card_skins: 
                 for skin in list_of_card_skins:
-                    if skin['NAME'] not in current_cards:
+                    
+                    if skin['NAME'] not in current_cards and skin['SKIN_FOR'] == user['CARD']:
                         new_skin_list.append(skin)
-                card_skin_message = f" {card_info['UNIVERSE']} Skins Available!"
-                skin_alert = True
+                        card_skin_message = f" {card_info['UNIVERSE']} Skins Available!"
+                        skin_alert = True
+           
+                
+                
 
             owned_destinies = []
             for destiny in vault['DESTINY']:
                 owned_destinies.append(destiny['NAME'])
                 d_card = ' '.join(destiny['USE_CARDS'])
                 d_card_info = db.queryCard({"NAME": str(d_card)})
-                if card_info['NAME'] == destiny['USE_CARDS'] or card_info['SKIN_FOR'] == d_card_info['NAME']:
+                if card_info['NAME'] in destiny['USE_CARDS'] or card_info['SKIN_FOR'] in d_card_info['NAME']:
                     #destiny_alert_message = f"{card_info['UNIVERSE']} Destinies Availble"
                     destiny_alert = True
             if len(owned_destinies) >= 1:
                 destiny_Alert = True
+            
                     
             if skin_alert == True and destiny_alert ==True:
                 destiny_alert_message = f"{card_info['NAME']} Skins and Destinies Available!"
@@ -3016,8 +3023,10 @@ class Profile(commands.Cog):
                     destiny_message = f"{universe_name} Destinies available"
                 elif gems >= 800000:
                     destiny_message = f"Affordable!"
-                if universe_name != card_info['UNIVERSE']:
+                if universe_name != card_info['UNIVERSE'] and skin_alert:
                     card_skin_message = f"{card_info['UNIVERSE']} Skin Available!"
+                    if card_info['UNIVERSE'] in poke_universes:
+                        card_skin_message = f"Regional Pokemon Skins Available!"
                     
                 embedVar = discord.Embed(title= f"{universe_name}", description=textwrap.dedent(f"""
                 Welcome {ctx.author.mention}!

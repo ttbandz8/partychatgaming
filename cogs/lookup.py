@@ -432,12 +432,26 @@ class Lookup(commands.Cog):
                
                 """), colour=0x7289da)
 
+                guild_explanations = discord.Embed(title=f"Information", description=textwrap.dedent(f"""
+                **Buff Explanations**
+                - **Quest Buff**: Start Quest from the required fight in the Tale
+                - **Level Buff**: Each fight will grant you a level up
+                - **Stat Buff**: Add 50 ATK & DEF, 30 AP, and 100 HLT
+
+                **Guild Position Explanations**
+                - **Owner**:  All operations
+                - **Officer**:  Can Add members, Delete members, Pay members, Buy & Swap buffs
+                - **Captain**:  Can Add members, Delete members, Pay members
+                - **Member**:  No operations
+                """), colour=0x7289da)
+
+
 
                 activity_page = discord.Embed(title="Recent Guild Activity", description=textwrap.dedent(f"""
                 {transactions_embed}
                 """), colour=0x7289da)
 
-                embed_list = [first_page, membership_pages, guild_mission_embed, war_embed, activity_page]
+                embed_list = [first_page, membership_pages, guild_mission_embed, war_embed, activity_page, guild_explanations]
 
                 buttons = []
 
