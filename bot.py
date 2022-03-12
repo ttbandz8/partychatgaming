@@ -384,8 +384,9 @@ async def crown(ctx):
    2 - Tales
    3 - Coop
    6 - PVP
+   7 - Duo
    8 - Crafting
-   9 - Guilds & Families
+   9 - Guilds, Families and Associations
    10- Trading and Trinketshop
    20 - Gifting
    25 - Explore Mode
