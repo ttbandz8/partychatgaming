@@ -3108,8 +3108,12 @@ def abyss_level_up_message(did, floor, card, title, arm):
             message = "🎊 Congratulations! 🎊 You unlocked **Crafting!**. Use the **/craft** command to craft Universe Items such as Universe Souls, or even Destiny Line Wins toward Destiny Cards!"
             new_unlock = True
 
+        if floor == 3:
+            message = "🎊 Congratulations! 🎊 You unlocked **Guilds**. You're now able to create and join Guilds! Use /help to learn more about Guild and Family commands!"
+            new_unlock = True
+
         if floor == 9:
-            message = "🎊 Congratulations! 🎊 You unlocked **Guilds, and Families!**. You're now able to create Guilds and Families now! Use /help to learn more about Guild and Family commands!"
+            message = "🎊 Congratulations! 🎊 You unlocked **Guilds, and Families!**. You're now able to create Guilds and Families! Use /help to learn more about Guild and Family commands!"
             new_unlock = True
             
         if floor == 10:
