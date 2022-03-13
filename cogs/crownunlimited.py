@@ -41,7 +41,7 @@ import destiny as d
 class CrownUnlimited(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self._cd = commands.CooldownMapping.from_cooldown(1, 1500,
+        self._cd = commands.CooldownMapping.from_cooldown(1, 3,
                                                           commands.BucketType.member)  # Change accordingly. Currently every 8 minutes (3600 seconds == 60 minutes)
         self._lvl_cd = commands.CooldownMapping.from_cooldown(1, 600,
                                                           commands.BucketType.member)
@@ -6088,6 +6088,7 @@ async def enemy_approached(self, message, channel, player, selected_mode, univer
         mode = selected_mode
 
         sowner = player
+        oteam = sowner['TEAM']
         # guild = message.guild
         # overwrites = {
         #     guild.default_role: discord.PermissionOverwrite(read_messages=False),
@@ -6099,7 +6100,7 @@ async def enemy_approached(self, message, channel, player, selected_mode, univer
         oguild = "RANDOMIZED_BATTLE"
         crestlist = opponent
         crestsearch = bounty
-        await battle_commands(self, message, mode, universe, universe['TITLE'], None, oguild, crestlist, crestsearch, sowner, None, private_channel, None, None, None, None, None, None, None, None, None)
+        await battle_commands(self, message, mode, universe, universe['TITLE'], None, oguild, crestlist, crestsearch, sowner, oteam, private_channel, None, None, None, None, None, None, None, None, None)
     except Exception as ex:
         trace = []
         tb = ex.__traceback__
@@ -20305,15 +20306,19 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 gameClock = getTime(int(h_gametime), int(m_gametime), int(s_gametime), h_playtime, m_playtime,
                                                     s_playtime)
 
-                                bank_amount = 1000
+                                bank_amount = 2000
                                 fam_amount = 1000
                                 if mode in D_modes:
-                                    bank_amount = 5000
-                                    fam_amount = 2500
+                                    bank_amount = 8000
+                                    fam_amount = 3000
 
                                 if difficulty == "HARD":
-                                    bank_amount = 15000
+                                    bank_amount = 20000
                                     fam_amount = 10000
+
+                                if difficulty == "EASY":
+                                    bank_amount = 500
+                                    fam_amount = 100
 
 
                                 if mode in D_modes:
@@ -20324,9 +20329,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     response = db.updateUserNoFilter({'DISNAME': str(o_user['DISNAME'])}, {'$set': {'RIFT': 0}})
 
                                 if mode in D_modes:
-                                    drop_response = await dungeondrops(self,ouser, selected_universe, currentopponent)
+                                    drop_response = await dungeondrops(self, ouser, selected_universe, currentopponent)
                                 elif mode in U_modes:
-                                    drop_response = await drops(self,ouser, selected_universe, currentopponent)
+                                    drop_response = await drops(self, ouser, selected_universe, currentopponent)
                                 if mode in D_modes:
                                     ofambank = await blessfamily(fam_amount, ofam)
                                 else:
@@ -20450,8 +20455,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             await asyncio.sleep(2)
                                             battle_msg = await private_channel.send(embed=embedVar)
 
-                                            await ctx.send(
-                                                f"You were awarded :coin: 300,000 for completing the {selected_universe} Dungeon again!")
+                                            await ctx.send(f"You were awarded :coin: 300,000 for completing the {selected_universe} Dungeon again!")
                                         else:
                                             await bless(6000000, ctx.author.id)
                                             teambank = await blessteam(1500000, oteam)
@@ -20459,9 +20463,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             await battle_msg.delete(delay=2)
                                             await asyncio.sleep(2)
                                             battle_msg = await private_channel.send(embed=embedVar)
-
-                                            await ctx.send(
-                                                f"You were awarded :coin: 6,000,000 for completing the {selected_universe} Dungeon! ")
+                                            await ctx.send(f"You were awarded :coin: 6,000,000 for completing the {selected_universe} Dungeon! ")
                                         if mode in co_op_modes and mode not in ai_co_op_modes:
                                             cuid = c_DID
                                             cuser = await self.bot.fetch_user(cuid)
@@ -20495,8 +20497,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             await asyncio.sleep(2)
                                             battle_msg = await private_channel.send(embed=embedVar)
 
-                                            await ctx.send(
-                                                f"You were awarded :coin: 100,000 for completing the {selected_universe} Tale again!")
+                                            await ctx.send(f"You were awarded :coin: 100,000 for completing the {selected_universe} Tale again!")
                                         else:
                                             await bless(2000000, ctx.author.id)
                                             teambank = await blessteam(500000, oteam)
@@ -20504,9 +20505,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             await battle_msg.delete(delay=2)
                                             await asyncio.sleep(2)
                                             battle_msg = await private_channel.send(embed=embedVar)
-
-                                            await ctx.send(
-                                                f"You were awarded :coin: 2,000,000 for completing the {selected_universe} Tale! ")
+                                            await ctx.send(f"You were awarded :coin: 2,000,000 for completing the {selected_universe} Tale! ")
                                         if mode in co_op_modes and mode not in ai_co_op_modes:
                                             cuid = c_DID
                                             cuser = await self.bot.fetch_user(cuid)
@@ -20765,7 +20764,7 @@ async def bless(amount, user):
 async def blessteam(amount, team):
     blessAmount = amount
     posBlessAmount = 0 + abs(int(blessAmount))
-    query = {'TEAM_NAME': str(team)}
+    query = {'TEAM_NAME': str(team.lower())}
     team_data = db.queryTeam(query)
     if team_data:
         guild_mult = 1.0
@@ -21015,6 +21014,7 @@ async def drops(self,player, universe, matchcount):
     card_drop = 200  # 200
     drop_rate = random.randint((0 + (rebirth * rebirth) * (1 + rebirth)), 200)
     durability = random.randint(1, 45)
+    
     if difficulty == "HARD":
         gold_drop = 30  
         rift_rate = 65  
@@ -21131,8 +21131,8 @@ async def drops(self,player, universe, matchcount):
                     await bless(50, player.id)
                     return f"You earned _Card:_ **{cards[rand_card]}** + :coin: 50!\n{message}"
             else:
-                await bless(250, player.id)
-                return f"You earned :coin: **250**!"
+                await bless(5000, player.id)
+                return f"You earned :coin: **5000**!"
     except Exception as ex:
         trace = []
         tb = ex.__traceback__
@@ -21144,13 +21144,15 @@ async def drops(self,player, universe, matchcount):
             })
             tb = tb.tb_next
         print(str({
+            'player': str(player),
             'type': type(ex).__name__,
             'message': str(ex),
             'trace': trace
         }))
-        await ctx.send(
-            "There's an issue with the Drops. Alert support.")
-        return
+        await ctx.send("There's an issue with the Drops. Alert support.")
+        await bless(5000, player.id)
+        return f"You earned :coin: **5000**!"
+
 
 
 async def specific_drops(self,player, card, universe):
@@ -21220,13 +21222,14 @@ async def specific_drops(self,player, card, universe):
             })
             tb = tb.tb_next
         print(str({
+            'player': str(player),
             'type': type(ex).__name__,
             'message': str(ex),
             'trace': trace
         }))
-        await ctx.send(
-            "There's an issue with the Drops. Alert support.")
-        return
+        await ctx.send("There's an issue with the Drops. Alert support.")
+        await bless(5000, player.id)
+        return f"You earned :coin: **5000**!"
 
 
 async def dungeondrops(self, player, universe, matchcount):
@@ -21425,11 +21428,14 @@ async def dungeondrops(self, player, universe, matchcount):
             })
             tb = tb.tb_next
         print(str({
+            'player': str(player),
             'type': type(ex).__name__,
             'message': str(ex),
             'trace': trace
         }))
-        return
+        await ctx.send("There's an issue with the Drops. Alert support.")
+        await bless(5000, player.id)
+        return f"You earned :coin: **5000**!"
 
 
 async def bossdrops(self,player, universe):
@@ -21624,13 +21630,14 @@ async def bossdrops(self,player, universe):
             })
             tb = tb.tb_next
         print(str({
+            'player': str(player),
             'type': type(ex).__name__,
             'message': str(ex),
             'trace': trace
         }))
-        await ctx.send(
-            "There's an issue with Boss Drops. Alert support.")
-        return
+        await ctx.send("There's an issue with the Drops. Alert support.")
+        await bless(5000, player.id)
+        return f"You earned :coin: **5000**!"
 
 async def ai_enhancer_moves(turn_total,focus, resolve, summon, stamina, enhancer_type, health, maxhealth, attack, defense, oppstamina, oppattack, oppdefense, opphealth):
     aiMove = 1

@@ -2065,8 +2065,7 @@ class Profile(commands.Cog):
                     embed_list.append(embedVar)
 
                 buttons = [
-                    manage_components.create_button(style=3, label="Start Tales", custom_id="quests_tales"),
-                    manage_components.create_button(style=3, label="Start Dungeon", custom_id="quests_dungeon"),
+                    manage_components.create_button(style=3, label="Start Quest Tales", custom_id="quests_tales"),
                 ]
                 custom_action_row = manage_components.create_actionrow(*buttons)
 
@@ -2117,51 +2116,6 @@ class Profile(commands.Cog):
                                     None, None, None, None, None)
                             
                             self.stop = True
-                        if button_ctx.custom_id == "quests_dungeon":
-                            await button_ctx.defer(ignore=True)
-                            mode = "Dungeon"
-                            card = db.queryCard({"NAME": selected_quest})
-                            user = db.queryUser({'DID': str(ctx.author.id)})
-                            universe = db.queryUniverse({"TITLE": card['UNIVERSE']})
-                            selected_universe = universe['TITLE']
-                            completed_universes = user['CROWN_TALES']
-                            oguild = "PCG"
-                            crestlist = []
-                            crestsearch = False
-                            # guild = server_name
-                            oteam = user['TEAM']
-                            ofam = user['FAMILY']
-                            sowner = user
-
-                            if mode == "Dungeon" and sowner['LEVEL'] < 41:
-                                await button_ctx.send("🔓 Unlock **Dungeons** by completing **Floor 40** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
-                                self.stop = True
-                                return
-
-                            if universe['TITLE'] not in completed_universes:
-                                await button_ctx.send("You have not unlocked this dungeon.")
-                                self.stop = True
-                                return
-
-
-                            if oteam != 'PCG':
-                                team_info = db.queryTeam({'TEAM_NAME': oteam.lower()})
-                                guildname = team_info['GUILD']
-                                if guildname != "PCG":
-                                    oguild = db.queryGuildAlt({'GNAME': guildname})
-                                    if oguild:
-                                        crestlist = oguild['CREST']
-                                        crestsearch = True
-
-                            
-                            currentopponent = 0
-
-                            await battle_commands(self, ctx, mode, universe, selected_universe, completed_universes, oguild,
-                                    crestlist, crestsearch, sowner, oteam, ofam, currentopponent, None, None, None,
-                                    None, None, None, None, None)
-                            
-                            self.stop = True
-
                     else:
                         await ctx.send("This is not your Title list.")
 
