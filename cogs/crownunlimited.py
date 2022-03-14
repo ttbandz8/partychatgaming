@@ -1,6 +1,5 @@
 from operator import floordiv
 from discord import guild, message
-from cogs.lobbies import Lobbies
 import time
 from re import T
 import discord
