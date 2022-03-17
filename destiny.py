@@ -2924,7 +2924,7 @@ destiny = [
         "REQUIRED": 5,
         "DEFEAT": "Majin Vegeta",
         "USE_CARDS": ["Vegeta"],
-        "EARN": "Kid Trunks", 
+        "EARN": "Teen Trunks", 
         "COMPLETED": False,
         "UNIVERSE": "Dragon Ball Z"
     },

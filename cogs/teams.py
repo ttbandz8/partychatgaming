@@ -96,6 +96,7 @@ class Teams(commands.Cog):
         except:
             await ctx.send("Guild already exists")
     
+    @cog_ext.cog_slash(description="Recruit New Guild Members", guild_ids=main.guild_ids)
     async def recruit(self, ctx, player: User):
         owner_profile = db.queryUser({'DID': str(ctx.author.id)})
         team_profile = db.queryTeam({'TEAM_NAME': owner_profile['TEAM']})

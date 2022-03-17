@@ -70,13 +70,13 @@ class Guild(commands.Cog):
                             await ctx.send(m.FOUNDER_NO_TEAM, delete_after=3)
                             return
                         else:
-                            fteam_query = {'TNAME' : founder_profile['TEAM']}
-                            steam_query = {'TNAME' : sworn_profile['TEAM']}
+                            fteam_query = {'TEAM_NAME' : founder_profile['TEAM']}
+                            steam_query = {'TEAM_NAME' : sworn_profile['TEAM']}
                             founder_team = db.queryTeam(fteam_query)
                             sworn_team = db.queryTeam(steam_query)
                             fbal = founder_team['BANK']
                             sbal = sworn_team['BANK']
-                            if founder_team['TNAME'] == sworn_team['TNAME']:
+                            if founder_team['TEAM_NAME'] == sworn_team['TEAM_NAME']:
                                 await ctx.send(m.SAME_TEAM, delete_after=3)
                                 return
                             # if sbal < cost:
@@ -135,9 +135,9 @@ class Guild(commands.Cog):
                                                 newvalue = {'$set': {'SHIELD': str(owner), 'SDID': str(owner.id)}}
                                                 response = db.addGuildShield(guild_query, newvalue, ctx.author, owner)
                                                 await ctx.send(response)
-                                                if sworn_team['TNAME'] not in sword_list:
-                                                    newvalue = {'$push': {'SWORDS': str(sworn_team['TNAME'])}}
-                                                    swordaddition2 = db.addGuildSword(guild_query, newvalue, ctx.author, str(sworn_team['TNAME']))
+                                                if sworn_team['TEAM_NAME'] not in sword_list:
+                                                    newvalue = {'$push': {'SWORDS': str(sworn_team['TEAM_NAME'])}}
+                                                    swordaddition2 = db.addGuildSword(guild_query, newvalue, ctx.author, str(sworn_team['TEAM_NAME']))
                                                     await ctx.send(swordaddition2)
                                                 gbank = db.updateGuild(guild_query,{'$inc' : {'BANK' : cost }})
                                                 s_new_bal = sbal - cost
@@ -176,7 +176,7 @@ class Guild(commands.Cog):
                                                 for swords in guild['SWORDS']:
                                                     blade_count = 0
                                                     sword_count = sword_count + 1
-                                                    sword_team = db.queryTeam({'TNAME': swords})
+                                                    sword_team = db.queryTeam({'TEAM_NAME': swords})
                                                     dubs = sword_team['SCRIM_WINS']
                                                     els = sword_team['SCRIM_LOSSES']
                                                     for blades in sword_team['MEMBERS']:
@@ -199,8 +199,8 @@ class Guild(commands.Cog):
                                                 :mechanical_arm: | **Arm: **{sworn_profile['ARM']}
                                                 
                                                 :ninja: | **Swords: ** 2
-                                                **{founder_team['TNAME']}**
-                                                **{sworn_team['TNAME']}**
+                                                **{founder_team['TEAM_NAME']}**
+                                                **{sworn_team['TEAM_NAME']}**
                                                 :dollar: | **Guild Split: **{hall_split} 
                                                 :secret: | **Universe Crest: **{len(crest_list)} 
                                                     
@@ -247,13 +247,13 @@ class Guild(commands.Cog):
                         await ctx.send(m.FOUNDER_NO_TEAM, delete_after=3)
                         return
                     else:
-                        fteam_query = {'TNAME' : founder_profile['TEAM']}
-                        steam_query = {'TNAME' : sworn_profile['TEAM']}
+                        fteam_query = {'TEAM_NAME' : founder_profile['TEAM']}
+                        steam_query = {'TEAM_NAME' : sworn_profile['TEAM']}
                         founder_team = db.queryTeam(fteam_query)
                         sworn_team = db.queryTeam(steam_query)
                         fbal = founder_team['BANK']
                         sbal = sworn_team['BANK']
-                        if founder_team['TNAME'] == sworn_team['TNAME']:
+                        if founder_team['TEAM_NAME'] == sworn_team['TEAM_NAME']:
                             await ctx.send(m.SAME_TEAM, delete_after=3)
                             return
                         # if fbal < cost or sbal < cost:
@@ -312,11 +312,11 @@ class Guild(commands.Cog):
                                             newvalue = {'$set': {'SHIELD': str(owner), 'SDID': str(owner.id)}}
                                             response = db.addGuildShield(guild_query, newvalue, ctx.author, owner)
                                             await ctx.send(response)
-                                            newvalue = {'$push': {'SWORDS': str(founder_team['TNAME'])}}
-                                            swordaddition = db.addGuildSword(guild_query, newvalue, ctx.author, str(founder_team['TNAME']))
+                                            newvalue = {'$push': {'SWORDS': str(founder_team['TEAM_NAME'])}}
+                                            swordaddition = db.addGuildSword(guild_query, newvalue, ctx.author, str(founder_team['TEAM_NAME']))
                                             await ctx.send(swordaddition)
-                                            newvalue = {'$push': {'SWORDS': str(sworn_team['TNAME'])}}
-                                            swordaddition2 = db.addGuildSword(guild_query, newvalue, ctx.author, str(sworn_team['TNAME']))
+                                            newvalue = {'$push': {'SWORDS': str(sworn_team['TEAM_NAME'])}}
+                                            swordaddition2 = db.addGuildSword(guild_query, newvalue, ctx.author, str(sworn_team['TEAM_NAME']))
                                             await ctx.send(swordaddition2)
                                             gbank = db.updateGuild(guild_query,{'$set' : {'BANK' : investment }})
                                             new_bal = fbal - cost
@@ -358,7 +358,7 @@ class Guild(commands.Cog):
                                             for swords in guild['SWORDS']:
                                                 blade_count = 0
                                                 sword_count = sword_count + 1
-                                                sword_team = db.queryTeam({'TNAME': swords})
+                                                sword_team = db.queryTeam({'TEAM_NAME': swords})
                                                 dubs = sword_team['SCRIM_WINS']
                                                 els = sword_team['SCRIM_LOSSES']
                                                 for blades in sword_team['MEMBERS']:
@@ -381,8 +381,8 @@ class Guild(commands.Cog):
                                             :mechanical_arm: | **Arm: **{sworn_profile['ARM']}
                                             
                                             :ninja: | **Swords: ** 2
-                                            **{founder_team['TNAME']}**
-                                            **{sworn_team['TNAME']}**
+                                            **{founder_team['TEAM_NAME']}**
+                                            **{sworn_team['TEAM_NAME']}**
                                             :dollar: | **Guild Split: **{hall_split} 
                                             :secret: | **Universe Crest: **{len(crest_list)} 
                                                 
@@ -552,10 +552,10 @@ class Guild(commands.Cog):
         founder_profile = db.queryUser({'DID': str(ctx.author.id)})
         guildname = founder_profile['GUILD']
         sword_profile = db.queryUser({'DID': str(owner.id)})
-        team_profile = db.queryTeam({'TNAME': sword_profile['TEAM']})
+        team_profile = db.queryTeam({'TEAM_NAME': sword_profile['TEAM']})
         if not team_profile:
             await ctx.send(f"{owner.mention} does not own a Guild")
-        team_name = team_profile['TNAME']
+        team_name = team_profile['TEAM_NAME']
         team_owner = team_profile['OWNER']
         if founder_profile['GUILD'] == 'PCG':
             await ctx.send(m.USER_NOT_IN_GUILD, delete_after=3)
@@ -645,7 +645,7 @@ class Guild(commands.Cog):
         if shield_team_name == 'PCG':
             await ctx.send(m.KNIGHT_NOT_TEAM, delete_after=3)
             return
-        shield_team = db.queryTeam({'TNAME' : str(shield_team_name)})
+        shield_team = db.queryTeam({'TEAM_NAME' : str(shield_team_name)})
         if shield_team['GUILD'] != founder_profile['GUILD']:
             await ctx.send(m.KNIGHT_NOT_TEAM, delete_after=3)
             return
@@ -749,7 +749,7 @@ class Guild(commands.Cog):
         if not exiled_profile:
             await ctx.send(m.USER_DOESNT_EXIST, delete_after=5)
             return
-        exiled_team = db.queryTeam({'TNAME' : exiled_profile['TEAM']})
+        exiled_team = db.queryTeam({'TEAM_NAME' : exiled_profile['TEAM']})
         if leader_profile['GUILD'] != exiled_team['GUILD']:
             await ctx.send(m.GUILD_DOESNT_EXIST, delete_after=5)
             return
@@ -799,11 +799,11 @@ class Guild(commands.Cog):
     @cog_ext.cog_slash(description="Abandon Association (Guild Owner)", guild_ids=main.guild_ids)
     async def renounce(self, ctx):
         sword_profile = db.queryUser({'DID': str(ctx.author.id)})
-        team_profile = db.queryTeam({'TNAME' : sword_profile['TEAM']})
+        team_profile = db.queryTeam({'TEAM_NAME' : sword_profile['TEAM']})
         if sword_profile['DISNAME'] != team_profile['OWNER'] or sword_profile['TEAM'] == 'PCG':
             await ctx.send(m.OWNER_ONLY_COMMAND, delete_after=5)
             return
-        team_name = team_profile['TNAME']
+        team_name = team_profile['TEAM_NAME']
         guild_query = {'GNAME': team_profile['GUILD']}
         guild_profile = db.queryGuildAlt(guild_query)  
         if guild_profile:

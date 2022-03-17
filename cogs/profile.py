@@ -3040,17 +3040,14 @@ class Profile(commands.Cog):
                         await button_ctx.defer(ignore=True)
                         price = 800000
                         response = await craft_adjuster(self, ctx, vault, universe, price, card_info, None)
-                        if not response['SUCCESS']:
-                            await button_ctx.send(f"{response['MESSAGE']}")
-                            self.stop = True
+                        await button_ctx.send(f"{response['MESSAGE']}")
+                        self.stop = True
                     if button_ctx.custom_id == "Skin":
                         await button_ctx.defer(ignore=True)
                         price = 2000000
                         response = await craft_adjuster(self, ctx, vault, universe, price, card_info, new_skin_list)
-                        print(response)
-                        if not response['SUCCESS']:
-                            await button_ctx.send(f"{response['MESSAGE']}")
-                            self.stop = True
+                        await button_ctx.send(f"{response['MESSAGE']}")
+                        self.stop = True
                  
                 else:
                     await ctx.send("This is not your Craft.")
