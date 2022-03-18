@@ -99,7 +99,7 @@ class Teams(commands.Cog):
     @cog_ext.cog_slash(description="Recruit New Guild Members", guild_ids=main.guild_ids)
     async def recruit(self, ctx, player: User):
         owner_profile = db.queryUser({'DID': str(ctx.author.id)})
-        team_profile = db.queryTeam({'TEAM_NAME': owner_profile['TEAM']})
+        team_profile = db.queryTeam({'TEAM_NAME': owner_profile['TEAM'].lower()})
         if owner_profile['LEVEL'] < 4:
             await ctx.send(f"🔓 Unlock Guilds by completing Floor 3 of the 🌑 Abyss! Use /abyss to enter the abyss.")
             return
@@ -112,27 +112,28 @@ class Teams(commands.Cog):
             if owner_profile['DISNAME'] == team_profile['OWNER']:
 
                 member_profile = db.queryUser({'DID': str(player.id)})
-                if member_profile['LEVEL'] < 11:
-                    await ctx.send(f"🔓 {player.mention} has not unlocked Guilds!. Complete Floor 10 of the 🌑 Abyss! Use /abyss to enter the abyss.")
+                if member_profile['LEVEL'] < 4:
+                    await ctx.send(f"🔓 {player.mention} has not unlocked Guilds!. Complete Floor 3 of the 🌑 Abyss! Use /abyss to enter the abyss.")
                     return
 
                 # If user is part of a team you cannot add them to your team
                 if member_profile['TEAM'] == 'PCG':
-                    await main.DM(ctx, player, f"{ctx.author.mention}" + f" has invited you to join **{team_profile['TEAM_NAME']}** !" + f" React in server to join **{team_profile['TEAM_NAME']}**" )
+                    await main.DM(ctx, player, f"{ctx.author.mention}" + f" has invited you to join **{team_profile['TEAM_DISPLAY_NAME']}** !" + f" React in server to join **{team_profile['TEAM_DISPLAY_NAME']}**" )
 
                     team_buttons = [
                         manage_components.create_button(
                             style=ButtonStyle.blue,
-                            label="✔️",
+                            label="Join",
                             custom_id="Yes"
                         ),
                         manage_components.create_button(
                             style=ButtonStyle.red,
-                            label="❌",
+                            label="Don't Join",
                             custom_id="No"
                         )
                     ]
                     team_buttons_action_row = manage_components.create_actionrow(*team_buttons)
+                    transaction_message = f"{member_profile['DISNAME']} was recruited."
                     await ctx.send(f"{player.mention}" +f" do you want to join Guild **{team_profile['TEAM_NAME']}**?".format(self), components=[team_buttons_action_row])
 
                     def check(button_ctx):
@@ -149,9 +150,10 @@ class Teams(commands.Cog):
                             team_query = {'TEAM_NAME': team_profile['TEAM_NAME']}
                             new_value_query = {
                                 '$push': {'MEMBERS': str(player)},
-                                '$inc': {'MEMBER_COUNT': 1}
+                                '$inc': {'MEMBER_COUNT': 1},
+                                '$addToSet': {'TRANSACTIONS': transaction_message}
                                 }
-                            response = db.addTeamMember(team_query, new_value_query, str(ctx.author), str(player))
+                            response = db.addTeamMember(team_query, new_value_query, owner_profile['DISNAME'], member_profile['DISNAME'])
                             await button_ctx.send(response)
                     except:
                         await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=3)
