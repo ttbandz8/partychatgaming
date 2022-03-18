@@ -4096,6 +4096,8 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             tpet_exp = tpet['EXP']
             tpet_lvl = tpet['LVL']
             tpet_bond = tpet['BOND']
+            tpet_lookup = db.queryPet({'PET': tpet_name})
+            tpet_passive = tpet_lookup['ABILITIES'][0]
 
             t_DID = t_user['DID']
             t_card = t['NAME']
