@@ -2247,6 +2247,21 @@ async def destiny(player, opponent, mode):
     vault_query = {'DID': str(player.id)}
     card_info = db.queryCard({"NAME": str(user['CARD'])})
     skin_for = card_info['SKIN_FOR']
+    
+    hand_limit = 25
+    storage_allowed_amount = user['STORAGE_TYPE'] * 15
+    storage_amount = len(vault['STORAGE'])
+    hand_length = len(vault['CARDS'])
+    list1 = vault['CARDS']
+    list2 = vault['STORAGE']
+    current_cards = list1.extend(list2)
+
+    if len(list1) >= hand_limit and storage_amount >= storage_allowed_amount:
+        message = f"Your storage is full. You are unable to completed the destiny until you have available storage for your new destiny card."
+        return message
+
+
+
     owned_destinies = []
     for destiny in vault['DESTINY']:
         owned_destinies.append(destiny['NAME'])
@@ -2269,19 +2284,20 @@ async def destiny(player, opponent, mode):
                         try:
                             if destiny['EARN'] not in owned_card_levels_list:
                                 # Add the CARD_LEVELS for Destiny Card
-                                card_data = db.queryCard({'NAME': str(destiny['EARN'])})
-                                uni = db.queryUniverse({'TITLE': card_data['UNIVERSE']})
-                                tier = uni['TIER']
                                 update_query = {'$addToSet': {
-                                    'CARD_LEVELS': {'CARD': str(destiny['EARN']), 'LVL': 0, 'TIER': int(tier), 'EXP': 0,
+                                    'CARD_LEVELS': {'CARD': str(destiny['EARN']), 'LVL': 0, 'TIER': 0, 'EXP': 0,
                                                     'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
                                 db.updateVaultNoFilter(vault_query, update_query)
                                 #
                         except Exception as ex:
                             print(f"Error in Completing Destiny: {ex}")
 
-                        response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'CARDS': str(destiny['EARN'])}})
-                        message = f"**{destiny['NAME']}** completed! **{destiny['EARN']}** has been added to your vault!"
+                        if len(list1) >= 25 and storage_amount < storage_allowed_amount:
+                            response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'STORAGE': str(destiny['EARN'])}})
+                            message = f"**{destiny['NAME']}** completed! **{destiny['EARN']}** has been added to your storage!"
+                        else:
+                            response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'CARDS': str(destiny['EARN'])}})
+                            message = f"**{destiny['NAME']}** completed! **{destiny['EARN']}** has been added to your vault!"
                         query = {'DID': str(player.id)}
                         update_query = {'$inc': {'DESTINY.$[type].' + "WINS": 1},
                                         '$set': {'DESTINY.$[type].' + "COMPLETED": True}}
@@ -2314,18 +2330,20 @@ async def destiny(player, opponent, mode):
                         try:
                             if destiny['EARN'] not in owned_card_levels_list:
                                 # Add the CARD_LEVELS for Destiny Card
-                                card_data = db.queryCard({'NAME': str(destiny['EARN'])})
-                                uni = db.queryUniverse({'TITLE': card_data['UNIVERSE']})
-                                tier = uni['TIER']
                                 update_query = {'$addToSet': {
-                                    'CARD_LEVELS': {'CARD': str(destiny['EARN']), 'LVL': 0, 'TIER': int(tier), 'EXP': 0,
+                                    'CARD_LEVELS': {'CARD': str(destiny['EARN']), 'LVL': 0, 'TIER': 0, 'EXP': 0,
                                                     'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
                                 db.updateVaultNoFilter(vault_query, update_query)
                                 #
                         except Exception as ex:
                             print(f"Error in Completing Destiny: {ex}")
-                        response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'CARDS': str(destiny['EARN'])}})
-                        message = f"**{destiny['NAME']}** completed! **{destiny['EARN']}** has been added to your vault!"
+
+                        if len(list1) >= 25 and storage_amount < storage_allowed_amount:
+                            response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'STORAGE': str(destiny['EARN'])}})
+                            message = f"**{destiny['NAME']}** completed! **{destiny['EARN']}** has been added to your storage!"
+                        else:
+                            response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'CARDS': str(destiny['EARN'])}})
+                            message = f"**{destiny['NAME']}** completed! **{destiny['EARN']}** has been added to your vault!"
                         query = {'DID': str(player.id)}
                         update_query = {'$inc': {'DESTINY.$[type].' + "WINS": 3},
                                         '$set': {'DESTINY.$[type].' + "COMPLETED": True}}
@@ -2345,6 +2363,7 @@ async def destiny(player, opponent, mode):
                     resp = db.updateVault(query, update_query, filter_query)
                     await player.send(message)
                     return message
+        
         else:
             return False
     except Exception as ex:

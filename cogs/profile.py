@@ -585,7 +585,7 @@ class Profile(commands.Cog):
                             card_health = card_data['HLT']
                             card_name = card_data['NAME']
                             selected_universe = card_data['UNIVERSE']
-                            dismantle_amount = (35000 * card_tier) + card_health
+                            dismantle_amount = (10000 * card_tier) + card_health
                             if card_name == current_card:
                                 await button_ctx.send("You cannot dismantle equipped cards.")
                             elif card_name in updated_vault['CARDS']:
@@ -2715,6 +2715,11 @@ class Profile(commands.Cog):
                     updated_vault = db.queryVault({'DID': user['DID']})
                     balance = updated_vault['BALANCE']        
                     universe = str(button_ctx.origin_message.embeds[0].title)
+                    list1 = updated_vault['CARDS']
+                    list2 = updated_vault['STORAGE']
+                    list2.extend(list1)
+                    current_cards = list2
+                    
                     if button_ctx.custom_id == "title":
                         updated_vault = db.queryVault({'DID': user['DID']})
                         current_titles = updated_vault['TITLES']
@@ -2800,10 +2805,6 @@ class Profile(commands.Cog):
 
                
                     elif button_ctx.custom_id == "t1card":
-                        updated_vault = db.queryVault({'DID': user['DID']})
-                        list1 = updated_vault['CARDS']
-                        list2 = updated_vault['STORAGE']
-                        current_cards = list1.extend(list2)
                         price = price_adjuster(100000, universe, completed_tales, completed_dungeons)['C1']
                         acceptable = [1,2,3]
                         if price > balance:
@@ -2825,11 +2826,11 @@ class Profile(commands.Cog):
                         card_name = card['NAME']
                         tier = 0
 
-                        if len(list1) >= 25 and storage_amount < storage_allowed_amount:
+                        if len(updated_vault['CARDS']) >= 25 and storage_amount < storage_allowed_amount:
                             await route_to_storage(self, ctx, card_name, current_cards, owned_card_levels_list, price, universe, owned_destinies, tier)
                             self.stop = True
                             return
-                        elif len(list1) >= 25 and storage_amount >= storage_allowed_amount:
+                        elif len(updated_vault['CARDS']) >= 25 and storage_amount >= storage_allowed_amount:
                             await button_ctx.send("You have max amount of Cards. Transaction cancelled.")
                             self.stop = True
                             return
@@ -2861,15 +2862,7 @@ class Profile(commands.Cog):
 
                             await button_ctx.send(f"You purchased **{card_name}**!")
 
-                            # self.stop = True
-                            # return
-
-
                     elif button_ctx.custom_id == "t2card":
-                        updated_vault = db.queryVault({'DID': user['DID']})
-                        list1 = updated_vault['CARDS']
-                        list2 = updated_vault['STORAGE']
-                        current_cards = list1.extend(list2)
                         price = price_adjuster(450000, universe, completed_tales, completed_dungeons)['C2']
                         acceptable = [3,4,5]
                         if price > balance:
@@ -2893,11 +2886,11 @@ class Profile(commands.Cog):
                         card_name = card['NAME']
                         tier = 0
 
-                        if len(list1) >= 25 and storage_amount < storage_allowed_amount:
+                        if len(updated_vault['CARDS']) >= 25 and storage_amount < storage_allowed_amount:
                             await route_to_storage(self, ctx, card_name, current_cards, owned_card_levels_list, price, universe, owned_destinies, tier)
                             self.stop = True
                             return
-                        elif len(list1) >= 25 and storage_amount >= storage_allowed_amount:
+                        elif len(updated_vault['CARDS']) >= 25 and storage_amount >= storage_allowed_amount:
                             await button_ctx.send("You have max amount of Cards. Transaction cancelled.")
                             self.stop = True
                             return
@@ -2931,10 +2924,6 @@ class Profile(commands.Cog):
                             await button_ctx.send(f"You purchased **{card_name}**!")
 
                     elif button_ctx.custom_id == "t3card":
-                        updated_vault = db.queryVault({'DID': user['DID']})
-                        list1 = updated_vault['CARDS']
-                        list2 = updated_vault['STORAGE']
-                        current_cards = list1.extend(list2)
                         price = price_adjuster(6000000, universe, completed_tales, completed_dungeons)['C3']
                         acceptable = [5,6,7]
                         if price > balance:
@@ -2967,11 +2956,11 @@ class Profile(commands.Cog):
                         card_name = card['NAME']
                         tier = 0
 
-                        if len(list1) >= 25 and storage_amount < storage_allowed_amount:
+                        if len(updated_vault['CARDS']) >= 25 and storage_amount < storage_allowed_amount:
                             await route_to_storage(self, ctx, card_name, current_cards, owned_card_levels_list, price, universe, owned_destinies, tier)
                             self.stop = True
                             return
-                        elif len(list1) >= 25 and storage_amount >= storage_allowed_amount:
+                        elif len(updated_vault['CARDS']) >= 25 and storage_amount >= storage_allowed_amount:
                             await button_ctx.send("You have max amount of Cards. Transaction cancelled.")
                             self.stop = True
                             return
