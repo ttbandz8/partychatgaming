@@ -555,6 +555,7 @@ class Profile(commands.Cog):
                                         self.stop = True
                                     if button_ctx.custom_id == "yes":
                                         db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'CARDS': card_name}})
+                                        db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'CARD_LEVELS': {'CARD': card_name}}})
                                         await main.bless(sell_price, ctx.author.id)
                                         await button_ctx.send("Sold.")
                                 except Exception as ex:
@@ -623,6 +624,7 @@ class Profile(commands.Cog):
                                             response = db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$addToSet':{'GEMS': {'UNIVERSE': selected_universe, 'GEMS': dismantle_amount, 'UNIVERSE_HEART': False, 'UNIVERSE_SOUL': False}}})
 
                                         db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'CARDS': card_name}})
+                                        db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'CARD_LEVELS': {'CARD': card_name}}})
                                         #await main.bless(sell_price, ctx.author.id)
                                         await button_ctx.send("Dismantled.")
                                         self.stop = True
@@ -688,7 +690,7 @@ class Profile(commands.Cog):
                                         )
                                     ]
                                     trade_buttons_action_row = manage_components.create_actionrow(*trade_buttons)
-                                    await button_ctx.send(f"Woudl you like to remove **{selected_card}** from the **Trade**?", components=[trade_buttons_action_row])
+                                    await button_ctx.send(f"Would you like to remove **{selected_card}** from the **Trade**?", components=[trade_buttons_action_row])
                                     
                                     def check(button_ctx):
                                         return button_ctx.author == ctx.author
@@ -757,13 +759,13 @@ class Profile(commands.Cog):
                                                 trade_query = {'MDID' : str(ctx.author.id), 'BDID' : str(mtrade['BDID']), 'OPEN' : True}
                                                 update_query = {"$push" : {'MCARDS': selected_card}, "$inc" : {'TAX' : int(sell_price)}}
                                                 resp = db.updateTrade(trade_query, update_query)
-                                                await button_ctx.send("Traded.")
+                                                await button_ctx.send("Trade staged.")
                                                 self.stop = True
                                             elif bvalidation:
                                                 trade_query = {'MDID' : str(btrade['MDID']),'BDID' : str(ctx.author.id), 'OPEN' : True}
                                                 update_query = {"$push" : {'BCARDS': selected_card}, "$inc" : {'TAX' : int(sell_price)}}
                                                 resp = db.updateTrade(trade_query, update_query)
-                                                await button_ctx.send("Traded.")
+                                                await button_ctx.send("Trade staged.")
                                                 self.stop = True
                                     except Exception as ex:
                                         trace = []
@@ -3233,13 +3235,6 @@ class Profile(commands.Cog):
                 'message': str(ex),
                 'trace': trace
             }))
-
-    # @cog_ext.cog_slash(description="Open Storage", guild_ids=main.guild_ids)
-    # async def storage(self, ctx):
-    #     vault_query = {'DID': str(ctx.author.id)}
-    #     vault = db.altQueryVault(vault_query)
-    #     storage = vault['STORAGE']
-    #     hand = vault['CARDS']
 
 
 async def route_to_storage(self, ctx, card_name, current_cards, owned_card_levels_list, price, universe, owned_destinies, tier):

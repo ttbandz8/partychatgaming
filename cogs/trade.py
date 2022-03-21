@@ -289,6 +289,7 @@ class Trade(commands.Cog):
                                         update_query = {'$addToSet': {'CARD_LEVELS': {'CARD': str(c), 'LVL': 0, 'TIER': 0, 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
                                         db.updateVaultNoFilter({'DID': str(buyer_info['DID'])}, update_query)
                                     db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'CARDS': str(c)}})
+                                    db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'CARD_LEVELS': {'CARD': str(c)}}})
                                     db.updateVaultNoFilter({'DID': str(buyer_info['DID'])},{'$addToSet':{'CARDS': str(c)}})
                                     
                                     for dest in d.destiny:
@@ -330,6 +331,7 @@ class Trade(commands.Cog):
                                         update_query = {'$addToSet': {'CARD_LEVELS': {'CARD': str(c), 'LVL': 0, 'TIER': 0, 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
                                         db.updateVaultNoFilter({'DID': str(ctx.author.id)}, update_query)
                                     db.updateVaultNoFilter({'DID': str(buyer_info['DID'])},{'$pull':{'CARDS': str(c)}})
+                                    db.updateVaultNoFilter({'DID': str(buyer_info['DID'])},{'$pull':{'CARD_LEVELS': {'CARD': str(c)}}})
                                     db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$addToSet':{'CARDS': str(c)}})
                                     
                                     for dest in d.destiny:
