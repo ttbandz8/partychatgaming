@@ -20925,7 +20925,9 @@ async def drops(self,player, universe, matchcount):
     vault_query = {'DID': str(player.id)}
     vault = db.queryVault(vault_query)
     player_info = db.queryUser({'DID': str(vault['DID'])})
+
     difficulty = player_info['DIFFICULTY']
+
     if difficulty == "EASY":
         bless_amount = 100
         await bless(bless_amount, player.id)
@@ -21101,10 +21103,6 @@ async def drops(self,player, universe, matchcount):
                 return f"You earned :coin: **150**!"
         elif drop_rate <= card_drop and drop_rate > pet_drop:
             if all_available_drop_cards:
-                if len(vault['CARDS']) >= 25:
-                    await bless(300, player.id)
-                    return f"You're maxed out on Cards! You earned :coin: 300 instead!"
-
                 # Check if already owned
                 card_owned = False
                 for c in vault['CARD_LEVELS']:
@@ -21113,17 +21111,38 @@ async def drops(self,player, universe, matchcount):
 
                 if card_owned:
                     await cardlevel(self, cards[rand_card], player.id, "Tales", universe)
-                    response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'CARDS': str(cards[rand_card])}})
-                    message = ""
                     await bless(150, player.id)
                     return f"You earned EXP for _Card:_ **{cards[rand_card]}** + :coin: 150!\n{message}"
                 else:
+                    storage_amount = len(vault['STORAGE'])
+                    hand_length = len(vault['CARDS'])
+                    storage_allowed_amount = player_info['STORAGE_TYPE'] * 15
+                    list1 = vault['CARDS']
+                    list2 = vault['STORAGE']
+                    current_cards = list1.extend(list2)
+                    if len(vault['CARDS']) >= 25:
+                        if storage_amount < storage_allowed_amount:
+                            update_query = {'$addToSet': {
+                                'CARD_LEVELS': {'CARD': str(cards[rand_card]), 'LVL': 0, 'TIER': 0, 'EXP': 0, 'HLT': 0,
+                                                'ATK': 0, 'DEF': 0, 'AP': 0}}}
+                            response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'STORAGE': str(cards[rand_card])}})
+                            r = db.updateVaultNoFilter(vault_query, update_query)
+                            message = ""
+                            for destiny in d.destiny:
+                                if cards[rand_card] in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
+                                    db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
+                                    message = f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault."
+
+                            return f"{cards[rand_card]} has been added to your storage 💼!\n{message}"
+
+                        else:
+                            await bless(300, player.id)
+                            return f"You're maxed out on Cards! You earned :coin: 300 instead!"
+
 
                     card_data = db.queryCard({'NAME': str(cards[rand_card])})
-                    uni = db.queryUniverse({'TITLE': card_data['UNIVERSE']})
-                    tier = uni['TIER']
                     update_query = {'$addToSet': {
-                        'CARD_LEVELS': {'CARD': str(cards[rand_card]), 'LVL': 0, 'TIER': int(tier), 'EXP': 0, 'HLT': 0,
+                        'CARD_LEVELS': {'CARD': str(cards[rand_card]), 'LVL': 0, 'TIER': 0, 'EXP': 0, 'HLT': 0,
                                         'ATK': 0, 'DEF': 0, 'AP': 0}}}
                     response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'CARDS': str(cards[rand_card])}})
                     r = db.updateVaultNoFilter(vault_query, update_query)
@@ -21133,8 +21152,7 @@ async def drops(self,player, universe, matchcount):
                             db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
                             message = f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault."
 
-                    await bless(50, player.id)
-                    return f"You earned _Card:_ **{cards[rand_card]}** + :coin: 50!\n{message}"
+                    return f"You earned Card: **{cards[rand_card]}**!\n{message}"
             else:
                 await bless(5000, player.id)
                 return f"You earned :coin: **5000**!"
@@ -21177,34 +21195,46 @@ async def specific_drops(self,player, card, universe):
         owned_destinies.append(destiny['NAME'])
 
     try:
-        if len(vault['CARDS']) >= 25:
-            await bless(3000, player)
-            return f"You're maxed out on Cards! You earned :coin: 3,000 instead!"
-        # Check if already owned
-        card_lvls_owned = False
         card_owned = False
-        for c in vault['CARD_LEVELS']:
-            if c['CARD'] == str(card):
-                card_lvls_owned = True
+
         if card in vault['CARDS']:
             card_owned = True
 
-        if card_owned and card_lvls_owned:
-            await cardlevel(self, card, player, "Tales", universe)
-            message = ""
-            await bless(5000, player)
-            return f"You earned EXP for _Card:_ **{card}** + :coin: 5,000 in addition to the card bounty."
-        elif card_lvls_owned:
+        if card_owned:
             await cardlevel(self, card, player, "Tales", universe)
             message = ""
             await bless(5000, player)
             return f"You earned EXP for _Card:_ **{card}** + :coin: 5,000 in addition to the card bounty."
         else:
-            card_data = db.queryCard({'NAME': str(card)})
-            uni = db.queryUniverse({'TITLE': card_data['UNIVERSE']})
-            tier = uni['TIER']
+            storage_amount = len(vault['STORAGE'])
+            hand_length = len(vault['CARDS'])
+            storage_allowed_amount = user['STORAGE_TYPE'] * 15
+            list1 = vault['CARDS']
+            list2 = vault['STORAGE']
+            current_cards = list1.extend(list2)
+            if len(vault['CARDS']) >= 25:
+                if storage_amount < storage_allowed_amount:
+                    update_query = {'$addToSet': {
+                        'CARD_LEVELS': {'CARD': str(card), 'LVL': 0, 'TIER': 0, 'EXP': 0, 'HLT': 0,
+                                        'ATK': 0, 'DEF': 0, 'AP': 0}}}
+                    response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'STORAGE': str(card)}})
+                    r = db.updateVaultNoFilter(vault_query, update_query)
+                    message = ""
+                    for destiny in d.destiny:
+                        if card in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
+                            db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
+                            message = f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault."
+
+                    return f"{str(card)} has been added to your storage 💼!\n{message}"
+
+                else:
+                    await bless(300, player)
+                    return f"You're maxed out on Cards! You earned :coin: 300 instead!"
+
+
+
             update_query = {'$addToSet': {
-                'CARD_LEVELS': {'CARD': str(card), 'LVL': 0, 'TIER': int(tier), 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0,
+                'CARD_LEVELS': {'CARD': str(card), 'LVL': 0, 'TIER': 0, 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0,
                                 'AP': 0}}}
             response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'CARDS': str(card)}})
             r = db.updateVaultNoFilter(vault_query, update_query)
@@ -21214,7 +21244,6 @@ async def specific_drops(self,player, card, universe):
                     db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
                     message = f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault."
 
-            await bless(50, player)
             return f"You earned _Card:_ **{card}**!\n{message}"
     except Exception as ex:
         trace = []
@@ -21391,9 +21420,6 @@ async def dungeondrops(self, player, universe, matchcount):
                 await bless(100, player.id)
                 return f"You earned _Summon:_ **{pets[rand_pet]}** + :coin: 100!"
         elif drop_rate <= card_drop and drop_rate > pet_drop:
-            if len(vault['CARDS']) >= 25:
-                await bless(5000, player.id)
-                return f"You're maxed out on Cards! You earned :coin: 5000 instead!"
             card_owned = False
             for c in vault['CARD_LEVELS']:
                 if c['CARD'] == cards[rand_card]:
@@ -21401,16 +21427,39 @@ async def dungeondrops(self, player, universe, matchcount):
 
             if card_owned:
                 await cardlevel(self, cards[rand_card], player.id, "Dungeon", universe)
-                response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'CARDS': str(cards[rand_card])}})
                 message = ""
                 await bless(2500, player.id)
-                return f"You earned {exp_gain} EXP for _Card:_ **{cards[rand_card]}** + :coin: 2500!\n{message}"
+                return f"You earned {exp_gain} EXP for _Card:_ **{cards[rand_card]}** + :coin: 2,500!\n{message}"
             else:
-                card_data = db.queryCard({'NAME': str(cards[rand_card])})
-                uni = db.queryUniverse({'TITLE': card_data['UNIVERSE']})
-                tier = uni['TIER']
+                storage_amount = len(vault['STORAGE'])
+                hand_length = len(vault['CARDS'])
+                storage_allowed_amount = user['STORAGE_TYPE'] * 15
+                list1 = vault['CARDS']
+                list2 = vault['STORAGE']
+                current_cards = list1.extend(list2)
+                if len(vault['CARDS']) >= 25:
+                    if storage_amount < storage_allowed_amount:
+                        update_query = {'$addToSet': {
+                            'CARD_LEVELS': {'CARD': str(cards[rand_card]), 'LVL': 0, 'TIER': 0, 'EXP': 0, 'HLT': 0,
+                                            'ATK': 0, 'DEF': 0, 'AP': 0}}}
+                        response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'STORAGE': str(cards[rand_card])}})
+                        r = db.updateVaultNoFilter(vault_query, update_query)
+                        message = ""
+                        for destiny in d.destiny:
+                            if cards[rand_card] in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
+                                db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
+                                message = f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault."
+
+                        return f"{cards[rand_card]} has been added to your storage 💼!\n{message}"
+
+                    else:
+                        await bless(5000, player.id)
+                        return f"You're maxed out on Cards! You earned :coin: 5,000 instead!"
+
+
+                
                 update_query = {'$addToSet': {
-                    'CARD_LEVELS': {'CARD': str(cards[rand_card]), 'LVL': 0, 'TIER': int(tier), 'EXP': 0, 'HLT': 0,
+                    'CARD_LEVELS': {'CARD': str(cards[rand_card]), 'LVL': 0, 'TIER': 0, 'EXP': 0, 'HLT': 0,
                                     'ATK': 0, 'DEF': 0, 'AP': 0}}}
                 response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'CARDS': str(cards[rand_card])}})
                 r = db.updateVaultNoFilter(vault_query, update_query)
@@ -21420,8 +21469,7 @@ async def dungeondrops(self, player, universe, matchcount):
                         db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
                         message = f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault."
 
-                await bless(2000, player.id)
-                return f"You earned _Card:_ **{cards[rand_card]}** + :coin: 2000!\n{message}"
+                return f"You earned _Card:_ **{cards[rand_card]}**!\n{message}"
     except Exception as ex:
         trace = []
         tb = ex.__traceback__
@@ -21565,9 +21613,9 @@ async def bossdrops(self,player, universe):
             if len(vault['CARDS']) >= 25:
                 await bless(8000, player.id)
                 return f"You're maxed out on Cards! You earned :coin: 8000 instead!"
-                response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'CARDS': str(cards[rand_card])}})
-                await bless(50, player.id)
-                return f"You earned {cards[rand_card]} + :coin: 50!"
+            response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'CARDS': str(cards[rand_card])}})
+            await bless(50, player.id)
+            return f"You earned {cards[rand_card]} + :coin: 50!"
         elif drop_rate <= boss_title_drop and drop_rate > card_drop:
             if len(vault['TITLES']) >= 25:
                 await bless(10000, player.id)

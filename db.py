@@ -922,6 +922,14 @@ def queryDropCards(args):
     data = cards_col.find({'UNIVERSE': args, 'EXCLUSIVE': False, 'AVAILABLE': True, 'HAS_COLLECTION': False, 'IS_SKIN': False,'TIER': {'$in': acceptable}})
     return data 
 
+def querySpecificCards(args):
+    try:
+        data = cards_col.find({'NAME': {'$in': args}})
+        return data 
+    except Exception as e:
+        return False
+   
+
 def querySpecificDropCards(args):
     data = cards_col.find({'UNIVERSE': args, 'AVAILABLE': True, 'HAS_COLLECTION': False, 'VUL': False, 'IS_SKIN': False, 'TIER': {'$in': acceptable}})
     return data 

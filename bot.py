@@ -2245,8 +2245,11 @@ async def trinketshop(ctx):
    if user['LEVEL'] < 11:
       await ctx.send(f"🔓 Unlock the Trinket Shop by completing Floor 10 of the 🌑 Abyss! Use /abyss to enter the abyss.")
       return
-
+   patron_flag = user['PATRON']
    current_arm = user['ARM']
+   storage_type = user['STORAGE_TYPE']
+   storage_pricing = (storage_type + 1) * 1500000
+   storage_pricing_text = f"{'{:,}'.format(storage_pricing)}" 
    arm_info = db.queryArm({'ARM': str(current_arm)})
    boss_arm = False
    dungeon_arm = False
@@ -2313,6 +2316,11 @@ async def trinketshop(ctx):
             style=ButtonStyle.grey,
             label="Gabe's Purse 👛",
             custom_id="4"
+         ),
+         manage_components.create_button(
+            style=ButtonStyle.grey,
+            label="Storage 💼",
+            custom_id="6"
          )
    ]
    sell_buttons_action_row = manage_components.create_actionrow(*sell_buttons)
@@ -2332,6 +2340,9 @@ async def trinketshop(ctx):
 
    ⚒️ 4️⃣ **50 Durability** for :dollar: **{durability_message}**
 
+   💼 **Storage Tier {str(storage_type + 1)}**: :money_with_wings: **{storage_pricing_text}**
+
+
    Purchase **Gabe's Purse** to Keep ALL ITEMS when **Rebirthing**
    *You will not be able to select a new starting universe!*
 
@@ -2340,7 +2351,7 @@ async def trinketshop(ctx):
    What would you like to buy?
    """), colour=0xf1c40f)
    embedVar.set_footer(text="Boosts are used immediately upon purchase. Click cancel to exit purchase.", icon_url="https://cdn.discordapp.com/emojis/784402243519905792.gif?v=1")
-   await ctx.send(embed=embedVar, components=[sell_buttons_action_row, util_sell_buttons_action_row])
+   msg = await ctx.send(embed=embedVar, components=[sell_buttons_action_row, util_sell_buttons_action_row])
 
    def check(button_ctx):
       return button_ctx.author == ctx.author
@@ -2365,7 +2376,7 @@ async def trinketshop(ctx):
 
 
       if button_ctx.custom_id == "cancel":
-         await button_ctx.send("Cancelled purchase.", hidden=True)
+         await msg.edit(components=[])
          return
 
       if button_ctx.custom_id in exp_boost_buttons:
@@ -2442,7 +2453,30 @@ async def trinketshop(ctx):
                return
             except:
                await ctx.send("Failed to purchase durability boost.", hidden=True)
-         
+
+      if button_ctx.custom_id == "6":
+         if storage_pricing > balance:
+            await button_ctx.send("Insufficent funds.", hidden=True)
+            await msg.edit(components=[])
+            return
+            
+         if not patron_flag and storage_type >= 2:
+            await button_ctx.send("Only Patrons may purchase more than 30 additional storage. To become a Patron, visit https://www.patreon.com/partychatgaming?fan_landing=true.", hidden=True)
+            await msg.edit(components=[])
+            return
+            
+         if storage_type == 10:
+            await button_ctx.send("You already have max storage.")
+            await msg.edit(components=[])
+            return
+            
+         else:
+            update = db.updateUserNoFilterAlt(user_query, {'$inc': {'STORAGE_TYPE': 1}})
+            await curse(storage_pricing, str(ctx.author.id))
+            await button_ctx.send(f"Storage Tier {str(storage_type + 1)} has been purchased!")
+            await msg.edit(components=[])
+            return
+
    except Exception as ex:
       trace = []
       tb = ex.__traceback__

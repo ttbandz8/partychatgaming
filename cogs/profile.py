@@ -379,6 +379,7 @@ class Profile(commands.Cog):
                 cards_list = vault['CARDS']
                 total_cards = len(cards_list)
                 current_card = d['CARD']
+                storage = vault['STORAGE']
                 cards=[]
                 icon = ":coin:"
                 if balance >= 150000:
@@ -499,7 +500,7 @@ class Profile(commands.Cog):
                     manage_components.create_button(style=1, label="Resell", custom_id="Resell"),
                     manage_components.create_button(style=1, label="Dismantle", custom_id="Dismantle"),
                     manage_components.create_button(style=1, label="Trade", custom_id="Trade"),
-                    manage_components.create_button(style=2, label="Exit", custom_id="Exit")
+                    manage_components.create_button(style=2, label="Swap", custom_id="Swap")
                 ]
                 custom_action_row = manage_components.create_actionrow(*buttons)
                 # custom_button = manage_components.create_button(style=3, label="Equip")
@@ -783,12 +784,45 @@ class Profile(commands.Cog):
                                         await ctx.send("There's an issue with trading one or all of your items.")
                                         return   
                             
-                        elif button_ctx.custom_id == "Exit":
+                        elif button_ctx.custom_id == "Swap":
                             await button_ctx.defer(ignore=True)
+                            await ctx.send(f"{ctx.author.mention}, Which card number would you like to swap with in storage?")
+
+                            def check(msg):
+                                return msg.author == ctx.author
+
+                            try:
+                                msg = await self.bot.wait_for('message', check=check, timeout=30)
+                                if storage[int(msg.content)]:
+                                    swap_with = storage[int(msg.content)]
+                                    query = {'DID': str(msg.author.id)}
+                                    update_storage_query = {
+                                        '$pull': {'CARDS': selected_card},
+                                        '$addToSet': {'STORAGE': selected_card},
+                                    }
+                                    response = db.updateVaultNoFilter(query, update_storage_query)
+
+                                    update_storage_query = {
+                                        '$pull': {'STORAGE': swap_with},
+                                        '$addToSet': {'CARDS': swap_with}
+                                    }
+                                    response = db.updateVaultNoFilter(query, update_storage_query)
+
+
+                                    await ctx.send(f"**{selected_card}** has been swapped with **{swap_with}**")
+                                    return
+                                else:
+                                    await ctx.send("The card number you want to swap with does not exist.")
+                                    return
+
+                            except Exception as e:
+                                return False
+
+
                             self.stop = True
                     else:
                         await ctx.send("This is not your card list.")
-                await Paginator(bot=self.bot, disableAfterTimeout=True, ctx=ctx, pages=embed_list, timeout=60, customActionRow=[
+                await Paginator(bot=self.bot, disableAfterTimeout=True, useQuitButton=True, ctx=ctx, pages=embed_list, timeout=60, customActionRow=[
                     custom_action_row,
                     custom_function,
                 ]).run()
@@ -811,6 +845,108 @@ class Profile(commands.Cog):
             }))
             await ctx.send("There's an issue with loading your cards. Check with support.", hidden=True)
             return
+
+    @cog_ext.cog_slash(description="View all Cards in Storage", guild_ids=main.guild_ids)
+    async def storage(self, ctx):
+        try:
+            user = db.queryUser({'DID': str(ctx.author.id)})
+            vault = db.queryVault({'DID': str(ctx.author.id)})
+            storage_allowed_amount = user['STORAGE_TYPE'] * 15
+            if not vault['STORAGE']:
+                await ctx.send("Your storage is empty.", hidden=True)
+                return
+
+            list_of_cards = db.querySpecificCards(vault['STORAGE'])
+            cards = [x for x in list_of_cards]
+            dungeon_card_details = []
+            tales_card_details = []
+            destiny_card_details = []
+            
+            for card in cards:
+                index = vault['STORAGE'].index(card['NAME'])
+                level = ""
+                for c in vault['CARD_LEVELS']:
+                    if card['NAME'] == c['CARD']:
+                        level = str(c['LVL'])
+                available = ""
+                if card['EXCLUSIVE'] and not card['HAS_COLLECTION']:
+                    dungeon_card_details.append(
+                        f"[{str(index)}] :mahjong: {card['TIER']} **{card['NAME']}**\n**🔱**: {str(level)} :heart: {card['HLT']} :dagger: {card['ATK']}  🛡️ {card['DEF']}\n")
+                elif not card['HAS_COLLECTION']:
+                    tales_card_details.append(
+                        f"[{str(index)}] :mahjong: {card['TIER']} **{card['NAME']}**\n**🔱**: {str(level)} :heart: {card['HLT']} :dagger: {card['ATK']}  🛡️ {card['DEF']}\n")
+                elif card['HAS_COLLECTION']:
+                    destiny_card_details.append(
+                        f"[{str(index)}] :mahjong: {card['TIER']} **{card['NAME']}**\n**🔱**: {str(level)} :heart: {card['HLT']} :dagger: {card['ATK']}  🛡️ {card['DEF']}\n")
+
+            all_cards = []
+            if tales_card_details:
+                for t in tales_card_details:
+                    all_cards.append(t)
+
+            if dungeon_card_details:
+                for d in dungeon_card_details:
+                    all_cards.append(d)
+
+            if destiny_card_details:
+                for de in destiny_card_details:
+                    all_cards.append(de)
+
+            total_cards = len(all_cards)
+
+            # Adding to array until divisible by 10
+            while len(all_cards) % 10 != 0:
+                all_cards.append("")
+            # Check if divisible by 10, then start to split evenly
+
+            if len(all_cards) % 10 == 0:
+                first_digit = int(str(len(all_cards))[:1])
+                if len(all_cards) >= 89:
+                    if first_digit == 1:
+                        first_digit = 10
+                # first_digit = 10
+                cards_broken_up = np.array_split(all_cards, first_digit)
+
+            # If it's not an array greater than 10, show paginationless embed
+            if len(all_cards) < 10:
+                embedVar = discord.Embed(title=f"💼 {user['DISNAME']}'s Storage", description="\n".join(all_cards), colour=0x7289da)
+                embedVar.set_footer(
+                    text=f"{total_cards} Total Cards\n{str(storage_allowed_amount - len(vault['STORAGE']))} Storage Available")
+                await ctx.send(embed=embedVar)
+
+            embed_list = []
+            for i in range(0, len(cards_broken_up)):
+                globals()['embedVar%s' % i] = discord.Embed(
+                    title=f"💼 {user['DISNAME']}'s Storage",
+                    description="\n".join(cards_broken_up[i]), colour=0x7289da)
+                globals()['embedVar%s' % i].set_footer(
+                    text=f"{total_cards} Total Cards\n{str(storage_allowed_amount - len(vault['STORAGE']))} Storage Available")
+                embed_list.append(globals()['embedVar%s' % i])
+
+            paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+            paginator.add_reaction('⏮️', "first")
+            paginator.add_reaction('⬅️', "back")
+            paginator.add_reaction('🔐', "lock")
+            paginator.add_reaction('➡️', "next")
+            paginator.add_reaction('⏭️', "last")
+            embeds = embed_list
+            await paginator.run(embeds)
+        except Exception as ex:
+            trace = []
+            tb = ex.__traceback__
+            while tb is not None:
+                trace.append({
+                    "filename": tb.tb_frame.f_code.co_filename,
+                    "name": tb.tb_frame.f_code.co_name,
+                    "lineno": tb.tb_lineno
+                })
+                tb = tb.tb_next
+            print(str({
+                'player': str(ctx.author),
+                'type': type(ex).__name__,
+                'message': str(ex),
+                'trace': trace
+            }))
 
 
     @cog_ext.cog_slash(description="Check all your Titles", guild_ids=main.guild_ids)
@@ -2486,6 +2622,7 @@ class Profile(commands.Cog):
         try:
             all_universes = db.queryAllUniverse()
             user = db.queryUser({'DID': str(ctx.author.id)})
+            storage_allowed_amount = user['STORAGE_TYPE'] * 15
 
             if user['LEVEL'] < 1:
                 await ctx.send("🔓 Unlock the Shop by completing Floor 0 of the 🌑 Abyss! Use /abyss to enter the abyss.")
@@ -2511,6 +2648,8 @@ class Profile(commands.Cog):
             
             vault_query = {'DID' : str(ctx.author.id)}
             vault = db.altQueryVault(vault_query)
+            storage_amount = len(vault['STORAGE'])
+            hand_length = len(vault['CARDS'])
             current_titles = vault['TITLES']
             current_cards = vault['CARDS']
             current_arms = []
@@ -2660,12 +2799,10 @@ class Profile(commands.Cog):
                
                     elif button_ctx.custom_id == "t1card":
                         updated_vault = db.queryVault({'DID': user['DID']})
-                        current_cards = updated_vault['CARDS']
+                        list1 = updated_vault['CARDS']
+                        list2 = updated_vault['STORAGE']
+                        current_cards = list1.extend(list2)
                         price = price_adjuster(100000, universe, completed_tales, completed_dungeons)['C1']
-                        if len(current_cards) >= 25:
-                            await button_ctx.send("You have max amount of Cards. Transaction cancelled.")
-                            self.stop = True
-                            return
                         acceptable = [1,2,3]
                         if price > balance:
                             await button_ctx.send("Insufficent funds.")
@@ -2685,6 +2822,16 @@ class Profile(commands.Cog):
                             card = list_of_cards[selection]
                         card_name = card['NAME']
                         tier = 0
+
+                        if len(list1) >= 25 and storage_amount < storage_allowed_amount:
+                            await route_to_storage(self, ctx, card_name, current_cards, owned_card_levels_list, price, universe, owned_destinies, tier)
+                            self.stop = True
+                            return
+                        elif len(list1) >= 25 and storage_amount >= storage_allowed_amount:
+                            await button_ctx.send("You have max amount of Cards. Transaction cancelled.")
+                            self.stop = True
+                            return
+        
 
                         if card_name in current_cards:
                             await cardlevel(self,card['NAME'], str(ctx.author.id), "Purchase", universe)
@@ -2711,18 +2858,17 @@ class Profile(commands.Cog):
 
 
                             await button_ctx.send(f"You purchased **{card_name}**!")
+
                             # self.stop = True
                             # return
 
 
                     elif button_ctx.custom_id == "t2card":
                         updated_vault = db.queryVault({'DID': user['DID']})
-                        current_cards = updated_vault['CARDS']
+                        list1 = updated_vault['CARDS']
+                        list2 = updated_vault['STORAGE']
+                        current_cards = list1.extend(list2)
                         price = price_adjuster(450000, universe, completed_tales, completed_dungeons)['C2']
-                        if len(current_cards) >=25:
-                            await button_ctx.send("You have max amount of Cards. Transaction cancelled.")
-                            self.stop = True
-                            return
                         acceptable = [3,4,5]
                         if price > balance:
                             await button_ctx.send("Insufficent funds.")
@@ -2745,6 +2891,16 @@ class Profile(commands.Cog):
                         card_name = card['NAME']
                         tier = 0
 
+                        if len(list1) >= 25 and storage_amount < storage_allowed_amount:
+                            await route_to_storage(self, ctx, card_name, current_cards, owned_card_levels_list, price, universe, owned_destinies, tier)
+                            self.stop = True
+                            return
+                        elif len(list1) >= 25 and storage_amount >= storage_allowed_amount:
+                            await button_ctx.send("You have max amount of Cards. Transaction cancelled.")
+                            self.stop = True
+                            return
+
+
                         if card_name in current_cards:
                             await cardlevel(self,card['NAME'], str(ctx.author.id), "Purchase", universe)
                             await button_ctx.send(f"You received a level up for **{card_name}**!")
@@ -2771,17 +2927,13 @@ class Profile(commands.Cog):
 
 
                             await button_ctx.send(f"You purchased **{card_name}**!")
-                            # self.stop = True
-                            # return
 
                     elif button_ctx.custom_id == "t3card":
                         updated_vault = db.queryVault({'DID': user['DID']})
-                        current_cards = updated_vault['CARDS']
+                        list1 = updated_vault['CARDS']
+                        list2 = updated_vault['STORAGE']
+                        current_cards = list1.extend(list2)
                         price = price_adjuster(6000000, universe, completed_tales, completed_dungeons)['C3']
-                        if len(current_cards) >=25:
-                            await button_ctx.send("You have max amount of Cards. Transaction cancelled.")
-                            self.stop = True
-                            return
                         acceptable = [5,6,7]
                         if price > balance:
                             await button_ctx.send("Insufficent funds.")
@@ -2812,6 +2964,16 @@ class Profile(commands.Cog):
                             card = list_of_cards[selection]
                         card_name = card['NAME']
                         tier = 0
+
+                        if len(list1) >= 25 and storage_amount < storage_allowed_amount:
+                            await route_to_storage(self, ctx, card_name, current_cards, owned_card_levels_list, price, universe, owned_destinies, tier)
+                            self.stop = True
+                            return
+                        elif len(list1) >= 25 and storage_amount >= storage_allowed_amount:
+                            await button_ctx.send("You have max amount of Cards. Transaction cancelled.")
+                            self.stop = True
+                            return
+
 
                         if card_name in current_cards:
                             await cardlevel(self,card['NAME'], str(ctx.author.id), "Purchase", universe)
@@ -3078,6 +3240,59 @@ class Profile(commands.Cog):
     #     vault = db.altQueryVault(vault_query)
     #     storage = vault['STORAGE']
     #     hand = vault['CARDS']
+
+
+async def route_to_storage(self, ctx, card_name, current_cards, owned_card_levels_list, price, universe, owned_destinies, tier):
+    try:
+        user_query = {"DID": str(ctx.author.id)}
+        vault_query = {"DID": str(ctx.author.id)}
+        update_query = {
+            "$addToSet": {"STORAGE": card_name}
+        }
+        update_storage = db.updateVaultNoFilter(user_query, update_query)
+        
+
+        if card_name in current_cards:
+            await cardlevel(self, card_name, str(ctx.author.id), "Purchase", universe)
+            await ctx.send(f"You received a level up for **{card_name}**!")
+            await main.curse(price, str(ctx.author.id))            
+        else:
+            await main.curse(price, str(ctx.author.id))
+
+            # Add Card Level config
+            if card_name not in owned_card_levels_list:
+                update_query = {'$addToSet': {
+                    'CARD_LEVELS': {'CARD': str(card_name), 'LVL': 0, 'TIER': int(tier),
+                                    'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
+                r = db.updateVaultNoFilter(vault_query, update_query)
+
+            # Add Destiny
+            for destiny in d.destiny:
+                if card_name in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
+                    db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
+                    await ctx.send(
+                        f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.", hidden=True)
+
+
+            await ctx.send(f"**{card_name}** has been purchased and added to Storage!")
+
+    except Exception as ex:
+        trace = []
+        tb = ex.__traceback__
+        while tb is not None:
+            trace.append({
+                "filename": tb.tb_frame.f_code.co_filename,
+                "name": tb.tb_frame.f_code.co_name,
+                "lineno": tb.tb_lineno
+            })
+            tb = tb.tb_next
+        print(str({
+            'player': str(ctx.author),
+            'type': type(ex).__name__,
+            'message': str(ex),
+            'trace': trace
+        }))
+
 
 async def craft_adjuster(self, player, vault, universe, price, item, skin_list):
     try:

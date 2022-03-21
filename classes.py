@@ -42,6 +42,7 @@ class USER():
     BOSS_FOUGHT: bool = field(default_factory=lambda: False)
     SERVER: str = field(default_factory=lambda: "N/A")
     DIFFICULTY: str = field(default_factory=lambda: "EASY")
+    STORAGE_TYPE: int = field(default_factory=lambda: 1)
 
 @dataclass(frozen=True, order=True)
 class TRADE():
