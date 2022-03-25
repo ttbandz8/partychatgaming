@@ -2206,10 +2206,10 @@ class Profile(commands.Cog):
                         embed_list.append(embedVar)
 
                 if not embed_list:
-                    await ctx.send("All quests have been completed today!")
+                    await ctx.send("All quests have been completed today! 👑")
                     return
 
-                buttons = []
+                buttons = [manage_components.create_button(style=3, label="Start Quest Tales", custom_id="quests_tales"),]
                 custom_action_row = manage_components.create_actionrow(*buttons)
 
                 async def custom_function(self, button_ctx):
