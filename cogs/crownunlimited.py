@@ -97,7 +97,6 @@ class CrownUnlimited(commands.Cog):
 
         if ratelimit is None:
             if isinstance(message.channel, discord.channel.DMChannel):
-                await message.channel.send(m.SERVER_FUNCTION_ONLY)
                 return
 
             g = message.author.guild
@@ -6166,7 +6165,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
     team_query = {'TEAM_NAME': oteam.lower()}
     guild_buff_update_query = {}
     filter_query = {}
-    overwrites = { guild.default_role: discord.PermissionOverwrite(read_messages=False), guild.me: discord.PermissionOverwrite(read_messages=True), ctx.author: discord.PermissionOverwrite(read_messages=True),}    
+    # overwrites = { guild.default_role: discord.PermissionOverwrite(read_messages=False), guild.me: discord.PermissionOverwrite(read_messages=True), ctx.author: discord.PermissionOverwrite(read_messages=True),}    
 
     if sowner['RIFT'] == 1:
         rift_on = True
@@ -6197,12 +6196,12 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                 self.stop = True
                 return
             if button_ctx.custom_id == "yes":
-                overwrites = {
-                    guild.default_role: discord.PermissionOverwrite(read_messages=False),
-                    guild.me: discord.PermissionOverwrite(read_messages=True),
-                    ctx.author: discord.PermissionOverwrite(read_messages=True, send_messages=True),
-                    user: discord.PermissionOverwrite(read_messages=True, send_messages=True),
-                }
+                # overwrites = {
+                #     guild.default_role: discord.PermissionOverwrite(read_messages=False),
+                #     guild.me: discord.PermissionOverwrite(read_messages=True),
+                #     ctx.author: discord.PermissionOverwrite(read_messages=True, send_messages=True),
+                #     user: discord.PermissionOverwrite(read_messages=True, send_messages=True),
+                # }
                 await button_ctx.defer(ignore=True)
         except Exception as ex:
             trace = []
