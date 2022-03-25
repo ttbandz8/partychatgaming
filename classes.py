@@ -43,6 +43,7 @@ class USER():
     SERVER: str = field(default_factory=lambda: "N/A")
     DIFFICULTY: str = field(default_factory=lambda: "EASY")
     STORAGE_TYPE: int = field(default_factory=lambda: 1)
+    CREATOR: bool = field(default_factory=lambda: False)
 
 @dataclass(frozen=True, order=True)
 class TRADE():

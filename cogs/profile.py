@@ -2114,6 +2114,7 @@ class Profile(commands.Cog):
             return
         if vault:
             try:
+                buttons = []
                 guild_buff = guild_buff_update_function(self, d['TEAM'].lower())
                 name = d['DISNAME'].split("#",1)[0]
                 avatar = d['AVATAR']
@@ -2166,11 +2167,11 @@ class Profile(commands.Cog):
                         dungeon_message = f"**{opponent_name}** is fight number ⚔️ **{dungeon_index + 1}** in **Dungeon**"
                     
                     completed = ""
+                    
                     if quest['GOAL'] == quest['WINS']:
                         completed = "🟢"
                     else:
                         completed = "🔴"
-
                     icon = ":coin:"
                     if balance >= 150000:
                         icon = ":money_with_wings:"
@@ -2200,11 +2201,15 @@ class Profile(commands.Cog):
 
                     embedVar.set_thumbnail(url=opponent_universe_image)
                     # embedVar.set_footer(text="Use /tales to complete daily quest!", icon_url="https://cdn.discordapp.com/emojis/784402243519905792.gif?v=1")
-                    embed_list.append(embedVar)
 
-                buttons = [
-                    manage_components.create_button(style=3, label="Start Quest Tales", custom_id="quests_tales"),
-                ]
+                    if quest['GOAL'] != quest['WINS']:
+                        embed_list.append(embedVar)
+
+                if not embed_list:
+                    await ctx.send("All quests have been completed today!")
+                    return
+
+                buttons = []
                 custom_action_row = manage_components.create_actionrow(*buttons)
 
                 async def custom_function(self, button_ctx):
