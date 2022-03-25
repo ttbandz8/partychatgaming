@@ -109,7 +109,7 @@ class Teams(commands.Cog):
             await ctx.send(m.USER_NOT_ON_TEAM, delete_after=5)
         else:
 
-            if owner_profile['DISNAME'] == team_profile['OWNER']:
+            if owner_profile['DISNAME'] == team_profile['OWNER'] or owner_profile['DISNAME'] in team_profile['OFFICERS']:
 
                 member_profile = db.queryUser({'DID': str(player.id)})
                 if member_profile['LEVEL'] < 4:
@@ -161,7 +161,7 @@ class Teams(commands.Cog):
                     await ctx.send(m.USER_ALREADY_ON_TEAM, delete_after=5)
 
             else:
-                await ctx.send(m.OWNER_ONLY_COMMAND, delete_after=5)
+                await ctx.send("Recruiting can only be done by Owners and Officers.", delete_after=5)
 
     async def apply(self, ctx, owner: User):
         owner_profile = db.queryUser({'DID': str(owner.id)})
@@ -171,7 +171,7 @@ class Teams(commands.Cog):
             await ctx.send(m.USER_NOT_ON_TEAM, delete_after=5)
         else:
 
-            if owner_profile['DISNAME'] == team_profile['OWNER']:
+            if owner_profile['DISNAME'] == team_profile['OWNER'] or owner_profile['DISNAME'] in team_profile['OFFICERS'] or owner_profile['DISNAME'] in team_profile['CAPTAINS'] :
                 member_profile = db.queryUser({'DID': str(ctx.author.id)})
                 if member_profile['LEVEL'] < 4:
                     await ctx.send(f"🔓 Unlock Guilds by completing Floor 3 of the 🌑 Abyss! Use /abyss to enter the abyss.")
