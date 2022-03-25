@@ -6271,7 +6271,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
 
                         **Saved Game**: :crossed_swords: *{save_spot_text}*
                         **Difficulty**: ⚙️ {difficulty.lower().capitalize()}
-                        **Completed**: 🟢
+                        **Completed**: "🟢"
                         """))
                         embedVar.set_image(url=uni['PATH'])
                         universe_embed_list.append(embedVar)
@@ -6290,7 +6290,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
 
                         **Saved Game**: :crossed_swords: *{save_spot_text}*
                         **Difficulty**: ⚙️ {difficulty.lower().capitalize()}
-                        **Completed**: 🔴
+                        **Completed**: "🔴"
                         """))
                         embedVar.set_image(url=uni['PATH'])
                         universe_embed_list.append(embedVar)
@@ -6312,7 +6312,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
 
                         **Saved Game**: :crossed_swords: *{save_spot_text}*
                         **Difficulty**: ⚙️ {difficulty.lower().capitalize()}
-                        **Completed**: 🟢
+                        **Completed**: "🟢"
                         """))
                         embedVar.set_image(url=uni['PATH'])
                         universe_embed_list.append(embedVar)
@@ -6331,7 +6331,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
 
                         **Saved Game**: :crossed_swords: *{save_spot_text}*
                         **Difficulty**: ⚙️ {difficulty.lower().capitalize()}
-                        **Completed**: 🔴
+                        **Completed**: "🔴"
                         """))
                         embedVar.set_image(url=uni['PATH'])
                         universe_embed_list.append(embedVar)
@@ -6438,9 +6438,9 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                         save_spot_text = str(save['CURRENTOPPONENT'])
 
                 if uni in completed_dungeons:
-                    completed = 🟢
+                    completed = "🟢"
                 else:
-                    completed = 🔴
+                    completed = "🔴"
 
                 embedVar = discord.Embed(title= f"{uni}", description=textwrap.dedent(f"""
                 {Crest_dict[uni_option['TITLE']]} **Number of Fights**: :fire: **{len(uni_option['DUNGEONS'])}**
