@@ -6151,9 +6151,9 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
     C_MODES = ['CTales', 'CDungeon', 'CBoss']
 
     saved_spots = sowner['SAVE_SPOT']
-    if isinstance(ctx.channel, discord.channel.DMChannel):
-        await ctx.send(m.SERVER_FUNCTION_ONLY)
-        return
+    # if isinstance(ctx.channel, discord.channel.DMChannel):
+    #     await ctx.send(m.SERVER_FUNCTION_ONLY)
+    #     return
     oguild = "PCG"
     prevault = db.queryVault({'DID': sowner['DID']})
     balance = prevault['BALANCE']
