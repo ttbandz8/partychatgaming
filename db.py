@@ -855,16 +855,13 @@ def addTeamMember(query, add_to_team_query, user, new_user):
     exists = team_exists({'TEAM_NAME': query['TEAM_NAME']})
     if exists:
         team = teams_col.find_one(query)
-        if user == team['OWNER']:
-            teams_col.update_one(query, add_to_team_query, upsert=True)
+        teams_col.update_one(query, add_to_team_query, upsert=True)
 
-             # Add Guild to User Profile as well
-            query = {'DISNAME': new_user}
-            new_value = {'$set': {'TEAM': team['TEAM_NAME']}}
-            users_col.update_one(query, new_value)
-            return "User added to the Guild. "
-        else:
-            return "The Owner of the Guild can add new members. "
+            # Add Guild to User Profile as well
+        query = {'DISNAME': new_user}
+        new_value = {'$set': {'TEAM': team['TEAM_NAME']}}
+        users_col.update_one(query, new_value)
+        return "User added to the Guild. "
     else:
         return "Cannot add user to the Guild."
 

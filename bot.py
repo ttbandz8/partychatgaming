@@ -120,6 +120,9 @@ async def validate_user(ctx):
 @bot.event
 async def on_ready():
    print('Bot is ready! ')
+   guild = bot.get_guild(543442011156643871)
+   channel = guild.get_channel(957061470192033812)
+   await channel.send("Hello World")
    for server in bot.guilds:
         print(server.name)
 
