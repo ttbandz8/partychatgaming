@@ -57,7 +57,7 @@ traits = [{
 },{
     'NAME': 'Solo Leveling',
     'EFFECT': 'Rulers Authority',
-    'TRAIT': 'On Focus, opponent loses (60 + turn count) Defense. Arise! When Opponent Arm Breaks it revives as your Arm.'
+    'TRAIT': 'On Focus, opponent loses (30 + turn count) Defense. Arise! When Opponent Arm Breaks it revives as your Arm.'
 },{
     'NAME': 'Souls',
     'EFFECT': 'Combo Recognition',

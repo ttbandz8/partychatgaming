@@ -4496,92 +4496,8 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             c_title_passive_type = list(c_title_passive.keys())[0]
             c_title_passive_value = list(c_title_passive.values())[0]
 
-            if c_title_passive_bool:
-                if c_title_passive_type == 'ATK':
-                    c_attack = c_attack + int(c_title_passive_value)
-                elif c_title_passive_type == 'DEF':
-                    c_defense = c_defense + int(c_title_passive_value)
-                elif c_title_passive_type == 'STAM':
-                    c_stamina = c_stamina + int(c_title_passive_value)
-                elif c_title_passive_type == 'HLT':
-                    c_max_health = c_max_health + int(c_title_passive_value)
-                    c_health = c_health + int(c_title_passive_value)
-                elif c_title_passive_type == 'LIFE':
-                    if mode in B_modes:
-                        c_max_health = c_max_health + int((c_title_passive_value / 200) * t_health)
-                    else:
-                        c_max_health = c_max_health + int((c_title_passive_value / 100) * t_health)
-                elif c_title_passive_type == 'DRAIN':
-                    t_stamina = t_stamina - int(c_title_passive_value)
-                    c_stamina = c_stamina + int(c_title_passive_value)
-                elif c_title_passive_type == 'FLOG':
-                    c_attack = c_attack + int((c_title_passive_value / 100) * t_attack)
-                    t_attack = t_attack - int((c_title_passive_value / 100) * t_attack)
-                elif c_title_passive_type == 'WITHER':
-                    c_defense = c_defense + int((c_title_passive_value / 100) * t_defense)
-                    t_defense = t_defense - int((c_title_passive_value / 100) * t_defense)
-                elif c_title_passive_type == 'RAGE':
-                    c_attack = c_attack + int(((c_title_passive_value / 100) * c_defense))
-                    c_defense = c_defense - int(((c_title_passive_value / 100) * c_attack))
-                elif c_title_passive_type == 'BRACE':
-                    c_defense = c_defense + int(((c_title_passive_value / 100) * c_attack))
-                    c_attack = c_attack - int(((c_title_passive_value / 100) * c_defense))
-                elif c_title_passive_type == 'BZRK':
-                    c_attack = c_attack + int(((c_title_passive_value / 100) * c_health))
-                    c_health = c_health - int(((c_title_passive_value / 100) * c_health))
-                elif c_title_passive_type == 'CRYSTAL':
-                    c_defense = c_defense + int(((c_title_passive_value / 100) * c_health))
-                    c_health = c_health - int(((c_title_passive_value / 100) * c_health))
-                elif c_title_passive_type == 'GROWTH':
-                    c_attack = c_attack + int(((c_title_passive_value / 100) * c_attack))
-                    c_defense = c_defense + int(((c_title_passive_value / 100) * c_defense))
-                    c_max_health = c_max_health - int(((c_title_passive_value / 100) * c_max_health))
-                elif c_title_passive_type == 'STANCE':
-                    tempattack = c_attack
-                    c_attack = c_defense
-                    c_defense = tempattack
-                elif c_title_passive_type == 'CONFUSE':
-                    tempattack = t_attack
-                    t_attack = t_defense
-                    t_defense = tempattack
-                elif c_title_passive_type == 'BLINK':
-                    c_stamina = c_stamina - c_title_passive_value
-                    t_stamina = t_stamina + c_title_passive_value
-                elif c_title_passive_type == 'SLOW':
-                    tempstam = t_stamina + c_title_passive_value
-                    c_stamina = c_stamina - c_title_passive_value
-                    t_stamina = c_stamina
-                    c_stamina = tempstam
-                elif c_title_passive_type == 'HASTE':
-                    tempstam = t_stamina - c_title_passive_value
-                    c_stamina = c_stamina + c_title_passive_value
-                    t_stamina = c_stamina
-                    c_stamina = tempstam
-                elif c_title_passive_type == 'SOULCHAIN':
-                    c_stamina = c_title_passive_value
-                    t_stamina = c_title_passive_value
-                elif c_title_passive_type == 'FEAR':
-                    if c_universe == "Chainsawman":
-                        c_max_health = c_max_health - int((c_title_passive_value / 150) * c_max_health)
-                        t_attack = t_attack - int((c_title_passive_value / 100) * t_attack)
-                        t_defense = t_defense - int((c_title_passive_value / 100) * t_defense)
-                    else:
-                        c_max_health = c_max__health - int((c_title_passive_value / 100) * c_max_health)
-                        t_attack = t_attack - int((c_title_passive_value / 100) * t_attack)
-                        t_defense = t_defense - int((c_title_passive_value / 100) * t_defense)
-                elif c_title_passive_type == 'GAMBLE':
-                    if mode in B_modes:
-                        c_health = o_card_passive
-                        o_health = c_card_passive
-                        t_health = o_card_passive * 3
-                    elif mode in D_modes:
-                        c_health = o_card_passive
-                        o_health = c_card_passive
-                        t_health = o_card_passive * 2
-                    else:
-                        c_health = o_card_passive
-                        o_health = c_card_passive
-                        t_health = o_card_passive
+            if not c_title_passive_bool:
+                c_title_passive_type = False
 
                         # Arm Passive Player 1
             carm_passive_type = list(carm_passive.keys())[0]
@@ -4750,91 +4666,8 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         o_title_passive_type = list(o_title_passive.keys())[0]
         o_title_passive_value = list(o_title_passive.values())[0]
 
-        if o_title_passive_bool:
-            if o_title_passive_type == 'ATK':
-                o_attack = o_attack + int(o_title_passive_value)
-            elif o_title_passive_type == 'DEF':
-                o_defense = o_defense + int(o_title_passive_value)
-            elif o_title_passive_type == 'STAM':
-                o_stamina = o_stamina + int(o_title_passive_value)
-            elif o_title_passive_type == 'HLT':
-                o_max_health = o_max_health + int(o_title_passive_value)
-                o_health = o_health + int(o_title_passive_value)
-            elif o_title_passive_type == 'LIFE':
-                if mode in B_modes:
-                    o_max_health = o_max_health + int((o_title_passive_value / 200) * t_health)
-                else:
-                    o_max_health = o_max_health + int((o_title_passive_value / 100) * t_health)
-            elif o_title_passive_type == 'DRAIN':
-                t_stamina = t_stamina - int(o_title_passive_value)
-                o_stamina = o_stamina + int(o_title_passive_value)
-            elif o_title_passive_type == 'FLOG':
-                o_attack = o_attack + int((o_title_passive_value / 100) * t_attack)
-                t_attack = t_attack - int((o_title_passive_value / 100) * t_attack)
-            elif o_title_passive_type == 'WITHER':
-                o_defense = o_defense + int((o_title_passive_value / 100) * t_defense)
-                t_defense = t_defense - int((o_title_passive_value / 100) * t_defense)
-            elif o_title_passive_type == 'RAGE':
-                o_attack = o_attack + int(((o_title_passive_value / 100) * o_defense))
-                o_defense = o_defense - int(((o_title_passive_value / 100) * o_attack))
-            elif o_title_passive_type == 'BRACE':
-                o_defense = o_defense + int(((o_title_passive_value / 100) * o_attack))
-                o_attack = o_attack - int(((o_title_passive_value / 100) * o_defense))
-            elif o_title_passive_type == 'BZRK':
-                o_attack = o_attack + int(((o_title_passive_value / 100) * o_health))
-                o_health = o_health - int(((o_title_passive_value / 100) * o_health))
-            elif o_title_passive_type == 'CRYSTAL':
-                o_defense = o_defense + int(((o_title_passive_value / 100) * o_health))
-                o_health = o_health - int(((o_title_passive_value / 100) * o_health))
-            elif o_title_passive_type == 'GROWTH':
-                o_attack = o_attack + int((o_title_passive_value / 100) * o_attack)
-                o_defense = o_defense + int((o_title_passive_value / 100) * o_defense)
-                o_max_health = o_max_health - int((o_title_passive_value / 100) * o_max_health)
-            elif o_title_passive_type == 'STANCE':
-                tempattack = o_attack
-                o_attack = o_defense
-                o_defense = tempattack
-            elif o_title_passive_type == 'CONFUSE':
-                tempattack = t_attack
-                t_attack = t_defense
-                t_defense = tempattack
-            elif o_title_passive_type == 'BLINK':
-                o_stamina = o_stamina - o_title_passive_value
-                t_stamina = t_stamina + o_title_passive_value
-            elif o_title_passive_type == 'SLOW':
-                tempstam = t_stamina + o_title_passive_value
-                o_stamina = o_stamina - o_title_passive_value
-                t_stamina = o_stamina
-                o_stamina = tempstam
-            elif o_title_passive_type == 'HASTE':
-                tempstam = t_stamina - o_title_passive_value
-                o_stamina = o_stamina + o_title_passive_value
-                t_stamina = o_stamina
-                o_stamina = tempstam
-            elif o_title_passive_type == 'SOULCHAIN':
-                o_stamina = o_title_passive_value
-                t_stamina = o_title_passive_value
-            elif o_title_passive_type == 'FEAR':
-                if o_universe == "Chainsawman":
-                    o_max_health = o_max_health - int((o_title_passive_value / 150) * o_max_health)
-                    t_attack = t_attack - int((o_title_passive_value / 100) * t_attack)
-                    t_defense = t_defense - int((o_title_passive_value / 100) * t_defense)
-                else:
-                    o_max_health = o_max_health - int((o_title_passive_value / 100) * o_max_health)
-                    t_attack = t_attack - int((o_title_passive_value / 100) * t_attack)
-                    t_defense = t_defense - int((o_title_passive_value / 100) * t_defense)
-            elif o_title_passive_type == 'GAMBLE':
-                if mode in B_modes:
-                    o_health = o_title_passive_value
-                    t_health = o_title_passive_value * 3
-                elif mode in D_modes:
-                    o_health = o_title_passive_value
-                    t_health = o_title_passive_value * 2
-                else:
-                    o_health = o_title_passive_value
-                    t_health = o_title_passive_value
-                if companion:
-                    c_health = o_title_passive_value
+        if not o_title_passive_bool:
+            o_title_passive_type = False
 
         # Arm Passive Player 1
         oarm_passive_type = list(oarm_passive.keys())[0]
@@ -5015,111 +4848,8 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         t_title_passive_type = list(t_title_passive.keys())[0]
         t_title_passive_value = list(t_title_passive.values())[0]
 
-        if t_title_passive_bool:
-            if t_title_passive_type == 'ATK':
-                t_attack = t_attack + int(t_title_passive_value)
-            elif t_title_passive_type == 'DEF':
-                t_defense = t_defense + int(t_title_passive_value)
-            elif t_title_passive_type == 'STAM':
-                t_stamina = t_stamina + int(t_title_passive_value)
-            elif t_title_passive_type == 'HLT':
-                t_max_health = t_max_health + int(t_title_passive_value)
-                t_health = t_health + int(t_title_passive_value)
-            elif t_title_passive_type == 'LIFE':
-                t_max_health = t_max_health + int((t_title_passive_value / 100) * o_health)
-            elif t_title_passive_type == 'DRAIN':
-                if companion:
-                    c_stamina = c_stamina - int(t_title_passive_value)
-                o_stamina = o_stamina - int(t_title_passive_value)
-                t_stamina = t_stamina + int(t_title_passive_value)
-            elif t_title_passive_type == 'FLOG':
-                t_attack = t_attack + int((t_title_passive_value / 100) * o_attack)
-                o_attack = o_attack - int((t_title_passive_value / 100) * o_attack)
-                if companion:
-                    c_attack = c_attack - int((t_title_passive_value / 100) * c_attack)
-            elif t_title_passive_type == 'WITHER':
-                t_defense = t_defense + int((t_title_passive_value / 100) * o_defense)
-                o_defense = o_defense - int((t_title_passive_value / 100) * o_defense)
-                if companion:
-                    c_defense = c_defense - int((t_title_passive_value / 100) * c_defense)
-            elif t_title_passive_type == 'RAGE':
-                t_attack = t_attack + int(((t_title_passive_value / 100) * t_defense))
-                t_defense = t_defense - int(((t_title_passive_value / 100) * t_attack))
-            elif t_title_passive_type == 'BRACE':
-                t_defense = t_defense + int(((t_title_passive_value / 100) * t_attack))
-                t_attack = t_attack - int(((t_title_passive_value / 100) * t_defense))
-            elif t_title_passive_type == 'BZRK':
-                t_attack = t_attack + int(((t_title_passive_value / 100) * t_health))
-                t_health = t_health - int(((t_title_passive_value / 100) * t_health))
-            elif t_title_passive_type == 'CRYSTAL':
-                t_defense = t_defense + int(((t_title_passive_value / 100) * t_health))
-                t_health = t_health - int(((t_title_passive_value / 100) * t_health))
-            elif t_title_passive_type == 'GROWTH':
-                t_attack = t_attack + int(((t_title_passive_value / 100) * t_attack))
-                t_defense = t_defense + int(((t_title_passive_value / 100) * t_defense))
-                t_max_health = t_max_health - int(((t_title_passive_value / 100) * t_max_health))
-            elif t_title_passive_type == 'STANCE':
-                tempattack = t_attack + t_title_passive_value
-                t_attack = t_defense + t_title_passive_value
-                t_defense = tempattack
-            elif t_title_passive_type == 'CONFUSE':
-                tempattack = o_attack - t_title_passive_value
-                o_attack = o_defense - t_title_passive_value
-                o_defense = tempattack
-                if companion:
-                    c_attack = c_defense - t_title_passive_value
-                    c_defense = tempattack
-            elif t_title_passive_type == 'BLINK':
-                t_stamina = t_stamina - t_title_passive_value
-                o_stamina = o_stamina + t_title_passive_value
-                if companion:
-                    c_stamina = c_stamina + t_title_passive_value
-            elif t_title_passive_type == 'SLOW':
-                tempstam = o_stamina + t_title_passive_value
-                t_stamina = t_stamina - t_title_passive_value
-                o_stamina = t_stamina
-                if companion:
-                    c_stamina = t_stamina
-                t_stamina = tempstam
-            elif t_title_passive_type == 'HASTE':
-                tempstam = o_stamina - t_title_passive_value
-                t_stamina = t_stamina + t_title_passive_value
-                o_stamina = t_stamina
-                if companion:
-                    c_stamina = t_stamina
-                t_stamina = tempstam
-            elif t_title_passive_type == 'SOULCHAIN':
-                t_stamina = t_title_passive_value
-                o_stamina = t_title_passive_value
-                if companion:
-                    c_stamina = t_title_passive_value
-            elif t_title_passive_type == 'FEAR':
-                if t_universe == "Chainsawman":
-                    t_max_health = t_max_health - int((t_title_passive_value / 150) * t_max_health)
-                    o_attack = o_attack - int((t_title_passive_value / 100) * o_attack)
-                    o_defense = o_defense - int((t_title_passive_value / 100) * o_defense)
-                    if companion:
-                        c_attack = c_attack - int((t_title_passive_value / 100) * c_attack)
-                        c_defense = c_defense - int((t_title_passive_value / 100) * c_defense)
-                else:
-                    t_max_health = t_max_health - int((t_title_passive_value / 100) * t_max_health)
-                    o_attack = o_attack - int((t_title_passive_value / 100) * o_attack)
-                    o_defense = o_defense - int((t_title_passive_value / 100) * o_defense)
-                    if companion:
-                        c_attack = c_attack - int((t_title_passive_value / 100) * c_attack)
-                        c_defense = c_defense - int((t_title_passive_value / 100) * c_defense)
-            elif t_title_passive_type == 'GAMBLE':
-                if mode in B_modes:
-                    o_health = t_title_passive_value
-                    t_health = t_title_passive_value * 3
-                elif mode in D_modes:
-                    o_health = t_title_passive_value
-                    t_health = t_title_passive_value * 2
-                else:
-                    o_health = t_title_passive_value
-                    t_health = t_title_passive_value
-                if companion:
-                    c_health = t_title_passive_value
+        if not t_title_passive_bool:
+            t_title_passive_type = False
 
         # Arm Passive Player 2
         tarm_passive_type = list(tarm_passive.keys())[0]
@@ -5229,6 +4959,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
 
         STATS = {
             'operformance': operformance,
+            'o_title_passive_type': o_title_passive_type,
+            'o_title_passive_value': o_title_passive_value,
+            't_title_passive_type': t_title_passive_type,
+            't_title_passive_value': t_title_passive_value,
             'o_card': o_card,
             'ocard_lvl': ocard_lvl,
             'o_card_path': o_card_path,
@@ -5350,6 +5084,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
 
         if mode in pvp_modes:
             STATS = {
+                'o_title_passive_type': o_title_passive_type,
+                'o_title_passive_value': o_title_passive_value,
+                't_title_passive_type': t_title_passive_type,
+                't_title_passive_value': t_title_passive_value,
                 'operformance': operformance,
                 'o_card': o_card,
                 'ocard_lvl': ocard_lvl,
@@ -5477,6 +5215,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             }
         if mode == "RAID":
             STATS = {
+                'o_title_passive_type': o_title_passive_type,
+                'o_title_passive_value': o_title_passive_value,
+                't_title_passive_type': t_title_passive_type,
+                't_title_passive_value': t_title_passive_value,
                 'operformance': operformance,
                 'o_card': o_card,
                 'ocard_lvl': ocard_lvl,
@@ -5604,6 +5346,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             }
         if mode == "Boss":
             STATS = {
+                'o_title_passive_type': o_title_passive_type,
+                'o_title_passive_value': o_title_passive_value,
+                't_title_passive_type': t_title_passive_type,
+                't_title_passive_value': t_title_passive_value,
                 'operformance': operformance,
                 'opet_lvl': opet_lvl,
                 'opet_bond': opet_bond,
@@ -5741,6 +5487,12 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
 
         if mode == "CBoss":
             STATS = {
+                'o_title_passive_type': o_title_passive_type,
+                'o_title_passive_value': o_title_passive_value,
+                't_title_passive_type': t_title_passive_type,
+                't_title_passive_value': t_title_passive_value,
+                'c_title_passive_type': c_title_passive_type,
+                'c_title_passive_value': c_title_passive_value,
                 'operformance': operformance,
                 'opet_lvl': opet_lvl,
                 'opet_bond': opet_bond,
@@ -5940,6 +5692,12 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
 
         if mode in co_op_modes and mode != "CBoss":
             STATS = {
+                'o_title_passive_type': o_title_passive_type,
+                'o_title_passive_value': o_title_passive_value,
+                't_title_passive_type': t_title_passive_type,
+                't_title_passive_value': t_title_passive_value,
+                'c_title_passive_type': c_title_passive_type,
+                'c_title_passive_value': c_title_passive_value,
                 'operformance': operformance,
                 'opet_lvl': opet_lvl,
                 'opet_bond': opet_bond,
@@ -6935,6 +6693,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                  universe, currentopponent, oteam, ofam, abyss_scaling, None, None,
                                                  None, None, None, None, None, None, None, None)
             difficulty = sowner['DIFFICULTY']
+            o_title_passive_type = stats['o_title_passive_type']
+            o_title_passive_value = stats['o_title_passive_value']
             operformance = stats['operformance']
             o_card = stats['o_card']
             ocard_lvl = stats['ocard_lvl']
@@ -7006,6 +6766,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                     tperformance = stats['operformance']
                 else:
                     tperformance = stats['tperformance']
+                t_title_passive_type = stats['t_title_passive_type']
+                t_title_passive_value = stats['t_title_passive_value']
                 tpet_lvl = stats['tpet_lvl']
                 tpet_bond = stats['tpet_bond']
                 t_card = stats['t_card']
@@ -7068,6 +6830,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 t_defend_used = stats['t_defend_used']
                 t_final_stand = stats['t_final_stand']
             else:
+                t_title_passive_type = stats['t_title_passive_type']
+                t_title_passive_value = stats['t_title_passive_value']
                 tpet_lvl = stats['tpet_lvl']
                 tpet_bond = stats['tpet_bond']
                 t_card = stats['t_card']
@@ -7160,6 +6924,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 c_max_health = 0
 
             if mode in co_op_modes:
+                c_title_passive_type = stats['c_title_passive_type']
+                c_title_passive_value = stats['c_title_passive_value']
                 cpet_lvl = stats['cpet_lvl']
                 cpet_bond = stats['cpet_bond']
                 c_card = stats['c_card']
@@ -7449,6 +7215,54 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         if mode in PVP_MODES or mode in RAID_MODES:
                             # Player 1 Turn Start
                             if turn == 0:
+
+                                if o_title_passive_type:
+                                    if o_title_passive_type == "HLT":
+                                        o_health = o_health + o_title_passive_value
+                                    if o_title_passive_type == "LIFE":
+                                        t_health = t_health - o_title_passive_value
+                                        o_health = o_health + o_title_passive_value
+                                    if o_title_passive_type == "ATK":
+                                        o_attack = o_attack + o_title_passive_value
+                                    if o_title_passive_type == "DEF":
+                                        o_defense = o_defense + o_title_passive_value
+                                    if o_title_passive_type == "STAM":
+                                        o_stamina = o_stamina + o_title_passive_value
+                                    if o_title_passive_type == "DRAIN":
+                                        t_stamina = t_stamina - o_title_passive_value
+                                        o_stamina = o_stamina + o_title_passive_value
+                                    if o_title_passive_type == "FLOG":
+                                        t_attack = t_attack - o_title_passive_value
+                                        o_attack = o_attack + o_title_passive_value
+                                    if o_title_passive_type == "WITHER":
+                                        t_defense = t_defense - o_title_passive_value
+                                        o_defense = o_defense + o_title_passive_value
+                                    if o_title_passive_type == "RAGE":
+                                        o_defense = o_defense - o_title_passive_value
+                                        o_attack = o_attack + o_title_passive_value
+                                    if o_title_passive_type == "BRACE":
+                                        o_defense = o_defense + o_title_passive_value
+                                        o_attack = o_attack - o_title_passive_value
+                                    if o_title_passive_type == "BZRK":
+                                        o_health = o_health - o_title_passive_value
+                                        o_attack = o_attack + o_title_passive_value
+                                    if o_title_passive_type == "CRYSTAL":
+                                        o_health = o_health - o_title_passive_value
+                                        o_defense = o_defense + o_title_passive_value
+                                    if o_title_passive_type == "FEAR":
+                                        o_health = o_health - o_title_passive_value
+                                        t_defense = t_defense - (o_title_passive_value / 2)
+                                        t_attack = t_attack - (o_title_passive_value / 2)
+                                    if o_title_passive_type == "GROWTH":
+                                        o_health = o_health - o_title_passive_value
+                                        o_defense = o_defense - (o_title_passive_value / 2)
+                                        o_attack = o_attack - (o_title_passive_value / 2)
+                                    if o_title_passive_type == "SLOW":
+                                        if turn_total != 0:
+                                            turn_total = turn_total - 1
+                                    if o_title_passive_type == "HASTE":
+                                        turn_total = turn_total + 1
+
                                 if o_block_used == True:
                                     o_block_used = False
                                     o_defense = o_defense / 2
@@ -7462,6 +7276,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             description=f"**{t_card} says**\nYou will die in 50  turns...",
                                                             colour=0xe91e63)
                                     previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Scheduled Death 📓")
+                                
                                 if o_attack <= 25:
                                     o_attack = 25
                                 if o_defense <= 30:
@@ -7567,6 +7382,27 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                     o_stamina = o_focus
                                     o_healthcalc = round(((o_focus * .40) + (fortitude * 1)) / 2)
+
+                                    if o_title_passive_type:
+                                        if o_title_passive_type == "GAMBLE":
+                                            o_healthcalc = o_title_passive_value
+                                        if o_title_passive_type == "SOULCHAIN":
+                                            o_stamina = o_title_passive_value
+
+                                    if t_title_passive_type:
+                                        if t_title_passive_type == "GAMBLE":
+                                            o_healthcalc = t_title_passive_value
+                                        if t_title_passive_type == "SOULCHAIN":
+                                            o_stamina = t_title_passive_value
+                                    
+                                    if mode in co_op_modes:
+                                        if c_title_passive_type:
+                                            if c_title_passive_type == "GAMBLE":
+                                                o_healthcalc = c_title_passive_value
+                                            if c_title_passive_type == "SOULCHAIN":
+                                                o_stamina = c_title_passive_value
+
+
                                     o_attackcalc = round(.20 * ((o_focus * .15) + round(fortitude * 1)))
                                     o_defensecalc = round(.20 * ((o_focus * .15) + round(fortitude * 1)))
                                     # check if user is at max health and sets messages and focus health value
@@ -7646,10 +7482,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                     elif o_universe == "Solo Leveling":
                                         embedVar = discord.Embed(
-                                            title=f"Ruler's Authority... Opponent loses **{60 + turn_total}** 🛡️ 🔻",
+                                            title=f"Ruler's Authority... Opponent loses **{30 + turn_total}** 🛡️ 🔻",
                                             colour=0xe91e63)
-                                        previous_moves.append(f"*{turn_total}:* 🩸 Ruler's Authority... Opponent loses **{60 + turn_total}** 🛡️ 🔻")
-                                        t_defense = round(t_defense - (60 + turn_total))
+                                        previous_moves.append(f"*{turn_total}:* 🩸 Ruler's Authority... Opponent loses **{30 + turn_total}** 🛡️ 🔻")
+                                        t_defense = round(t_defense - (30 + turn_total))
 
                                     elif o_universe == "Dragon Ball Z":
                                         o_health = o_health + t_stamina + turn_total
@@ -8804,6 +8640,54 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 
                             # Player 2 Turn Start
                             elif turn == 1:
+                                if t_title_passive_type:
+                                    if t_title_passive_type == "HLT":
+                                        t_health = t_health + t_title_passive_value
+                                    if t_title_passive_type == "LIFE":
+                                        o_health = o_health - t_title_passive_value
+                                        t_health = t_health + t_title_passive_value
+                                    if t_title_passive_type == "ATK":
+                                        t_attack = t_attack + t_title_passive_value
+                                    if t_title_passive_type == "DEF":
+                                        t_defense = t_defense + t_title_passive_value
+                                    if t_title_passive_type == "STAM":
+                                        t_stamina = t_stamina + t_title_passive_value
+                                    if t_title_passive_type == "DRAIN":
+                                        t_stamina = t_stamina + t_title_passive_value
+                                        o_stamina = o_stamina - t_title_passive_value
+                                    if t_title_passive_type == "FLOG":
+                                        t_attack = t_attack + t_title_passive_value
+                                        o_attack = o_attack - t_title_passive_value
+                                    if t_title_passive_type == "WITHER":
+                                        t_defense = t_defense + t_title_passive_value
+                                        o_defense = o_defense - t_title_passive_value
+                                    if t_title_passive_type == "RAGE":
+                                        t_defense = t_defense - t_title_passive_value
+                                        t_attack = t_attack + t_title_passive_value
+                                    if t_title_passive_type == "BRACE":
+                                        t_defense = t_defense + t_title_passive_value
+                                        t_attack = t_attack - t_title_passive_value
+                                    if t_title_passive_type == "BZRK":
+                                        t_health = t_health - t_title_passive_value
+                                        t_attack = t_attack + t_title_passive_value
+                                    if t_title_passive_type == "CRYSTAL":
+                                        t_health = t_health - t_title_passive_value
+                                        t_defense = t_defense + t_title_passive_value
+                                    if t_title_passive_type == "FEAR":
+                                        t_health = t_health - t_title_passive_value
+                                        o_defense = o_defense - (t_title_passive_value / 2)
+                                        o_attack = o_attack - (t_title_passive_value / 2)
+                                    if t_title_passive_type == "GROWTH":
+                                        t_health = t_health - t_title_passive_value
+                                        t_defense = t_defense - (t_title_passive_value / 2)
+                                        t_attack = t_attack - (t_title_passive_value / 2)
+                                    if t_title_passive_type == "SLOW":
+                                        if turn_total != 0:
+                                            turn_total = turn_total - 1
+                                    if t_title_passive_type == "HASTE":
+                                        turn_total = turn_total + 1
+
+
                                 if o_universe == "Death Note" and turn_total == 0:
                                     embedVar = discord.Embed(title=f"{o_card} Scheduled Death 📓",
                                                             description=f"**{o_card} says**\nYou will die in 50  turns...",
@@ -8970,10 +8854,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                     elif t_universe == "Solo Leveling":
                                         embedVar = discord.Embed(
-                                            title=f"Ruler's Authority... {o_card} loses **{60 + turn_total}** 🛡️ 🔻",
+                                            title=f"Ruler's Authority... {o_card} loses **{30 + turn_total}** 🛡️ 🔻",
                                             colour=0xe91e63)
-                                        previous_moves.append(f"*{turn_total}:* 🩸 Ruler's Authority... {o_card} loses **{60 + turn_total}** 🛡️ 🔻")
-                                        o_defense = round(o_defense - (60 + turn_total))
+                                        previous_moves.append(f"*{turn_total}:* 🩸 Ruler's Authority... {o_card} loses **{30 + turn_total}** 🛡️ 🔻")
+                                        o_defense = round(o_defense - (30 + turn_total))
                                     elif t_universe == "Attack On Titan":
                                         embedVar = discord.Embed(title=f"Rally! **{t_card}** Increased Max Health ❤️",
                                                                 colour=0xe91e63)
@@ -10951,6 +10835,53 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 #     previous_moves_into_embed = "\n\n".join(previous_moves)
 
                                 # await asyncio.sleep(1)
+                                if o_title_passive_type:
+                                    if o_title_passive_type == "HLT":
+                                        o_health = o_health + o_title_passive_value
+                                    if o_title_passive_type == "LIFE":
+                                        t_health = t_health - o_title_passive_value
+                                        o_health = o_health + o_title_passive_value
+                                    if o_title_passive_type == "ATK":
+                                        o_attack = o_attack + o_title_passive_value
+                                    if o_title_passive_type == "DEF":
+                                        o_defense = o_defense + o_title_passive_value
+                                    if o_title_passive_type == "STAM":
+                                        o_stamina = o_stamina + o_title_passive_value
+                                    if o_title_passive_type == "DRAIN":
+                                        t_stamina = t_stamina - o_title_passive_value
+                                        o_stamina = o_stamina + o_title_passive_value
+                                    if o_title_passive_type == "FLOG":
+                                        t_attack = t_attack - o_title_passive_value
+                                        o_attack = o_attack + o_title_passive_value
+                                    if o_title_passive_type == "WITHER":
+                                        t_defense = t_defense - o_title_passive_value
+                                        o_defense = o_defense + o_title_passive_value
+                                    if o_title_passive_type == "RAGE":
+                                        o_defense = o_defense - o_title_passive_value
+                                        o_attack = o_attack + o_title_passive_value
+                                    if o_title_passive_type == "BRACE":
+                                        o_defense = o_defense + o_title_passive_value
+                                        o_attack = o_attack - o_title_passive_value
+                                    if o_title_passive_type == "BZRK":
+                                        o_health = o_health - o_title_passive_value
+                                        o_attack = o_attack + o_title_passive_value
+                                    if o_title_passive_type == "CRYSTAL":
+                                        o_health = o_health - o_title_passive_value
+                                        o_defense = o_defense + o_title_passive_value
+                                    if o_title_passive_type == "FEAR":
+                                        o_health = o_health - o_title_passive_value
+                                        t_defense = t_defense - (o_title_passive_value / 2)
+                                        t_attack = t_attack - (o_title_passive_value / 2)
+                                    if o_title_passive_type == "GROWTH":
+                                        o_health = o_health - o_title_passive_value
+                                        o_defense = o_defense - (o_title_passive_value / 2)
+                                        o_attack = o_attack - (o_title_passive_value / 2)
+                                    if o_title_passive_type == "SLOW":
+                                        if turn_total != 0:
+                                            turn_total = turn_total - 1
+                                    if o_title_passive_type == "HASTE":
+                                        turn_total = turn_total + 1
+
                                 if o_block_used == True:
                                     o_defense = int(o_defense / 2)
                                     o_block_used = False
@@ -11080,6 +11011,25 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     o_healthcalc = round(((o_focus * .40) + (fortitude * 1)) / 2)
                                     o_attackcalc = round(.20 * ((o_focus * .15) + round(fortitude * 1)))
                                     o_defensecalc = round(.20 * ((o_focus * .15) + round(fortitude * 1)))
+                                    if o_title_passive_type:
+                                        if o_title_passive_type == "GAMBLE":
+                                            o_healthcalc = o_title_passive_value
+                                        if o_title_passive_type == "SOULCHAIN":
+                                            o_stamina = o_title_passive_value
+
+                                    if t_title_passive_type:
+                                        if t_title_passive_type == "GAMBLE":
+                                            o_healthcalc = t_title_passive_value
+                                        if t_title_passive_type == "SOULCHAIN":
+                                            o_stamina = t_title_passive_value
+                                    
+                                    if mode in co_op_modes:
+                                        if c_title_passive_type:
+                                            if c_title_passive_type == "GAMBLE":
+                                                o_healthcalc = c_title_passive_value
+                                            if c_title_passive_type == "SOULCHAIN":
+                                                o_stamina = c_title_passive_value
+
                                     # check if user is at max health and sets messages and focus health value
                                     o_newhealth = 0
                                     healmessage = ""
@@ -11157,12 +11107,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                     elif o_universe == "Solo Leveling":
                                         embedVar = discord.Embed(
-                                            title=f"Ruler's Authority... Opponent loses **{60 + turn_total}** 🛡️ 🔻",
+                                            title=f"Ruler's Authority... Opponent loses **{30 + turn_total}** 🛡️ 🔻",
                                             colour=0xe91e63)
                                         # await private_channel.send(embed=embedVar)
-                                        t_defense = round(t_defense - (60 + turn_total))
+                                        t_defense = round(t_defense - (30 + turn_total))
                                         
-                                        previous_moves.append(f"*{turn_total}:* 🩸 Ruler's Authority... Opponent loses **{60 + turn_total}** 🛡️ 🔻")
+                                        previous_moves.append(f"*{turn_total}:* 🩸 Ruler's Authority... Opponent loses **{30 + turn_total}** 🛡️ 🔻")
 
                                     elif o_universe == "Attack On Titan":
                                         embedVar = discord.Embed(title=f"Rally! **{o_card}** Increased Max Health ❤️",
@@ -13336,6 +13286,54 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             # Opponent Turn Start
                             
                             elif turn == 1:
+                                if t_title_passive_type:
+                                    if t_title_passive_type == "HLT":
+                                        t_health = t_health + t_title_passive_value
+                                    if t_title_passive_type == "LIFE":
+                                        o_health = o_health - t_title_passive_value
+                                        t_health = t_health + t_title_passive_value
+                                    if t_title_passive_type == "ATK":
+                                        t_attack = t_attack + t_title_passive_value
+                                    if t_title_passive_type == "DEF":
+                                        t_defense = t_defense + t_title_passive_value
+                                    if t_title_passive_type == "STAM":
+                                        t_stamina = t_stamina + t_title_passive_value
+                                    if t_title_passive_type == "DRAIN":
+                                        t_stamina = t_stamina + t_title_passive_value
+                                        o_stamina = o_stamina - t_title_passive_value
+                                    if t_title_passive_type == "FLOG":
+                                        t_attack = t_attack + t_title_passive_value
+                                        o_attack = o_attack - t_title_passive_value
+                                    if t_title_passive_type == "WITHER":
+                                        t_defense = t_defense + t_title_passive_value
+                                        o_defense = o_defense - t_title_passive_value
+                                    if t_title_passive_type == "RAGE":
+                                        t_defense = t_defense - t_title_passive_value
+                                        t_attack = t_attack + t_title_passive_value
+                                    if t_title_passive_type == "BRACE":
+                                        t_defense = t_defense + t_title_passive_value
+                                        t_attack = t_attack - t_title_passive_value
+                                    if t_title_passive_type == "BZRK":
+                                        t_health = t_health - t_title_passive_value
+                                        t_attack = t_attack + t_title_passive_value
+                                    if t_title_passive_type == "CRYSTAL":
+                                        t_health = t_health - t_title_passive_value
+                                        t_defense = t_defense + t_title_passive_value
+                                    if t_title_passive_type == "FEAR":
+                                        t_health = t_health - t_title_passive_value
+                                        o_defense = o_defense - (t_title_passive_value / 2)
+                                        o_attack = o_attack - (t_title_passive_value / 2)
+                                    if t_title_passive_type == "GROWTH":
+                                        t_health = t_health - t_title_passive_value
+                                        t_defense = t_defense - (t_title_passive_value / 2)
+                                        t_attack = t_attack - (t_title_passive_value / 2)
+                                    if t_title_passive_type == "SLOW":
+                                        if turn_total != 0:
+                                            turn_total = turn_total - 1
+                                    if t_title_passive_type == "HASTE":
+                                        turn_total = turn_total + 1
+
+
                                 # if previous_moves:
                                 #     previous_moves_len = len(previous_moves)
                                 #     # print(f"LIST LEN: {previous_moves_len}")
@@ -13423,6 +13421,26 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     t_newhealth = 0
                                     healmessage = ""
                                     messagenumber = 0
+
+                                    if t_title_passive_type:
+                                        if t_title_passive_type == "GAMBLE":
+                                            t_healthcalc = t_title_passive_value
+                                        if t_title_passive_type == "SOULCHAIN":
+                                            t_stamina = t_title_passive_value
+
+                                    if o_title_passive_type:
+                                        if o_title_passive_type == "GAMBLE":
+                                            t_healthcalc = o_title_passive_value
+                                        if t_title_passive_type == "SOULCHAIN":
+                                            t_stamina = o_title_passive_value
+                                    
+                                    if mode in co_op_modes:
+                                        if c_title_passive_type:
+                                            if c_title_passive_type == "GAMBLE":
+                                                t_healthcalc = c_title_passive_value
+                                            if c_title_passive_type == "SOULCHAIN":
+                                                t_stamina = c_title_passive_value
+
                                     if t_universe == "Crown Rift Madness":
                                         healmessage = "yet inner **Madness** drags on..."
                                         messagenumber = 3
@@ -13509,10 +13527,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                     elif t_universe == "Solo Leveling":
                                         embedVar = discord.Embed(
-                                            title=f"Ruler's Authority... {o_card} loses **{60 + turn_total}** 🛡️ 🔻",
+                                            title=f"Ruler's Authority... {o_card} loses **{30 + turn_total}** 🛡️ 🔻",
                                             colour=0xe91e63)
-                                        previous_moves.append(f"*{turn_total}:* 🩸 Ruler's Authority... {o_card} loses **{60 + turn_total}** 🛡️ 🔻")
-                                        o_defense = round(o_defense - (60 + turn_total))
+                                        previous_moves.append(f"*{turn_total}:* 🩸 Ruler's Authority... {o_card} loses **{30 + turn_total}** 🛡️ 🔻")
+                                        o_defense = round(o_defense - (30 + turn_total))
 
                                     elif t_universe == "Attack On Titan":
                                         embedVar = discord.Embed(title=f"Rally! **{t_card}** Increased Max Health ❤️",
@@ -15517,6 +15535,54 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             elif mode in co_op_modes and turn != (0 or 1):
                                 # Companion Turn Start
                                 if turn == 2:
+
+                                    if c_title_passive_type:
+                                        if c_title_passive_type == "HLT":
+                                            c_health = c_health + c_title_passive_value
+                                        if c_title_passive_type == "LIFE":
+                                            t_health = t_health - c_title_passive_value
+                                            c_health = c_health + c_title_passive_value
+                                        if c_title_passive_type == "ATK":
+                                            c_attack = c_attack + c_title_passive_value
+                                        if c_title_passive_type == "DEF":
+                                            c_defense = c_defense + c_title_passive_value
+                                        if c_title_passive_type == "STAM":
+                                            c_stamina = c_stamina + c_title_passive_value
+                                        if c_title_passive_type == "DRAIN":
+                                            t_stamina = t_stamina - c_title_passive_value
+                                            c_stamina = c_stamina + c_title_passive_value
+                                        if c_title_passive_type == "FLOG":
+                                            t_attack = t_attack - c_title_passive_value
+                                            c_attack = c_attack + c_title_passive_value
+                                        if c_title_passive_type == "WITHER":
+                                            t_defense = t_defense - c_title_passive_value
+                                            c_defense = c_defense + c_title_passive_value
+                                        if c_title_passive_type == "RAGE":
+                                            c_defense = c_defense - c_title_passive_value
+                                            c_attack = c_attack + c_title_passive_value
+                                        if c_title_passive_type == "BRACE":
+                                            c_defense = c_defense + c_title_passive_value
+                                            c_attack = c_attack - c_title_passive_value
+                                        if c_title_passive_type == "BZRK":
+                                            c_health = c_health - c_title_passive_value
+                                            c_attack = c_attack + c_title_passive_value
+                                        if c_title_passive_type == "CRYSTAL":
+                                            c_health = c_health - c_title_passive_value
+                                            c_defense = c_defense + c_title_passive_value
+                                        if c_title_passive_type == "FEAR":
+                                            c_health = c_health - c_title_passive_value
+                                            t_defense = t_defense - (c_title_passive_value / 2)
+                                            t_attack = t_attack - (c_title_passive_value / 2)
+                                        if c_title_passive_type == "GROWTH":
+                                            c_health = c_health - c_title_passive_value
+                                            c_defense = c_defense - (c_title_passive_value / 2)
+                                            c_attack = c_attack - (c_title_passive_value / 2)
+                                        if c_title_passive_type == "SLOW":
+                                            if turn_total != 0:
+                                                turn_total = turn_total - 1
+                                        if c_title_passive_type == "HASTE":
+                                            turn_total = turn_total + 1
+
                                                            
                                     # await asyncio.sleep(2)
                                     if c_block_used == True:
@@ -15589,6 +15655,19 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         c_newhealth = 0
                                         healmessage = ""
                                         messagenumber = 0
+                                        if c_title_passive_type:
+                                            if c_title_passive_type == "GAMBLE":
+                                                c_healthcalc = c_title_passive_value
+                                            if c_title_passive_type == "SOULCHAIN":
+                                                c_stamina = c_title_passive_value
+
+                                        if t_title_passive_type:
+                                            if t_title_passive_type == "GAMBLE":
+                                                c_healthcalc = t_title_passive_value
+                                            if t_title_passive_type == "SOULCHAIN":
+                                                c_stamina = t_title_passive_value
+
+
                                         if c_universe == "Crown Rift Madness":
                                             healmessage = "yet inner **Madness** drags on..."
                                             messagenumber = 3
@@ -15662,11 +15741,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                         elif c_universe == "Solo Leveling":
                                             embedVar = discord.Embed(
-                                                title=f"Ruler's Authority... {t_card} loses **{60 + turn_total}** 🛡️ 🔻",
+                                                title=f"Ruler's Authority... {t_card} loses **{30 + turn_total}** 🛡️ 🔻",
                                                 colour=0xe91e63)
                                             #await private_channel.send(embed=embedVar)
-                                            previous_moves.append(f"*{turn_total}:* 🩸 Ruler's Authority... {t_card} loses **{60 + turn_total}** 🛡️ 🔻")
-                                            t_defense = round(t_defense - (60 + turn_total))
+                                            previous_moves.append(f"*{turn_total}:* 🩸 Ruler's Authority... {t_card} loses **{30 + turn_total}** 🛡️ 🔻")
+                                            t_defense = round(t_defense - (30 + turn_total))
 
                                         elif c_universe == "Attack On Titan":
                                             embedVar = discord.Embed(title=f"Rally! **{c_card}** Increased Max Health ❤️",
@@ -18079,7 +18158,55 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 await channel.send(f"'PLAYER': **{str(ctx.author)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
 
                                 # Opponent Turn Start
-                                elif turn == 3:                                                               
+                                elif turn == 3:
+                                    if t_title_passive_type:
+                                        if t_title_passive_type == "HLT":
+                                            t_health = t_health + t_title_passive_value
+                                        if t_title_passive_type == "LIFE":
+                                            c_health = c_health - t_title_passive_value
+                                            t_health = t_health + t_title_passive_value
+                                        if t_title_passive_type == "ATK":
+                                            t_attack = t_attack + t_title_passive_value
+                                        if t_title_passive_type == "DEF":
+                                            t_defense = t_defense + t_title_passive_value
+                                        if t_title_passive_type == "STAM":
+                                            t_stamina = t_stamina + t_title_passive_value
+                                        if t_title_passive_type == "DRAIN":
+                                            t_stamina = t_stamina + t_title_passive_value
+                                            c_stamina = c_stamina - t_title_passive_value
+                                        if t_title_passive_type == "FLOG":
+                                            t_attack = t_attack + t_title_passive_value
+                                            c_attack = c_attack - t_title_passive_value
+                                        if t_title_passive_type == "WITHER":
+                                            t_defense = t_defense + t_title_passive_value
+                                            c_defense = c_defense - t_title_passive_value
+                                        if t_title_passive_type == "RAGE":
+                                            t_defense = t_defense - t_title_passive_value
+                                            t_attack = t_attack + t_title_passive_value
+                                        if t_title_passive_type == "BRACE":
+                                            t_defense = t_defense + t_title_passive_value
+                                            t_attack = t_attack - t_title_passive_value
+                                        if t_title_passive_type == "BZRK":
+                                            t_health = t_health - t_title_passive_value
+                                            t_attack = t_attack + t_title_passive_value
+                                        if t_title_passive_type == "CRYSTAL":
+                                            t_health = t_health - t_title_passive_value
+                                            t_defense = t_defense + t_title_passive_value
+                                        if t_title_passive_type == "FEAR":
+                                            t_health = t_health - t_title_passive_value
+                                            c_defense = c_defense - (t_title_passive_value / 2)
+                                            c_attack = c_attack - (t_title_passive_value / 2)
+                                        if t_title_passive_type == "GROWTH":
+                                            t_health = t_health - t_title_passive_value
+                                            t_defense = t_defense - (t_title_passive_value / 2)
+                                            t_attack = t_attack - (t_title_passive_value / 2)
+                                        if t_title_passive_type == "SLOW":
+                                            if turn_total != 0:
+                                                turn_total = turn_total - 1
+                                        if t_title_passive_type == "HASTE":
+                                            turn_total = turn_total + 1
+
+                                                               
                                     # await asyncio.sleep(2)
                                     if t_block_used == True:
                                         t_block_used = False
@@ -18143,6 +18270,25 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         t_newhealth = 0
                                         healmessage = ""
                                         messagenumber = 0
+                                        if t_title_passive_type:
+                                            if t_title_passive_type == "GAMBLE":
+                                                t_healthcalc = t_title_passive_value
+                                            if t_title_passive_type == "SOULCHAIN":
+                                                t_stamina = t_title_passive_value
+
+                                        if o_title_passive_type:
+                                            if o_title_passive_type == "GAMBLE":
+                                                t_healthcalc = o_title_passive_value
+                                            if t_title_passive_type == "SOULCHAIN":
+                                                t_stamina = o_title_passive_value
+                                        
+                                        if mode in co_op_modes:
+                                            if c_title_passive_type:
+                                                if c_title_passive_type == "GAMBLE":
+                                                    t_healthcalc = c_title_passive_value
+                                                if c_title_passive_type == "SOULCHAIN":
+                                                    t_stamina = c_title_passive_value
+
                                         if t_universe == "Crown Rift Madness":
                                             healmessage = "yet inner **Madness** drags on..."
                                             messagenumber = 3
@@ -18218,11 +18364,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                         elif t_universe == "Solo Leveling":
                                             embedVar = discord.Embed(
-                                                title=f"Ruler's Authority... {c_card} loses **{60 + turn_total}** 🛡️ 🔻",
+                                                title=f"Ruler's Authority... {c_card} loses **{30 + turn_total}** 🛡️ 🔻",
                                                 colour=0xe91e63)
                                             #await private_channel.send(embed=embedVar)
-                                            previous_moves.append(f"*{turn_total}:* 🩸 Ruler's Authority... {c_card} loses **{60 + turn_total}** 🛡️ 🔻")
-                                            c_defense = round(c_defense - (60 + turn_total))
+                                            previous_moves.append(f"*{turn_total}:* 🩸 Ruler's Authority... {c_card} loses **{30 + turn_total}** 🛡️ 🔻")
+                                            c_defense = round(c_defense - (30 + turn_total))
 
                                         elif t_universe == "Attack On Titan":
                                             embedVar = discord.Embed(title=f"Rally! **{t_card}** Increased Max Health ❤️",
