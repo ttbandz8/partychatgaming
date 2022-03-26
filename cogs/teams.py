@@ -55,7 +55,7 @@ class Teams(commands.Cog):
             'TEAM_DISPLAY_NAME': team_display_name, 
             'MEMBERS': [str(ctx.author)],
             'TRANSACTIONS': [transaction_message],
-            'BANK': 150000
+            'BANK': 0
             }
 
         team_buttons = [

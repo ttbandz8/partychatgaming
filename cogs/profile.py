@@ -524,7 +524,7 @@ class Profile(commands.Cog):
                         elif button_ctx.custom_id == "Resell":
                             card_data = db.queryCard({'NAME': selected_card})
                             card_name = card_data['NAME']
-                            sell_price = sell_price + (card_data['PRICE'] * .07)
+                            sell_price = sell_price + (card_data['PRICE'] * .15)
                             if card_name == current_card:
                                 await button_ctx.send("You cannot resell equipped cards.")
                             elif card_name in updated_vault['CARDS']:
@@ -3374,19 +3374,45 @@ async def craft_adjuster(self, player, vault, universe, price, item, skin_list):
                                 async def custom_function(self, button_ctx):
                                     if button_ctx.author == player.author:
                                         selected_destiny = str(button_ctx.origin_message.embeds[0].title)
+                                        updated_vault = db.queryVault({'DID': str(button_ctx.author.id)})
                                         if button_ctx.custom_id == "craft_d_win":
-                                            r = await update_destiny_call(button_ctx.author, selected_destiny, "Tales")
-                                           
-                                            query = {'DID': str(vault['DID'])}
-                                            update_query = {
-                                                '$inc': {'GEMS.$[type].' + "GEMS": int(negPriceAmount)}
-                                            }
-                                            filter_query = [{'type.' + "UNIVERSE": universe}]
-                                            res = db.updateVault(query, update_query, filter_query)
-                                            await button_ctx.send(f"Craft Success!")
-                                            response = {"HAS_GEMS_FOR": True, "SUCCESS":  True, "MESSAGE": "Craft Success!"}
-                                            return response
-                                            self.stop = True
+                                            gems = 0
+                                            has_gems_for = False
+                                            negPriceAmount = 0 - abs(int(price))
+                                            can_afford = False
+
+                                            for uni in updated_vault['GEMS']:
+                                                if uni['UNIVERSE'] == universe:
+                                                    gems = uni['GEMS']
+                                                    universe_heart = uni['UNIVERSE_HEART']
+                                                    universe_soul = uni['UNIVERSE_SOUL']
+                                                    has_gems_for = True
+                                                    if gems >= price:
+                                                        can_afford = True
+                                            
+                                            if can_afford:
+                                                r = await update_destiny_call(button_ctx.author, selected_destiny, "Tales")
+                                                
+                                                if r == "Your storage is full. You are unable to completed the destiny until you have available storage for your new destiny card.":
+                                                    await button_ctx.send(f"Your storage is full. You are unable to completed the destiny until you have available storage for your new destiny card.")
+                                                    self.stop = True
+                                                    return
+                                                else:
+                                                    query = {'DID': str(player.author.id)}
+                                                    update_query = {
+                                                        '$inc': {'GEMS.$[type].' + "GEMS": int(negPriceAmount)}
+                                                    }
+                                                    filter_query = [{'type.' + "UNIVERSE": universe}]
+                                                    res = db.updateVault(query, update_query, filter_query)
+                                                    await button_ctx.send(f"Craft Success!")
+                                                    response = {"HAS_GEMS_FOR": True, "SUCCESS":  True, "MESSAGE": "Craft Success!"}
+                                                    return response
+                                                    self.stop = True
+                                                    return
+                                            else:
+                                                await button_ctx.send(f"Insufficent 💎!")
+                                                self.stop = True
+                                                return
 
                                 await Paginator(bot=self.bot, disableAfterTimeout=True,useQuitButton=True, ctx=player, pages=embed_list, timeout=60, customActionRow=[
                                 custom_action_row,

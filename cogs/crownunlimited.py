@@ -2292,7 +2292,7 @@ async def destiny(player, opponent, mode):
     list2 = vault['STORAGE']
     current_cards = list1.extend(list2)
 
-    if len(list1) >= hand_limit and storage_amount >= storage_allowed_amount:
+    if hand_length >= hand_limit and storage_amount >= storage_allowed_amount:
         message = f"Your storage is full. You are unable to completed the destiny until you have available storage for your new destiny card."
         return message
 
@@ -21237,7 +21237,7 @@ async def drops(self,player, universe, matchcount):
                     list2 = vault['STORAGE']
                     current_cards = list1.extend(list2)
                     if len(vault['CARDS']) >= 25:
-                        if storage_amount < storage_allowed_amount:
+                        if storage_amount <= storage_allowed_amount:
                             update_query = {'$addToSet': {
                                 'CARD_LEVELS': {'CARD': str(cards[rand_card]), 'LVL': 0, 'TIER': 0, 'EXP': 0, 'HLT': 0,
                                                 'ATK': 0, 'DEF': 0, 'AP': 0}}}
@@ -21333,7 +21333,7 @@ async def specific_drops(self,player, card, universe):
             list2 = vault['STORAGE']
             current_cards = list1.extend(list2)
             if len(vault['CARDS']) >= 25:
-                if storage_amount < storage_allowed_amount:
+                if storage_amount <= storage_allowed_amount:
                     update_query = {'$addToSet': {
                         'CARD_LEVELS': {'CARD': str(card), 'LVL': 0, 'TIER': 0, 'EXP': 0, 'HLT': 0,
                                         'ATK': 0, 'DEF': 0, 'AP': 0}}}
@@ -21562,7 +21562,7 @@ async def dungeondrops(self, player, universe, matchcount):
                 list2 = vault['STORAGE']
                 current_cards = list1.extend(list2)
                 if len(vault['CARDS']) >= 25:
-                    if storage_amount < storage_allowed_amount:
+                    if storage_amount <= storage_allowed_amount:
                         update_query = {'$addToSet': {
                             'CARD_LEVELS': {'CARD': str(cards[rand_card]), 'LVL': 0, 'TIER': 0, 'EXP': 0, 'HLT': 0,
                                             'ATK': 0, 'DEF': 0, 'AP': 0}}}
