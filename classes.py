@@ -122,6 +122,7 @@ class TEAMS():
     ACTIVE_GUILD_BUFF: str = field(default_factory=lambda: '')
     GUILD_BUFFS: list[str] = field(default_factory=lambda: []) 
     GUILD: str = field(default_factory=lambda: 'PCG')
+    SHIELDING: bool = field(default_factory=lambda: False)
     TOURNAMENT_WINS: int = field(default_factory=lambda: 0)
     BANK: int = field(default_factory=lambda: 0)
     WINS: int = field(default_factory=lambda: 0)

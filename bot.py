@@ -596,8 +596,10 @@ async def crown(ctx):
    Occasionally the Founder or Sworn may /raid to start a Defense Test gauging the strength of their Chosen Shield
    host a /raid tournament within the Association to find a new champion or simply /knight one yourself
    
+   
    **Shield Benefits**
    Earn income by defending your Association from raiders
+   Guild has a 30% reduction in buff cost
    Earn respect by increasing the Association victory streak 
    
    """) ,colour=0x7289da)
@@ -2000,6 +2002,11 @@ async def buffshop(ctx, player, team):
    team_member_count = len(team['MEMBERS'])
    balance = team['BANK']
    icon = "💳"
+   shielding = team['SHIELDING']
+   association = team['GUILD']
+   shield_buff = False
+   if shielding ==True and association != 'PCG':
+      shield_buff = True
 
    if team_member_count <= 2:
       await ctx.send("Guilds must have at least **3** guild members to purchase Guild Buffs.")
@@ -2012,6 +2019,7 @@ async def buffshop(ctx, player, team):
          return
    war_tax = 0
    war_message = ""
+   shield_message = ""
    if team['WAR_FLAG']:
       war_tax = 15000000
       war_message = "War tax applied"
@@ -2019,7 +2027,12 @@ async def buffshop(ctx, player, team):
    rift_buff_cost = 18000000 + war_tax
    level_buff_cost = 15000000 + war_tax
    stat_buff_cost = 10000000 + war_tax
-
+   if shield_buff:
+      quest_buff_cost = round(quest_buff_cost * .60)
+      rift_buff_cost = round(rift_buff_cost * .60)
+      level_buff_cost = round(level_buff_cost * .60)
+      stat_buff_cost = round(stat_buff_cost * .60)
+      shield_message = "Association Shield Discount 30%"
    sell_buttons = [
          manage_components.create_button(
             style=ButtonStyle.green,
@@ -2052,6 +2065,7 @@ async def buffshop(ctx, player, team):
    embedVar = discord.Embed(title=f":tickets: | **Buff Shop** - {icon}{'{:,}'.format(balance)} ", description=textwrap.dedent(f"""\
    Welcome {team['TEAM_DISPLAY_NAME']}!
    {war_message}
+   {shield_message}
    🔋 1️⃣ **Quest Buff** for :money_with_wings: **{'{:,}'.format(quest_buff_cost)}**
    
    🔋 2️⃣ **Level Buff** for :money_with_wings: **{'{:,}'.format(level_buff_cost)}**

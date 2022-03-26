@@ -256,9 +256,9 @@ class Guild(commands.Cog):
                         if founder_team['TEAM_NAME'] == sworn_team['TEAM_NAME']:
                             await ctx.send(m.SAME_TEAM, delete_after=3)
                             return
-                        # if fbal < cost or sbal < cost:
-                        #     await ctx.send(m.BROKE_TEAM, delete_after=3)
-                        #     return
+                        if fbal < cost or sbal < cost:
+                            await ctx.send(m.BROKE_TEAM, delete_after=3)
+                            return
                                         
                         guild_query = {'FOUNDER': str(ctx.author), 'FDID': str(ctx.author.id)}
                         guild_buttons = [
@@ -323,7 +323,7 @@ class Guild(commands.Cog):
                                             new_value = {'$set' : {'BANK' : new_bal}}
                                             fteambal = db.updateTeam(fteam_query, new_value)
                                             s_new_bal = sbal - cost
-                                            new_value = {'$set' : {'BANK' : s_new_bal}}
+                                            new_value = {'$set' : {'BANK' : s_new_bal, 'SHIELDING': True}}
                                             steambal = db.updateTeam(steam_query, new_value)    
                                             
                                             guild_query = {'GNAME': guild_name}
@@ -359,8 +359,8 @@ class Guild(commands.Cog):
                                                 blade_count = 0
                                                 sword_count = sword_count + 1
                                                 sword_team = db.queryTeam({'TEAM_NAME': swords})
-                                                dubs = sword_team['SCRIM_WINS']
-                                                els = sword_team['SCRIM_LOSSES']
+                                                dubs = sword_team['WINS']
+                                                els = sword_team['LOSSES']
                                                 for blades in sword_team['MEMBERS']:
                                                     blade_count = blade_count + 1
                                                 sword_bank = sword_team['BANK']
@@ -505,6 +505,8 @@ class Guild(commands.Cog):
                             self.stop = True
                             return
                         if button_ctx.custom_id == "yes":
+                            prev_team_update = {'$set': {'SHIELDING': False}}
+                            remove_shield = db.updateTeam({'TEAM_NAME': str(team_name)}, prev_team_update)
                             newvalue = {'$pull': {'SWORDS': str(team_name)}}
                             response2 = db.deleteGuildSword(guild_query, newvalue, ctx.author, str(team_name))
                             await ctx.send(response2)
@@ -656,6 +658,13 @@ class Guild(commands.Cog):
         guild_query = {'GNAME': str(guildname)}
         guild = db.queryGuildAlt(guild_query)
         guild_name = guild['GNAME']
+        
+        prev_id = guild['SDID']
+        prev_user = db.queryUser({'DID':prev_id})
+        prev_team = db.queryTeam({'TEAM_NAME':prev_user['TEAM']})
+        prev_team_exist = False
+        if prev_team:
+            prev_team_exist = True
         new_query = {'FDID' : guild['FDID']}
         f_profile = guild['FDID']
         s_profile = guild['WDID']
@@ -716,11 +725,33 @@ class Guild(commands.Cog):
                             self.stop = True
                             return
                         if button_ctx.custom_id == "yes":
+                            if prev_team_exist:
+                                prev_team_update = {'$set': {'SHIELDING': False}}
+                                remove_shield = db.updateTeam({'TEAM_NAME': str(prev_team['TEAM_NAME'])}, prev_team_update)
+                            update_shielding = {'$set': {'SHIELDING': True}}
+                            add_shield = db.updateTeam({'TEAM_NAME': str(shield_team_name)}, update_shielding)
                             newvalue = {'$set': {'SHIELD': str(blade), 'STREAK' : 0, 'SDID' : str(blade.id)}}
-                            response = db.addGuildShield(new_query, newvalue, ctx.author, str(blade))
+                            response = db.addGuildShield(new_query, newvalue, ctx.author, blade)
                             await ctx.send(response)
-                    except:
-                        await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=3)
+                            
+                    except Exception as ex:
+                        trace = []
+                        tb = ex.__traceback__
+                        while tb is not None:
+                            trace.append({
+                                "filename": tb.tb_frame.f_code.co_filename,
+                                "name": tb.tb_frame.f_code.co_name,
+                                "lineno": tb.tb_lineno
+                            })
+                            tb = tb.tb_next
+                        print(str({
+                            'type': type(ex).__name__,
+                            'message': str(ex),
+                            'trace': trace
+                        }))
+                        await ctx.send(
+                            "There's an issue with your commnads. Alert support.")
+                        return
                 except Exception as ex:
                     trace = []
                     tb = ex.__traceback__
@@ -786,6 +817,8 @@ class Guild(commands.Cog):
                         self.stop = True
                         return
                     if button_ctx.custom_id == "yes":
+                        prev_team_update = {'$set': {'SHIELDING': False}}
+                        remove_shield = db.updateTeam({'TEAM_NAME': str(exiled_team['TEAM_NAME'])}, prev_team_update)
                         new_value_query = {'$pull': {'SWORDS': str(exiled_profile['TEAM'])}, '$set': {'SHIELD': guild_profile['SWORN'], 'SDID': guild_profile['WDID']}}
                         response2 = db.deleteGuildSword(new_query, new_value_query, ctx.author, str(exiled_profile['TEAM']))
                         await ctx.send(response2)
@@ -837,6 +870,8 @@ class Guild(commands.Cog):
                     return
                 if button_ctx.custom_id == "yes":
                     try:
+                        prev_team_update = {'$set': {'SHIELDING': False}}
+                        remove_shield = db.updateTeam({'TEAM_NAME': str(team_profile['TEAM_NAME'])}, prev_team_update)
                         new_value_query = {'$pull': {'SWORDS': str(team_name)}, '$set': {'SHIELD': guild_profile['SWORN'], 'SDID': guild_profile['WDID']}}
                         response = db.deleteGuildSwordAlt(guild_query, new_value_query, str(team_name))
                         await ctx.send(response)

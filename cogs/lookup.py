@@ -255,6 +255,12 @@ class Lookup(commands.Cog):
                 team_query = {'TEAM_NAME': team_name}
                 team = db.queryTeam(team_query)
                 team_display_name = team['TEAM_DISPLAY_NAME']
+                if team:
+                    team_name = team['TEAM_NAME']
+                    team_display_name = team['TEAM_DISPLAY_NAME']
+                else:
+                    await ctx.send("Guild does not exist")
+                    return
             else:
                 user = db.queryUser({'DID': str(ctx.author.id)})
                 team = db.queryTeam({'TEAM_NAME': user['TEAM'].lower()})
@@ -482,6 +488,7 @@ class Lookup(commands.Cog):
 
                 elif is_member and not is_owner and not is_captain and not is_officer:
                     buttons = [
+                        manage_components.create_button(style=2, label="Close", custom_id="Q")
                     ]
 
 
@@ -493,6 +500,9 @@ class Lookup(commands.Cog):
                         if button_ctx.custom_id == "guild_apply":
                             await button_ctx.defer(ignore=True)
                             await apply(self, ctx, owner_object)
+                            self.stop = True
+                            return
+                        elif button_ctx.custom_id == "Q":
                             self.stop = True
                             return
                         elif button_ctx.custom_id == "guild_buff_toggle":
@@ -549,168 +559,233 @@ class Lookup(commands.Cog):
     
     
     @cog_ext.cog_slash(description="Lookup Association", guild_ids=main.guild_ids)
-    async def association(self, ctx, association: str):
-        guild_name = association
-        guild_query = {'GNAME': guild_name}
-        guild = db.queryGuildAlt(guild_query)
-        founder_name = ""
-        if guild:
-            hall = db.queryHall({'HALL' : guild['HALL']})
-            hall_name = hall['HALL']
-            hall_multipler = hall['MULT']
-            hall_split = hall['SPLIT']
-            hall_fee = hall['FEE']
-            hall_def = hall['DEFENSE']
-            hall_img = hall['PATH']
-            guild_name = guild['GNAME']
-            founder_name = guild['FOUNDER']
-            sworn_name = guild['SWORN']
-            shield_name = guild['SHIELD']
-            shield_info = db.queryUser({'DISNAME' : str(shield_name)})
-            shield_card = shield_info['CARD']
-            shield_arm = shield_info['ARM']
-            shield_title = shield_info['TITLE']
-            shield_rebirth = shield_info['REBIRTH']
-            streak = guild['STREAK']
-            # games = guild['GAMES']
-            # avatar = game['IMAGE_URL']
-            crest = guild['CREST']
-            balance = guild['BANK']
-            bounty = guild['BOUNTY']
-            bonus = int((streak/100) * bounty)
-            picon = ":shield:"
-            sicon = ":beginner:"
-            icon = ":coin:"
-            if balance >= 50000000:
-                icon = ":money_with_wings:"
-            elif balance >=25000000:
-                icon = ":moneybag:"
-            elif balance >= 5000000:
-                icon = ":dollar:"
+    async def association(self, ctx, association = None):
+        try:
+            if association:   
+                guild_name = association
+                guild_query = {'GNAME': guild_name}
+                guild = db.queryGuildAlt(guild_query)
+                founder_name = ""
+                if guild:
+                    guild_name = guild['GNAME']
+                else:
+                    await ctx.send("Association does not exist.")
+                    return
+            else:
+                user = db.queryUser({'DID': str(ctx.author.id)})
+                team = db.queryTeam({'TEAM_NAME': user['TEAM'].lower()})
+                guild = db.queryGuildAlt({'GNAME': team['GUILD'].lower()})
+                if guild:
+                    guild_name = guild['GNAME']
+                else:
+                    await ctx.send("Your Guild is not Associated.")
+                    return
                 
-            if streak >= 100:
-                sicon = ":skull_crossbones:"     
-            elif streak >= 50:
-                sicon = ":skull:"
-            elif streak >=25:
-                sicon = ":ghost:"
-            elif streak >= 10:
-                sicon = ":diamond_shape_with_a_dot_inside:"
+            if guild:
+                hall = db.queryHall({'HALL' : guild['HALL']})
+                hall_name = hall['HALL']
+                hall_multipler = hall['MULT']
+                hall_split = hall['SPLIT']
+                hall_fee = hall['FEE']
+                hall_def = hall['DEFENSE']
+                hall_img = hall['PATH']
+                guild_name = guild['GNAME']
+                founder_name = guild['FOUNDER']
+                sworn_name = guild['SWORN']
+                shield_name = guild['SHIELD']
+                shield_info = db.queryUser({'DISNAME' : str(shield_name)})
+                shield_card = shield_info['CARD']
+                shield_arm = shield_info['ARM']
+                shield_title = shield_info['TITLE']
+                shield_rebirth = shield_info['REBIRTH']
+                streak = guild['STREAK']
+                # games = guild['GAMES']
+                # avatar = game['IMAGE_URL']
+                crest = guild['CREST']
+                balance = guild['BANK']
+                bounty = guild['BOUNTY']
+                bonus = int((streak/100) * bounty)
+                picon = ":shield:"
+                sicon = ":beginner:"
+                icon = ":coin:"
+                if balance >= 50000000:
+                    icon = ":money_with_wings:"
+                elif balance >=25000000:
+                    icon = ":moneybag:"
+                elif balance >= 5000000:
+                    icon = ":dollar:"
+                    
+                if streak >= 100:
+                    sicon = ":skull_crossbones:"     
+                elif streak >= 50:
+                    sicon = ":skull:"
+                elif streak >=25:
+                    sicon = ":ghost:"
+                elif streak >= 10:
+                    sicon = ":diamond_shape_with_a_dot_inside:"
+                    
+                # if shield_rebirth > 0:
+                #     picon = "::heart_on_fire::"
                 
-            # if shield_rebirth > 0:
-            #     picon = "::heart_on_fire::"
-            
 
-            sword_list = []
-            sword_count = 0
-            blade_count = 0
-            for swords in guild['SWORDS']:
+                sword_list = []
+                sword_count = 0
                 blade_count = 0
-                sword_count = sword_count + 1
-                sword_team = db.queryTeam({'TEAM_NAME': swords})
-                dubs = sword_team['SCRIM_WINS']
-                els = sword_team['SCRIM_LOSSES']
-                for blades in sword_team['MEMBERS']:
-                    blade_count = blade_count + 1
-                sword_bank = sword_team['BANK']
-                sword_list.append(f"~ {swords} ~ W**{dubs}** / L**{els}**\n:man_detective: | **Owner: **{sword_team['OWNER']}\n:coin: | **Bank: **{'{:,}'.format(sword_bank)}\n:knife: | **Members: **{blade_count}\n_______________________")
-            crest_list = []
-            for c in crest:
-                crest_list.append(f"{Crest_dict[c]} | {c}")
+                for swords in guild['SWORDS']:
+                    blade_count = 0
+                    sword_count = sword_count + 1
+                    sword_team = db.queryTeam({'TEAM_NAME': swords})
+                    dubs = sword_team['WINS']
+                    els = sword_team['LOSSES']
+                    for blades in sword_team['MEMBERS']:
+                        blade_count = blade_count + 1
+                    sword_bank = sword_team['BANK']
+                    sword_list.append(f"~ {swords} ~ W**{dubs}** / L**{els}**\n:man_detective: | **Owner: **{sword_team['OWNER']}\n:coin: | **Bank: **{'{:,}'.format(sword_bank)}\n:knife: | **Members: **{blade_count}\n_______________________")
+                crest_list = []
+                for c in crest:
+                    crest_list.append(f"{Crest_dict[c]} | {c}")
 
 
 
 
-            # embed1 = discord.Embed(title=f":flags: {guild_name} Guild Card - {icon}{'{:,}'.format(balance)}".format(self), description=":bank: Party Chat Gaming Database", colour=000000)
-            # if guild['LOGO_FLAG']:
-            #     embed1.set_image(url=logo)
-            # embed1.add_field(name="Founder :dolls:", value= founder_name.split("#",1)[0], inline=True)
-            # embed1.add_field(name="Sworn :dolls:", value= sworn_name.split("#",1)[0], inline=True)
-            embed1 = discord.Embed(title= f":flags: |{guild_name} Association Card - {icon} {'{:,}'.format(balance)}".format(self), description=textwrap.dedent(f"""\
-            
-            :nesting_dolls: | **Founder ~** {founder_name.split("#",1)[0]}
-            :dolls: | **Sworn ~** {sworn_name.split("#",1)[0]}
-            
+                # embed1 = discord.Embed(title=f":flags: {guild_name} Guild Card - {icon}{'{:,}'.format(balance)}".format(self), description=":bank: Party Chat Gaming Database", colour=000000)
+                # if guild['LOGO_FLAG']:
+                #     embed1.set_image(url=logo)
+                # embed1.add_field(name="Founder :dolls:", value= founder_name.split("#",1)[0], inline=True)
+                # embed1.add_field(name="Sworn :dolls:", value= sworn_name.split("#",1)[0], inline=True)
+                embed1 = discord.Embed(title= f":flags: |{guild_name} Association Card - {icon} {'{:,}'.format(balance)}".format(self), description=textwrap.dedent(f"""\
+                
+                :nesting_dolls: | **Founder ~** {founder_name.split("#",1)[0]}
+                :dolls: | **Sworn ~** {sworn_name.split("#",1)[0]}
+                
 
-            :japanese_goblin: | **Shield: ~**{shield_name.split("#",1)[0].format(self)} ~ {sicon} | **Victories: **{streak}
-            :flower_playing_cards: | **Card: **{shield_card}
-            :reminder_ribbon: | **Title: **{shield_title}
-            :mechanical_arm: | **Arm: **{shield_arm}
-              
-            :ninja: | **Swords: **{sword_count}
-            :dollar: | **Guild Split: **{hall_split} 
-            :secret: | **Universe Crest: **{len(crest_list)} 
-                   
-            :shinto_shrine: | **Hall: **{hall_name} 
-            :shield: | **Raid Defenses: **{hall_def} 
-            :coin: | **Raid Fee: **{'{:,}'.format(hall_fee)}
-            :yen: | **Bounty: **{'{:,}'.format(bounty)}
-            :moneybag: | **Victory Bonus: **{'{:,}'.format(bonus)}
-            """), colour=000000)
-            embed1.set_image(url=hall_img)
-            embed1.set_footer(text=f"/raid {guild_name} - Raid Association")
-            
-            embed2 = discord.Embed(title=f":flags: |  {guild_name} **Sword** List".format(self), description=":bank: |  Party Chat Gaming Database", colour=000000)
-            embed2.add_field(name=f"**Swords: | ** :ninja: ~ {sword_count}", value="\n".join(f'**{t}**'.format(self) for t in sword_list), inline=False)
-            embed2.set_footer(text=f"/guild - View Association Guild")
-            
-            embed3 = discord.Embed(title=f":flags: |  {guild_name} **OWNED CREST**".format(self), description=":bank: |  Party Chat Gaming Database", colour=000000)
-            embed3.add_field(name=f":secret: | **CREST**", value="\n".join(f'**{c}**'.format(self) for c in crest_list), inline=False)
-            embed3.set_footer(text=f"Earn Universe Crest in Dungeons!")
-            # if guild['LOGO_FLAG']:
-            #     embed3.set_image(url=logo)
-            
-            paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
-            paginator.add_reaction('⏮️', "first")
-            paginator.add_reaction('⬅️', "back")
-            paginator.add_reaction('🔐', "lock")
-            paginator.add_reaction('➡️', "next")
-            paginator.add_reaction('⏭️', "last")
-            embeds = [embed1,embed2, embed3]
-            await paginator.run(embeds)
-        else:
-            await ctx.send(m.GUILD_DOESNT_EXIST)
+                :japanese_goblin: | **Shield: ~**{shield_name.split("#",1)[0].format(self)} ~ {sicon} | **Victories: **{streak}
+                :flower_playing_cards: | **Card: **{shield_card}
+                :reminder_ribbon: | **Title: **{shield_title}
+                :mechanical_arm: | **Arm: **{shield_arm}
+                
+                :ninja: | **Swords: **{sword_count}
+                :dollar: | **Guild Split: **{hall_split} 
+                :secret: | **Universe Crest: **{len(crest_list)} 
+                    
+                :shinto_shrine: | **Hall: **{hall_name} 
+                :shield: | **Raid Defenses: **{hall_def} 
+                :coin: | **Raid Fee: **{'{:,}'.format(hall_fee)}
+                :yen: | **Bounty: **{'{:,}'.format(bounty)}
+                :moneybag: | **Victory Bonus: **{'{:,}'.format(bonus)}
+                """), colour=000000)
+                embed1.set_image(url=hall_img)
+                embed1.set_footer(text=f"/raid {guild_name} - Raid Association")
+                
+                embed2 = discord.Embed(title=f":flags: |  {guild_name} **Sword** List".format(self), description=":bank: |  Party Chat Gaming Database", colour=000000)
+                embed2.add_field(name=f"**Swords: | ** :ninja: ~ {sword_count}", value="\n".join(f'**{t}**'.format(self) for t in sword_list), inline=False)
+                embed2.set_footer(text=f"/guild - View Association Guild")
+                
+                embed3 = discord.Embed(title=f":flags: |  {guild_name} **OWNED CREST**".format(self), description=":bank: |  Party Chat Gaming Database", colour=000000)
+                embed3.add_field(name=f":secret: | **CREST**", value="\n".join(f'**{c}**'.format(self) for c in crest_list), inline=False)
+                embed3.set_footer(text=f"Earn Universe Crest in Dungeons!")
+                # if guild['LOGO_FLAG']:
+                #     embed3.set_image(url=logo)
+                
+                paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+                paginator.add_reaction('⏮️', "first")
+                paginator.add_reaction('⬅️', "back")
+                paginator.add_reaction('🔐', "lock")
+                paginator.add_reaction('➡️', "next")
+                paginator.add_reaction('⏭️', "last")
+                embeds = [embed1,embed2, embed3]
+                await paginator.run(embeds)
+            else:
+                await ctx.send(m.GUILD_DOESNT_EXIST)
+        except Exception as ex:
+            trace = []
+            tb = ex.__traceback__
+            while tb is not None:
+                trace.append({
+                    "filename": tb.tb_frame.f_code.co_filename,
+                    "name": tb.tb_frame.f_code.co_name,
+                    "lineno": tb.tb_lineno
+                })
+                tb = tb.tb_next
+            print(str({
+                'type': type(ex).__name__,
+                'message': str(ex),
+                'trace': trace
+            }))
 
 
     @cog_ext.cog_slash(description="Lookup player family", guild_ids=main.guild_ids)
-    async def family(self, ctx, member: User):
-        user_profile = db.queryUser({'DISNAME': str(member)})
-        family = db.queryFamily({'HEAD': user_profile['FAMILY']})
-        if family:
-            family_name = family['HEAD'] + "'s Family"
-            head_name = family['HEAD']
-            partner_name = family['PARTNER']
-            savings = int(family['BANK'])
-            house = family['HOUSE']
-            house_info = db.queryHouse({'HOUSE' : house})
-            house_img = house_info['PATH']
-            kid_list = []
-            for kids in family['KIDS']:
-                kid_list.append(kids.split("#",1)[0])
-            icon = ":coin:"
-            if savings >= 300000:
-                icon = ":money_with_wings:"
-            elif savings >=150000:
-                icon = ":moneybag:"
-            elif savings >= 100000:
-                icon = ":dollar:"
+    async def family(self, ctx, player = None):
+        try:
+            if player != None:
+                member = player
+            if player:
+                user_profile = db.queryUser({'DISNAME': str(member)})
+                family = db.queryFamily({'HEAD': user_profile['FAMILY']})
+                if family:
+                    family_name = family['HEAD']
+                else:
+                    await ctx.send("Family does not exist.")
+                    return
+                
+            else:
+                user_profile = db.queryUser({'DID': str(ctx.author.id)})
+                family = db.queryFamily({'HEAD': user_profile['FAMILY']})
+                if family:
+                    family_name = family['HEAD']
+                else:
+                    await ctx.send("You are not a part of a Family.")
+                    return
+                
+            if family:
+                family_name = family['HEAD'] + "'s Family"
+                head_name = family['HEAD']
+                partner_name = family['PARTNER']
+                savings = int(family['BANK'])
+                house = family['HOUSE']
+                house_info = db.queryHouse({'HOUSE' : house})
+                house_img = house_info['PATH']
+                kid_list = []
+                for kids in family['KIDS']:
+                    kid_list.append(kids.split("#",1)[0])
+                icon = ":coin:"
+                if savings >= 300000:
+                    icon = ":money_with_wings:"
+                elif savings >=150000:
+                    icon = ":moneybag:"
+                elif savings >= 100000:
+                    icon = ":dollar:"
 
 
-            embed1 = discord.Embed(title=f":family_mwgb: | {family_name} - {icon}{'{:,}'.format(savings)}".format(self), description=":bank: | Party Chat Gaming Database", colour=000000)
-            # if team['LOGO_FLAG']:
-            #     embed1.set_image(url=logo)
-            embed1.add_field(name=":brain: | Head Of Household", value= head_name.split("#",1)[0], inline=False)
-            if partner_name:
-                embed1.add_field(name=":anatomical_heart: | Partner", value= partner_name.split("#",1)[0], inline=False)
-            if kid_list:
-                embed1.add_field(name=":baby: | Kids", value="\n".join(f'{k}'.format(self) for k in kid_list), inline=False)
-            embed1.add_field(name=":house: | House", value=house, inline=False)
-            embed1.set_image(url=house_img)
-    
-            await ctx.send(embed = embed1)
-        else:
-            await ctx.send(m.FAMILY_DOESNT_EXIST)
-
+                embed1 = discord.Embed(title=f":family_mwgb: | {family_name} - {icon}{'{:,}'.format(savings)}".format(self), description=":bank: | Party Chat Gaming Database", colour=000000)
+                # if team['LOGO_FLAG']:
+                #     embed1.set_image(url=logo)
+                embed1.add_field(name=":brain: | Head Of Household", value= head_name.split("#",1)[0], inline=False)
+                if partner_name:
+                    embed1.add_field(name=":anatomical_heart: | Partner", value= partner_name.split("#",1)[0], inline=False)
+                if kid_list:
+                    embed1.add_field(name=":baby: | Kids", value="\n".join(f'{k}'.format(self) for k in kid_list), inline=False)
+                embed1.add_field(name=":house: | House", value=house, inline=False)
+                embed1.set_image(url=house_img)
+        
+                await ctx.send(embed = embed1)
+            else:
+                await ctx.send(m.FAMILY_DOESNT_EXIST)
+        except Exception as ex:
+            trace = []
+            tb = ex.__traceback__
+            while tb is not None:
+                trace.append({
+                    "filename": tb.tb_frame.f_code.co_filename,
+                    "name": tb.tb_frame.f_code.co_name,
+                    "lineno": tb.tb_lineno
+                })
+                tb = tb.tb_next
+            print(str({
+                'type': type(ex).__name__,
+                'message': str(ex),
+                'trace': trace
+            }))
 
 def setup(bot):
     bot.add_cog(Lookup(bot))

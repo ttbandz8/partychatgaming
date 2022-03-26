@@ -1565,10 +1565,8 @@ class CrownUnlimited(commands.Cog):
                 return
             if oguild['SHIELD'] == sowner['DISNAME']:
                 shield_training_active = True
-                await ctx.send("Association Shield Training", delete_after=5)
             elif player_guild == guildname:
                 shield_test_active = True
-                await ctx.send("Association Shield Defense Test", delete_after=5)
                 
 
             guild_query = {'GNAME': guildname}
@@ -3860,8 +3858,8 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         currentopponent = 0
     t_user = ""
     if mode == "RAID":
-        tguild = cteam
-        tteam = ctitle
+        tguild = player2guild
+        tteam = player2team
         hall = universe
         hall_def = hall['DEFENSE']
         fee = hall['FEE']
@@ -6842,8 +6840,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 opponent = currentopponent
                 t = db.queryCard({'NAME': opponent['CARD']})
                 ttitle = db.queryTitle({'TITLE': opponent['TITLE']})
-                tguild = cfam
-                tteam = cteam
+                tguild = cteam
+                tteam = cowner
                 hall = universe
                 title_match_active = selected_universe
                 shield_test_active = completed_universes
@@ -20086,6 +20084,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             newshield = db.updateGuild(guild_query, {'$set': {'SHIELD': str(ctx.author)}})
                                             guildwin = db.updateGuild(guild_query, {'$set': {'BOUNTY': winbonus, 'STREAK': 1}})
                                             endmessage = f":flags: {oguild['GNAME']} SHIELD CLAIMED!"
+                                            prev_team_update = {'$set': {'SHIELDING': False}}
+                                            remove_shield = db.updateTeam({'TEAM_NAME': str(tteam)}, prev_team_update)
+                                            update_shielding = {'$set': {'SHIELDING': True}}
+                                            add_shield = db.updateTeam({'TEAM_NAME': str(oteam)}, update_shielding)
                                     else:
                                         guildloss = db.updateGuild(guild_query, {'$set': {'BOUNTY': fee, 'STREAK': 0}})
                                 
