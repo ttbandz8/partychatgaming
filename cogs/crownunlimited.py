@@ -12742,7 +12742,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 battle_msg = await private_channel.send(embed=embedVar, file=summon_file)
                                                                 await asyncio.sleep(2)
                                                                 await battle_msg.delete(delay=None)
-                                                            await button_ctx.defer(ignore=True)
+                                                            # await button_ctx.defer(ignore=True)
                                                             #await battle_msg.delete(delay=None)
                                                         turn = 0
                                                     else:
@@ -13290,8 +13290,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = 0
                                                                 o_stamina = o_stamina - dmg['STAMINA_USED']
                                                                 turn_total = turn_total + 1
-                                                                if botActive:
-                                                                    await button_ctx.defer(ignore=True)
+                                                                # if botActive:
+                                                                #     await button_ctx.defer(ignore=True)
                                                         else:
                                                             o_stamina = o_stamina - dmg['STAMINA_USED']
                                                             turn_total = turn_total + 1
@@ -21553,7 +21553,7 @@ async def dungeondrops(self, player, universe, matchcount):
                 await cardlevel(self, cards[rand_card], player.id, "Dungeon", universe)
                 message = ""
                 await bless(2500, player.id)
-                return f"You earned {exp_gain} EXP for _Card:_ **{cards[rand_card]}** + :coin: 2,500!\n{message}"
+                return f"You earned EXP for _Card:_ **{cards[rand_card]}** + :coin: 2,500!\n{message}"
             else:
                 storage_amount = len(vault['STORAGE'])
                 hand_length = len(vault['CARDS'])
@@ -21610,7 +21610,7 @@ async def dungeondrops(self, player, universe, matchcount):
             'message': str(ex),
             'trace': trace
         }))
-        await ctx.send("There's an issue with the Drops. Alert support.")
+        await player.send("There's an issue with the Drops. Alert support.")
         await bless(5000, player.id)
         guild = self.bot.get_guild(543442011156643871)
         channel = guild.get_channel(957061470192033812)
