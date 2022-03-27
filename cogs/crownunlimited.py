@@ -7218,7 +7218,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                 if o_title_passive_type:
                                     if o_title_passive_type == "HLT":
-                                        o_health = o_health + o_title_passive_value
+                                        o_health = o_health + ((o_title_passive_value / 100) * o_health)
                                     if o_title_passive_type == "LIFE":
                                         t_health = t_health - o_title_passive_value
                                         o_health = o_health + o_title_passive_value
@@ -7273,8 +7273,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     if o_title_passive_type == "BLINK":
                                         o_stamina = o_stamina - o_title_passive_value
                                         t_stamina = t_stamina + o_title_passive_value
-
-
 
 
                                 if o_block_used == True:
