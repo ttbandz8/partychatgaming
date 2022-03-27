@@ -7262,6 +7262,20 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             turn_total = turn_total - 1
                                     if o_title_passive_type == "HASTE":
                                         turn_total = turn_total + 1
+                                    if o_title_passive_type == "STANCE":
+                                        tempattack = o_attack + o_title_passive_value
+                                        o_attack = o_defense
+                                        o_defense = tempattack
+                                    if o_title_passive_type == "CONFUSE":
+                                        tempattack = t_attack - o_title_passive_value
+                                        t_attack = t_defense
+                                        t_defense = tempattack
+                                    if o_title_passive_type == "BLINK":
+                                        o_stamina = o_stamina - o_title_passive_value
+                                        t_stamina = t_stamina + o_title_passive_value
+
+
+
 
                                 if o_block_used == True:
                                     o_block_used = False
@@ -8686,6 +8700,18 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             turn_total = turn_total - 1
                                     if t_title_passive_type == "HASTE":
                                         turn_total = turn_total + 1
+                                    if t_title_passive_type == "STANCE":
+                                        tempattack = t_attack + t_title_passive_value
+                                        t_attack = t_defense
+                                        t_defense = tempattack
+                                    if t_title_passive_type == "CONFUSE":
+                                        tempattack = o_attack - t_title_passive_value
+                                        o_attack = o_defense
+                                        o_defense = tempattack
+                                    if t_title_passive_type == "BLINK":
+                                        o_stamina = o_stamina + t_title_passive_value
+                                        t_stamina = t_stamina - t_title_passive_value
+
 
 
                                 if o_universe == "Death Note" and turn_total == 0:
@@ -10881,6 +10907,18 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             turn_total = turn_total - 1
                                     if o_title_passive_type == "HASTE":
                                         turn_total = turn_total + 1
+                                    if o_title_passive_type == "STANCE":
+                                        tempattack = o_attack + o_title_passive_value
+                                        o_attack = o_defense
+                                        o_defense = tempattack
+                                    if o_title_passive_type == "CONFUSE":
+                                        tempattack = t_attack - o_title_passive_value
+                                        t_attack = t_defense
+                                        t_defense = tempattack
+                                    if o_title_passive_type == "BLINK":
+                                        o_stamina = o_stamina - o_title_passive_value
+                                        t_stamina = t_stamina + o_title_passive_value
+
 
                                 if o_block_used == True:
                                     o_defense = int(o_defense / 2)
@@ -13332,6 +13370,18 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             turn_total = turn_total - 1
                                     if t_title_passive_type == "HASTE":
                                         turn_total = turn_total + 1
+                                    if t_title_passive_type == "STANCE":
+                                        tempattack = t_attack + t_title_passive_value
+                                        t_attack = t_defense
+                                        t_defense = tempattack
+                                    if t_title_passive_type == "CONFUSE":
+                                        tempattack = o_attack - t_title_passive_value
+                                        o_attack = o_defense
+                                        o_defense = tempattack
+                                    if t_title_passive_type == "BLINK":
+                                        o_stamina = o_stamina + t_title_passive_value
+                                        t_stamina = t_stamina - t_title_passive_value
+
 
 
                                 # if previous_moves:
@@ -15582,6 +15632,18 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 turn_total = turn_total - 1
                                         if c_title_passive_type == "HASTE":
                                             turn_total = turn_total + 1
+                                        if c_title_passive_type == "STANCE":
+                                            tempattack = c_attack + c_title_passive_value
+                                            c_attack = c_defense
+                                            c_defense = tempattack
+                                        if c_title_passive_type == "CONFUSE":
+                                            tempattack = c_attack - c_title_passive_value
+                                            t_attack = c_defense
+                                            t_defense = tempattack
+                                        if c_title_passive_type == "BLINK":
+                                            c_stamina = c_stamina + c_title_passive_value
+                                            t_stamina = t_stamina - c_title_passive_value
+
 
                                                            
                                     # await asyncio.sleep(2)
@@ -18205,6 +18267,18 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 turn_total = turn_total - 1
                                         if t_title_passive_type == "HASTE":
                                             turn_total = turn_total + 1
+                                        if t_title_passive_type == "STANCE":
+                                            tempattack = t_attack + t_title_passive_value
+                                            t_attack = t_defense
+                                            t_defense = tempattack
+                                        if t_title_passive_type == "CONFUSE":
+                                            tempattack = c_attack - t_title_passive_value
+                                            c_attack = c_defense
+                                            c_defense = tempattack
+                                        if t_title_passive_type == "BLINK":
+                                            c_stamina = c_stamina + t_title_passive_value
+                                            t_stamina = t_stamina - t_title_passive_value
+
 
                                                                
                                     # await asyncio.sleep(2)
