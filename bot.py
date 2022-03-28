@@ -2763,6 +2763,77 @@ async def blessall(ctx, amount: int):
 
 @bot.command()
 @commands.check(validate_user)
+async def updatedungeoncards(ctx):
+   if ctx.author.guild_permissions.administrator == True:
+      try:
+         all_cards = db.queryDungeonCards()
+         for card in all_cards:
+            query = {'NAME': str(card['NAME'])}
+            update_query = {
+               '$inc': {
+                  'HLT': 50,
+                  'ATK': 30,
+                  'DEF': 30,
+               }
+            }
+            r = db.updateCard(query, update_query)
+         await ctx.send("Dungeon Cards have been updated.")
+      except Exception as ex:
+         trace = []
+         tb = ex.__traceback__
+         while tb is not None:
+               trace.append({
+                  "filename": tb.tb_frame.f_code.co_filename,
+                  "name": tb.tb_frame.f_code.co_name,
+                  "lineno": tb.tb_lineno
+               })
+               tb = tb.tb_next
+         print(str({
+               'type': type(ex).__name__,
+               'message': str(ex),
+               'trace': trace
+         }))      
+   else:
+      await ctx.send("Admin only")
+
+@bot.command()
+@commands.check(validate_user)
+async def updatedestinycards(ctx):
+   if ctx.author.guild_permissions.administrator == True:
+      try:
+         all_cards = db.queryDestinyCards()
+         for card in all_cards:
+            query = {'NAME': str(card['NAME'])}
+            update_query = {
+               '$inc': {
+                  'HLT': 100,
+                  'ATK': 50,
+                  'DEF': 60,
+               }
+            }
+            r = db.updateCard(query, update_query)
+         await ctx.send("Destiny Cards have been udpated.")
+      except Exception as ex:
+         trace = []
+         tb = ex.__traceback__
+         while tb is not None:
+               trace.append({
+                  "filename": tb.tb_frame.f_code.co_filename,
+                  "name": tb.tb_frame.f_code.co_name,
+                  "lineno": tb.tb_lineno
+               })
+               tb = tb.tb_next
+         print(str({
+               'type': type(ex).__name__,
+               'message': str(ex),
+               'trace': trace
+         }))
+   else:
+      await ctx.send("Admin only")
+
+
+@bot.command()
+@commands.check(validate_user)
 async def addfield(ctx, collection, new_field, field_type):
    if ctx.author.guild_permissions.administrator == True:
 

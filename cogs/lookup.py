@@ -664,7 +664,7 @@ class Lookup(commands.Cog):
                 :reminder_ribbon: | **Title: **{shield_title}
                 :mechanical_arm: | **Arm: **{shield_arm}
                 
-                :ninja: | **Swords: **{sword_count}
+                :ninja: | **Guilds: **{sword_count}
                 :dollar: | **Guild Split: **{hall_split} 
                 :secret: | **Universe Crest: **{len(crest_list)} 
                     
@@ -677,8 +677,8 @@ class Lookup(commands.Cog):
                 embed1.set_image(url=hall_img)
                 embed1.set_footer(text=f"/raid {guild_name} - Raid Association")
                 
-                embed2 = discord.Embed(title=f":flags: |  {guild_name} **Sword** List".format(self), description=":bank: |  Party Chat Gaming Database", colour=000000)
-                embed2.add_field(name=f"**Swords: | ** :ninja: ~ {sword_count}", value="\n".join(f'**{t}**'.format(self) for t in sword_list), inline=False)
+                embed2 = discord.Embed(title=f":flags: |  {guild_name} **Guild** List".format(self), description=":bank: |  Party Chat Gaming Database", colour=000000)
+                embed2.add_field(name=f"**Guilds: | ** :ninja: ~ {sword_count}", value="\n".join(f'**{t}**'.format(self) for t in sword_list), inline=False)
                 embed2.set_footer(text=f"/guild - View Association Guild")
                 
                 embed3 = discord.Embed(title=f":flags: |  {guild_name} **OWNED CREST**".format(self), description=":bank: |  Party Chat Gaming Database", colour=000000)

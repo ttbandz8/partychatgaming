@@ -914,6 +914,13 @@ def querySkins(args):
     data = cards_col.find({'SKIN_FOR': args, 'HAS_COLLECTION': False, 'AVAILABLE': True, 'IS_SKIN': True})
     return data 
 
+def queryDungeonCards():
+    data = cards_col.find({'AVAILABLE': True, 'HAS_COLLECTION': False, 'EXCLUSIVE': True})
+    return data 
+
+def queryDestinyCards():
+    data = cards_col.find({'HAS_COLLECTION': True})
+    return data 
 
 def queryDropCards(args):
     data = cards_col.find({'UNIVERSE': args, 'EXCLUSIVE': False, 'AVAILABLE': True, 'HAS_COLLECTION': False, 'IS_SKIN': False,'TIER': {'$in': acceptable}})
@@ -1566,12 +1573,12 @@ def updateManyTeams(new_value):
 
 def queryTeam(team):
     try:
-        exists = team_exists({'TEAM_NAME': team['TEAM_NAME']})
+        exists = team_exists({'TEAM_NAME': team['TEAM_NAME'].lower()})
         if exists:
             data = teams_col.find_one(team)
             return data
         else:
-           return False
+            return False
     except:
         return False
 

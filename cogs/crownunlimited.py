@@ -1381,6 +1381,9 @@ class CrownUnlimited(commands.Cog):
     async def battle(self, ctx: SlashContext, player: User):
         try:
             await ctx.defer()
+            if ctx.author.id == player.id:
+                await ctx.send("You cannot PVP against yourself.", hidden=True)
+                return
             await ctx.send(":crown: Building PVP Match...", delete_after=10)
             private_channel = ctx
             starttime = time.asctime()
@@ -4134,7 +4137,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             tvault = db.queryVault({'DID': str(t_user['DID']), 'PETS.NAME': t_user['PET']})
             if mode in pvp_modes:
                 tupdate_durability_message = update_arm_durability(self, tvault, tarm, tarm_universe, tarm_price, t)
-                if tupdate_durability_message:
+                if tupdate_durability_message['MESSAGE']:
                     await ctx.send(f"{tupdate_durability_message['MESSAGE']}")
 
             tpet = {}
@@ -7220,8 +7223,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     if o_title_passive_type == "HLT":
                                         o_health = o_health + ((o_title_passive_value / 100) * o_health)
                                     if o_title_passive_type == "LIFE":
-                                        t_health = t_health - ((o_title_passive_value / 100) * o_health)
-                                        o_health = o_health + ((o_title_passive_value / 100) * o_health)
+                                        t_health = t_health - ((o_title_passive_value / 100) * t_health)
+                                        o_health = o_health + ((o_title_passive_value / 100) * t_health)
                                     if o_title_passive_type == "ATK":
                                         o_attack = o_attack + o_title_passive_value
                                     if o_title_passive_type == "DEF":
@@ -7238,17 +7241,17 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         t_defense = t_defense - ((o_title_passive_value / 100) * t_defense)
                                         o_defense = o_defense + ((o_title_passive_value / 100) * t_defense)
                                     if o_title_passive_type == "RAGE":
-                                        o_defense = o_defense - o_title_passive_value
-                                        o_attack = o_attack + o_title_passive_value
+                                        o_defense = o_defense - ((o_title_passive_value / 100) * o_defense)
+                                        o_attack = o_attack + ((o_title_passive_value / 100) * o_defense)
                                     if o_title_passive_type == "BRACE":
-                                        o_defense = o_defense + o_title_passive_value
-                                        o_attack = o_attack - o_title_passive_value
+                                        o_defense = o_defense + ((o_title_passive_value / 100) * o_attack)
+                                        o_attack = o_attack - ((o_title_passive_value / 100) * o_attack)
                                     if o_title_passive_type == "BZRK":
-                                        o_health = o_health - o_title_passive_value
-                                        o_attack = o_attack + o_title_passive_value
+                                        o_health = o_health - ((o_title_passive_value / 100) * o_health)
+                                        o_attack = o_attack + ((o_title_passive_value / 100) * o_health)
                                     if o_title_passive_type == "CRYSTAL":
-                                        o_health = o_health - o_title_passive_value
-                                        o_defense = o_defense + o_title_passive_value
+                                        o_health = o_health - ((o_title_passive_value / 100) * o_health)
+                                        o_defense = o_defense + ((o_title_passive_value / 100) * o_health)
                                     if o_title_passive_type == "FEAR":
                                         o_health = o_health - o_title_passive_value
                                         t_defense = t_defense - (o_title_passive_value / 2)
@@ -8654,10 +8657,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             elif turn == 1:
                                 if t_title_passive_type:
                                     if t_title_passive_type == "HLT":
-                                        t_health = t_health + t_title_passive_value
+                                        t_health = t_health + ((t_title_passive_value / 100) * t_health)
                                     if t_title_passive_type == "LIFE":
-                                        o_health = o_health - t_title_passive_value
-                                        t_health = t_health + t_title_passive_value
+                                        o_health = o_health - ((t_title_passive_value / 100) * o_health)
+                                        t_health = t_health + ((t_title_passive_value / 100) * o_health)
                                     if t_title_passive_type == "ATK":
                                         t_attack = t_attack + t_title_passive_value
                                     if t_title_passive_type == "DEF":
@@ -8668,23 +8671,23 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         t_stamina = t_stamina + t_title_passive_value
                                         o_stamina = o_stamina - t_title_passive_value
                                     if t_title_passive_type == "FLOG":
-                                        t_attack = t_attack + t_title_passive_value
-                                        o_attack = o_attack - t_title_passive_value
+                                        t_attack = t_attack + ((t_title_passive_value / 100) * o_attack)
+                                        o_attack = o_attack - ((t_title_passive_value / 100) * o_attack)
                                     if t_title_passive_type == "WITHER":
-                                        t_defense = t_defense + t_title_passive_value
-                                        o_defense = o_defense - t_title_passive_value
+                                        t_defense = t_defense + ((t_title_passive_value / 100) * o_defense)
+                                        o_defense = o_defense - ((t_title_passive_value / 100) * o_defense)
                                     if t_title_passive_type == "RAGE":
-                                        t_defense = t_defense - t_title_passive_value
-                                        t_attack = t_attack + t_title_passive_value
+                                        t_defense = t_defense - ((t_title_passive_value / 100) * t_defense)
+                                        t_attack = t_attack + ((t_title_passive_value / 100) * t_defense)
                                     if t_title_passive_type == "BRACE":
-                                        t_defense = t_defense + t_title_passive_value
-                                        t_attack = t_attack - t_title_passive_value
+                                        t_defense = t_defense + ((t_title_passive_value / 100) * t_attack)
+                                        t_attack = t_attack - ((t_title_passive_value / 100) * t_attack)
                                     if t_title_passive_type == "BZRK":
-                                        t_health = t_health - t_title_passive_value
-                                        t_attack = t_attack + t_title_passive_value
+                                        t_health = t_health - ((t_title_passive_value / 100) * t_health)
+                                        t_attack = t_attack + ((t_title_passive_value / 100) * t_health)
                                     if t_title_passive_type == "CRYSTAL":
-                                        t_health = t_health - t_title_passive_value
-                                        t_defense = t_defense + t_title_passive_value
+                                        t_health = t_health - ((t_title_passive_value / 100) * t_health)
+                                        t_defense = t_defense + ((t_title_passive_value / 100) * t_health)
                                     if t_title_passive_type == "FEAR":
                                         t_health = t_health - t_title_passive_value
                                         o_defense = o_defense - (t_title_passive_value / 2)
@@ -10861,10 +10864,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 # await asyncio.sleep(1)
                                 if o_title_passive_type:
                                     if o_title_passive_type == "HLT":
-                                        o_health = o_health + o_title_passive_value
+                                        o_health = o_health + ((o_title_passive_value / 100) * o_health)
                                     if o_title_passive_type == "LIFE":
-                                        t_health = t_health - o_title_passive_value
-                                        o_health = o_health + o_title_passive_value
+                                        t_health = t_health - ((o_title_passive_value / 100) * t_health)
+                                        o_health = o_health + ((o_title_passive_value / 100) * t_health)
                                     if o_title_passive_type == "ATK":
                                         o_attack = o_attack + o_title_passive_value
                                     if o_title_passive_type == "DEF":
@@ -10875,23 +10878,23 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         t_stamina = t_stamina - o_title_passive_value
                                         o_stamina = o_stamina + o_title_passive_value
                                     if o_title_passive_type == "FLOG":
-                                        t_attack = t_attack - o_title_passive_value
-                                        o_attack = o_attack + o_title_passive_value
+                                        t_attack = t_attack - ((o_title_passive_value / 100) * t_attack)
+                                        o_attack = o_attack + ((o_title_passive_value / 100) * t_attack)
                                     if o_title_passive_type == "WITHER":
-                                        t_defense = t_defense - o_title_passive_value
-                                        o_defense = o_defense + o_title_passive_value
+                                        t_defense = t_defense - ((o_title_passive_value / 100) * t_defense)
+                                        o_defense = o_defense + ((o_title_passive_value / 100) * t_defense)
                                     if o_title_passive_type == "RAGE":
-                                        o_defense = o_defense - o_title_passive_value
-                                        o_attack = o_attack + o_title_passive_value
+                                        o_defense = o_defense - ((o_title_passive_value / 100) * o_defense)
+                                        o_attack = o_attack + ((o_title_passive_value / 100) * o_defense)
                                     if o_title_passive_type == "BRACE":
-                                        o_defense = o_defense + o_title_passive_value
-                                        o_attack = o_attack - o_title_passive_value
+                                        o_defense = o_defense + ((o_title_passive_value / 100) * o_attack)
+                                        o_attack = o_attack - ((o_title_passive_value / 100) * o_attack)
                                     if o_title_passive_type == "BZRK":
-                                        o_health = o_health - o_title_passive_value
-                                        o_attack = o_attack + o_title_passive_value
+                                        o_health = o_health - ((o_title_passive_value / 100) * o_health)
+                                        o_attack = o_attack + ((o_title_passive_value / 100) * o_health)
                                     if o_title_passive_type == "CRYSTAL":
-                                        o_health = o_health - o_title_passive_value
-                                        o_defense = o_defense + o_title_passive_value
+                                        o_health = o_health - ((o_title_passive_value / 100) * o_health)
+                                        o_defense = o_defense + ((o_title_passive_value / 100) * o_health)
                                     if o_title_passive_type == "FEAR":
                                         o_health = o_health - o_title_passive_value
                                         t_defense = t_defense - (o_title_passive_value / 2)
@@ -10916,7 +10919,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     if o_title_passive_type == "BLINK":
                                         o_stamina = o_stamina - o_title_passive_value
                                         t_stamina = t_stamina + o_title_passive_value
-
 
                                 if o_block_used == True:
                                     o_defense = int(o_defense / 2)
@@ -13324,10 +13326,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             elif turn == 1:
                                 if t_title_passive_type:
                                     if t_title_passive_type == "HLT":
-                                        t_health = t_health + t_title_passive_value
+                                        t_health = t_health + ((t_title_passive_value / 100) * t_health)
                                     if t_title_passive_type == "LIFE":
-                                        o_health = o_health - t_title_passive_value
-                                        t_health = t_health + t_title_passive_value
+                                        o_health = o_health - ((t_title_passive_value / 100) * o_health)
+                                        t_health = t_health + ((t_title_passive_value / 100) * o_health)
                                     if t_title_passive_type == "ATK":
                                         t_attack = t_attack + t_title_passive_value
                                     if t_title_passive_type == "DEF":
@@ -13338,23 +13340,23 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         t_stamina = t_stamina + t_title_passive_value
                                         o_stamina = o_stamina - t_title_passive_value
                                     if t_title_passive_type == "FLOG":
-                                        t_attack = t_attack + t_title_passive_value
-                                        o_attack = o_attack - t_title_passive_value
+                                        t_attack = t_attack + ((t_title_passive_value / 100) * o_attack)
+                                        o_attack = o_attack - ((t_title_passive_value / 100) * o_attack)
                                     if t_title_passive_type == "WITHER":
-                                        t_defense = t_defense + t_title_passive_value
-                                        o_defense = o_defense - t_title_passive_value
+                                        t_defense = t_defense + ((t_title_passive_value / 100) * o_defense)
+                                        o_defense = o_defense - ((t_title_passive_value / 100) * o_defense)
                                     if t_title_passive_type == "RAGE":
-                                        t_defense = t_defense - t_title_passive_value
-                                        t_attack = t_attack + t_title_passive_value
+                                        t_defense = t_defense - ((t_title_passive_value / 100) * t_defense)
+                                        t_attack = t_attack + ((t_title_passive_value / 100) * t_defense)
                                     if t_title_passive_type == "BRACE":
-                                        t_defense = t_defense + t_title_passive_value
-                                        t_attack = t_attack - t_title_passive_value
+                                        t_defense = t_defense + ((t_title_passive_value / 100) * t_attack)
+                                        t_attack = t_attack - ((t_title_passive_value / 100) * t_attack)
                                     if t_title_passive_type == "BZRK":
-                                        t_health = t_health - t_title_passive_value
-                                        t_attack = t_attack + t_title_passive_value
+                                        t_health = t_health - ((t_title_passive_value / 100) * t_health)
+                                        t_attack = t_attack + ((t_title_passive_value / 100) * t_health)
                                     if t_title_passive_type == "CRYSTAL":
-                                        t_health = t_health - t_title_passive_value
-                                        t_defense = t_defense + t_title_passive_value
+                                        t_health = t_health - ((t_title_passive_value / 100) * t_health)
+                                        t_defense = t_defense + ((t_title_passive_value / 100) * t_health)
                                     if t_title_passive_type == "FEAR":
                                         t_health = t_health - t_title_passive_value
                                         o_defense = o_defense - (t_title_passive_value / 2)
@@ -13379,7 +13381,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     if t_title_passive_type == "BLINK":
                                         o_stamina = o_stamina + t_title_passive_value
                                         t_stamina = t_stamina - t_title_passive_value
-
 
 
                                 # if previous_moves:
@@ -15586,10 +15587,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                     if c_title_passive_type:
                                         if c_title_passive_type == "HLT":
-                                            c_health = c_health + c_title_passive_value
+                                            c_health = c_health + ((c_title_passive_value / 100) * c_health)
                                         if c_title_passive_type == "LIFE":
-                                            t_health = t_health - c_title_passive_value
-                                            c_health = c_health + c_title_passive_value
+                                            t_health = t_health - ((c_title_passive_value / 100) * t_health)
+                                            c_health = c_health + ((c_title_passive_value / 100) * t_health)
                                         if c_title_passive_type == "ATK":
                                             c_attack = c_attack + c_title_passive_value
                                         if c_title_passive_type == "DEF":
@@ -15600,20 +15601,20 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             t_stamina = t_stamina - c_title_passive_value
                                             c_stamina = c_stamina + c_title_passive_value
                                         if c_title_passive_type == "FLOG":
-                                            t_attack = t_attack - c_title_passive_value
-                                            c_attack = c_attack + c_title_passive_value
+                                            t_attack = t_attack - ((c_title_passive_value / 100) * t_attack)
+                                            c_attack = c_attack + ((c_title_passive_value / 100) * t_attack)
                                         if c_title_passive_type == "WITHER":
-                                            t_defense = t_defense - c_title_passive_value
-                                            c_defense = c_defense + c_title_passive_value
+                                            t_defense = t_defense - ((c_title_passive_value / 100) * t_defense)
+                                            c_defense = c_defense + ((c_title_passive_value / 100) * t_defense)
                                         if c_title_passive_type == "RAGE":
-                                            c_defense = c_defense - c_title_passive_value
-                                            c_attack = c_attack + c_title_passive_value
+                                            c_defense = c_defense - ((c_title_passive_value / 100) * c_defense)
+                                            c_attack = c_attack + ((c_title_passive_value / 100) * c_defense)
                                         if c_title_passive_type == "BRACE":
-                                            c_defense = c_defense + c_title_passive_value
-                                            c_attack = c_attack - c_title_passive_value
+                                            c_defense = c_defense + ((c_title_passive_value / 100) * c_attack)
+                                            c_attack = c_attack - ((c_title_passive_value / 100) * c_attack)
                                         if c_title_passive_type == "BZRK":
-                                            c_health = c_health - c_title_passive_value
-                                            c_attack = c_attack + c_title_passive_value
+                                            c_health = c_health - ((c_title_passive_value / 100) * c_health)
+                                            c_attack = c_attack + ((c_title_passive_value / 100) * c_health)
                                         if c_title_passive_type == "CRYSTAL":
                                             c_health = c_health - c_title_passive_value
                                             c_defense = c_defense + c_title_passive_value
@@ -18221,10 +18222,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 elif turn == 3:
                                     if t_title_passive_type:
                                         if t_title_passive_type == "HLT":
-                                            t_health = t_health + t_title_passive_value
+                                            t_health = t_health + ((t_title_passive_value / 100) * t_health)
                                         if t_title_passive_type == "LIFE":
-                                            c_health = c_health - t_title_passive_value
-                                            t_health = t_health + t_title_passive_value
+                                            c_health = c_health - ((t_title_passive_value / 100) * c_health)
+                                            t_health = t_health + ((t_title_passive_value / 100) * c_health)
                                         if t_title_passive_type == "ATK":
                                             t_attack = t_attack + t_title_passive_value
                                         if t_title_passive_type == "DEF":
@@ -18235,23 +18236,23 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             t_stamina = t_stamina + t_title_passive_value
                                             c_stamina = c_stamina - t_title_passive_value
                                         if t_title_passive_type == "FLOG":
-                                            t_attack = t_attack + t_title_passive_value
-                                            c_attack = c_attack - t_title_passive_value
+                                            t_attack = t_attack + ((t_title_passive_value / 100) * c_attack)
+                                            c_attack = c_attack - ((t_title_passive_value / 100) * c_attack)
                                         if t_title_passive_type == "WITHER":
-                                            t_defense = t_defense + t_title_passive_value
-                                            c_defense = c_defense - t_title_passive_value
+                                            t_defense = t_defense + ((t_title_passive_value / 100) * c_defense)
+                                            c_defense = c_defense - ((t_title_passive_value / 100) * c_defense)
                                         if t_title_passive_type == "RAGE":
-                                            t_defense = t_defense - t_title_passive_value
-                                            t_attack = t_attack + t_title_passive_value
+                                            t_defense = t_defense - ((t_title_passive_value / 100) * t_defense)
+                                            t_attack = t_attack + ((t_title_passive_value / 100) * t_defense)
                                         if t_title_passive_type == "BRACE":
-                                            t_defense = t_defense + t_title_passive_value
-                                            t_attack = t_attack - t_title_passive_value
+                                            t_defense = t_defense + ((t_title_passive_value / 100) * t_attack)
+                                            t_attack = t_attack - ((t_title_passive_value / 100) * t_attack)
                                         if t_title_passive_type == "BZRK":
-                                            t_health = t_health - t_title_passive_value
-                                            t_attack = t_attack + t_title_passive_value
+                                            t_health = t_health - ((t_title_passive_value / 100) * t_health)
+                                            t_attack = t_attack + ((t_title_passive_value / 100) * t_health)
                                         if t_title_passive_type == "CRYSTAL":
-                                            t_health = t_health - t_title_passive_value
-                                            t_defense = t_defense + t_title_passive_value
+                                            t_health = t_health - ((t_title_passive_value / 100) * t_health)
+                                            t_defense = t_defense + ((t_title_passive_value / 100) * t_health)
                                         if t_title_passive_type == "FEAR":
                                             t_health = t_health - t_title_passive_value
                                             c_defense = c_defense - (t_title_passive_value / 2)
