@@ -7405,20 +7405,19 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             o_healthcalc = o_title_passive_value
                                         if o_title_passive_type == "SOULCHAIN":
                                             o_stamina = o_title_passive_value
+                                            t_stamina = o_title_passive_value
+                                            if mode in co_op_modes:
+                                                c_stmina = o_title_passive_value
+
 
                                     if t_title_passive_type:
                                         if t_title_passive_type == "GAMBLE":
                                             o_healthcalc = t_title_passive_value
-                                        if t_title_passive_type == "SOULCHAIN":
-                                            o_stamina = t_title_passive_value
                                     
                                     if mode in co_op_modes:
                                         if c_title_passive_type:
                                             if c_title_passive_type == "GAMBLE":
                                                 o_healthcalc = c_title_passive_value
-                                            if c_title_passive_type == "SOULCHAIN":
-                                                o_stamina = c_title_passive_value
-
 
                                     o_attackcalc = round(.20 * ((o_focus * .15) + round(fortitude * 1)))
                                     o_defensecalc = round(.20 * ((o_focus * .15) + round(fortitude * 1)))
@@ -8820,6 +8819,26 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     t_newhealth = 0
                                     healmessage = ""
                                     messagenumber = 0
+                                    if t_title_passive_type:
+                                        if t_title_passive_type == "GAMBLE":
+                                            t_healthcalc = t_title_passive_value
+                                        if t_title_passive_type == "SOULCHAIN":
+                                            o_stamina = t_title_passive_value
+                                            t_stamina = t_title_passive_value
+                                            if mode in co_op_modes:
+                                                c_stmina = t_title_passive_value
+
+
+                                    if o_title_passive_type:
+                                        if o_title_passive_type == "GAMBLE":
+                                            t_healthcalc = o_title_passive_value
+                                    
+                                    if mode in co_op_modes:
+                                        if c_title_passive_type:
+                                            if c_title_passive_type == "GAMBLE":
+                                                t_healthcalc = c_title_passive_value
+
+
                                     if t_universe == "Crown Rift Madness":
                                         healmessage = "yet inner **Madness** drags on..."
                                         messagenumber = 3
@@ -11060,20 +11079,19 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             o_healthcalc = o_title_passive_value
                                         if o_title_passive_type == "SOULCHAIN":
                                             o_stamina = o_title_passive_value
+                                            t_stamina = o_title_passive_value
+                                            if mode in co_op_modes:
+                                                c_stmina = o_title_passive_value
+
 
                                     if t_title_passive_type:
                                         if t_title_passive_type == "GAMBLE":
                                             o_healthcalc = t_title_passive_value
-                                        if t_title_passive_type == "SOULCHAIN":
-                                            o_stamina = t_title_passive_value
                                     
                                     if mode in co_op_modes:
                                         if c_title_passive_type:
                                             if c_title_passive_type == "GAMBLE":
                                                 o_healthcalc = c_title_passive_value
-                                            if c_title_passive_type == "SOULCHAIN":
-                                                o_stamina = c_title_passive_value
-
                                     # check if user is at max health and sets messages and focus health value
                                     o_newhealth = 0
                                     healmessage = ""
@@ -13483,20 +13501,20 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         if t_title_passive_type == "GAMBLE":
                                             t_healthcalc = t_title_passive_value
                                         if t_title_passive_type == "SOULCHAIN":
+                                            o_stamina = t_title_passive_value
                                             t_stamina = t_title_passive_value
+                                            if mode in co_op_modes:
+                                                c_stmina = t_title_passive_value
+
 
                                     if o_title_passive_type:
                                         if o_title_passive_type == "GAMBLE":
                                             t_healthcalc = o_title_passive_value
-                                        if t_title_passive_type == "SOULCHAIN":
-                                            t_stamina = o_title_passive_value
                                     
                                     if mode in co_op_modes:
                                         if c_title_passive_type:
                                             if c_title_passive_type == "GAMBLE":
                                                 t_healthcalc = c_title_passive_value
-                                            if c_title_passive_type == "SOULCHAIN":
-                                                t_stamina = c_title_passive_value
 
                                     if t_universe == "Crown Rift Madness":
                                         healmessage = "yet inner **Madness** drags on..."
@@ -15731,12 +15749,17 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 c_healthcalc = c_title_passive_value
                                             if c_title_passive_type == "SOULCHAIN":
                                                 c_stamina = c_title_passive_value
+                                                t_stamina = c_title_passive_value
+                                                o_stamina = c_title_passive_value
 
+
+                                        if o_title_passive_type:
+                                            if o_title_passive_type == "GAMBLE":
+                                                c_healthcalc = o_title_passive_value
+                                        
                                         if t_title_passive_type:
                                             if t_title_passive_type == "GAMBLE":
                                                 c_healthcalc = t_title_passive_value
-                                            if t_title_passive_type == "SOULCHAIN":
-                                                c_stamina = t_title_passive_value
 
 
                                         if c_universe == "Crown Rift Madness":
@@ -18359,20 +18382,21 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             if t_title_passive_type == "GAMBLE":
                                                 t_healthcalc = t_title_passive_value
                                             if t_title_passive_type == "SOULCHAIN":
+                                                o_stamina = t_title_passive_value
                                                 t_stamina = t_title_passive_value
+                                                if mode in co_op_modes:
+                                                    c_stmina = t_title_passive_value
+
 
                                         if o_title_passive_type:
                                             if o_title_passive_type == "GAMBLE":
                                                 t_healthcalc = o_title_passive_value
-                                            if t_title_passive_type == "SOULCHAIN":
-                                                t_stamina = o_title_passive_value
                                         
                                         if mode in co_op_modes:
                                             if c_title_passive_type:
                                                 if c_title_passive_type == "GAMBLE":
                                                     t_healthcalc = c_title_passive_value
-                                                if c_title_passive_type == "SOULCHAIN":
-                                                    t_stamina = c_title_passive_value
+
 
                                         if t_universe == "Crown Rift Madness":
                                             healmessage = "yet inner **Madness** drags on..."
