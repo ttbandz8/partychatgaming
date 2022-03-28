@@ -1439,6 +1439,7 @@ async def daily(ctx):
       Defeat **{opponents[q1]}** to earn :coin: {'{:,}'.format(q1_earn)}
       Defeat **{opponents[q2]}** to earn :coin: {'{:,}'.format(q2_earn)}
       Defeat **{opponents[q3]}** to earn :coin: {'{:,}'.format(q3_earn)}
+      Use **/quests** command to complete your quests!
 
       [Support our Patreon for Rewards!](https://www.patreon.com/partychatgaming?fan_landing=true)
       [Vote for Rewards!](https://top.gg/bot/840222176304824340/vote)
