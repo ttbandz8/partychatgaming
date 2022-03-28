@@ -16765,6 +16765,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_max_health = round(t_max_health - dmg['DMG'])
                                                         if t_max_health <=1:
                                                             t_max_health = 1
+
+                                                            
                                                     
                                                     if cenh_type in Stamina_Enhancer_Check or cenh_type in Time_Enhancer_Check or cenh_type in Control_Enhancer_Check:
                                                         c_stamina = c_stamina
