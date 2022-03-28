@@ -7220,8 +7220,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     if o_title_passive_type == "HLT":
                                         o_health = o_health + ((o_title_passive_value / 100) * o_health)
                                     if o_title_passive_type == "LIFE":
-                                        t_health = t_health - o_title_passive_value
-                                        o_health = o_health + o_title_passive_value
+                                        t_health = t_health - ((o_title_passive_value / 100) * o_health)
+                                        o_health = o_health + ((o_title_passive_value / 100) * o_health)
                                     if o_title_passive_type == "ATK":
                                         o_attack = o_attack + o_title_passive_value
                                     if o_title_passive_type == "DEF":
@@ -7232,11 +7232,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         t_stamina = t_stamina - o_title_passive_value
                                         o_stamina = o_stamina + o_title_passive_value
                                     if o_title_passive_type == "FLOG":
-                                        t_attack = t_attack - o_title_passive_value
-                                        o_attack = o_attack + o_title_passive_value
+                                        t_attack = t_attack - ((o_title_passive_value / 100) * t_attack)
+                                        o_attack = o_attack + ((o_title_passive_value / 100) * t_attack)
                                     if o_title_passive_type == "WITHER":
-                                        t_defense = t_defense - o_title_passive_value
-                                        o_defense = o_defense + o_title_passive_value
+                                        t_defense = t_defense - ((o_title_passive_value / 100) * t_defense)
+                                        o_defense = o_defense + ((o_title_passive_value / 100) * t_defense)
                                     if o_title_passive_type == "RAGE":
                                         o_defense = o_defense - o_title_passive_value
                                         o_attack = o_attack + o_title_passive_value
