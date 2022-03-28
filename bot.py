@@ -1407,7 +1407,7 @@ async def daily(ctx):
          ),
          manage_components.create_button(
             style=ButtonStyle.red,
-            label="Vote For Rewards",
+            label="Vote For 👑",
             custom_id="vote"
          )
       ]
