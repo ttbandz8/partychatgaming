@@ -40,7 +40,7 @@ import destiny as d
 class CrownUnlimited(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self._cd = commands.CooldownMapping.from_cooldown(1, 1500,
+        self._cd = commands.CooldownMapping.from_cooldown(1, 1600,
                                                           commands.BucketType.member)  # Change accordingly. Currently every 8 minutes (3600 seconds == 60 minutes)
         self._lvl_cd = commands.CooldownMapping.from_cooldown(1, 600,
                                                           commands.BucketType.member)
@@ -286,7 +286,7 @@ class CrownUnlimited(commands.Cog):
 
 
             setchannel = discord.utils.get(channel_list, name=server_channel)
-            await setchannel.send(f"{message.author.mention}")  
+            # await setchannel.send(f"{message.author.mention}") 
             msg = await setchannel.send(embed=embedVar, file=card_file, components=[random_battle_buttons_action_row])     
 
             def check(button_ctx):
@@ -7135,7 +7135,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         turn_total, tap1, tap2, tap3, tenh1, tenh_name, tcard_lvl, o_defense)
             # await private_channel.send(file=player_2_card)
             
-
+            # if randomized_battle:
+            #     private_channel = ctx.author
             if mode not in PVP_MODES and mode not in B_modes and mode != "ABYSS" and mode not in RAID_MODES and mode not in co_op_modes:
                 embedVar = discord.Embed(title=f"✅ Confirm Start! ({currentopponent + 1}/{total_legends})", description=f"{ctx.author.mention}\n**{o_card}** VS **{t_card}**")
                 embedVar.set_image(url="attachment://image.png")
@@ -12712,7 +12713,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             embedVar = discord.Embed(
                                                                 title=f"**PERSONA!**\n{opet_name} was summoned from {o_card}'s soul dealing **{petdmg['DMG']}** damage!!",
                                                                 colour=0xe91e63)
-                                                            await battle_msg.delete(delay=2)
+                                                            # await battle_msg.delete(delay=2)
                                                             if not operformance:
                                                                 summon_file = showsummon(opet_image, opet_name, dmg['MESSAGE'], opet_lvl, opet_bond)
                                                                 embedVar.set_image(url="attachment://pet.png")

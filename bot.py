@@ -28,10 +28,7 @@ import random
 import unique_traits as ut
 now = time.asctime()
 import asyncio
-
-'''User must have predefined roles of the games they play before creating users
-   User input for IGN will be available after User is created and goes to join game events
-   User input for TEAM will be available after User is created. There will be a command to add Team. '''
+import webbrowser
 
 
 # Logging Logic
@@ -44,10 +41,13 @@ handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w'
 handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
 logger.addHandler(handler)
 
+
 guild_ids = None
 
 intents = discord.Intents.all()
 client = discord.Client()
+
+
 
 if config('ENV') == "production":
    # PRODUCTION
@@ -75,7 +75,6 @@ for filename in os.listdir('./cogs'):
 
 
 bot.remove_command("help")
-
 
 @slash.slash(name="Help", description="List of Commands", guild_ids=guild_ids,)
 async def help(ctx: SlashContext):
@@ -1400,6 +1399,20 @@ async def daily(ctx):
 
       user_available_opponents = []
 
+      support_buttons = [
+         manage_components.create_button(
+            style=ButtonStyle.blue,
+            label="Support Patreon",
+            custom_id="patreon"
+         ),
+         manage_components.create_button(
+            style=ButtonStyle.red,
+            label="Vote For Rewards",
+            custom_id="vote"
+         )
+      ]
+      support_buttons_action_row = manage_components.create_actionrow(*support_buttons)
+
       for x in universes:
          user_available_opponents.append(x['CROWN_TALES'])
 
@@ -1416,7 +1429,43 @@ async def daily(ctx):
       quests = [{'OPPONENT': opponents[q1], 'TYPE': 'Tales', 'GOAL': 1, 'WINS': 0, 'REWARD': q1_earn },{'OPPONENT': opponents[q2], 'TYPE': 'Tales', 'GOAL': 2, 'WINS': 0, 'REWARD': q2_earn }, {'OPPONENT': opponents[q3], 'TYPE': 'Tales', 'GOAL': 3, 'WINS': 0, 'REWARD': q3_earn }]
       db.updateVaultNoFilter({'DID': str(ctx.author.id)}, {'$set': {'QUESTS': quests}})
       db.updateUserNoFilter({'DID': str(ctx.author.id)}, {'$set': {'BOSS_FOUGHT': False}})
-      await ctx.send(f"Daily bonus :coin:{dailyamount} has been applied for {ctx.author.mention}!\nYour new quests are available!\n**use /quests to open the Quest Board**!")
+      
+      embedVar = discord.Embed(title=f"☀️ Daily Rewards!", description=textwrap.dedent(f"""\
+      Welcome back, {ctx.author.mention}!
+      **Daily Earnings** 
+      :coin: {'{:,}'.format(dailyamount)}
+      
+      📜 **New Quests**
+      Defeat **{opponents[q1]}** to earn :coin: {'{:,}'.format(q1_earn)}
+      Defeat **{opponents[q2]}** to earn :coin: {'{:,}'.format(q2_earn)}
+      Defeat **{opponents[q3]}** to earn :coin: {'{:,}'.format(q3_earn)}
+
+      [Support our Patreon for Rewards!](https://www.patreon.com/partychatgaming?fan_landing=true)
+      [Vote for Rewards!](https://top.gg/bot/840222176304824340/vote)
+      [Add Crown Unlimited to your server!](https://discord.com/api/oauth2/authorize?client_id=955704903198711808&permissions=139586955344&scope=applications.commands%20bot)
+      """), colour=0xf1c40f)
+      
+      await ctx.send(embed=embedVar, components=[support_buttons_action_row])
+
+      def check(button_ctx):
+         return button_ctx.author == ctx.author
+
+
+      button_ctx: ComponentContext = await manage_components.wait_for_component(bot, components=[support_buttons_action_row], timeout=120,check=check)
+      
+      if button_ctx.custom_id == "patreon":
+         await button_ctx.defer(ignore=True)
+         webbrowser.open('https://www.patreon.com/partychatgaming?fan_landing=true')
+         return
+
+      if button_ctx.custom_id == "vote":
+         await button_ctx.defer(ignore=True)
+         webbrowser.open('https://top.gg/bot/840222176304824340/vote')
+         return
+
+
+
+   
    except Exception as ex:
       trace = []
       tb = ex.__traceback__
