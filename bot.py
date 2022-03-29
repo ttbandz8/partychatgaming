@@ -1400,19 +1400,6 @@ async def daily(ctx):
 
       user_available_opponents = []
 
-      support_buttons = [
-         manage_components.create_button(
-            style=ButtonStyle.blue,
-            label="Support Patreon",
-            custom_id="patreon"
-         ),
-         manage_components.create_button(
-            style=ButtonStyle.red,
-            label="Vote For Rewards",
-            custom_id="vote"
-         )
-      ]
-      support_buttons_action_row = manage_components.create_actionrow(*support_buttons)
 
       for x in universes:
          user_available_opponents.append(x['CROWN_TALES'])
@@ -1443,30 +1430,11 @@ async def daily(ctx):
       Use **/quests** command to complete your quests!
 
       [Support our Patreon for Rewards!](https://www.patreon.com/partychatgaming?fan_landing=true)
-      [Vote for Rewards!](https://top.gg/bot/840222176304824340/vote)
+      [Vote for Crown Unlimited!](https://top.gg/bot/840222176304824340/vote)
       [Add Crown Unlimited to your server!](https://discord.com/api/oauth2/authorize?client_id=955704903198711808&permissions=139586955344&scope=applications.commands%20bot)
       """), colour=0xf1c40f)
       
-      await ctx.send(embed=embedVar, components=[support_buttons_action_row])
-
-      def check(button_ctx):
-         return button_ctx.author == ctx.author
-
-
-      button_ctx: ComponentContext = await manage_components.wait_for_component(bot, components=[support_buttons_action_row], timeout=120,check=check)
-      
-      if button_ctx.custom_id == "patreon":
-         await button_ctx.defer(ignore=True)
-         webbrowser.open('https://www.patreon.com/partychatgaming?fan_landing=true')
-         return
-
-      if button_ctx.custom_id == "vote":
-         await button_ctx.defer(ignore=True)
-         webbrowser.open('https://top.gg/bot/840222176304824340/vote')
-         return
-
-
-
+      await ctx.send(embed=embedVar)
    
    except Exception as ex:
       trace = []

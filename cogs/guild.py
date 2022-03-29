@@ -247,8 +247,8 @@ class Guild(commands.Cog):
                         await ctx.send(m.FOUNDER_NO_TEAM, delete_after=3)
                         return
                     else:
-                        fteam_query = {'TEAM_NAME' : founder_profile['TEAM'].tolower()}
-                        steam_query = {'TEAM_NAME' : sworn_profile['TEAM'].tolower()}
+                        fteam_query = {'TEAM_NAME' : founder_profile['TEAM'].lower()}
+                        steam_query = {'TEAM_NAME' : sworn_profile['TEAM'].lower()}
                         founder_team = db.queryTeam(fteam_query)
                         sworn_team = db.queryTeam(steam_query)
                         fbal = founder_team['BANK']

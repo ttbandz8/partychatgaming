@@ -20769,12 +20769,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                 if currentopponent != (total_legends):
                                     if mode not in co_op_modes:
-                                        embedVar = discord.Embed(title=f":crown: VICTORY\n**{o_card} says**\n{o_win_description}\nThe game lasted {turn_total} rounds.\n\n{drop_response}",description=textwrap.dedent(f"""
+                                        embedVar = discord.Embed(title=f":crown: VICTORY\nThe game lasted {turn_total} rounds.\n\n{drop_response}",description=textwrap.dedent(f"""
                                         {previous_moves_into_embed}
                                         
                                         """),colour=0x1abc9c)
                                     elif mode in co_op_modes and mode not in ai_co_op_modes:
-                                        embedVar = discord.Embed(title=f"👥 CO-OP VICTORY\n**{o_card} says**\n{o_win_description}\nThe game lasted {turn_total} rounds.\n\n👤**{o_user['NAME']}:** {drop_response}\n👥**{c_user['NAME']}:** {cdrop_response} ",description=textwrap.dedent(f"""
+                                        embedVar = discord.Embed(title=f"👥 CO-OP VICTORY\nThe game lasted {turn_total} rounds.\n\n👤**{o_user['NAME']}:** {drop_response}\n👥**{c_user['NAME']}:** {cdrop_response} ",description=textwrap.dedent(f"""
                                         {previous_moves_into_embed}
                                         
                                         """),colour=0x1abc9c)
@@ -20787,7 +20787,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             embedVar.add_field(name="**Destiny Progress**",
                                                 value=f"{destinylogger}")
                                     elif mode in ai_co_op_modes:
-                                        embedVar = discord.Embed(title=f":crown: DUO VICTORY\n**{o_card} says**\n{o_win_description}\nThe game lasted {turn_total} rounds.\n\n{drop_response}",description=textwrap.dedent(f"""
+                                        embedVar = discord.Embed(title=f":crown: DUO VICTORY\nThe game lasted {turn_total} rounds.\n\n{drop_response}",description=textwrap.dedent(f"""
                                         {previous_moves_into_embed}
                                         
                                         """),colour=0x1abc9c)
