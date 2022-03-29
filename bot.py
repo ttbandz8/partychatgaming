@@ -169,7 +169,7 @@ async def enhancers(ctx):
 
       embedVar9 = discord.Embed(title= f"Enhancer Type: Divinity",colour=0x7289da)
       embedVar9.set_thumbnail(url=avatar)
-      embedVar9.add_field(name="`DIVINITY`", value="**CREATION** - Increase Max Health by Flat AP. AP Decreases each turn (Can Crit). *If used on turn that is divisible by 10 you will heal Health & Max Health for 75% AP.*\n\n**DESTRUCTION** - Decrease Opponent Max Health by Flat AP. AP Increases each turn.\n\n")
+      embedVar9.add_field(name="`DIVINITY`", value="**CREATION** - Increase Max Health by Flat AP. AP Decreases each turn (Can Crit). *If used on turn that is divisible by 10 you will heal Health & Max Health for 75% AP.*\n\n**DESTRUCTION** - Decrease Your and Your Opponent Max Health by Flat AP (only opponent on PET use). AP Increases each turn.\n\n")
       embedVar9.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
       
       embedVar10 = discord.Embed(title= f"Arm Enhancer Type: Offensive",colour=0x7289da)
