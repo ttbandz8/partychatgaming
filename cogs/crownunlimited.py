@@ -1585,7 +1585,7 @@ class CrownUnlimited(commands.Cog):
             hall_info = db.queryHall({'HALL': str(guild_hall)})
             hall_def = hall_info['DEFENSE']
             t_user = db.queryUser({'DID': shield_id})
-            tteam_name = t_user['TEAM']}
+            tteam_name = t_user['TEAM']
             tteam_info = db.queryTeam({'TEAM_NAME': tteam_name.tolower()}})
             tteam = tteam_info['TEAM_NAME']
             tguild = tteam_info['GUILD']
@@ -8319,8 +8319,30 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             else:
                                                 previous_moves.append(f"*{turn_total}:* 🧬 **{opet_name}** needs a turn to rest...")
                                                 await button_ctx.defer(ignore=True)
-                                        elif button_ctx.custom_id == "0":
-                                            if o_stamina >= 20:
+                                        elif button_ctx.custom_id == "0": 
+                                            if o_universe == "Persona":
+                                                o_stamina = o_stamina
+                                                o_block_used = True
+                                                o_defense = round(o_defense * 2)
+                                                previous_moves.append(f"*{turn_total}:* **{o_pet}:** Blocked 🛡️")
+                                                turn_total = turn_total + 1
+                                                turn = 1
+                                                if botActive and tutorial_block==False:
+                                                    tutorial_block=True
+                                                    embedVar = discord.Embed(title=f"🛡️Blocking!",
+                                                                            description=f"🛡️**Blocking** cost **20 ST(Stamina)** to Double your **DEF** until your next turn!",
+                                                                            colour=0xe91e63)
+                                                    embedVar.add_field(name=f"**Engagements**",
+                                                                    value="You will take less DMG when your **DEF** is greater than your opponenents **ATK**")
+                                                    embedVar.add_field(name=f"**Engagement Insight**",
+                                                                    value="❕: %50-%75 of AP\n💢: %75-%110 AP\n‼️: %90-%120 AP")
+                                                    embedVar.set_footer(
+                                                        text=f"Use 🛡️Block strategically to defend against your opponents strongest abilities!")
+                                                    await button_ctx.send(embed=embedVar)
+                                                    await asyncio.sleep(2)
+                                                else:
+                                                    await button_ctx.defer(ignore=True)
+                                            elif o_stamina >= 20:
                                                 o_stamina = o_stamina - 20
                                                 o_block_used = True
                                                 o_defense = round(o_defense * 2)
