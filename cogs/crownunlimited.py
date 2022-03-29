@@ -4349,15 +4349,15 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         # DBZ traits
         o_final_stand = False
         t_final_stand = False
-        if o['UNIVERSE'] == "Dragon Ball Z" or o['UNIVERSE'] == "Bleach":
+        if o['UNIVERSE'] == "Dragon Ball Z":
             o_final_stand = True
 
-        if t['UNIVERSE'] == "Dragon Ball Z" or t['UNIVERSE'] == "Bleach":
+        if t['UNIVERSE'] == "Dragon Ball Z":
             t_final_stand = True
 
         if companion:
             c_final_stand = False
-            if c['UNIVERSE'] == "Dragon Ball Z" or c['UNIVERSE'] == "Bleach":
+            if c['UNIVERSE'] == "Dragon Ball Z":
                 c_final_stand = True
 
             if oteam == cteam:
@@ -7224,8 +7224,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     if o_title_passive_type == "HLT":
                                         o_health = round(round(o_health + ((o_title_passive_value / 100) * o_health)))
                                     if o_title_passive_type == "LIFE":
-                                        t_health = round(t_health - ((o_title_passive_value / 100) * t_health))
-                                        o_health = round(o_health + ((o_title_passive_value / 100) * t_health))
+                                        if o_max_health != o_health:
+                                            t_health = round(t_health - ((o_title_passive_value / 100) * t_health))
+                                            o_health = round(o_health + ((o_title_passive_value / 100) * t_health))
                                     if o_title_passive_type == "ATK":
                                         o_attack = o_attack + o_title_passive_value
                                     if o_title_passive_type == "DEF":
@@ -7508,11 +7509,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         o_health = o_health + t_stamina + turn_total
                                         previous_moves.append(f"*{turn_total}:* 🩸 Saiyan Spirit... You heal for **{t_stamina + turn_total}** ❤️")
 
-                                    elif o_universe == "Attack On Titan":
-                                        embedVar = discord.Embed(title=f"Rally! **{o_card}** Increased Max Health ❤️",
-                                                                colour=0xe91e63)
-                                        previous_moves.append(f"*{turn_total}:* 🩸 Rally! **{o_card}** Increased Max Health ❤️")
-                                        o_max_health = round(o_max_health + 100)
 
                                     elif o_universe == "Black Clover":
                                         embedVar = discord.Embed(title=f"Mana Zone! **{o_card}** Increased Stamina 🌀",
@@ -8320,7 +8316,36 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 previous_moves.append(f"*{turn_total}:* 🧬 **{opet_name}** needs a turn to rest...")
                                                 await button_ctx.defer(ignore=True)
                                         elif button_ctx.custom_id == "0":
+                                            if o_universe == "Persona":
+                                                if mode in co_op_modes:
+                                                    block_message = f"🩸**Confidant Block!***: **{o_card}**: Defended 🛡️ **{c_card}**"
+                                                    o_defend_used = True
+                                                else:
+                                                    block_message = f"🩸**Confidant Block!***: **{o_card}** Blocked 🛡️"
+                                                    o_block_used = True
+                                                o_defense = round(o_defense * 2)
+                                                embedVar = discord.Embed(title=f"{block_message}", colour=0xe91e63)
+
+                                                previous_moves.append(f"*{turn_total}:* {block_message}")
+                                                await button_ctx.defer(ignore=True)
+                                                turn_total = turn_total + 1
+                                                turn = 1
+
+
                                             if o_stamina >= 20:
+                                                if o_universe == "Attack On Titan":
+                                                    previous_moves.append(f"*{turn_total}:* 🩸 Rally! **{o_card}** Increased Max Health ❤️")
+                                                    o_max_health = round(o_max_health + 100)
+                                                    o_health = o_health + 50
+
+                                                if o_universe == "Bleach":
+                                                    dmg = damage_cal(o_universe, o_card, o_1, o_attack, o_defense, t_defense, o_stamina,
+                                                                    o_enhancer_used, o_health, t_health, t_stamina, o_max_health,
+                                                                    t_attack, o_special_move_description, turn_total,
+                                                                    ocard_lvl_ap_buff, None)
+                                                    previous_moves.append(f"*{turn_total}:* **{o_card}** Exerted their 🩸 Spiritual Pressure dealing {dmg['DMG']} dmg")
+                                                    t_health = t_health - dmg['DMG']
+                                                        
                                                 o_stamina = o_stamina - 20
                                                 o_block_used = True
                                                 o_defense = round(o_defense * 2)
@@ -8584,27 +8609,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_stamina = o_stamina - dmg['STAMINA_USED']
                                                                 turn_total = turn_total + 1
                                                                 turn = 1
-                                                            elif t_universe == "Bleach":
-                                                                if oarm_barrier_active:
-                                                                    oarm_barrier_active=False
-                                                                    embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
-                                                                soul_damage = turn_total * t_stamina
-                                                                if soul_damage <= 0:
-                                                                    soul_damage = 0
-                                                                previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}'s** Final Stand: **Final {list(t_3.keys())[0]}!!!** Deals **{soul_damage}**! {icon}")
-                                                                o_max_health = o_max_health - soul_damage
-                                                                if o_max_health <= 0:
-                                                                    o_max_health=1
-                                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}'s** Last Breath.")
-                                                                o_stamina = o_stamina - int(dmg['STAMINA_USED'])
-                                                                
-                                                                t_health = 1
-                                                                t_max_health = 1
-                                                                t_stamina = 30
-                                                                t_final_stand = False
-                                                                turn_total = turn_total + 1
-                                                                turn = 0
                                                         else:
                                                             t_health = 0
                                                             o_stamina = o_stamina - dmg['STAMINA_USED']
@@ -8661,8 +8665,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     if t_title_passive_type == "HLT":
                                         t_health = round(t_health + ((t_title_passive_value / 100) * t_health))
                                     if t_title_passive_type == "LIFE":
-                                        o_health = round(o_health - ((t_title_passive_value / 100) * o_health))
-                                        t_health = round(t_health + ((t_title_passive_value / 100) * o_health))
+                                        if t_max_health != t_health:
+                                            o_health = round(o_health - ((t_title_passive_value / 100) * o_health))
+                                            t_health = round(t_health + ((t_title_passive_value / 100) * o_health))
                                     if t_title_passive_type == "ATK":
                                         t_attack = t_attack + t_title_passive_value
                                     if t_title_passive_type == "DEF":
@@ -8909,11 +8914,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             colour=0xe91e63)
                                         previous_moves.append(f"*{turn_total}:* 🩸 Ruler's Authority... {o_card} loses **{30 + turn_total}** 🛡️ 🔻")
                                         o_defense = round(o_defense - (30 + turn_total))
-                                    elif t_universe == "Attack On Titan":
-                                        embedVar = discord.Embed(title=f"Rally! **{t_card}** Increased Max Health ❤️",
-                                                                colour=0xe91e63)
-                                        previous_moves.append(f"*{turn_total}:* 🩸 Rally! **{t_card}** Increased Max Health ❤️")
-                                        t_max_health = round(t_max_health + 100)
                                     elif t_universe == "Black Clover":
                                         embedVar = discord.Embed(title=f"Mana Zone! **{t_card}** Increased Stamina 🌀",
                                                                 colour=0xe91e63)
@@ -9644,7 +9644,28 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     await button_ctx.defer(ignore=True)
                                                     turn = 1
                                             elif button_ctx.custom_id == "0":
+                                                if t_universe == "Persona":
+                                                    block_message = f"🩸**Confidant Block!***: **{t_card}** Blocked 🛡️"
+                                                    t_block_used = True
+                                                    t_defense = round(t_defense * 2)
+                                                    previous_moves.append(block_message)
+                                                    await button_ctx.defer(ignore=True)
+                                                    turn_total = turn_total + 1
+                                                    turn = 0
+
                                                 if t_stamina >= 20:
+                                                    if t_universe == "Attack On Titan":
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 Rally! **{t_card}** Increased Max Health ❤️")
+                                                        t_max_health = round(t_max_health + 100)
+                                                        t_health = t_health + 50
+
+                                                    if t_universe == "Bleach":
+                                                        dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense,
+                                                                        t_stamina, t_enhancer_used, t_health, o_health, o_stamina,
+                                                                        t_max_health, o_attack, t_special_move_description, turn_total,
+                                                                        tcard_lvl_ap_buff, None)
+                                                        previous_moves.append(f"*{turn_total}:* **{t_card}** Exerted their 🩸 Spiritual Pressure dealing {dmg['DMG']} dmg")
+                                                        o_health = o_health - dmg['DMG']
 
                                                     t_stamina = t_stamina - 20
                                                     t_block_used = True
@@ -9892,28 +9913,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                                                     turn_total = turn_total + 1
                                                                     turn = 0
-                                                                elif o_universe == "Bleach":
-                                                                    if tarm_barrier_active:
-                                                                        tarm_barrier_active=False
-                                                                        embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
-                                                                    soul_damage = turn_total * o_stamina
-                                                                    if soul_damage <= 0:
-                                                                        soul_damage = 0
-                                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}'s** Final Stand: **Final {list(o_3.keys())[0]}!!!** Deals **{soul_damage}**! {icon}")
-                                                                    t_max_health = t_max_health - soul_damage
-                                                                    if t_max_health <= 0:
-                                                                        t_max_health=1
-                                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}'s** Last Breath.")
-                                                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-                                                                    
-                                                                    o_health = 1
-                                                                    o_max_health = 1
-                                                                    o_stamina = 30
-                                                                    
-                                                                    turn_total = turn_total + 1
-                                                                    turn = 1
-                                                                # await button_ctx.defer(ignore=True)
                                                             else:
                                                                 o_health = 0
                                                                 t_stamina = t_stamina - int(dmg['STAMINA_USED'])
@@ -10609,7 +10608,32 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 previous_moves.append(f"*{turn_total}:* {t_card} Could not summon 🧬 **{tpet_name}**. Needs rest")
                                                 turn = 1
                                         elif int(aiMove) == 7:
+                                            if t_universe == "Persona":
+                                                block_message = f"🩸**Confidant Block!***: **{t_card}** Blocked 🛡️"
+                                                t_block_used = True
+                                                t_defense = round(t_defense * 2)
+
+                                                previous_moves.append(block_message)
+                                                await button_ctx.defer(ignore=True)
+                                                turn_total = turn_total + 1
+                                                turn = 0
+
+
                                             if t_stamina >= 20:
+                                                if t_universe == "Attack On Titan":
+                                                    previous_moves.append(f"*{turn_total}:* 🩸 Rally! **{t_card}** Increased Max Health ❤️")
+                                                    t_max_health = round(t_max_health + 100)
+                                                    t_health = t_health + 50
+
+                                                if t_universe == "Bleach":
+                                                    dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense,
+                                                                    t_stamina, t_enhancer_used, t_health, o_health, o_stamina,
+                                                                    t_max_health, o_attack, t_special_move_description, turn_total,
+                                                                    tcard_lvl_ap_buff, None)
+                                                    previous_moves.append(f"*{turn_total}:* **{t_card}** Exerted their 🩸 Spiritual Pressure dealing {dmg['DMG']} dmg")
+                                                    o_health = o_health - dmg['DMG']
+
+
                                                 t_stamina = t_stamina - 20
                                                 t_block_used = True
                                                 t_defense = round(t_defense * 2)
@@ -10830,38 +10854,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                                                 turn_total = turn_total + 1
                                                                 turn = 0
-                                                            elif o_universe == "Bleach":
-                                                                if tarm_barrier_active:
-                                                                    tarm_barrier_active=False
-                                                                    embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
-                                                                soul_damage = turn_total * o_stamina
-                                                                icon = ':anger:'
-                                                                if soul_damage >=3000:
-                                                                    icon = ':zap:'
-                                                                elif soul_damage >=2000:
-                                                                    icon = ':boom:'
-                                                                elif soul_damage >=1000:
-                                                                    icon = ':anger_right:'
-                                                                elif soul_damage >= 500:
-                                                                    icon = 'bangbang'
-                                                                else:
-                                                                    icon = ':anger:'
-                                                                if soul_damage <= 0:
-                                                                    soul_damage = 0
-                                                                previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}'s** Final Stand: **Final {list(o_3.keys())[0]}!!!** Deals **{soul_damage}**! {icon}")
-                                                                t_max_health = t_max_health - soul_damage
-                                                                if t_max_health <= 0:
-                                                                    t_max_health=1
-                                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}'s** Last Breath.")
-                                                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-                                                                
-                                                                o_health = 1
-                                                                o_max_health = 1
-                                                                o_stamina = 30
-                                                                o_final_stand = False
-                                                                turn_total = turn_total + 1
-                                                                turn = 1
                                                         else:
                                                             o_health = 0
                                                             t_stamina = t_stamina - int(dmg['STAMINA_USED'])
@@ -10890,8 +10882,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     if o_title_passive_type == "HLT":
                                         o_health = round(o_health + ((o_title_passive_value / 100) * o_health))
                                     if o_title_passive_type == "LIFE":
-                                        t_health = round(t_health - ((o_title_passive_value / 100) * t_health))
-                                        o_health = round(o_health + ((o_title_passive_value / 100) * t_health))
+                                        if o_max_health != o_health:
+                                            t_health = round(t_health - ((o_title_passive_value / 100) * t_health))
+                                            o_health = round(o_health + ((o_title_passive_value / 100) * t_health))
                                     if o_title_passive_type == "ATK":
                                         o_attack = o_attack + o_title_passive_value
                                     if o_title_passive_type == "DEF":
@@ -11176,14 +11169,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         t_defense = round(t_defense - (30 + turn_total))
                                         
                                         previous_moves.append(f"*{turn_total}:* 🩸 Ruler's Authority... Opponent loses **{30 + turn_total}** 🛡️ 🔻")
-
-                                    elif o_universe == "Attack On Titan":
-                                        embedVar = discord.Embed(title=f"Rally! **{o_card}** Increased Max Health ❤️",
-                                                                colour=0xe91e63)
-                                        # await private_channel.send(embed=embedVar)
-                                        o_max_health = round(o_max_health + 100)
-
-                                        previous_moves.append(f"*{turn_total}:* 🩸 Rally! **{o_card}** Increased Max Health ❤️")
                                     
                                     elif o_universe == "Black Clover":
                                         embedVar = discord.Embed(title=f"Mana Zone! **{o_card}** Increased Stamina 🌀",
@@ -12713,7 +12698,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             embedVar = discord.Embed(
                                                                 title=f"**PERSONA!**\n{opet_name} was summoned from {o_card}'s soul dealing **{petdmg['DMG']}** damage!!",
                                                                 colour=0xe91e63)
-                                                            # await battle_msg.delete(delay=2)
+                                                            await battle_msg.delete(delay=2)
                                                             if not operformance:
                                                                 summon_file = showsummon(opet_image, opet_name, dmg['MESSAGE'], opet_lvl, opet_bond)
                                                                 embedVar.set_image(url="attachment://pet.png")
@@ -12998,7 +12983,37 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                             if button_ctx.custom_id == "0":
                                                 block_message = ""
-                                                if o_stamina >= 20:
+                                                if o_universe == "Persona":
+                                                    if mode in co_op_modes:
+                                                        block_message = f"🩸**Confidant Block!***: **{o_card}**: Defended 🛡️ **{c_card}**"
+                                                        o_defend_used = True
+                                                    else:
+                                                        block_message = f"🩸**Confidant Block!***: **{o_card}** Blocked 🛡️"
+                                                        o_block_used = True
+                                                    o_defense = round(o_defense * 2)
+                                                    embedVar = discord.Embed(title=f"{block_message}", colour=0xe91e63)
+
+                                                    previous_moves.append(f"*{turn_total}:* {block_message}")
+                                                    await button_ctx.defer(ignore=True)
+                                                    turn_total = turn_total + 1
+                                                    turn = 1
+
+                                                elif o_stamina >= 20:
+
+                                                    if o_universe == "Attack On Titan":
+                                                        previous_moves.append(f"*{turn_total}:* 🩸 Rally! **{o_card}** Increased Max Health ❤️")
+                                                        o_max_health = round(o_max_health + 100)
+                                                        o_health = o_health + 50
+
+                                                    if o_universe == "Bleach":
+                                                        dmg = damage_cal(o_universe, o_card, o_1, o_attack, o_defense, t_defense, o_stamina,
+                                                                        o_enhancer_used, o_health, t_health, t_stamina, o_max_health,
+                                                                        t_attack, o_special_move_description, turn_total,
+                                                                        ocard_lvl_ap_buff, None)
+                                                        previous_moves.append(f"*{turn_total}:* **{o_card}** Exerted their 🩸 Spiritual Pressure dealing {dmg['DMG']} dmg")
+                                                        t_health = t_health - dmg['DMG']
+                                                        
+
                                                     if mode in co_op_modes:
                                                         block_message = f"**{o_card}**: Defended 🛡️ **{c_card}**"
                                                         o_defend_used = True
@@ -13265,38 +13280,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     o_stamina = o_stamina - dmg['STAMINA_USED']
                                                                     turn_total = turn_total + 1
                                                                     turn = 1
-                                                                elif t_universe == "Bleach":
-                                                                    if oarm_barrier_active:
-                                                                        oarm_barrier_active=False
-                                                                        embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
-                                                                    soul_damage = turn_total * t_stamina
-                                                                    icon = ':anger:'
-                                                                    if soul_damage >=3000:
-                                                                        icon = ':zap:'
-                                                                    elif soul_damage >=2000:
-                                                                        icon = ':boom:'
-                                                                    elif soul_damage >=1000:
-                                                                        icon = ':anger_right:'
-                                                                    elif soul_damage >= 500:
-                                                                        icon = 'bangbang'
-                                                                    else:
-                                                                        icon = ':anger:'
-                                                                    if soul_damage <= 0:
-                                                                        soul_damage = 0
-                                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}'s** Final Stand: **Final {list(t_3.keys())[0]}!!!** Deals **{soul_damage}**! {icon}")
-                                                                    o_max_health = o_max_health - soul_damage
-                                                                    if o_max_health <= 0:
-                                                                        o_max_health=1
-                                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}'s** Last Breath.")
-                                                                    o_stamina = o_stamina - int(dmg['STAMINA_USED'])
-                                                                    
-                                                                    t_health = 1
-                                                                    t_max_health = 1
-                                                                    t_stamina = 30
-                                                                    t_final_stand = False
-                                                                    turn_total = turn_total + 1
-                                                                    turn = 0
                                                             else:
                                                                 t_health = 0
                                                                 o_stamina = o_stamina - dmg['STAMINA_USED']
@@ -13353,8 +13336,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     if t_title_passive_type == "HLT":
                                         t_health = round(t_health + ((t_title_passive_value / 100) * t_health))
                                     if t_title_passive_type == "LIFE":
-                                        o_health = round(o_health - ((t_title_passive_value / 100) * o_health))
-                                        t_health = round(t_health + ((t_title_passive_value / 100) * o_health))
+                                        if t_max_health != o_health:
+                                            o_health = round(o_health - ((t_title_passive_value / 100) * o_health))
+                                            t_health = round(t_health + ((t_title_passive_value / 100) * o_health))
                                     if t_title_passive_type == "ATK":
                                         t_attack = t_attack + t_title_passive_value
                                     if t_title_passive_type == "DEF":
@@ -13607,12 +13591,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             colour=0xe91e63)
                                         previous_moves.append(f"*{turn_total}:* 🩸 Ruler's Authority... {o_card} loses **{30 + turn_total}** 🛡️ 🔻")
                                         o_defense = round(o_defense - (30 + turn_total))
-
-                                    elif t_universe == "Attack On Titan":
-                                        embedVar = discord.Embed(title=f"Rally! **{t_card}** Increased Max Health ❤️",
-                                                                colour=0xe91e63)
-                                        previous_moves.append(f"*{turn_total}:* 🩸 Rally! **{t_card}** Increased Max Health ❤️")
-                                        t_max_health = round(t_max_health + 100)
 
                                     elif t_universe == "Black Clover":
                                         embedVar = discord.Embed(title=f"Mana Zone! **{t_card}** Increased Stamina 🌀",
@@ -14790,7 +14768,31 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         else:
                                             previous_moves.append(f"*{turn_total}:* {t_card} Could not summon 🧬 **{tpet_name}**. Needs rest")
                                     elif int(aiMove) == 7:
+                                        if t_universe == "Persona":
+                                            block_message = f"🩸**Confidant Block!***: **{t_card}** Blocked 🛡️"
+                                            t_block_used = True
+                                            t_defense = round(t_defense * 2)
+
+                                            previous_moves.append(block_message)
+                                            await button_ctx.defer(ignore=True)
+                                            turn_total = turn_total + 1
+                                            turn = 0
+
                                         if t_stamina >= 20:
+                                            if t_universe == "Attack On Titan":
+                                                previous_moves.append(f"*{turn_total}:* 🩸 Rally! **{t_card}** Increased Max Health ❤️")
+                                                t_max_health = round(t_max_health + 100)
+                                                t_health = t_health + 50
+
+                                            if t_universe == "Bleach":
+                                                dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense,
+                                                                t_stamina, t_enhancer_used, t_health, o_health, o_stamina,
+                                                                t_max_health, o_attack, t_special_move_description, turn_total,
+                                                                tcard_lvl_ap_buff, None)
+                                                previous_moves.append(f"*{turn_total}:* **{t_card}** Exerted their 🩸 Spiritual Pressure dealing {dmg['DMG']} dmg")
+                                                o_health = o_health - dmg['DMG']
+
+
                                             t_stamina = t_stamina - 20
                                             t_block_used = True
                                             t_defense = round(t_defense * 2)
@@ -15028,38 +15030,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                                                     turn_total = turn_total + 1
                                                                     turn = turn_selector
-                                                                elif c_universe == "Bleach":
-                                                                    if tarm_barrier_active:
-                                                                        tarm_barrier_active=False
-                                                                        embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
-                                                                    soul_damage = turn_total * c_stamina
-                                                                    icon = ':anger:'
-                                                                    if soul_damage >=3000:
-                                                                        icon = ':zap:'
-                                                                    elif soul_damage >=2000:
-                                                                        icon = ':boom:'
-                                                                    elif soul_damage >=1000:
-                                                                        icon = ':anger_right:'
-                                                                    elif soul_damage >= 500:
-                                                                        icon = 'bangbang'
-                                                                    else:
-                                                                        icon = ':anger:'
-                                                                    if soul_damage <= 0:
-                                                                        soul_damage = 0
-                                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}'s** Final Stand: **Final {list(c_3.keys())[0]}!!!** Deals **{soul_damage}**! {icon}")
-                                                                    t_max_health = t_max_health - soul_damage
-                                                                    if t_max_health <= 0:
-                                                                        t_max_health=1
-                                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}'s** Last Breath.")
-                                                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-                                                                    
-                                                                    c_health = 1
-                                                                    c_max_health = 1
-                                                                    c_stamina = 30
-                                                                    c_final_stand = False
-                                                                    turn_total = turn_total + 1
-                                                                    turn = 3
                                                             else:
                                                                 c_health = 0
                                                                 t_stamina = t_stamina - int(dmg['STAMINA_USED'])
@@ -15293,38 +15263,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                         t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                                                         turn_total = turn_total + 1
                                                                         turn = 0
-                                                                    elif o_universe == "Bleach":
-                                                                        if tarm_barrier_active:
-                                                                            tarm_barrier_active=False
-                                                                            embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                            previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
-                                                                        soul_damage = turn_total * o_stamina
-                                                                        icon = ':anger:'
-                                                                        if soul_damage >=3000:
-                                                                            icon = ':zap:'
-                                                                        elif soul_damage >=2000:
-                                                                            icon = ':boom:'
-                                                                        elif soul_damage >=1000:
-                                                                            icon = ':anger_right:'
-                                                                        elif soul_damage >= 500:
-                                                                            icon = 'bangbang'
-                                                                        else:
-                                                                            icon = ':anger:'
-                                                                        if soul_damage <= 0:
-                                                                            soul_damage = 0
-                                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}'s** Final Stand: **Final {list(o_3.keys())[0]}!!!** Deals **{soul_damage}**! {icon}")
-                                                                        t_max_health = t_max_health - soul_damage
-                                                                        if t_max_health <= 0:
-                                                                            t_max_health=1
-                                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}'s** Last Breath.")
-                                                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-                                                                        
-                                                                        o_health = 1
-                                                                        o_max_health = 1
-                                                                        o_stamina = 30
-                                                                        o_final_stand = False
-                                                                        turn_total = turn_total + 1
-                                                                        turn = 1
                                                             else:
                                                                 o_health = 0
                                                                 t_stamina = t_stamina - int(dmg['STAMINA_USED'])
@@ -15562,38 +15500,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                                                     turn_total = turn_total + 1
                                                                     turn = 0
-                                                                elif o_universe == "Bleach":
-                                                                    if tarm_barrier_active:
-                                                                        tarm_barrier_active=False
-                                                                        embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
-                                                                    soul_damage = turn_total * o_stamina
-                                                                    icon = ':anger:'
-                                                                    if soul_damage >=3000:
-                                                                        icon = ':zap:'
-                                                                    elif soul_damage >=2000:
-                                                                        icon = ':boom:'
-                                                                    elif soul_damage >=1000:
-                                                                        icon = ':anger_right:'
-                                                                    elif soul_damage >= 500:
-                                                                        icon = 'bangbang'
-                                                                    else:
-                                                                        icon = ':anger:'
-                                                                    if soul_damage <= 0:
-                                                                        soul_damage = 0
-                                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}'s** Final Stand: **Final {list(o_3.keys())[0]}!!!** Deals **{soul_damage}**! {icon}")
-                                                                    t_max_health = t_max_health - soul_damage
-                                                                    if t_max_health <= 0:
-                                                                        t_max_health=1
-                                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}'s** Last Breath.")
-                                                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-                                                                    
-                                                                    o_health = 1
-                                                                    o_max_health = 1
-                                                                    o_stamina = 30
-                                                                    o_final_stand = False
-                                                                    turn_total = turn_total + 1
-                                                                    turn = 1
                                                         else:
                                                             o_health = 0
                                                             t_stamina = t_stamina - int(dmg['STAMINA_USED'])
@@ -15616,8 +15522,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         if c_title_passive_type == "HLT":
                                             c_health = round(c_health + ((c_title_passive_value / 100) * c_health))
                                         if c_title_passive_type == "LIFE":
-                                            t_health = round(t_health - ((c_title_passive_value / 100) * t_health))
-                                            c_health = round(c_health + ((c_title_passive_value / 100) * t_health))
+                                            if c_max_health != o_health:
+                                                t_health = round(t_health - ((c_title_passive_value / 100) * t_health))
+                                                c_health = round(c_health + ((c_title_passive_value / 100) * t_health))
                                         if c_title_passive_type == "ATK":
                                             c_attack = c_attack + c_title_passive_value
                                         if c_title_passive_type == "DEF":
@@ -15841,13 +15748,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             #await private_channel.send(embed=embedVar)
                                             previous_moves.append(f"*{turn_total}:* 🩸 Ruler's Authority... {t_card} loses **{30 + turn_total}** 🛡️ 🔻")
                                             t_defense = round(t_defense - (30 + turn_total))
-
-                                        elif c_universe == "Attack On Titan":
-                                            embedVar = discord.Embed(title=f"Rally! **{c_card}** Increased Max Health ❤️",
-                                                                    colour=0xe91e63)
-                                            #await private_channel.send(embed=embedVar)
-                                            previous_moves.append(f"*{turn_total}:* 🩸 Rally! **{c_card}** Increased Max Health ❤️")
-                                            c_max_health = round(c_max_health + 100)
 
                                         elif c_universe == "Black Clover":
                                             embedVar = discord.Embed(title=f"Mana Zone! {c_card} Increased Stamina 🌀",
@@ -17038,38 +16938,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     c_stamina = c_stamina - dmg['STAMINA_USED']
                                                                     turn_total = turn_total + 1
                                                                     turn = 3
-                                                                elif t_universe == "Bleach":
-                                                                    if carm_barrier_active:
-                                                                        carm_barrier_active=False
-                                                                        embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* 💠**{c_card}**'s Barrier Disabled!")
-                                                                    soul_damage = turn_total * t_stamina
-                                                                    icon = ':anger:'
-                                                                    if soul_damage >=3000:
-                                                                        icon = ':zap:'
-                                                                    elif soul_damage >=2000:
-                                                                        icon = ':boom:'
-                                                                    elif soul_damage >=1000:
-                                                                        icon = ':anger_right:'
-                                                                    elif soul_damage >= 500:
-                                                                        icon = 'bangbang'
-                                                                    else:
-                                                                        icon = ':anger:'
-                                                                    if soul_damage <= 0:
-                                                                        soul_damage = 0
-                                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}'s** Final Stand: **Final {list(t_3.keys())[0]}!!!** Deals **{soul_damage}**! {icon}")
-                                                                    c_max_health = c_max_health - soul_damage
-                                                                    if c_max_health <= 0:
-                                                                        c_max_health=1
-                                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}'s** Last Breath.")
-                                                                    c_stamina = c_stamina - int(dmg['STAMINA_USED'])
-                                                                    
-                                                                    t_health = 1
-                                                                    t_max_health = 1
-                                                                    t_stamina = 30
-                                                                    t_final_stand = False
-                                                                    turn_total = turn_total + 1
-                                                                    turn = 2
                                                             else:
                                                                 t_health = 0
                                                                 c_stamina = c_stamina - dmg['STAMINA_USED']
@@ -17910,7 +17778,35 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         turn = 2
                                                         await button_ctx.defer(ignore=True)
                                                 elif button_ctx.custom_id == "0":
+                                                    if c_universe == "Persona":
+                                                        block_message = f"🩸**Confidant Block!***: **{c_card}** Blocked 🛡️"
+                                                        c_block_used = True
+                                                        c_defense = round(c_defense * 2)
+                                                        embedVar = discord.Embed(
+                                                            title=f"{c_card} Defended 🛡️ {o_card}",
+                                                            colour=0xe91e63)
+
+                                                        #await button_ctx.send(embed=embedVar)
+                                                        previous_moves.append(block_message)
+                                                        turn_total = turn_total + 1
+                                                        turn = 3
+                                                        await button_ctx.defer(ignore=True)
+
                                                     if c_stamina >= 20:
+                                                        if c_universe == "Attack On Titan":
+                                                            previous_moves.append(f"*{turn_total}:* 🩸 Rally! **{c_card}** Increased Max Health ❤️")
+                                                            c_max_health = round(c_max_health + 100)
+                                                            c_health = c_health + 50
+
+                                                        if c_universe == "Bleach":
+                                                            dmg = damage_cal(c_universe, c_card, c_1, c_attack, c_defense, t_defense,
+                                                                        c_stamina, c_enhancer_used, c_health, t_health, t_stamina,
+                                                                        c_max_health, t_attack, c_special_move_description,
+                                                                        turn_total, ccard_lvl_ap_buff, None)
+                                                            previous_moves.append(f"*{turn_total}:* **{c_card}** Exerted their 🩸 Spiritual Pressure dealing {dmg['DMG']} dmg")
+                                                            c_health = c_health - dmg['DMG']
+
+                                                        
                                                         c_block_used = True
                                                         c_stamina = c_stamina - 20
                                                         c_defense = round(c_defense * 2)
@@ -18176,38 +18072,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                         turn_total = turn_total + 1
                                                                         turn = 3
                                                                         await button_ctx.defer(ignore=True)
-                                                                    elif t_universe == "Bleach":
-                                                                        if carm_barrier_active:
-                                                                            carm_barrier_active=False
-                                                                            embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                            previous_moves.append(f"*{turn_total}:* 💠**{c_card}**'s Barrier Disabled!")
-                                                                        soul_damage = turn_total * t_stamina
-                                                                        icon = ':anger:'
-                                                                        if soul_damage >=3000:
-                                                                            icon = ':zap:'
-                                                                        elif soul_damage >=2000:
-                                                                            icon = ':boom:'
-                                                                        elif soul_damage >=1000:
-                                                                            icon = ':anger_right:'
-                                                                        elif soul_damage >= 500:
-                                                                            icon = 'bangbang'
-                                                                        else:
-                                                                            icon = ':anger:'
-                                                                        if soul_damage <= 0:
-                                                                            soul_damage = 0
-                                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}'s** Final Stand: **Final {list(t_3.keys())[0]}!!!** Deals **{soul_damage}**! {icon}")
-                                                                        c_max_health = c_max_health - soul_damage
-                                                                        if c_max_health <= 0:
-                                                                            c_max_health=1
-                                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}'s** Last Breath.")
-                                                                        c_stamina = c_stamina - int(dmg['STAMINA_USED'])
-                                                                        
-                                                                        t_health = 1
-                                                                        t_max_health = 1
-                                                                        t_stamina = 30
-                                                                        t_final_stand = False
-                                                                        turn_total = turn_total + 1
-                                                                        turn = 2
                                                                 else:
                                                                     t_health = 0
                                                                     c_stamina = c_stamina - dmg['STAMINA_USED']
@@ -18260,8 +18124,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         if t_title_passive_type == "HLT":
                                             t_health = round(t_health + ((t_title_passive_value / 100) * t_health))
                                         if t_title_passive_type == "LIFE":
-                                            c_health = c_health - ((t_title_passive_value / 100) * c_health)
-                                            t_health = t_health + ((t_title_passive_value / 100) * c_health)
+                                            if t_max_health != o_health:
+                                                c_health = c_health - ((t_title_passive_value / 100) * c_health)
+                                                t_health = t_health + ((t_title_passive_value / 100) * c_health)
                                         if t_title_passive_type == "ATK":
                                             t_attack = t_attack + t_title_passive_value
                                         if t_title_passive_type == "DEF":
@@ -18481,13 +18346,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             #await private_channel.send(embed=embedVar)
                                             previous_moves.append(f"*{turn_total}:* 🩸 Ruler's Authority... {c_card} loses **{30 + turn_total}** 🛡️ 🔻")
                                             c_defense = round(c_defense - (30 + turn_total))
-
-                                        elif t_universe == "Attack On Titan":
-                                            embedVar = discord.Embed(title=f"Rally! **{t_card}** Increased Max Health ❤️",
-                                                                    colour=0xe91e63)
-                                            #await private_channel.send(embed=embedVar)
-                                            previous_moves.append(f"*{turn_total}:* 🩸 Rally! **{t_card}** Increased Max Health ❤️")
-                                            t_max_health = round(t_max_health + 100)
 
                                         elif t_universe == "Black Clover":
                                             embedVar = discord.Embed(title=f"Mana Zone! **{t_card}** Increased Stamina 🌀",
@@ -19434,7 +19292,32 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         previous_moves.append(f"*{turn_total}:* {t_card} Could not summon 🧬 **{tpet_name}**. Needs rest")
                                                         turn = 3
                                         elif int(aiMove) == 7:
+                                            if t_universe == "Persona":
+                                                block_message = f"🩸**Confidant Block!***: **{t_card}** Blocked 🛡️"
+                                                t_block_used = True
+                                                t_defense = round(t_defense * 2)
+
+                                                previous_moves.append(block_message)
+                                                await button_ctx.defer(ignore=True)
+                                                turn_total = turn_total + 1
+                                                turn = 0
+
+
                                             if t_stamina >= 20:
+                                                if t_universe == "Attack On Titan":
+                                                    previous_moves.append(f"*{turn_total}:* 🩸 Rally! **{t_card}** Increased Max Health ❤️")
+                                                    t_max_health = round(t_max_health + 100)
+                                                    t_health = t_health + 50
+
+                                                if t_universe == "Bleach":
+                                                    dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense,
+                                                                    t_stamina, t_enhancer_used, t_health, o_health, o_stamina,
+                                                                    t_max_health, o_attack, t_special_move_description, turn_total,
+                                                                    tcard_lvl_ap_buff, None)
+                                                    previous_moves.append(f"*{turn_total}:* **{t_card}** Exerted their 🩸 Spiritual Pressure dealing {dmg['DMG']} dmg")
+                                                    c_health = c_health - dmg['DMG']
+
+
                                                 t_stamina = t_stamina - 20
                                                 t_block_used = True
                                                 t_defense = round(t_defense * 2)
@@ -19678,38 +19561,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                                                     turn_total = turn_total + 1
                                                                     turn = 0
-                                                                elif o_universe == "Bleach":
-                                                                    if tarm_barrier_active:
-                                                                        tarm_barrier_active=False
-                                                                        embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
-                                                                    soul_damage = turn_total * o_stamina
-                                                                    icon = ':anger:'
-                                                                    if soul_damage >=3000:
-                                                                        icon = ':zap:'
-                                                                    elif soul_damage >=2000:
-                                                                        icon = ':boom:'
-                                                                    elif soul_damage >=1000:
-                                                                        icon = ':anger_right:'
-                                                                    elif soul_damage >= 500:
-                                                                        icon = 'bangbang'
-                                                                    else:
-                                                                        icon = ':anger:'
-                                                                    if soul_damage <= 0:
-                                                                        soul_damage = 0
-                                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}'s** Final Stand: **Final {list(o_3.keys())[0]}!!!** Deals **{soul_damage}**! {icon}")
-                                                                    t_max_health = t_max_health - soul_damage
-                                                                    if t_max_health <= 0:
-                                                                        t_max_health=1
-                                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}'s** Last Breath.")
-                                                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-                                                                    
-                                                                    o_health = 1
-                                                                    o_max_health = 1
-                                                                    o_stamina = 30
-                                                                    o_final_stand = False
-                                                                    turn_total = turn_total + 1
-                                                                    turn = 1
                                                             else:
                                                                 o_health = 0
                                                                 t_stamina = t_stamina - int(dmg['STAMINA_USED'])
@@ -19949,38 +19800,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     c_used_focus = True
                                                                     c_final_stand = False
                                                                     t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-                                                                    turn_total = turn_total + 1
-                                                                    turn = 2
-                                                                elif c_universe == "Bleach":
-                                                                    if tarm_barrier_active:
-                                                                        tarm_barrier_active=False
-                                                                        embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
-                                                                    soul_damage = turn_total * c_stamina
-                                                                    icon = ':anger:'
-                                                                    if soul_damage >=3000:
-                                                                        icon = ':zap:'
-                                                                    elif soul_damage >=2000:
-                                                                        icon = ':boom:'
-                                                                    elif soul_damage >=1000:
-                                                                        icon = ':anger_right:'
-                                                                    elif soul_damage >= 500:
-                                                                        icon = ':bangbang:'
-                                                                    else:
-                                                                        icon = ':anger:'
-                                                                    if soul_damage <= 0:
-                                                                        soul_damage = 0
-                                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}'s** Final Stand: **Final {list(c_3.keys())[0]}!!!** Deals **{soul_damage}**! {icon}")
-                                                                    t_max_health = t_max_health - soul_damage
-                                                                    if t_max_health <= 0:
-                                                                        t_max_health=1
-                                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}'s** Last Breath.")
-                                                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-                                                                    
-                                                                    c_health = 1
-                                                                    c_max_health = 1
-                                                                    c_stamina = 30
-                                                                    c_final_stand = False
                                                                     turn_total = turn_total + 1
                                                                     turn = 2
                                                             else:

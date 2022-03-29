@@ -24,12 +24,12 @@ traits = [{
     'TRAIT': 'When Health reaches 50% gain Double ATK, Double DEF, and Double Max Health. Strong Fear Infliction.'
 },{
     'NAME': 'Bleach',
-    'EFFECT': 'Bankai',
-    'TRAIT': 'Gain Double Attack on Resolve. Final Stand: On Death Destroy (Turn Count * Current Stamina) Opponent Max Health.'
+    'EFFECT': 'Bankai, Spiritual Pressure',
+    'TRAIT': 'Gain Double Attack on Resolve. On Block, exert your Spiritual Pressure to deal damage equal to your basic attack while still gaining defense.'
 },{
     'NAME': 'Attack On Titan',
     'EFFECT': 'Rally',
-    'TRAIT': 'Gain 100 Max Health on Focus. Gain (100 x Your Focus Count) worth of Health upon Resolve.'
+    'TRAIT': 'Gain 100 Max Health and 50 Health on Block. Gain (100 x Your Focus Count) worth of Health upon Resolve.'
 },{
     'NAME': 'Black Clover',
     'EFFECT': 'Mana Zone',
@@ -72,8 +72,8 @@ traits = [{
     'TRAIT': 'When you die, Resolve with 75% ATK + DEF as Health. Saiyan Spirit! On focus, heal for opponent Stamina amount + turn count.'
 },{
     'NAME': 'Persona',
-    'EFFECT': 'Summoner',
-    'TRAIT': 'Summon deals Damage equal to your :boom: attack, in addition to their status effect. Using your summon will disable opponents summon.'
+    'EFFECT': 'Summoner, Confidant Block',
+    'TRAIT': 'Summon deals Damage equal to your :boom: attack, in addition to their status effect. Using your summon will disable opponents summon. Blocks cost no Stamina.'
 },
 {
     'NAME': 'Crown Rift Slayers',
