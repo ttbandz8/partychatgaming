@@ -1586,7 +1586,7 @@ class CrownUnlimited(commands.Cog):
             hall_def = hall_info['DEFENSE']
             t_user = db.queryUser({'DID': shield_id})
             tteam_name = t_user['TEAM']
-            tteam_info = db.queryTeam({'TEAM_NAME': tteam_name})
+            tteam_info = db.queryTeam({'TEAM_NAME': tteam_name.lower()})
             tteam = tteam_info['TEAM_NAME']
             tguild = tteam_info['GUILD']
             tteam_info = db.queryTeam({'TEAM_NAME': tteam.lower()})
@@ -8315,24 +8315,30 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             else:
                                                 previous_moves.append(f"*{turn_total}:* 🧬 **{opet_name}** needs a turn to rest...")
                                                 await button_ctx.defer(ignore=True)
-                                        elif button_ctx.custom_id == "0":
+                                        elif button_ctx.custom_id == "0": 
                                             if o_universe == "Persona":
-                                                if mode in co_op_modes:
-                                                    block_message = f"🩸**Confidant Block!***: **{o_card}**: Defended 🛡️ **{c_card}**"
-                                                    o_defend_used = True
-                                                else:
-                                                    block_message = f"🩸**Confidant Block!***: **{o_card}** Blocked 🛡️"
-                                                    o_block_used = True
+                                                o_stamina = o_stamina
+                                                o_block_used = True
                                                 o_defense = round(o_defense * 2)
-                                                embedVar = discord.Embed(title=f"{block_message}", colour=0xe91e63)
-
-                                                previous_moves.append(f"*{turn_total}:* {block_message}")
-                                                await button_ctx.defer(ignore=True)
+                                                previous_moves.append(f"*{turn_total}:* **{o_pet}:** Blocked 🛡️")
                                                 turn_total = turn_total + 1
                                                 turn = 1
-
-
-                                            if o_stamina >= 20:
+                                                if botActive and tutorial_block==False:
+                                                    tutorial_block=True
+                                                    embedVar = discord.Embed(title=f"🛡️Blocking!",
+                                                                            description=f"🛡️**Blocking** cost **20 ST(Stamina)** to Double your **DEF** until your next turn!",
+                                                                            colour=0xe91e63)
+                                                    embedVar.add_field(name=f"**Engagements**",
+                                                                    value="You will take less DMG when your **DEF** is greater than your opponenents **ATK**")
+                                                    embedVar.add_field(name=f"**Engagement Insight**",
+                                                                    value="❕: %50-%75 of AP\n💢: %75-%110 AP\n‼️: %90-%120 AP")
+                                                    embedVar.set_footer(
+                                                        text=f"Use 🛡️Block strategically to defend against your opponents strongest abilities!")
+                                                    await button_ctx.send(embed=embedVar)
+                                                    await asyncio.sleep(2)
+                                                else:
+                                                    await button_ctx.defer(ignore=True)
+                                            elif o_stamina >= 20:
                                                 if o_universe == "Attack On Titan":
                                                     previous_moves.append(f"*{turn_total}:* 🩸 Rally! **{o_card}** Increased Max Health ❤️")
                                                     o_max_health = round(o_max_health + 100)
@@ -8345,7 +8351,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     ocard_lvl_ap_buff, None)
                                                     previous_moves.append(f"*{turn_total}:* **{o_card}** Exerted their 🩸 Spiritual Pressure dealing {dmg['DMG']} dmg")
                                                     t_health = t_health - dmg['DMG']
-                                                        
+
+
                                                 o_stamina = o_stamina - 20
                                                 o_block_used = True
                                                 o_defense = round(o_defense * 2)
@@ -20599,6 +20606,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         """),colour=0x1abc9c)
                                         embedVar.add_field(name="**Co-Op Bonus**",
                                                 value=f"{bonus_message}")
+                                        if questlogger:
+                                            embedVar.add_field(name="**Quest Progress**",
+                                                value=f"{questlogger}")
+                                        if destinylogger:
+                                            embedVar.add_field(name="**Destiny Progress**",
+                                                value=f"{destinylogger}")
                                     elif mode in ai_co_op_modes:
                                         embedVar = discord.Embed(title=f":crown: DUO VICTORY\nThe game lasted {turn_total} rounds.\n\n{drop_response}",description=textwrap.dedent(f"""
                                         {previous_moves_into_embed}
@@ -20630,8 +20643,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             await movecrest(selected_universe, oguild['GNAME'])
                                             embedVar.add_field(name=f"**{selected_universe}** CREST CLAIMED!",
                                                             value=f"**{oguild['GNAME']}** earned the {selected_universe} **Crest**")
-                                        embedVar.add_field(name="Additional Reward",
-                                                        value=f"You earned additional rewards in your vault! Take a look.")
+                                        if questlogger:
+                                            embedVar.add_field(name="**Quest Progress**",
+                                                value=f"{questlogger}")
+                                        if destinylogger:
+                                            embedVar.add_field(name="**Destiny Progress**",
+                                                value=f"{destinylogger}")
                                         embedVar.set_footer(text="The /shop has been updated with new CARDS, TITLES and ARMS!")
                                         if difficulty != "EASY":
                                             upload_query = {'DID': str(ctx.author.id)}
@@ -20674,6 +20691,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 colour=0xe91e63)
                                         embedVar.add_field(name="Additional Reward",
                                                         value=f"You earned additional rewards in your vault! Take a look.")
+                                        if questlogger:
+                                            embedVar.add_field(name="**Quest Progress**",
+                                                value=f"{questlogger}")
+                                        if destinylogger:
+                                            embedVar.add_field(name="**Destiny Progress**",
+                                                value=f"{destinylogger}")
                                         embedVar.set_footer(text="The /shop has been updated with new CARDS, TITLES and ARMS!")
                                         if difficulty != "EASY":
                                             embedVar.set_author(name=f"{selected_universe} Dungeon has been unlocked!")

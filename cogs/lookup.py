@@ -574,7 +574,7 @@ class Lookup(commands.Cog):
             else:
                 user = db.queryUser({'DID': str(ctx.author.id)})
                 team = db.queryTeam({'TEAM_NAME': user['TEAM'].lower()})
-                guild = db.queryGuildAlt({'GNAME': team['GUILD'].lower()})
+                guild = db.queryGuildAlt({'GNAME': team['GUILD']})
                 if guild:
                     guild_name = guild['GNAME']
                 else:
