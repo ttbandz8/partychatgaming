@@ -1585,8 +1585,8 @@ class CrownUnlimited(commands.Cog):
             hall_info = db.queryHall({'HALL': str(guild_hall)})
             hall_def = hall_info['DEFENSE']
             t_user = db.queryUser({'DID': shield_id})
-            tteam_name = t_user['TEAM']
-            tteam_info = db.queryTeam({'TEAM_NAME': tteam_name})
+            tteam_name = t_user['TEAM']}
+            tteam_info = db.queryTeam({'TEAM_NAME': tteam_name.tolower()}})
             tteam = tteam_info['TEAM_NAME']
             tguild = tteam_info['GUILD']
             tteam_info = db.queryTeam({'TEAM_NAME': tteam.lower()})
@@ -20780,6 +20780,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         """),colour=0x1abc9c)
                                         embedVar.add_field(name="**Co-Op Bonus**",
                                                 value=f"{bonus_message}")
+                                        if questlogger:
+                                            embedVar.add_field(name="**Quest Progress**",
+                                                value=f"{questlogger}")
+                                        if destinylogger:
+                                            embedVar.add_field(name="**Destiny Progress**",
+                                                value=f"{destinylogger}")
                                     elif mode in ai_co_op_modes:
                                         embedVar = discord.Embed(title=f":crown: DUO VICTORY\n**{o_card} says**\n{o_win_description}\nThe game lasted {turn_total} rounds.\n\n{drop_response}",description=textwrap.dedent(f"""
                                         {previous_moves_into_embed}
@@ -20811,8 +20817,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             await movecrest(selected_universe, oguild['GNAME'])
                                             embedVar.add_field(name=f"**{selected_universe}** CREST CLAIMED!",
                                                             value=f"**{oguild['GNAME']}** earned the {selected_universe} **Crest**")
-                                        embedVar.add_field(name="Additional Reward",
-                                                        value=f"You earned additional rewards in your vault! Take a look.")
+                                        if questlogger:
+                                            embedVar.add_field(name="**Quest Progress**",
+                                                value=f"{questlogger}")
+                                        if destinylogger:
+                                            embedVar.add_field(name="**Destiny Progress**",
+                                                value=f"{destinylogger}")
                                         embedVar.set_footer(text="The /shop has been updated with new CARDS, TITLES and ARMS!")
                                         if difficulty != "EASY":
                                             upload_query = {'DID': str(ctx.author.id)}
@@ -20855,6 +20865,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 colour=0xe91e63)
                                         embedVar.add_field(name="Additional Reward",
                                                         value=f"You earned additional rewards in your vault! Take a look.")
+                                        if questlogger:
+                                            embedVar.add_field(name="**Quest Progress**",
+                                                value=f"{questlogger}")
+                                        if destinylogger:
+                                            embedVar.add_field(name="**Destiny Progress**",
+                                                value=f"{destinylogger}")
                                         embedVar.set_footer(text="The /shop has been updated with new CARDS, TITLES and ARMS!")
                                         if difficulty != "EASY":
                                             embedVar.set_author(name=f"{selected_universe} Dungeon has been unlocked!")
