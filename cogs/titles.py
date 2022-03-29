@@ -131,43 +131,43 @@ class Titles(commands.Cog):
                 message=f"{title_title} is a CONFUSE title"
             elif o_title_passive_type == 'BLINK':
                 typetext = "Decrease Stamina"
-                type2 ="Increase Target/Ally Stamina"
+                type2 ="Increase Target Stamina"
                 message=f"{title_title} is a BLINK title"
             elif o_title_passive_type == 'SLOW':
-                typetext = "Increase Opponent Stamina"
+                typetext = "Decrease Turn Count"
                 type2 = "Decrease Stamina"
                 message=f"{title_title} is a SLOW title"
             elif o_title_passive_type == 'HASTE':
-                typetext = "Increase Stamina"
+                typetext = "Increase Turn Count"
                 type2 = "Decrease Opponent Stamina"
                 message=f"{title_title} is a HASTE title" 
             elif o_title_passive_type == 'SOULCHAIN':
-                typetext = "Stamina"
+                typetext = "Stamina Regen"
                 message=f"{title_title} is a SOULCHAIN title"
             elif o_title_passive_type == 'FEAR':
                 typetext = "Max Health reduce Opponent Attack and Defense"
                 message=f"{title_title} is a FEAR title"
             elif o_title_passive_type == 'GAMBLE':
-                typetext = "Health"
+                typetext = "Health Regen "
                 message=f"{title_title} is a GAMBLE title" 
 
             embedVar = discord.Embed(title=f"{Crest_dict[title_show]} {title_title}\n{price_message}".format(self), colour=000000)
             if title_show != "Unbound":
                 embedVar.set_thumbnail(url=title_img)
             if o_title_passive_type == "ATK" or o_title_passive_type == "DEF" or o_title_passive_type == "HLT" or o_title_passive_type == "STAM":
-                embedVar.add_field(name=f"**Unique Passive**", value=f"Increases **{typetext}** by **{o_title_passive_value}{title_enhancer_suffix_mapping[o_title_passive_type]}**", inline=False)
+                embedVar.add_field(name=f"**Unique Passive**", value=f"On your Turn, Increases **{typetext}** by **{o_title_passive_value}{title_enhancer_suffix_mapping[o_title_passive_type]}**", inline=False)
             elif o_title_passive_type == "FLOG" or o_title_passive_type == "WITHER" or o_title_passive_type == "LIFE" or o_title_passive_type == "DRAIN":
-                embedVar.add_field(name=f"**Unique Passive**", value=f"Steals **{o_title_passive_value}{title_enhancer_suffix_mapping[o_title_passive_type]} {typetext}**", inline=False)
+                embedVar.add_field(name=f"**Unique Passive**", value=f"On your turn, Steals **{o_title_passive_value}{title_enhancer_suffix_mapping[o_title_passive_type]} {typetext}**", inline=False)
             elif o_title_passive_type == "RAGE" or o_title_passive_type == "BRACE" or o_title_passive_type == "BZRK" or o_title_passive_type == "CRYSTAL" or o_title_passive_type == "GROWTH" or o_title_passive_type == "FEAR":
-                embedVar.add_field(name=f"**Unique Passive**", value=f"Sacrifice **{o_title_passive_value}{title_enhancer_suffix_mapping[o_title_passive_type]} {typetext}**", inline=False)
+                embedVar.add_field(name=f"**Unique Passive**", value=f"On your turn, Sacrifice **{o_title_passive_value}{title_enhancer_suffix_mapping[o_title_passive_type]} {typetext}**", inline=False)
             elif o_title_passive_type == "STANCE" or o_title_passive_type == "CONFUSE":
-                embedVar.add_field(name=f"**Unique Passive**", value=f"Swap {typetext} Defense by **{o_title_passive_value}**", inline=False)
+                embedVar.add_field(name=f"**Unique Passive**", value=f"On your turn, Swap {typetext} Defense by **{o_title_passive_value}**", inline=False)
             elif o_title_passive_type == "BLINK":
-                embedVar.add_field(name=f"**Unique Passive**", value=f"**{typetext}** by **{o_title_passive_value}**, **{type2}** by **{o_title_passive_value}**", inline=False)
+                embedVar.add_field(name=f"**Unique Passive**", value=f"On your turn, **{typetext}** by **{o_title_passive_value}**, **{type2}** by **{o_title_passive_value}**", inline=False)
             elif o_title_passive_type == "SLOW" or o_title_passive_type == "HASTE":
-                embedVar.add_field(name=f"**Unique Passive**", value=f"**{typetext}** by **{o_title_passive_value}**, **{type2}** by **{o_title_passive_value}** then **Swap Stamina**", inline=False)
+                embedVar.add_field(name=f"**Unique Passive**", value=f"On your turn, **{typetext}** by **{o_title_passive_value}**", inline=False)
             elif o_title_passive_type == "SOULCHAIN" or o_title_passive_type == "GAMBLE":
-                embedVar.add_field(name=f"**Unique Passive**", value=f"Set both players **{typetext}** equal to **{o_title_passive_value}**", inline=False)
+                embedVar.add_field(name=f"**Unique Passive**", value=f"During Focus, **{typetext}** equal **{o_title_passive_value}**", inline=False)
             embedVar.set_footer(text=f"{o_title_passive_type}: {title_enhancer_mapping[o_title_passive_type]}")
 
             await ctx.send(embed=embedVar)
