@@ -2850,8 +2850,8 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, stamina, en
                 enhanced = ap
             else:
                 enhanced = round(ap * turn)
-                if enhanced >= 350:
-                    enhanced = 350
+                if enhanced >= 300:
+                    enhanced = 300
             if enhanced > op_health:
                 message = f'Opponent has been reduced.'
                 enhanced = op_health - 1
@@ -8462,11 +8462,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_health = round(o_health + dmg['DMG'])
                                                     elif enh_type == 'DESTRUCTION':
                                                         t_max_health = round(t_max_health - dmg['DMG'])
-                                                        o_max_health = round(o_max_health - dmg['DMG'])
+                                                        # o_max_health = round(o_max_health - dmg['DMG'])
                                                         if t_max_health <=1:
                                                             t_max_health = 1
-                                                        if o_max_health <=1:
-                                                            o_max_health = 1
+                                                        # if o_max_health <=1:
+                                                        #     o_max_health = 1
                                                     if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check or enh_type in Control_Enhancer_Check:
                                                         o_stamina = o_stamina
                                                     else:
@@ -9779,10 +9779,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_max_health = round(t_max_health + dmg['DMG'])
                                                             t_health = round(t_health + dmg['DMG'])
                                                         elif enh_type == 'DESTRUCTION':
-                                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                                            # t_max_health = round(t_max_health - dmg['DMG'])
                                                             o_max_health = round(o_max_health - dmg['DMG'])
-                                                            if t_max_health <=1:
-                                                                t_max_health = 1
+                                                            # if t_max_health <=1:
+                                                            #     t_max_health = 1
                                                             if o_max_health <=1:
                                                                 o_max_health = 1
                                                             
@@ -10745,10 +10745,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_max_health = round(t_max_health + dmg['DMG'])
                                                         t_health = round(t_health + dmg['DMG'])
                                                     elif enh_type == 'DESTRUCTION':
-                                                        t_max_health = round(t_max_health - dmg['DMG'])
+                                                        # t_max_health = round(t_max_health - dmg['DMG'])
                                                         o_max_health = round(o_max_health - dmg['DMG'])
-                                                        if t_max_health <=1:
-                                                            t_max_health = 1
+                                                        # if t_max_health <=1:
+                                                        #     t_max_health = 1
                                                         if o_max_health <=1:
                                                             o_max_health = 1
                                                     if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check or enh_type in Control_Enhancer_Check:
@@ -11890,11 +11890,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_health = round(o_health + dmg['DMG'])
                                                     elif enh_type == 'DESTRUCTION':
                                                         t_max_health = round(t_max_health - dmg['DMG'])
-                                                        o_max_health = round(o_max_health - dmg['DMG'])
+                                                        # o_max_health = round(o_max_health - dmg['DMG'])
                                                         if t_max_health <=1:
                                                             t_max_health = 1
-                                                        if o_max_health <=1:
-                                                            o_max_health = 1
+                                                        # if o_max_health <=1:
+                                                        #     o_max_health = 1
 
                                                     if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check or enh_type in Control_Enhancer_Check:
                                                         o_stamina = o_stamina
@@ -12873,11 +12873,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             c_health = round(c_health + dmg['DMG'])
                                                         elif comp_enh == 'DESTRUCTION':
                                                             t_max_health = round(t_max_health - dmg['DMG'])
-                                                            c_max_health = round(c_max_health - dmg['DMG'])
+                                                            # c_max_health = round(c_max_health - dmg['DMG'])
                                                             if t_max_health <=1:
                                                                 t_max_health = 1
-                                                            if c_max_health <=1:
-                                                                c_max_health = 1
+                                                            # if c_max_health <=1:
+                                                            #     c_max_health = 1
 
 
 
@@ -12985,11 +12985,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = round(o_health + dmg['DMG'])
                                                         elif enh_type == 'DESTRUCTION':
                                                             t_max_health = round(t_max_health - dmg['DMG'])
-                                                            o_max_health = round(o_max_health - dmg['DMG'])
+                                                            # o_max_health = round(o_max_health - dmg['DMG'])
                                                             if t_max_health <=1:
                                                                 t_max_health = 1
-                                                            if o_max_health <=1:
-                                                                o_max_health = 1
+                                                            # if o_max_health <=1:
+                                                            #     o_max_health = 1
 
                                                         if cenh_type in Stamina_Enhancer_Check or cenh_type in Time_Enhancer_Check:
                                                             t_stamina = t_stamina
@@ -13168,11 +13168,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = round(o_health + dmg['DMG'])
                                                         elif enh_type == 'DESTRUCTION':
                                                             t_max_health = round(t_max_health - dmg['DMG'])
-                                                            o_max_health = round(o_max_health - dmg['DMG'])
+                                                            # o_max_health = round(o_max_health - dmg['DMG'])
                                                             if t_max_health <=1:
                                                                 t_max_health = 1
-                                                            if o_max_health <=1:
-                                                                o_max_health = 1
+                                                            # if o_max_health <=1:
+                                                            #     o_max_health = 1
 
                                                         if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check or enh_type in Control_Enhancer_Check:
                                                             o_stamina = o_stamina
@@ -14949,10 +14949,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_max_health = round(t_max_health + dmg['DMG'])
                                                             t_health = round(t_health + dmg['DMG'])
                                                         elif enh_type == 'DESTRUCTION':
-                                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                                            # t_max_health = round(t_max_health - dmg['DMG'])
                                                             c_max_health = round(c_max_health - dmg['DMG'])
-                                                            if t_max_health <=1:
-                                                                t_max_health = 1
+                                                            # if t_max_health <=1:
+                                                            #     t_max_health = 1
                                                             if c_max_health <=1:
                                                                 c_max_health = 1
                                                         if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check or enh_type in Control_Enhancer_Check:
@@ -15190,10 +15190,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_max_health = round(t_max_health + dmg['DMG'])
                                                             t_health = round(t_health + dmg['DMG'])
                                                         elif enh_type == 'DESTRUCTION':
-                                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                                            # t_max_health = round(t_max_health - dmg['DMG'])
                                                             o_max_health = round(o_max_health - dmg['DMG'])
-                                                            if t_max_health <=1:
-                                                                t_max_health = 1
+                                                            # if t_max_health <=1:
+                                                            #     t_max_health = 1
                                                             if o_max_health <=1:
                                                                 o_max_health = 1
                                                         if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check or enh_type in Control_Enhancer_Check:
@@ -15429,11 +15429,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = round(t_health + dmg['DMG'])
                                                     elif enh_type == 'DESTRUCTION':
                                                         t_max_health = round(t_max_health - dmg['DMG'])
-                                                        o_max_health = round(o_max_health - dmg['DMG'])
+                                                        # o_max_health = round(o_max_health - dmg['DMG'])
                                                         if t_max_health <=1:
                                                             t_max_health = 1
-                                                        if o_max_health <=1:
-                                                            o_max_health = 1
+                                                        # if o_max_health <=1:
+                                                        #     o_max_health = 1
                                                     if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check or enh_type in Control_Enhancer_Check:
                                                         t_stamina = t_stamina
                                                     else:
@@ -16737,11 +16737,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_health = round(o_health + dmg['DMG'])
                                                     elif cenh_type == 'DESTRUCTION':
                                                         t_max_health = round(t_max_health - dmg['DMG'])
-                                                        c_max_health = round(c_max_health - dmg['DMG'])
+                                                        # c_max_health = round(c_max_health - dmg['DMG'])
                                                         if t_max_health <=1:
                                                             t_max_health = 1
-                                                        if c_max_health <=1:
-                                                            c_max_health = 1
+                                                        # if c_max_health <=1:
+                                                        #     c_max_health = 1
 
                                                             
                                                     
@@ -16869,11 +16869,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             c_health = round(c_health + dmg['DMG'])
                                                         elif enh_type == 'DESTRUCTION':
                                                             t_max_health = round(t_max_health - dmg['DMG'])
-                                                            c_max_health = round(c_max_health - dmg['DMG'])
+                                                            # c_max_health = round(c_max_health - dmg['DMG'])
                                                             if t_max_health <=1:
                                                                 t_max_health = 1
-                                                            if c_max_health <=1:
-                                                                c_max_health = 1
+                                                            # if c_max_health <=1:
+                                                            #     c_max_health = 1
 
                                                         if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check or enh_type in Control_Enhancer_Check:
                                                             c_stamina = c_stamina
@@ -17838,11 +17838,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = round(o_health + dmg['DMG'])
                                                         elif enh_type == 'DESTRUCTION':
                                                             t_max_health = round(t_max_health - dmg['DMG'])
-                                                            c_max_health = round(c_max_health - dmg['DMG'])
+                                                            # c_max_health = round(c_max_health - dmg['DMG'])
                                                             if t_max_health <=1:
                                                                 t_max_health = 1
-                                                            if c_max_health <=1:
-                                                                c_max_health = 1
+                                                            # if c_max_health <=1:
+                                                            #     c_max_health = 1
                                                         
                                                         if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check or enh_type in Control_Enhancer_Check:
                                                             c_stamina = c_stamina
@@ -18001,11 +18001,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 c_health = round(c_health + dmg['DMG'])
                                                             elif enh_type == 'DESTRUCTION':
                                                                 t_max_health = round(t_max_health - dmg['DMG'])
-                                                                c_max_health = round(c_max_health - dmg['DMG'])
+                                                                # c_max_health = round(c_max_health - dmg['DMG'])
                                                                 if t_max_health <=1:
                                                                     t_max_health = 1
-                                                                if c_max_health <=1:
-                                                                    c_max_health = 1
+                                                                # if c_max_health <=1:
+                                                                #     c_max_health = 1
                                                             
                                                             if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check or enh_type in Control_Enhancer_Check:
                                                                 c_stamina = c_stamina
@@ -19513,10 +19513,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_max_health = round(t_max_health + dmg['DMG'])
                                                             t_health = round(t_health + dmg['DMG'])
                                                         elif enh_type == 'DESTRUCTION':
-                                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                                            # t_max_health = round(t_max_health - dmg['DMG'])
                                                             o_max_health = round(o_max_health - dmg['DMG'])
-                                                            if t_max_health <=1:
-                                                                t_max_health = 1
+                                                            # if t_max_health <=1:
+                                                            #     t_max_health = 1
                                                             if o_max_health <=1:
                                                                 o_max_health = 1
                                                         
@@ -19759,10 +19759,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_max_health = round(t_max_health + dmg['DMG'])
                                                             t_health = round(t_health + dmg['DMG'])
                                                         elif enh_type == 'DESTRUCTION':
-                                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                                            # t_max_health = round(t_max_health - dmg['DMG'])
                                                             c_max_health = round(c_max_health - dmg['DMG'])
-                                                            if t_max_health <=1:
-                                                                t_max_health = 1
+                                                            # if t_max_health <=1:
+                                                            #     t_max_health = 1
                                                             if c_max_health <=1:
                                                                 c_max_health = 1
                                                         if enh_type in Stamina_Enhancer_Check or enh_type in Time_Enhancer_Check or enh_type in Control_Enhancer_Check:
@@ -22205,7 +22205,7 @@ enhancer_mapping = {'ATK': 'Increase Attack %',
 'WAVE': 'Deal Damage, Decreases over time',
 'CREATION': 'Heals you, Decreases over time',
 'BLAST': 'Deals Damage, Increases over time',
-'DESTRUCTION': 'Decreases Your and Your Opponent Max Health, Increases over time',
+'DESTRUCTION': 'Decreases Your Opponent Max Health, Increases over time',
 'BASIC': 'Increase Basic Attack AP',
 'SPECIAL': 'Increase Special Attack AP',
 'ULTIMATE': 'Increase Ultimate Attack AP',
@@ -22240,7 +22240,7 @@ title_enhancer_mapping = {'ATK': 'Increase Attack ',
 'WAVE': 'Deal Damage, Decreases over time',
 'CREATION': 'Heals you, Decreases over time',
 'BLAST': 'Deals Damage on your turn',
-'DESTRUCTION': 'Decreases Your and Your Opponent Max Health, Increases over time',
+'DESTRUCTION': 'Decreases Your Opponent Max Health, Increases over time',
 'BASIC': 'Increase Basic Attack AP',
 'SPECIAL': 'Increase Special Attack AP',
 'ULTIMATE': 'Increase Ultimate Attack AP',
