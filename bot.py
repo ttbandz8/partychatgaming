@@ -1432,6 +1432,8 @@ async def daily(ctx):
       [Support our Patreon for Rewards!](https://www.patreon.com/partychatgaming?fan_landing=true)
       [Vote for Crown Unlimited!](https://top.gg/bot/840222176304824340/vote)
       [Add Crown Unlimited to your server!](https://discord.com/api/oauth2/authorize?client_id=955704903198711808&permissions=139586955344&scope=applications.commands%20bot)
+
+      [Join the Crown Unlimited Support Server](https://discord.gg/2JkCqcN3hB)
       """), colour=0xf1c40f)
       
       await ctx.send(embed=embedVar)
