@@ -3529,10 +3529,8 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
             # Health & Stamina
             rift_universes = ['Crown Rift Awakening']
             if d['UNIVERSE'] in rift_universes:
-                draw.text((730, 417), health_bar, (0, 0, 0), font=health_and_stamina_font, stroke_width=1,
-                        stroke_fill=(0, 0, 0), align="left")
-                draw.text((730, 457), f"{stamina}", (0, 0, 0), font=health_and_stamina_font, stroke_width=1,
-                        stroke_fill=(0, 0, 0), align="left")
+                draw.text((730, 417), health_bar, (0, 0, 0), font=health_and_stamina_font, align="left")
+                draw.text((730, 457), f"{stamina}", (0, 0, 0), font=health_and_stamina_font, align="left")
             else:
                 draw.text((730, 417), health_bar, (255, 255, 255), font=health_and_stamina_font, stroke_width=1,
                         stroke_fill=(0, 0, 0), align="left")
