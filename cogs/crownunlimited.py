@@ -3527,10 +3527,18 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
                       align="center")
 
             # Health & Stamina
-            draw.text((730, 417), health_bar, (255, 255, 255), font=health_and_stamina_font, stroke_width=1,
-                      stroke_fill=(0, 0, 0), align="left")
-            draw.text((730, 457), f"{stamina}", (255, 255, 255), font=health_and_stamina_font, stroke_width=1,
-                      stroke_fill=(0, 0, 0), align="left")
+            rift_universes = ['Crown Rift Awakening']
+            if d['UNIVERSE'] in rift_universes:
+                draw.text((730, 417), health_bar, (255, 255, 255), font=health_and_stamina_font, stroke_width=1,
+                        stroke_fill=(0, 0, 0), align="left")
+                draw.text((730, 457), f"{stamina}", (255, 255, 255), font=health_and_stamina_font, stroke_width=1,
+                        stroke_fill=(0, 0, 0), align="left")
+            else:
+                draw.text((730, 417), health_bar, (0, 0, 0), font=health_and_stamina_font, stroke_width=1,
+                        stroke_fill=(255, 255, 255), align="left")
+                draw.text((730, 457), f"{stamina}", (0, 0, 0), font=health_and_stamina_font, stroke_width=1,
+                        stroke_fill=(255, 255, 255), align="left")
+
 
             # Attack & Shield (Defense)
             a_sizing = (89, 515)
