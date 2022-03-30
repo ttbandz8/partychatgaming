@@ -8344,7 +8344,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 if o_universe == "Attack On Titan":
                                                     previous_moves.append(f"*{turn_total}:* 🩸 Rally! **{o_card}** Increased Max Health ❤️")
                                                     o_max_health = round(o_max_health + 100)
-                                                    o_health = o_health + 50
+                                                    o_health = o_health + 100
 
                                                 if o_universe == "Bleach":
                                                     dmg = damage_cal(o_universe, o_card, o_1, o_attack, o_defense, t_defense, o_stamina,
@@ -9673,7 +9673,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     if t_universe == "Attack On Titan":
                                                         previous_moves.append(f"*{turn_total}:* 🩸 Rally! **{t_card}** Increased Max Health ❤️")
                                                         t_max_health = round(t_max_health + 100)
-                                                        t_health = t_health + 50
+                                                        t_health = t_health + 100
 
                                                     if t_universe == "Bleach":
                                                         dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense,
@@ -10646,7 +10646,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 if t_universe == "Attack On Titan":
                                                     previous_moves.append(f"*{turn_total}:* 🩸 Rally! **{t_card}** Increased Max Health ❤️")
                                                     t_max_health = round(t_max_health + 100)
-                                                    t_health = t_health + 50
+                                                    t_health = t_health + 100
 
                                                 if t_universe == "Bleach":
                                                     dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense,
@@ -13049,7 +13049,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     if o_universe == "Attack On Titan":
                                                         previous_moves.append(f"*{turn_total}:* 🩸 Rally! **{o_card}** Increased Max Health ❤️")
                                                         o_max_health = round(o_max_health + 100)
-                                                        o_health = o_health + 50
+                                                        o_health = o_health + 100
 
                                                     if o_universe == "Bleach":
                                                         dmg = damage_cal(o_universe, o_card, o_1, o_attack, o_defense, t_defense, o_stamina,
@@ -14839,7 +14839,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             if t_universe == "Attack On Titan":
                                                 previous_moves.append(f"*{turn_total}:* 🩸 Rally! **{t_card}** Increased Max Health ❤️")
                                                 t_max_health = round(t_max_health + 100)
-                                                t_health = t_health + 50
+                                                t_health = t_health + 100
 
                                             if t_universe == "Bleach":
                                                 dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense,
@@ -17883,7 +17883,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if c_universe == "Attack On Titan":
                                                             previous_moves.append(f"*{turn_total}:* 🩸 Rally! **{c_card}** Increased Max Health ❤️")
                                                             c_max_health = round(c_max_health + 100)
-                                                            c_health = c_health + 50
+                                                            c_health = c_health + 100
 
                                                         if c_universe == "Bleach":
                                                             dmg = damage_cal(c_universe, c_card, c_1, c_attack, c_defense, t_defense,
@@ -19403,7 +19403,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 if t_universe == "Attack On Titan":
                                                     previous_moves.append(f"*{turn_total}:* 🩸 Rally! **{t_card}** Increased Max Health ❤️")
                                                     t_max_health = round(t_max_health + 100)
-                                                    t_health = t_health + 50
+                                                    t_health = t_health + 100
 
                                                 if t_universe == "Bleach":
                                                     dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense,
