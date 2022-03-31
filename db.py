@@ -41,6 +41,8 @@ abyss_col = db['ABYSS']
 trade_col = db['TRADE']
 server_col = db['SERVER']
 arena_col = db['ARENA']
+codes_col = db['CODES']
+
 acceptable = [1, 2, 3, 4]
 
 
@@ -158,6 +160,28 @@ def updateArena(query, new_value, arrayFilters):
     except Exception as e:
         return e
 
+#########################################################################
+''' CODES '''
+def queryCodes(query):
+    try:
+        response = codes_col.find_one(query)
+        return response
+    except Exception as e:
+        return False
+
+def createCode(query):
+    try:
+        response = codes_col.insert_one(query)
+        return response
+    except Exception as e:
+        return e
+
+def updateCode(query, new_value):
+    try:
+        response = codes_col.update_one(query, new_value)
+        return response
+    except Exception as e:
+        return e
 
 #########################################################################
 ''' GUILD '''

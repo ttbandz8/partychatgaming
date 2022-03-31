@@ -44,6 +44,16 @@ class USER():
     DIFFICULTY: str = field(default_factory=lambda: "EASY")
     STORAGE_TYPE: int = field(default_factory=lambda: 1)
     CREATOR: bool = field(default_factory=lambda: False)
+    USED_CODES: list[str] = field(default_factory=lambda: [""])
+
+@dataclass(frozen=True, order=True)
+class CODES():
+    CODE_INPUT: str = field(default_factory=lambda: '')
+    COIN: int = field(default_factory=lambda: 0)
+    GEMS: int = field(default_factory=lambda: 0)
+    AVAILABLE: bool = field(default_factory=lambda: False)
+    TIMESTAMP: str = now
+
 
 @dataclass(frozen=True, order=True)
 class TRADE():
@@ -425,6 +435,11 @@ def newArena(arena):
 
 def newCard(card):
     c = CARDS(**card)
+    return asdict(c)
+
+
+def newCode(code):
+    c = CODES(**code)
     return asdict(c)
 
 

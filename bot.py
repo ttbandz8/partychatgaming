@@ -1511,14 +1511,31 @@ async def DM(ctx, user : User, m,  message=None):
 
 
 async def bless(amount, user):
-   blessAmount = amount
-   posBlessAmount = 0 + abs(int(blessAmount))
-   query = {'DID': str(user)}
-   vaultOwner = db.queryUser(query)
-   if vaultOwner:
-      vault = db.queryVault({'DID' : vaultOwner['DID']})
-      update_query = {"$inc": {'BALANCE': posBlessAmount}}
-      db.updateVaultNoFilter(vault, update_query)
+   try:
+      blessAmount = amount
+      posBlessAmount = 0 + abs(int(blessAmount))
+      query = {'DID': str(user)}
+      vaultOwner = db.queryUser(query)
+      if vaultOwner:
+         vault = db.queryVault({'DID' : vaultOwner['DID']})
+         update_query = {"$inc": {'BALANCE': posBlessAmount}}
+         db.updateVaultNoFilter(vault, update_query)
+   except:
+      trace = []
+      tb = ex.__traceback__
+      while tb is not None:
+            trace.append({
+               "filename": tb.tb_frame.f_code.co_filename,
+               "name": tb.tb_frame.f_code.co_name,
+               "lineno": tb.tb_lineno
+            })
+            tb = tb.tb_next
+      print(str({
+            'type': type(ex).__name__,
+            'message': str(ex),
+            'trace': trace
+      }))
+
 
 
 async def curse(amount, user):
@@ -2780,6 +2797,89 @@ async def blessall(ctx, amount: int):
 
    else:
       await ctx.send("Creator only command.", hidden=True)
+
+
+@slash.slash(description="Create Code for Droppables", guild_ids=guild_ids)
+@commands.check(validate_user)
+async def createcode(ctx, code_input: str, coin:int, gems:int):
+   if ctx.author.guild_permissions.administrator == True:
+      code_exist = db.queryCodes({'CODE_INPUT': code_input})
+      if code_exist:
+         await ctx.send("Code already exist")
+         return
+      else:
+         try:
+            query = {
+               'CODE_INPUT': code_input,
+               'COIN': coin,
+               'GEMS': gems,
+               'AVAILABLE': True
+            }
+            response = db.createCode(data.newCode(query))
+            await ctx.send(f"**{code_input}** Code has been created")
+         except Exception as e:
+            print(e)
+   else:
+      await ctx.send("Creator only command.", hidden=True)
+
+@slash.slash(description="Input Codes", guild_ids=guild_ids)
+@commands.check(validate_user)
+async def code(ctx, code_input: str):
+   try:
+      query = {'DID': str(ctx.author.id)}
+      user = db.queryUser(query)
+      vault = db.queryVault(query)
+      code = db.queryCodes({'CODE_INPUT': code_input})
+      gem_list = vault['GEMS']
+      if code and code['AVAILABLE']:
+         coin = code['COIN']
+         gems = code['GEMS']
+         if code_input not in user['USED_CODES']:
+            if gems != 0:
+               if gem_list:
+                  for universe in gem_list:
+                     query = {'DID': str(ctx.author.id)}
+                     update_query = {
+                        '$inc': {'GEMS.$[type].' + "GEMS": gems}
+                     }
+                     filter_query = [{'type.' + "UNIVERSE": universe['UNIVERSE']}]
+                     res = db.updateVault(query, update_query, filter_query)
+                  await ctx.send(f"The gems in each of your craftable universes have increased by 💎 **{'{:,}'.format(gems)}**")
+               else:
+                  await ctx.send(f"{ctx.author.mention}, you do not have any universes that have gems to increase.")
+                  return
+            if coin != 0:
+               await bless(int(coin), ctx.author.id)
+               await ctx.send(f"You've been rewarded :coin: **{'{:,}'.format(coin)}**.")
+            respond = db.updateUserNoFilter(query, {'$addToSet': {'USED_CODES': code_input}})
+         else:
+            await ctx.send(f"**{code_input}** has already been used by {ctx.author.mention}")
+            return
+      else:
+         await ctx.send(f'**{code_input}** is not a valid code.')
+         return
+   except:
+      trace = []
+      tb = ex.__traceback__
+      while tb is not None:
+            trace.append({
+               "filename": tb.tb_frame.f_code.co_filename,
+               "name": tb.tb_frame.f_code.co_name,
+               "lineno": tb.tb_lineno
+            })
+            tb = tb.tb_next
+      print(str({
+            'type': type(ex).__name__,
+            'message': str(ex),
+            'trace': trace
+      }))
+      guild = bot.get_guild(543442011156643871)
+      channel = guild.get_channel(957061470192033812)
+      await channel.send(f"'PLAYER': **{str(ctx.author)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
+      return
+
+
+
 
 
 # @bot.command()
