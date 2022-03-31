@@ -2803,6 +2803,11 @@ async def blessall(ctx, amount: int):
 @commands.check(validate_user)
 async def createcode(ctx, code_input: str, coin:int, gems:int):
    if ctx.author.guild_permissions.administrator == True:
+      is_creator = db.queryUser({'DID': str(ctx.author.id)})['CREATOR']
+      if not is_creator:
+         await ctx.send("Creator only command.", hidden=True)
+         return
+         
       code_exist = db.queryCodes({'CODE_INPUT': code_input})
       if code_exist:
          await ctx.send("Code already exist")
