@@ -99,6 +99,22 @@ class CrownUnlimited(commands.Cog):
             if isinstance(message.channel, discord.channel.DMChannel):
                 return
 
+            # Pull Character Information
+            player = db.queryUser({'DID': str(message.author.id)})
+
+            if player['DIFFICULTY'] == "EASY":
+                return
+
+            if player['LEVEL'] < 26:
+                return
+                # await message.channel.send(f"🔓 Unlock the Explore Mode by completing Floor 35 of the 🌑 Abyss! Use /abyss to enter the abyss.")
+                # return
+
+            if not player:
+                return
+            if player['EXPLORE'] is False:
+                return
+
             g = message.author.guild
             channel_list = message.author.guild.text_channels
             channel_names = []
@@ -116,27 +132,7 @@ class CrownUnlimited(commands.Cog):
             if not server_channel:
                 return
 
-            # Pull Character Information
-            player = db.queryUser({'DID': str(message.author.id)})
-
-            if player['DIFFICULTY'] == "EASY":
-                return
-
-            if player['LEVEL'] < 26:
-                return
-                # await message.channel.send(f"🔓 Unlock the Explore Mode by completing Floor 35 of the 🌑 Abyss! Use /abyss to enter the abyss.")
-                # return
-
-            if not player:
-                return
-            if player['EXPLORE'] is False:
-                return
-
-            all_universes = db.queryExploreUniverses()
-            available_universes = []
-            for uni in all_universes:
-                if uni['HAS_CROWN_TALES'] and uni['HAS_DUNGEON']:
-                    available_universes.append(uni)
+            available_universes = db.queryExploreUniverses()
 
             u = len(available_universes) - 1
             rand_universe = random.randint(1, u)
@@ -286,7 +282,7 @@ class CrownUnlimited(commands.Cog):
 
 
             setchannel = discord.utils.get(channel_list, name=server_channel)
-            # await setchannel.send(f"{message.author.mention}") 
+            await setchannel.send(f"{message.author.mention}") 
             msg = await setchannel.send(embed=embedVar, file=card_file, components=[random_battle_buttons_action_row])     
 
             def check(button_ctx):

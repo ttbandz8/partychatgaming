@@ -1436,7 +1436,7 @@ def queryAllUniverse():
     return data
 
 def queryExploreUniverses():
-    data = universe_col.find({"HAS_CROWN_TALES": True})
+    data = universe_col.find({"HAS_CROWN_TALES": True, "HAS_DUNGEON": True})
     return data
 
 def queryUniverse(query):
