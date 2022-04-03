@@ -28,7 +28,7 @@ import random
 import unique_traits as ut
 now = time.asctime()
 import asyncio
-import webbrowser
+import topgg
 
 
 # Logging Logic
@@ -121,6 +121,28 @@ async def on_ready():
    print('Bot is ready! ')
    for server in bot.guilds:
         print(server.name)
+
+token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk1NTcwNDkwMzE5ODcxMTgwOCIsImJvdCI6dHJ1ZSwiaWF0IjoxNjQ5MDAyNDYzfQ.OGIjvyo2mlOrfZTTLoyIODNKzvk_7o-0tP5zwA31JsE'  # set this to your DBL token
+bot.topggpy  = topgg.WebhookManager(bot).dbl_webhook("/dblwebhook", "KqXJUqmipftsrmJREC-XjYqJkM2SOAM1Gw3uscD9SU8V191Q45EikQTjNhJiwq73_op2")
+bot.topgg_webhook.run(5000)
+
+        #.DBLClient(self.bot, self.token, webhook_path='/dblwebhook', webhook_auth='KqXJUqmipftsrmJREC-XjYqJkM2SOAM1Gw3uscD9SU8V191Q45EikQTjNhJiwq73_op2', webhook_port=5000)
+
+@bot.event
+async def on_ready():
+   print('Voting is ready!')
+
+@bot.event
+async def on_dbl_vote(data):
+   """An event that is called whenever someone votes for the bot on top.gg."""
+   print("Received an upvote:", "\n", data, sep="")
+
+@bot.event
+async def on_dbl_test(data):
+   """An event that is called whenever someone tests the webhook system for your bot on top.gg."""
+   print("Received a test upvote:", "\n", data, sep="")
+
+
 
 @slash.slash(name="Enhancers", description="List of Enhancers", guild_ids=guild_ids)
 async def enhancers(ctx):

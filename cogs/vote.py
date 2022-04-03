@@ -36,26 +36,6 @@ class TopGG(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk1NTcwNDkwMzE5ODcxMTgwOCIsImJvdCI6dHJ1ZSwiaWF0IjoxNjQ5MDAyNDYzfQ.OGIjvyo2mlOrfZTTLoyIODNKzvk_7o-0tP5zwA31JsE'  # set this to your DBL token
-        self.bot.topggpy  = topgg.WebhookManager(self.bot).dbl_webhook("/dblwebhook", "KqXJUqmipftsrmJREC-XjYqJkM2SOAM1Gw3uscD9SU8V191Q45EikQTjNhJiwq73_op2")
-        self.bot.topggpy.topgg_webhook.run(5000)
-
-        #.DBLClient(self.bot, self.token, webhook_path='/dblwebhook', webhook_auth='KqXJUqmipftsrmJREC-XjYqJkM2SOAM1Gw3uscD9SU8V191Q45EikQTjNhJiwq73_op2', webhook_port=5000)
-
-    @commands.Cog.listener()
-    async def on_ready(self):
-        print('Voting Cog is ready!')
-
-    @commands.Cog.listener()
-    async def on_dbl_vote(self, data):
-        """An event that is called whenever someone votes for the bot on top.gg."""
-        print("Received an upvote:", "\n", data, sep="")
-
-    @commands.Cog.listener()
-    async def on_dbl_test(self, data):
-        """An event that is called whenever someone tests the webhook system for your bot on top.gg."""
-        print("Received a test upvote:", "\n", data, sep="")
-
-
+        
 def setup(bot):
     bot.add_cog(TopGG(bot))
