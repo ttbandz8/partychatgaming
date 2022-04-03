@@ -664,9 +664,9 @@ async def register(ctx):
       :drop_of_blood: - Card Passive *Enhancers applied at the start of the battle*
 
       **Accessories & Summons**
-      :reminder_ribbon: - Title  *Title enhancers are applied at the start of battle.*
+      :reminder_ribbon: - Title  *Title enhancers are applied each turn, passively.*
       :mechanical_arm: - Arm *Arm enhancers are applied passively throughout the duration of battle.*
-      🧬 - Summon *Summons use Active Enhancers and are available during battle after you Resolve*
+      🧬 - Summon *Summons use Active Enhancers that are available during battle after you Resolve*
       
       **Currency**
       :coin: - Coins *Buy Items in the /shop and /trinketshop*
