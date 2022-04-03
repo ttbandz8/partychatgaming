@@ -99,22 +99,6 @@ class CrownUnlimited(commands.Cog):
             if isinstance(message.channel, discord.channel.DMChannel):
                 return
 
-            # Pull Character Information
-            player = db.queryUser({'DID': str(message.author.id)})
-
-            if player['DIFFICULTY'] == "EASY":
-                return
-
-            if player['LEVEL'] < 26:
-                return
-                # await message.channel.send(f"🔓 Unlock the Explore Mode by completing Floor 35 of the 🌑 Abyss! Use /abyss to enter the abyss.")
-                # return
-
-            if not player:
-                return
-            if player['EXPLORE'] is False:
-                return
-
             g = message.author.guild
             channel_list = message.author.guild.text_channels
             channel_names = []
@@ -132,7 +116,27 @@ class CrownUnlimited(commands.Cog):
             if not server_channel:
                 return
 
-            available_universes = db.queryExploreUniverses()
+            # Pull Character Information
+            player = db.queryUser({'DID': str(message.author.id)})
+
+            if player['DIFFICULTY'] == "EASY":
+                return
+
+            if player['LEVEL'] < 26:
+                return
+                # await message.channel.send(f"🔓 Unlock the Explore Mode by completing Floor 35 of the 🌑 Abyss! Use /abyss to enter the abyss.")
+                # return
+
+            if not player:
+                return
+            if player['EXPLORE'] is False:
+                return
+
+            all_universes = db.queryExploreUniverses()
+            available_universes = []
+            for uni in all_universes:
+                if uni['HAS_CROWN_TALES'] and uni['HAS_DUNGEON']:
+                    available_universes.append(uni)
 
             u = len(available_universes) - 1
             rand_universe = random.randint(1, u)
@@ -150,13 +154,13 @@ class CrownUnlimited(commands.Cog):
             selected_mode = ""
             approach_message = ""
             mode_selector_randomizer = random.randint(0, 100)
-            if mode_selector_randomizer <= 5 or cards[rand_card]['EXCLUSIVE']:
+            if mode_selector_randomizer <= 10 or cards[rand_card]['EXCLUSIVE']:
                 selected_mode = "Dungeon"
-                approach_message = ":fire:"
+                approach_message = ":fire: A Tempered "
                 icon = "https://cdn.discordapp.com/emojis/744887136125190204.gif?v=1"
             else:
                 selected_mode = "Tales"
-                approach_message = ":crown:"
+                approach_message = ":crown: A Calm "
                 icon = "https://cdn.discordapp.com/emojis/788000259996516373.gif?v=1"
 
             random_battle_buttons = [
@@ -176,7 +180,8 @@ class CrownUnlimited(commands.Cog):
             # Lose / Bounty
             take_chances_response = ""
             random_flee_loss = random.randint(1, 50)
-            bounty = random.randint(1, 20000)
+            random_flee_loss = 5
+            bounty = random.randint(1, 30000)
 
             if bounty >= 150000:
                 bounty_icon = ":money_with_wings:"
@@ -195,22 +200,22 @@ class CrownUnlimited(commands.Cog):
             # Take Chances Button Interaction
 
 
-            if random_flee_loss <= 5:
+            if random_flee_loss <= 100:
                 if selected_mode == "Tales":
                     found_amount = round(bounty / 3)
                 else:
                     found_amount = round(bounty / 5)
                 await bless(found_amount, str(message.author.id))
-                embedVar = discord.Embed(title=f"💨 You earned {bounty_icon} {found_amount}!", colour=0xf1c40f)
+                embedVar = discord.Embed(title=f"💨You fled but earned {bounty_icon} {found_amount}!", colour=0xf1c40f)
                 take_chances_response = embedVar
             else:
-                embedVar = discord.Embed(title=f"💨 You did not earn card or bounty.", colour=0xf1c40f)
+                embedVar = discord.Embed(title=f"💨 You fled", colour=0xf1c40f)
                 take_chances_response = embedVar
 
             # Send Message
-            embedVar = discord.Embed(title=f"**{approach_message} {cards[rand_card]['NAME']}** Explore Battle!",
+            embedVar = discord.Embed(title=f"**{approach_message}{cards[rand_card]['NAME']}** Approaches!",
                                      description=textwrap.dedent(f"""\
-            **Card Bounty** **{bounty_message}**
+            **Bounty** **{bounty_message}**
             {battle_message}
             """), colour=0xf1c40f)
             card_lvl = 0
@@ -295,6 +300,8 @@ class CrownUnlimited(commands.Cog):
                     if random_flee_loss <= 10 and selected_mode == "Tales":
                         drop_response = await specific_drops(self,str(message.author.id), cards[rand_card]['NAME'], universetitle)
                         embedVar = discord.Embed(title=f"**{drop_response}**", colour=0xf1c40f)
+                        embedVar.set_footer(text="Successful Capture!",
+                                            icon_url="https://cdn.discordapp.com/emojis/877233426770583563.gif?v=1")
                         take_chances_response = embedVar
                     await curse(random_flee_loss, message.author.id)
                     await button_ctx.send(embed=take_chances_response)
@@ -327,7 +334,6 @@ class CrownUnlimited(commands.Cog):
                 # print("Explore Exception. Likely nothing, but yea.")
                 # await message.channel.send("Something ain't right, my guy.Check with support.")
                 # print("")
-
     @cog_ext.cog_slash(description="Toggle Explore Mode On/Off", guild_ids=main.guild_ids)
     @commands.cooldown(1, 15, commands.BucketType.user)
     async def explore(self, ctx: SlashContext):
