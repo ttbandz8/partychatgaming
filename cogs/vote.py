@@ -37,8 +37,8 @@ class TopGG(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk1NTcwNDkwMzE5ODcxMTgwOCIsImJvdCI6dHJ1ZSwiaWF0IjoxNjQ5MDAyNDYzfQ.OGIjvyo2mlOrfZTTLoyIODNKzvk_7o-0tP5zwA31JsE'  # set this to your DBL token
-        self.bot.topggpy  = topgg.WebhookManager(self.bot).dbl_webhook("/dblwebhook", "KqXJUqmipftsrmJREC-XjYqJkM2SOAM1Gw3uscD9SU8V191Q45EikQTjNhJiwq73_op2")
-        self.bot.topgg_webhook.run(5000)
+        self.topggpy  = topgg.WebhookManager(self.bot).dbl_webhook("/dblwebhook", "KqXJUqmipftsrmJREC-XjYqJkM2SOAM1Gw3uscD9SU8V191Q45EikQTjNhJiwq73_op2")
+        self.topgg_webhook.run(5000)
 
         #.DBLClient(self.bot, self.token, webhook_path='/dblwebhook', webhook_auth='KqXJUqmipftsrmJREC-XjYqJkM2SOAM1Gw3uscD9SU8V191Q45EikQTjNhJiwq73_op2', webhook_port=5000)
 
