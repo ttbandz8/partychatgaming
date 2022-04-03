@@ -150,13 +150,13 @@ class CrownUnlimited(commands.Cog):
             selected_mode = ""
             approach_message = ""
             mode_selector_randomizer = random.randint(0, 100)
-            if mode_selector_randomizer <= 10 or cards[rand_card]['EXCLUSIVE']:
+            if mode_selector_randomizer <= 5 or cards[rand_card]['EXCLUSIVE']:
                 selected_mode = "Dungeon"
-                approach_message = ":fire: A Tempered "
+                approach_message = ":fire:"
                 icon = "https://cdn.discordapp.com/emojis/744887136125190204.gif?v=1"
             else:
                 selected_mode = "Tales"
-                approach_message = ":crown: A Calm "
+                approach_message = ":crown:"
                 icon = "https://cdn.discordapp.com/emojis/788000259996516373.gif?v=1"
 
             random_battle_buttons = [
@@ -176,8 +176,7 @@ class CrownUnlimited(commands.Cog):
             # Lose / Bounty
             take_chances_response = ""
             random_flee_loss = random.randint(1, 50)
-            random_flee_loss = 5
-            bounty = random.randint(1, 30000)
+            bounty = random.randint(1, 20000)
 
             if bounty >= 150000:
                 bounty_icon = ":money_with_wings:"
@@ -196,22 +195,22 @@ class CrownUnlimited(commands.Cog):
             # Take Chances Button Interaction
 
 
-            if random_flee_loss <= 100:
+            if random_flee_loss <= 5:
                 if selected_mode == "Tales":
                     found_amount = round(bounty / 3)
                 else:
                     found_amount = round(bounty / 5)
                 await bless(found_amount, str(message.author.id))
-                embedVar = discord.Embed(title=f"💨You fled but earned {bounty_icon} {found_amount}!", colour=0xf1c40f)
+                embedVar = discord.Embed(title=f"💨 You earned {bounty_icon} {found_amount}!", colour=0xf1c40f)
                 take_chances_response = embedVar
             else:
-                embedVar = discord.Embed(title=f"💨 You fled", colour=0xf1c40f)
+                embedVar = discord.Embed(title=f"💨 You did not earn card or bounty.", colour=0xf1c40f)
                 take_chances_response = embedVar
 
             # Send Message
-            embedVar = discord.Embed(title=f"**{approach_message}{cards[rand_card]['NAME']}** Approaches!",
+            embedVar = discord.Embed(title=f"**{approach_message} {cards[rand_card]['NAME']}** Explore Battle!",
                                      description=textwrap.dedent(f"""\
-            **Bounty** **{bounty_message}**
+            **Card Bounty** **{bounty_message}**
             {battle_message}
             """), colour=0xf1c40f)
             card_lvl = 0
@@ -296,8 +295,6 @@ class CrownUnlimited(commands.Cog):
                     if random_flee_loss <= 10 and selected_mode == "Tales":
                         drop_response = await specific_drops(self,str(message.author.id), cards[rand_card]['NAME'], universetitle)
                         embedVar = discord.Embed(title=f"**{drop_response}**", colour=0xf1c40f)
-                        embedVar.set_footer(text="Successful Capture!",
-                                            icon_url="https://cdn.discordapp.com/emojis/877233426770583563.gif?v=1")
                         take_chances_response = embedVar
                     await curse(random_flee_loss, message.author.id)
                     await button_ctx.send(embed=take_chances_response)
@@ -816,7 +813,7 @@ class CrownUnlimited(commands.Cog):
                                     }))
                                     guild = self.bot.get_guild(543442011156643871)
                                     channel = guild.get_channel(957061470192033812)
-                                    await channel.send(f"'PLAYER': **{str(ctx.author)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
+                                    await channel.send(f"'PLAYER': **{str(ctx.author)}**, 'GUILD': **{str(ctx.author.guild)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
 
                         elif button_ctx.custom_id == "start_singles":
                             try:
@@ -866,7 +863,7 @@ class CrownUnlimited(commands.Cog):
                                 }))
                                 guild = self.bot.get_guild(543442011156643871)
                                 channel = guild.get_channel(957061470192033812)
-                                await channel.send(f"'PLAYER': **{str(ctx.author)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
+                                await channel.send(f"'PLAYER': **{str(ctx.author)}**, 'GUILD': **{str(ctx.author.guild)}**,  TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
 
                                 return
                         elif button_ctx.custom_id == "delete_arena_singles":
@@ -924,7 +921,7 @@ class CrownUnlimited(commands.Cog):
                                 }))
                                 guild = self.bot.get_guild(543442011156643871)
                                 channel = guild.get_channel(957061470192033812)
-                                await channel.send(f"'PLAYER': **{str(ctx.author)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
+                                await channel.send(f"'PLAYER': **{str(ctx.author)}**, 'GUILD': **{str(ctx.author.guild)}**,  TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
 
                         
                     
@@ -956,7 +953,7 @@ class CrownUnlimited(commands.Cog):
             }))
             guild = self.bot.get_guild(543442011156643871)
             channel = guild.get_channel(957061470192033812)
-            await channel.send(f"'PLAYER': **{str(ctx.author)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
+            await channel.send(f"'PLAYER': **{str(ctx.author)}**, 'GUILD': **{str(ctx.author.guild)}**,  TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
 
             return
 
@@ -1068,7 +1065,7 @@ class CrownUnlimited(commands.Cog):
             }))
             guild = self.bot.get_guild(543442011156643871)
             channel = guild.get_channel(957061470192033812)
-            await channel.send(f"'PLAYER': **{str(ctx.author)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
+            await channel.send(f"'PLAYER': **{str(ctx.author)}**, 'GUILD': **{str(ctx.author.guild)}**,  TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
             return
 
     @cog_ext.cog_slash(description="Conquer Tales to Unlock New Universes!",
@@ -1176,7 +1173,7 @@ class CrownUnlimited(commands.Cog):
             }))
             guild = self.bot.get_guild(543442011156643871)
             channel = guild.get_channel(957061470192033812)
-            await channel.send(f"'PLAYER': **{str(ctx.author)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
+            await channel.send(f"'PLAYER': **{str(ctx.author)}**, 'GUILD': **{str(ctx.author.guild)}**,  TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
             return
 
     @cog_ext.cog_slash(description="Enter the Abyss", guild_ids=main.guild_ids)
@@ -1350,7 +1347,7 @@ class CrownUnlimited(commands.Cog):
                 }))
                 guild = self.bot.get_guild(543442011156643871)
                 channel = guild.get_channel(957061470192033812)
-                await channel.send(f"'PLAYER': **{str(ctx.author)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
+                await channel.send(f"'PLAYER': **{str(ctx.author)}**, 'GUILD': **{str(ctx.author.guild)}**,  TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
                 return
         except Exception as ex:
             trace = []
@@ -1455,7 +1452,7 @@ class CrownUnlimited(commands.Cog):
             }))
             guild = self.bot.get_guild(543442011156643871)
             channel = guild.get_channel(957061470192033812)
-            await channel.send(f"'PLAYER': **{str(ctx.author)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
+            await channel.send(f"'PLAYER': **{str(ctx.author)}**, 'GUILD': **{str(ctx.author.guild)}**,  TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
             return
 
 
@@ -1527,7 +1524,7 @@ class CrownUnlimited(commands.Cog):
             }))
             guild = self.bot.get_guild(543442011156643871)
             channel = guild.get_channel(957061470192033812)
-            await channel.send(f"'PLAYER': **{str(ctx.author)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
+            await channel.send(f"'PLAYER': **{str(ctx.author)}**, 'GUILD': **{str(ctx.author.guild)}**,  TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
             return
 
     @cog_ext.cog_slash(description="Start an Association Raid", guild_ids=main.guild_ids)
@@ -1627,7 +1624,7 @@ class CrownUnlimited(commands.Cog):
             }))
             guild = self.bot.get_guild(543442011156643871)
             channel = guild.get_channel(957061470192033812)
-            await channel.send(f"'PLAYER': **{str(ctx.author)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
+            await channel.send(f"'PLAYER': **{str(ctx.author)}**, 'GUILD': **{str(ctx.author.guild)}**,  TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
             return
 
 
@@ -6021,7 +6018,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             }))
             guild = self.bot.get_guild(543442011156643871)
             channel = guild.get_channel(957061470192033812)
-            await channel.send(f"'PLAYER': **{str(ctx.author)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
+            await channel.send(f"'PLAYER': **{str(ctx.author)}**, 'GUILD': **{str(ctx.author.guild)}**,  TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
             return
     
     if oteam != 'PCG':
@@ -6224,7 +6221,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             }))
             guild = self.bot.get_guild(543442011156643871)
             channel = guild.get_channel(957061470192033812)
-            await channel.send(f"'PLAYER': **{str(ctx.author)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
+            await channel.send(f"'PLAYER': **{str(ctx.author)}**, 'GUILD': **{str(ctx.author.guild)}**,  TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
             return
 
     if mode in D_modes:
@@ -6334,7 +6331,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             }))
             guild = self.bot.get_guild(543442011156643871)
             channel = guild.get_channel(957061470192033812)
-            await channel.send(f"'PLAYER': **{str(ctx.author)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
+            await channel.send(f"'PLAYER': **{str(ctx.author)}**, 'GUILD': **{str(ctx.author.guild)}**,  TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
             return
 
     if mode in B_modes:
@@ -6434,7 +6431,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             await ctx.send(embed=embedVar)
             guild = self.bot.get_guild(543442011156643871)
             channel = guild.get_channel(957061470192033812)
-            await channel.send(f"'PLAYER': **{str(ctx.author)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
+            await channel.send(f"'PLAYER': **{str(ctx.author)}**, 'GUILD': **{str(ctx.author.guild)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
             return
 
 
@@ -8672,7 +8669,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         }))
                                         guild = self.bot.get_guild(543442011156643871)
                                         channel = guild.get_channel(957061470192033812)
-                                        await channel.send(f"'PLAYER': **{str(ctx.author)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
+                                        await channel.send(f"'PLAYER': **{str(ctx.author)}**, 'GUILD': **{str(ctx.author.guild)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
 
                 
                             # Player 2 Turn Start
@@ -9976,7 +9973,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             }))
                                             guild = self.bot.get_guild(543442011156643871)
                                             channel = guild.get_channel(957061470192033812)
-                                            await channel.send(f"'PLAYER': **{str(ctx.author)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
+                                            await channel.send(f"'PLAYER': **{str(ctx.author)}**, 'GUILD': **{str(ctx.author.guild)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
 
                                     
                                     # Play Bot
@@ -12206,7 +12203,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     }))
                                                     guild = self.bot.get_guild(543442011156643871)
                                                     channel = guild.get_channel(957061470192033812)
-                                                    await channel.send(f"'PLAYER': **{str(ctx.author)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
+                                                    await channel.send(f"'PLAYER': **{str(ctx.author)}**, 'GUILD': **{str(ctx.author.guild)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
 
                                                     
 
@@ -13380,7 +13377,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             }))
                                             guild = self.bot.get_guild(543442011156643871)
                                             channel = guild.get_channel(957061470192033812)
-                                            await channel.send(f"'PLAYER': **{str(ctx.author)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
+                                            await channel.send(f"'PLAYER': **{str(ctx.author)}**, 'GUILD': **{str(ctx.author.guild)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
 
                             # Opponent Turn Start
                             
@@ -18210,7 +18207,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 }))
                                                 guild = self.bot.get_guild(543442011156643871)
                                                 channel = guild.get_channel(957061470192033812)
-                                                await channel.send(f"'PLAYER': **{str(ctx.author)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
+                                                await channel.send(f"'PLAYER': **{str(ctx.author)}**, 'GUILD': **{str(ctx.author.guild)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
 
                                 # Opponent Turn Start
                                 elif turn == 3:
@@ -20085,7 +20082,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 }))
                                 guild = self.bot.get_guild(543442011156643871)
                                 channel = guild.get_channel(957061470192033812)
-                                await channel.send(f"'PLAYER': **{str(ctx.author)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
+                                await channel.send(f"'PLAYER': **{str(ctx.author)}**, 'GUILD': **{str(ctx.author.guild)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
                             continued = False
                             return
                         else:
@@ -20407,7 +20404,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 }))
                                 guild = self.bot.get_guild(543442011156643871)
                                 channel = guild.get_channel(957061470192033812)
-                                await channel.send(f"'PLAYER': **{str(ctx.author)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
+                                await channel.send(f"'PLAYER': **{str(ctx.author)}**, 'GUILD': **{str(ctx.author.guild)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
 
 
                         else:
@@ -20853,7 +20850,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 }))
                 guild = self.bot.get_guild(543442011156643871)
                 channel = guild.get_channel(957061470192033812)
-                await channel.send(f"'PLAYER': **{str(ctx.author)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
+                await channel.send(f"'PLAYER': **{str(ctx.author)}**, 'GUILD': **{str(ctx.author.guild)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
                 return
 
 
@@ -20903,7 +20900,7 @@ async def save_spot(self, ctx, universe, mode, currentopponent):
         }))
         guild = self.bot.get_guild(543442011156643871)
         channel = guild.get_channel(957061470192033812)
-        await channel.send(f"'PLAYER': **{str(ctx.author)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
+        await channel.send(f"'PLAYER': **{str(ctx.author)}**, 'GUILD': **{str(ctx.author.guild)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
         return
 
         
