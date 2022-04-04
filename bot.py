@@ -119,8 +119,8 @@ async def validate_user(ctx):
 @bot.event
 async def on_ready():
    token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk1NTcwNDkwMzE5ODcxMTgwOCIsImJvdCI6dHJ1ZSwiaWF0IjoxNjQ5MDAyNDYzfQ.OGIjvyo2mlOrfZTTLoyIODNKzvk_7o-0tP5zwA31JsE'  # set this to your DBL token
-   bot.topgg_webhook = topgg.WebhookManager(bot).dbl_webhook("/dblwebhook", "KqXJUqmipftsrmJREC-XjYqJkM2SOAM1Gw3uscD9SU8V191Q45EikQTjNhJiwq73_op2")
-   bot.topgg_webhook.run(5000)
+   client.topgg_webhook = topgg.WebhookManager(client).dbl_webhook("/dblwebhook", "KqXJUqmipftsrmJREC-XjYqJkM2SOAM1Gw3uscD9SU8V191Q45EikQTjNhJiwq73_op2")
+   client.topgg_webhook.run(5000)
 
    print('Bot is ready! ')
    for server in bot.guilds:
@@ -133,7 +133,7 @@ async def on_dbl_vote(data):
     if data["type"] == "test":
         # this is roughly equivalent to
         # return await on_dbl_test(data) in this case
-        return bot.dispatch('dbl_test', data)
+        return client.dispatch('dbl_test', data)
 
     print(f"Received a vote:\n{data}")
 
@@ -1450,7 +1450,7 @@ async def daily(ctx):
       Use **/quests** command to complete your quests!
 
       [Support our Patreon for Rewards!](https://www.patreon.com/partychatgaming?fan_landing=true)
-      [Vote for Crown Unlimited!](https://top.gg/bot/840222176304824340/vote)
+      [Vote for Crown Unlimited!](https://top.gg/bot/955704903198711808/vote)
       [Add Crown Unlimited to your server!](https://discord.com/api/oauth2/authorize?client_id=955704903198711808&permissions=139586955344&scope=applications.commands%20bot)
 
       [Join the Crown Unlimited Support Server](https://discord.gg/2JkCqcN3hB)
