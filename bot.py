@@ -123,7 +123,7 @@ async def on_ready():
    print('Bot is ready!')
 
    try:
-      topgg_webhook = topgg.WebhookManager(bot).dbl_webhook("/dblwebhook", "KqXJUqmipftsrmJREC-XjYqJkM2SOAM1Gw3uscD9SU8V191Q45EikQTjNhJiwq73_op2").run(5000)
+      await topgg.WebhookManager(bot).dbl_webhook("/dblwebhook", "KqXJUqmipftsrmJREC-XjYqJkM2SOAM1Gw3uscD9SU8V191Q45EikQTjNhJiwq73_op2").run(5000)
    except Exception as e:
       print(e)
    # for server in bot.guilds:
