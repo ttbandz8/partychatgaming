@@ -118,7 +118,7 @@ class Teams(commands.Cog):
 
                 # If user is part of a team you cannot add them to your team
                 if member_profile['TEAM'] == 'PCG':
-                    await main.DM(ctx, player, f"{ctx.author.mention}" + f" has invited you to join **{team_profile['TEAM_DISPLAY_NAME']}** !" + f" React in server to join **{team_profile['TEAM_DISPLAY_NAME']}**" )
+                    await main.DM(ctx, player, f"{ctx.author}" + f" has invited you to join **{team_profile['TEAM_DISPLAY_NAME']}** !" + f" React in server to join **{team_profile['TEAM_DISPLAY_NAME']}**" )
 
                     team_buttons = [
                         manage_components.create_button(

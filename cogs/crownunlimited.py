@@ -20640,10 +20640,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     destinylogger = await destiny(ouser, t_card, tale_or_dungeon_only)
                                     petlogger = await summonlevel(opet_name, ouser)
                                     cardlogger = await cardlevel(self, o_card, ouser.id, tale_or_dungeon_only, selected_universe)
-                                    if questlogger:
-                                        await private_channel.send(questlogger)
-                                    if destinylogger:
-                                        await private_channel.send(destinylogger)
+                                    # if questlogger:
+                                    #     await private_channel.send(questlogger)
+                                    # if destinylogger:
+                                    #     await private_channel.send(destinylogger)
                                 
                                 if mode in co_op_modes and mode not in ai_co_op_modes:
                                     teammates = False
@@ -20697,6 +20697,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         {previous_moves_into_embed}
                                         
                                         """),colour=0x1abc9c)
+                                        if questlogger:
+                                            embedVar.add_field(name="**Quest Progress**",
+                                                value=f"{questlogger}")
+                                        if destinylogger:
+                                            embedVar.add_field(name="**Destiny Progress**",
+                                                value=f"{destinylogger}")
                                     elif mode in co_op_modes and mode not in ai_co_op_modes:
                                         embedVar = discord.Embed(title=f"👥 CO-OP VICTORY\nThe game lasted {turn_total} rounds.\n\n👤**{o_user['NAME']}:** {drop_response}\n👥**{c_user['NAME']}:** {cdrop_response} ",description=textwrap.dedent(f"""
                                         {previous_moves_into_embed}
@@ -21136,7 +21142,7 @@ async def blessguild(amount, guild):
             hall_data = db.queryHall({'HALL': hall})
             multiplier = hall_data['MULT']
             posBlessAmount = posBlessAmount * multiplier
-            query = {'FDID': str(guild_data['FDID'])}
+            query = {'GNAME': str(guild_data['GNAME'])}
             update_query = {"$inc": {'BANK': int(posBlessAmount)}}
             db.updateGuildAlt(query, update_query)
         else:
@@ -21189,7 +21195,7 @@ async def curseguild(amount, guild):
     query = {'GNAME': str(guild)}
     guild_data = db.queryGuildAlt(query)
     if guild_data:
-        query = {'FDID':str(guild_data['FDID'])}
+        query = {'GNAME':str(guild_data['GNAME'])}
         update_query = {"$inc": {'BANK': int(negCurseAmount)}}
         db.updateGuildAlt(query, update_query)
     else:
