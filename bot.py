@@ -130,7 +130,7 @@ async def on_ready():
 
 
 @bot.event
-async def on_dbl_vote(data):
+async def on_dbl_vote(ctx, data):
     print("HELLO WORLD VOTE")
     if data["type"] == "test":
         # this is roughly equivalent to
@@ -140,7 +140,7 @@ async def on_dbl_vote(data):
     print(f"Received a vote:\n{data}")
 
 @bot.event
-async def on_dbl_test(data):
+async def on_dbl_test(ctx, data):
    print("HELLO WORLD TEST")
    print(f"Received a test vote:\n{data}")
 
