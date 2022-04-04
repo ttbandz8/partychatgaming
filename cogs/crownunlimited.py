@@ -20793,8 +20793,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         embedVar = discord.Embed(title=f":crown: UNIVERSE CONQUERED",
                                                                 description=f"**{selected_universe}** has been conquered\n\n{drop_response}",
                                                                 colour=0xe91e63)
-                                        embedVar.add_field(name="Additional Reward",
-                                                        value=f"You earned additional rewards in your vault! Take a look.")
                                         if questlogger:
                                             embedVar.add_field(name="**Quest Progress**",
                                                 value=f"{questlogger}")
@@ -20813,9 +20811,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             # await ctx.send(embed=embedVar)
                                             await battle_msg.delete(delay=2)
                                             await asyncio.sleep(2)
+                                            embedVar.add_field(name="Minor Reward",
+                                                        value=f"You were awarded :coin: 100,000 for completing the {selected_universe} Tale again!")
                                             battle_msg = await private_channel.send(embed=embedVar)
-
-                                            await ctx.send(f"You were awarded :coin: 100,000 for completing the {selected_universe} Tale again!")
                                         else:
                                             await bless(2000000, ctx.author.id)
                                             teambank = await blessteam(500000, oteam)
@@ -20823,7 +20821,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             await battle_msg.delete(delay=2)
                                             await asyncio.sleep(2)
                                             battle_msg = await private_channel.send(embed=embedVar)
-                                            await ctx.send(f"You were awarded :coin: 2,000,000 for completing the {selected_universe} Tale! ")
+                                            embedVar.add_field(name="Conquerors Reward",
+                                                        value=f"You were awarded :coin: 2,000,000 for completing the {selected_universe} Tale!")
                                         if mode in co_op_modes and mode not in ai_co_op_modes:
                                             cuid = c_DID
                                             cuser = await self.bot.fetch_user(cuid)
@@ -20832,9 +20831,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             # await bless(125, user2)
                                             # await ctx.send(embed=embedVar)
                                             await asyncio.sleep(2)
-
-                                            await ctx.send(
-                                                f"{user2.mention} You were awarded :coin: 75,000 for assisting in the {selected_universe} Tale!")
+                                            embedVar.add_field(name="Companion Reward",
+                                                        value=f"{user2.mention} You were awarded :coin: 75,000 for assisting in the {selected_universe} Tale!")
                                         continued = False
 
 
