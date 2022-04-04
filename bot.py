@@ -117,6 +117,7 @@ async def validate_user(ctx):
       return False
 
 bot.token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk1NTcwNDkwMzE5ODcxMTgwOCIsImJvdCI6dHJ1ZSwiaWF0IjoxNjQ5MDAyNDYzfQ.OGIjvyo2mlOrfZTTLoyIODNKzvk_7o-0tP5zwA31JsE'  # set this to your DBL token
+bot.topggpy = topgg.DBLClient(bot, bot.token)
 bot.topgg_webhook = topgg.WebhookManager(bot).dbl_webhook("/dblwebhook", "KqXJUqmipftsrmJREC-XjYqJkM2SOAM1Gw3uscD9SU8V191Q45EikQTjNhJiwq73_op2")
 
 
@@ -130,7 +131,7 @@ async def on_ready():
 
 
 @bot.event
-async def on_dbl_vote(ctx, data):
+async def on_dbl_vote(data):
     print("HELLO WORLD VOTE")
     if data["type"] == "test":
         # this is roughly equivalent to
@@ -140,7 +141,7 @@ async def on_dbl_vote(ctx, data):
     print(f"Received a vote:\n{data}")
 
 @bot.event
-async def on_dbl_test(ctx, data):
+async def on_dbl_test(data):
    print("HELLO WORLD TEST")
    print(f"Received a test vote:\n{data}")
 
