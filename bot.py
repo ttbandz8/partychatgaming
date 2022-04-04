@@ -116,11 +116,13 @@ async def validate_user(ctx):
       msg = await ctx.send(m.USER_NOT_REGISTERED, delete_after=5)
       return False
 
+token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk1NTcwNDkwMzE5ODcxMTgwOCIsImJvdCI6dHJ1ZSwiaWF0IjoxNjQ5MDAyNDYzfQ.OGIjvyo2mlOrfZTTLoyIODNKzvk_7o-0tP5zwA31JsE'  # set this to your DBL token
+topgg_webhook = topgg.WebhookManager(client).dbl_webhook("/dblwebhook", "KqXJUqmipftsrmJREC-XjYqJkM2SOAM1Gw3uscD9SU8V191Q45EikQTjNhJiwq73_op2")
+
+
 @bot.event
 async def on_ready():
-   token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk1NTcwNDkwMzE5ODcxMTgwOCIsImJvdCI6dHJ1ZSwiaWF0IjoxNjQ5MDAyNDYzfQ.OGIjvyo2mlOrfZTTLoyIODNKzvk_7o-0tP5zwA31JsE'  # set this to your DBL token
-   client.topgg_webhook = topgg.WebhookManager(client).dbl_webhook("/dblwebhook", "KqXJUqmipftsrmJREC-XjYqJkM2SOAM1Gw3uscD9SU8V191Q45EikQTjNhJiwq73_op2")
-   client.topgg_webhook.run(5000)
+   await topgg_webhook.run(5000)
 
    print('Bot is ready! ')
    for server in bot.guilds:
@@ -1401,6 +1403,7 @@ async def on_slash_command_error(ctx, ex):
 
 
 @slash.slash(name="Daily", description="Receive your daily reward and quests", guild_ids=guild_ids)
+@commands.check(validate_user)
 @commands.cooldown(1, 60*60*24, commands.BucketType.user)
 async def daily(ctx):
    try:
