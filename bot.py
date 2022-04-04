@@ -2598,13 +2598,7 @@ async def sponsor(ctx, guild: str, amount):
       await ctx.send("Association does not have that much :coin:", delete_after=5)
       return
 
-   if user['DID'] != founder:
-      await ctx.send(m.NOT_LEADER, delete_after=5)
-      return
-   elif user['DID'] != sworn:
-      await ctx.send(m.NOT_LEADER, delete_after=5)
-      return
-   elif user['DID'] != shield:
+   if user['DID'] != founder and user['DID'] != sworn and user['DID'] != shield:
       await ctx.send(m.NOT_LEADER, delete_after=5)
       return
 
