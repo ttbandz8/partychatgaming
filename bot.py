@@ -117,7 +117,7 @@ async def validate_user(ctx):
       return False
 
 token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk1NTcwNDkwMzE5ODcxMTgwOCIsImJvdCI6dHJ1ZSwiaWF0IjoxNjQ5MDAyNDYzfQ.OGIjvyo2mlOrfZTTLoyIODNKzvk_7o-0tP5zwA31JsE'  # set this to your DBL token
-topgg_webhook = topgg.WebhookManager(client).dbl_webhook("/dblwebhook", "KqXJUqmipftsrmJREC-XjYqJkM2SOAM1Gw3uscD9SU8V191Q45EikQTjNhJiwq73_op2")
+topgg_webhook = topgg.WebhookManager(bot).dbl_webhook("/dblwebhook", "KqXJUqmipftsrmJREC-XjYqJkM2SOAM1Gw3uscD9SU8V191Q45EikQTjNhJiwq73_op2")
 
 
 @bot.event
@@ -131,18 +131,18 @@ async def on_ready():
 
 @bot.event
 async def on_dbl_vote(data):
-    """An event that is called whenever someone votes for the bot on Top.gg."""
+    print("HELLO WORLD VOTE")
     if data["type"] == "test":
         # this is roughly equivalent to
         # return await on_dbl_test(data) in this case
-        return client.dispatch('dbl_test', data)
+        return bot.dispatch('dbl_test', data)
 
     print(f"Received a vote:\n{data}")
 
 @bot.event
 async def on_dbl_test(data):
-    """An event that is called whenever someone tests the webhook system for your bot on Top.gg."""
-    print(f"Received a test vote:\n{data}")
+   print("HELLO WORLD TEST")
+   print(f"Received a test vote:\n{data}")
 
 @slash.slash(name="Enhancers", description="List of Enhancers", guild_ids=guild_ids)
 async def enhancers(ctx):
