@@ -29,6 +29,8 @@ import unique_traits as ut
 now = time.asctime()
 import asyncio
 import topgg
+import requests
+import json
 
 
 # Logging Logic
@@ -115,30 +117,12 @@ async def validate_user(ctx):
       return False
 
 
-bot.token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk1NTcwNDkwMzE5ODcxMTgwOCIsImJvdCI6dHJ1ZSwiaWF0IjoxNjQ5MDAyNDYzfQ.OGIjvyo2mlOrfZTTLoyIODNKzvk_7o-0tP5zwA31JsE'  # set this to your DBL token
-# bot.topggpy = topgg.DBLClient(bot, bot.token)
-bot.topgg_webhook = topgg.WebhookManager(bot).dbl_webhook("/dblwebhook", "password")
-bot.topgg_webhook.run(5000)
-
 @bot.event
 async def on_ready():
    print('Bot is ready!')
    for server in bot.guilds:
         print(server.name)
 
-@bot.event
-async def on_dbl_vote(data):
-    if data["type"] == "test":
-        # this is roughly equivalent to
-        # return await on_dbl_test(data) in this case
-        return bot.dispatch('dbl_test', data)
-
-    print(f"Received a vote:\n{data}")
-
-@bot.event
-async def on_dbl_test(data):
-   print("HELLO WORLD TEST")
-   print(f"Received a test vote:\n{data}")
 
 @slash.slash(name="Enhancers", description="List of Enhancers", guild_ids=guild_ids)
 async def enhancers(ctx):
@@ -628,6 +612,64 @@ async def crown(ctx):
    embeds = [embedVar1, embedVar2, embedVar3, embedVar11, embedVar4, embedVar5, embedVar6, embedVar16, embedVar7, embedVar8,embedVar9, embedVar10,embedVar15,embedVar12,embedVar13,embedVar14]
    await Paginator(bot=bot, ctx=ctx, pages=embeds, timeout=60).run()
   
+
+@slash.slash(description="Rewards for daily voting", guild_ids=guild_ids)
+async def voted(ctx):
+   try:
+      query = {'DID': str(ctx.author.id)}
+      user = db.queryUser(query)
+      vault = db.queryVault(query)
+      gem_list = vault['GEMS']
+
+      if user['VOTED']:
+         await ctx.send("You've already received your voting rewards!")
+         return
+      else:
+         auth_token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk1NTcwNDkwMzE5ODcxMTgwOCIsImJvdCI6dHJ1ZSwiaWF0IjoxNjQ5MDAyNDY0fQ.zNf3ECu2PBWVlfYlYH9YMy7PRb2P-sQFBGRkBp-DwUo'
+         head = {'Authorization': 'Bearer ' + auth_token}
+         
+         response = requests.get(f"https://top.gg/api/bots/955704903198711808/check?userId={ctx.author.id}", headers=head)
+         response_dict = json.loads(response.text)
+
+         if response_dict['voted'] == 1:
+            if gem_list:
+               for universe in gem_list:
+                  update_query = {
+                     '$inc': {'GEMS.$[type].' + "GEMS": 80000}
+                  }
+                  filter_query = [{'type.' + "UNIVERSE": universe['UNIVERSE']}]
+                  res = db.updateVault(query, update_query, filter_query)
+
+            await bless(int(200000), ctx.author.id)
+            respond = db.updateUserNoFilter(query, {'$set': {'VOTED': True}})
+
+
+            embedVar = discord.Embed(title=f"✅ Daily Voter Rewards!", description=textwrap.dedent(f"""\
+            Thank you for voting, {ctx.author.mention}!
+            
+            **Daily Voter Earnings** 
+            :coin: **{'{:,}'.format(200000)}**
+            💎 **{'{:,}'.format(80000)}** *all craftable universes*
+            """), colour=0xf1c40f)
+            
+            await ctx.send(embed=embedVar)
+
+         else:
+            embedVar = discord.Embed(title=f"❌ Daily Voter Rewards!", description=textwrap.dedent(f"""\
+            You have not voted for Crown Unlimited today, {ctx.author.mention}!
+
+            To earn your daily voter rewards, [Vote for Crown Unlimited!](https://top.gg/bot/955704903198711808/vote)
+
+            **What are the Daily Voter Rewards?** 
+            :coin: **{'{:,}'.format(200000)}**
+            💎 **{'{:,}'.format(80000)}**
+            """), colour=0xf1c40f)
+            
+            await ctx.send(embed=embedVar)
+
+   except Exception as e:
+      print(e)
+
 
 @slash.slash(description="Register for Crown Unlimited", guild_ids=guild_ids)
 async def register(ctx):
@@ -1405,8 +1447,8 @@ async def daily(ctx):
    try:
       dailyamount = 100000
       await bless(dailyamount, ctx.author.id)
-
-      user_data = db.queryUser({'DID': str(ctx.author.id)})
+      query = {'DID': str(ctx.author.id)}
+      user_data = db.queryUser(query)
       user_completed_tales = user_data['CROWN_TALES']
       universes = db.queryAllUniverse()
 
@@ -1434,8 +1476,9 @@ async def daily(ctx):
       q3_earn = round(random.randint(400000, 800000))
 
       quests = [{'OPPONENT': opponents[q1], 'TYPE': 'Tales', 'GOAL': 1, 'WINS': 0, 'REWARD': q1_earn },{'OPPONENT': opponents[q2], 'TYPE': 'Tales', 'GOAL': 2, 'WINS': 0, 'REWARD': q2_earn }, {'OPPONENT': opponents[q3], 'TYPE': 'Tales', 'GOAL': 3, 'WINS': 0, 'REWARD': q3_earn }]
-      db.updateVaultNoFilter({'DID': str(ctx.author.id)}, {'$set': {'QUESTS': quests}})
-      db.updateUserNoFilter({'DID': str(ctx.author.id)}, {'$set': {'BOSS_FOUGHT': False}})
+      db.updateVaultNoFilter(query, {'$set': {'QUESTS': quests}})
+      db.updateUserNoFilter(query, {'$set': {'BOSS_FOUGHT': False}})
+      db.updateUserNoFilter(query, {'$set': {'VOTED': False}})
       
       embedVar = discord.Embed(title=f"☀️ Daily Rewards!", description=textwrap.dedent(f"""\
       Welcome back, {ctx.author.mention}!
@@ -1448,10 +1491,11 @@ async def daily(ctx):
       Defeat **{opponents[q3]}** to earn :coin: {'{:,}'.format(q3_earn)}
       Use **/quests** command to complete your quests!
 
+      Use **/voted** command to receive Daily voting rewards!
+
       [Support our Patreon for Rewards!](https://www.patreon.com/partychatgaming?fan_landing=true)
       [Vote for Crown Unlimited!](https://top.gg/bot/955704903198711808/vote)
       [Add Crown Unlimited to your server!](https://discord.com/api/oauth2/authorize?client_id=955704903198711808&permissions=139586955344&scope=applications.commands%20bot)
-
       [Join the Crown Unlimited Support Server](https://discord.gg/2JkCqcN3hB)
       """), colour=0xf1c40f)
       
