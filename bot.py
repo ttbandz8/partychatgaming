@@ -114,6 +114,7 @@ async def validate_user(ctx):
       msg = await ctx.send(m.USER_NOT_REGISTERED, delete_after=5)
       return False
 
+
 bot.token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk1NTcwNDkwMzE5ODcxMTgwOCIsImJvdCI6dHJ1ZSwiaWF0IjoxNjQ5MDAyNDYzfQ.OGIjvyo2mlOrfZTTLoyIODNKzvk_7o-0tP5zwA31JsE'  # set this to your DBL token
 # bot.topggpy = topgg.DBLClient(bot, bot.token)
 bot.topgg_webhook = topgg.WebhookManager(bot).dbl_webhook("/dblwebhook", "password")
