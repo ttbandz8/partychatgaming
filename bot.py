@@ -118,11 +118,9 @@ bot.token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk1NTcwNDkwMzE5ODcxMT
 # bot.topggpy = topgg.DBLClient(bot, bot.token)
 bot.topgg_webhook = topgg.WebhookManager(bot).dbl_webhook("/dblwebhook", "KqXJUqmipftsrmJREC-XjYqJkM2SOAM1Gw3uscD9SU8V191Q45EikQTjNhJiwq73_op2")
 
-
 @bot.event
 async def on_ready():
-   start_topgg = await bot.topgg_webhook.run(6000)
-   print(start_topgg)
+   await bot.topgg_webhook.run(6000)
 
    print('Bot is ready! ')
    for server in bot.guilds:
