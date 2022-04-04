@@ -47,8 +47,6 @@ guild_ids = None
 intents = discord.Intents.all()
 client = discord.Client()
 
-
-
 if config('ENV') == "production":
    # PRODUCTION
    bot = commands.Bot(command_prefix=".", intents=intents)
@@ -123,7 +121,8 @@ bot.topgg_webhook = topgg.WebhookManager(bot).dbl_webhook("/dblwebhook", "KqXJUq
 
 @bot.event
 async def on_ready():
-   await bot.topgg_webhook.run(6000)
+   start_topgg = await bot.topgg_webhook.run(6000)
+   print(start_topgg)
 
    print('Bot is ready! ')
    for server in bot.guilds:
