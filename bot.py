@@ -1436,16 +1436,19 @@ async def rebirth(ctx):
 async def on_slash_command_error(ctx, ex):
    if isinstance(ex, commands.CommandOnCooldown): # Checks Cooldown
       msg = 'You have already used this command... Try again in {:.2f}s'.format(ex.retry_after)
-      guild = bot.get_guild(543442011156643871)
-      channel = guild.get_channel(957061470192033812)
-      await ctx.send(f"Crown Unlimited has been Rate Limited")
+
 
 
 @bot.event
 async def on_command_error(ctx, error):
     if isinstance(error, discord.HTTPException):
-        await ctx.send("You are ratelimited")
+      guild = bot.get_guild(543442011156643871)
+      channel = guild.get_channel(957061470192033812)
+      await ctx.send(f"Crown Unlimited has been Rate Limited")
 
+      
+      
+      
 
 @slash.slash(name="Daily", description="Receive your daily reward and quests", guild_ids=guild_ids)
 @commands.check(validate_user)
