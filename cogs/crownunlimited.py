@@ -7631,23 +7631,34 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             custom_id="q"
                                         ),
                                     ]
-
-                                    if o_stamina >= 80:
+                                    if o_stamina >= 10:
                                         battle_buttons.append(
                                             manage_components.create_button(
-                                                style=ButtonStyle.blue,
-                                                label=f"🏵️ 80",
-                                                custom_id="3"
+                                                style=ButtonStyle.green,
+                                                label=f"💥 10",
+                                                custom_id="1"
                                             )
                                         )
+
                                     if o_stamina >= 30:
                                         battle_buttons.append(
                                             manage_components.create_button(
-                                                style=ButtonStyle.blue,
+                                                style=ButtonStyle.green,
                                                 label=f"☄️ 30",
                                                 custom_id="2"
                                             )
                                         )
+
+
+                                    if o_stamina >= 80:
+                                        battle_buttons.append(
+                                            manage_components.create_button(
+                                                style=ButtonStyle.green,
+                                                label=f"🏵️ 80",
+                                                custom_id="3"
+                                            )
+                                        )
+
                                     if o_stamina >= 20:
                                         battle_buttons.append(
                                             manage_components.create_button(
@@ -7657,19 +7668,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             )
                                         )
 
+
                                         util_buttons.append(
                                             manage_components.create_button(
                                                 style=ButtonStyle.grey,
                                                 label="Block 20",
                                                 custom_id="0"
-                                            )
-                                        )
-                                    if o_stamina >= 10:
-                                        battle_buttons.append(
-                                            manage_components.create_button(
-                                                style=ButtonStyle.blue,
-                                                label=f"💥 10",
-                                                custom_id="1"
                                             )
                                         )
 
@@ -9061,23 +9065,34 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 custom_id="q"
                                             ),
                                         ]
-
-                                        if t_stamina >= 80:
+                                        if t_stamina >= 10:
                                             battle_buttons.append(
                                                 manage_components.create_button(
-                                                    style=ButtonStyle.blue,
-                                                    label=f"🏵️ 80",
-                                                    custom_id="3"
+                                                    style=ButtonStyle.green,
+                                                    label=f"💥 10",
+                                                    custom_id="1"
                                                 )
                                             )
+
                                         if t_stamina >= 30:
                                             battle_buttons.append(
                                                 manage_components.create_button(
-                                                    style=ButtonStyle.blue,
+                                                    style=ButtonStyle.green,
                                                     label=f"☄️ 30",
                                                     custom_id="2"
                                                 )
                                             )
+
+
+                                        if t_stamina >= 80:
+                                            battle_buttons.append(
+                                                manage_components.create_button(
+                                                    style=ButtonStyle.green,
+                                                    label=f"🏵️ 80",
+                                                    custom_id="3"
+                                                )
+                                            )
+
                                         if t_stamina >= 20:
                                             battle_buttons.append(
                                                 manage_components.create_button(
@@ -9087,19 +9102,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 )
                                             )
 
+
                                             util_buttons.append(
                                                 manage_components.create_button(
                                                     style=ButtonStyle.grey,
                                                     label="Block 20",
                                                     custom_id="0"
-                                                )
-                                            )
-                                        if t_stamina >= 10:
-                                            battle_buttons.append(
-                                                manage_components.create_button(
-                                                    style=ButtonStyle.blue,
-                                                    label=f"💥 10",
-                                                    custom_id="1"
                                                 )
                                             )
                                         if t_used_focus and t_used_resolve and not t_pet_used and mode != "RAID":
@@ -12315,23 +12323,34 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 custom_id="q"
                                             ),
                                         ]
-
-                                        if o_stamina >= 80:
+                                        if o_stamina >= 10:
                                             battle_buttons.append(
                                                 manage_components.create_button(
-                                                    style=ButtonStyle.blue,
-                                                    label=f"🏵️ 80",
-                                                    custom_id="3"
+                                                    style=ButtonStyle.green,
+                                                    label=f"💥 10",
+                                                    custom_id="1"
                                                 )
                                             )
+
                                         if o_stamina >= 30:
                                             battle_buttons.append(
                                                 manage_components.create_button(
-                                                    style=ButtonStyle.blue,
+                                                    style=ButtonStyle.green,
                                                     label=f"☄️ 30",
                                                     custom_id="2"
                                                 )
                                             )
+
+
+                                        if o_stamina >= 80:
+                                            battle_buttons.append(
+                                                manage_components.create_button(
+                                                    style=ButtonStyle.green,
+                                                    label=f"🏵️ 80",
+                                                    custom_id="3"
+                                                )
+                                            )
+
                                         if o_stamina >= 20:
                                             battle_buttons.append(
                                                 manage_components.create_button(
@@ -12341,20 +12360,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 )
                                             )
 
+
                                             util_buttons.append(
                                                 manage_components.create_button(
                                                     style=ButtonStyle.grey,
                                                     label="Block 20",
                                                     custom_id="0"
-                                                )
-                                            )
-                                            
-                                        if o_stamina >= 10:
-                                            battle_buttons.append(
-                                                manage_components.create_button(
-                                                    style=ButtonStyle.blue,
-                                                    label=f"💥 10",
-                                                    custom_id="1"
                                                 )
                                             )
 
@@ -17407,41 +17418,59 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             else:
                                                 options = ["q", "Q", "0", "1", "2", "3", "4", "7"]
 
-                                            battle_buttons = [
-                                                manage_components.create_button(
-                                                    style=ButtonStyle.green,
-                                                    label=f"💥 10",
-                                                    custom_id="1"
-                                                ),
-                                                manage_components.create_button(
-                                                    style=ButtonStyle.green,
-                                                    label=f"☄️ 30",
-                                                    custom_id="2"
-                                                ),
-                                                manage_components.create_button(
-                                                    style=ButtonStyle.green,
-                                                    label=f"🏵️ 80",
-                                                    custom_id="3"
-                                                ),
-                                                manage_components.create_button(
-                                                    style=ButtonStyle.blue,
-                                                    label=f"🦠 20",
-                                                    custom_id="4"
-                                                )
-                                            ]
-
+                                            battle_buttons = []
                                             util_buttons = [
-                                                manage_components.create_button(
-                                                    style=ButtonStyle.grey,
-                                                    label="Block 20",
-                                                    custom_id="0"
-                                                ),
                                                 manage_components.create_button(
                                                     style=ButtonStyle.grey,
                                                     label="Quit | /ff",
                                                     custom_id="q"
                                                 ),
                                             ]
+                                            if c_stamina >= 10:
+                                                battle_buttons.append(
+                                                    manage_components.create_button(
+                                                        style=ButtonStyle.green,
+                                                        label=f"💥 10",
+                                                        custom_id="1"
+                                                    )
+                                                )
+
+                                            if c_stamina >= 30:
+                                                battle_buttons.append(
+                                                    manage_components.create_button(
+                                                        style=ButtonStyle.green,
+                                                        label=f"☄️ 30",
+                                                        custom_id="2"
+                                                    )
+                                                )
+
+
+                                            if c_stamina >= 80:
+                                                battle_buttons.append(
+                                                    manage_components.create_button(
+                                                        style=ButtonStyle.green,
+                                                        label=f"🏵️ 80",
+                                                        custom_id="3"
+                                                    )
+                                                )
+
+                                            if c_stamina >= 20:
+                                                battle_buttons.append(
+                                                    manage_components.create_button(
+                                                        style=ButtonStyle.blue,
+                                                        label=f"🦠 20",
+                                                        custom_id="4"
+                                                    )
+                                                )
+
+
+                                                util_buttons.append(
+                                                    manage_components.create_button(
+                                                        style=ButtonStyle.grey,
+                                                        label="Block 20",
+                                                        custom_id="0"
+                                                    )
+                                                )
 
                                             coop_util_buttons = [
                                                 manage_components.create_button(
