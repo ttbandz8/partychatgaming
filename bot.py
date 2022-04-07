@@ -31,6 +31,7 @@ import asyncio
 import topgg
 import requests
 import json
+import datetime
 
 
 # Logging Logic
@@ -1435,10 +1436,9 @@ async def rebirth(ctx):
 @bot.event
 async def on_slash_command_error(ctx, ex):
    if isinstance(ex, commands.CommandOnCooldown): # Checks Cooldown
-      msg = 'You have already used this command... Try again in {:.2f}s'.format(ex.retry_after)
-      guild = bot.get_guild(543442011156643871)
-      channel = guild.get_channel(957061470192033812)
-      await ctx.send(f"Crown Unlimited has been Rate Limited")
+      remaining_time = str(datetime.timedelta(seconds=int(ex.retry_after)))
+      msg = f'You have already used this command... Try again in {remaining_time} *hh:mm:ss*'
+      await ctx.send(msg)
 
 
 @bot.event
