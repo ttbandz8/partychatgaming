@@ -21869,7 +21869,7 @@ async def specific_drops(self,player, card, universe):
             card_owned = True
 
         if card_owned:
-            await cardlevel(self, card, player, "Tales", universe)
+            await cardlevel(self, card, player, "Purchase", universe)
             message = ""
             await bless(5000, player)
             return f"You earned EXP for _Card:_ **{card}** + :coin: 5,000 in addition to the card bounty."
