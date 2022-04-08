@@ -12741,7 +12741,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             embedVar = discord.Embed(
                                                                 title=f"**PERSONA!**\n{opet_name} was summoned from {o_card}'s soul dealing **{petdmg['DMG']}** damage!!",
                                                                 colour=0xe91e63)
-                                                            await battle_msg.delete(delay=2)
+                                                            await battle_msg.delete(delay=None)
                                                             if not operformance:
                                                                 summon_file = showsummon(opet_image, opet_name, dmg['MESSAGE'], opet_lvl, opet_bond)
                                                                 embedVar.set_image(url="attachment://pet.png")
@@ -20771,17 +20771,18 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             # await ctx.send(embed=embedVar)
                                             await battle_msg.delete(delay=2)
                                             await asyncio.sleep(2)
+                                            embedVar.add_field(name="Miner Reward",
+                                                        value=f"You were awarded :coin: 300,000 for completing the {selected_universe} Dungeon again!")
                                             battle_msg = await private_channel.send(embed=embedVar)
-
-                                            await ctx.send(f"You were awarded :coin: 300,000 for completing the {selected_universe} Dungeon again!")
                                         else:
                                             await bless(6000000, ctx.author.id)
                                             teambank = await blessteam(1500000, oteam)
                                             # await ctx.send(embed=embedVar)
                                             await battle_msg.delete(delay=2)
                                             await asyncio.sleep(2)
+                                            embedVar.add_field(name="Dungeon Reward",
+                                                        value=f"You were awarded :coin: 6,000,000 for completing the {selected_universe} Dungeon!")
                                             battle_msg = await private_channel.send(embed=embedVar)
-                                            await ctx.send(f"You were awarded :coin: 6,000,000 for completing the {selected_universe} Dungeon! ")
                                         if mode in co_op_modes and mode not in ai_co_op_modes:
                                             cuid = c_DID
                                             cuser = await self.bot.fetch_user(cuid)
@@ -20790,7 +20791,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             # await bless(125, user2)
                                             # await ctx.send(embed=embedVar)
                                             await asyncio.sleep(2)
-
+                                            
                                             await ctx.send(
                                                 f"{user2.mention} You were awarded :coin: 250,000 for  assisting in the {selected_universe} Dungeon!")
                                         continued = False

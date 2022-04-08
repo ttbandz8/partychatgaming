@@ -473,7 +473,7 @@ class Guild(commands.Cog):
             guild_query = {'FDID': str(founder.id)}
             guild_profile = db.queryGuild(guild_query)
             guild_bank = guild_profile['BANK']
-            team_name = sworn_profile['TEAM']
+            team_name = sworn_profile['TEAM'].tolower()
             
             warchest = guild_bank
             
@@ -554,7 +554,7 @@ class Guild(commands.Cog):
         founder_profile = db.queryUser({'DID': str(ctx.author.id)})
         guildname = founder_profile['GUILD']
         sword_profile = db.queryUser({'DID': str(owner.id)})
-        team_profile = db.queryTeam({'TEAM_NAME': sword_profile['TEAM']})
+        team_profile = db.queryTeam({'TEAM_NAME': sword_profile['TEAM'].tolower()})
         if not team_profile:
             await ctx.send(f"{owner.mention} does not own a Guild")
         team_name = team_profile['TEAM_NAME']
@@ -643,7 +643,7 @@ class Guild(commands.Cog):
         shield_profile = db.queryUser({'DID' : str(blade.id)})
         if not shield_profile:
             await ctx.send(m.USER_NOT_REGISTERED)
-        shield_team_name = shield_profile['TEAM']
+        shield_team_name = shield_profile['TEAM'].tolower()
         if shield_team_name == 'PCG':
             await ctx.send(m.KNIGHT_NOT_TEAM, delete_after=3)
             return
@@ -780,7 +780,7 @@ class Guild(commands.Cog):
         if not exiled_profile:
             await ctx.send(m.USER_DOESNT_EXIST, delete_after=5)
             return
-        exiled_team = db.queryTeam({'TEAM_NAME' : exiled_profile['TEAM']})
+        exiled_team = db.queryTeam({'TEAM_NAME' : exiled_profile['TEAM'].tolower()})
         if leader_profile['GUILD'] != exiled_team['GUILD']:
             await ctx.send(m.GUILD_DOESNT_EXIST, delete_after=5)
             return
@@ -832,7 +832,7 @@ class Guild(commands.Cog):
     @cog_ext.cog_slash(description="Abandon Association (Guild Owner)", guild_ids=main.guild_ids)
     async def renounce(self, ctx):
         sword_profile = db.queryUser({'DID': str(ctx.author.id)})
-        team_profile = db.queryTeam({'TEAM_NAME' : sword_profile['TEAM']})
+        team_profile = db.queryTeam({'TEAM_NAME' : sword_profile['TEAM'].tolower()})
         if sword_profile['DISNAME'] != team_profile['OWNER'] or sword_profile['TEAM'] == 'PCG':
             await ctx.send(m.OWNER_ONLY_COMMAND, delete_after=5)
             return
