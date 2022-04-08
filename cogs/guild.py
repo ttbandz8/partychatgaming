@@ -661,7 +661,7 @@ class Guild(commands.Cog):
         
         prev_id = guild['SDID']
         prev_user = db.queryUser({'DID':prev_id})
-        prev_team = db.queryTeam({'TEAM_NAME':prev_user['TEAM']})
+        prev_team = db.queryTeam({'TEAM_NAME':prev_user['TEAM'].tolower()})
         prev_team_exist = False
         if prev_team:
             prev_team_exist = True
