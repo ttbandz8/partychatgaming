@@ -44,6 +44,7 @@ class USER():
     DIFFICULTY: str = field(default_factory=lambda: "EASY")
     STORAGE_TYPE: int = field(default_factory=lambda: 1)
     CREATOR: bool = field(default_factory=lambda: False)
+    VOTED: bool = field(default_factory=lambda: False)
     USED_CODES: list[str] = field(default_factory=lambda: [""])
 
 @dataclass(frozen=True, order=True)
