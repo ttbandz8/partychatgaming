@@ -9945,12 +9945,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     previous_moves.append(f"*{turn_total}:* **{t_card}**: 💉 Siphoned **Full Health!**")
                                                                 else:
                                                                     previous_moves.append(f"*{turn_total}:* **{t_card}**: 💉 Siphoned **{round(siphon_damage)}** Health!")
-                                                                await button_ctx.defer(ignore=True)
+                                                                # await button_ctx.defer(ignore=True)
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                 previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
-                                                            await button_ctx.defer(ignore=True)
+                                                            # await button_ctx.defer(ignore=True)
                                                         if o_health <= 0:
                                                             if o_final_stand==True:
                                                                 if o_universe == "Dragon Ball Z":
