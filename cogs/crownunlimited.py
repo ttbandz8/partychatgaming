@@ -3005,7 +3005,7 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, stamina, en
             low = dmg - (dmg * .10)
             high = dmg + (dmg * .10)
 
-            true_dmg = (random.randint(int(low), int(high))) + 25
+            true_dmg = (round(random.randint(int(low), int(high)))) + 25
             message = ""
 
             miss_hit = 3  # Miss
@@ -7401,7 +7401,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     fortitude = 0.0
                                     low = o_health - (o_health * .90)
                                     high = o_health - (o_health * .80)
-                                    fortitude = random.randint(int(low), int(high))
+                                    fortitude = round(random.randint(int(low), int(high)))
 
                                     o_stamina = o_focus
                                     o_healthcalc = round(((o_focus * .40) + (fortitude * 1)) / 2)
@@ -7465,7 +7465,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         fortitude = 0.0
                                         low = o_health - (o_health * .75)
                                         high = o_health - (o_health * .66)
-                                        fortitude = random.randint(int(low), int(high))
+                                        fortitude = round(random.randint(int(low), int(high)))
                                         # Resolve Scaling
                                         o_resolve_health = round(fortitude + (.5 * o_resolve))
                                         o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
@@ -7868,7 +7868,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     fortitude = 0.0
                                                     low = o_health - (o_health * .75)
                                                     high = o_health - (o_health * .66)
-                                                    fortitude = random.randint(int(low), int(high))
+                                                    fortitude = round(random.randint(int(low), int(high)))
                                                     # Resolve Scaling
                                                     o_resolve_health = round(fortitude + (.5 * o_resolve))
                                                     o_resolve_attack = round(
@@ -7898,7 +7898,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     fortitude = 0.0
                                                     low = o_health - (o_health * .75)
                                                     high = o_health - (o_health * .66)
-                                                    fortitude = random.randint(int(low), int(high))
+                                                    fortitude = round(random.randint(int(low), int(high)))
                                                     # Resolve Scaling
                                                     o_resolve_health = round(fortitude + (.5 * o_resolve))
                                                     o_resolve_attack = round(
@@ -7929,7 +7929,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     fortitude = 0.0
                                                     low = o_health - (o_health * .75)
                                                     high = o_health - (o_health * .66)
-                                                    fortitude = random.randint(int(low), int(high))
+                                                    fortitude = round(random.randint(int(low), int(high)))
                                                     # Resolve Scaling
                                                     o_resolve_health = round(fortitude + (.5 * o_resolve))
                                                     o_resolve_attack = round(
@@ -7959,7 +7959,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     fortitude = 0.0
                                                     low = o_health - (o_health * .75)
                                                     high = o_health - (o_health * .66)
-                                                    fortitude = random.randint(int(low), int(high))
+                                                    fortitude = round(random.randint(int(low), int(high)))
                                                     # Resolve Scaling
                                                     o_resolve_health = round(fortitude + (.5 * o_resolve))
                                                     o_resolve_attack = round(
@@ -7991,7 +7991,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     fortitude = 0.0
                                                     low = o_health - (o_health * .75)
                                                     high = o_health - (o_health * .66)
-                                                    fortitude = random.randint(int(low), int(high))
+                                                    fortitude = round(random.randint(int(low), int(high)))
                                                     # Resolve Scaling
                                                     o_resolve_health = round(fortitude + (.5 * o_resolve))
                                                     o_resolve_attack = round(
@@ -8021,7 +8021,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     fortitude = 0.0
                                                     low = o_health - (o_health * .75)
                                                     high = o_health - (o_health * .66)
-                                                    fortitude = random.randint(int(low), int(high))
+                                                    fortitude = round(random.randint(int(low), int(high)))
                                                     # Resolve Scaling
                                                     o_resolve_health = round(fortitude + (.5 * o_resolve))
                                                     o_resolve_attack = round(
@@ -8058,7 +8058,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     fortitude = 0.0
                                                     low = o_health - (o_health * .75)
                                                     high = o_health - (o_health * .66)
-                                                    fortitude = random.randint(int(low), int(high))
+                                                    fortitude = round(random.randint(int(low), int(high)))
                                                     # Resolve Scaling
                                                     o_resolve_health = round(fortitude + (.5 * o_resolve))
                                                     o_resolve_attack = round(
@@ -8094,7 +8094,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     fortitude = 0.0
                                                     low = o_health - (o_health * .75)
                                                     high = o_health - (o_health * .66)
-                                                    fortitude = random.randint(int(low), int(high))
+                                                    fortitude = round(random.randint(int(low), int(high)))
                                                     # Resolve Scaling
                                                     o_resolve_health = round(fortitude + (.5 * o_resolve))
                                                     o_resolve_attack = round(
@@ -8131,7 +8131,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     fortitude = 0.0
                                                     low = o_health - (o_health * .75)
                                                     high = o_health - (o_health * .66)
-                                                    fortitude = random.randint(int(low), int(high))
+                                                    fortitude = round(random.randint(int(low), int(high)))
                                                     # Resolve Scaling
                                                     o_resolve_health = round(fortitude + (.5 * o_resolve))
                                                     o_resolve_attack = round(
@@ -8850,7 +8850,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     fortitude = 0.0
                                     low = t_health - (t_health * .90)
                                     high = t_health - (t_health * .80)
-                                    fortitude = random.randint(int(low), int(high))
+                                    fortitude = round(random.randint(int(low), int(high)))
 
                                     t_stamina = t_focus
                                     t_healthcalc = round(((t_focus * .40) + (fortitude * 1)) / 2)
@@ -8909,7 +8909,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         fortitude = 0.0
                                         low = t_health - (t_health * .75)
                                         high = t_health - (t_health * .66)
-                                        fortitude = random.randint(int(low), int(high))
+                                        fortitude = round(random.randint(int(low), int(high)))
                                         # Resolve Scaling
                                         t_resolve_health = round(fortitude + (.5 * t_resolve))
                                         t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
@@ -9240,7 +9240,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         fortitude = 0.0
                                                         low = t_health - (t_health * .75)
                                                         high = t_health - (t_health * .66)
-                                                        fortitude = random.randint(int(low), int(high))
+                                                        fortitude = round(random.randint(int(low), int(high)))
                                                         # Resolve Scaling
                                                         t_resolve_health = round(fortitude + (.5 * t_resolve))
                                                         t_resolve_attack = round(
@@ -9270,7 +9270,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         fortitude = 0.0
                                                         low = t_health - (t_health * .75)
                                                         high = t_health - (t_health * .66)
-                                                        fortitude = random.randint(int(low), int(high))
+                                                        fortitude = round(random.randint(int(low), int(high)))
                                                         # Resolve Scaling
                                                         t_resolve_health = round(fortitude + (.5 * t_resolve))
                                                         t_resolve_attack = round(
@@ -9301,7 +9301,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         fortitude = 0.0
                                                         low = t_health - (t_health * .75)
                                                         high = t_health - (t_health * .66)
-                                                        fortitude = random.randint(int(low), int(high))
+                                                        fortitude = round(random.randint(int(low), int(high)))
                                                         # Resolve Scaling
                                                         t_resolve_health = round(fortitude + (.5 * t_resolve))
                                                         t_resolve_attack = round(
@@ -9330,7 +9330,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         fortitude = 0.0
                                                         low = t_health - (t_health * .75)
                                                         high = t_health - (t_health * .66)
-                                                        fortitude = random.randint(int(low), int(high))
+                                                        fortitude = round(random.randint(int(low), int(high)))
                                                         # Resolve Scaling
                                                         t_resolve_health = round(fortitude + (.5 * t_resolve))
                                                         t_resolve_attack = round(
@@ -9362,7 +9362,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         fortitude = 0.0
                                                         low = t_health - (t_health * .75)
                                                         high = t_health - (t_health * .66)
-                                                        fortitude = random.randint(int(low), int(high))
+                                                        fortitude = round(random.randint(int(low), int(high)))
                                                         # Resolve Scaling
                                                         t_resolve_health = round(fortitude + (.5 * t_resolve))
                                                         t_resolve_attack = round(
@@ -9393,7 +9393,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         fortitude = 0.0
                                                         low = t_health - (t_health * .75)
                                                         high = t_health - (t_health * .66)
-                                                        fortitude = random.randint(int(low), int(high))
+                                                        fortitude = round(random.randint(int(low), int(high)))
                                                         # Resolve Scaling
                                                         t_resolve_health = round(fortitude + (.5 * t_resolve))
                                                         t_resolve_attack = round(
@@ -9431,7 +9431,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         fortitude = 0.0
                                                         low = t_health - (t_health * .75)
                                                         high = t_health - (t_health * .66)
-                                                        fortitude = random.randint(int(low), int(high))
+                                                        fortitude = round(random.randint(int(low), int(high)))
                                                         # Resolve Scaling
                                                         t_resolve_health = round(fortitude + (.5 * t_resolve))
                                                         t_resolve_attack = round(
@@ -9468,7 +9468,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         fortitude = 0.0
                                                         low = t_health - (t_health * .75)
                                                         high = t_health - (t_health * .66)
-                                                        fortitude = random.randint(int(low), int(high))
+                                                        fortitude = round(random.randint(int(low), int(high)))
                                                         # Resolve Scaling
                                                         t_resolve_health = round(fortitude + (.5 * t_resolve))
                                                         t_resolve_attack = round(
@@ -9506,7 +9506,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         fortitude = 0.0
                                                         low = t_health - (t_health * .75)
                                                         high = t_health - (t_health * .66)
-                                                        fortitude = random.randint(int(low), int(high))
+                                                        fortitude = round(random.randint(int(low), int(high)))
                                                         # Resolve Scaling
                                                         t_resolve_health = round(fortitude + (.5 * t_resolve))
                                                         t_resolve_attack = round(
@@ -10229,7 +10229,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     fortitude = 0.0
                                                     low = t_health - (t_health * .75)
                                                     high = t_health - (t_health * .66)
-                                                    fortitude = random.randint(int(low), int(high))
+                                                    fortitude = round(random.randint(int(low), int(high)))
                                                     # Resolve Scaling
                                                     t_resolve_health = round(fortitude + (.5 * t_resolve))
                                                     t_resolve_attack = round(
@@ -10257,7 +10257,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     fortitude = 0.0
                                                     low = t_health - (t_health * .75)
                                                     high = t_health - (t_health * .66)
-                                                    fortitude = random.randint(int(low), int(high))
+                                                    fortitude = round(random.randint(int(low), int(high)))
                                                     # Resolve Scaling
                                                     t_resolve_health = round(fortitude + (.5 * t_resolve))
                                                     t_resolve_attack = round(
@@ -10289,7 +10289,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     fortitude = 0.0
                                                     low = t_health - (t_health * .75)
                                                     high = t_health - (t_health * .66)
-                                                    fortitude = random.randint(int(low), int(high))
+                                                    fortitude = round(random.randint(int(low), int(high)))
                                                     # Resolve Scaling
                                                     t_resolve_health = round(fortitude + (.5 * t_resolve))
                                                     t_resolve_attack = round(
@@ -10317,7 +10317,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     fortitude = 0.0
                                                     low = t_health - (t_health * .75)
                                                     high = t_health - (t_health * .66)
-                                                    fortitude = random.randint(int(low), int(high))
+                                                    fortitude = round(random.randint(int(low), int(high)))
                                                     # Resolve Scaling
                                                     t_resolve_health = round(fortitude + (.5 * t_resolve))
                                                     t_resolve_attack = round(
@@ -10348,7 +10348,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     fortitude = 0.0
                                                     low = t_health - (t_health * .75)
                                                     high = t_health - (t_health * .66)
-                                                    fortitude = random.randint(int(low), int(high))
+                                                    fortitude = round(random.randint(int(low), int(high)))
                                                     # Resolve Scaling
                                                     t_resolve_health = round(fortitude + (.5 * t_resolve))
                                                     t_resolve_attack = round(
@@ -10377,7 +10377,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     fortitude = 0.0
                                                     low = t_health - (t_health * .75)
                                                     high = t_health - (t_health * .66)
-                                                    fortitude = random.randint(int(low), int(high))
+                                                    fortitude = round(random.randint(int(low), int(high)))
                                                     # Resolve Scaling
                                                     t_resolve_health = round(fortitude + (.5 * t_resolve))
                                                     t_resolve_attack = round(
@@ -10413,7 +10413,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     fortitude = 0.0
                                                     low = t_health - (t_health * .75)
                                                     high = t_health - (t_health * .66)
-                                                    fortitude = random.randint(int(low), int(high))
+                                                    fortitude = round(random.randint(int(low), int(high)))
                                                     # Resolve Scaling
                                                     t_resolve_health = round(fortitude + (.5 * t_resolve))
                                                     t_resolve_attack = round(
@@ -10448,7 +10448,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     fortitude = 0.0
                                                     low = t_health - (t_health * .75)
                                                     high = t_health - (t_health * .66)
-                                                    fortitude = random.randint(int(low), int(high))
+                                                    fortitude = round(random.randint(int(low), int(high)))
                                                     # Resolve Scaling
                                                     t_resolve_health = round(fortitude + (.5 * t_resolve))
                                                     t_resolve_attack = round(
@@ -10484,7 +10484,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     fortitude = 0.0
                                                     low = t_health - (t_health * .75)
                                                     high = t_health - (t_health * .66)
-                                                    fortitude = random.randint(int(low), int(high))
+                                                    fortitude = round(random.randint(int(low), int(high)))
                                                     # Resolve Scaling
                                                     t_resolve_health = round(fortitude + (.5 * t_resolve))
                                                     t_resolve_attack = round(
@@ -11127,7 +11127,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     fortitude = 0.0
                                     low = o_health - (o_health * .90)
                                     high = o_health - (o_health * .80)
-                                    fortitude = random.randint(int(low), int(high))
+                                    fortitude = round(random.randint(int(low), int(high)))
 
                                     o_stamina = o_focus
                                     o_healthcalc = round(((o_focus * .40) + (fortitude * 1)) / 2)
@@ -11193,7 +11193,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         fortitude = 0.0
                                         low = o_health - (o_health * .75)
                                         high = o_health - (o_health * .66)
-                                        fortitude = random.randint(int(low), int(high))
+                                        fortitude = round(random.randint(int(low), int(high)))
                                         # Resolve Scaling
                                         o_resolve_health = round(fortitude + (.5 * o_resolve))
                                         o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
@@ -11504,7 +11504,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     fortitude = 0.0
                                                     low = o_health - (o_health * .75)
                                                     high = o_health - (o_health * .66)
-                                                    fortitude = random.randint(int(low), int(high))
+                                                    fortitude = round(random.randint(int(low), int(high)))
                                                     # Resolve Scaling
                                                     o_resolve_health = round(fortitude + (.5 * o_resolve))
                                                     o_resolve_attack = round(
@@ -11539,7 +11539,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     fortitude = 0.0
                                                     low = o_health - (o_health * .75)
                                                     high = o_health - (o_health * .66)
-                                                    fortitude = random.randint(int(low), int(high))
+                                                    fortitude = round(random.randint(int(low), int(high)))
                                                     # Resolve Scaling
                                                     o_resolve_health = round(fortitude + (.5 * o_resolve))
                                                     o_resolve_attack = round(
@@ -11570,7 +11570,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     fortitude = 0.0
                                                     low = o_health - (o_health * .75)
                                                     high = o_health - (o_health * .66)
-                                                    fortitude = random.randint(int(low), int(high))
+                                                    fortitude = round(random.randint(int(low), int(high)))
                                                     # Resolve Scaling
                                                     o_resolve_health = round(fortitude + (.5 * o_resolve))
                                                     o_resolve_attack = round(
@@ -11601,7 +11601,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     fortitude = 0.0
                                                     low = o_health - (o_health * .75)
                                                     high = o_health - (o_health * .66)
-                                                    fortitude = random.randint(int(low), int(high))
+                                                    fortitude = round(random.randint(int(low), int(high)))
                                                     # Resolve Scaling
                                                     o_resolve_health = round(fortitude + (.5 * o_resolve))
                                                     o_resolve_attack = round(
@@ -11637,7 +11637,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     fortitude = 0.0
                                                     low = o_health - (o_health * .75)
                                                     high = o_health - (o_health * .66)
-                                                    fortitude = random.randint(int(low), int(high))
+                                                    fortitude = round(random.randint(int(low), int(high)))
                                                     # Resolve Scaling
                                                     o_resolve_health = round(fortitude + (.5 * o_resolve))
                                                     o_resolve_attack = round(
@@ -11673,7 +11673,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     fortitude = 0.0
                                                     low = o_health - (o_health * .75)
                                                     high = o_health - (o_health * .66)
-                                                    fortitude = random.randint(int(low), int(high))
+                                                    fortitude = round(random.randint(int(low), int(high)))
                                                     # Resolve Scaling
                                                     o_resolve_health = round(fortitude + (.5 * o_resolve))
                                                     o_resolve_attack = round(
@@ -11714,7 +11714,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     fortitude = 0.0
                                                     low = o_health - (o_health * .75)
                                                     high = o_health - (o_health * .66)
-                                                    fortitude = random.randint(int(low), int(high))
+                                                    fortitude = round(random.randint(int(low), int(high)))
                                                     # Resolve Scaling
                                                     o_resolve_health = round(fortitude + (.5 * o_resolve))
                                                     o_resolve_attack = round(
@@ -11761,7 +11761,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     fortitude = 0.0
                                                     low = o_health - (o_health * .75)
                                                     high = o_health - (o_health * .66)
-                                                    fortitude = random.randint(int(low), int(high))
+                                                    fortitude = round(random.randint(int(low), int(high)))
                                                     # Resolve Scaling
                                                     o_resolve_health = round(fortitude + (.5 * o_resolve))
                                                     o_resolve_attack = round(
@@ -11803,7 +11803,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     fortitude = 0.0
                                                     low = o_health - (o_health * .75)
                                                     high = o_health - (o_health * .66)
-                                                    fortitude = random.randint(int(low), int(high))
+                                                    fortitude = round(random.randint(int(low), int(high)))
                                                     # Resolve Scaling
                                                     o_resolve_health = round(fortitude + (.5 * o_resolve))
                                                     o_resolve_attack = round(
@@ -12591,7 +12591,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         fortitude = 0.0
                                                         low = o_health - (o_health * .75)
                                                         high = o_health - (o_health * .66)
-                                                        fortitude = random.randint(int(low), int(high))
+                                                        fortitude = round(random.randint(int(low), int(high)))
                                                         # Resolve Scaling
                                                         o_resolve_health = round(fortitude + (.5 * o_resolve))
                                                         o_resolve_attack = round(
@@ -12627,7 +12627,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         fortitude = 0.0
                                                         low = o_health - (o_health * .75)
                                                         high = o_health - (o_health * .66)
-                                                        fortitude = random.randint(int(low), int(high))
+                                                        fortitude = round(random.randint(int(low), int(high)))
                                                         # Resolve Scaling
                                                         o_resolve_health = round(fortitude + (.5 * o_resolve))
                                                         o_resolve_attack = round(
@@ -12659,7 +12659,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         fortitude = 0.0
                                                         low = o_health - (o_health * .75)
                                                         high = o_health - (o_health * .66)
-                                                        fortitude = random.randint(int(low), int(high))
+                                                        fortitude = round(random.randint(int(low), int(high)))
                                                         # Resolve Scaling
                                                         o_resolve_health = round(fortitude + (.5 * o_resolve))
                                                         o_resolve_attack = round(
@@ -12691,7 +12691,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         fortitude = 0.0
                                                         low = o_health - (o_health * .75)
                                                         high = o_health - (o_health * .66)
-                                                        fortitude = random.randint(int(low), int(high))
+                                                        fortitude = round(random.randint(int(low), int(high)))
                                                         # Resolve Scaling
                                                         o_resolve_health = round(fortitude + (.5 * o_resolve))
                                                         o_resolve_attack = round(
@@ -12728,7 +12728,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         fortitude = 0.0
                                                         low = o_health - (o_health * .75)
                                                         high = o_health - (o_health * .66)
-                                                        fortitude = random.randint(int(low), int(high))
+                                                        fortitude = round(random.randint(int(low), int(high)))
                                                         # Resolve Scaling
                                                         o_resolve_health = round(fortitude + (.5 * o_resolve))
                                                         o_resolve_attack = round(
@@ -12765,7 +12765,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         fortitude = 0.0
                                                         low = o_health - (o_health * .75)
                                                         high = o_health - (o_health * .66)
-                                                        fortitude = random.randint(int(low), int(high))
+                                                        fortitude = round(random.randint(int(low), int(high)))
                                                         # Resolve Scaling
                                                         o_resolve_health = round(fortitude + (.5 * o_resolve))
                                                         o_resolve_attack = round(
@@ -12809,7 +12809,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         fortitude = 0.0
                                                         low = o_health - (o_health * .75)
                                                         high = o_health - (o_health * .66)
-                                                        fortitude = random.randint(int(low), int(high))
+                                                        fortitude = round(random.randint(int(low), int(high)))
                                                         # Resolve Scaling
                                                         o_resolve_health = round(fortitude + (.5 * o_resolve))
                                                         o_resolve_attack = round(
@@ -12857,7 +12857,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         fortitude = 0.0
                                                         low = o_health - (o_health * .75)
                                                         high = o_health - (o_health * .66)
-                                                        fortitude = random.randint(int(low), int(high))
+                                                        fortitude = round(random.randint(int(low), int(high)))
                                                         # Resolve Scaling
                                                         o_resolve_health = round(fortitude + (.5 * o_resolve))
                                                         o_resolve_attack = round(
@@ -12900,7 +12900,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         fortitude = 0.0
                                                         low = o_health - (o_health * .75)
                                                         high = o_health - (o_health * .66)
-                                                        fortitude = random.randint(int(low), int(high))
+                                                        fortitude = round(random.randint(int(low), int(high)))
                                                         # Resolve Scaling
                                                         o_resolve_health = round(fortitude + (.5 * o_resolve))
                                                         o_resolve_attack = round(
@@ -13846,7 +13846,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     fortitude = 0.0
                                     low = t_health - (t_health * .90)
                                     high = t_health - (t_health * .80)
-                                    fortitude = random.randint(int(low), int(high))
+                                    fortitude = round(random.randint(int(low), int(high)))
 
                                     t_stamina = t_focus
                                     t_healthcalc = round(((t_focus * .40) + (fortitude * 1)) / 2)
@@ -13919,7 +13919,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         fortitude = 0.0
                                         low = t_health - (t_health * .75)
                                         high = t_health - (t_health * .66)
-                                        fortitude = random.randint(int(low), int(high))
+                                        fortitude = round(random.randint(int(low), int(high)))
                                         # Resolve Scaling
                                         t_resolve_health = round(fortitude + (.5 * t_resolve))
                                         t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
@@ -14371,7 +14371,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 fortitude = 0.0
                                                 low = t_health - (t_health * .75)
                                                 high = t_health - (t_health * .66)
-                                                fortitude = random.randint(int(low), int(high))
+                                                fortitude = round(random.randint(int(low), int(high)))
                                                 # Resolve Scaling
                                                 t_resolve_health = round(fortitude + (.5 * t_resolve))
                                                 t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
@@ -14399,7 +14399,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 fortitude = 0.0
                                                 low = t_health - (t_health * .75)
                                                 high = t_health - (t_health * .66)
-                                                fortitude = random.randint(int(low), int(high))
+                                                fortitude = round(random.randint(int(low), int(high)))
                                                 # Resolve Scaling
                                                 t_resolve_health = round(fortitude + (.5 * t_resolve))
                                                 t_resolve_attack = round(
@@ -14431,7 +14431,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 fortitude = 0.0
                                                 low = t_health - (t_health * .75)
                                                 high = t_health - (t_health * .66)
-                                                fortitude = random.randint(int(low), int(high))
+                                                fortitude = round(random.randint(int(low), int(high)))
                                                 # Resolve Scaling
                                                 t_resolve_health = round(fortitude + (.5 * t_resolve))
                                                 t_resolve_attack = round(
@@ -14461,7 +14461,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 fortitude = 0.0
                                                 low = t_health - (t_health * .75)
                                                 high = t_health - (t_health * .66)
-                                                fortitude = random.randint(int(low), int(high))
+                                                fortitude = round(random.randint(int(low), int(high)))
                                                 # Resolve Scaling
                                                 t_resolve_health = round(fortitude + (.5 * t_resolve))
                                                 t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
@@ -14490,7 +14490,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 fortitude = 0.0
                                                 low = t_health - (t_health * .75)
                                                 high = t_health - (t_health * .66)
-                                                fortitude = random.randint(int(low), int(high))
+                                                fortitude = round(random.randint(int(low), int(high)))
                                                 # Resolve Scaling
                                                 t_resolve_health = round(fortitude + (.5 * t_resolve))
                                                 t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
@@ -14518,7 +14518,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 fortitude = 0.0
                                                 low = t_health - (t_health * .75)
                                                 high = t_health - (t_health * .66)
-                                                fortitude = random.randint(int(low), int(high))
+                                                fortitude = round(random.randint(int(low), int(high)))
                                                 # Resolve Scaling
                                                 t_resolve_health = round(fortitude + (.5 * t_resolve))
                                                 t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
@@ -14555,7 +14555,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 fortitude = 0.0
                                                 low = t_health - (t_health * .75)
                                                 high = t_health - (t_health * .66)
-                                                fortitude = random.randint(int(low), int(high))
+                                                fortitude = round(random.randint(int(low), int(high)))
                                                 # Resolve Scaling
                                                 t_resolve_health = round(fortitude + (.5 * t_resolve))
                                                 t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
@@ -14599,7 +14599,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 fortitude = 0.0
                                                 low = t_health - (t_health * .75)
                                                 high = t_health - (t_health * .66)
-                                                fortitude = random.randint(int(low), int(high))
+                                                fortitude = round(random.randint(int(low), int(high)))
                                                 # Resolve Scaling
                                                 t_resolve_health = round(fortitude + (.5 * t_resolve))
                                                 t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
@@ -14635,7 +14635,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 fortitude = 0.0
                                                 low = t_health - (t_health * .75)
                                                 high = t_health - (t_health * .66)
-                                                fortitude = random.randint(int(low), int(high))
+                                                fortitude = round(random.randint(int(low), int(high)))
                                                 # Resolve Scaling
                                                 t_resolve_health = round(fortitude + (.5 * t_resolve))
                                                 t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
@@ -16037,7 +16037,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         fortitude = 0.0
                                         low = c_health - (c_health * .90)
                                         high = c_health - (c_health * .80)
-                                        fortitude = random.randint(int(low), int(high))
+                                        fortitude = round(random.randint(int(low), int(high)))
 
                                         c_stamina = c_focus
                                         c_healthcalc = round(((c_focus * .40) + (fortitude * 1)) / 2)
@@ -16104,7 +16104,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             fortitude = 0.0
                                             low = o_health - (o_health * .75)
                                             high = o_health - (o_health * .66)
-                                            fortitude = random.randint(int(low), int(high))
+                                            fortitude = round(random.randint(int(low), int(high)))
                                             # Resolve Scaling
                                             c_resolve_health = round(fortitude + (.5 * c_resolve))
                                             c_resolve_attack = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
@@ -16521,7 +16521,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         fortitude = 0.0
                                                         low = c_health - (c_health * .75)
                                                         high = c_health - (c_health * .66)
-                                                        fortitude = random.randint(int(low), int(high))
+                                                        fortitude = round(random.randint(int(low), int(high)))
                                                         # Resolve Scaling
                                                         c_resolve_health = round(fortitude + (.5 * c_resolve))
                                                         c_resolve_attack = round(
@@ -16552,7 +16552,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         fortitude = 0.0
                                                         low = c_health - (c_health * .75)
                                                         high = c_health - (c_health * .66)
-                                                        fortitude = random.randint(int(low), int(high))
+                                                        fortitude = round(random.randint(int(low), int(high)))
                                                         # Resolve Scaling
                                                         c_resolve_health = round(fortitude + (.5 * c_resolve))
                                                         c_resolve_attack = round(
@@ -16584,7 +16584,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         fortitude = 0.0
                                                         low = c_health - (c_health * .75)
                                                         high = c_health - (c_health * .66)
-                                                        fortitude = random.randint(int(low), int(high))
+                                                        fortitude = round(random.randint(int(low), int(high)))
                                                         # Resolve Scaling
                                                         c_resolve_health = round(fortitude + (.5 * c_resolve))
                                                         c_resolve_attack = round(
@@ -16615,7 +16615,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         fortitude = 0.0
                                                         low = c_health - (c_health * .75)
                                                         high = c_health - (c_health * .66)
-                                                        fortitude = random.randint(int(low), int(high))
+                                                        fortitude = round(random.randint(int(low), int(high)))
                                                         # Resolve Scaling
                                                         c_resolve_health = round(fortitude + (.5 * c_resolve))
                                                         c_resolve_attack = round(
@@ -16647,7 +16647,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         fortitude = 0.0
                                                         low = c_health - (c_health * .75)
                                                         high = c_health - (c_health * .66)
-                                                        fortitude = random.randint(int(low), int(high))
+                                                        fortitude = round(random.randint(int(low), int(high)))
                                                         # Resolve Scaling
                                                         c_resolve_health = round(fortitude + (.5 * c_resolve))
                                                         c_resolve_attack = round(
@@ -16677,7 +16677,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         fortitude = 0.0
                                                         low = c_health - (c_health * .75)
                                                         high = c_health - (c_health * .66)
-                                                        fortitude = random.randint(int(low), int(high))
+                                                        fortitude = round(random.randint(int(low), int(high)))
                                                         # Resolve Scaling
                                                         c_resolve_health = round(fortitude + (.5 * o_resolve))
                                                         c_resolve_attack = round(
@@ -16716,7 +16716,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         fortitude = 0.0
                                                         low = c_health - (c_health * .75)
                                                         high = c_health - (c_health * .66)
-                                                        fortitude = random.randint(int(low), int(high))
+                                                        fortitude = round(random.randint(int(low), int(high)))
                                                         # Resolve Scaling
                                                         c_resolve_health = round(fortitude + (.5 * c_resolve))
                                                         c_resolve_attack = round(
@@ -16754,7 +16754,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         fortitude = 0.0
                                                         low = c_health - (c_health * .75)
                                                         high = c_health - (c_health * .66)
-                                                        fortitude = random.randint(int(low), int(high))
+                                                        fortitude = round(random.randint(int(low), int(high)))
                                                         # Resolve Scaling
                                                         c_resolve_health = round(fortitude + (.5 * o_resolve))
                                                         c_resolve_attack = round(
@@ -16791,7 +16791,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         fortitude = 0.0
                                                         low = c_health - (c_health * .75)
                                                         high = c_health - (c_health * .66)
-                                                        fortitude = random.randint(int(low), int(high))
+                                                        fortitude = round(random.randint(int(low), int(high)))
                                                         # Resolve Scaling
                                                         c_resolve_health = round(fortitude + (.5 * c_resolve))
                                                         c_resolve_attack = round(
@@ -17626,7 +17626,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             fortitude = 0.0
                                                             low = c_health - (c_health * .75)
                                                             high = c_health - (c_health * .66)
-                                                            fortitude = random.randint(int(low), int(high))
+                                                            fortitude = round(random.randint(int(low), int(high)))
                                                             # Resolve Scaling
                                                             c_resolve_health = round(fortitude + (.5 * c_resolve))
                                                             c_resolve_attack = round(
@@ -17657,7 +17657,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             fortitude = 0.0
                                                             low = c_health - (c_health * .75)
                                                             high = c_health - (c_health * .66)
-                                                            fortitude = random.randint(int(low), int(high))
+                                                            fortitude = round(random.randint(int(low), int(high)))
                                                             # Resolve Scaling
                                                             c_resolve_health = round(fortitude + (.5 * c_resolve))
                                                             c_resolve_attack = round(
@@ -17689,7 +17689,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             fortitude = 0.0
                                                             low = c_health - (c_health * .75)
                                                             high = c_health - (c_health * .66)
-                                                            fortitude = random.randint(int(low), int(high))
+                                                            fortitude = round(random.randint(int(low), int(high)))
                                                             # Resolve Scaling
                                                             c_resolve_health = round(fortitude + (.5 * c_resolve))
                                                             c_resolve_attack = round(
@@ -17721,7 +17721,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             fortitude = 0.0
                                                             low = c_health - (c_health * .75)
                                                             high = c_health - (c_health * .66)
-                                                            fortitude = random.randint(int(low), int(high))
+                                                            fortitude = round(random.randint(int(low), int(high)))
                                                             # Resolve Scaling
                                                             c_resolve_health = round(fortitude + (.5 * c_resolve))
                                                             c_resolve_attack = round(
@@ -17752,7 +17752,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             fortitude = 0.0
                                                             low = c_health - (c_health * .75)
                                                             high = c_health - (c_health * .66)
-                                                            fortitude = random.randint(int(low), int(high))
+                                                            fortitude = round(random.randint(int(low), int(high)))
                                                             # Resolve Scaling
                                                             c_resolve_health = round(fortitude + (.5 * c_resolve))
                                                             c_resolve_attack = round(
@@ -17784,7 +17784,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             fortitude = 0.0
                                                             low = c_health - (c_health * .75)
                                                             high = c_health - (c_health * .66)
-                                                            fortitude = random.randint(int(low), int(high))
+                                                            fortitude = round(random.randint(int(low), int(high)))
                                                             # Resolve Scaling
                                                             c_resolve_health = round(fortitude + (.5 * o_resolve))
                                                             c_resolve_attack = round(
@@ -17824,7 +17824,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             fortitude = 0.0
                                                             low = c_health - (c_health * .75)
                                                             high = c_health - (c_health * .66)
-                                                            fortitude = random.randint(int(low), int(high))
+                                                            fortitude = round(random.randint(int(low), int(high)))
                                                             # Resolve Scaling
                                                             c_resolve_health = round(fortitude + (.5 * c_resolve))
                                                             c_resolve_attack = round(
@@ -17862,7 +17862,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             fortitude = 0.0
                                                             low = c_health - (c_health * .75)
                                                             high = c_health - (c_health * .66)
-                                                            fortitude = random.randint(int(low), int(high))
+                                                            fortitude = round(random.randint(int(low), int(high)))
                                                             # Resolve Scaling
                                                             c_resolve_health = round(fortitude + (.5 * o_resolve))
                                                             c_resolve_attack = round(
@@ -17901,7 +17901,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             fortitude = 0.0
                                                             low = c_health - (c_health * .75)
                                                             high = c_health - (c_health * .66)
-                                                            fortitude = random.randint(int(low), int(high))
+                                                            fortitude = round(random.randint(int(low), int(high)))
                                                             # Resolve Scaling
                                                             c_resolve_health = round(fortitude + (.5 * c_resolve))
                                                             c_resolve_attack = round(
@@ -18670,7 +18670,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         fortitude = 0.0
                                         low = t_health - (t_health * .90)
                                         high = t_health - (t_health * .80)
-                                        fortitude = random.randint(int(low), int(high))
+                                        fortitude = round(random.randint(int(low), int(high)))
 
                                         t_stamina = t_focus
                                         t_healthcalc = round(((t_focus * .40) + (fortitude * 1)) / 2)
@@ -18735,7 +18735,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             fortitude = 0.0
                                             low = t_health - (t_health * .75)
                                             high = t_health - (t_health * .66)
-                                            fortitude = random.randint(int(low), int(high))
+                                            fortitude = round(random.randint(int(low), int(high)))
                                             # Resolve Scaling
                                             t_resolve_health = round(fortitude + (.5 * t_resolve))
                                             t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
@@ -19117,7 +19117,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     fortitude = 0.0
                                                     low = t_health - (t_health * .75)
                                                     high = t_health - (t_health * .66)
-                                                    fortitude = random.randint(int(low), int(high))
+                                                    fortitude = round(random.randint(int(low), int(high)))
                                                     # Resolve Scaling
                                                     t_resolve_health = round(fortitude + (.5 * t_resolve))
                                                     t_resolve_attack = round(
@@ -19148,7 +19148,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     fortitude = 0.0
                                                     low = t_health - (t_health * .75)
                                                     high = t_health - (t_health * .66)
-                                                    fortitude = random.randint(int(low), int(high))
+                                                    fortitude = round(random.randint(int(low), int(high)))
                                                     # Resolve Scaling
                                                     t_resolve_health = round(fortitude + (.5 * t_resolve))
                                                     t_resolve_attack = round(
@@ -19180,7 +19180,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     fortitude = 0.0
                                                     low = t_health - (t_health * .75)
                                                     high = t_health - (t_health * .66)
-                                                    fortitude = random.randint(int(low), int(high))
+                                                    fortitude = round(random.randint(int(low), int(high)))
                                                     # Resolve Scaling
                                                     t_resolve_health = round(fortitude + (.5 * t_resolve))
                                                     t_resolve_attack = round(
@@ -19209,7 +19209,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     fortitude = 0.0
                                                     low = t_health - (t_health * .75)
                                                     high = t_health - (t_health * .66)
-                                                    fortitude = random.randint(int(low), int(high))
+                                                    fortitude = round(random.randint(int(low), int(high)))
                                                     # Resolve Scaling
                                                     t_resolve_health = round(fortitude + (.5 * t_resolve))
                                                     t_resolve_attack = round(
@@ -19240,7 +19240,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     fortitude = 0.0
                                                     low = t_health - (t_health * .75)
                                                     high = t_health - (t_health * .66)
-                                                    fortitude = random.randint(int(low), int(high))
+                                                    fortitude = round(random.randint(int(low), int(high)))
                                                     # Resolve Scaling
                                                     t_resolve_health = round(fortitude + (.5 * t_resolve))
                                                     t_resolve_attack = round(
@@ -19271,7 +19271,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     fortitude = 0.0
                                                     low = t_health - (t_health * .75)
                                                     high = t_health - (t_health * .66)
-                                                    fortitude = random.randint(int(low), int(high))
+                                                    fortitude = round(random.randint(int(low), int(high)))
                                                     # Resolve Scaling
                                                     t_resolve_health = round(fortitude + (.5 * t_resolve))
                                                     t_resolve_attack = round(
@@ -19307,7 +19307,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     fortitude = 0.0
                                                     low = t_health - (t_health * .75)
                                                     high = t_health - (t_health * .66)
-                                                    fortitude = random.randint(int(low), int(high))
+                                                    fortitude = round(random.randint(int(low), int(high)))
                                                     # Resolve Scaling
                                                     t_resolve_health = round(fortitude + (.5 * t_resolve))
                                                     t_resolve_attack = round(
@@ -19353,7 +19353,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     fortitude = 0.0
                                                     low = t_health - (t_health * .75)
                                                     high = t_health - (t_health * .66)
-                                                    fortitude = random.randint(int(low), int(high))
+                                                    fortitude = round(random.randint(int(low), int(high)))
                                                     # Resolve Scaling
                                                     t_resolve_health = round(fortitude + (.5 * t_resolve))
                                                     t_resolve_attack = round(
@@ -19391,7 +19391,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     fortitude = 0.0
                                                     low = t_health - (t_health * .75)
                                                     high = t_health - (t_health * .66)
-                                                    fortitude = random.randint(int(low), int(high))
+                                                    fortitude = round(random.randint(int(low), int(high)))
                                                     # Resolve Scaling
                                                     t_resolve_health = round(fortitude + (.5 * t_resolve))
                                                     t_resolve_attack = round(
@@ -21300,7 +21300,7 @@ def update_arm_durability(self, vault, arm, arm_universe, arm_price, card):
                     resp = db.updateVault(query, update_query, filter_query)
                     if current_durability >= 15:
                         return {"MESSAGE": False}
-                    else
+                    else:
                         return {"MESSAGE": f"**{arm['ARM']}** will lose all ⚒️ durability soon! Use **/trinketshop** to repair!"}
         return {"MESSAGE": False}
     except Exception as ex:
