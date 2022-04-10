@@ -21300,7 +21300,7 @@ def update_arm_durability(self, vault, arm, arm_universe, arm_price, card):
                     resp = db.updateVault(query, update_query, filter_query)
                     if current_durability >= 15:
                         return {"MESSAGE": False}
-                    else
+                    else:
                         return {"MESSAGE": f"**{arm['ARM']}** will lose all ⚒️ durability soon! Use **/trinketshop** to repair!"}
         return {"MESSAGE": False}
     except Exception as ex:
