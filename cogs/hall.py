@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 import bot as main
+import crown_utilities
 import db
 import classes as data
 import messages as m
@@ -28,6 +29,10 @@ class Hall(commands.Cog):
 
     @cog_ext.cog_slash(description="Buy a Hall for your guild", guild_ids=main.guild_ids)
     async def buyhall(self, ctx, hall: str):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         hall_name = hall
         leadername = str(ctx.author.id)
         user_query = {'DID' : leadername}
@@ -59,6 +64,10 @@ class Hall(commands.Cog):
 
     @cog_ext.cog_slash(description="View a Hall", guild_ids=main.guild_ids)
     async def viewhall(self, ctx, hall: str):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         hall = db.queryHall({'HALL':{"$regex": f"^{str(hall)}$", "$options": "i"}})
         if hall:
             hall_hall = hall['HALL']

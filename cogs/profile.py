@@ -3,6 +3,7 @@ from discord.ext import commands
 from pymongo import response
 # from soupsieve import select
 import bot as main
+import crown_utilities
 import db
 import classes as data
 import messages as m
@@ -19,12 +20,13 @@ from PIL import Image, ImageFont, ImageDraw
 import requests
 from collections import ChainMap
 import DiscordUtils
-from .crownunlimited import showcard, cardback, enhancer_mapping, title_enhancer_mapping, enhancer_suffix_mapping, title_enhancer_suffix_mapping, passive_enhancer_suffix_mapping, battle_commands, Crest_dict, cardlevel, guild_buff_update_function, destiny as update_destiny_call
+from .crownunlimited import showcard, cardback, enhancer_mapping, title_enhancer_mapping, enhancer_suffix_mapping, title_enhancer_suffix_mapping, passive_enhancer_suffix_mapping, battle_commands, Crest_dict, destiny as update_destiny_call
 import random
 import textwrap
 from discord_slash import cog_ext, SlashContext
 from dinteractions_Paginator import Paginator
 import destiny as d
+
 
 
 emojis = ['👍', '👎']
@@ -38,10 +40,15 @@ class Profile(commands.Cog):
         print('Profile Cog is ready!')
 
     async def cog_check(self, ctx):
+        print("Here")
         return await main.validate_user(ctx)
+
 
     @cog_ext.cog_slash(description="Delete your account", guild_ids=main.guild_ids)
     async def deleteaccount(self, ctx):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
         user = str(ctx.author)
         query = {'DID': str(ctx.author.id)}
         user_is_validated = db.queryUser(query)
@@ -75,6 +82,8 @@ class Profile(commands.Cog):
                     return
 
                 if button_ctx.custom_id == "yes":
+                    response = db.deleteVault({'DID': str(ctx.author.id)})
+                    delete_user_resp = db.deleteUser(user)
                     if team:
                         transaction_message = f"{user_is_validated['DISNAME']} left the game."
                         team_query = {'TEAM_NAME': team['TEAM_NAME']}
@@ -88,8 +97,6 @@ class Profile(commands.Cog):
                             '$inc': {'MEMBER_COUNT': -1}
                             }
                         response = db.deleteTeamMember(team_query, new_value_query, str(ctx.author.id))
-                    response = db.deleteVault({'DID': str(ctx.author.id)})
-                    delete_user_resp = db.deleteUser(user)
                     await button_ctx.send("Account successfully deleted.")
 
             except Exception as ex:
@@ -113,257 +120,282 @@ class Profile(commands.Cog):
 
     @cog_ext.cog_slash(description="View your current build", guild_ids=main.guild_ids)
     async def build(self, ctx):
-        query = {'DID': str(ctx.author.id)}
-        d = db.queryUser(query)
-        card = db.queryCard({'NAME':str(d['CARD'])})
-        title = db.queryTitle({'TITLE': str(d['TITLE'])})
-        arm = db.queryArm({'ARM': str(d['ARM'])})
-        user_info = db.queryUser(query)
-        vault = db.queryVault({'DID': d['DID']})
-        if card:
-            try:
-                durability = ""
-                base_arm_names = ['Reborn Stock', 'Stock', 'Deadgun', 'Glaive', 'Kings Glaive', 'Legendary Weapon']
-                for a in vault['ARMS']:
-                    if a['ARM'] == str(d['ARM']) and a['ARM'] in base_arm_names:
-                        durability = f""
-                    elif a['ARM'] == str(d['ARM']) and a['ARM'] not in base_arm_names:
-                        durability = f"⚒️ {a['DUR']}"
-                   
-                # Acquire Card Levels data
-                card_lvl = 0
-                card_tier = 0
-                card_exp = 0
-                card_lvl_attack_buff = 0
-                card_lvl_defense_buff = 0
-                card_lvl_ap_buff = 0
-                card_lvl_hlt_buff = 0
-
-                for x in vault['CARD_LEVELS']:
-                    if x['CARD'] == card['NAME']:
-                        card_lvl = x['LVL']
-                        card_exp = x['EXP']
-                        card_lvl_ap_buff = x['AP']
-                        card_lvl_attack_buff = x['ATK']
-                        card_lvl_defense_buff = x['DEF']
-                        card_lvl_hlt_buff = x['HLT']
-
-                oarm_universe = arm['UNIVERSE']
-                o_title_universe = title['UNIVERSE']
-                o_card = card['NAME']
-                o_card_path=card['PATH']
-                o_max_health = card['HLT'] + card_lvl_hlt_buff
-                o_health = card['HLT'] + card_lvl_hlt_buff
-                o_stamina = card['STAM']
-                o_max_stamina = card['STAM']
-                o_moveset = card['MOVESET']
-                o_attack = card['ATK'] + card_lvl_attack_buff
-                o_defense = card['DEF'] + card_lvl_defense_buff
-                o_type = card['TYPE']
-                o_passive = card['PASS'][0]
-                o_speed = card['SPD']
-                o_show = card['UNIVERSE']
-                o_collection = card['COLLECTION']
-                o_destiny = card['HAS_COLLECTION']
-                o_rebirth = d['REBIRTH']
-                performance_mode = d['PERFORMANCE']
-                card_tier = card['TIER']
-                
-        
-                rebirthBonus = o_rebirth * 10
-                traits = ut.traits
-                mytrait = {}
-                traitmessage = ''
-                for trait in traits:
-                    if trait['NAME'] == o_show:
-                        mytrait = trait
-                    if o_show == 'Kanto Region' or o_show == 'Johto Region' or o_show == 'Kalos Region' or o_show == 'Unova Region' or o_show == 'Sinnoh Region' or o_show == 'Hoenn Region' or o_show == 'Galar Region' or o_show == 'Alola Region':
-                        if trait['NAME'] == 'Pokemon':
-                            mytrait = trait
-                if mytrait:
-                    traitmessage = f"{mytrait['EFFECT']}: {mytrait['TRAIT']}"
-
-                pets = vault['PETS']
-
-                active_pet = {}
-                pet_names = []
-
-                for pet in pets:
-                    pet_names.append(pet['NAME'])
-                    if pet['NAME'] == d['PET']:
-                        active_pet = pet
-
-                power = list(active_pet.values())[3]
-                pet_ability_power = (active_pet['BOND'] * active_pet['LVL']) + power
-                bond = active_pet['BOND']
-                lvl = active_pet['LVL']
-
-                bond_message = ""
-                lvl_message = ""
-                if bond == 3:
-                    bond_message = "🌟"
-                
-                if lvl == 10:
-                    lvl_message = "⭐"
-
-                # Arm Information
-                arm_name = arm['ARM']
-                arm_passive = arm['ABILITIES'][0]
-                arm_passive_type = list(arm_passive.keys())[0]
-                arm_passive_value = list(arm_passive.values())[0]
-                title_name= title['TITLE']
-                title_passive = title['ABILITIES'][0]
-                title_passive_type = list(title_passive.keys())[0]
-                title_passive_value = list(title_passive.values())[0]
-
-                o_1 = o_moveset[0]
-                o_2 = o_moveset[1]
-                o_3 = o_moveset[2]
-                o_enhancer = o_moveset[3]
-                
-                # Move 1
-                move1 = list(o_1.keys())[0]
-                move1ap = list(o_1.values())[0] + card_lvl_ap_buff
-                move1_stamina = list(o_1.values())[1]
-                
-                # Move 2
-                move2 = list(o_2.keys())[0]
-                move2ap = list(o_2.values())[0] + card_lvl_ap_buff
-                move2_stamina = list(o_2.values())[1]
-
-                # Move 3
-                move3 = list(o_3.keys())[0]
-                move3ap = list(o_3.values())[0] + card_lvl_ap_buff
-                move3_stamina = list(o_3.values())[1]
-
-                # Move Enhancer
-                move4 = list(o_enhancer.keys())[0]
-                move4ap = list(o_enhancer.values())[0]
-                move4_stamina = list(o_enhancer.values())[1]
-                move4enh = list(o_enhancer.values())[2]
-
-
-                resolved = False
-                focused = False
-                att = 0
-                defe = 0
-                turn = 0
-
-                passive_name = list(o_passive.keys())[0]
-                passive_num = list(o_passive.values())[0]
-                passive_type = list(o_passive.values())[1]
-
-                atk_buff = ""
-                def_buff = ""
-                hlt_buff = ""
-                message = ""
-                if (oarm_universe == o_show) and (o_title_universe == o_show):
-                    o_attack = o_attack + 20
-                    o_defense = o_defense + 20
-                    o_health = o_health + 100
-                    o_max_health = o_max_health + 100
-                    message = "_Universe Buff Applied_"
-                    if o_destiny:
-                        o_attack = o_attack + 25
-                        o_defense = o_defense + 25
-                        o_health = o_health + 150
-                        o_max_health = o_max_health + 150
-                        message = "_Destiny Buff Applied_"
-
-                #Title errors 
-                titled =False
-                titleicon="⚠️"
-                licon = "🔱"
-                if card_lvl == 200:
-                    licon ="⚜️"
-                titlemessage = f"{titleicon} {title_name} ~ INEFFECTIVE"
-                warningmessage = f"Use {o_show} or Unbound Titles on this card"
-                if o_title_universe == "Unbound":
-                    titled =True
-                    titleicon = "🎗️"
-                    titlemessage = f"🎗️ {title_name}: {title_passive_type} {title_passive_value}{title_enhancer_suffix_mapping[title_passive_type]}"
-                    warningmessage= f""
-                elif o_title_universe == o_show:
-                    titled =True
-                    titleicon = "🎗️"
-                    titlemessage = f"🎗️ {title_name}: {title_passive_type} {title_passive_value}{title_enhancer_suffix_mapping[title_passive_type]}"
-                    warningmessage= f""
-                cardtitle = {'TITLE': title_name}
-
-                #<:PCG:769471288083218432>
-                if performance_mode:
-                    embedVar = discord.Embed(title=f"{licon}{card_lvl} {o_card}".format(self), description=textwrap.dedent(f"""\
-                    :mahjong: **{card_tier}**
-                    ❤️ **{o_max_health}**
-                    🗡️ **{o_attack}**
-                    🛡️ **{o_defense}**
-                    🏃 **{o_speed}**
-
-                    **{titlemessage}**
-                    🦾 **{arm_name}: {arm_passive_type} {arm_passive_value}{enhancer_suffix_mapping[arm_passive_type]} {durability}**
-                    🧬 **{active_pet['NAME']}: {active_pet['TYPE']}: {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]} | Bond {bond} {bond_message} / Level {lvl} {lvl_message}**
-                    🩸 **{passive_name}:** {passive_type} {passive_num}{passive_enhancer_suffix_mapping[passive_type]}                
-                    
-                    💥 **{move1}:** {move1ap}
-                    ☄️ **{move2}:** {move2ap}
-                    🏵️ **{move3}:** {move3ap}
-                    🦠 **{move4}:** {move4enh} {move4ap}{enhancer_suffix_mapping[move4enh]}
-
-                    ♾️ {traitmessage}
-                    """),colour=000000)
-                    embedVar.set_image(url="attachment://image.png")
-                    if card_lvl != 500:
-                        embedVar.set_footer(text=f"EXP Until Next Level: {150 - card_exp}\nRebirth Buff: +{rebirthBonus}\n{warningmessage}")
-                    else:
-                        embedVar.set_footer(text=f"Max Level\nRebirth Buff: +{rebirthBonus}\n{warningmessage}")
-                    embedVar.set_author(name=f"{ctx.author}", icon_url=user_info['AVATAR'])
-                    
-                    await ctx.send(embed=embedVar)
-                    return
-                   
-                else:
-                    card_file = showcard(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, cardtitle, focused, o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, card_lvl, None)
-
-                    embedVar = discord.Embed(title=f"".format(self), colour=000000)
-                    embedVar.set_image(url="attachment://image.png")
-                    embedVar.set_author(name=textwrap.dedent(f"""\
-                    {titlemessage}
-                    🦾 {arm_name}: {arm_passive_type} {arm_passive_value}{enhancer_suffix_mapping[arm_passive_type]} {durability}
-                    🧬 {active_pet['NAME']}: {active_pet['TYPE']}: {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]} | Bond {bond} {bond_message} / Level {lvl} {lvl_message}
-                    🩸 {passive_name}: {passive_type} {passive_num}{passive_enhancer_suffix_mapping[passive_type]}                
-                    🏃 {o_speed}
-                    """))
-                    if card_lvl != 500:
-                        embedVar.set_footer(text=f"EXP Until Next Level: {150 - card_exp}\nRebirth Buff: +{rebirthBonus}\n♾️ {traitmessage}\n{warningmessage}")
-                    else:
-                        embedVar.set_footer(text=f"Max Level")
-                    
-                    await ctx.send(file=card_file, embed=embedVar)
-                    return
-            except Exception as ex:
-                trace = []
-                tb = ex.__traceback__
-                while tb is not None:
-                    trace.append({
-                        "filename": tb.tb_frame.f_code.co_filename,
-                        "name": tb.tb_frame.f_code.co_name,
-                        "lineno": tb.tb_lineno
-                    })
-                    tb = tb.tb_next
-                print(str({
-                    'type': type(ex).__name__,
-                    'message': str(ex),
-                    'trace': trace
-                }))
-                await ctx.send("There's an issue with your build. Check with support.", hidden=True)
+        try:
+            # await ctx.defer()
+            a_registered_player = await crown_utilities.player_check(ctx)
+            if not a_registered_player:
                 return
-        else:
-            await ctx.send(m.USER_NOT_REGISTERED, hidden=True)
+            query = {'DID': str(ctx.author.id)}
+            d = db.queryUser(query)
+            card = db.queryCard({'NAME':str(d['CARD'])})
+            title = db.queryTitle({'TITLE': str(d['TITLE'])})
+            arm = db.queryArm({'ARM': str(d['ARM'])})
+            user_info = db.queryUser(query)
+            vault = db.queryVault({'DID': d['DID']})
+            if card:
+                try:
+                    durability = ""
+                    base_arm_names = ['Reborn Stock', 'Stock', 'Deadgun', 'Glaive', 'Kings Glaive', 'Legendary Weapon']
+                    for a in vault['ARMS']:
+                        if a['ARM'] == str(d['ARM']) and a['ARM'] in base_arm_names:
+                            durability = f""
+                        elif a['ARM'] == str(d['ARM']) and a['ARM'] not in base_arm_names:
+                            durability = f"⚒️ {a['DUR']}"
+                    
+                    # Acquire Card Levels data
+                    card_lvl = 0
+                    card_tier = 0
+                    card_exp = 0
+                    card_lvl_attack_buff = 0
+                    card_lvl_defense_buff = 0
+                    card_lvl_ap_buff = 0
+                    card_lvl_hlt_buff = 0
+
+                    for x in vault['CARD_LEVELS']:
+                        if x['CARD'] == card['NAME']:
+                            card_lvl = x['LVL']
+                            card_exp = x['EXP']
+                            card_lvl_ap_buff = x['AP']
+                            card_lvl_attack_buff = x['ATK']
+                            card_lvl_defense_buff = x['DEF']
+                            card_lvl_hlt_buff = x['HLT']
+
+                    oarm_universe = arm['UNIVERSE']
+                    o_title_universe = title['UNIVERSE']
+                    o_card = card['NAME']
+                    o_card_path=card['PATH']
+                    o_max_health = card['HLT'] + card_lvl_hlt_buff
+                    o_health = card['HLT'] + card_lvl_hlt_buff
+                    o_stamina = card['STAM']
+                    o_max_stamina = card['STAM']
+                    o_moveset = card['MOVESET']
+                    o_attack = card['ATK'] + card_lvl_attack_buff
+                    o_defense = card['DEF'] + card_lvl_defense_buff
+                    o_type = card['TYPE']
+                    o_passive = card['PASS'][0]
+                    o_speed = card['SPD']
+                    o_show = card['UNIVERSE']
+                    o_collection = card['COLLECTION']
+                    o_destiny = card['HAS_COLLECTION']
+                    o_rebirth = d['REBIRTH']
+                    performance_mode = d['PERFORMANCE']
+                    card_tier = card['TIER']
+                    
+            
+                    rebirthBonus = o_rebirth * 10
+                    traits = ut.traits
+                    mytrait = {}
+                    traitmessage = ''
+                    for trait in traits:
+                        if trait['NAME'] == o_show:
+                            mytrait = trait
+                        if o_show == 'Kanto Region' or o_show == 'Johto Region' or o_show == 'Kalos Region' or o_show == 'Unova Region' or o_show == 'Sinnoh Region' or o_show == 'Hoenn Region' or o_show == 'Galar Region' or o_show == 'Alola Region':
+                            if trait['NAME'] == 'Pokemon':
+                                mytrait = trait
+                    if mytrait:
+                        traitmessage = f"{mytrait['EFFECT']}: {mytrait['TRAIT']}"
+
+                    pets = vault['PETS']
+
+                    active_pet = {}
+                    pet_names = []
+
+                    for pet in pets:
+                        pet_names.append(pet['NAME'])
+                        if pet['NAME'] == d['PET']:
+                            active_pet = pet
+
+                    power = list(active_pet.values())[3]
+                    pet_ability_power = (active_pet['BOND'] * active_pet['LVL']) + power
+                    bond = active_pet['BOND']
+                    lvl = active_pet['LVL']
+
+                    bond_message = ""
+                    lvl_message = ""
+                    if bond == 3:
+                        bond_message = "🌟"
+                    
+                    if lvl == 10:
+                        lvl_message = "⭐"
+
+                    # Arm Information
+                    arm_name = arm['ARM']
+                    arm_passive = arm['ABILITIES'][0]
+                    arm_passive_type = list(arm_passive.keys())[0]
+                    arm_passive_value = list(arm_passive.values())[0]
+                    title_name= title['TITLE']
+                    title_passive = title['ABILITIES'][0]
+                    title_passive_type = list(title_passive.keys())[0]
+                    title_passive_value = list(title_passive.values())[0]
+
+                    o_1 = o_moveset[0]
+                    o_2 = o_moveset[1]
+                    o_3 = o_moveset[2]
+                    o_enhancer = o_moveset[3]
+                    
+                    # Move 1
+                    move1 = list(o_1.keys())[0]
+                    move1ap = list(o_1.values())[0] + card_lvl_ap_buff
+                    move1_stamina = list(o_1.values())[1]
+                    
+                    # Move 2
+                    move2 = list(o_2.keys())[0]
+                    move2ap = list(o_2.values())[0] + card_lvl_ap_buff
+                    move2_stamina = list(o_2.values())[1]
+
+                    # Move 3
+                    move3 = list(o_3.keys())[0]
+                    move3ap = list(o_3.values())[0] + card_lvl_ap_buff
+                    move3_stamina = list(o_3.values())[1]
+
+                    # Move Enhancer
+                    move4 = list(o_enhancer.keys())[0]
+                    move4ap = list(o_enhancer.values())[0]
+                    move4_stamina = list(o_enhancer.values())[1]
+                    move4enh = list(o_enhancer.values())[2]
+
+
+                    resolved = False
+                    focused = False
+                    att = 0
+                    defe = 0
+                    turn = 0
+
+                    passive_name = list(o_passive.keys())[0]
+                    passive_num = list(o_passive.values())[0]
+                    passive_type = list(o_passive.values())[1]
+
+                    atk_buff = ""
+                    def_buff = ""
+                    hlt_buff = ""
+                    message = ""
+                    if (oarm_universe == o_show) and (o_title_universe == o_show):
+                        o_attack = o_attack + 20
+                        o_defense = o_defense + 20
+                        o_health = o_health + 100
+                        o_max_health = o_max_health + 100
+                        message = "_Universe Buff Applied_"
+                        if o_destiny:
+                            o_attack = o_attack + 25
+                            o_defense = o_defense + 25
+                            o_health = o_health + 150
+                            o_max_health = o_max_health + 150
+                            message = "_Destiny Buff Applied_"
+
+                    #Title errors 
+                    titled =False
+                    titleicon="⚠️"
+                    licon = "🔱"
+                    if card_lvl == 200:
+                        licon ="⚜️"
+                    titlemessage = f"{titleicon} {title_name} ~ INEFFECTIVE"
+                    warningmessage = f"Use {o_show} or Unbound Titles on this card"
+                    if o_title_universe == "Unbound":
+                        titled =True
+                        titleicon = "🎗️"
+                        titlemessage = f"🎗️ {title_name}: {title_passive_type} {title_passive_value}{title_enhancer_suffix_mapping[title_passive_type]}"
+                        warningmessage= f""
+                    elif o_title_universe == o_show:
+                        titled =True
+                        titleicon = "🎗️"
+                        titlemessage = f"🎗️ {title_name}: {title_passive_type} {title_passive_value}{title_enhancer_suffix_mapping[title_passive_type]}"
+                        warningmessage= f""
+                    cardtitle = {'TITLE': title_name}
+
+                    #<:PCG:769471288083218432>
+                    if performance_mode:
+                        embedVar = discord.Embed(title=f"{licon}{card_lvl} {o_card}".format(self), description=textwrap.dedent(f"""\
+                        :mahjong: **{card_tier}**
+                        ❤️ **{o_max_health}**
+                        🗡️ **{o_attack}**
+                        🛡️ **{o_defense}**
+                        🏃 **{o_speed}**
+
+                        **{titlemessage}**
+                        🦾 **{arm_name}: {arm_passive_type} {arm_passive_value}{enhancer_suffix_mapping[arm_passive_type]} {durability}**
+                        🧬 **{active_pet['NAME']}: {active_pet['TYPE']}: {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]} | Bond {bond} {bond_message} / Level {lvl} {lvl_message}**
+                        🩸 **{passive_name}:** {passive_type} {passive_num}{passive_enhancer_suffix_mapping[passive_type]}                
+                        
+                        💥 **{move1}:** {move1ap}
+                        ☄️ **{move2}:** {move2ap}
+                        🏵️ **{move3}:** {move3ap}
+                        🦠 **{move4}:** {move4enh} {move4ap}{enhancer_suffix_mapping[move4enh]}
+
+                        ♾️ {traitmessage}
+                        """),colour=000000)
+                        embedVar.set_image(url="attachment://image.png")
+                        if card_lvl != 500:
+                            embedVar.set_footer(text=f"EXP Until Next Level: {150 - card_exp}\nRebirth Buff: +{rebirthBonus}\n{warningmessage}")
+                        else:
+                            embedVar.set_footer(text=f"Max Level\nRebirth Buff: +{rebirthBonus}\n{warningmessage}")
+                        embedVar.set_author(name=f"{ctx.author}", icon_url=user_info['AVATAR'])
+                        
+                        await ctx.send(embed=embedVar)
+                        return
+                    
+                    else:
+                        card_file = showcard(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, cardtitle, focused, o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, card_lvl, None)
+
+                        embedVar = discord.Embed(title=f"".format(self), colour=000000)
+                        embedVar.set_image(url="attachment://image.png")
+                        embedVar.set_author(name=textwrap.dedent(f"""\
+                        {titlemessage}
+                        🦾 {arm_name}: {arm_passive_type} {arm_passive_value}{enhancer_suffix_mapping[arm_passive_type]} {durability}
+                        🧬 {active_pet['NAME']}: {active_pet['TYPE']}: {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]} | Bond {bond} {bond_message} / Level {lvl} {lvl_message}
+                        🩸 {passive_name}: {passive_type} {passive_num}{passive_enhancer_suffix_mapping[passive_type]}                
+                        🏃 {o_speed}
+                        """))
+                        embedVar.set_thumbnail(url=ctx.author.avatar_url)
+                        if card_lvl != 500:
+                            embedVar.set_footer(text=f"EXP Until Next Level: {150 - card_exp}\nRebirth Buff: +{rebirthBonus}\n♾️ {traitmessage}\n{warningmessage}")
+                        else:
+                            embedVar.set_footer(text=f"Max Level")
+                        
+                        await ctx.send(file=card_file, embed=embedVar)
+                        return
+                except Exception as ex:
+                    trace = []
+                    tb = ex.__traceback__
+                    while tb is not None:
+                        trace.append({
+                            "filename": tb.tb_frame.f_code.co_filename,
+                            "name": tb.tb_frame.f_code.co_name,
+                            "lineno": tb.tb_lineno
+                        })
+                        tb = tb.tb_next
+                    print(str({
+                        'type': type(ex).__name__,
+                        'message': str(ex),
+                        'trace': trace
+                    }))
+                    await ctx.send("There's an issue with your build. Check with support.", hidden=True)
+                    return
+            else:
+                await ctx.send(m.USER_NOT_REGISTERED, hidden=True)
+        except Exception as ex:
+            trace = []
+            tb = ex.__traceback__
+            while tb is not None:
+                trace.append({
+                    "filename": tb.tb_frame.f_code.co_filename,
+                    "name": tb.tb_frame.f_code.co_name,
+                    "lineno": tb.tb_lineno
+                })
+                tb = tb.tb_next
+            print(str({
+                'player': str(player),
+                'type': type(ex).__name__,
+                'message': str(ex),
+                'trace': trace
+            }))
 
 
     @cog_ext.cog_slash(description="Check all your cards", guild_ids=main.guild_ids)
     async def cards(self, ctx):
         await ctx.defer()
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
         query = {'DID': str(ctx.author.id)}
         d = db.queryUser(query)
         vault = db.queryVault({'DID': d['DID']})
@@ -848,8 +880,13 @@ class Profile(commands.Cog):
             await ctx.send("There's an issue with loading your cards. Check with support.", hidden=True)
             return
 
+
     @cog_ext.cog_slash(description="View all Cards in Storage", guild_ids=main.guild_ids)
     async def storage(self, ctx):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         try:
             user = db.queryUser({'DID': str(ctx.author.id)})
             vault = db.queryVault({'DID': str(ctx.author.id)})
@@ -954,6 +991,9 @@ class Profile(commands.Cog):
     @cog_ext.cog_slash(description="Check all your Titles", guild_ids=main.guild_ids)
     async def titles(self, ctx):
         await ctx.defer()
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
         query = {'DID': str(ctx.author.id)}
         d = db.queryUser(query)
         vault = db.queryVault({'DID': d['DID']})
@@ -1323,6 +1363,10 @@ class Profile(commands.Cog):
     @cog_ext.cog_slash(description="Check all your Arms", guild_ids=main.guild_ids)
     async def arms(self, ctx):
         await ctx.defer()
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         query = {'DID': str(ctx.author.id)}
         d = db.queryUser(query)
         vault = db.queryVault({'DID': d['DID']})
@@ -1700,6 +1744,10 @@ class Profile(commands.Cog):
     @cog_ext.cog_slash(description="Check all your Summons", guild_ids=main.guild_ids)
     async def summons(self, ctx):
         await ctx.defer()
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         query = {'DID': str(ctx.author.id)}
         d = db.queryUser(query)
         vault = db.queryVault({'DID': d['DID']})
@@ -2015,6 +2063,10 @@ class Profile(commands.Cog):
     @cog_ext.cog_slash(description="Check all your destiny lines", guild_ids=main.guild_ids)
     async def destinies(self, ctx):
         await ctx.defer()
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         query = {'DID': str(ctx.author.id)}
         d = db.queryUser(query)
         vault = db.queryVault({'DID': d['DID']})
@@ -2105,6 +2157,10 @@ class Profile(commands.Cog):
     @cog_ext.cog_slash(description="Check all your Quests", guild_ids=main.guild_ids)
     async def quests(self, ctx):
         await ctx.defer()
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         query = {'DID': str(ctx.author.id)}
         d = db.queryUser(query)
         vault = db.queryVault({'DID': d['DID']})
@@ -2115,7 +2171,7 @@ class Profile(commands.Cog):
         if vault:
             try:
                 buttons = []
-                guild_buff = guild_buff_update_function(self, d['TEAM'].lower())
+                guild_buff = await crown_utilities.guild_buff_update_function(self, d['TEAM'].lower())
                 name = d['DISNAME'].split("#",1)[0]
                 avatar = d['AVATAR']
                 balance = vault['BALANCE']
@@ -2229,7 +2285,7 @@ class Profile(commands.Cog):
                             # guild = server_name
                             oteam = sowner['TEAM']
                             ofam = sowner['FAMILY']
-                            guild_buff = guild_buff_update_function(self, sowner['TEAM'].lower())
+                            guild_buff = await crown_utilities.guild_buff_update_function(self, sowner['TEAM'].lower())
                             
 
                             if sowner['LEVEL'] < 4:
@@ -2290,6 +2346,10 @@ class Profile(commands.Cog):
 
     @cog_ext.cog_slash(description="Check your Balance", guild_ids=main.guild_ids)
     async def balance(self, ctx):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         try:
             query = {'DID': str(ctx.author.id)}
             d = db.queryUser(query)
@@ -2334,6 +2394,10 @@ class Profile(commands.Cog):
 
     @cog_ext.cog_slash(description="Check your Build Presets", guild_ids=main.guild_ids)
     async def preset(self, ctx):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         query = {'DID': str(ctx.author.id)}
         d = db.queryUser(query)
         vault_query = {'DID': d['DID']}
@@ -2512,6 +2576,10 @@ class Profile(commands.Cog):
 
     @cog_ext.cog_slash(description="Save your current Build as Preset", guild_ids=main.guild_ids)
     async def savepreset(self, ctx):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         query = {'DID': str(ctx.author.id)}
         d = db.queryUser(query)
         vault_query = {'DID': d['DID']}
@@ -2626,6 +2694,10 @@ class Profile(commands.Cog):
 
     @cog_ext.cog_slash(description="Open Crown Shop", guild_ids=main.guild_ids)
     async def shop(self, ctx):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         try:
             all_universes = db.queryAllUniverse()
             user = db.queryUser({'DID': str(ctx.author.id)})
@@ -2720,10 +2792,6 @@ class Profile(commands.Cog):
                     updated_vault = db.queryVault({'DID': user['DID']})
                     balance = updated_vault['BALANCE']        
                     universe = str(button_ctx.origin_message.embeds[0].title)
-                    list1 = updated_vault['CARDS']
-                    list2 = updated_vault['STORAGE']
-                    list2.extend(list1)
-                    current_cards = list2
                     
                     if button_ctx.custom_id == "title":
                         updated_vault = db.queryVault({'DID': user['DID']})
@@ -2808,7 +2876,7 @@ class Profile(commands.Cog):
                             await main.curse(price, str(ctx.author.id))
                             await button_ctx.send(f"You purchased **{arm}**. Increased durability for the arm by 10 as you already own it.")
 
-               
+
                     elif button_ctx.custom_id == "t1card":
                         price = price_adjuster(100000, universe, completed_tales, completed_dungeons)['C1']
                         acceptable = [1,2,3]
@@ -2831,41 +2899,9 @@ class Profile(commands.Cog):
                         card_name = card['NAME']
                         tier = 0
 
-                        if len(updated_vault['CARDS']) >= 25 and storage_amount < storage_allowed_amount:
-                            await route_to_storage(self, ctx, card_name, current_cards, owned_card_levels_list, price, universe, owned_destinies, tier)
-                            self.stop = True
-                            return
-                        elif len(updated_vault['CARDS']) >= 25 and storage_amount >= storage_allowed_amount:
-                            await button_ctx.send("You have max amount of Cards. Transaction cancelled.")
-                            self.stop = True
-                            return
-        
+                        response = await crown_utilities.store_drop_card(str(ctx.author.id), card_name, universe, updated_vault, owned_destinies, 0, 0, "Purchase", True, int(price))
+                        await button_ctx.send(response)
 
-                        if card_name in current_cards:
-                            await cardlevel(self,card['NAME'], str(ctx.author.id), "Purchase", universe)
-                            await button_ctx.send(f"You received a level up for **{card_name}**!")
-                            await main.curse(price, str(ctx.author.id))
-                            
-                        else:
-                            response = db.updateVaultNoFilter(vault_query,{'$addToSet': {'CARDS': str(card_name)}})
-                            await main.curse(price, str(ctx.author.id))
-
-                            # Add Card Level config
-                            if card_name not in owned_card_levels_list:
-                                update_query = {'$addToSet': {
-                                    'CARD_LEVELS': {'CARD': str(card_name), 'LVL': 0, 'TIER': int(tier),
-                                                    'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
-                                r = db.updateVaultNoFilter(vault_query, update_query)
-
-                            # Add Destiny
-                            for destiny in d.destiny:
-                                if card_name in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
-                                    db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
-                                    await button_ctx.send(
-                                        f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.", hidden=True)
-
-
-                            await button_ctx.send(f"You purchased **{card_name}**!")
 
                     elif button_ctx.custom_id == "t2card":
                         price = price_adjuster(450000, universe, completed_tales, completed_dungeons)['C2']
@@ -2890,43 +2926,10 @@ class Profile(commands.Cog):
                             card = list_of_cards[selection]
                         card_name = card['NAME']
                         tier = 0
+                        
+                        response = await crown_utilities.store_drop_card(str(ctx.author.id), card_name, universe, updated_vault, owned_destinies, 0, 0, "Purchase", True, int(price))
+                        await button_ctx.send(response)
 
-                        if len(updated_vault['CARDS']) >= 25 and storage_amount < storage_allowed_amount:
-                            await route_to_storage(self, ctx, card_name, current_cards, owned_card_levels_list, price, universe, owned_destinies, tier)
-                            self.stop = True
-                            return
-                        elif len(updated_vault['CARDS']) >= 25 and storage_amount >= storage_allowed_amount:
-                            await button_ctx.send("You have max amount of Cards. Transaction cancelled.")
-                            self.stop = True
-                            return
-
-
-                        if card_name in current_cards:
-                            await cardlevel(self,card['NAME'], str(ctx.author.id), "Purchase", universe)
-                            await button_ctx.send(f"You received a level up for **{card_name}**!")
-                            await main.curse(price, str(ctx.author.id))
-                            
-                        else:
-                            response = db.updateVaultNoFilter(vault_query,{'$addToSet': {'CARDS': str(card_name)}})
-                            await main.curse(price, str(ctx.author.id))
-
-                            # Add Card Level config
-                            if card_name not in owned_card_levels_list:
-                                update_query = {'$addToSet': {
-                                    'CARD_LEVELS': {'CARD': str(card_name), 'LVL': 0, 'TIER': int(tier),
-                                                    'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
-                                r = db.updateVaultNoFilter(vault_query, update_query)
-
-
-                            # Add Destiny
-                            for destiny in d.destiny:
-                                if card_name in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
-                                    db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
-                                    await button_ctx.send(
-                                        f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.", hidden=True)
-
-
-                            await button_ctx.send(f"You purchased **{card_name}**!")
 
                     elif button_ctx.custom_id == "t3card":
                         price = price_adjuster(6000000, universe, completed_tales, completed_dungeons)['C3']
@@ -2961,44 +2964,8 @@ class Profile(commands.Cog):
                         card_name = card['NAME']
                         tier = 0
 
-                        if len(updated_vault['CARDS']) >= 25 and storage_amount < storage_allowed_amount:
-                            await route_to_storage(self, ctx, card_name, current_cards, owned_card_levels_list, price, universe, owned_destinies, tier)
-                            self.stop = True
-                            return
-                        elif len(updated_vault['CARDS']) >= 25 and storage_amount >= storage_allowed_amount:
-                            await button_ctx.send("You have max amount of Cards. Transaction cancelled.")
-                            self.stop = True
-                            return
-
-
-                        if card_name in current_cards:
-                            await cardlevel(self,card['NAME'], str(ctx.author.id), "Purchase", universe)
-                            await button_ctx.send(f"You received a level up for **{card_name}**!")
-                            await main.curse(price, str(ctx.author.id))
-                            
-                        else:
-                            response = db.updateVaultNoFilter(vault_query,{'$addToSet': {'CARDS': str(card_name)}})
-                            await main.curse(price, str(ctx.author.id))
-
-                            # Add Card Level config
-                            if card_name not in owned_card_levels_list:
-                                update_query = {'$addToSet': {
-                                    'CARD_LEVELS': {'CARD': str(card_name), 'LVL': 0, 'TIER': int(tier),
-                                                    'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
-                                r = db.updateVaultNoFilter(vault_query, update_query)
-
-
-                            # Add Destiny
-                            for destiny in d.destiny:
-                                if card_name in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
-                                    db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
-                                    await button_ctx.send(
-                                        f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.", hidden=True)
-
-                            await button_ctx.send(f"You purchased **{card_name}**!")
-
-                            # self.stop = True
-                            # return
+                        response = await crown_utilities.store_drop_card(str(ctx.author.id), card_name, universe, updated_vault, owned_destinies, 0, 0, "Purchase", True, int(price))
+                        await button_ctx.send(response)
 
                 else:
                     await ctx.send("This is not your Shop.")
@@ -3025,6 +2992,10 @@ class Profile(commands.Cog):
 
     @cog_ext.cog_slash(description="Open Gem Crafting", guild_ids=main.guild_ids)
     async def craft(self, ctx):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         # Craft with Gems
         # Craft Universe Heart, Universe Soul, Skin Box
         poke_universes = ['Kanto Region', 'Johto Region', 'Hoenn Region', 'Sinnoh Region']
@@ -3229,58 +3200,6 @@ class Profile(commands.Cog):
                 'message': str(ex),
                 'trace': trace
             }))
-
-
-async def route_to_storage(self, ctx, card_name, current_cards, owned_card_levels_list, price, universe, owned_destinies, tier):
-    try:
-        user_query = {"DID": str(ctx.author.id)}
-        vault_query = {"DID": str(ctx.author.id)}
-        update_query = {
-            "$addToSet": {"STORAGE": card_name}
-        }
-        update_storage = db.updateVaultNoFilter(user_query, update_query)
-        
-
-        if card_name in current_cards:
-            await cardlevel(self, card_name, str(ctx.author.id), "Purchase", universe)
-            await ctx.send(f"You received a level up for **{card_name}**!")
-            await main.curse(price, str(ctx.author.id))            
-        else:
-            await main.curse(price, str(ctx.author.id))
-
-            # Add Card Level config
-            if card_name not in owned_card_levels_list:
-                update_query = {'$addToSet': {
-                    'CARD_LEVELS': {'CARD': str(card_name), 'LVL': 0, 'TIER': int(tier),
-                                    'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
-                r = db.updateVaultNoFilter(vault_query, update_query)
-
-            # Add Destiny
-            for destiny in d.destiny:
-                if card_name in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
-                    db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
-                    await ctx.send(
-                        f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.", hidden=True)
-
-
-            await ctx.send(f"**{card_name}** has been purchased and added to Storage!")
-
-    except Exception as ex:
-        trace = []
-        tb = ex.__traceback__
-        while tb is not None:
-            trace.append({
-                "filename": tb.tb_frame.f_code.co_filename,
-                "name": tb.tb_frame.f_code.co_name,
-                "lineno": tb.tb_lineno
-            })
-            tb = tb.tb_next
-        print(str({
-            'player': str(ctx.author),
-            'type': type(ex).__name__,
-            'message': str(ex),
-            'trace': trace
-        }))
 
 
 async def craft_adjuster(self, player, vault, universe, price, item, skin_list):

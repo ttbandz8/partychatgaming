@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 import bot as main
+import crown_utilities
 import db
 import classes as data
 import messages as m
@@ -36,6 +37,10 @@ class Family(commands.Cog):
 
     @cog_ext.cog_slash(description="Marry a player", guild_ids=main.guild_ids)
     async def marry(self, ctx, player: User):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         try:
             head_profile = db.queryUser({'DID': str(ctx.author.id)})
             partner_profile = db.queryUser({'DID': str(player.id)})
@@ -156,6 +161,10 @@ class Family(commands.Cog):
 
     @cog_ext.cog_slash(description="Divorce your partner", guild_ids=main.guild_ids)
     async def divorce(self, ctx, partner: User):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         head_profile = db.queryUser({'DID': str(ctx.author.id)})
         partner_profile = db.queryUser({'DISNAME': str(partner)})
         family_profile = db.queryFamily({'HEAD': head_profile['FAMILY']})
@@ -296,6 +305,10 @@ class Family(commands.Cog):
 
     @cog_ext.cog_slash(description="Adopt a kid", guild_ids=main.guild_ids)
     async def adopt(self, ctx, player: User):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         try:
             head_profile = db.queryUser({'DID': str(ctx.author.id)})
             kid_profile = db.queryUser({'DISNAME': str(player)})
@@ -455,6 +468,10 @@ class Family(commands.Cog):
 
     @cog_ext.cog_slash(description="Disown your kid", guild_ids=main.guild_ids)
     async def disown(self, ctx, kid: User):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         try:
             head_profile = db.queryUser({'DID': str(ctx.author.id)})
             family_profile = db.queryFamily({'HEAD': head_profile['FAMILY']})
@@ -543,6 +560,10 @@ class Family(commands.Cog):
 
     @cog_ext.cog_slash(description="Leave your adopted family", guild_ids=main.guild_ids)
     async def leavefamily(self, ctx):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         kid_profile = db.queryUser({'DID': str(ctx.author.id)})
         family_profile = db.queryFamily({'HEAD': kid_profile['FAMILY']})
         kidlist = []
@@ -607,6 +628,10 @@ class Family(commands.Cog):
 
     @cog_ext.cog_slash(description="Abandon your family", guild_ids=main.guild_ids)
     async def abandon(self, ctx):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         try:
             family_query = {'HEAD': str(ctx.author)}
             family = db.queryFamily(family_query)
@@ -685,9 +710,6 @@ class Family(commands.Cog):
                 'trace': trace
             }))
             return
-
-
-
 
 def setup(bot):
     bot.add_cog(Family(bot))

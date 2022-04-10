@@ -5,6 +5,7 @@ from re import T
 import discord
 from discord.ext import commands
 import bot as main
+import crown_utilities
 import db
 import classes as data
 import destiny as d
@@ -19,7 +20,6 @@ from PIL import Image, ImageFont, ImageDraw
 import requests
 import random
 from collections import ChainMap
-
 now = time.asctime()
 import base64
 from io import BytesIO
@@ -40,7 +40,7 @@ import destiny as d
 class CrownUnlimited(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self._cd = commands.CooldownMapping.from_cooldown(1, 1600,
+        self._cd = commands.CooldownMapping.from_cooldown(1, 2500,
                                                           commands.BucketType.member)  # Change accordingly. Currently every 8 minutes (3600 seconds == 60 minutes)
         self._lvl_cd = commands.CooldownMapping.from_cooldown(1, 600,
                                                           commands.BucketType.member)
@@ -89,7 +89,7 @@ class CrownUnlimited(commands.Cog):
                     uni = card_that_leveled['UNIVERSE']
                     nam = card_that_leveled['NAME']
                     mode = "Tales"
-                    await cardlevel(self, nam, str(message.author.id), mode, uni)
+                    await crown_utilities.cardlevel(nam, str(message.author.id), mode, uni)
                 else:
                     return
             except Exception as e:
@@ -156,32 +156,24 @@ class CrownUnlimited(commands.Cog):
             mode_selector_randomizer = random.randint(0, 100)
             if mode_selector_randomizer <= 10 or cards[rand_card]['EXCLUSIVE']:
                 selected_mode = "Dungeon"
-                approach_message = ":fire: A Tempered "
+                approach_message = ":fire: An Empowered "
                 icon = "https://cdn.discordapp.com/emojis/744887136125190204.gif?v=1"
             else:
                 selected_mode = "Tales"
-                approach_message = ":crown: A Calm "
+                approach_message = ":crown: "
                 icon = "https://cdn.discordapp.com/emojis/788000259996516373.gif?v=1"
 
             random_battle_buttons = [
                 manage_components.create_button(
                     style=ButtonStyle.blue,
-                    label="Battle",
+                    label="Start Explore Battle",
                     custom_id="exploreYes"
                 ),
-                manage_components.create_button(
-                    style=ButtonStyle.red,
-                    label="Take Chances",
-                    custom_id="exploreNo"
-                )
             ]
             random_battle_buttons_action_row = manage_components.create_actionrow(*random_battle_buttons)
 
             # Lose / Bounty
-            take_chances_response = ""
-            random_flee_loss = random.randint(1, 50)
-            random_flee_loss = 5
-            bounty = random.randint(1, 30000)
+            bounty = random.randint(1, 80000)
 
             if bounty >= 150000:
                 bounty_icon = ":money_with_wings:"
@@ -195,25 +187,9 @@ class CrownUnlimited(commands.Cog):
             if selected_mode == "Dungeon":
                 bounty = bounty * 2
                 battle_message = "Defeat the card to earn it, and 2x it's bounty!!"
-                random_flee_loss = 100
-
-            # Take Chances Button Interaction
-
-
-            if random_flee_loss <= 100:
-                if selected_mode == "Tales":
-                    found_amount = round(bounty / 3)
-                else:
-                    found_amount = round(bounty / 5)
-                await bless(found_amount, str(message.author.id))
-                embedVar = discord.Embed(title=f"💨You fled but earned {bounty_icon} {found_amount}!", colour=0xf1c40f)
-                take_chances_response = embedVar
-            else:
-                embedVar = discord.Embed(title=f"💨 You fled", colour=0xf1c40f)
-                take_chances_response = embedVar
 
             # Send Message
-            embedVar = discord.Embed(title=f"**{approach_message}{cards[rand_card]['NAME']}** Approaches!",
+            embedVar = discord.Embed(title=f"**{approach_message}{cards[rand_card]['NAME']}** has a bounty!",
                                      description=textwrap.dedent(f"""\
             **Bounty** **{bounty_message}**
             {battle_message}
@@ -296,18 +272,6 @@ class CrownUnlimited(commands.Cog):
                 button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[
                     random_battle_buttons_action_row], timeout=120, check=check)
 
-                if button_ctx.custom_id == "exploreNo":
-                    if random_flee_loss <= 10 and selected_mode == "Tales":
-                        drop_response = await specific_drops(self,str(message.author.id), cards[rand_card]['NAME'], universetitle)
-                        embedVar = discord.Embed(title=f"**{drop_response}**", colour=0xf1c40f)
-                        embedVar.set_footer(text="Successful Capture!",
-                                            icon_url="https://cdn.discordapp.com/emojis/877233426770583563.gif?v=1")
-                        take_chances_response = embedVar
-                    await curse(random_flee_loss, message.author.id)
-                    await button_ctx.send(embed=take_chances_response)
-                    await msg.edit(components=[])
-                    return
-
                 if button_ctx.custom_id == "exploreYes":
                     await button_ctx.defer(ignore=True)
                     await enemy_approached(self, message, setchannel, player, selected_mode, universe,
@@ -366,6 +330,7 @@ class CrownUnlimited(commands.Cog):
                 'trace': trace
             }))
 
+
     @cog_ext.cog_slash(description="Set Explore Channel", guild_ids=main.guild_ids)
     async def setexplorechannel(self, ctx: SlashContext):
         if ctx.author.guild_permissions.administrator:
@@ -400,6 +365,7 @@ class CrownUnlimited(commands.Cog):
         else:
             await ctx.send("Admin command only.")
             return
+
 
     @cog_ext.cog_slash(description="Create Default Server Explore Channel", guild_ids=main.guild_ids)
     async def createexplorechannel(self, ctx: SlashContext):
@@ -444,6 +410,7 @@ class CrownUnlimited(commands.Cog):
                 'trace': trace
             }))
     
+
     @cog_ext.cog_slash(description="Duo Tales with AI",
                        options=[
                            create_option(
@@ -485,6 +452,10 @@ class CrownUnlimited(commands.Cog):
                        ]
         , guild_ids=main.guild_ids)
     async def duo(self, ctx: SlashContext, deck: int, mode: str):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         U_modes = ['ATales', 'Tales', 'CTales', 'DTales']
         D_modes = ['CDungeon', 'DDungeon', 'Dungeon', 'ADungeon']
         B_MODES = ['Boss', 'CBoss']
@@ -555,6 +526,7 @@ class CrownUnlimited(commands.Cog):
             }))
             return
 
+
     @cog_ext.cog_slash(description="Co-op Tales with Friends",
                        options=[
                            create_option(
@@ -586,6 +558,10 @@ class CrownUnlimited(commands.Cog):
                        ]
         , guild_ids=main.guild_ids)
     async def coop(self, ctx: SlashContext, user: User, mode: str):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         U_modes = ['ATales', 'Tales', 'CTales', 'DTales']
         D_modes = ['CDungeon', 'DDungeon', 'Dungeon', 'ADungeon']
         B_MODES = ['Boss', 'CBoss']
@@ -674,8 +650,13 @@ class CrownUnlimited(commands.Cog):
             }))
             return
 
+
     @cog_ext.cog_slash(description="Operate Arena", guild_ids=main.guild_ids)
     async def checkarena(self, ctx, owner: User):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         try:
             arena = db.queryArena({"OWNER": str(owner), "ACTIVE": True})
             if arena:
@@ -963,6 +944,7 @@ class CrownUnlimited(commands.Cog):
 
             return
 
+
     @cog_ext.cog_slash(description="Arena Battle!",
                     options=[
                         create_option(
@@ -988,6 +970,10 @@ class CrownUnlimited(commands.Cog):
                     ]
         , guild_ids=main.guild_ids)
     async def arena(self, ctx: SlashContext, mode: str):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         try:
             player = db.queryUser({"DID": str(ctx.author.id)})
             if player['DIFFICULTY'] == "EASY":
@@ -1074,6 +1060,7 @@ class CrownUnlimited(commands.Cog):
             await channel.send(f"'PLAYER': **{str(ctx.author)}**, 'GUILD': **{str(ctx.author.guild)}**,  TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
             return
 
+
     @cog_ext.cog_slash(description="Conquer Tales to Unlock New Universes!",
                     options=[
                         create_option(
@@ -1103,6 +1090,10 @@ class CrownUnlimited(commands.Cog):
                     ]
         , guild_ids=main.guild_ids)
     async def tales(self, ctx: SlashContext, mode: str):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         U_modes = ['ATales', 'Tales', 'CTales', 'DTales', 'tales']
         D_modes = ['CDungeon', 'DDungeon', 'Dungeon', 'ADungeon', 'dungeon']
         B_MODES = ['Boss', 'CBoss', 'boss']
@@ -1182,9 +1173,15 @@ class CrownUnlimited(commands.Cog):
             await channel.send(f"'PLAYER': **{str(ctx.author)}**, 'GUILD': **{str(ctx.author.guild)}**,  TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
             return
 
+
     @cog_ext.cog_slash(description="Enter the Abyss", guild_ids=main.guild_ids)
     async def abyss(self, ctx: SlashContext):
         await ctx.defer()
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
+
         private_channel = ctx
         mode = "ABYSS"
         if isinstance(private_channel.channel, discord.channel.DMChannel):
@@ -1380,6 +1377,10 @@ class CrownUnlimited(commands.Cog):
     async def battle(self, ctx: SlashContext, player: User):
         try:
             await ctx.defer()
+            a_registered_player = await crown_utilities.player_check(ctx)
+            if not a_registered_player:
+                return
+
             if ctx.author.id == player.id:
                 await ctx.send("You cannot PVP against yourself.", hidden=True)
                 return
@@ -1466,6 +1467,11 @@ class CrownUnlimited(commands.Cog):
     async def tutorial(self, ctx: SlashContext):
         try:
             await ctx.defer()
+            a_registered_player = await crown_utilities.player_check(ctx)
+            if not a_registered_player:
+                return
+
+
             await ctx.send(":crown: Building Tutorial Match...", delete_after=10)
             private_channel = ctx
             starttime = time.asctime()
@@ -1533,8 +1539,13 @@ class CrownUnlimited(commands.Cog):
             await channel.send(f"'PLAYER': **{str(ctx.author)}**, 'GUILD': **{str(ctx.author.guild)}**,  TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
             return
 
+
     @cog_ext.cog_slash(description="Start an Association Raid", guild_ids=main.guild_ids)
     async def raid(self, ctx: SlashContext, guild: str):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         try:
             guildname = guild
             private_channel = ctx
@@ -1636,6 +1647,10 @@ class CrownUnlimited(commands.Cog):
 
     @cog_ext.cog_slash(description="View all Cards of a Universe you unlocked", guild_ids=main.guild_ids)
     async def cardlist(self, ctx: SlashContext, universe: str):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         universe_data = db.queryUniverse({'TITLE': {"$regex": str(universe), "$options": "i"}})
         user = db.queryUser({'DID': str(ctx.author.id)})
         list_of_cards = db.queryAllCardsBasedOnUniverse({'UNIVERSE': {"$regex": str(universe), "$options": "i"}})
@@ -1719,8 +1734,14 @@ class CrownUnlimited(commands.Cog):
         embeds = embed_list
         await paginator.run(embeds)
 
+
     @cog_ext.cog_slash(description="View all Titles of a Universe you unlocked", guild_ids=main.guild_ids)
     async def titlelist(self, ctx: SlashContext, universe: str):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
+
         universe_data = db.queryUniverse({'TITLE': {"$regex": universe, "$options": "i"}})
         user = db.queryUser({'DID': str(ctx.author.id)})
         list_of_titles = db.queryAllTitlesBasedOnUniverses({'UNIVERSE': {"$regex": str(universe), "$options": "i"}})
@@ -1793,8 +1814,14 @@ class CrownUnlimited(commands.Cog):
         embeds = embed_list
         await paginator.run(embeds)
 
+
     @cog_ext.cog_slash(description="View all Arms of a Universe you unlocked", guild_ids=main.guild_ids)
     async def armlist(self, ctx: SlashContext, universe: str):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
+
         universe_data = db.queryUniverse({'TITLE': {"$regex": universe, "$options": "i"}})
         user = db.queryUser({'DID': str(ctx.author.id)})
         list_of_arms = db.queryAllArmsBasedOnUniverses({'UNIVERSE': {"$regex": str(universe), "$options": "i"}})
@@ -1863,8 +1890,14 @@ class CrownUnlimited(commands.Cog):
         embeds = embed_list
         await paginator.run(embeds)
 
+
     @cog_ext.cog_slash(description="View all Destinies of a Universe you unlocked", guild_ids=main.guild_ids)
     async def destinylist(self, ctx: SlashContext, universe: str):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
+
         universe_data = db.queryUniverse({'TITLE': {"$regex": universe, "$options": "i"}})
         user = db.queryUser({'DID': str(ctx.author.id)})
         destinies = []
@@ -1914,8 +1947,14 @@ class CrownUnlimited(commands.Cog):
         embeds = embed_list
         await paginator.run(embeds)
 
+
     @cog_ext.cog_slash(description="View Gems", guild_ids=main.guild_ids)
     async def gems(self, ctx: SlashContext):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
+
         vault = db.queryVault({'DID': str(ctx.author.id)})
         current_gems = vault['GEMS']
         if current_gems:
@@ -1973,8 +2012,14 @@ class CrownUnlimited(commands.Cog):
         else:
             await ctx.send("You currently own no 💎.")
 
+
     @cog_ext.cog_slash(description="View all Summons of a Universe you unlocked", guild_ids=main.guild_ids)
     async def summonlist(self, ctx: SlashContext, universe: str):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
+
         universe_data = db.queryUniverse({'TITLE': {"$regex": universe, "$options": "i"}})
         user = db.queryUser({'DID': str(ctx.author.id)})
         list_of_pets = db.queryAllPetsBasedOnUniverses({'UNIVERSE': {"$regex": str(universe), "$options": "i"}})
@@ -2045,8 +2090,13 @@ class CrownUnlimited(commands.Cog):
         embeds = embed_list
         await paginator.run(embeds)
 
+
     @cog_ext.cog_slash(description="View all available Universes", guild_ids=main.guild_ids)
     async def universes(self, ctx: SlashContext):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         try:
             universe_data = db.queryAllUniverse()
             # user = db.queryUser({'DID': str(ctx.author.id)})
@@ -2088,8 +2138,14 @@ class CrownUnlimited(commands.Cog):
                 'trace': trace
             }))
 
+
     @cog_ext.cog_slash(description="View all Homes for purchase", guild_ids=main.guild_ids)
     async def houses(self, ctx: SlashContext):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
+
         house_data = db.queryAllHouses()
         user = db.queryUser({'DID': str(ctx.author.id)})
 
@@ -2129,8 +2185,14 @@ class CrownUnlimited(commands.Cog):
         embeds = embed_list
         await paginator.run(embeds)
 
+
     @cog_ext.cog_slash(description="View all Halls for purchase", guild_ids=main.guild_ids)
     async def halls(self, ctx: SlashContext):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
+
         hall_data = db.queryAllHalls()
         user = db.queryUser({'DID': str(ctx.author.id)})
 
@@ -2223,7 +2285,7 @@ async def quest(player, opponent, mode):
             if str(mode) == "Dungeon" and completion >= 0:
                 message = "Quest progressed!"
                 if completion == 0:
-                    await bless(reward, player.id)
+                    await crown_utilities.bless(reward, player.id)
                     message = f"Quest Completed! :coin:{reward} has been added to your balance."
 
                     # server_query = {'GNAME': str(player.guild)}
@@ -2241,7 +2303,7 @@ async def quest(player, opponent, mode):
             elif str(mode) == "Tales" and completion >= 0:
                 message = "Quest progressed!"
                 if completion == 0:
-                    await bless(reward, player.id)
+                    await crown_utilities.bless(reward, player.id)
                     message = f"Quest Completed! :coin:{reward} has been added to your balance."
                     # server_query = {'GNAME': str(player.guild)}
                     # update_server_query = {
@@ -2293,7 +2355,7 @@ async def destiny(player, opponent, mode):
     current_cards = list1.extend(list2)
 
     if hand_length >= hand_limit and storage_amount >= storage_allowed_amount:
-        message = f"Your storage is full. You are unable to completed the destiny until you have available storage for your new destiny card."
+        message = f"Your storage is full. You are unable to complete the destinies until you have available storage for rewarded destiny cards."
         return message
 
 
@@ -2489,116 +2551,116 @@ async def summonlevel(pet, player):
         return
 
 
-async def cardlevel(self, card: str, player, mode: str, universe: str):
-    vault = db.queryVault({'DID': str(player)})
-    player_info = db.queryUser({'DID': str(player)})
-    guild_buff = guild_buff_update_function(self, player_info['TEAM'].lower())
-    if player_info['DIFFICULTY'] == "EASY":
-        return
+# async def cardlevel(card: str, player, mode: str, universe: str):
+#     vault = db.queryVault({'DID': str(player)})
+#     player_info = db.queryUser({'DID': str(player)})
+#     guild_buff = await crown_utilities.guild_buff_update_function(player_info['TEAM'].lower())
+#     if player_info['DIFFICULTY'] == "EASY":
+#         return
 
 
-    card_uni = db.queryCard({'NAME': card})['UNIVERSE']
-    user = await self.bot.fetch_user(vault['DID'])
+#     card_uni = db.queryCard({'NAME': card})['UNIVERSE']
+#     user = await self.bot.fetch_user(vault['DID'])
 
-    cardinfo = {}
-    for x in vault['CARD_LEVELS']:
-        if x['CARD'] == str(card):
-            cardinfo = x
+#     cardinfo = {}
+#     for x in vault['CARD_LEVELS']:
+#         if x['CARD'] == str(card):
+#             cardinfo = x
     
-    has_universe_heart = False
-    has_universe_soul = False
+#     has_universe_heart = False
+#     has_universe_soul = False
 
-    if universe != "n/a":
-        for gems in vault['GEMS']:
-            if gems['UNIVERSE'] == card_uni and gems['UNIVERSE_HEART']:
-                has_universe_heart = True
-            if gems['UNIVERSE'] == card_uni and gems['UNIVERSE_SOUL']:
-                has_universe_soul = True
-
-
-    lvl = cardinfo['LVL']
-    lvl_req = 150
-    exp = cardinfo['EXP']
-    exp_gain = 0
-    if has_universe_soul:
-        if mode == "Dungeon":
-            exp_gain = 65
-        if mode == "Tales":
-            exp_gain = 35
-        if mode == "Purchase":
-            exp_gain = 150
-    else:
-        if mode == "Dungeon":
-            exp_gain = 30
-        if mode == "Tales":
-            exp_gain = 15
-        if mode == "Purchase":
-            exp_gain = 150
+#     if universe != "n/a":
+#         for gems in vault['GEMS']:
+#             if gems['UNIVERSE'] == card_uni and gems['UNIVERSE_HEART']:
+#                 has_universe_heart = True
+#             if gems['UNIVERSE'] == card_uni and gems['UNIVERSE_SOUL']:
+#                 has_universe_soul = True
 
 
-    hlt_buff = 0
-    atk_def_buff = 0
-    ap_buff = 0
+#     lvl = cardinfo['LVL']
+#     lvl_req = 150
+#     exp = cardinfo['EXP']
+#     exp_gain = 0
+#     if has_universe_soul:
+#         if mode == "Dungeon":
+#             exp_gain = 65
+#         if mode == "Tales":
+#             exp_gain = 35
+#         if mode == "Purchase":
+#             exp_gain = 150
+#     else:
+#         if mode == "Dungeon":
+#             exp_gain = 30
+#         if mode == "Tales":
+#             exp_gain = 15
+#         if mode == "Purchase":
+#             exp_gain = 150
 
-    if lvl < 200:
-        if guild_buff:
-            if guild_buff['Level']:
-                exp_gain = 150
-                update_team_response = db.updateTeam(guild_buff['QUERY'], guild_buff['UPDATE_QUERY'])
 
-        # Experience Code
-        if exp < (lvl_req - 1):
-            query = {'DID': str(player)}
-            update_query = {'$inc': {'CARD_LEVELS.$[type].' + "EXP": exp_gain}}
-            filter_query = [{'type.' + "CARD": str(card)}]
-            response = db.updateVault(query, update_query, filter_query)
+#     hlt_buff = 0
+#     atk_def_buff = 0
+#     ap_buff = 0
 
-        # Level Up Code
-        if exp >= (lvl_req - exp_gain):
-            if (lvl + 1) % 2 == 0:
-                atk_def_buff = 1
-            if (lvl + 1) % 3 == 0:
-                ap_buff = 1
-            if (lvl + 1) % 20 == 0:
-                hlt_buff = 25
-            query = {'DID': str(player)}
-            update_query = {'$set': {'CARD_LEVELS.$[type].' + "EXP": 0},
-                            '$inc': {'CARD_LEVELS.$[type].' + "LVL": 1, 'CARD_LEVELS.$[type].' + "ATK": atk_def_buff,
-                                     'CARD_LEVELS.$[type].' + "DEF": atk_def_buff,
-                                     'CARD_LEVELS.$[type].' + "AP": ap_buff, 'CARD_LEVELS.$[type].' + "HLT": hlt_buff}}
-            filter_query = [{'type.' + "CARD": str(card)}]
-            response = db.updateVault(query, update_query, filter_query)
-            await user.send(f"**{card}** leveled up!")
+#     if lvl < 200:
+#         if guild_buff:
+#             if guild_buff['Level']:
+#                 exp_gain = 150
+#                 update_team_response = db.updateTeam(guild_buff['QUERY'], guild_buff['UPDATE_QUERY'])
 
-    if lvl < 500 and lvl >= 200 and has_universe_heart:
-        if guild_buff:
-            if guild_buff['Level']:
-                exp_gain = 150
-                update_team_response = db.updateTeam(guild_buff['QUERY'], guild_buff['UPDATE_QUERY'])
+#         # Experience Code
+#         if exp < (lvl_req - 1):
+#             query = {'DID': str(player)}
+#             update_query = {'$inc': {'CARD_LEVELS.$[type].' + "EXP": exp_gain}}
+#             filter_query = [{'type.' + "CARD": str(card)}]
+#             response = db.updateVault(query, update_query, filter_query)
 
-        # Experience Code
-        if exp < (lvl_req - 1):
-            query = {'DID': str(player)}
-            update_query = {'$inc': {'CARD_LEVELS.$[type].' + "EXP": exp_gain}}
-            filter_query = [{'type.' + "CARD": str(card)}]
-            response = db.updateVault(query, update_query, filter_query)
+#         # Level Up Code
+#         if exp >= (lvl_req - exp_gain):
+#             if (lvl + 1) % 2 == 0:
+#                 atk_def_buff = 1
+#             if (lvl + 1) % 3 == 0:
+#                 ap_buff = 1
+#             if (lvl + 1) % 20 == 0:
+#                 hlt_buff = 25
+#             query = {'DID': str(player)}
+#             update_query = {'$set': {'CARD_LEVELS.$[type].' + "EXP": 0},
+#                             '$inc': {'CARD_LEVELS.$[type].' + "LVL": 1, 'CARD_LEVELS.$[type].' + "ATK": atk_def_buff,
+#                                      'CARD_LEVELS.$[type].' + "DEF": atk_def_buff,
+#                                      'CARD_LEVELS.$[type].' + "AP": ap_buff, 'CARD_LEVELS.$[type].' + "HLT": hlt_buff}}
+#             filter_query = [{'type.' + "CARD": str(card)}]
+#             response = db.updateVault(query, update_query, filter_query)
+#             await user.send(f"**{card}** leveled up!")
 
-        # Level Up Code
-        if exp >= (lvl_req - exp_gain):
-            if (lvl + 1) % 2 == 0:
-                atk_def_buff = 1
-            if (lvl + 1) % 3 == 0:
-                ap_buff = 1
-            if (lvl + 1) % 20 == 0:
-                hlt_buff = 25
-            query = {'DID': str(player)}
-            update_query = {'$set': {'CARD_LEVELS.$[type].' + "EXP": 0},
-                            '$inc': {'CARD_LEVELS.$[type].' + "LVL": 1, 'CARD_LEVELS.$[type].' + "ATK": atk_def_buff,
-                                     'CARD_LEVELS.$[type].' + "DEF": atk_def_buff,
-                                     'CARD_LEVELS.$[type].' + "AP": ap_buff, 'CARD_LEVELS.$[type].' + "HLT": hlt_buff}}
-            filter_query = [{'type.' + "CARD": str(card)}]
-            response = db.updateVault(query, update_query, filter_query)
-            await user.send(f"**{card}** leveled up!")
+#     if lvl < 500 and lvl >= 200 and has_universe_heart:
+#         if guild_buff:
+#             if guild_buff['Level']:
+#                 exp_gain = 150
+#                 update_team_response = db.updateTeam(guild_buff['QUERY'], guild_buff['UPDATE_QUERY'])
+
+#         # Experience Code
+#         if exp < (lvl_req - 1):
+#             query = {'DID': str(player)}
+#             update_query = {'$inc': {'CARD_LEVELS.$[type].' + "EXP": exp_gain}}
+#             filter_query = [{'type.' + "CARD": str(card)}]
+#             response = db.updateVault(query, update_query, filter_query)
+
+#         # Level Up Code
+#         if exp >= (lvl_req - exp_gain):
+#             if (lvl + 1) % 2 == 0:
+#                 atk_def_buff = 1
+#             if (lvl + 1) % 3 == 0:
+#                 ap_buff = 1
+#             if (lvl + 1) % 20 == 0:
+#                 hlt_buff = 25
+#             query = {'DID': str(player)}
+#             update_query = {'$set': {'CARD_LEVELS.$[type].' + "EXP": 0},
+#                             '$inc': {'CARD_LEVELS.$[type].' + "LVL": 1, 'CARD_LEVELS.$[type].' + "ATK": atk_def_buff,
+#                                      'CARD_LEVELS.$[type].' + "DEF": atk_def_buff,
+#                                      'CARD_LEVELS.$[type].' + "AP": ap_buff, 'CARD_LEVELS.$[type].' + "HLT": hlt_buff}}
+#             filter_query = [{'type.' + "CARD": str(card)}]
+#             response = db.updateVault(query, update_query, filter_query)
+#             await user.send(f"**{card}** leveled up!")
 
 
 async def savematch(player, card, path, title, arm, universe, universe_type, exclusive):
@@ -3956,7 +4018,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         ocard_lvl_ap_buff = 0
         ocard_lvl_hlt_buff = 0
 
-        guild_buff = guild_buff_update_function(self, oteam.lower())
+        guild_buff = await crown_utilities.guild_buff_update_function(oteam.lower())
         if guild_buff:
             if guild_buff['Stat']:
                 ocard_lvl_attack_buff = 50
@@ -4069,7 +4131,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             ccard_lvl_ap_buff = 0
             ccard_lvl_hlt_buff = 0
 
-            guild_buff = guild_buff_update_function(self, cteam.lower())
+            guild_buff = await crown_utilities.guild_buff_update_function(cteam.lower())
             if guild_buff:
                 if guild_buff['Stat']:
                     ccard_lvl_attack_buff = 50
@@ -6029,7 +6091,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
     
     if oteam != 'PCG':
         team_info = db.queryTeam(team_query)
-        team_buff = guild_buff_update_function(self, oteam)
+        team_buff = await crown_utilities.guild_buff_update_function(oteam)
         if team_buff:
             if team_buff['Rift']:
                 rift_on = True
@@ -6068,6 +6130,9 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                             for save in saved_spots:
                                 if save['UNIVERSE'] == uni['TITLE'] and save['MODE'] in U_modes:
                                     save_spot_text = str(save['CURRENTOPPONENT'])
+                        corruption_message = "📢 Not Corrupted"
+                        if uni['CORRUPTED']:
+                            corruption_message = "📢 **Corrupted**"
 
                         embedVar = discord.Embed(title= f"{uni['TITLE']}", description=textwrap.dedent(f"""
                         {Crest_dict[uni['TITLE']]} **Number of Fights**: :crossed_swords: **{len(uni['CROWN_TALES'])}**
@@ -6077,9 +6142,11 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
 
                         **Saved Game**: :crossed_swords: *{save_spot_text}*
                         **Difficulty**: ⚙️ {difficulty.lower().capitalize()}
-                        **Completed**: "🟢"
+                        **Completed**: 🟢
+                        {corruption_message}
                         """))
                         embedVar.set_image(url=uni['PATH'])
+                        embedVar.set_thumbnail(url=ctx.author.avatar_url)
                         universe_embed_list.append(embedVar)
                     else:
                         save_spot_text = "No Save Data"
@@ -6087,6 +6154,9 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                             for save in saved_spots:
                                 if save['UNIVERSE'] == uni['TITLE'] and save['MODE'] in U_modes:
                                     save_spot_text = str(save['CURRENTOPPONENT'])
+                        corruption_message = "📢 Not Corrupted"
+                        if uni['CORRUPTED']:
+                            corruption_message = "📢 **Corrupted**"
 
                         embedVar = discord.Embed(title= f"{uni['TITLE']}", description=textwrap.dedent(f"""
                         {Crest_dict[uni['TITLE']]} **Number of Fights**: :crossed_swords: **{len(uni['CROWN_TALES'])}**
@@ -6096,9 +6166,11 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
 
                         **Saved Game**: :crossed_swords: *{save_spot_text}*
                         **Difficulty**: ⚙️ {difficulty.lower().capitalize()}
-                        **Completed**: "🔴"
+                        **Completed**: 🔴
+                        {corruption_message}
                         """))
                         embedVar.set_image(url=uni['PATH'])
+                        embedVar.set_thumbnail(url=ctx.author.avatar_url)
                         universe_embed_list.append(embedVar)
         else:
             for uni in all_universes:
@@ -6109,6 +6181,10 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                             for save in saved_spots:
                                 if save['UNIVERSE'] == uni['TITLE'] and save['MODE'] in U_modes:
                                     save_spot_text = str(save['CURRENTOPPONENT'])
+                        corruption_message = "📢 Not Corrupted"
+                        if uni['CORRUPTED']:
+                            corruption_message = "📢 **Corrupted**"
+
 
                         embedVar = discord.Embed(title= f"{uni['TITLE']}", description=textwrap.dedent(f"""
                         {Crest_dict[uni['TITLE']]} **Number of Fights**: :crossed_swords: **{len(uni['CROWN_TALES'])}**
@@ -6118,9 +6194,11 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
 
                         **Saved Game**: :crossed_swords: *{save_spot_text}*
                         **Difficulty**: ⚙️ {difficulty.lower().capitalize()}
-                        **Completed**: "🟢"
+                        **Completed**: 🟢
+                        {corruption_message}
                         """))
                         embedVar.set_image(url=uni['PATH'])
+                        embedVar.set_thumbnail(url=ctx.author.avatar_url)
                         universe_embed_list.append(embedVar)
                     else:
                         save_spot_text = "No Save Data"
@@ -6128,6 +6206,9 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                             for save in saved_spots:
                                 if save['UNIVERSE'] == uni['TITLE'] and save['MODE'] in U_modes:
                                     save_spot_text = str(save['CURRENTOPPONENT'])
+                        corruption_message = "📢 Not Corrupted"
+                        if uni['CORRUPTED']:
+                            corruption_message = "📢 **Corrupted**"
 
                         embedVar = discord.Embed(title= f"{uni['TITLE']}", description=textwrap.dedent(f"""
                         {Crest_dict[uni['TITLE']]} **Number of Fights**: :crossed_swords: **{len(uni['CROWN_TALES'])}**
@@ -6137,9 +6218,11 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
 
                         **Saved Game**: :crossed_swords: *{save_spot_text}*
                         **Difficulty**: ⚙️ {difficulty.lower().capitalize()}
-                        **Completed**: "🔴"
+                        **Completed**: 🔴
+                        {corruption_message}
                         """))
                         embedVar.set_image(url=uni['PATH'])
+                        embedVar.set_thumbnail(url=ctx.author.avatar_url)
                         universe_embed_list.append(embedVar)
 
         custom_button = manage_components.create_button(style=3, label="Select")
@@ -6181,11 +6264,11 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                     db.updateUserNoFilter({'DID': str(ctx.author.id)}, {'$set': {'AVAILABLE': True}})
                     return
                 else:
-                    await curse(entrance_fee, str(ctx.author.id))
+                    await crown_utilities.curse(entrance_fee, str(ctx.author.id))
                     if universe_owner != 'PCG':
                         crest_guild = db.queryGuildAlt({'GNAME' : universe_owner})
                         if crest_guild:
-                            await blessguild(entrance_fee, universe['GUILD'])
+                            await crown_utilities.blessguild(entrance_fee, universe['GUILD'])
                             await ctx.send(f"{Crest_dict[selected_universe]} | {crest_guild['GNAME']} Universe Toll Paid! :coin:{'{:,}'.format(entrance_fee)}")
             
             # #Create Explore Category
@@ -6245,6 +6328,9 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                 for save in saved_spots:
                     if save['UNIVERSE'] == uni and save['MODE'] in D_modes:
                         save_spot_text = str(save['CURRENTOPPONENT'])
+                corruption_message = "📢 Not Corrupted"
+                if uni_option['CORRUPTED']:
+                    corruption_message = "📢 **Corrupted**"
 
                 if uni in completed_dungeons:
                     completed = "🟢"
@@ -6259,8 +6345,10 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
 
                 **Saved Game**: :fire: *{save_spot_text}*
                 **Completed**: {completed}
+                {corruption_message}
                 """))
                 embedVar.set_image(url=uni_option['PATH'])
+                embedVar.set_thumbnail(url=ctx.author.avatar_url)
                 universe_embed_list.append(embedVar)
 
         if not universe_embed_list:
@@ -6301,11 +6389,11 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                     db.updateUserNoFilter({'DID': str(ctx.author.id)}, {'$set': {'AVAILABLE': True}})
                     return
                 else:
-                    await curse(entrance_fee, str(ctx.author.id))
+                    await crown_utilities.curse(entrance_fee, str(ctx.author.id))
                     if universe['GUILD'] != 'PCG':
                         crest_guild = db.queryGuildAlt({'GNAME' : universe['GUILD']})
                         if crest_guild:
-                            await blessguild(entrance_fee, universe['GUILD'])
+                            await crown_utilities.blessguild(entrance_fee, universe['GUILD'])
                             await ctx.send(f"{Crest_dict[selected_universe]} | {crest_guild['GNAME']} Universe Toll Paid! :coin:{'{:,}'.format(entrance_fee)}")
             categoryname = "Crown Unlimited"
             category = discord.utils.get(guild.categories, name=categoryname)
@@ -6362,6 +6450,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
 
                         """))
                         embedVar.set_image(url=boss_info['PATH'])
+                        embedVar.set_thumbnail(url=ctx.author.avatar_url)
                         universe_embed_list.append(embedVar)
         if not universe_embed_list:
             await ctx.send("No available Bosses for you at this time!")
@@ -6398,11 +6487,11 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                     db.updateUserNoFilter({'DID': str(ctx.author.id)}, {'$set': {'AVAILABLE': True}})
                     return
                 else:
-                    await curse(entrance_fee, str(ctx.author.id))
+                    await crown_utilities.curse(entrance_fee, str(ctx.author.id))
                     if universe['GUILD'] != 'PCG':
                         crest_guild = db.queryGuildAlt({'GNAME' : universe['GUILD']})
                         if crest_guild:
-                            await blessguild(entrance_fee, universe['GUILD'])
+                            await crown_utilities.blessguild(entrance_fee, universe['GUILD'])
                             await ctx.send(f"{Crest_dict[selected_universe]} | {crest_guild['GNAME']} Universe Toll Paid! :coin:{'{:,}'.format(entrance_fee)}")
             categoryname = "Crown Unlimited"
             category = discord.utils.get(guild.categories, name=categoryname)
@@ -6439,114 +6528,6 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             channel = guild.get_channel(957061470192033812)
             await channel.send(f"'PLAYER': **{str(ctx.author)}**, 'GUILD': **{str(ctx.author.guild)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
             return
-
-
-def guild_buff_update_function(self, team):
-    try:
-        team_query = {'TEAM_NAME': team.lower()}
-        team_info = db.queryTeam(team_query)
-        if team_info:
-            guild_buff_count = len(team_info['GUILD_BUFFS'])
-            guild_buff_active = team_info['GUILD_BUFF_ON']
-            guild_buffs = team_info['GUILD_BUFFS']
-
-
-            if guild_buff_active:
-                filter_query = [{'type.' + "TYPE": guild_buff_active}]
-                guild_buff_update_query = {}
-                quest_buff = False
-                rift_buff = False
-                level_buff = False
-                stat_buff = False
-                index = 0
-
-                active_guild_buff = team_info['ACTIVE_GUILD_BUFF']
-                for buff in guild_buffs:
-                    if buff['TYPE'] == active_guild_buff:
-                        index = guild_buffs.index(buff)
-
-                        if buff['TYPE'] == "Rift":
-                            rift_buff = True
-                        
-                        if buff['TYPE'] == "Quest":
-                            quest_buff = True
-
-                        if buff['TYPE'] == "Level":
-                            level_buff = True
-
-                        if buff['TYPE'] == "Stat":
-                            stat_buff = True
-                        
-                        if buff['USES'] == 1:
-                            
-                            if guild_buff_count == 1:
-                                guild_buff_update_query = {
-                                        '$pull': {
-                                            'GUILD_BUFFS': {'TYPE': active_guild_buff, 'USES': 1}
-                                        },
-                                        '$set': {
-                                            'GUILD_BUFF_ON': False,
-                                            'GUILD_BUFF_AVAILABLE': False,
-                                            'ACTIVE_GUILD_BUFF': "",
-                                        },
-                                        '$push': {
-                                            'TRANSACTIONS': f"{active_guild_buff} Buff has been used up"
-                                        }
-                                    }
-
-                            else:
-                                guild_buff_update_query = {
-                                        "$pull": {
-                                            'GUILD_BUFFS': {'TYPE': active_guild_buff, 'USES': 1}
-                                        },
-                                        '$set': {
-                                            'GUILD_BUFF_ON': False,
-                                            'ACTIVE_GUILD_BUFF': "",
-                                        },
-                                        '$push': {
-                                            'TRANSACTIONS': f"{active_guild_buff} Buff has been used up"
-                                        }
-                                    }
-                        
-                        else:
-                            guild_buff_update_query = {
-                                '$inc': {
-                                    f"GUILD_BUFFS.{index}.USES": -1
-                                }
-
-                            }
-                
-                response = {
-                    'Quest': quest_buff,
-                    'Rift': rift_buff,
-                    'Level': level_buff,
-                    'Stat': stat_buff,
-                    'QUERY': team_query,
-                    'UPDATE_QUERY': guild_buff_update_query,
-                    'FILTER_QUERY': filter_query
-                    }
-                
-                return response
-            else:
-                return False                     
-        else:
-            return False
-    except Exception as ex:
-        trace = []
-        tb = ex.__traceback__
-        while tb is not None:
-            trace.append({
-                "filename": tb.tb_frame.f_code.co_filename,
-                "name": tb.tb_frame.f_code.co_name,
-                "lineno": tb.tb_lineno
-            })
-            tb = tb.tb_next
-        print(str({
-            'type': type(ex).__name__,
-            'message': str(ex),
-            'trace': trace
-        }))
-        return False    
 
 async def battle_commands(self, ctx, mode, universe, selected_universe, completed_universes, oguild, crestlist,
                           crestsearch, sowner, oteam, ofam, currentopponent, cowner, cteam, cfam, deckNumber, user, arena_flag, arena_owner, arena_type):
@@ -6767,8 +6748,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             o_final_stand = stats['o_final_stand']
 
 
-
-
             if mode in PVP_MODES or mode in RAID_MODES:
                 if mode in RAID_MODES:
                     tperformance = stats['operformance']
@@ -6857,10 +6836,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 #     tcard_lvl = 500
                 #     tcard_lvl_ap_buff = 166
                 t_universe = stats['t_universe']
-                t_attack = stats['t_attack']
-                t_defense = stats['t_defense']
-                t_health = stats['t_health']
-                t_max_health = stats['t_max_health']
+                t_attack = stats['t_attack'] + corruption_atk_buff
+                t_defense = stats['t_defense'] + corruption_def_buff
+                t_health = stats['t_health'] + corruption_hlt_buff
+                t_max_health = stats['t_max_health'] + corruption_hlt_buff
                 t_chainsaw = stats['t_chainsaw']
                 t_atk_chainsaw = stats['t_atk_chainsaw']
                 t_def_chainsaw = stats['t_def_chainsaw']
@@ -7014,6 +6993,24 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             else:
                 turn = 1
             turn_total = 0
+            corruption_hlt_buff = 0
+            corruption_atk_buff = 0
+            corruption_def_buff = 0
+            corruption_ap_buff = 0
+
+            if universe and mode != "ABYSS":
+                if universe['CORRUPTED']:
+                    corruption_hlt_buff = 500
+                    corruption_atk_buff = 80
+                    corruption_def_buff = 100
+                    corruption_ap_buff = 35
+                    if difficulty == "HARD":
+                        corruption_hlt_buff = 1500
+                        corruption_atk_buff = 80
+                        corruption_def_buff = 150
+                        corruption_ap_buff = 65
+
+
             demon_slayer_buff = 0
             tdemon_slayer_buff = 0
             cdemon_slayer_buff = 0
@@ -7140,49 +7137,60 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         turn_total, tap1, tap2, tap3, tenh1, tenh_name, tcard_lvl, o_defense)
             # await private_channel.send(file=player_2_card)
             
+            
+
             # if randomized_battle:
             #     private_channel = ctx.author
             if mode not in PVP_MODES and mode not in B_modes and mode != "ABYSS" and mode not in RAID_MODES and mode not in co_op_modes:
                 embedVar = discord.Embed(title=f"✅ Confirm Start! ({currentopponent + 1}/{total_legends})", description=f"{ctx.author.mention}\n**{o_card}** VS **{t_card}**")
                 embedVar.set_image(url="attachment://image.png")
+                embedVar.set_thumbnail(url=ctx.author.avatar_url)
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card)
             if mode == "ABYSS":
                 embedVar = discord.Embed(title=f"🌑 Abyss Floor {universe['FLOOR']}\n✨ Confirm Start!  ({currentopponent + 1}/{total_legends})", description=f"{ctx.author.mention}\n**{o_card}** VS **{t_card}**")
                 embedVar.set_image(url="attachment://image.png")
+                embedVar.set_thumbnail(url=ctx.author.avatar_url)
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card)
             
             if mode in PVP_MODES and tutorial:
                 embedVar = discord.Embed(title=f"✅ Click Start Match to Begin the Tutorial!", description=f"{ctx.author.mention}\nYou : **{o_card}** VS **{t_card}**")
                 embedVar.set_image(url="attachment://image.png")
+                embedVar.set_thumbnail(url=ctx.author.avatar_url)
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card)
                 
             elif mode in PVP_MODES and tutorial == False:
                 embedVar = discord.Embed(title=f"✅ Confirm PVP Battle!", description=f"{user2.mention}\n**{o_card}** VS **{t_card}**")
+                embedVar.set_thumbnail(url=ctx.author.avatar_url)
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row])      
                 
             elif mode in RAID_MODES:
                 embedVar = discord.Embed(title=f"✅ Confirm Raid Battle!", description=f"{ctx.author.mention}\n**{o_card}** VS **{t_card}**")
                 embedVar.set_image(url="attachment://image.png")
+                embedVar.set_thumbnail(url=ctx.author.avatar_url)
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card)
             
             if mode in co_op_modes and mode not in ai_co_op_modes and mode not in B_modes:
                 embedVar = discord.Embed(title=f"✅ Confirm Co-Op Battle! ({currentopponent + 1}/{total_legends})", description=f"{ctx.author.mention}\n**{o_card}** & **{c_card}** VS **{t_card}**")
                 embedVar.set_image(url="attachment://image.png")
+                embedVar.set_thumbnail(url=ctx.author.avatar_url)
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card)
                 
             if mode in ai_co_op_modes:
                 embedVar = discord.Embed(title=f"✅ Confirm Duo Battle! ({currentopponent + 1}/{total_legends})", description=f"{ctx.author.mention}\n**{o_card}** & **{c_card}** VS **{t_card}**")
                 embedVar.set_image(url="attachment://image.png")
+                embedVar.set_thumbnail(url=ctx.author.avatar_url)
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card) 
                 
             if mode in B_modes and mode not in co_op_modes:
                 embedVar = discord.Embed(title=f"✅ Boss Fight!", description=f"{ctx.author.mention}\n**{o_card}** VS **{t_card}**")
                 embedVar.set_image(url="attachment://image.png")
+                embedVar.set_thumbnail(url=ctx.author.avatar_url)
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card)
                 
             if mode in B_modes and mode in co_op_modes:
                 embedVar = discord.Embed(title=f"✅ Boss Fight!", description=f"{ctx.author.mention}\n**{o_card}** & **{c_card}** VS **{t_card}**")
                 embedVar.set_image(url="attachment://image.png")
+                embedVar.set_thumbnail(url=ctx.author.avatar_url)
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card)
 
             def check(button_ctx):
@@ -7730,6 +7738,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     # await asyncio.sleep(2)
                                     embedVar.add_field(name=f"➡️ **Current Turn** {turn_total}", value=f"{ctx.author.mention} Select move below!")
                                     embedVar.set_image(url="attachment://image.png")
+                                    embedVar.set_thumbnail(url=ctx.author.avatar_url)
                                     embedVar.set_footer(
                                         text=f"{t_card}: ❤️{t_health} 🌀{t_stamina} 🗡️{t_attack}/🛡️{t_defense} {tarm_message}",
                                         icon_url="https://cdn.discordapp.com/emojis/789290881654980659.gif?v=1")
@@ -9945,12 +9954,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     previous_moves.append(f"*{turn_total}:* **{t_card}**: 💉 Siphoned **Full Health!**")
                                                                 else:
                                                                     previous_moves.append(f"*{turn_total}:* **{t_card}**: 💉 Siphoned **{round(siphon_damage)}** Health!")
-                                                                # await button_ctx.defer(ignore=True)
+                                                                await button_ctx.defer(ignore=True)
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                 previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
-                                                            # await button_ctx.defer(ignore=True)
+                                                            await button_ctx.defer(ignore=True)
                                                         if o_health <= 0:
                                                             if o_final_stand==True:
                                                                 if o_universe == "Dragon Ball Z":
@@ -12486,6 +12495,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         embedVar.add_field(name=f"➡️ **Current Turn** {turn_total}", value=f"{ctx.author.mention} Select move below!")
                                         # await asyncio.sleep(2)
                                         embedVar.set_image(url="attachment://image.png")
+                                        embedVar.set_thumbnail(url=ctx.author.avatar_url)
                                         embedVar.set_footer(
                                             text=f"{t_card}: ❤️{t_health} 🌀{t_stamina} 🗡️{t_attack}/🛡️{t_defense} {tarm_message}{companion_stats}",
                                             icon_url="https://cdn.discordapp.com/emojis/789290881654980659.gif?v=1")
@@ -14062,14 +14072,17 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     else:
                                         turn_selector = 0
                                     if mode not in AUTO_BATTLE_modes:
-                                        tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff
-                                        tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff
-                                        tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff
+                                        tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff + corruption_ap_buff
+                                        tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff + corruption_ap_buff
+                                        tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff + corruption_ap_buff
                                         tenh1 = list(t_enhancer.values())[0]
                                         tenh_name = list(t_enhancer.values())[2]
                                         tpet_enh_name = list(tpet_move.values())[2]
                                         tpet_msg_on_resolve = ""
                                         # UNIVERSE CARD
+                                        print(t_health)
+                                        print(t_max_health)
+
                                         if t_universe == "Souls" and t_used_resolve:
                                             player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina,
                                                                 t_used_resolve, ttitle, t_used_focus, t_attack, t_defense,
@@ -18613,9 +18626,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         if t_title_passive_type == "BLINK":
                                             c_stamina = c_stamina + t_title_passive_value
                                             t_stamina = t_stamina - t_title_passive_value
-
-
-                                                               
+                                                    
                                     # await asyncio.sleep(2)
                                     if t_block_used == True:
                                         t_block_used = False
@@ -18837,9 +18848,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             turn = 3
                                     else:
                                         # UNIVERSE CARD
-                                        tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff
-                                        tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff
-                                        tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff
+                                        tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff + corruption_ap_buff
+                                        tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff + corruption_ap_buff
+                                        tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff + corruption_ap_buff
                                         tenh1 = list(t_enhancer.values())[0]
                                         tenh_name = list(t_enhancer.values())[2]
                                         tpet_enh_name = list(tpet_move.values())[2]
@@ -20305,18 +20316,18 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     total_bounty = (bounty + ((bonus / 100) * bounty))
                                     wage = .50 * total_bounty
                                 # response = await score(sownerctx, tuser)
-                                await curse(30, str(ctx.author.id))
-                                await bless(80, tuser.id)
+                                await crown_utilities.curse(30, str(ctx.author.id))
+                                await crown_utilities.bless(80, tuser.id)
                                 if tguild:
-                                    await bless(15, str(tuser.id))
-                                    await blessteam(25, cteam)
+                                    await crown_utilities.bless(15, str(tuser.id))
+                                    await crown_utilities.blessteam(25, cteam)
                                     await teamwin(cteam)
-                                    await blessguild(60, tguild)
+                                    await crown_utilities.blessguild(60, tguild)
                                     if oguild:
-                                        await curse(7, str(tuser.id))
-                                        await curseteam(15, oteam)
+                                        await crown_utilities.curse(7, str(tuser.id))
+                                        await crown_utilities.curseteam(15, oteam)
                                         await teamloss(oteam)
-                                        await curseguild(30, oguild)
+                                        await crown_utilities.curseguild(30, oguild)
 
                                 if arena_flag and arena_type == "SINGLES":
                                     arena = db.queryArena({"OWNER": str(arena_owner), "ACTIVE": True})
@@ -20336,7 +20347,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             }
                                         filter_query = [{'type.' + "NAME": str(sowner['DISNAME'])}]
                                         res = db.updateArena(query, update_query, filter_query)
-                                        await bless(10000, str(tuser.id))
+                                        await crown_utilities.bless(10000, str(tuser.id))
                                         # await ctx.send(f"{ouser.mention} has won the 1v1, earning :coin: 10,000!")
                                         await battle_msg.delete(delay=2)
                                         await asyncio.sleep(2)
@@ -20617,18 +20628,18 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 
                                 
                                 # response = await score(sownerctx, ouser)
-                                await bless(8, str(ctx.author.id))
-                                await curse(3, str(tuser.id))
+                                await crown_utilities.bless(8, str(ctx.author.id))
+                                await crown_utilities.curse(3, str(tuser.id))
                                 if oguild:
-                                    await bless(15, str(ctx.author.id))
-                                    await blessteam(25, oteam)
+                                    await crown_utilities.bless(15, str(ctx.author.id))
+                                    await crown_utilities.blessteam(25, oteam)
                                     await teamwin(oteam)
-                                    await blessguild(60, oguild)
+                                    await crown_utilities.blessguild(60, oguild)
                                     if tguild:
-                                        await curse(7, str(tuser.id))
-                                        await curseteam(15, tteam)
+                                        await crown_utilities.curse(7, str(tuser.id))
+                                        await crown_utilities.curseteam(15, tteam)
                                         await teamloss(tteam)
-                                        await curseguild(30, tguild)
+                                        await crown_utilities.curseguild(30, tguild)
 
 
                                 if arena_flag and arena_type == "SINGLES":
@@ -20649,7 +20660,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             }
                                         filter_query = [{'type.' + "NAME": str(opponent['DISNAME'])}]
                                         res = db.updateArena(query, update_query, filter_query)
-                                        await bless(10000, str(ouser.id))
+                                        await crown_utilities.bless(10000, str(ouser.id))
                                         # await ctx.send(f"{tuser.mention} has won the 1v1, earning :coin: 10,000!")
                                         await battle_msg.delete(delay=2)
                                         await asyncio.sleep(2)
@@ -20748,8 +20759,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 channel = guild.get_channel(957061470192033812)
                                 await channel.send(f"'PLAYER': **{str(ctx.author)}**, 'GUILD': **{str(ctx.author.guild)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
 
-
                         else:
+                            corrupted_message = ""
+                            if universe['CORRUPTED']:
+                                corrupted_message = await crown_utilities.corrupted_universe_handler(ctx, universe, difficulty)
+
                             tale_or_dungeon_only = ""
                             if mode in U_modes:
                                 tale_or_dungeon_only = "Tales"
@@ -20759,7 +20773,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             if randomized_battle:
                                 bounty = abyss_scaling
                                 drop_response = await specific_drops(self,str(o_user['DID']), t_card, t_universe)
-                                await bless(bounty, str(o_user['DID']))
+                                await crown_utilities.bless(bounty, str(o_user['DID']))
                                 embedVar = discord.Embed(title=f"VICTORY\n:coin: {bounty} Bounty Received!\n**{o_card} says**\n{o_win_description}\nThe game lasted {turn_total} rounds.\n\n{drop_response}",description=textwrap.dedent(f"""
                                 {previous_moves_into_embed}
                                 
@@ -20796,11 +20810,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 if mode == "CBoss":
                                     # cmatch = await savematch(str(user2), str(c_card), str(c_card_path), str(ctitle['TITLE']),
                                     #                         str(carm['ARM']), "N/A", "Boss", c['EXCLUSIVE'])
-                                    cfambank = await blessfamily(bank_amount, cfam)
-                                    cteambank = await blessteam(bank_amount, cteam)
+                                    cfambank = await crown_utilities.blessfamily(bank_amount, cfam)
+                                    cteambank = await crown_utilities.blessteam(bank_amount, cteam)
                                     cpetlogger = await summonlevel(cpet_name, user2)
-                                    ccardlogger = await cardlevel(self, c_card, user2.id, "Dungeon", selected_universe)
-                                    await bless(50000, str(user2.id))
+                                    ccardlogger = await crown_utilities.cardlevel(c_card, user2.id, "Dungeon", selected_universe)
+                                    await crown_utilities.bless(50000, str(user2.id))
                                     teammates = False
                                     fam_members =False
                                     stat_bonus = 0
@@ -20828,19 +20842,19 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     embedVar.add_field(name="**Co-Op Bonus**",
                                                 value=f"{bonus_message}")
                                 else:
-                                    embedVar = discord.Embed(title=f":zap: **{o_card}** defeated the {t_universe} Boss {t_card}!\nMatch concluded in {turn_total} turns!\n\n{drop_response} + :coin: 25,000!",description=textwrap.dedent(f"""
+                                    embedVar = discord.Embed(title=f":zap: **{o_card}** defeated the {t_universe} Boss {t_card}!\nMatch concluded in {turn_total} turns!\n\n{drop_response} + :coin: 25,000!\n{corrupted_message}",description=textwrap.dedent(f"""
                                     {previous_moves_into_embed}
                                     
                                     """),colour=0x1abc9c)
-                                await bless(25000, str(ctx.author.id))
-                                ofambank = await blessfamily(fam_amount, ofam)
-                                oteambank = await blessteam(bank_amount, oteam)
+                                await crown_utilities.bless(25000, str(ctx.author.id))
+                                ofambank = await crown_utilities.blessfamily(fam_amount, ofam)
+                                oteambank = await crown_utilities.blessteam(bank_amount, oteam)
                                 petlogger = await summonlevel(opet_name, ouser)
-                                cardlogger = await cardlevel(self, o_card, ouser.id, "Dungeon", selected_universe)
+                                cardlogger = await crown_utilities.cardlevel(o_card, ouser.id, "Dungeon", selected_universe)
 
                                 if crestsearch:
-                                    await blessguild(25000, oguild['GNAME'])
-                                    teambank = await blessteam(5000, oteam)
+                                    await crown_utilities.blessguild(25000, oguild['GNAME'])
+                                    teambank = await crown_utilities.blessteam(5000, oteam)
                                     await movecrest(selected_universe, oguild['GNAME'])
                                     embedVar.add_field(name=f"**{selected_universe} Crest Claimed**!",
                                                     value=f":flags:**{oguild['GNAME']}** earned the {selected_universe} **Crest**")
@@ -20860,14 +20874,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                 if t_card not in sowner['BOSS_WINS']:
                                     if difficulty == "HARD":
-                                        await bless(5000000, str(ctx.author.id))
+                                        await crown_utilities.bless(5000000, str(ctx.author.id))
                                     else:
-                                        await bless(15000000, str(ctx.author.id))
+                                        await crown_utilities.bless(15000000, str(ctx.author.id))
                                     if mode == "CBoss":
                                         if difficulty == "HARD":
-                                            await bless(5000000, str(user2.id))
+                                            await crown_utilities.bless(5000000, str(user2.id))
                                         else:
-                                            await bless(15000000, str(user2.id))
+                                            await crown_utilities.bless(15000000, str(user2.id))
 
                                     query = {'DISNAME': sowner['DISNAME']}
                                     new_query = {'$addToSet': {'BOSS_WINS': t_card}}
@@ -20897,10 +20911,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     new_level = floor + 1
                                     response = db.updateUserNoFilter({'DID': str(ctx.author.id)}, {'$set': {'LEVEL': new_level}})
                                     abyss_message = abyss_level_up_message(str(ctx.author.id), floor, t_card, t_title, tarm_name)
-                                    cardlogger = await cardlevel(self, o_card, ctx.author.id, "Purchase", "n/a")
+                                    cardlogger = await crown_utilities.cardlevel(o_card, ctx.author.id, "Purchase", "n/a")
                                     abyss_drop_message = "\n".join(abyss_message['DROP_MESSAGE'])
                                     bless_amount = 100000 + (10000 * floor)
-                                    await bless(bless_amount, ctx.author.id)
+                                    await crown_utilities.bless(bless_amount, ctx.author.id)
                                     embedVar = discord.Embed(title=f"🌑 Floor **{floor}** Cleared\n**{o_card} says**\n{o_win_description}\nThe game lasted {turn_total} rounds.",description=textwrap.dedent(f"""
                                     Counquer the **Abyss** to unlock **Abyssal Rewards** and **New Game Modes.**
                                     
@@ -20960,9 +20974,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
 
                                 if mode in D_modes:
-                                    teambank = await blessteam(bank_amount, oteam)
+                                    teambank = await crown_utilities.blessteam(bank_amount, oteam)
                                 else:
-                                    teambank = await blessteam(bank_amount, oteam)
+                                    teambank = await crown_utilities.blessteam(bank_amount, oteam)
                                 if o_user['RIFT'] == 1:
                                     response = db.updateUserNoFilter({'DISNAME': str(o_user['DISNAME'])}, {'$set': {'RIFT': 0}})
 
@@ -20971,9 +20985,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 elif mode in U_modes:
                                     drop_response = await drops(self, ouser, selected_universe, currentopponent)
                                 if mode in D_modes:
-                                    ofambank = await blessfamily(fam_amount, ofam)
+                                    ofambank = await crown_utilities.blessfamily(fam_amount, ofam)
                                 else:
-                                    ofambank = await blessfamily(fam_amount, ofam)
+                                    ofambank = await crown_utilities.blessfamily(fam_amount, ofam)
                                 match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']),
                                                         str(oarm['ARM']), str(selected_universe), tale_or_dungeon_only,
                                                         o['EXCLUSIVE'])
@@ -20981,7 +20995,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     questlogger = await quest(ouser, t_card, tale_or_dungeon_only)
                                     destinylogger = await destiny(ouser, t_card, tale_or_dungeon_only)
                                     petlogger = await summonlevel(opet_name, ouser)
-                                    cardlogger = await cardlevel(self, o_card, ouser.id, tale_or_dungeon_only, selected_universe)
+                                    cardlogger = await crown_utilities.cardlevel(o_card, ouser.id, tale_or_dungeon_only, selected_universe)
                                     # if questlogger:
                                     #     await private_channel.send(questlogger)
                                     # if destinylogger:
@@ -21010,41 +21024,42 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     cuid = c_DID
                                     cuser = await self.bot.fetch_user(cuid)
                                     if mode in D_modes:
-                                        teambank = await blessteam(bank_amount, oteam)
-                                        cteambank = await blessteam(bank_amount, oteam)
+                                        teambank = await crown_utilities.blessteam(bank_amount, oteam)
+                                        cteambank = await crown_utilities.blessteam(bank_amount, oteam)
                                     else:
-                                        teambank = await blessteam(bank_amount, oteam)
-                                        cteambank = await blessteam(bank_amount, oteam)
+                                        teambank = await crown_utilities.blessteam(bank_amount, oteam)
+                                        cteambank = await crown_utilities.blessteam(bank_amount, oteam)
                                     if mode in D_modes:
                                         cdrop_response = await dungeondrops(self,user2, selected_universe, currentopponent)
                                     elif mode in U_modes:
                                         cdrop_response = await drops(self,user2, selected_universe, currentopponent)
                                     if mode in D_modes:
-                                        cfambank = await blessfamily(fam_amount, cfam)
-                                        ofambank = await blessfamily(fam_amount, ofam)
+                                        cfambank = await crown_utilities.blessfamily(fam_amount, cfam)
+                                        ofambank = await crown_utilities.blessfamily(fam_amount, ofam)
                                     else:
-                                        cfambank = await blessfamily(fam_amount, cfam)
-                                        ofambank = await blessfamily(fam_amount, ofam)
+                                        cfambank = await crown_utilities.blessfamily(fam_amount, cfam)
+                                        ofambank = await crown_utilities.blessfamily(fam_amount, ofam)
                                     # cmatch = await savematch(str(user2), str(c_card), str(c_card_path), str(ctitle['TITLE']),
                                     #                         str(carm['ARM']), str(selected_universe), tale_or_dungeon_only, c['EXCLUSIVE'])
-                                    cfambank = await blessfamily(fam_amount, cfam)
-                                    cteambank = await blessteam(bank_amount, cteam)
+                                    cfambank = await crown_utilities.blessfamily(fam_amount, cfam)
+                                    cteambank = await crown_utilities.blessteam(bank_amount, cteam)
                                     cpetlogger = await summonlevel(cpet_name, user2)
-                                    ccardlogger = await cardlevel(self, c_card, user2.id, tale_or_dungeon_only, selected_universe)
-                                    await bless(5000, str(user2.id))
+                                    ccardlogger = await crown_utilities.cardlevel(c_card, user2.id, tale_or_dungeon_only, selected_universe)
+                                    await crown_utilities.bless(5000, str(user2.id))
 
                                 if currentopponent != (total_legends):
                                     if mode not in co_op_modes:
-                                        embedVar = discord.Embed(title=f":crown: VICTORY\nThe game lasted {turn_total} rounds.\n\n{drop_response}",description=textwrap.dedent(f"""
+                                        embedVar = discord.Embed(title=f":crown: VICTORY\nThe game lasted {turn_total} rounds.\n\n{drop_response}\n{corrupted_message}",description=textwrap.dedent(f"""
                                         {previous_moves_into_embed}
                                         
                                         """),colour=0x1abc9c)
-                                        if questlogger:
-                                            embedVar.add_field(name="**Quest Progress**",
-                                                value=f"{questlogger}")
-                                        if destinylogger:
-                                            embedVar.add_field(name="**Destiny Progress**",
-                                                value=f"{destinylogger}")
+                                        if difficulty != "EASY":
+                                            if questlogger:
+                                                embedVar.add_field(name="**Quest Progress**",
+                                                    value=f"{questlogger}")
+                                            if destinylogger:
+                                                embedVar.add_field(name="**Destiny Progress**",
+                                                    value=f"{destinylogger}")
                                     elif mode in co_op_modes and mode not in ai_co_op_modes:
                                         embedVar = discord.Embed(title=f"👥 CO-OP VICTORY\nThe game lasted {turn_total} rounds.\n\n👤**{o_user['NAME']}:** {drop_response}\n👥**{c_user['NAME']}:** {cdrop_response} ",description=textwrap.dedent(f"""
                                         {previous_moves_into_embed}
@@ -21059,13 +21074,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             embedVar.add_field(name="**Destiny Progress**",
                                                 value=f"{destinylogger}")
                                     elif mode in ai_co_op_modes:
-                                        embedVar = discord.Embed(title=f":crown: DUO VICTORY\nThe game lasted {turn_total} rounds.\n\n{drop_response}",description=textwrap.dedent(f"""
+                                        embedVar = discord.Embed(title=f":crown: DUO VICTORY\nThe game lasted {turn_total} rounds.\n\n{drop_response}\n{corrupted_message}",description=textwrap.dedent(f"""
                                         {previous_moves_into_embed}
                                         
                                         """),colour=0x1abc9c)
                                     if mode in D_modes:
                                         if crestsearch:
-                                            await blessguild(10000, oguild['GNAME'])
+                                            await crown_utilities.blessguild(10000, oguild['GNAME'])
                                             embedVar.add_field(name=f"**{selected_universe} Crest Search!**",
                                                             value=f":flags:**{oguild['GNAME']}** earned **10,000** :coin:")
                                     embedVar.set_author(name=f"{t_card} lost!")
@@ -21080,12 +21095,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 if currentopponent == (total_legends):
                                     if mode in D_modes:
                                         embedVar = discord.Embed(title=f":fire: DUNGEON CONQUERED",
-                                                                description=f"**{selected_universe} Dungeon** has been conquered\n\n{drop_response}",
+                                                                description=f"**{selected_universe} Dungeon** has been conquered\n\n{drop_response}\n{corrupted_message}",
                                                                 colour=0xe91e63)
                                         embedVar.set_author(name=f"{selected_universe} Boss has been unlocked!")
                                         if crestsearch:
-                                            await blessguild(100000, oguild['GNAME'])
-                                            teambank = await blessteam(10000, oteam)
+                                            await crown_utilities.blessguild(100000, oguild['GNAME'])
+                                            teambank = await crown_utilities.blessteam(10000, oteam)
                                             await movecrest(selected_universe, oguild['GNAME'])
                                             embedVar.add_field(name=f"**{selected_universe}** CREST CLAIMED!",
                                                             value=f"**{oguild['GNAME']}** earned the {selected_universe} **Crest**")
@@ -21101,9 +21116,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             new_upload_query = {'$addToSet': {'DUNGEONS': selected_universe}}
                                             r = db.updateUserNoFilter(upload_query, new_upload_query)
                                         if selected_universe in completed_universes:
-                                            await bless(300000, ctx.author.id)
-                                            teambank = await blessteam(bank_amount, oteam)
-                                            # await bless(125, user2)
+                                            await crown_utilities.bless(300000, ctx.author.id)
+                                            teambank = await crown_utilities.blessteam(bank_amount, oteam)
+                                            # await crown_utilities.bless(125, user2)
                                             # await ctx.send(embed=embedVar)
                                             await battle_msg.delete(delay=2)
                                             await asyncio.sleep(2)
@@ -21111,8 +21126,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                             await ctx.send(f"You were awarded :coin: 300,000 for completing the {selected_universe} Dungeon again!")
                                         else:
-                                            await bless(6000000, ctx.author.id)
-                                            teambank = await blessteam(1500000, oteam)
+                                            await crown_utilities.bless(6000000, ctx.author.id)
+                                            teambank = await crown_utilities.blessteam(1500000, oteam)
                                             # await ctx.send(embed=embedVar)
                                             await battle_msg.delete(delay=2)
                                             await asyncio.sleep(2)
@@ -21121,9 +21136,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         if mode in co_op_modes and mode not in ai_co_op_modes:
                                             cuid = c_DID
                                             cuser = await self.bot.fetch_user(cuid)
-                                            await bless(300000, user2.id)
-                                            teambank = await blessteam(80000, cteam)
-                                            # await bless(125, user2)
+                                            await crown_utilities.bless(300000, user2.id)
+                                            teambank = await crown_utilities.blessteam(80000, cteam)
+                                            # await crown_utilities.bless(125, user2)
                                             # await ctx.send(embed=embedVar)
                                             await asyncio.sleep(2)
 
@@ -21133,7 +21148,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         # await discord.TextChannel.delete(private_channel, reason=None)
                                     elif mode in U_modes:
                                         embedVar = discord.Embed(title=f":crown: UNIVERSE CONQUERED",
-                                                                description=f"**{selected_universe}** has been conquered\n\n{drop_response}",
+                                                                description=f"**{selected_universe}** has been conquered\n\n{drop_response}\n{corrupted_message}",
                                                                 colour=0xe91e63)
                                         embedVar.add_field(name="Additional Reward",
                                                         value=f"You earned additional rewards in your vault! Take a look.")
@@ -21150,8 +21165,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             new_upload_query = {'$addToSet': {'CROWN_TALES': selected_universe}}
                                             r = db.updateUserNoFilter(upload_query, new_upload_query)
                                         if selected_universe in completed_universes:
-                                            await bless(100000, ctx.author.id)
-                                            teambank = await blessteam(25000, oteam)
+                                            await crown_utilities.bless(100000, ctx.author.id)
+                                            teambank = await crown_utilities.blessteam(25000, oteam)
                                             # await ctx.send(embed=embedVar)
                                             await battle_msg.delete(delay=2)
                                             await asyncio.sleep(2)
@@ -21159,8 +21174,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                             await ctx.send(f"You were awarded :coin: 100,000 for completing the {selected_universe} Tale again!")
                                         else:
-                                            await bless(2000000, ctx.author.id)
-                                            teambank = await blessteam(500000, oteam)
+                                            await crown_utilities.bless(2000000, ctx.author.id)
+                                            teambank = await crown_utilities.blessteam(500000, oteam)
                                             # await ctx.send(embed=embedVar)
                                             await battle_msg.delete(delay=2)
                                             await asyncio.sleep(2)
@@ -21169,9 +21184,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         if mode in co_op_modes and mode not in ai_co_op_modes:
                                             cuid = c_DID
                                             cuser = await self.bot.fetch_user(cuid)
-                                            await bless(300000, user2.id)
-                                            teambank = await blessteam(80000, cteam)
-                                            # await bless(125, user2)
+                                            await crown_utilities.bless(300000, user2.id)
+                                            teambank = await crown_utilities.blessteam(80000, cteam)
+                                            # await crown_utilities.bless(125, user2)
                                             # await ctx.send(embed=embedVar)
                                             await asyncio.sleep(2)
 
@@ -21417,19 +21432,6 @@ def getTime(hgame, mgame, sgame, hnow, mnow, snow):
     return gameTime
 
 
-async def bless(amount, user):
-    blessAmount = amount
-    posBlessAmount = 0 + abs(int(blessAmount))
-    query = {'DID': str(user)}
-    vaultOwner = db.queryUser(query)
-    if vaultOwner:
-        vault = db.queryVault({'DID': vaultOwner['DID']})
-        update_query = {"$inc": {'BALANCE': posBlessAmount}}
-        db.updateVaultNoFilter(vault, update_query)
-    else:
-        print("cant find vault")
-
-
 async def blessteam(amount, team):
     blessAmount = amount
     posBlessAmount = 0 + abs(int(blessAmount))
@@ -21458,90 +21460,6 @@ async def blessteam(amount, team):
         update_query = {"$inc": {'BANK': posBlessAmount}}
         db.updateTeam(query, update_query)
 
-
-async def blessfamily(amount, family):
-    blessAmount = amount
-    posBlessAmount = 0 + abs(int(blessAmount))
-    query = {'HEAD': str(family)}
-    family_data = db.queryFamily(query)
-    if family_data:
-        house = family_data['HOUSE']
-        house_data = db.queryHouse({'HOUSE': house})
-        multiplier = house_data['MULT']
-        posBlessAmount = posBlessAmount * multiplier
-        update_query = {"$inc": {'BANK': posBlessAmount}}
-        db.updateFamily(query, update_query)
-
-
-async def blessguild(amount, guild):
-    try:
-        blessAmount = amount
-        posBlessAmount = 0 + abs(int(blessAmount))
-        query = {'GNAME': str(guild)}
-        guild_data = db.queryGuildAlt(query)
-        if guild_data:
-            hall = guild_data['HALL']
-            hall_data = db.queryHall({'HALL': hall})
-            multiplier = hall_data['MULT']
-            posBlessAmount = posBlessAmount * multiplier
-            query = {'GNAME': str(guild_data['GNAME'])}
-            update_query = {"$inc": {'BANK': int(posBlessAmount)}}
-            db.updateGuildAlt(query, update_query)
-        else:
-            print("Cannot find guild")
-    except Exception as ex:
-        trace = []
-        tb = ex.__traceback__
-        while tb is not None:
-            trace.append({
-                "filename": tb.tb_frame.f_code.co_filename,
-                "name": tb.tb_frame.f_code.co_name,
-                "lineno": tb.tb_lineno
-            })
-            tb = tb.tb_next
-        print(str({
-            'type': type(ex).__name__,
-            'message': str(ex),
-            'trace': trace
-        }))
-
-
-async def curse(amount, user):
-    curseAmount = amount
-    negCurseAmount = 0 - abs(int(curseAmount))
-    query = {'DID': str(user)}
-    vaultOwner = db.queryUser(query)
-    if vaultOwner:
-        vault = db.queryVault({'DID': vaultOwner['DID']})
-        update_query = {"$inc": {'BALANCE': int(negCurseAmount)}}
-        db.updateVaultNoFilter(vault, update_query)
-    else:
-        print("cant find vault")
-
-
-async def curseteam(amount, team):
-    curseAmount = amount
-    negCurseAmount = 0 - abs(int(curseAmount))
-    query = {'TEAM_NAME': str(team)}
-    team_data = db.queryTeam(query)
-    if team_data:
-        update_query = {"$inc": {'BANK': int(negCurseAmount)}}
-        db.updateTeam(query, update_query)
-    else:
-        print("cant find team")
-
-
-async def curseguild(amount, guild):
-    curseAmount = amount
-    negCurseAmount = 0 - abs(int(curseAmount))
-    query = {'GNAME': str(guild)}
-    guild_data = db.queryGuildAlt(query)
-    if guild_data:
-        query = {'GNAME':str(guild_data['GNAME'])}
-        update_query = {"$inc": {'BANK': int(negCurseAmount)}}
-        db.updateGuildAlt(query, update_query)
-    else:
-        print("cant find guild")
 
 
 async def teamwin(team):
@@ -21594,7 +21512,7 @@ async def drops(self,player, universe, matchcount):
 
     if difficulty == "EASY":
         bless_amount = 100
-        await bless(bless_amount, player.id)
+        await crown_utilities.bless(bless_amount, player.id)
         return f"You earned :coin: **{bless_amount}**!"
 
 
@@ -21621,12 +21539,12 @@ async def drops(self,player, universe, matchcount):
     arms = []
     pets = []
 
-    if matchcount <= 2:
-        bless_amount = (500 + (1000 * matchcount)) * (1 + rebirth)
-        if difficulty == "HARD":
-            bless_amount = (5000 + (2500 * matchcount)) * (1 + rebirth)
-        await bless(bless_amount, player.id)
-        return f"You earned :coin: **{bless_amount}**!"
+    # if matchcount <= 2:
+    #     bless_amount = (500 + (1000 * matchcount)) * (1 + rebirth)
+    #     if difficulty == "HARD":
+    #         bless_amount = (5000 + (2500 * matchcount)) * (1 + rebirth)
+    #     await crown_utilities.bless(bless_amount, player.id)
+    #     return f"You earned :coin: **{bless_amount}**!"
 
 
 
@@ -21672,11 +21590,6 @@ async def drops(self,player, universe, matchcount):
         p = len(pets) - 1
         rand_pet = random.randint(0, p)
 
-
-    
-
-    
-    
     gold_drop = 150  # 150
     rift_rate = 175  # 175
     title_drop = 190  # 190
@@ -21685,8 +21598,10 @@ async def drops(self,player, universe, matchcount):
     card_drop = 200  # 200
     drop_rate = random.randint((0 + (rebirth * rebirth) * (1 + rebirth)), 200)
     durability = random.randint(1, 45)
+    drop_rate=199
     
     if difficulty == "HARD":
+        mode = "Purchase"
         gold_drop = 30  
         rift_rate = 65  
         title_drop = 75  
@@ -21695,50 +21610,50 @@ async def drops(self,player, universe, matchcount):
         card_drop = 200 
         drop_rate = random.randint((0 + (rebirth * rebirth) * (1 + rebirth)), 200)
         durability = random.randint(35, 50)
-
+        
     try:
         if drop_rate <= gold_drop:
             bless_amount = (500 + (1000 * matchcount)) * (1 + rebirth)
             if difficulty == "HARD":
                 bless_amount = (5000 + (2500 * matchcount)) * (1 + rebirth)
-            await bless(bless_amount, player.id)
+            await crown_utilities.bless(bless_amount, player.id)
             return f"You earned :coin: **{bless_amount}**!"
         elif drop_rate <= rift_rate and drop_rate > gold_drop:
             response = db.updateUserNoFilter(user_query, {'$set': {'RIFT': 1}})
             bless_amount = (200 + (100 * matchcount)) * (1 + rebirth)
-            await bless(bless_amount, player.id)
+            await crown_utilities.bless(bless_amount, player.id)
             return f"A RIFT HAS OPENED! You have earned :coin: **{bless_amount}**!"
         elif drop_rate <= title_drop and drop_rate > gold_drop:
             if all_available_drop_titles:
                 if len(vault['TITLES']) >= 25:
-                    await bless(300, player.id)
+                    await crown_utilities.bless(300, player.id)
                     return f"You're maxed out on Titles! You earned :coin: 300 instead!"
                 if str(titles[rand_title]) in owned_titles:
-                    await bless(150, player.id)
+                    await crown_utilities.bless(150, player.id)
                     return f"You already own **{titles[rand_title]}**! You earn :coin: **150**."
                 response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'TITLES': str(titles[rand_title])}})
                 return f"You earned _Title:_ **{titles[rand_title]}**!"
             else:
-                await bless(150, player.id)
+                await crown_utilities.bless(150, player.id)
                 return f"You earned :coin: **150**!"
         elif drop_rate <= arm_drop and drop_rate > title_drop:
             if all_available_drop_arms:
                 if len(vault['ARMS']) >= 25:
-                    await bless(300, player.id)
+                    await crown_utilities.bless(300, player.id)
                     return f"You're maxed out on Arms! You earned :coin: 300 instead!"
                 if str(arms[rand_arm]) in owned_arms:
-                    await bless(150, player.id)
+                    await crown_utilities.bless(150, player.id)
                     return f"You already own **{arms[rand_arm]}**! You earn :coin: **150**."
                 else:
                     response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'ARMS': {'ARM': str(arms[rand_arm]), 'DUR': durability}}})
                     return f"You earned _Arm:_ **{arms[rand_arm]}** with ⚒️**{str(durability)}**!"
             else:
-                await bless(150, player.id)
+                await crown_utilities.bless(150, player.id)
                 return f"You earned :coin: **150**!"
         elif drop_rate <= pet_drop and drop_rate > arm_drop:
             if all_available_drop_pets:
                 if len(vault['PETS']) >= 25:
-                    await bless(300, player.id)
+                    await crown_utilities.bless(300, player.id)
                     return f"You're maxed out on Summons! You earned :coin: 300 instead!"
 
                 pet_owned = False
@@ -21748,7 +21663,7 @@ async def drops(self,player, universe, matchcount):
 
                 if pet_owned:
 
-                    await bless(150, player.id)
+                    await crown_utilities.bless(150, player.id)
                     return f"You own _Summon:_ **{pets[rand_pet]}**! Received extra + :coin: 150!"
                 else:
 
@@ -21760,65 +21675,21 @@ async def drops(self,player, universe, matchcount):
                     response = db.updateVaultNoFilter(vault_query, {'$addToSet': {
                         'PETS': {'NAME': selected_pet['PET'], 'LVL': 0, 'EXP': 0, pet_ability_name: int(pet_ability_power),
                                 'TYPE': pet_ability_type, 'BOND': 0, 'BONDEXP': 0, 'PATH': selected_pet['PATH']}}})
-                    await bless(50, player.id)
+                    await crown_utilities.bless(50, player.id)
                     return f"You earned _Summon:_ **{pets[rand_pet]}** + :coin: 50!"
             else:
-                await bless(150, player.id)
+                await crown_utilities.bless(150, player.id)
                 return f"You earned :coin: **150**!"
         elif drop_rate <= card_drop and drop_rate > pet_drop:
             if all_available_drop_cards:
-                # Check if already owned
-                card_owned = False
-                for c in vault['CARD_LEVELS']:
-                    if c['CARD'] == str(cards[rand_card]):
-                        card_owned = True
-
-                if card_owned:
-                    await cardlevel(self, cards[rand_card], player.id, "Tales", universe)
-                    await bless(150, player.id)
-                    return f"You earned EXP for _Card:_ **{cards[rand_card]}** + :coin: 150!\n{message}"
-                else:
-                    storage_amount = len(vault['STORAGE'])
-                    hand_length = len(vault['CARDS'])
-                    storage_allowed_amount = player_info['STORAGE_TYPE'] * 15
-                    list1 = vault['CARDS']
-                    list2 = vault['STORAGE']
-                    current_cards = list1.extend(list2)
-                    if len(vault['CARDS']) >= 25:
-                        if storage_amount <= storage_allowed_amount:
-                            update_query = {'$addToSet': {
-                                'CARD_LEVELS': {'CARD': str(cards[rand_card]), 'LVL': 0, 'TIER': 0, 'EXP': 0, 'HLT': 0,
-                                                'ATK': 0, 'DEF': 0, 'AP': 0}}}
-                            response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'STORAGE': str(cards[rand_card])}})
-                            r = db.updateVaultNoFilter(vault_query, update_query)
-                            message = ""
-                            for destiny in d.destiny:
-                                if cards[rand_card] in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
-                                    db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
-                                    message = f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault."
-
-                            return f"{cards[rand_card]} has been added to your storage 💼!\n{message}"
-
-                        else:
-                            await bless(300, player.id)
-                            return f"You're maxed out on Cards! You earned :coin: 300 instead!"
-
-
-                    card_data = db.queryCard({'NAME': str(cards[rand_card])})
-                    update_query = {'$addToSet': {
-                        'CARD_LEVELS': {'CARD': str(cards[rand_card]), 'LVL': 0, 'TIER': 0, 'EXP': 0, 'HLT': 0,
-                                        'ATK': 0, 'DEF': 0, 'AP': 0}}}
-                    response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'CARDS': str(cards[rand_card])}})
-                    r = db.updateVaultNoFilter(vault_query, update_query)
-                    message = ""
-                    for destiny in d.destiny:
-                        if cards[rand_card] in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
-                            db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
-                            message = f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault."
-
-                    return f"You earned Card: **{cards[rand_card]}**!\n{message}"
+                response = await crown_utilities.store_drop_card(player.id, cards[rand_card], universe, vault, owned_destinies, 3000, 1000, mode, False, 0)
+                if not response:
+                    bless_amount = (5000 + (2500 * matchcount)) * (1 + rebirth)
+                    await crown_utilities.bless(bless_amount, player.id)
+                    return f"You earned :coin: **{bless_amount}**!"
+                return response
             else:
-                await bless(5000, player.id)
+                await crown_utilities.bless(5000, player.id)
                 return f"You earned :coin: **5000**!"
     except Exception as ex:
         trace = []
@@ -21837,13 +21708,12 @@ async def drops(self,player, universe, matchcount):
             'trace': trace
         }))
         await ctx.send("There's an issue with the Drops. Alert support.")
-        await bless(5000, player.id)
+        await crown_utilities.bless(5000, player.id)
         guild = self.bot.get_guild(543442011156643871)
         channel = guild.get_channel(957061470192033812)
         await channel.send(f"'PLAYER': **{str(player)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
 
         return f"You earned :coin: **5000**!"
-
 
 
 async def specific_drops(self,player, card, universe):
@@ -21854,7 +21724,7 @@ async def specific_drops(self,player, card, universe):
 
     if user['DIFFICULTY'] == "EASY":
         bless_amount = 100
-        await bless(100, player)
+        await crown_utilities.bless(100, player)
         return f"You earned :coin: **{bless_amount}**!"
 
     rebirth = user['REBIRTH']
@@ -21863,56 +21733,8 @@ async def specific_drops(self,player, card, universe):
         owned_destinies.append(destiny['NAME'])
 
     try:
-        card_owned = False
-
-        if card in vault['CARDS']:
-            card_owned = True
-
-        if card_owned:
-            await cardlevel(self, card, player, "Purchase", universe)
-            message = ""
-            await bless(5000, player)
-            return f"You earned EXP for _Card:_ **{card}** + :coin: 5,000 in addition to the card bounty."
-        else:
-            storage_amount = len(vault['STORAGE'])
-            hand_length = len(vault['CARDS'])
-            storage_allowed_amount = user['STORAGE_TYPE'] * 15
-            list1 = vault['CARDS']
-            list2 = vault['STORAGE']
-            current_cards = list1.extend(list2)
-            if len(vault['CARDS']) >= 25:
-                if storage_amount <= storage_allowed_amount:
-                    update_query = {'$addToSet': {
-                        'CARD_LEVELS': {'CARD': str(card), 'LVL': 0, 'TIER': 0, 'EXP': 0, 'HLT': 0,
-                                        'ATK': 0, 'DEF': 0, 'AP': 0}}}
-                    response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'STORAGE': str(card)}})
-                    r = db.updateVaultNoFilter(vault_query, update_query)
-                    message = ""
-                    for destiny in d.destiny:
-                        if card in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
-                            db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
-                            message = f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault."
-
-                    return f"{str(card)} has been added to your storage 💼!\n{message}"
-
-                else:
-                    await bless(300, player)
-                    return f"You're maxed out on Cards! You earned :coin: 300 instead!"
-
-
-
-            update_query = {'$addToSet': {
-                'CARD_LEVELS': {'CARD': str(card), 'LVL': 0, 'TIER': 0, 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0,
-                                'AP': 0}}}
-            response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'CARDS': str(card)}})
-            r = db.updateVaultNoFilter(vault_query, update_query)
-            message = ""
-            for destiny in d.destiny:
-                if card in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
-                    db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
-                    message = f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault."
-
-            return f"You earned _Card:_ **{card}**!\n{message}"
+        response = await crown_utilities.store_drop_card(player, card, universe, vault, owned_destinies, 3000, 1000, "Purchase", False, 0)
+        return response
     except Exception as ex:
         trace = []
         tb = ex.__traceback__
@@ -21930,7 +21752,7 @@ async def specific_drops(self,player, card, universe):
             'trace': trace
         }))
         await ctx.send("There's an issue with the Drops. Alert support.")
-        await bless(5000, player.id)
+        await crown_utilities.bless(5000, player.id)
         guild = self.bot.get_guild(543442011156643871)
         channel = guild.get_channel(957061470192033812)
         await channel.send(f"'PLAYER': **{str(player)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
@@ -21957,7 +21779,7 @@ async def dungeondrops(self, player, universe, matchcount):
     difficulty = player_info['DIFFICULTY']
     if difficulty == "EASY":
         bless_amount = 100
-        await bless(bless_amount, player.id)
+        await crown_utilities.bless(bless_amount, player.id)
         return f"You earned :coin: **{bless_amount}**!"
 
 
@@ -21977,7 +21799,7 @@ async def dungeondrops(self, player, universe, matchcount):
         bless_amount = (8000 + (2000 * matchcount)) * (1 + rebirth)
         if difficulty == "HARD":
             bless_amount = (20000 + (5000 * matchcount)) * (1 + rebirth)
-        await bless(bless_amount, player.id)
+        await crown_utilities.bless(bless_amount, player.id)
         return f"You earned :coin: **{bless_amount}**!"
 
 
@@ -22027,6 +21849,7 @@ async def dungeondrops(self, player, universe, matchcount):
     card_drop = 400  #
     drop_rate = random.randint((0 + (rebirth * rebirth) * (1 + rebirth)), 400)
     durability = random.randint(10, 75)
+    mode="Dungeon"
     if difficulty == "HARD":
         gold_drop = 30  
         rift_rate = 65  
@@ -22036,41 +21859,42 @@ async def dungeondrops(self, player, universe, matchcount):
         card_drop = 300 
         drop_rate = random.randint((0 + (rebirth * rebirth) * (1 + rebirth)), 300)
         durability = 100
+        mode="Purchase"
 
     try:
         if drop_rate <= gold_drop:
             bless_amount = (3000 + (2000 * matchcount)) * (1 + rebirth)
             if difficulty == "HARD":
                 bless_amount = (20000 + (5000 * matchcount)) * (1 + rebirth)
-            await bless(bless_amount, player.id)
+            await crown_utilities.bless(bless_amount, player.id)
             return f"You earned :coin: **{bless_amount}**!"
         elif drop_rate <= rift_rate and drop_rate > gold_drop:
             response = db.updateUserNoFilter(user_query, {'$set': {'RIFT': 1}})
             bless_amount = (150 + (250 * matchcount)) * (1 + rebirth)
-            await bless(bless_amount, player.id)
+            await crown_utilities.bless(bless_amount, player.id)
             return f"A RIFT HAS OPENED! You have earned :coin: **{bless_amount}**!"
         elif drop_rate <= title_drop and drop_rate > gold_drop:
             if len(vault['TITLES']) >= 25:
-                await bless(1500, player.id)
+                await crown_utilities.bless(1500, player.id)
                 return f"You're maxed out on Titles! You earned :coin: 1500 instead!"
             if str(titles[rand_title]) in owned_titles:
-                    await bless(1250, player.id)
+                    await crown_utilities.bless(1250, player.id)
                     return f"You already own **{titles[rand_title]}**! You earn :coin: **1250**."
             response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'TITLES': str(titles[rand_title])}})
             return f"You earned _Title:_ **{titles[rand_title]}**!"
         elif drop_rate <= arm_drop and drop_rate > title_drop:
             if len(vault['ARMS']) >= 25:
-                await bless(1500, player.id)
+                await crown_utilities.bless(1500, player.id)
                 return f"You're maxed out on Arms! You earned :coin: 1500 instead!"
             if str(arms[rand_arm]) in owned_arms:
-                await bless(1250, player.id)
+                await crown_utilities.bless(1250, player.id)
                 return f"You already own **{arms[rand_arm]}**! You earn :coin: **1250**."
             else:
                 response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'ARMS': {'ARM': str(arms[rand_arm]), 'DUR': durability}}})
                 return f"You earned _Arm:_ **{arms[rand_arm]}** with ⚒️**{str(durability)}**!"
         elif drop_rate <= pet_drop and drop_rate > arm_drop:
             if len(vault['PETS']) >= 25:
-                await bless(3000, player.id)
+                await crown_utilities.bless(3000, player.id)
                 return f"You're maxed out on Summons! You earned :coin: 3000 instead!"
             pet_owned = False
             for p in vault['PETS']:
@@ -22078,7 +21902,7 @@ async def dungeondrops(self, player, universe, matchcount):
                     pet_owned = True
 
             if pet_owned:
-                await bless(1800, player.id)
+                await crown_utilities.bless(1800, player.id)
                 return f"You own _Summon:_ **{pets[rand_pet]}**! Received extra + :coin: 1800!"
             else:
                 selected_pet = db.queryPet({'PET': pets[rand_pet]})
@@ -22089,59 +21913,11 @@ async def dungeondrops(self, player, universe, matchcount):
                 response = db.updateVaultNoFilter(vault_query, {'$addToSet': {
                     'PETS': {'NAME': selected_pet['PET'], 'LVL': 0, 'EXP': 0, pet_ability_name: int(pet_ability_power),
                              'TYPE': pet_ability_type, 'BOND': 0, 'BONDEXP': 0, 'PATH': selected_pet['PATH']}}})
-                await bless(100, player.id)
+                await crown_utilities.bless(100, player.id)
                 return f"You earned _Summon:_ **{pets[rand_pet]}** + :coin: 100!"
         elif drop_rate <= card_drop and drop_rate > pet_drop:
-            card_owned = False
-            for c in vault['CARD_LEVELS']:
-                if c['CARD'] == cards[rand_card]:
-                    card_owned = True
-
-            if card_owned:
-                await cardlevel(self, cards[rand_card], player.id, "Dungeon", universe)
-                message = ""
-                await bless(2500, player.id)
-                return f"You earned EXP for _Card:_ **{cards[rand_card]}** + :coin: 2,500!\n{message}"
-            else:
-                storage_amount = len(vault['STORAGE'])
-                hand_length = len(vault['CARDS'])
-                storage_allowed_amount = user['STORAGE_TYPE'] * 15
-                list1 = vault['CARDS']
-                list2 = vault['STORAGE']
-                current_cards = list1.extend(list2)
-                if len(vault['CARDS']) >= 25:
-                    if storage_amount <= storage_allowed_amount:
-                        update_query = {'$addToSet': {
-                            'CARD_LEVELS': {'CARD': str(cards[rand_card]), 'LVL': 0, 'TIER': 0, 'EXP': 0, 'HLT': 0,
-                                            'ATK': 0, 'DEF': 0, 'AP': 0}}}
-                        response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'STORAGE': str(cards[rand_card])}})
-                        r = db.updateVaultNoFilter(vault_query, update_query)
-                        message = ""
-                        for destiny in d.destiny:
-                            if cards[rand_card] in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
-                                db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
-                                message = f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault."
-
-                        return f"{cards[rand_card]} has been added to your storage 💼!\n{message}"
-
-                    else:
-                        await bless(5000, player.id)
-                        return f"You're maxed out on Cards! You earned :coin: 5,000 instead!"
-
-
-                
-                update_query = {'$addToSet': {
-                    'CARD_LEVELS': {'CARD': str(cards[rand_card]), 'LVL': 0, 'TIER': 0, 'EXP': 0, 'HLT': 0,
-                                    'ATK': 0, 'DEF': 0, 'AP': 0}}}
-                response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'CARDS': str(cards[rand_card])}})
-                r = db.updateVaultNoFilter(vault_query, update_query)
-                message = ""
-                for destiny in d.destiny:
-                    if cards[rand_card] in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
-                        db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
-                        message = f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault."
-
-                return f"You earned _Card:_ **{cards[rand_card]}**!\n{message}"
+            response = await crown_utilities.store_drop_card(player.id, cards[rand_card], universe, vault, owned_destinies, 5000, 2500, mode, False, 0)
+            return response
     except Exception as ex:
         trace = []
         tb = ex.__traceback__
@@ -22159,7 +21935,7 @@ async def dungeondrops(self, player, universe, matchcount):
             'trace': trace
         }))
         await player.send("There's an issue with the Drops. Alert support.")
-        await bless(5000, player.id)
+        await crown_utilities.bless(5000, player.id)
         guild = self.bot.get_guild(543442011156643871)
         channel = guild.get_channel(957061470192033812)
         await channel.send(f"'PLAYER': **{str(player)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
@@ -22184,6 +21960,10 @@ async def bossdrops(self,player, universe):
     user = db.queryUser(user_query)
     difficulty = user['DIFFICULTY']
     rebirth = user['REBIRTH']
+
+    owned_destinies = []
+    for destiny in vault['DESTINY']:
+        owned_destinies.append(destiny['NAME'])
 
     cards = []
     titles = []
@@ -22250,30 +22030,30 @@ async def bossdrops(self,player, universe):
             bless_amount = 80000 * (1 + rebirth)
             if difficulty == "HARD":
                 bless_amount = 150000 * (1 + rebirth)
-            await bless(bless_amount, player.id)
+            await crown_utilities.bless(bless_amount, player.id)
             return f"You earned :coin: {bless_amount}!"
         elif drop_rate <= title_drop and drop_rate > gold_drop:
             if len(vault['TITLES']) >= 25:
-                await bless(8000, player.id)
+                await crown_utilities.bless(8000, player.id)
                 return f"You're maxed out on Titles! You earned :coin: **8000** instead!"
             if str(titles[rand_title]) in owned_titles:
-                    await bless(8000, player.id)
+                    await crown_utilities.bless(8000, player.id)
                     return f"You already own **{titles[rand_title]}**! You earn :coin: **8000**."
             response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'TITLES': str(titles[rand_title])}})
             return f"You earned {titles[rand_title]}!"
         elif drop_rate <= arm_drop and drop_rate > title_drop:
             if len(vault['ARMS']) >= 25:
-                await bless(8000, player.id)
+                await crown_utilities.bless(8000, player.id)
                 return f"You're maxed out on Arms! You earned :coin: 8000 instead!"
             if str(arms[rand_arm]) in owned_arms:
-                await bless(8000, player.id)
+                await crown_utilities.bless(8000, player.id)
                 return f"You already own **{arms[rand_arm]}**! You earn :coin: **8000**."
             else:
                 response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'ARMS': {'ARM': str(arms[rand_arm]), 'DUR': durability}}})
                 return f"You earned _Arm:_ **{arms[rand_arm]}** with ⚒️**{str(durability)}**!"
         elif drop_rate <= pet_drop and drop_rate > arm_drop:
             if len(vault['PETS']) >= 25:
-                await bless(8000, player.id)
+                await crown_utilities.bless(8000, player.id)
                 return f"You're maxed out on Summons! You earned :coin: 8000 instead!"
             selected_pet = db.queryPet({'PET': pets[rand_pet]})
             pet_ability_name = list(selected_pet['ABILITIES'][0].keys())[0]
@@ -22283,35 +22063,30 @@ async def bossdrops(self,player, universe):
             response = db.updateVaultNoFilter(vault_query, {'$addToSet': {
                 'PETS': {'NAME': selected_pet['PET'], 'LVL': 0, 'EXP': 0, pet_ability_name: int(pet_ability_power),
                          'TYPE': pet_ability_type, 'BOND': 0, 'BONDEXP': 0, 'PATH': selected_pet['PATH']}}})
-            await bless(80, player.id)
+            await crown_utilities.bless(80, player.id)
             return f"You earned {pets[rand_pet]} + :coin: 80!"
         elif drop_rate <= card_drop and drop_rate > pet_drop:
-            if len(vault['CARDS']) >= 25:
-                await bless(8000, player.id)
-                return f"You're maxed out on Cards! You earned :coin: 8000 instead!"
-            response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'CARDS': str(cards[rand_card])}})
-            await bless(50, player.id)
-            return f"You earned {cards[rand_card]} + :coin: 50!"
+            response = await crown_utilities.store_drop_card(player.id, cards[rand_card], universe, vault, owned_destinies, 30000, 10000, "Dungeon", False, 0)
+            return response
         elif drop_rate <= boss_title_drop and drop_rate > card_drop:
             if len(vault['TITLES']) >= 25:
-                await bless(10000, player.id)
+                await crown_utilities.bless(10000, player.id)
                 return f"You're maxed out on Titles! You earned :coin: **10,000** instead!"
             response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'TITLES': str(boss_title)}})
             return f"You earned the Exclusive Boss Title: {boss_title}!"
         elif drop_rate <= boss_arm_drop and drop_rate > boss_title_drop:
             if len(vault['ARMS']) >= 25:
-                await bless(10000, player.id)
+                await crown_utilities.bless(10000, player.id)
                 return f"You're maxed out on Arms! You earned :coin: **10,000** instead!"
             if str(boss_arm) in owned_arms:
-                await bless(20000, player.id)
+                await crown_utilities.bless(20000, player.id)
                 return f"You already own **{arms[rand_arm]}**! You earn :coin: **20,000**."
             else:
                 response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'ARMS': {'ARM': str(boss_arm), 'DUR': durability}}})
                 return f"You earned the Exclusive Boss Arm: **{str(boss_arm)}** with ⚒️**{str(durability)}**!"
-
         elif drop_rate <= boss_pet_drop and drop_rate > boss_arm_drop:
             if len(vault['PETS']) >= 25:
-                await bless(10000, player.id)
+                await crown_utilities.bless(10000, player.id)
                 return f"You're maxed out on Summons! You earned :coin: **10,000** instead!"
             selected_pet = db.queryPet({'PET': boss['PET']})
             pet_ability_name = list(selected_pet['ABILITIES'][0].keys())[0]
@@ -22321,33 +22096,11 @@ async def bossdrops(self,player, universe):
             response = db.updateVaultNoFilter(vault_query, {'$addToSet': {
                 'PETS': {'NAME': selected_pet['PET'], 'LVL': 0, 'EXP': 0, pet_ability_name: int(pet_ability_power),
                          'TYPE': pet_ability_type, 'BOND': 0, 'BONDEXP': 0, 'PATH': selected_pet['PATH']}}})
-            await bless(10000, player.id)
+            await crown_utilities.bless(10000, player.id)
             return f"You earned the Exclusive Boss Summon:  {boss['PET']} + :coin: **10,000**!"
         elif drop_rate <= boss_card_drop and drop_rate > boss_pet_drop:
-            if len(vault['CARDS']) >= 25:
-                await bless(10000, player.id)
-                return f"You're maxed out on Cards! You earned :coin: **10,000** instead!"
-            card_owned = False
-            for c in vault['CARD_LEVELS']:
-                if c['CARD'] == str(boss_card):
-                    card_owned = True
-
-            if card_owned:
-                await cardlevel(self, str(boss_card), player.id, "Dungeon", universe)
-                message = ""
-                await bless(200, player.id)
-            else:
-                card_data = db.queryCard({'NAME': str(boss_card)})
-                uni = db.queryUniverse({'TITLE': card_data['UNIVERSE']})
-                tier = uni['TIER']
-                update_query = {'$addToSet': {
-                    'CARD_LEVELS': {'CARD': str(boss_card), 'LVL': 0, 'TIER': int(tier), 'EXP': 0, 'HLT': 0, 'ATK': 0,
-                                    'DEF': 0, 'AP': 0}}}
-                response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'CARDS': str(boss_card)}})
-                r = db.updateVaultNoFilter(vault_query, update_query)
-
-                response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'CARDS': str(boss_card)}})
-                await bless(8000, player.id)
+            response = await crown_utilities.store_drop_card(player.id, boss_card, universe, vault, owned_destinies, 30000, 10000, "Dungeon", False, 0)
+            return response
     except Exception as ex:
         trace = []
         tb = ex.__traceback__
@@ -22365,7 +22118,7 @@ async def bossdrops(self,player, universe):
             'trace': trace
         }))
         await ctx.send("There's an issue with the Drops. Alert support.")
-        await bless(5000, player.id)
+        await crown_utilities.bless(5000, player.id)
         guild = self.bot.get_guild(543442011156643871)
         channel = guild.get_channel(957061470192033812)
         await channel.send(f"'PLAYER': **{str(player)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")

@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 import bot as main
+import crown_utilities
 import db
 import classes as data
 import messages as m
@@ -34,6 +35,10 @@ class Teams(commands.Cog):
 
     @cog_ext.cog_slash(description="Create a new guild", guild_ids=main.guild_ids)
     async def createguild(self, ctx, guild: str):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         user = db.queryUser({'DID': str(ctx.author.id)})
         if user['LEVEL'] < 4:
             await ctx.send(f"🔓 Unlock Guilds by completing Floor 3 of the 🌑 Abyss! Use /abyss to enter the abyss.")
@@ -98,6 +103,10 @@ class Teams(commands.Cog):
     
     @cog_ext.cog_slash(description="Recruit New Guild Members", guild_ids=main.guild_ids)
     async def recruit(self, ctx, player: User):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         owner_profile = db.queryUser({'DID': str(ctx.author.id)})
         team_profile = db.queryTeam({'TEAM_NAME': owner_profile['TEAM'].lower()})
         if owner_profile['LEVEL'] < 4:
@@ -164,6 +173,10 @@ class Teams(commands.Cog):
                 await ctx.send("Recruiting can only be done by Owners and Officers.", delete_after=5)
 
     async def apply(self, ctx, owner: User):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         owner_profile = db.queryUser({'DID': str(owner.id)})
         team_profile = db.queryTeam({'TEAM_NAME': owner_profile['TEAM'].lower()})
 
@@ -223,6 +236,10 @@ class Teams(commands.Cog):
                 await ctx.send(m.OWNER_ONLY_COMMAND, delete_after=5)
     
     async def leaveguild(self, ctx):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         member_profile = db.queryUser({'DID': str(ctx.author.id)})
         team_profile = db.queryTeam({'TEAM_NAME': member_profile['TEAM'].lower()})
         
@@ -277,6 +294,10 @@ class Teams(commands.Cog):
 
     @cog_ext.cog_slash(description="Delete a guild", guild_ids=main.guild_ids)
     async def disbandguild(self, ctx, guild = None):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         if guild:
             team_name = guild.lower()
             team_query = {'TEAM_NAME': team_name}

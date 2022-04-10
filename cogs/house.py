@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 import bot as main
+import crown_utilities
 import db
 import classes as data
 import messages as m
@@ -29,6 +30,10 @@ class House(commands.Cog):
 
     @cog_ext.cog_slash(description="Buy a House for your family", guild_ids=main.guild_ids)
     async def buyhouse(self, ctx, house: str):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         house_name = house
         family_query = {'HEAD' : str(ctx.author)}
         family = db.queryFamily(family_query)
@@ -53,6 +58,10 @@ class House(commands.Cog):
 
     @cog_ext.cog_slash(description="View a House", guild_ids=main.guild_ids)
     async def viewhouse(self, ctx, house: str):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         house = db.queryHouse({'HOUSE': {"$regex": f"^{str(house)}$", "$options": "i"}})
         if house:
             house_house = house['HOUSE']
@@ -75,7 +84,6 @@ class House(commands.Cog):
 
         else:
             await ctx.send(m.HOUSE_DOESNT_EXIST, delete_after=3)
-
 
 
 def setup(bot):

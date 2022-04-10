@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 import bot as main
+import crown_utilities
 import db
 import classes as data
 import messages as m
@@ -32,6 +33,10 @@ class Titles(commands.Cog):
 
     @cog_ext.cog_slash(description="Equip a Title", guild_ids=main.guild_ids)
     async def equiptitle(self, ctx, title: str):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         title_name = title
         user_query = {'DID': str(ctx.author.id)}
         user = db.queryUser(user_query)
@@ -60,6 +65,10 @@ class Titles(commands.Cog):
 
     @cog_ext.cog_slash(description="View a Title", guild_ids=main.guild_ids)
     async def viewtitle(self, ctx, title: str):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         title_name = title
         title = db.queryTitle({'TITLE': {"$regex": f"^{str(title)}$", "$options": "i"}})
         if title:

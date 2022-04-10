@@ -2,6 +2,7 @@ from itertools import filterfalse
 import discord
 from discord.ext import commands
 import bot as main
+import crown_utilities
 import db
 import classes as data
 import messages as m
@@ -62,6 +63,10 @@ class Trade(commands.Cog):
                        ]
         , guild_ids=main.guild_ids)
     async def trade(self, ctx: SlashContext, mode: str, player: User):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         try:
             buyer_name = player
             merchant = db.queryUser({'DID': str(ctx.author.id)})
@@ -561,7 +566,11 @@ class Trade(commands.Cog):
                            )
                        ]
         , guild_ids=main.guild_ids)
-    async def tradecoins(self, ctx: SlashContext, mode: str, amount: int):            
+    async def tradecoins(self, ctx: SlashContext, mode: str, amount: int):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+      
         try:
             x = amount
             trade_mode = mode

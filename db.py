@@ -796,12 +796,7 @@ def updateManyVaults(new_value):
 '''New Vault'''
 def createVault(vault):
     try:
-        vaultexist = vault_exist({'OWNER': vault['OWNER']})
-        if vaultexist:
-            return False
-        else:
-            vault_col.insert_one(vault)
-            return True
+        vault_col.insert_one(vault)
     except:
         return "Cannot create vault."
 
@@ -1411,12 +1406,8 @@ def createUniverse(universe):
 
 def updateUniverse(query, new_value):
     try:
-        universeexists = universe_exists({'TITLE': query['TITLE']})
-        if universeexists:
-            universe_col.update_one(query, new_value)
-            return True
-        else:
-            return False
+        universe_col.update_one(query, new_value)
+        return True
     except:
         return False
 
@@ -1429,6 +1420,16 @@ def deleteUniverse(query):
         else:
             return False
     except:
+        return False
+
+def queryCorruptedUniverse():
+    try:
+        data = universe_col.find_one({"CORRUPTED": True})
+        if data:
+            return data
+        else:
+            return False
+    except Exception as e:
         return False
 
 def queryAllUniverse():
