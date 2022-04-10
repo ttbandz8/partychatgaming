@@ -14080,8 +14080,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         tpet_enh_name = list(tpet_move.values())[2]
                                         tpet_msg_on_resolve = ""
                                         # UNIVERSE CARD
-                                        print(t_health)
-                                        print(t_max_health)
 
                                         if t_universe == "Souls" and t_used_resolve:
                                             player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina,
