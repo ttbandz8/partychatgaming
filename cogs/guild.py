@@ -551,34 +551,150 @@ class Guild(commands.Cog):
 
     @cog_ext.cog_slash(description="Ask Guild Owner to join Association! (Association Owner)", guild_ids=main.guild_ids)
     async def ally(self, ctx, owner: User):
-        founder_profile = db.queryUser({'DID': str(ctx.author.id)})
-        guildname = founder_profile['GUILD']
-        sword_profile = db.queryUser({'DID': str(owner.id)})
-        team_profile = db.queryTeam({'TEAM_NAME': sword_profile['TEAM'].tolower()})
-        if not team_profile:
-            await ctx.send(f"{owner.mention} does not own a Guild")
-        team_name = team_profile['TEAM_NAME']
-        team_owner = team_profile['OWNER']
-        if founder_profile['GUILD'] == 'PCG':
-            await ctx.send(m.USER_NOT_IN_GUILD, delete_after=3)
-        elif team_profile['GUILD'] != 'PCG':
-            await ctx.send(m.USER_IN_GUILD, delete_after=3)
-        elif sword_profile['DISNAME'] != team_owner:
-            await ctx.send(m.SWORD_NO_TEAM, delete_after=3)
-        else:
+        try:
+            founder_profile = db.queryUser({'DID': str(ctx.author.id)})
+            guildname = founder_profile['GUILD']
+            sword_profile = db.queryUser({'DID': str(owner.id)})
+            team_profile = db.queryTeam({'TEAM_NAME': sword_profile['TEAM'].tolower()})
+            if not team_profile:
+                await ctx.send(f"{owner.mention} does not own a Guild")
+            team_name = team_profile['TEAM_NAME']
+            team_owner = team_profile['OWNER']
+            if founder_profile['GUILD'] == 'PCG':
+                await ctx.send(m.USER_NOT_IN_GUILD, delete_after=3)
+            elif team_profile['GUILD'] != 'PCG':
+                await ctx.send(m.USER_IN_GUILD, delete_after=3)
+            elif sword_profile['DISNAME'] != team_owner:
+                await ctx.send(m.SWORD_NO_TEAM, delete_after=3)
+            else:
+                guild_query = {'GNAME': str(guildname)}
+                guild = db.queryGuildAlt(guild_query)
+                new_query = {'FDID' : guild['FDID']}
+                f_profile = guild['FDID']
+                s_profile = guild['WDID']
+                guild_name = guildname
+                if founder_profile['DID'] != f_profile and founder_profile['DID'] != s_profile:
+                    await ctx.send(m.ENLIST_GUILD_FOUNDER, delete_after=3)
+                    return
+                trade_buttons = [
+                    manage_components.create_button(
+                        style=ButtonStyle.green,
+                        label="Ally",
+                        custom_id="yes"
+                    ),
+                    manage_components.create_button(
+                        style=ButtonStyle.blue,
+                        label="No",
+                        custom_id="no"
+                    )
+                ]
+                trade_buttons_action_row = manage_components.create_actionrow(*trade_buttons)
+                await ctx.send(f"Do you want to ally with {team_name}?".format(self), components=[trade_buttons_action_row])
+                
+                def check(button_ctx):
+                    return button_ctx.author == ctx.author
+
+                
+                try:
+                    button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[trade_buttons_action_row], timeout=120, check=check)
+                    if button_ctx.custom_id == "no":
+                        await button_ctx.send("No Change")
+                        self.stop = True
+                        return
+                    if button_ctx.custom_id == "yes":
+                        await main.DM(ctx, owner, f"{ctx.author.mention}" + f" would like to ally with your team!" + f" React in server to join their Association" )
+                        trade_buttons = [
+                            manage_components.create_button(
+                                style=ButtonStyle.green,
+                                label="Form Alliance",
+                                custom_id="yes"
+                            ),
+                            manage_components.create_button(
+                                style=ButtonStyle.blue,
+                                label="No",
+                                custom_id="no"
+                            )
+                        ]
+                        trade_buttons_action_row = manage_components.create_actionrow(*trade_buttons)
+                        await ctx.send(f"{owner.mention}" +f" will you join {guild_name}?".format(self), components=[trade_buttons_action_row])
+                        
+                        def check(button_ctx):
+                            return button_ctx.author == owner
+
+                        
+                        try:
+                            button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[trade_buttons_action_row], timeout=120, check=check)
+                            if button_ctx.custom_id == "no":
+                                await button_ctx.send("No Change")
+                                self.stop = True
+                                return
+                            if button_ctx.custom_id == "yes":
+                                newvalue = {'$push': {'SWORDS': str(team_name)}}
+                                response = db.addGuildSword(new_query, newvalue, ctx.author, str(team_name))
+                                await ctx.send(response)
+                        
+                        except:
+                            await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=3)
+                except:
+                    print("No proposal Sent") 
+        except Exception as ex:
+            trace = []
+            tb = ex.__traceback__
+            while tb is not None:
+                trace.append({
+                    "filename": tb.tb_frame.f_code.co_filename,
+                    "name": tb.tb_frame.f_code.co_name,
+                    "lineno": tb.tb_lineno
+                })
+                tb = tb.tb_next
+            print(str({
+                'type': type(ex).__name__,
+                'message': str(ex),
+                'trace': trace
+            }))
+            await ctx.send(
+                "There's an issue with your commnads. Alert support.")
+            return    
+                
+    @cog_ext.cog_slash(description="Knight your Association Shield! (Association Owner)", guild_ids=main.guild_ids)
+    async def knight(self, ctx, blade: User):
+        try:
+            founder_profile = db.queryUser({'DID': str(ctx.author.id)})
+            shield_profile = db.queryUser({'DID' : str(blade.id)})
+            if not shield_profile:
+                await ctx.send(m.USER_NOT_REGISTERED)
+            shield_team_name = shield_profile['TEAM'].tolower()
+            if shield_team_name == 'PCG':
+                await ctx.send(m.KNIGHT_NOT_TEAM, delete_after=3)
+                return
+            shield_team = db.queryTeam({'TEAM_NAME' : str(shield_team_name)})
+            if shield_team['GUILD'] != founder_profile['GUILD']:
+                await ctx.send(m.KNIGHT_NOT_TEAM, delete_after=3)
+                return
+            guildname = founder_profile['GUILD']
+            if founder_profile['GUILD'] == 'PCG':
+                await ctx.send(m.USER_NOT_IN_GUILD, delete_after=3)
+                return
             guild_query = {'GNAME': str(guildname)}
             guild = db.queryGuildAlt(guild_query)
+            guild_name = guild['GNAME']
+            
+            prev_id = guild['SDID']
+            prev_user = db.queryUser({'DID':prev_id})
+            prev_team = db.queryTeam({'TEAM_NAME':prev_user['TEAM'].tolower()})
+            prev_team_exist = False
+            if prev_team:
+                prev_team_exist = True
             new_query = {'FDID' : guild['FDID']}
             f_profile = guild['FDID']
             s_profile = guild['WDID']
-            guild_name = guildname
             if founder_profile['DID'] != f_profile and founder_profile['DID'] != s_profile:
-                await ctx.send(m.ENLIST_GUILD_FOUNDER, delete_after=3)
+                await ctx.send(m.KNIGHT_GUILD_FOUNDER, delete_after=3)
                 return
             trade_buttons = [
                 manage_components.create_button(
                     style=ButtonStyle.green,
-                    label="Ally",
+                    label="Knight",
                     custom_id="yes"
                 ),
                 manage_components.create_button(
@@ -588,7 +704,7 @@ class Guild(commands.Cog):
                 )
             ]
             trade_buttons_action_row = manage_components.create_actionrow(*trade_buttons)
-            await ctx.send(f"Do you want to ally with {team_name}?".format(self), components=[trade_buttons_action_row])
+            await ctx.send(f"Do you wish to knight {blade.mention}?".format(self), components=[trade_buttons_action_row])
             
             def check(button_ctx):
                 return button_ctx.author == ctx.author
@@ -601,139 +717,61 @@ class Guild(commands.Cog):
                     self.stop = True
                     return
                 if button_ctx.custom_id == "yes":
-                    await main.DM(ctx, owner, f"{ctx.author.mention}" + f" would like to ally with your team!" + f" React in server to join their Association" )
-                    trade_buttons = [
-                        manage_components.create_button(
-                            style=ButtonStyle.green,
-                            label="Form Alliance",
-                            custom_id="yes"
-                        ),
-                        manage_components.create_button(
-                            style=ButtonStyle.blue,
-                            label="No",
-                            custom_id="no"
-                        )
-                    ]
-                    trade_buttons_action_row = manage_components.create_actionrow(*trade_buttons)
-                    await ctx.send(f"{owner.mention}" +f" will you join {guild_name}?".format(self), components=[trade_buttons_action_row])
-                    
-                    def check(button_ctx):
-                        return button_ctx.author == owner
+                    try: 
+                        await main.DM(ctx, blade, f"{ctx.author.mention}" + f" would like you to serve as the Association Shield!" + f" React in server to protect the Association" )
+                        trade_buttons = [
+                            manage_components.create_button(
+                                style=ButtonStyle.green,
+                                label="Serve",
+                                custom_id="yes"
+                            ),
+                            manage_components.create_button(
+                                style=ButtonStyle.blue,
+                                label="No",
+                                custom_id="no"
+                            )
+                        ]
+                        trade_buttons_action_row = manage_components.create_actionrow(*trade_buttons)
+                        await ctx.send(f"{blade.mention}" +f" will you defend {guild_name}?".format(self), components=[trade_buttons_action_row])
+                        
+                        def check(button_ctx):
+                            return button_ctx.author == blade
 
-                    
-                    try:
-                        button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[trade_buttons_action_row], timeout=120, check=check)
-                        if button_ctx.custom_id == "no":
-                            await button_ctx.send("No Change")
-                            self.stop = True
+                        
+                        try:
+                            button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[trade_buttons_action_row], timeout=120, check=check)
+                            if button_ctx.custom_id == "no":
+                                await button_ctx.send("Knight Refused")
+                                self.stop = True
+                                return
+                            if button_ctx.custom_id == "yes":
+                                if prev_team_exist:
+                                    prev_team_update = {'$set': {'SHIELDING': False}}
+                                    remove_shield = db.updateTeam({'TEAM_NAME': str(prev_team['TEAM_NAME'])}, prev_team_update)
+                                update_shielding = {'$set': {'SHIELDING': True}}
+                                add_shield = db.updateTeam({'TEAM_NAME': str(shield_team_name)}, update_shielding)
+                                newvalue = {'$set': {'SHIELD': str(blade), 'STREAK' : 0, 'SDID' : str(blade.id)}}
+                                response = db.addGuildShield(new_query, newvalue, ctx.author, blade)
+                                await ctx.send(response)
+                                
+                        except Exception as ex:
+                            trace = []
+                            tb = ex.__traceback__
+                            while tb is not None:
+                                trace.append({
+                                    "filename": tb.tb_frame.f_code.co_filename,
+                                    "name": tb.tb_frame.f_code.co_name,
+                                    "lineno": tb.tb_lineno
+                                })
+                                tb = tb.tb_next
+                            print(str({
+                                'type': type(ex).__name__,
+                                'message': str(ex),
+                                'trace': trace
+                            }))
+                            await ctx.send(
+                                "There's an issue with your commnads. Alert support.")
                             return
-                        if button_ctx.custom_id == "yes":
-                            newvalue = {'$push': {'SWORDS': str(team_name)}}
-                            response = db.addGuildSword(new_query, newvalue, ctx.author, str(team_name))
-                            await ctx.send(response)
-                    
-                    except:
-                        await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=3)
-            except:
-                print("No proposal Sent") 
-                
-    @cog_ext.cog_slash(description="Knight your Association Shield! (Association Owner)", guild_ids=main.guild_ids)
-    async def knight(self, ctx, blade: User):
-        founder_profile = db.queryUser({'DID': str(ctx.author.id)})
-        shield_profile = db.queryUser({'DID' : str(blade.id)})
-        if not shield_profile:
-            await ctx.send(m.USER_NOT_REGISTERED)
-        shield_team_name = shield_profile['TEAM'].tolower()
-        if shield_team_name == 'PCG':
-            await ctx.send(m.KNIGHT_NOT_TEAM, delete_after=3)
-            return
-        shield_team = db.queryTeam({'TEAM_NAME' : str(shield_team_name)})
-        if shield_team['GUILD'] != founder_profile['GUILD']:
-            await ctx.send(m.KNIGHT_NOT_TEAM, delete_after=3)
-            return
-        guildname = founder_profile['GUILD']
-        if founder_profile['GUILD'] == 'PCG':
-            await ctx.send(m.USER_NOT_IN_GUILD, delete_after=3)
-            return
-        guild_query = {'GNAME': str(guildname)}
-        guild = db.queryGuildAlt(guild_query)
-        guild_name = guild['GNAME']
-        
-        prev_id = guild['SDID']
-        prev_user = db.queryUser({'DID':prev_id})
-        prev_team = db.queryTeam({'TEAM_NAME':prev_user['TEAM'].tolower()})
-        prev_team_exist = False
-        if prev_team:
-            prev_team_exist = True
-        new_query = {'FDID' : guild['FDID']}
-        f_profile = guild['FDID']
-        s_profile = guild['WDID']
-        if founder_profile['DID'] != f_profile and founder_profile['DID'] != s_profile:
-            await ctx.send(m.KNIGHT_GUILD_FOUNDER, delete_after=3)
-            return
-        trade_buttons = [
-            manage_components.create_button(
-                style=ButtonStyle.green,
-                label="Knight",
-                custom_id="yes"
-            ),
-            manage_components.create_button(
-                style=ButtonStyle.blue,
-                label="No",
-                custom_id="no"
-            )
-        ]
-        trade_buttons_action_row = manage_components.create_actionrow(*trade_buttons)
-        await ctx.send(f"Do you wish to knight {blade.mention}?".format(self), components=[trade_buttons_action_row])
-        
-        def check(button_ctx):
-            return button_ctx.author == ctx.author
-
-        
-        try:
-            button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[trade_buttons_action_row], timeout=120, check=check)
-            if button_ctx.custom_id == "no":
-                await button_ctx.send("No Change")
-                self.stop = True
-                return
-            if button_ctx.custom_id == "yes":
-                try: 
-                    await main.DM(ctx, blade, f"{ctx.author.mention}" + f" would like you to serve as the Association Shield!" + f" React in server to protect the Association" )
-                    trade_buttons = [
-                        manage_components.create_button(
-                            style=ButtonStyle.green,
-                            label="Serve",
-                            custom_id="yes"
-                        ),
-                        manage_components.create_button(
-                            style=ButtonStyle.blue,
-                            label="No",
-                            custom_id="no"
-                        )
-                    ]
-                    trade_buttons_action_row = manage_components.create_actionrow(*trade_buttons)
-                    await ctx.send(f"{blade.mention}" +f" will you defend {guild_name}?".format(self), components=[trade_buttons_action_row])
-                    
-                    def check(button_ctx):
-                        return button_ctx.author == blade
-
-                    
-                    try:
-                        button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[trade_buttons_action_row], timeout=120, check=check)
-                        if button_ctx.custom_id == "no":
-                            await button_ctx.send("Knight Refused")
-                            self.stop = True
-                            return
-                        if button_ctx.custom_id == "yes":
-                            if prev_team_exist:
-                                prev_team_update = {'$set': {'SHIELDING': False}}
-                                remove_shield = db.updateTeam({'TEAM_NAME': str(prev_team['TEAM_NAME'])}, prev_team_update)
-                            update_shielding = {'$set': {'SHIELDING': True}}
-                            add_shield = db.updateTeam({'TEAM_NAME': str(shield_team_name)}, update_shielding)
-                            newvalue = {'$set': {'SHIELD': str(blade), 'STREAK' : 0, 'SDID' : str(blade.id)}}
-                            response = db.addGuildShield(new_query, newvalue, ctx.author, blade)
-                            await ctx.send(response)
-                            
                     except Exception as ex:
                         trace = []
                         tb = ex.__traceback__
@@ -752,49 +790,119 @@ class Guild(commands.Cog):
                         await ctx.send(
                             "There's an issue with your commnads. Alert support.")
                         return
-                except Exception as ex:
-                    trace = []
-                    tb = ex.__traceback__
-                    while tb is not None:
-                        trace.append({
-                            "filename": tb.tb_frame.f_code.co_filename,
-                            "name": tb.tb_frame.f_code.co_name,
-                            "lineno": tb.tb_lineno
-                        })
-                        tb = tb.tb_next
-                    print(str({
-                        'type': type(ex).__name__,
-                        'message': str(ex),
-                        'trace': trace
-                    }))
-                    await ctx.send(
-                        "There's an issue with your commnads. Alert support.")
-                    return
-        except:
-            print("No proposal Sent")
-        
+            except:
+                print("No proposal Sent")
+        except Exception as ex:
+            trace = []
+            tb = ex.__traceback__
+            while tb is not None:
+                trace.append({
+                    "filename": tb.tb_frame.f_code.co_filename,
+                    "name": tb.tb_frame.f_code.co_name,
+                    "lineno": tb.tb_lineno
+                })
+                tb = tb.tb_next
+            print(str({
+                'type': type(ex).__name__,
+                'message': str(ex),
+                'trace': trace
+            }))
+            await ctx.send(
+                "There's an issue with your commnads. Alert support.")
+            return
     @cog_ext.cog_slash(description="Exile Guild from Association (Association Owner)", guild_ids=main.guild_ids)
     async def exile(self, ctx, owner: User):
-        leader_profile = db.queryUser({'DID': str(ctx.author.id)})
-        exiled_profile = db.queryUser({'DID': str(owner.id)})
-        if not exiled_profile:
-            await ctx.send(m.USER_DOESNT_EXIST, delete_after=5)
+        try:
+            leader_profile = db.queryUser({'DID': str(ctx.author.id)})
+            exiled_profile = db.queryUser({'DID': str(owner.id)})
+            if not exiled_profile:
+                await ctx.send(m.USER_DOESNT_EXIST, delete_after=5)
+                return
+            exiled_team = db.queryTeam({'TEAM_NAME' : exiled_profile['TEAM'].tolower()})
+            if leader_profile['GUILD'] != exiled_team['GUILD']:
+                await ctx.send(m.GUILD_DOESNT_EXIST, delete_after=5)
+                return
+            guild_query = {'GNAME': leader_profile['GUILD']}
+            guild_profile = db.queryGuildAlt(guild_query)
+            new_query = {'FDID' : guild_profile['FDID']}
+            
+            if guild_profile:
+                if leader_profile['DID'] == guild_profile['FDID'] or leader_profile['DID'] == guild_profile['WDID'] or leader_profile['DID'] == guild_profile['SDID']: 
+                    accept = await ctx.send(f"".format(self), delete_after=8)
+                    trade_buttons = [
+                        manage_components.create_button(
+                            style=ButtonStyle.red,
+                            label="Exile Guild",
+                            custom_id="yes"
+                        ),
+                        manage_components.create_button(
+                            style=ButtonStyle.blue,
+                            label="No",
+                            custom_id="no"
+                        )
+                    ]
+                    trade_buttons_action_row = manage_components.create_actionrow(*trade_buttons)
+                    await ctx.send(f"Do you wish to Exile {owner.mention} and {exiled_profile['TEAM']}?".format(self), components=[trade_buttons_action_row])
+                    
+                    def check(button_ctx):
+                        return button_ctx.author == ctx.author
+
+                    
+                    try:
+                        button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[trade_buttons_action_row], timeout=120, check=check)
+                        if button_ctx.custom_id == "no":
+                            await button_ctx.send("No Change")
+                            self.stop = True
+                            return
+                        if button_ctx.custom_id == "yes":
+                            prev_team_update = {'$set': {'SHIELDING': False}}
+                            remove_shield = db.updateTeam({'TEAM_NAME': str(exiled_team['TEAM_NAME'])}, prev_team_update)
+                            new_value_query = {'$pull': {'SWORDS': str(exiled_profile['TEAM'])}, '$set': {'SHIELD': guild_profile['SWORN'], 'SDID': guild_profile['WDID']}}
+                            response2 = db.deleteGuildSword(new_query, new_value_query, ctx.author, str(exiled_profile['TEAM']))
+                            await ctx.send(response2)
+                    except:
+                        print("No Exile")
+                else:
+                    await ctx.send(m.EXILE_GUILD_FOUNDER, delete_after=5)
+            else:
+                await ctx.send(m.GUILD_DOESNT_EXIST, delete_after=5)
+        except Exception as ex:
+            trace = []
+            tb = ex.__traceback__
+            while tb is not None:
+                trace.append({
+                    "filename": tb.tb_frame.f_code.co_filename,
+                    "name": tb.tb_frame.f_code.co_name,
+                    "lineno": tb.tb_lineno
+                })
+                tb = tb.tb_next
+            print(str({
+                'type': type(ex).__name__,
+                'message': str(ex),
+                'trace': trace
+            }))
+            await ctx.send(
+                "There's an issue with your commnads. Alert support.")
             return
-        exiled_team = db.queryTeam({'TEAM_NAME' : exiled_profile['TEAM'].tolower()})
-        if leader_profile['GUILD'] != exiled_team['GUILD']:
-            await ctx.send(m.GUILD_DOESNT_EXIST, delete_after=5)
-            return
-        guild_query = {'GNAME': leader_profile['GUILD']}
-        guild_profile = db.queryGuildAlt(guild_query)
-        new_query = {'FDID' : guild_profile['FDID']}
-        
-        if guild_profile:
-            if leader_profile['DID'] == guild_profile['FDID'] or leader_profile['DID'] == guild_profile['WDID'] or leader_profile['DID'] == guild_profile['SDID']: 
-                accept = await ctx.send(f"".format(self), delete_after=8)
+    @cog_ext.cog_slash(description="Abandon Association (Guild Owner)", guild_ids=main.guild_ids)
+    async def renounce(self, ctx):
+        try:
+            sword_profile = db.queryUser({'DID': str(ctx.author.id)})
+            team_profile = db.queryTeam({'TEAM_NAME' : sword_profile['TEAM'].tolower()})
+            if sword_profile['DISNAME'] != team_profile['OWNER'] or sword_profile['TEAM'] == 'PCG':
+                await ctx.send(m.OWNER_ONLY_COMMAND, delete_after=5)
+                return
+            team_name = team_profile['TEAM_NAME']
+            guild_query = {'GNAME': team_profile['GUILD']}
+            guild_profile = db.queryGuildAlt(guild_query)  
+            if guild_profile:
+                if sword_profile['DID'] == guild_profile['WDID']:
+                    await ctx.send(m.SWORD_LEAVE, delete_after=5)
+                    return      
                 trade_buttons = [
                     manage_components.create_button(
                         style=ButtonStyle.red,
-                        label="Exile Guild",
+                        label="Renounce Oath",
                         custom_id="yes"
                     ),
                     manage_components.create_button(
@@ -804,7 +912,7 @@ class Guild(commands.Cog):
                     )
                 ]
                 trade_buttons_action_row = manage_components.create_actionrow(*trade_buttons)
-                await ctx.send(f"Do you wish to Exile {owner.mention} and {exiled_profile['TEAM']}?".format(self), components=[trade_buttons_action_row])
+                await ctx.send(f"Do you wish to renounce your allegiance to {guild_profile['GNAME']}?".format(self), components=[trade_buttons_action_row])
                 
                 def check(button_ctx):
                     return button_ctx.author == ctx.author
@@ -817,127 +925,14 @@ class Guild(commands.Cog):
                         self.stop = True
                         return
                     if button_ctx.custom_id == "yes":
-                        prev_team_update = {'$set': {'SHIELDING': False}}
-                        remove_shield = db.updateTeam({'TEAM_NAME': str(exiled_team['TEAM_NAME'])}, prev_team_update)
-                        new_value_query = {'$pull': {'SWORDS': str(exiled_profile['TEAM'])}, '$set': {'SHIELD': guild_profile['SWORN'], 'SDID': guild_profile['WDID']}}
-                        response2 = db.deleteGuildSword(new_query, new_value_query, ctx.author, str(exiled_profile['TEAM']))
-                        await ctx.send(response2)
-                except:
-                    print("No Exile")
-            else:
-                await ctx.send(m.EXILE_GUILD_FOUNDER, delete_after=5)
-        else:
-            await ctx.send(m.GUILD_DOESNT_EXIST, delete_after=5)
-
-    @cog_ext.cog_slash(description="Abandon Association (Guild Owner)", guild_ids=main.guild_ids)
-    async def renounce(self, ctx):
-        sword_profile = db.queryUser({'DID': str(ctx.author.id)})
-        team_profile = db.queryTeam({'TEAM_NAME' : sword_profile['TEAM'].tolower()})
-        if sword_profile['DISNAME'] != team_profile['OWNER'] or sword_profile['TEAM'] == 'PCG':
-            await ctx.send(m.OWNER_ONLY_COMMAND, delete_after=5)
-            return
-        team_name = team_profile['TEAM_NAME']
-        guild_query = {'GNAME': team_profile['GUILD']}
-        guild_profile = db.queryGuildAlt(guild_query)  
-        if guild_profile:
-            if sword_profile['DID'] == guild_profile['WDID']:
-                await ctx.send(m.SWORD_LEAVE, delete_after=5)
-                return      
-            trade_buttons = [
-                manage_components.create_button(
-                    style=ButtonStyle.red,
-                    label="Renounce Oath",
-                    custom_id="yes"
-                ),
-                manage_components.create_button(
-                    style=ButtonStyle.blue,
-                    label="No",
-                    custom_id="no"
-                )
-            ]
-            trade_buttons_action_row = manage_components.create_actionrow(*trade_buttons)
-            await ctx.send(f"Do you wish to renounce your allegiance to {guild_profile['GNAME']}?".format(self), components=[trade_buttons_action_row])
-            
-            def check(button_ctx):
-                return button_ctx.author == ctx.author
-
-            
-            try:
-                button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[trade_buttons_action_row], timeout=120, check=check)
-                if button_ctx.custom_id == "no":
-                    await button_ctx.send("No Change")
-                    self.stop = True
-                    return
-                if button_ctx.custom_id == "yes":
-                    try:
-                        prev_team_update = {'$set': {'SHIELDING': False}}
-                        remove_shield = db.updateTeam({'TEAM_NAME': str(team_profile['TEAM_NAME'])}, prev_team_update)
-                        new_value_query = {'$pull': {'SWORDS': str(team_name)}, '$set': {'SHIELD': guild_profile['SWORN'], 'SDID': guild_profile['WDID']}}
-                        response = db.deleteGuildSwordAlt(guild_query, new_value_query, str(team_name))
-                        await ctx.send(response)
-                    except:
-                        print("Association not created. ")
-            except:
-                trace = []
-                tb = ex.__traceback__
-                while tb is not None:
-                    trace.append({
-                        "filename": tb.tb_frame.f_code.co_filename,
-                        "name": tb.tb_frame.f_code.co_name,
-                        "lineno": tb.tb_lineno
-                    })
-                    tb = tb.tb_next
-                print(str({
-                    'type': type(ex).__name__,
-                    'message': str(ex),
-                    'trace': trace
-                }))
-        else:
-            await ctx.send(m.GUILD_DOESNT_EXIST, delete_after=5)
-
-    @cog_ext.cog_slash(description="Disband your Association (Association Founder)", guild_ids=main.guild_ids)
-    async def disband(self, ctx):
-        guild_query = {'FDID': str(ctx.author.id)}
-        guild = db.queryGuild(guild_query)
-        if guild:
-            if guild['FDID'] == str(ctx.author.id):
-                trade_buttons = [
-                    manage_components.create_button(
-                        style=ButtonStyle.red,
-                        label="Disband Assosiation",
-                        custom_id="yes"
-                    ),
-                    manage_components.create_button(
-                        style=ButtonStyle.blue,
-                        label="No",
-                        custom_id="no"
-                    )
-                ]
-                trade_buttons_action_row = manage_components.create_actionrow(*trade_buttons)
-                await ctx.send(f"Do you want to disband the {guild['GNAME']}?".format(self), components=[trade_buttons_action_row])
-                
-                def check(button_ctx):
-                    return button_ctx.author == ctx.author
-
-                
-                try:
-                    button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[trade_buttons_action_row], timeout=120, check=check)
-                    if button_ctx.custom_id == "no":
-                        await button_ctx.send("Association not Disbanded")
-                        self.stop = True
-                        return
-                    if button_ctx.custom_id == "yes":
                         try:
-                            response = db.deleteGuild(guild, ctx.author)
-
-                            user_query = {'DID': str(ctx.author.id)}
-                            new_value = {'$set': {'GUILD': 'PCG'}}
-                            db.updateUserNoFilter(user_query, new_value)
-
+                            prev_team_update = {'$set': {'SHIELDING': False}}
+                            remove_shield = db.updateTeam({'TEAM_NAME': str(team_profile['TEAM_NAME'])}, prev_team_update)
+                            new_value_query = {'$pull': {'SWORDS': str(team_name)}, '$set': {'SHIELD': guild_profile['SWORN'], 'SDID': guild_profile['WDID']}}
+                            response = db.deleteGuildSwordAlt(guild_query, new_value_query, str(team_name))
                             await ctx.send(response)
-                        
                         except:
-                            print("Association Not Deleted. ")
+                            print("Association not created. ")
                 except:
                     trace = []
                     tb = ex.__traceback__
@@ -954,10 +949,106 @@ class Guild(commands.Cog):
                         'trace': trace
                     }))
             else:
-                await ctx.send("Only the Founder can disband the Association. ")
-        else:
-            await ctx.send(m.TEAM_DOESNT_EXIST, delete_after=5)
+                await ctx.send(m.GUILD_DOESNT_EXIST, delete_after=5)
+        except Exception as ex:
+            trace = []
+            tb = ex.__traceback__
+            while tb is not None:
+                trace.append({
+                    "filename": tb.tb_frame.f_code.co_filename,
+                    "name": tb.tb_frame.f_code.co_name,
+                    "lineno": tb.tb_lineno
+                })
+                tb = tb.tb_next
+            print(str({
+                'type': type(ex).__name__,
+                'message': str(ex),
+                'trace': trace
+            }))
+            await ctx.send(
+                "There's an issue with your commnads. Alert support.")
+            return
+    @cog_ext.cog_slash(description="Disband your Association (Association Founder)", guild_ids=main.guild_ids)
+    async def disband(self, ctx):
+        try:
+            guild_query = {'FDID': str(ctx.author.id)}
+            guild = db.queryGuild(guild_query)
+            if guild:
+                if guild['FDID'] == str(ctx.author.id):
+                    trade_buttons = [
+                        manage_components.create_button(
+                            style=ButtonStyle.red,
+                            label="Disband Assosiation",
+                            custom_id="yes"
+                        ),
+                        manage_components.create_button(
+                            style=ButtonStyle.blue,
+                            label="No",
+                            custom_id="no"
+                        )
+                    ]
+                    trade_buttons_action_row = manage_components.create_actionrow(*trade_buttons)
+                    await ctx.send(f"Do you want to disband the {guild['GNAME']}?".format(self), components=[trade_buttons_action_row])
+                    
+                    def check(button_ctx):
+                        return button_ctx.author == ctx.author
 
+                    
+                    try:
+                        button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[trade_buttons_action_row], timeout=120, check=check)
+                        if button_ctx.custom_id == "no":
+                            await button_ctx.send("Association not Disbanded")
+                            self.stop = True
+                            return
+                        if button_ctx.custom_id == "yes":
+                            try:
+                                response = db.deleteGuild(guild, ctx.author)
+
+                                user_query = {'DID': str(ctx.author.id)}
+                                new_value = {'$set': {'GUILD': 'PCG'}}
+                                db.updateUserNoFilter(user_query, new_value)
+
+                                await ctx.send(response)
+                            
+                            except:
+                                print("Association Not Deleted. ")
+                    except:
+                        trace = []
+                        tb = ex.__traceback__
+                        while tb is not None:
+                            trace.append({
+                                "filename": tb.tb_frame.f_code.co_filename,
+                                "name": tb.tb_frame.f_code.co_name,
+                                "lineno": tb.tb_lineno
+                            })
+                            tb = tb.tb_next
+                        print(str({
+                            'type': type(ex).__name__,
+                            'message': str(ex),
+                            'trace': trace
+                        }))
+                else:
+                    await ctx.send("Only the Founder can disband the Association. ")
+            else:
+                await ctx.send(m.TEAM_DOESNT_EXIST, delete_after=5)
+        except Exception as ex:
+            trace = []
+            tb = ex.__traceback__
+            while tb is not None:
+                trace.append({
+                    "filename": tb.tb_frame.f_code.co_filename,
+                    "name": tb.tb_frame.f_code.co_name,
+                    "lineno": tb.tb_lineno
+                })
+                tb = tb.tb_next
+            print(str({
+                'type': type(ex).__name__,
+                'message': str(ex),
+                'trace': trace
+            }))
+            await ctx.send(
+                "There's an issue with your commnads. Alert support.")
+            return
 
 
 

@@ -14119,7 +14119,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         # await asyncio.sleep(2)
                                         battle_msg = await private_channel.send(embed=tembedVar, file=player_2_card)
                                     aiMove = 0
-
+                                    
                                     if t_used_resolve and not t_pet_used and t_stamina >= 30:
                                         aiMove = 6
                                     elif tarm_barrier_active: #Ai Barrier Checks
