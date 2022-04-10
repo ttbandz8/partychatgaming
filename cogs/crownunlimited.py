@@ -6132,7 +6132,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                                     save_spot_text = str(save['CURRENTOPPONENT'])
                         corruption_message = "📢 Not Corrupted"
                         if uni['CORRUPTED']:
-                            corruption_message = "📢 **Corrupted**"
+                            corruption_message = "👾 **Corrupted**"
 
                         embedVar = discord.Embed(title= f"{uni['TITLE']}", description=textwrap.dedent(f"""
                         {Crest_dict[uni['TITLE']]} **Number of Fights**: :crossed_swords: **{len(uni['CROWN_TALES'])}**
@@ -6156,7 +6156,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                                     save_spot_text = str(save['CURRENTOPPONENT'])
                         corruption_message = "📢 Not Corrupted"
                         if uni['CORRUPTED']:
-                            corruption_message = "📢 **Corrupted**"
+                            corruption_message = "👾 **Corrupted**"
 
                         embedVar = discord.Embed(title= f"{uni['TITLE']}", description=textwrap.dedent(f"""
                         {Crest_dict[uni['TITLE']]} **Number of Fights**: :crossed_swords: **{len(uni['CROWN_TALES'])}**
@@ -6183,7 +6183,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                                     save_spot_text = str(save['CURRENTOPPONENT'])
                         corruption_message = "📢 Not Corrupted"
                         if uni['CORRUPTED']:
-                            corruption_message = "📢 **Corrupted**"
+                            corruption_message = "👾 **Corrupted**"
 
 
                         embedVar = discord.Embed(title= f"{uni['TITLE']}", description=textwrap.dedent(f"""
@@ -6208,7 +6208,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                                     save_spot_text = str(save['CURRENTOPPONENT'])
                         corruption_message = "📢 Not Corrupted"
                         if uni['CORRUPTED']:
-                            corruption_message = "📢 **Corrupted**"
+                            corruption_message = "👾 **Corrupted**"
 
                         embedVar = discord.Embed(title= f"{uni['TITLE']}", description=textwrap.dedent(f"""
                         {Crest_dict[uni['TITLE']]} **Number of Fights**: :crossed_swords: **{len(uni['CROWN_TALES'])}**
@@ -6330,7 +6330,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                         save_spot_text = str(save['CURRENTOPPONENT'])
                 corruption_message = "📢 Not Corrupted"
                 if uni_option['CORRUPTED']:
-                    corruption_message = "📢 **Corrupted**"
+                    corruption_message = "👾 **Corrupted**"
 
                 if uni in completed_dungeons:
                     completed = "🟢"

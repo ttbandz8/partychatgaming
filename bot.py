@@ -1479,7 +1479,7 @@ async def called_once_a_day():
    universe_name = selected_universe['TITLE']
    
    r_response = db.updateUniverse({'TITLE': universe_name}, {'$set': {'CORRUPTED': True}})
-   embedVar = discord.Embed(title= f"📢 {universe_name} has been corrupted!", description=textwrap.dedent(f"""
+   embedVar = discord.Embed(title= f"👾 {universe_name} has been corrupted!", description=textwrap.dedent(f"""
    Cards in corrupted universes are empowered!
 
    🗡️ **Your Goal**
