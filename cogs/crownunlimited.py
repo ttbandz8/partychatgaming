@@ -259,7 +259,7 @@ class CrownUnlimited(commands.Cog):
             card_file = showcard(cards[rand_card], o_max_health, o_health, o_max_stamina, o_stamina, resolved, cardtitle, focused, o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, card_lvl, None)
 
             embedVar.set_image(url="attachment://image.png")
-
+            embedVar.set_thumbnail(url=message.author.avatar_url)
 
             setchannel = discord.utils.get(channel_list, name=server_channel)
             await setchannel.send(f"{message.author.mention}") 
@@ -270,7 +270,7 @@ class CrownUnlimited(commands.Cog):
 
             try:
                 button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[
-                    random_battle_buttons_action_row], timeout=120, check=check)
+                    random_battle_buttons_action_row], timeout=100, check=check)
 
                 if button_ctx.custom_id == "exploreYes":
                     await button_ctx.defer(ignore=True)

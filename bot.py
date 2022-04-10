@@ -1483,10 +1483,7 @@ async def called_once_a_day():
    Cards in corrupted universes are empowered!
 
    🗡️ **Your Goal**
-   Defeat cards in corrupted universes to earn 💎 Craftable Gems!
-   
-   ⚔️ **Group Effort**
-   Work together to dissipate the corruption. If all corruption is dissipated before the timer runs out all players will earn a reward!
+   Defeat cards in corrupted universes to earn 💎 Craftable Gems!   
    """))
    embedVar.set_image(url=universe_image)
 

@@ -198,14 +198,28 @@ async def route_to_storage(player, card_name, current_cards, card_owned, price, 
         # await channel.send(f"'PLAYER': **{str(player)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
 
 
+# async def bless_all(ctx, amount: int):
+#     guild = main.bot.get_guild(main.guild_id)
+#     channel = guild.get_channel(main.guild_channel)
+#     message_channel = channel
+#     try:
+#         all_users = db.queryAllVault()
+#         for user in all_users:
+#             await bless(amount, user['DID'])
+#         await ctx.send(f"All Crown Unlimited Players have been blessed. 👑")
+#     except Exception as e:
+#     print(e)
+
+
 async def corrupted_universe_handler(ctx, universe, difficulty):
-    try:
-        print(str(universe['CORRUPTION_LEVEL']))
+    try:         
+        # if universe['CORRUPTION_LEVEL'] == 499:
+        # updated_corruption_level = db.updateUniverse({'TITLE': universe['TITLE']}, {'$inc': {'CORRUPTION_LEVEL': 1}})
         vault = db.queryVault({"DID": str(ctx.author.id)})
         gem_list = vault['GEMS']
-        gem_reward = 15000
+        gem_reward = 18000
         if difficulty == "HARD":
-            gem_reward = 40000
+            gem_reward = 50000
 
         if gem_list:
             for uni in gem_list:

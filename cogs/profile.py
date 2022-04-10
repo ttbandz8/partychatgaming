@@ -3092,6 +3092,7 @@ class Profile(commands.Cog):
                 heart_message = "Cannot Afford"
                 soul_message = "Cannot Afford"
                 destiny_message = "Cannot Afford"
+                revive_destiny_message = "Cannot Afford"
                 if universe_heart:
                     heart_message = "Owned"
                 elif gems >= 1000000:
@@ -3106,6 +3107,8 @@ class Profile(commands.Cog):
                     destiny_message = f"{universe_name} Destinies available"
                 elif gems >= 800000:
                     destiny_message = f"Affordable!"
+                if gems >= 6000000:
+                    revive_destiny_message = f"Affordable!"
                 if universe_name != card_info['UNIVERSE'] and skin_alert:
                     card_skin_message = f"{card_info['UNIVERSE']} Skin Available!"
                     if card_info['UNIVERSE'] in poke_universes:
@@ -3115,7 +3118,7 @@ class Profile(commands.Cog):
                 Welcome {ctx.author.mention}!
                 You have 💎 *{'{:,}'.format(gems)}* **{universe_name}** gems !
                 
-                🎴 Card:  **{card_info['NAME']}** *{card_info['UNIVERSE']}*
+                🎴 Equipped Card:  **{card_info['NAME']}** *{card_info['UNIVERSE']}*
                 *{destiny_alert_message}*
                 
                 💟 **Universe Heart:** 💎 1,000,000 *{heart_message}*
@@ -3129,6 +3132,10 @@ class Profile(commands.Cog):
                 
                 🃏 **Card Skins:** 💎 2,000,000 *{card_skin_message}*
                 *Grants Card Skin*
+
+                ✨🎴 **Revive Destiny Card:** 💎 6,000,000 *{revive_destiny_message}*
+                *Craft previously owned Destiny Card*
+
                 """), colour=0x7289da)
                 embedVar.set_image(url=universe_image)
                 embed_list.append(embedVar)
@@ -3138,7 +3145,8 @@ class Profile(commands.Cog):
                 manage_components.create_button(style=3, label="💟", custom_id="UNIVERSE_HEART"),
                 manage_components.create_button(style=1, label="🌹", custom_id="UNIVERSE_SOUL"),
                 manage_components.create_button(style=1, label="✨", custom_id="Destiny"),
-                manage_components.create_button(style=1, label="🃏", custom_id="Skin")
+                manage_components.create_button(style=1, label="🃏", custom_id="Skin"),
+                manage_components.create_button(style=1, label="✨🎴", custom_id="Revive")
             ]
 
             custom_action_row = manage_components.create_actionrow(*buttons)
@@ -3177,6 +3185,12 @@ class Profile(commands.Cog):
                         response = await craft_adjuster(self, ctx, vault, universe, price, card_info, new_skin_list)
                         await button_ctx.send(f"{response['MESSAGE']}")
                         self.stop = True
+                    if button_ctx.custom_id == "Revive":
+                        await button_ctx.defer(ignore=True)
+                        price = 6000000
+                        response = await craft_adjuster(self, ctx, vault, universe, price, card_info, new_skin_list)
+                        await button_ctx.send(f"{response['MESSAGE']}")
+                        self.stop = True                       
                  
                 else:
                     await ctx.send("This is not your Craft.")
