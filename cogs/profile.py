@@ -2171,7 +2171,7 @@ class Profile(commands.Cog):
         if vault:
             try:
                 buttons = []
-                guild_buff = await crown_utilities.guild_buff_update_function(self, d['TEAM'].lower())
+                guild_buff = await crown_utilities.guild_buff_update_function(d['TEAM'].lower())
                 name = d['DISNAME'].split("#",1)[0]
                 avatar = d['AVATAR']
                 balance = vault['BALANCE']
@@ -2285,7 +2285,7 @@ class Profile(commands.Cog):
                             # guild = server_name
                             oteam = sowner['TEAM']
                             ofam = sowner['FAMILY']
-                            guild_buff = await crown_utilities.guild_buff_update_function(self, sowner['TEAM'].lower())
+                            guild_buff = await crown_utilities.guild_buff_update_function(sowner['TEAM'].lower())
                             
 
                             if sowner['LEVEL'] < 4:

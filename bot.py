@@ -2182,9 +2182,6 @@ async def buffshop(ctx, player, team):
          }
 
       if button_ctx.custom_id == "4":
-         await button_ctx.send("Rifts are not available yet. Please check back another time.", hidden=True)
-         return
-
          price= rift_buff_cost
          if price > balance:
             await button_ctx.send("Insufficent Balance.", hidden=True)
