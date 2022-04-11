@@ -21398,11 +21398,6 @@ async def drops(self,player, universe, matchcount):
         await crown_utilities.bless(bless_amount, player.id)
         return f"You earned :coin: **{bless_amount}**!"
 
-
-
-
-            
-
     owned_arms = []
     for arm in vault['ARMS']:
         owned_arms.append(arm['ARM'])
@@ -21481,7 +21476,6 @@ async def drops(self,player, universe, matchcount):
     card_drop = 200  # 200
     drop_rate = random.randint((0 + (rebirth * rebirth) * (1 + rebirth)), 200)
     durability = random.randint(1, 45)
-    drop_rate=199
     
     if difficulty == "HARD":
         mode = "Purchase"
@@ -21590,7 +21584,6 @@ async def drops(self,player, universe, matchcount):
             'message': str(ex),
             'trace': trace
         }))
-        await ctx.send("There's an issue with the Drops. Alert support.")
         await crown_utilities.bless(5000, player.id)
         guild = self.bot.get_guild(543442011156643871)
         channel = guild.get_channel(957061470192033812)
@@ -21634,7 +21627,6 @@ async def specific_drops(self,player, card, universe):
             'message': str(ex),
             'trace': trace
         }))
-        await ctx.send("There's an issue with the Drops. Alert support.")
         await crown_utilities.bless(5000, player.id)
         guild = self.bot.get_guild(543442011156643871)
         channel = guild.get_channel(957061470192033812)
@@ -21817,7 +21809,6 @@ async def dungeondrops(self, player, universe, matchcount):
             'message': str(ex),
             'trace': trace
         }))
-        await player.send("There's an issue with the Drops. Alert support.")
         await crown_utilities.bless(5000, player.id)
         guild = self.bot.get_guild(543442011156643871)
         channel = guild.get_channel(957061470192033812)
@@ -22000,7 +21991,6 @@ async def bossdrops(self,player, universe):
             'message': str(ex),
             'trace': trace
         }))
-        await ctx.send("There's an issue with the Drops. Alert support.")
         await crown_utilities.bless(5000, player.id)
         guild = self.bot.get_guild(543442011156643871)
         channel = guild.get_channel(957061470192033812)
