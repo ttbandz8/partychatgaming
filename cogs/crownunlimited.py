@@ -2397,10 +2397,8 @@ async def destiny(player, opponent, mode):
                             response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'CARDS': str(destiny['EARN'])}})
                             message = f"**{destiny['NAME']}** completed! **{destiny['EARN']}** has been added to your vault!"
                         query = {'DID': str(player.id)}
-                        update_query = {'$inc': {'DESTINY.$[type].' + "WINS": 1},
-                                        '$set': {'DESTINY.$[type].' + "COMPLETED": True}}
-                        filter_query = [{'type.' + "DEFEAT": opponent}]
-                        resp = db.updateVault(query, update_query, filter_query)
+                        update_query = {'$pull': {'DESTINY': {'NAME': destiny['NAME']}}}
+                        resp = db.updateVaultNoFilter(query, update_query)
 
                         for dest in d.destiny:
                             if destiny['EARN'] in dest["USE_CARDS"] and dest['NAME'] not in owned_destinies:
@@ -2443,10 +2441,8 @@ async def destiny(player, opponent, mode):
                             response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'CARDS': str(destiny['EARN'])}})
                             message = f"**{destiny['NAME']}** completed! **{destiny['EARN']}** has been added to your vault!"
                         query = {'DID': str(player.id)}
-                        update_query = {'$inc': {'DESTINY.$[type].' + "WINS": 3},
-                                        '$set': {'DESTINY.$[type].' + "COMPLETED": True}}
-                        filter_query = [{'type.' + "DEFEAT": opponent}]
-                        resp = db.updateVault(query, update_query, filter_query)
+                        update_query = {'$pull': {'DESTINY': {'NAME': destiny['NAME']}}}
+                        resp = db.updateVaultNoFilter(query, update_query)
 
                         for dest in d.destiny:
                             if destiny['EARN'] in dest["USE_CARDS"] and dest['NAME'] not in owned_destinies:

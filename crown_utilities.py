@@ -215,9 +215,10 @@ async def corrupted_universe_handler(ctx, universe, difficulty):
     try:         
         # if universe['CORRUPTION_LEVEL'] == 499:
         # updated_corruption_level = db.updateUniverse({'TITLE': universe['TITLE']}, {'$inc': {'CORRUPTION_LEVEL': 1}})
-        vault = db.queryVault({"DID": str(ctx.author.id)})
+        query = {"DID": str(ctx.author.id)}
+        vault = db.queryVault(query)
         gem_list = vault['GEMS']
-        gem_reward = 18000
+        gem_reward = 20000
         if difficulty == "HARD":
             gem_reward = 50000
 
@@ -251,7 +252,6 @@ async def corrupted_universe_handler(ctx, universe, difficulty):
         }))
 
     
-
 
 async def cardlevel(card: str, player, mode: str, universe: str):
     try:

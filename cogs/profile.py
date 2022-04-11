@@ -3092,7 +3092,7 @@ class Profile(commands.Cog):
                 heart_message = "Cannot Afford"
                 soul_message = "Cannot Afford"
                 destiny_message = "Cannot Afford"
-                revive_destiny_message = "Cannot Afford"
+                craft_card_message = "Cannot Afford"
                 if universe_heart:
                     heart_message = "Owned"
                 elif gems >= 1000000:
@@ -3108,7 +3108,7 @@ class Profile(commands.Cog):
                 elif gems >= 800000:
                     destiny_message = f"Affordable!"
                 if gems >= 6000000:
-                    revive_destiny_message = f"Affordable!"
+                    craft_card_message = f"Affordable!"
                 if universe_name != card_info['UNIVERSE'] and skin_alert:
                     card_skin_message = f"{card_info['UNIVERSE']} Skin Available!"
                     if card_info['UNIVERSE'] in poke_universes:
@@ -3118,7 +3118,7 @@ class Profile(commands.Cog):
                 Welcome {ctx.author.mention}!
                 You have 💎 *{'{:,}'.format(gems)}* **{universe_name}** gems !
                 
-                🎴 Equipped Card:  **{card_info['NAME']}** *{card_info['UNIVERSE']}*
+                Equipped Card:  **{card_info['NAME']}** *{card_info['UNIVERSE']}*
                 *{destiny_alert_message}*
                 
                 💟 **Universe Heart:** 💎 1,000,000 *{heart_message}*
@@ -3133,8 +3133,8 @@ class Profile(commands.Cog):
                 🃏 **Card Skins:** 💎 2,000,000 *{card_skin_message}*
                 *Grants Card Skin*
 
-                ✨🎴 **Revive Destiny Card:** 💎 6,000,000 *{revive_destiny_message}*
-                *Craft previously owned Destiny Card*
+                ✨🎴 **Craft Card:** 💎 8,000,000 *{craft_card_message}*
+                *Craft a card from this Universe*
 
                 """), colour=0x7289da)
                 embedVar.set_image(url=universe_image)
@@ -3146,7 +3146,7 @@ class Profile(commands.Cog):
                 manage_components.create_button(style=1, label="🌹", custom_id="UNIVERSE_SOUL"),
                 manage_components.create_button(style=1, label="✨", custom_id="Destiny"),
                 manage_components.create_button(style=1, label="🃏", custom_id="Skin"),
-                manage_components.create_button(style=1, label="✨🎴", custom_id="Revive")
+                manage_components.create_button(style=1, label="🎴", custom_id="Card")
             ]
 
             custom_action_row = manage_components.create_actionrow(*buttons)
@@ -3185,10 +3185,10 @@ class Profile(commands.Cog):
                         response = await craft_adjuster(self, ctx, vault, universe, price, card_info, new_skin_list)
                         await button_ctx.send(f"{response['MESSAGE']}")
                         self.stop = True
-                    if button_ctx.custom_id == "Revive":
+                    if button_ctx.custom_id == "Card":
                         await button_ctx.defer(ignore=True)
-                        price = 6000000
-                        response = await craft_adjuster(self, ctx, vault, universe, price, card_info, new_skin_list)
+                        price = 8000000
+                        response = await craft_adjuster(self, ctx, vault, universe, price, "Card", new_skin_list)
                         await button_ctx.send(f"{response['MESSAGE']}")
                         self.stop = True                       
                  
@@ -3227,6 +3227,7 @@ async def craft_adjuster(self, player, vault, universe, price, item, skin_list):
         universe_heart = False
         universe_soul = False
         has_gems_for = False
+        destiny_revive_list = []
         negPriceAmount = 0 - abs(int(price))
         response = {}
         for uni in vault['GEMS']:
@@ -3235,6 +3236,7 @@ async def craft_adjuster(self, player, vault, universe, price, item, skin_list):
                 universe_heart = uni['UNIVERSE_HEART']
                 universe_soul = uni['UNIVERSE_SOUL']
                 has_gems_for = True
+
         #owned levels
         owned_card_levels_list = []
         for c in vault['CARD_LEVELS']:
@@ -3247,6 +3249,28 @@ async def craft_adjuster(self, player, vault, universe, price, item, skin_list):
 
         if has_gems_for:
             if gems >= price:
+                if item == "Card":
+                    acceptable = [4,5,6,7]
+                    list_of_cards = [x for x in db.queryAllCardsBasedOnUniverse({'UNIVERSE': str(universe), 'TIER': {'$in': acceptable}, 'HAS_COLLECTION': False, 'AVAILABLE': True})]
+                    selection_length = len(list(list_of_cards)) - 1
+                    if selection_length == 0:
+                        card = list_of_cards[0]
+                    else:
+                        selection = random.randint(1,selection_length)
+                        card = list_of_cards[selection]
+                    card_name = card['NAME']
+                    response = await crown_utilities.store_drop_card(str(player.author.id), card_name, universe, vault, owned_destinies, 0, 100000, "Purchase", False, 0)
+                    if response:
+                        query = {'DID': str(player.author.id)}
+                        update_query = {
+                            '$inc': {'GEMS.$[type].' + "GEMS": int(negPriceAmount)}
+                        }
+                        filter_query = [{'type.' + "UNIVERSE": universe}]
+                        res = db.updateVault(query, update_query, filter_query)
+                        rr = {"HAS_GEMS_FOR": True, "SUCCESS":  True, "MESSAGE": response}
+                        return rr
+
+
                 if item not in item_bools:
                     if not skin_list:
                         if price == 2000000: #check if price is for skins
@@ -3500,8 +3524,6 @@ async def craft_adjuster(self, player, vault, universe, price, item, skin_list):
                             response = {"HAS_GEMS_FOR": True, "SUCCESS":  False, "MESSAGE": f"Craft Failed!"}
                             return response
                         
-                        
-
                 if item in item_bools:
                     if item == "UNIVERSE_HEART" and universe_heart:
                         response = {"HAS_GEMS_FOR": True, "SUCCESS":  True, "MESSAGE": "You already have the Universe Heart for this universe!"}
