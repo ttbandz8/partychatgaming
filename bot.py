@@ -1459,7 +1459,7 @@ async def on_command_error(ctx, error):
       await ctx.send(f"Crown Unlimited has been Rate Limited")
 
 
-@tasks.loop(hours=8)
+@tasks.loop(hours=1)
 async def called_once_a_day():
    guild = bot.get_guild(guild_id)
    channel = guild.get_channel(868170580011130890)
