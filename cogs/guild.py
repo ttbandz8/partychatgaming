@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 import bot as main
+import crown_utilities
 import db
 import classes as data
 import messages as m
@@ -36,6 +37,10 @@ class Guild(commands.Cog):
 
     @cog_ext.cog_slash(description="Swear into Association!", guild_ids=main.guild_ids)
     async def oath(self, ctx, sworn: User, association: str):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         try:
             owner = sworn
             guild_name = association
@@ -461,9 +466,12 @@ class Guild(commands.Cog):
             return
             
                    
-
     @cog_ext.cog_slash(description="Betray your Association (Association Sworn)", guild_ids=main.guild_ids)
     async def betray(self, ctx, founder: User):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         try:
             sworn_profile = db.queryUser({'DID': str(ctx.author.id)})
             founder_profile = db.queryUser({'DID': str(founder.id)})
@@ -551,6 +559,10 @@ class Guild(commands.Cog):
 
     @cog_ext.cog_slash(description="Ask Guild Owner to join Association! (Association Owner)", guild_ids=main.guild_ids)
     async def ally(self, ctx, owner: User):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         founder_profile = db.queryUser({'DID': str(ctx.author.id)})
         guildname = founder_profile['GUILD']
         sword_profile = db.queryUser({'DID': str(owner.id)})
@@ -639,6 +651,10 @@ class Guild(commands.Cog):
                 
     @cog_ext.cog_slash(description="Knight your Association Shield! (Association Owner)", guild_ids=main.guild_ids)
     async def knight(self, ctx, blade: User):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         founder_profile = db.queryUser({'DID': str(ctx.author.id)})
         shield_profile = db.queryUser({'DID' : str(blade.id)})
         if not shield_profile:
@@ -775,6 +791,10 @@ class Guild(commands.Cog):
         
     @cog_ext.cog_slash(description="Exile Guild from Association (Association Owner)", guild_ids=main.guild_ids)
     async def exile(self, ctx, owner: User):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         leader_profile = db.queryUser({'DID': str(ctx.author.id)})
         exiled_profile = db.queryUser({'DID': str(owner.id)})
         if not exiled_profile:
@@ -831,6 +851,10 @@ class Guild(commands.Cog):
 
     @cog_ext.cog_slash(description="Abandon Association (Guild Owner)", guild_ids=main.guild_ids)
     async def renounce(self, ctx):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         sword_profile = db.queryUser({'DID': str(ctx.author.id)})
         team_profile = db.queryTeam({'TEAM_NAME' : sword_profile['TEAM'].tolower()})
         if sword_profile['DISNAME'] != team_profile['OWNER'] or sword_profile['TEAM'] == 'PCG':
@@ -897,6 +921,10 @@ class Guild(commands.Cog):
 
     @cog_ext.cog_slash(description="Disband your Association (Association Founder)", guild_ids=main.guild_ids)
     async def disband(self, ctx):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         guild_query = {'FDID': str(ctx.author.id)}
         guild = db.queryGuild(guild_query)
         if guild:
@@ -957,8 +985,6 @@ class Guild(commands.Cog):
                 await ctx.send("Only the Founder can disband the Association. ")
         else:
             await ctx.send(m.TEAM_DOESNT_EXIST, delete_after=5)
-
-
 
 
 def setup(bot):

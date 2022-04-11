@@ -1,5 +1,6 @@
 import textwrap
 import discord
+import crown_utilities
 from discord.ext import commands
 import bot as main
 import db
@@ -36,6 +37,10 @@ class Cards(commands.Cog):
 
     @cog_ext.cog_slash(description="Equip a Card", guild_ids=main.guild_ids)
     async def equipcard(self, ctx, card: str):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         card_name = card
         user_query = {'DID': str(ctx.author.id)}
         user = db.queryUser(user_query)
@@ -55,6 +60,10 @@ class Cards(commands.Cog):
 
     @cog_ext.cog_slash(description="View a Card", guild_ids=main.guild_ids)
     async def viewcard(self, ctx, card: str):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         card_name = card
         query = {'DID': str(ctx.author.id)}
         d = db.queryUser(query)

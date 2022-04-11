@@ -1,13 +1,16 @@
 import asyncio
-from operator import is_
-from urllib import response
+# from operator import is_
+# from urllib import response
+import cogs.profile
+
+import crown_utilities
 import db
 import time
 import classes as data
 import messages as m
 import discord
 import DiscordUtils
-from discord.ext import commands
+from discord.ext import commands, tasks
 import numpy as np
 import help_commands as h
 import destiny as d
@@ -44,8 +47,9 @@ handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w'
 handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
 logger.addHandler(handler)
 
-
 guild_ids = None
+guild_id = None
+guild_channel = None
 
 intents = discord.Intents.all()
 client = discord.Client()
@@ -53,10 +57,14 @@ client = discord.Client()
 if config('ENV') == "production":
    # PRODUCTION
    bot = commands.Bot(command_prefix=".", intents=intents)
+   guild_id = 543442011156643871
+   guild_channel = 957061470192033812
 else:
    # TEST
    bot = commands.Bot(command_prefix=",", intents=intents)
    guild_ids = [839352855000776735, 543442011156643871]
+   guild_id = 839352855000776735
+   guild_channel = 962580388432195595
 
 
 slash = SlashCommand(bot, sync_commands=True)
@@ -207,6 +215,7 @@ async def enhancers(ctx):
             }))
             await ctx.send("Hmm something ain't right. Check with support.", hidden=True)
             return
+
 
 @slash.slash(name="Crown", description="Crown Unlimited Manual", guild_ids=guild_ids)
 async def crown(ctx):
@@ -641,7 +650,7 @@ async def voted(ctx):
                   filter_query = [{'type.' + "UNIVERSE": universe['UNIVERSE']}]
                   res = db.updateVault(query, update_query, filter_query)
 
-            await bless(int(200000), ctx.author.id)
+            await crown_utilities.bless(int(200000), ctx.author.id)
             respond = db.updateUserNoFilter(query, {'$set': {'VOTED': True}})
 
 
@@ -671,6 +680,10 @@ async def voted(ctx):
    except Exception as e:
       print(e)
 
+
+# async def retrieve_user_object(player_id):
+#    response = await bot.fetch_user(player_id)
+#    return response
 
 @slash.slash(description="Register for Crown Unlimited", guild_ids=guild_ids)
 async def register(ctx):
@@ -707,7 +720,6 @@ async def register(ctx):
 
 
    if r_response:
-
       embedVar = discord.Embed(title=f"**Welcome to Crown Unlimited**!", description=textwrap.dedent(f"""
       Welcome {ctx.author.mention}!                                                                                           
       
@@ -744,225 +756,223 @@ async def register(ctx):
       embedVar.set_footer(text="Changing your Discord Account Name or Numbers will break your Crown Unlimited Account.")
       await ctx.author.send(embed=embedVar)
       await ctx.send(embed=embedVar)
-      
+      vault = db.createVault(data.newVault({'OWNER': str(ctx.author), 'DID' : str(ctx.author.id)}))
       await asyncio.sleep(3)
-      vault = db.queryVault({'DID': str(ctx.author.id)})
-      if vault:
-         await ctx.send(m.VAULT_RECOVERED, delete_after=5)
-      else:
-         try:
-            universe_data = db.queryAllUniverse()
-            universe_embed_list = []
-            for uni in universe_data:
-               available = ""
-               if uni['HAS_CROWN_TALES'] == True:
-                  traits = ut.traits
-                  mytrait = {}
-                  traitmessage = ''
-                  o_show = uni['TITLE']
-                  universe = o_show
-                  for trait in traits:
-                     if trait['NAME'] == o_show:
+      await ctx.send(f"{ctx.author.mention}, prepare to select a starter universe.")
+      await asyncio.sleep(3)
+
+      try:
+         universe_data = db.queryAllUniverse()
+         universe_embed_list = []
+         for uni in universe_data:
+            available = ""
+            if uni['HAS_CROWN_TALES'] == True:
+               traits = ut.traits
+               mytrait = {}
+               traitmessage = ''
+               o_show = uni['TITLE']
+               universe = o_show
+               for trait in traits:
+                  if trait['NAME'] == o_show:
+                        mytrait = trait
+                  if o_show == 'Kanto Region' or o_show == 'Johto Region' or o_show == 'Kalos Region' or o_show == 'Unova Region' or o_show == 'Sinnoh Region' or o_show == 'Hoenn Region' or o_show == 'Galar Region' or o_show == 'Alola Region':
+                        if trait['NAME'] == 'Pokemon':
                            mytrait = trait
-                     if o_show == 'Kanto Region' or o_show == 'Johto Region' or o_show == 'Kalos Region' or o_show == 'Unova Region' or o_show == 'Sinnoh Region' or o_show == 'Hoenn Region' or o_show == 'Galar Region' or o_show == 'Alola Region':
-                           if trait['NAME'] == 'Pokemon':
-                              mytrait = trait
-                  if mytrait:
-                     traitmessage = f"**{mytrait['EFFECT']}:** {mytrait['TRAIT']}"
-                  available = f"{Crest_dict[uni['TITLE']]}"
+               if mytrait:
+                  traitmessage = f"**{mytrait['EFFECT']}:** {mytrait['TRAIT']}"
+               available = f"{Crest_dict[uni['TITLE']]}"
+               
+               tales_list = ", ".join(uni['CROWN_TALES'])
+
+               embedVar = discord.Embed(title= f"{uni['TITLE']}", description=textwrap.dedent(f"""                                                                                         
+               **Select A Starting Universe, {ctx.author.mention}!**
+
+               Selecting a Starter Universe will give you *3* 🎴 Cards, :reminder_ribbon: Titles, and :mechanical_arm: Arms to begin!
+               
+               :infinity: - Unique Universe Trait
+               {traitmessage}
+               """))
+               embedVar.set_image(url=uni['PATH'])
+               embedVar.set_footer(text="You can earn or purchase items from other universes after Abyss Floor 3")
+               universe_embed_list.append(embedVar)
+               
+         buttons = [
+               manage_components.create_button(style=3, label="Select This Starter Universe", custom_id="Select")
+            ]
+         custom_action_row = manage_components.create_actionrow(*buttons)
+         # custom_button = manage_components.create_button(style=3, label="Equip")
+
+         async def custom_function(self, button_ctx):
+            try:
+               if button_ctx.author == ctx.author:
+                  universe = str(button_ctx.origin_message.embeds[0].title)
+                  user_info = db.queryUser({'DID':str(ctx.author.id)})
                   
-                  tales_list = ", ".join(uni['CROWN_TALES'])
+                  vault_query = {'DID' : str(ctx.author.id)}
+                  vault = db.altQueryVault(vault_query)
+                  current_titles = vault['TITLES']
+                  current_cards = vault['CARDS']
+                  current_arms = []
+                  for arm in vault['ARMS']:
+                     current_arms.append(arm['ARM'])
 
-                  embedVar = discord.Embed(title= f"{uni['TITLE']}", description=textwrap.dedent(f"""                                                                                         
-                  **Select A Starting Universe, {ctx.author.mention}!**
-
-                  Selecting a Starter Universe will give you *3* 🎴 Cards, :reminder_ribbon: Titles, and :mechanical_arm: Arms to begin!
+                  owned_card_levels_list = []
+                  for c in vault['CARD_LEVELS']:
+                     owned_card_levels_list.append(c['CARD'])
+                  owned_destinies = []
+                  for destiny in vault['DESTINY']:
+                     owned_destinies.append(destiny['NAME'])
                   
-                  :infinity: - Unique Universe Trait
-                  {traitmessage}
-                  """))
-                  embedVar.set_image(url=uni['PATH'])
-                  embedVar.set_footer(text="You can earn or purchase items from other universes after Abyss Floor 3")
-                  universe_embed_list.append(embedVar)
-                  
-            buttons = [
-                  manage_components.create_button(style=3, label="Select This Starter Universe", custom_id="Select")
-               ]
-            custom_action_row = manage_components.create_actionrow(*buttons)
-            # custom_button = manage_components.create_button(style=3, label="Equip")
-
-            async def custom_function(self, button_ctx):
-               try:
-                  if button_ctx.author == ctx.author:
-                     universe = str(button_ctx.origin_message.embeds[0].title)
-                     user_info = db.queryUser({'DID':str(ctx.author.id)})
-                     vault = db.createVault(data.newVault({'OWNER': disname, 'DID' : str(ctx.author.id)}))
-                     vault_query = {'DID' : str(ctx.author.id)}
-                     vault = db.altQueryVault(vault_query)
-                     current_titles = vault['TITLES']
-                     current_cards = vault['CARDS']
-                     current_arms = []
-                     for arm in vault['ARMS']:
-                        current_arms.append(arm['ARM'])
-
-                     owned_card_levels_list = []
-                     for c in vault['CARD_LEVELS']:
-                        owned_card_levels_list.append(c['CARD'])
-                     owned_destinies = []
-                     for destiny in vault['DESTINY']:
-                        owned_destinies.append(destiny['NAME'])
+                  if button_ctx.custom_id == "Select":
+                     acceptable = [1,2,3,4]
+                     list_of_titles =[x for x in db.queryAllTitlesBasedOnUniverses({'UNIVERSE': str(universe)}) if not x['EXCLUSIVE'] and x['AVAILABLE'] and x['TITLE'] not in current_titles]
+                     count = 0
+                     selected_titles = [1000]
                      
-                     if button_ctx.custom_id == "Select":
-                        acceptable = [1,2,3,4]
-                        list_of_titles =[x for x in db.queryAllTitlesBasedOnUniverses({'UNIVERSE': str(universe)}) if not x['EXCLUSIVE'] and x['AVAILABLE'] and x['TITLE'] not in current_titles]
-                        count = 0
-                        selected_titles = [1000]
+                     title_message = []
+                     arm_message = []
+                     card_message = []
+                     while count < 3:
+                        selectable_titles = list(range(0, len(list(list_of_titles))))
+                        for selected in selected_titles:
+                           if selected in selectable_titles:
+                              selectable_titles.remove(selected)
+                        selection = random.choice(selectable_titles)
+                        selected_titles.append(selection)
+                        title = list_of_titles[selection]
+                        response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'TITLES': str(title['TITLE'])}})
+                        title_message.append(f"You collected :reminder_ribbon: **{title['TITLE']}**.")
+                        #await button_ctx.send(f"You collected :reminder_ribbon: **{title['TITLE']}**.")
+                        count = count + 1
+                     
+                     
+                     list_of_arms = [x for x in db.queryAllArmsBasedOnUniverses({'UNIVERSE': str(universe)}) if not x['EXCLUSIVE'] and x['AVAILABLE'] and x['ARM'] not in current_arms]
+                     count = 0
+                     selected_arms = [1000]
+                     while count < 3:
+                        current_arms = vault['ARMS']
+                        selectable_arms = list(range(0, len(list(list_of_arms))))
+                        for selected in selected_arms:
+                           if selected in selectable_arms:
+                              selectable_arms.remove(selected)
+                        selection = random.choice(selectable_arms)
+                        selected_arms.append(selection)
+                        arm = list_of_arms[selection]['ARM']
+                        db.updateVaultNoFilter(vault_query,{'$addToSet':{'ARMS': {'ARM': str(arm), 'DUR': 75}}})        
+                        arm_message.append(f"You collected :mechanical_arm: **{arm}**.")                   
+                        #await button_ctx.send(f"You collected :mechanical_arm: **{arm}**.")
+                        count = count + 1
                         
-                        title_message = []
-                        arm_message = []
-                        card_message = []
-                        while count < 3:
-                           selectable_titles = list(range(0, len(list(list_of_titles))))
-                           for selected in selected_titles:
-                              if selected in selectable_titles:
-                                 selectable_titles.remove(selected)
-                           selection = random.choice(selectable_titles)
-                           selected_titles.append(selection)
-                           title = list_of_titles[selection]
-                           response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'TITLES': str(title['TITLE'])}})
-                           title_message.append(f"You collected :reminder_ribbon: **{title['TITLE']}**.")
-                           #await button_ctx.send(f"You collected :reminder_ribbon: **{title['TITLE']}**.")
-                           count = count + 1
-                        
-                        
-                        list_of_arms = [x for x in db.queryAllArmsBasedOnUniverses({'UNIVERSE': str(universe)}) if not x['EXCLUSIVE'] and x['AVAILABLE'] and x['ARM'] not in current_arms]
-                        count = 0
-                        selected_arms = [1000]
-                        while count < 3:
-                           current_arms = vault['ARMS']
-                           selectable_arms = list(range(0, len(list(list_of_arms))))
-                           for selected in selected_arms:
-                              if selected in selectable_arms:
-                                 selectable_arms.remove(selected)
-                           selection = random.choice(selectable_arms)
-                           selected_arms.append(selection)
-                           arm = list_of_arms[selection]['ARM']
-                           db.updateVaultNoFilter(vault_query,{'$addToSet':{'ARMS': {'ARM': str(arm), 'DUR': 75}}})        
-                           arm_message.append(f"You collected :mechanical_arm: **{arm}**.")                   
-                           #await button_ctx.send(f"You collected :mechanical_arm: **{arm}**.")
-                           count = count + 1
-                           
-                        list_of_cards = [x for x in db.queryAllCardsBasedOnUniverse({'UNIVERSE': str(universe), 'TIER': {'$in': acceptable}}) if not x['EXCLUSIVE'] and not x['HAS_COLLECTION'] and x['AVAILABLE'] and x['NAME'] not in current_cards]
-                        count = 0
-                        selected_cards = [1000]
-                        counter = 1
-                        destiny_counter = 0
-                        destiny_message = []
-                        has_destiny=False
-                        while count < 3:
-                           current_cards = vault['CARDS']
-                           selectable_cards = list(range(0, len(list(list_of_cards))))
-                           for selected in selected_cards:
-                              if selected in selectable_cards:
-                                 selectable_cards.remove(selected)
-                           selection = random.choice(selectable_cards)
-                           selectable_cards.append(selection)
-                           card = list_of_cards[selection]
-                           card_name = card['NAME']
-                           tier = 0
+                     list_of_cards = [x for x in db.queryAllCardsBasedOnUniverse({'UNIVERSE': str(universe), 'TIER': {'$in': acceptable}}) if not x['EXCLUSIVE'] and not x['HAS_COLLECTION'] and x['AVAILABLE'] and x['NAME'] not in current_cards]
+                     count = 0
+                     selected_cards = [1000]
+                     counter = 1
+                     destiny_counter = 0
+                     destiny_message = []
+                     has_destiny=False
+                     while count < 3:
+                        current_cards = vault['CARDS']
+                        selectable_cards = list(range(0, len(list(list_of_cards))))
+                        for selected in selected_cards:
+                           if selected in selectable_cards:
+                              selectable_cards.remove(selected)
+                        selection = random.choice(selectable_cards)
+                        selectable_cards.append(selection)
+                        card = list_of_cards[selection]
+                        card_name = card['NAME']
+                        tier = 0
 
-                           cresponse = db.updateVaultNoFilter(vault_query, {'$addToSet': {'CARDS': str(card_name)}})
-                           cardname_list = []
-                           if cresponse:
-                              if card_name not in owned_card_levels_list:
-                                 update_query = {'$addToSet': {
-                                       'CARD_LEVELS': {'CARD': str(card_name), 'LVL': 0, 'TIER': int(tier),
-                                                      'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
-                                 r = db.updateVaultNoFilter(vault_query, update_query)
-                              cardname_list.append(card_name)
-                              card_message.append(f"You collected 🎴 **{card_name}**!")
-                              #await button_ctx.send(f"You collected 🎴 **{card_name}**!")
+                        cresponse = db.updateVaultNoFilter(vault_query, {'$addToSet': {'CARDS': str(card_name)}})
+                        cardname_list = []
+                        if cresponse:
+                           if card_name not in owned_card_levels_list:
+                              update_query = {'$addToSet': {
+                                    'CARD_LEVELS': {'CARD': str(card_name), 'LVL': 0, 'TIER': int(tier),
+                                                   'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
+                              r = db.updateVaultNoFilter(vault_query, update_query)
+                           cardname_list.append(card_name)
+                           card_message.append(f"You collected 🎴 **{card_name}**!")
+                           #await button_ctx.send(f"You collected 🎴 **{card_name}**!")
 
-                              # Add Destiny
-                              for destiny in d.destiny:
-                                 if card_name in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
-                                    destiny_counter = destiny_counter + 1
-                                    db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
-                                    has_destiny=True
-                                    if counter > 0:
-                                       destiny_message.append(f"✨**{destiny['NAME']}** : Earn 🎴 **{destiny['EARN']}**.!")
-                                       counter = counter - 1
-                                       # await button_ctx.send(
-                                       #    f"✨**{destiny['NAME']}** addes to **/destinylist**.", hidden=True)
-                           count = count + 1
-                        title_drop_message_into_embded = "\n".join(title_message)
-                        arm_drop_message_into_embded = "\n".join(arm_message)
-                        card_drop_message_into_embded = "\n".join(card_message)
-                        destiny_drop_message_into_embded = "\n".join(destiny_message)
-                        embedVar = discord.Embed(title=f":crown: Create your **Build!**",description=textwrap.dedent(f"""
-                        *Nice Choice {ctx.author.mention}!*
-                        Create a **/build** with your **Starting Items**
-                        Use **/difficulty** to change your difficulty settings
-                        By default, you start on Easy mode
-                        
-                        """),colour=0x1abc9c)
-                        embedVar.add_field(name=f"🎴 **Cards** */cards to open your Cards*", value=f"{card_drop_message_into_embded}", inline=True)
-                        embedVar.add_field(name=f":reminder_ribbon: **Titles** */titles to open your Titles*", value=f"{title_drop_message_into_embded}", inline=True)
-                        embedVar.add_field(name=f":mechanical_arm: **Arms** */arms to open your Arms*", value=f"{arm_drop_message_into_embded}", inline=True)
-                        if has_destiny:
-                           embedVar.add_field(name=f"✨ **Destinies** */destinylist to open your Destinies*", value=f"{destiny_drop_message_into_embded}", inline=False)
-                        embedVar.set_author(name=f"Registration Complete!", icon_url=user_info['AVATAR'])
-                        embedVar.set_footer(text="Use /tutorial to start the tutorial match!",
-                                    icon_url="https://cdn.discordapp.com/emojis/877233426770583563.gif?v=1")
-                        #await button_ctx.send(f"Nice choice {ctx.author.mention}!\n\nCreate your first **Build**!\n**/cards** Select your 🎴  Card\n**/titles** Select your 🎗️ Title\n**/arms** Select your 🦾  Arm\n\nOnce you're done, run **/tutorial** to begin the **Tutorial Battle**! ⚔️")
-                        await button_ctx.send(embed=embedVar)
-                        self.stop = True
-               except Exception as ex:
-                  trace = []
-                  tb = ex.__traceback__
-                  while tb is not None:
-                     trace.append({
-                        "filename": tb.tb_frame.f_code.co_filename,
-                        "name": tb.tb_frame.f_code.co_name,
-                        "lineno": tb.tb_lineno
-                     })
-                     tb = tb.tb_next
-                  print(str({
-                     'type': type(ex).__name__,
-                     'message': str(ex),
-                     'trace': trace
-                  }))   
-            
-            await Paginator(bot=bot, ctx=ctx, disableAfterTimeout=True, timeout = 120,pages=universe_embed_list, customActionRow=[
-               custom_action_row,
-               custom_function,
-            ]).run()
+                           # Add Destiny
+                           for destiny in d.destiny:
+                              if card_name in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
+                                 destiny_counter = destiny_counter + 1
+                                 db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
+                                 has_destiny=True
+                                 if counter > 0:
+                                    destiny_message.append(f"✨**{destiny['NAME']}** : Earn 🎴 **{destiny['EARN']}**.!")
+                                    counter = counter - 1
+                                    # await button_ctx.send(
+                                    #    f"✨**{destiny['NAME']}** addes to **/destinylist**.", hidden=True)
+                        count = count + 1
+                     title_drop_message_into_embded = "\n".join(title_message)
+                     arm_drop_message_into_embded = "\n".join(arm_message)
+                     card_drop_message_into_embded = "\n".join(card_message)
+                     destiny_drop_message_into_embded = "\n".join(destiny_message)
+                     embedVar = discord.Embed(title=f":crown: Create your **Build!**",description=textwrap.dedent(f"""
+                     *Nice Choice {ctx.author.mention}!*
+                     Create a **/build** with your **Starting Items**
+                     Use **/difficulty** to change your difficulty settings
+                     By default, you start on Easy mode
+                     
+                     """),colour=0x1abc9c)
+                     embedVar.add_field(name=f"🎴 **Cards** */cards to open your Cards*", value=f"{card_drop_message_into_embded}", inline=True)
+                     embedVar.add_field(name=f":reminder_ribbon: **Titles** */titles to open your Titles*", value=f"{title_drop_message_into_embded}", inline=True)
+                     embedVar.add_field(name=f":mechanical_arm: **Arms** */arms to open your Arms*", value=f"{arm_drop_message_into_embded}", inline=True)
+                     if has_destiny:
+                        embedVar.add_field(name=f"✨ **Destinies** */destinylist to open your Destinies*", value=f"{destiny_drop_message_into_embded}", inline=False)
+                     embedVar.set_author(name=f"Registration Complete!", icon_url=user_info['AVATAR'])
+                     embedVar.set_footer(text="Use /tutorial to start the tutorial match!",
+                                 icon_url="https://cdn.discordapp.com/emojis/877233426770583563.gif?v=1")
+                     #await button_ctx.send(f"Nice choice {ctx.author.mention}!\n\nCreate your first **Build**!\n**/cards** Select your 🎴  Card\n**/titles** Select your 🎗️ Title\n**/arms** Select your 🦾  Arm\n\nOnce you're done, run **/tutorial** to begin the **Tutorial Battle**! ⚔️")
+                     await button_ctx.send(embed=embedVar)
+                     self.stop = True
+            except Exception as ex:
+               trace = []
+               tb = ex.__traceback__
+               while tb is not None:
+                  trace.append({
+                     "filename": tb.tb_frame.f_code.co_filename,
+                     "name": tb.tb_frame.f_code.co_name,
+                     "lineno": tb.tb_lineno
+                  })
+                  tb = tb.tb_next
+               print(str({
+                  'type': type(ex).__name__,
+                  'message': str(ex),
+                  'trace': trace
+               }))   
+         
+         await Paginator(bot=bot, ctx=ctx, disableAfterTimeout=True, timeout = 200,pages=universe_embed_list, customActionRow=[
+            custom_action_row,
+            custom_function,
+         ]).run()
 
-         except asyncio.TimeoutError:
-            user = str(ctx.author)
-            query = {'DID': str(ctx.author.id)}
-            response = db.deleteVault({'DID': str(ctx.author.id)})
-            delete_user_resp = db.deleteUser(user)
-            await ctx.author.send(f"{ctx.author.mention} your Registration was cancelled. You must interact before the timeout!")
-            await ctx.send(f"{ctx.author.mention} your Registration was cancelled. You must interact before the timeout!")
-            
-            
-         except Exception as ex:
-            trace = []
-            tb = ex.__traceback__
-            while tb is not None:
-               trace.append({
-                    "filename": tb.tb_frame.f_code.co_filename,
-                    "name": tb.tb_frame.f_code.co_name,
-                    "lineno": tb.tb_lineno
-               })
-               tb = tb.tb_next
-            print(str({
-                'type': type(ex).__name__,
-                'message': str(ex),
-                'trace': trace
-            }))
-         # await ctx.send(m.USER_HAS_REGISTERED, delete_after=5)
+      except Exception as ex:
+         user = str(ctx.author)
+         query = {'DID': str(ctx.author.id)}
+         response = db.deleteVault({'DID': str(ctx.author.id)})
+         delete_user_resp = db.deleteUser(user)
+         await ctx.author.send(f"{ctx.author.mention} your Registration was cancelled. You must interact before the timeout!")
+         await ctx.send(f"{ctx.author.mention} your Registration was cancelled. You must interact before the timeout!")
+         
+      
+         # trace = []
+         # tb = ex.__traceback__
+         # while tb is not None:
+         #    trace.append({
+         #          "filename": tb.tb_frame.f_code.co_filename,
+         #          "name": tb.tb_frame.f_code.co_name,
+         #          "lineno": tb.tb_lineno
+         #    })
+         #    tb = tb.tb_next
+         # print(str({
+         #       'type': type(ex).__name__,
+         #       'message': str(ex),
+         #       'trace': trace
+         # }))
+      # await ctx.send(m.USER_HAS_REGISTERED, delete_after=5)
    else:
       await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=3)
 
@@ -1444,13 +1454,48 @@ async def on_slash_command_error(ctx, ex):
 @bot.event
 async def on_command_error(ctx, error):
     if isinstance(error, discord.HTTPException):
-      guild = bot.get_guild(543442011156643871)
-      channel = guild.get_channel(957061470192033812)
+      guild = bot.get_guild(guild_id)
+      channel = guild.get_channel(guild_channel)
       await ctx.send(f"Crown Unlimited has been Rate Limited")
 
-      
-      
-      
+
+@tasks.loop(hours=8)
+async def called_once_a_day():
+   guild = bot.get_guild(guild_id)
+   channel = guild.get_channel(guild_channel)
+
+   message_channel = channel
+
+   corrupted_universe = db.queryCorruptedUniverse()
+
+   if corrupted_universe:
+      c_response = db.updateUniverse({'TITLE': corrupted_universe['TITLE']}, {'$set': {'CORRUPTED': False, 'CORRUPTION_LEVEL': 0}})
+   
+   universe = [x for x in db.queryExploreUniverses()]
+   universe_list_length = len(universe)
+   universe_selection = random.randint(0, int(universe_list_length))
+   selected_universe = universe[int(universe_selection)]
+   universe_image = selected_universe['PATH']
+   universe_name = selected_universe['TITLE']
+   
+   r_response = db.updateUniverse({'TITLE': universe_name}, {'$set': {'CORRUPTED': True}})
+   embedVar = discord.Embed(title= f"👾 {universe_name} has been corrupted!", description=textwrap.dedent(f"""
+   Cards in corrupted universes are empowered!
+
+   🗡️ **Your Goal**
+   Defeat cards in corrupted universes to earn 💎 Craftable Gems!   
+   """))
+   embedVar.set_image(url=universe_image)
+
+   await message_channel.send(embed=embedVar)
+
+@called_once_a_day.before_loop
+async def before():
+   await bot.wait_until_ready()
+   print("Finished waiting")
+
+called_once_a_day.start()
+
 
 @slash.slash(name="Daily", description="Receive your daily reward and quests", guild_ids=guild_ids)
 @commands.check(validate_user)
@@ -1458,7 +1503,7 @@ async def on_command_error(ctx, error):
 async def daily(ctx):
    try:
       dailyamount = 100000
-      await bless(dailyamount, ctx.author.id)
+      await crown_utilities.bless(dailyamount, ctx.author.id)
       query = {'DID': str(ctx.author.id)}
       user_data = db.queryUser(query)
       user_completed_tales = user_data['CROWN_TALES']
@@ -1585,45 +1630,6 @@ async def DM(ctx, user : User, m,  message=None):
     await user.send(m)
 
 
-async def bless(amount, user):
-   try:
-      blessAmount = amount
-      posBlessAmount = 0 + abs(int(blessAmount))
-      query = {'DID': str(user)}
-      vaultOwner = db.queryUser(query)
-      if vaultOwner:
-         vault = db.queryVault({'DID' : vaultOwner['DID']})
-         update_query = {"$inc": {'BALANCE': posBlessAmount}}
-         db.updateVaultNoFilter(vault, update_query)
-   except:
-      trace = []
-      tb = ex.__traceback__
-      while tb is not None:
-            trace.append({
-               "filename": tb.tb_frame.f_code.co_filename,
-               "name": tb.tb_frame.f_code.co_name,
-               "lineno": tb.tb_lineno
-            })
-            tb = tb.tb_next
-      print(str({
-            'type': type(ex).__name__,
-            'message': str(ex),
-            'trace': trace
-      }))
-
-
-
-async def curse(amount, user):
-      curseAmount = amount
-      negCurseAmount = 0 - abs(int(curseAmount))
-      query = {'DID': str(user)}
-      vaultOwner = db.queryUser(query)
-      if vaultOwner:
-         vault = db.queryVault({'DID' : vaultOwner['DID']})
-         update_query = {"$inc": {'BALANCE': int(negCurseAmount)}}
-         db.updateVaultNoFilter(vault, update_query)
-
-
 @slash.slash(name="Gift", description="Give money to friend", guild_ids=guild_ids)
 @commands.check(validate_user)
 async def gift(ctx, player: User, amount: int):
@@ -1641,8 +1647,8 @@ async def gift(ctx, player: User, amount: int):
    if balance <= int(amount_plus_tax):
       await ctx.send(f"You do not have that amount (:coin{amount_plus_tax}) to gift.")
    else:
-      await bless(int(amount), user2.id)
-      await curse(amount_plus_tax, ctx.author.id)
+      await crown_utilities.bless(int(amount), user2.id)
+      await crown_utilities.curse(amount_plus_tax, ctx.author.id)
       await ctx.send(f":coin:{amount} has been gifted to {user2.mention}.")
       return
 
@@ -1668,8 +1674,8 @@ async def donate(ctx, amount, guild = None):
          if balance <= int(amount):
             await ctx.send("You do not have that amount to donate.")
          else:
-            await blessteam(int(amount), dteam)
-            await curse(int(amount), ctx.author.id)
+            await crown_utilities.blessteam(int(amount), dteam)
+            await crown_utilities.curse(int(amount), ctx.author.id)
             await ctx.send(f":coin:{amount} has been gifted to **{team_display_name}**.")
             return
       else:
@@ -1703,8 +1709,8 @@ async def invest(ctx, amount):
       if balance <= int(amount):
          await ctx.send("You do not have that amount to invest.", hidden=True)
       else:
-         await blessfamily_Alt(int(amount), user['FAMILY'])
-         await curse(int(amount), ctx.author.id)
+         await crown_utilities.blessfamily_Alt(int(amount), user['FAMILY'])
+         await crown_utilities.curse(int(amount), ctx.author.id)
          await ctx.send(f":coin:{amount} invested into **{user['NAME']}'s Family**.")
          return
    else:
@@ -1751,8 +1757,8 @@ async def pay(ctx, player: User, amount):
       if balance <= int(amount):
          await ctx.send("Your guild does not have that amount to pay.")
       else:
-         await bless(int(amount), player.id)
-         await curseteam(int(amount), team['TEAM_NAME'])
+         await crown_utilities.bless(int(amount), player.id)
+         await crown_utilities.curseteam(int(amount), team['TEAM_NAME'])
          await ctx.send(f"{icon} **{'{:,}'.format(int(amount))}** has been paid to {player.mention}.")
          transaction_message = f"{str(ctx.author)} paid {str(player)} {'{:,}'.format(int(amount))}."
          team_query = {'TEAM_NAME': team['TEAM_NAME']}
@@ -1988,28 +1994,6 @@ async def traits(ctx):
    await ctx.author.send(embed=embedVar)
    await ctx.send(f"{ctx.author.mention} Universe Trait list sent to you via DM!")
 
-async def blessteam(amount, team):
-   blessAmount = amount
-   posBlessAmount = 0 + abs(int(blessAmount))
-   query = {'TEAM_NAME': str(team)}
-   team_data = db.queryTeam(query)
-   if team_data:
-      update_query = {"$inc": {'BANK': posBlessAmount}}
-      db.updateTeam(query, update_query)
-   else:
-      print("Cannot find Guild")
-
-
-async def curseteam(amount, team):
-      curseAmount = amount
-      negCurseAmount = 0 - abs(int(curseAmount))
-      query = {'TEAM_NAME': str(team)}
-      team_data = db.queryTeam(query)
-      if team_data:
-         update_query = {"$inc": {'BANK': int(negCurseAmount)}}
-         db.updateTeam(query, update_query)
-      else:
-         print("cant find team")
 
 
 @slash.slash(name="Allowance", description="Gift Family member an allowance", guild_ids=guild_ids)
@@ -2032,8 +2016,8 @@ async def allowance(ctx, player: User, amount):
    if balance <= int(amount):
       await ctx.send("You do not have that amount saved.")
    else:
-      await bless(int(amount), user2.id)
-      await cursefamily(int(amount), family['HEAD'])
+      await crown_utilities.bless(int(amount), user2.id)
+      await crown_utilities.cursefamily(int(amount), family['HEAD'])
       await ctx.send(f":coin:{amount} has been gifted to {user2.mention}.")
       return
 
@@ -2065,49 +2049,6 @@ async def performance(ctx):
             'message': str(ex),
             'trace': trace
       }))
-
-async def blessfamily(amount, family):
-   blessAmount = amount
-   posBlessAmount = 0 + abs(int(blessAmount))
-   query = {'HEAD': str(family)}
-   family_data = db.queryFamily(query)
-   if family_data:
-      house = family_data['HOUSE']
-      house_data = db.queryHouse({'HOUSE': house})
-      multiplier = house_data['MULT']
-      posBlessAmount = posBlessAmount * multiplier
-      update_query = {"$inc": {'BANK': posBlessAmount}}
-      db.updateFamily(query, update_query)
-   else:
-      print("Cannot find family")
-
-
-
-async def blessfamily_Alt(amount, family):
-   blessAmount = amount
-   posBlessAmount = 0 + abs(int(blessAmount))
-   query = {'HEAD': str(family)}
-   family_data = db.queryFamily(query)
-   if family_data:
-      house = family_data['HOUSE']
-      house_data = db.queryHouse({'HOUSE': house})
-      posBlessAmount = posBlessAmount
-      update_query = {"$inc": {'BANK': posBlessAmount}}
-      db.updateFamily(query, update_query)
-   else:
-      print("Cannot find family")
-
-
-async def cursefamily(amount, family):
-      curseAmount = amount
-      negCurseAmount = 0 - abs(int(curseAmount))
-      query = {'HEAD': str(family)}
-      family_data = db.queryFamily(query)
-      if family_data:
-         update_query = {"$inc": {'BANK': int(negCurseAmount)}}
-         db.updateFamily(query, update_query)
-      else:
-         print("cant find family")
 
 async def buffshop(ctx, player, team):
    team_query = {'TEAM_NAME': team['TEAM_NAME']}
@@ -2257,7 +2198,7 @@ async def buffshop(ctx, player, team):
 
       response = db.updateTeam(team_query, update_query)
       if response:
-         await curseteam(int(price), team['TEAM_NAME'])
+         await crown_utilities.curseteam(int(price), team['TEAM_NAME'])
          await button_ctx.send("Guild buff purchased successfuly.")
          return
    
@@ -2534,7 +2475,7 @@ async def trinketshop(ctx):
          update_query = {'$set': {'CARD_LEVELS.$[type].' + "EXP": 0}, '$inc': {'CARD_LEVELS.$[type].' + "LVL": levels_gained, 'CARD_LEVELS.$[type].' + "ATK": atk_def_buff, 'CARD_LEVELS.$[type].' + "DEF": atk_def_buff, 'CARD_LEVELS.$[type].' + "AP": ap_buff, 'CARD_LEVELS.$[type].' + "HLT": hlt_buff}}
          filter_query = [{'type.'+ "CARD": str(current_card)}]
          response = db.updateVault(query, update_query, filter_query)
-         await curse(price, str(ctx.author.id))
+         await crown_utilities.curse(price, str(ctx.author.id))
          await button_ctx.send(f"**{str(current_card)}** gained {levels_gained} levels!")
 
          if button_ctx.custom_id == "cancel":
@@ -2551,7 +2492,7 @@ async def trinketshop(ctx):
             return
          else:
             update = db.updateUserNoFilterAlt(user_query, {'$set': {'TOURNAMENT_WINS': 1}})
-            await curse(10000000, str(ctx.author.id))
+            await crown_utilities.curse(10000000, str(ctx.author.id))
             await button_ctx.send("Gabe's Purse has been purchased!")
             return
       
@@ -2575,7 +2516,7 @@ async def trinketshop(ctx):
                filter_query = [{'type.' + "ARM": str(current_arm)}]
                resp = db.updateVault(query, update_query, filter_query)
 
-               await curse(price, str(ctx.author.id))
+               await crown_utilities.curse(price, str(ctx.author.id))
                await button_ctx.send(f"{current_arm}'s ⚒️ durability has increased by **{levels_gained}**!")
                return
             except:
@@ -2599,7 +2540,7 @@ async def trinketshop(ctx):
             
          else:
             update = db.updateUserNoFilterAlt(user_query, {'$inc': {'STORAGE_TYPE': 1}})
-            await curse(storage_pricing, str(ctx.author.id))
+            await crown_utilities.curse(storage_pricing, str(ctx.author.id))
             await button_ctx.send(f"Storage Tier {str(storage_type + 1)} has been purchased!")
             await msg.edit(components=[])
             return
@@ -2694,8 +2635,8 @@ async def sponsor(ctx, guild: str, amount):
 
    team_bank = team_data['BANK']
 
-   await blessteam(int(amount), team_name)
-   await curseguild(int(amount), guild['GNAME'])
+   await crown_utilities.blessteam(int(amount), team_name)
+   await crown_utilities.curseguild(int(amount), guild['GNAME'])
    await ctx.send(f"{guild_name} sponsored {team_name} :coin:{amount}!!!")
    return
 
@@ -2771,8 +2712,8 @@ async def fund(ctx, amount):
       if balance <= int(amount):
          await ctx.send("You do not have that amount to fund.")
       else:
-         await curseteam(int(amount), team['TEAM_NAME'])
-         await blessguild_Alt(int(amount), str(team_guild))
+         await crown_utilities.curseteam(int(amount), team['TEAM_NAME'])
+         await crown_utilities.blessguild_Alt(int(amount), str(team_guild))
          await ctx.send(f"{team_guild} has been funded :coin: {amount}.")
          return
    except Exception as ex:
@@ -2793,21 +2734,6 @@ async def fund(ctx, amount):
             await ctx.send(f"Error when funding Association. Alert support. Thank you!")
             return
 
-async def blessguild(amount, guild):
-   blessAmount = amount
-   posBlessAmount = 0 + abs(int(blessAmount))
-   query = {'GNAME': str(guild)}
-   guild_data = db.queryGuildAlt(query)
-   if guild_data:
-      hall = guild_data['HALL']
-      hall_data = db.queryHall({'HALL': hall})
-      multiplier = hall_data['MULT']
-      posBlessAmount = posBlessAmount * multiplier
-      update_query = {"$inc": {'BANK': int(posBlessAmount)}}
-      db.updateGuildAlt(query, update_query)
-   else:
-      print("Cannot find Association")
-
 async def blessguild_Alt(amount, guild):
    blessAmount = amount
    posBlessAmount = 0 + abs(int(blessAmount))
@@ -2821,17 +2747,6 @@ async def blessguild_Alt(amount, guild):
       db.updateGuildAlt(query, update_query)
    else:
       print("Cannot find Association")
-
-async def curseguild(amount, guild):
-      curseAmount = amount
-      negCurseAmount = 0 - abs(int(curseAmount))
-      query = {'GNAME': str(guild)}
-      guild_data = db.queryGuildAlt(query)
-      if guild_data:
-         update_query = {"$inc": {'BANK': int(negCurseAmount)}}
-         db.updateGuildAlt(query, update_query)
-      else:
-         print("cant find Association")
 
 
 # @bot.command()
@@ -2857,7 +2772,7 @@ async def blessall(ctx, amount: int):
          try:
             all_users = db.queryAllVault()
             for user in all_users:
-               await bless(amount, user['DID'])
+               await crown_utilities.bless(amount, user['DID'])
             await ctx.send(f"All Crown Unlimited Players have been blessed. 👑")
          except Exception as e:
             print(e)
@@ -2923,7 +2838,7 @@ async def code(ctx, code_input: str):
                   await ctx.send(f"{ctx.author.mention}, you do not have any universes that have gems to increase.")
                   return
             if coin != 0:
-               await bless(int(coin), ctx.author.id)
+               await crown_utilities.bless(int(coin), ctx.author.id)
                await ctx.send(f"You've been rewarded :coin: **{'{:,}'.format(coin)}**.")
             respond = db.updateUserNoFilter(query, {'$addToSet': {'USED_CODES': code_input}})
          else:
@@ -2947,8 +2862,8 @@ async def code(ctx, code_input: str):
             'message': str(ex),
             'trace': trace
       }))
-      guild = bot.get_guild(543442011156643871)
-      channel = guild.get_channel(957061470192033812)
+      guild = bot.get_guild(guild_id)
+      channel = guild.get_channel(guild_channel)
       await channel.send(f"'PLAYER': **{str(ctx.author)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
       return
 

@@ -2,6 +2,7 @@ import discord
 from discord.embeds import Embed
 from discord.ext import commands
 import bot as main
+import crown_utilities
 import db
 import classes as data
 import messages as m
@@ -43,6 +44,10 @@ class Lookup(commands.Cog):
     @cog_ext.cog_slash(description="Lookup player stats", guild_ids=main.guild_ids)
     async def player(self, ctx, player = None):
         await ctx.defer()
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         try:
             if player:
                 player = player.replace("<","")
@@ -249,6 +254,10 @@ class Lookup(commands.Cog):
     
     @cog_ext.cog_slash(description="Lookup Guild stats", guild_ids=main.guild_ids)
     async def guild(self, ctx, guild = None):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         try:
             if guild:
                 team_name = guild.lower()
@@ -560,6 +569,10 @@ class Lookup(commands.Cog):
     
     @cog_ext.cog_slash(description="Lookup Association", guild_ids=main.guild_ids)
     async def association(self, ctx, association = None):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         try:
             if association:   
                 guild_name = association
@@ -716,6 +729,10 @@ class Lookup(commands.Cog):
 
     @cog_ext.cog_slash(description="Lookup player family", guild_ids=main.guild_ids)
     async def family(self, ctx, player = None):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         try:
             if player != None:
                 member = player

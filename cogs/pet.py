@@ -2,6 +2,7 @@ from os import name
 import discord
 from discord.ext import commands
 import bot as main
+import crown_utilities
 import db
 import classes as data
 import messages as m
@@ -30,6 +31,10 @@ class Pet(commands.Cog):
 
     @cog_ext.cog_slash(description="Equip Summon", guild_ids=main.guild_ids)
     async def equipsummon(self, ctx, summon: str):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         pet_name = summon
         user_query = {'DID': str(ctx.author.id)}
         user = db.queryUser(user_query)
@@ -53,6 +58,10 @@ class Pet(commands.Cog):
 
     @cog_ext.cog_slash(description="View a Summon", guild_ids=main.guild_ids)
     async def viewsummon(self, ctx, summon: str):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         pet = db.queryPet({'PET': {"$regex": f"^{str(summon)}$", "$options": "i"}})
         try:
             if pet:

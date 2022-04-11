@@ -2,6 +2,7 @@ import textwrap
 import discord
 from discord.ext import commands
 import bot as main
+import crown_utilities
 import db
 import classes as data
 import messages as m
@@ -30,6 +31,10 @@ class Universe(commands.Cog):
 
     @cog_ext.cog_slash(description="View a universe", guild_ids=main.guild_ids)
     async def viewuniverse(self, ctx, universe: str):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
         try:
             universe_name = universe
             universe = db.queryUniverse({'TITLE': {"$regex": f"^{universe_name}$", "$options": "i"}})
