@@ -1750,16 +1750,6 @@ destiny = [
         "UNIVERSE": "Crown Rift Slayers",
     },
     {
-        "NAME": "Ishvalan War",
-        "WINS": 0,
-        "REQUIRED": 15,
-        "DEFEAT": "Envy",
-        "USE_CARDS": ["Edward Elric"],
-        "EARN": "Scar",
-        "COMPLETED": False,
-        "UNIVERSE": "Crown Rift Awakening"
-    },
-    {
         "NAME": "Save Eri",
         "WINS": 0,
         "REQUIRED": 8,
@@ -1778,16 +1768,6 @@ destiny = [
         "EARN": "Broken Deku",
         "COMPLETED": False,
         "UNIVERSE": "My Hero Academia"
-    },
-    {
-        "NAME": "Mustangs Revenge",
-        "WINS": 0,
-        "REQUIRED": 20,
-        "DEFEAT": "Lust",
-        "USE_CARDS": ["Alphonse Elric"],
-        "EARN": "Roy Mustang",
-        "COMPLETED": False,
-        "UNIVERSE": "Crown Rift Awakening"
     },
     {
         "NAME": "Sibling Rivalry",
@@ -2011,15 +1991,6 @@ destiny = [
     },
 
     {
-        "NAME": "Masters Awakening",
-        "WINS": 0,
-        "REQUIRED": 35,
-        "DEFEAT": "Muzaka",
-        "USE_CARDS": ["Franky"],
-        "EARN": "Cadis Etrama Di Raizel",
-        "COMPLETED": False,
-        "UNIVERSE": "Crown Rift Awakening"
-    },{
         "NAME": "Hunting Season",
         "WINS": 0,
         "REQUIRED": 10,
