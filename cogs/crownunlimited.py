@@ -6743,6 +6743,23 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             o_defend_used = stats['o_defend_used']
             o_final_stand = stats['o_final_stand']
 
+            corruption_hlt_buff = 0
+            corruption_atk_buff = 0
+            corruption_def_buff = 0
+            corruption_ap_buff = 0
+
+            if universe and mode != "ABYSS":
+                if universe['CORRUPTED']:
+                    corruption_hlt_buff = 500
+                    corruption_atk_buff = 80
+                    corruption_def_buff = 100
+                    corruption_ap_buff = 35
+                    if difficulty == "HARD":
+                        corruption_hlt_buff = 1500
+                        corruption_atk_buff = 80
+                        corruption_def_buff = 150
+                        corruption_ap_buff = 65
+
 
             if mode in PVP_MODES or mode in RAID_MODES:
                 if mode in RAID_MODES:
@@ -6989,23 +7006,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             else:
                 turn = 1
             turn_total = 0
-            corruption_hlt_buff = 0
-            corruption_atk_buff = 0
-            corruption_def_buff = 0
-            corruption_ap_buff = 0
-
-            if universe and mode != "ABYSS":
-                if universe['CORRUPTED']:
-                    corruption_hlt_buff = 500
-                    corruption_atk_buff = 80
-                    corruption_def_buff = 100
-                    corruption_ap_buff = 35
-                    if difficulty == "HARD":
-                        corruption_hlt_buff = 1500
-                        corruption_atk_buff = 80
-                        corruption_def_buff = 150
-                        corruption_ap_buff = 65
-
 
             demon_slayer_buff = 0
             tdemon_slayer_buff = 0
