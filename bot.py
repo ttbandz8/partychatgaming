@@ -1473,7 +1473,7 @@ async def called_once_a_day():
    
    universe = [x for x in db.queryExploreUniverses()]
    universe_list_length = len(universe)
-   universe_selection = random.randint(0, int(universe_list_length))
+   universe_selection = round(random.randint(0, int(universe_list_length)))
    selected_universe = universe[int(universe_selection)]
    universe_image = selected_universe['PATH']
    universe_name = selected_universe['TITLE']
