@@ -1462,7 +1462,7 @@ async def on_command_error(ctx, error):
 @tasks.loop(hours=8)
 async def called_once_a_day():
    guild = bot.get_guild(guild_id)
-   channel = guild.get_channel(guild_channel)
+   channel = guild.get_channel(868170580011130890)
 
    message_channel = channel
 
