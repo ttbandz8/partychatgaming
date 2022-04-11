@@ -2715,6 +2715,10 @@ class Profile(commands.Cog):
             if user['RIFT'] == 1:
                 riftShopOpen = True
                 shopName = ':crystal_ball: Rift Shop'
+
+            if riftShopOpen:
+                close_rift = db.updateUserNoFilter({'DID': str(ctx.author.id)}, {'$set': {'RIFT': 0}})
+
                 
             if riftShopOpen:    
                 for uni in all_universes:
@@ -2830,10 +2834,10 @@ class Profile(commands.Cog):
                             else: 
                                 bless_amount = round(bless_amount /2)
                             await button_ctx.send(f"You already own **{title['TITLE']}**. You get a :coin:**{'{:,}'.format(bless_amount)}** refund!") 
-                            await main.curse(bless_amount, str(ctx.author.id))
+                            await crown_utilities.curse(bless_amount, str(ctx.author.id))
                         else:
                             response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'TITLES': str(title['TITLE'])}})   
-                            await main.curse(price, str(ctx.author.id))
+                            await crown_utilities.curse(price, str(ctx.author.id))
                             await button_ctx.send(f"You purchased **{title['TITLE']}**.")
 
 
@@ -2867,13 +2871,13 @@ class Profile(commands.Cog):
                         
                         if arm not in current_arms:
                             response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'ARMS': {'ARM': str(arm), 'DUR': 25}}})
-                            await main.curse(price, str(ctx.author.id))
+                            await crown_utilities.curse(price, str(ctx.author.id))
                             await button_ctx.send(f"You purchased **{arm}**.")
                         else:
                             update_query = {'$inc': {'ARMS.$[type].' + 'DUR': 10}}
                             filter_query = [{'type.' + "ARM": str(arm)}]
                             resp = db.updateVault(vault_query, update_query, filter_query)
-                            await main.curse(price, str(ctx.author.id))
+                            await crown_utilities.curse(price, str(ctx.author.id))
                             await button_ctx.send(f"You purchased **{arm}**. Increased durability for the arm by 10 as you already own it.")
 
 

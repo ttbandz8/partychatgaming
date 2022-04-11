@@ -212,11 +212,12 @@ async def route_to_storage(player, card_name, current_cards, card_owned, price, 
 
 
 async def corrupted_universe_handler(ctx, universe, difficulty):
-    try:         
+    try:
         # if universe['CORRUPTION_LEVEL'] == 499:
         # updated_corruption_level = db.updateUniverse({'TITLE': universe['TITLE']}, {'$inc': {'CORRUPTION_LEVEL': 1}})
         query = {"DID": str(ctx.author.id)}
         vault = db.queryVault(query)
+        
         gem_list = vault['GEMS']
         gem_reward = 20000
         if difficulty == "HARD":
@@ -224,13 +225,13 @@ async def corrupted_universe_handler(ctx, universe, difficulty):
 
         if gem_list:
             for uni in gem_list:
-                if uni['UNIVERSE'] == universe['TITLE']:
+                if uni['UNIVERSE'] == universe:
                     update_query = {
                         '$inc': {'GEMS.$[type].' + "GEMS": gem_reward}
                     }
                     filter_query = [{'type.' + "UNIVERSE": uni['UNIVERSE']}]
                     res = db.updateVault(query, update_query, filter_query)
-            return f"You earned 💎 {'{:,}'.format(gem_reward)}"
+                    return f"You earned 💎 {'{:,}'.format(gem_reward)}"
         else:
             return "You must dismantle a card from this universe to enable crafting."
 

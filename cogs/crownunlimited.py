@@ -6637,14 +6637,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
             if universe and mode != "ABYSS":
                 if universe['CORRUPTED']:
-                    corruption_hlt_buff = 500
-                    corruption_atk_buff = 80
-                    corruption_def_buff = 100
+                    corruption_hlt_buff = 150
+                    corruption_atk_buff = 40
+                    corruption_def_buff = 40
                     corruption_ap_buff = 35
                     if difficulty == "HARD":
-                        corruption_hlt_buff = 1500
+                        corruption_hlt_buff = 600
                         corruption_atk_buff = 80
-                        corruption_def_buff = 150
+                        corruption_def_buff = 120
                         corruption_ap_buff = 65
 
 
@@ -20643,7 +20643,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         else:
                             corrupted_message = ""
                             if universe['CORRUPTED']:
-                                corrupted_message = await crown_utilities.corrupted_universe_handler(ctx, universe, difficulty)
+                                corrupted_message = await crown_utilities.corrupted_universe_handler(ctx, selected_universe, difficulty)
+                                if not corrupted_message:
+                                    corrupted_message = "You must dismantle a card from this universe to enable crafting."
 
                             tale_or_dungeon_only = ""
                             if mode in U_modes:
