@@ -645,7 +645,7 @@ async def voted(ctx):
             if gem_list:
                for universe in gem_list:
                   update_query = {
-                     '$inc': {'GEMS.$[type].' + "GEMS": 80000}
+                     '$inc': {'GEMS.$[type].' + "GEMS": 120000}
                   }
                   filter_query = [{'type.' + "UNIVERSE": universe['UNIVERSE']}]
                   res = db.updateVault(query, update_query, filter_query)
@@ -659,7 +659,7 @@ async def voted(ctx):
             
             **Daily Voter Earnings** 
             :coin: **{'{:,}'.format(200000)}**
-            💎 **{'{:,}'.format(80000)}** *all craftable universes*
+            💎 **{'{:,}'.format(120000)}** *all craftable universes*
             """), colour=0xf1c40f)
             
             await ctx.send(embed=embedVar)
