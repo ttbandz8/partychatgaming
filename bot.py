@@ -1483,7 +1483,8 @@ async def called_once_a_day():
    Cards in corrupted universes are empowered!
 
    🗡️ **Your Goal**
-   Defeat cards in corrupted universes to earn 💎 Craftable Gems!   
+   Defeat cards in corrupted universes to earn 💎80,000 Craftable Gems!
+   Earn 💎180,000 when playing on Hard difficulty!
    """))
    embedVar.set_image(url=universe_image)
 
