@@ -20642,10 +20642,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                         else:
                             corrupted_message = ""
-                            if universe['CORRUPTED'] and mode != "ABYSS" and mode not in RAID_MODES and mode not in PVP_MODES:
-                                corrupted_message = await crown_utilities.corrupted_universe_handler(ctx, selected_universe, difficulty)
-                                if not corrupted_message:
-                                    corrupted_message = "You must dismantle a card from this universe to enable crafting."
+                            if mode != "ABYSS" and mode not in RAID_MODES and mode not in PVP_MODES:
+                                if universe['CORRUPTED']:
+                                    corrupted_message = await crown_utilities.corrupted_universe_handler(ctx, selected_universe, difficulty)
+                                    if not corrupted_message:
+                                        corrupted_message = "You must dismantle a card from this universe to enable crafting."
 
                             tale_or_dungeon_only = ""
                             if mode in U_modes:
