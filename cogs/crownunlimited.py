@@ -7291,6 +7291,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     # fortitude or luck is based on health
                                     fortitude = 0.0
                                     low = o_health - (o_health * .90)
+                                    if low <=0:
+                                        low = 1
                                     high = o_health - (o_health * .80)
                                     fortitude = round(random.randint(int(low), int(high)))
 
@@ -8741,6 +8743,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     t_focus_count = t_focus_count + 1
                                     fortitude = 0.0
                                     low = t_health - (t_health * .90)
+                                    if low<= 0:
+                                        low = 1
                                     high = t_health - (t_health * .80)
                                     fortitude = round(random.randint(int(low), int(high)))
 
@@ -11018,6 +11022,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     # fortitude or luck is based on health
                                     fortitude = 0.0
                                     low = o_health - (o_health * .90)
+                                    if low <=0:
+                                        low = 1
                                     high = o_health - (o_health * .80)
                                     fortitude = round(random.randint(int(low), int(high)))
 
@@ -13738,6 +13744,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     # o_pet_used = True
                                     fortitude = 0.0
                                     low = t_health - (t_health * .90)
+                                    if low <= 0:
+                                        low = 1
                                     high = t_health - (t_health * .80)
                                     fortitude = round(random.randint(int(low), int(high)))
 
@@ -15930,6 +15938,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         # fortitude or luck is based on health
                                         fortitude = 0.0
                                         low = c_health - (c_health * .90)
+                                        if low <=0:
+                                            low = 1
                                         high = c_health - (c_health * .80)
                                         fortitude = round(random.randint(int(low), int(high)))
 
@@ -18561,6 +18571,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         t_focus_count = t_focus_count + 1
                                         fortitude = 0.0
                                         low = t_health - (t_health * .90)
+                                        if low <=0:
+                                            low = 1
                                         high = t_health - (t_health * .80)
                                         fortitude = round(random.randint(int(low), int(high)))
 
