@@ -2082,11 +2082,13 @@ async def buffshop(ctx, player, team):
    rift_buff_cost = 18000000 + war_tax
    level_buff_cost = 15000000 + war_tax
    stat_buff_cost = 10000000 + war_tax
+   auto_buff_cost = 40000000 + war_tax
    if shield_buff:
       quest_buff_cost = round(quest_buff_cost * .60)
       rift_buff_cost = round(rift_buff_cost * .60)
       level_buff_cost = round(level_buff_cost * .60)
       stat_buff_cost = round(stat_buff_cost * .60)
+      auto_buff_cost = round(auto_buff_cost * .60)
       shield_message = "Association Shield Discount 30%"
    sell_buttons = [
          manage_components.create_button(
@@ -2109,14 +2111,24 @@ async def buffshop(ctx, player, team):
             label="🔋 4️⃣",
             custom_id="4"
          ),
-
          manage_components.create_button(
-            style=ButtonStyle.grey,
-            label="Cancel",
-            custom_id="cancel"
-         )
+            style=ButtonStyle.red,
+            label="🔋 5️⃣",
+            custom_id="5"
+         ),
+
       ]
+
+   utility_buttons = [
+      manage_components.create_button(
+         style=ButtonStyle.grey,
+         label="Cancel",
+         custom_id="cancel"
+      )
+   ]
+
    sell_buttons_action_row = manage_components.create_actionrow(*sell_buttons)
+   utility_buttons_action_row = manage_components.create_actionrow(*utility_buttons)
    embedVar = discord.Embed(title=f":tickets: | **Buff Shop** - {icon}{'{:,}'.format(balance)} ", description=textwrap.dedent(f"""\
    Welcome {team['TEAM_DISPLAY_NAME']}!
    {war_message}
@@ -2129,16 +2141,18 @@ async def buffshop(ctx, player, team):
 
    🔋 4️⃣ **Rift Buff** for :money_with_wings: **{'{:,}'.format(rift_buff_cost)}**
 
+   🔋 5️⃣**Auto Battle Buff** for :money_with_wings: **{'{:,}'.format(auto_buff_cost)}**
+
    All Buffs are available for 100 uses.
 
    What would you like to buy?
    """), colour=0xf1c40f)
-   msg = await ctx.send(embed=embedVar, components=[sell_buttons_action_row])
+   msg = await ctx.send(embed=embedVar, components=[sell_buttons_action_row, utility_buttons_action_row])
    def check(button_ctx):
       return button_ctx.author == ctx.author
 
    try:
-      button_ctx: ComponentContext = await manage_components.wait_for_component(bot, components=[sell_buttons_action_row], timeout=120,check=check)
+      button_ctx: ComponentContext = await manage_components.wait_for_component(bot, components=[sell_buttons_action_row, utility_buttons_action_row], timeout=120,check=check)
       uses = 100
       price = 0
       update_query = {}
@@ -2190,7 +2204,18 @@ async def buffshop(ctx, player, team):
 
          update_query = {
             '$set': {'GUILD_BUFF_AVAILABLE': True, 'ACTIVE_GUILD_BUFF': 'Rift'},
-            '$push': {'TRANSACTIONS': f"{player['DISNAME']} purchased Stat Buff", 'GUILD_BUFFS': {'TYPE': 'Rift', 'USES': 100}}
+            '$push': {'TRANSACTIONS': f"{player['DISNAME']} purchased Rift Buff", 'GUILD_BUFFS': {'TYPE': 'Rift', 'USES': 100}}
+         }
+
+      if button_ctx.custom_id == "5":
+         price= auto_buff_cost
+         if price > balance:
+            await button_ctx.send("Insufficent Balance.", hidden=True)
+            return
+
+         update_query = {
+            '$set': {'GUILD_BUFF_AVAILABLE': True, 'ACTIVE_GUILD_BUFF': 'Auto Battle'},
+            '$push': {'TRANSACTIONS': f"{player['DISNAME']} purchased Auto Battle Buff", 'GUILD_BUFFS': {'TYPE': 'Auto Battle', 'USES': 1000}}
          }
 
 

@@ -402,6 +402,7 @@ async def guild_buff_update_function(team):
                 rift_buff = False
                 level_buff = False
                 stat_buff = False
+                auto_battle_buff = False
                 index = 0
 
                 active_guild_buff = team_info['ACTIVE_GUILD_BUFF']
@@ -420,7 +421,11 @@ async def guild_buff_update_function(team):
 
                         if buff['TYPE'] == "Stat":
                             stat_buff = True
-                        
+
+                        if buff['TYPE'] == "Auto Battle":
+                            auto_battle_buff = True
+
+
                         if buff['USES'] == 1:
                             
                             if guild_buff_count == 1:
@@ -465,6 +470,7 @@ async def guild_buff_update_function(team):
                     'Rift': rift_buff,
                     'Level': level_buff,
                     'Stat': stat_buff,
+                    'Auto Battle': auto_battle_buff,
                     'QUERY': team_query,
                     'UPDATE_QUERY': guild_buff_update_query,
                     'FILTER_QUERY': filter_query
