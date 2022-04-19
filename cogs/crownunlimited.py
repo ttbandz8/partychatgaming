@@ -3912,6 +3912,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                     update_team_response = db.updateTeam(guild_buff['QUERY'], guild_buff['UPDATE_QUERY'])
                 if guild_buff['Auto Battle']:
                     auto_battle = True
+                    update_team_response = db.updateTeam(guild_buff['QUERY'], guild_buff['UPDATE_QUERY'])
            
         for x in vault['CARD_LEVELS']:
             if x['CARD'] == o_card:
@@ -7132,7 +7133,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         await battle_msg.delete(delay=2)
                         await asyncio.sleep(2)
                         battle_msg = await private_channel.send(embed=embedVar)
-                    await button_ctx.defer(ignore=True)
+                    # await button_ctx.defer(ignore=True)
                     while (((o_health > 0) and (c_health > 0)) and (t_health > 0) and mode in co_op_modes) or (
                             (o_health > 0) and (t_health > 0) and mode not in co_op_modes):
                         if previous_moves:
@@ -11254,9 +11255,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         await asyncio.sleep(2)
                                         # embedVar.set_image(url="attachment://image.png")
                                         embedVar.set_thumbnail(url=ctx.author.avatar_url)
-                                        # embedVar.set_footer(
-                                        #     text=f"{t_card}: ❤️{t_health} 🌀{t_stamina} 🗡️{t_attack}/🛡️{t_defense} {tarm_message}{companion_stats}",
-                                        #     icon_url="https://cdn.discordapp.com/emojis/789290881654980659.gif?v=1")
+                                        embedVar.set_footer(
+                                            text=f"{t_card}: ❤️{t_health} 🌀{t_stamina} 🗡️{t_attack}/🛡️{t_defense}\n{o_card}: ❤️{o_health} 🌀{o_stamina} 🗡️{o_attack}/🛡️{o_defense} <-- You",
+                                            icon_url="https://cdn.discordapp.com/emojis/789290881654980659.gif?v=1")
                                         await battle_msg.edit(embed=embedVar, components=[])
                                         # await asyncio.sleep(2)
                                         # battle_msg = await private_channel.send(embed=embedVar, components=components, file=player_1_card)
@@ -14072,6 +14073,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     {previous_moves_into_embed}
                                     
                                     """), color=0xe74c3c)
+                                    embedVar.set_footer(
+                                        text=f"{t_card}: ❤️{t_health} 🌀{t_stamina} 🗡️{t_attack}/🛡️{t_defense}\n{o_card}: ❤️{o_health} 🌀{o_stamina} 🗡️{o_attack}/🛡️{o_defense} <-- You",
+                                        icon_url="https://cdn.discordapp.com/emojis/789290881654980659.gif?v=1")
 
 
                                     # UNIVERSE CARD
