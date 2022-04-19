@@ -2082,7 +2082,7 @@ async def buffshop(ctx, player, team):
    rift_buff_cost = 18000000 + war_tax
    level_buff_cost = 15000000 + war_tax
    stat_buff_cost = 10000000 + war_tax
-   auto_buff_cost = 40000000 + war_tax
+   auto_buff_cost = 60000000 + war_tax
    if shield_buff:
       quest_buff_cost = round(quest_buff_cost * .60)
       rift_buff_cost = round(rift_buff_cost * .60)
@@ -2144,6 +2144,7 @@ async def buffshop(ctx, player, team):
    🔋 5️⃣**Auto Battle Buff** for :money_with_wings: **{'{:,}'.format(auto_buff_cost)}**
 
    All Buffs are available for 100 uses.
+   Auto Battle comes with 1000 uses.
 
    What would you like to buy?
    """), colour=0xf1c40f)
