@@ -645,12 +645,12 @@ async def voted(ctx):
             if gem_list:
                for universe in gem_list:
                   update_query = {
-                     '$inc': {'GEMS.$[type].' + "GEMS": 120000}
+                     '$inc': {'GEMS.$[type].' + "GEMS": 500000}
                   }
                   filter_query = [{'type.' + "UNIVERSE": universe['UNIVERSE']}]
                   res = db.updateVault(query, update_query, filter_query)
 
-            await crown_utilities.bless(int(200000), ctx.author.id)
+            await crown_utilities.bless(int(500000), ctx.author.id)
             respond = db.updateUserNoFilter(query, {'$set': {'VOTED': True}})
 
 
@@ -658,8 +658,8 @@ async def voted(ctx):
             Thank you for voting, {ctx.author.mention}!
             
             **Daily Voter Earnings** 
-            :coin: **{'{:,}'.format(200000)}**
-            💎 **{'{:,}'.format(120000)}** *all craftable universes*
+            :coin: **{'{:,}'.format(500000)}**
+            💎 **{'{:,}'.format(500000)}** *all craftable universes*
             """), colour=0xf1c40f)
             
             await ctx.send(embed=embedVar)
@@ -671,8 +671,8 @@ async def voted(ctx):
             To earn your daily voter rewards, [Vote for Crown Unlimited!](https://top.gg/bot/955704903198711808/vote)
 
             **What are the Daily Voter Rewards?** 
-            :coin: **{'{:,}'.format(200000)}**
-            💎 **{'{:,}'.format(80000)}**
+            :coin: **{'{:,}'.format(500000)}**
+            💎 **{'{:,}'.format(500000)}**
             """), colour=0xf1c40f)
             
             await ctx.send(embed=embedVar)
