@@ -1483,8 +1483,8 @@ async def called_once_a_day():
    Cards in corrupted universes are empowered!
 
    🗡️ **Your Goal**
-   Defeat cards in corrupted universes to earn 💎80,000 Craftable Gems!
-   Earn 💎180,000 when playing on Hard difficulty!
+   Defeat cards in corrupted universes to earn 💎150,000 Craftable Gems!
+   Earn 💎300,000 when playing on Hard difficulty!
    """))
    embedVar.set_image(url=universe_image)
 
@@ -1503,7 +1503,7 @@ called_once_a_day.start()
 @commands.cooldown(1, 60*60*24, commands.BucketType.user)
 async def daily(ctx):
    try:
-      dailyamount = 100000
+      dailyamount = 250000
       await crown_utilities.bless(dailyamount, ctx.author.id)
       query = {'DID': str(ctx.author.id)}
       user_data = db.queryUser(query)

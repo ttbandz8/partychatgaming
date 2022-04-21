@@ -219,9 +219,9 @@ async def corrupted_universe_handler(ctx, universe, difficulty):
         vault = db.queryVault(query)
         
         gem_list = vault['GEMS']
-        gem_reward = 80000
+        gem_reward = 150000
         if difficulty == "HARD":
-            gem_reward = 180000
+            gem_reward = 500000
 
         if gem_list:
             for uni in gem_list:
