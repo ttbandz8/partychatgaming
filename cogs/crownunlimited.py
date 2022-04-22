@@ -6576,6 +6576,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                  universe, currentopponent, oteam, ofam, abyss_scaling, None, None,
                                                  None, None, None, None, None, None, None, None)
             auto_battle = stats['auto_battle']
+            if sowner['PATRON']:
+                auto_battle = True
             difficulty = sowner['DIFFICULTY']
             o_title_passive_type = stats['o_title_passive_type']
             o_title_passive_value = stats['o_title_passive_value']
@@ -6658,6 +6660,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         corruption_atk_buff = 80
                         corruption_def_buff = 120
                         corruption_ap_buff = 65
+                    auto_battle = True
 
 
             if mode in PVP_MODES or mode in RAID_MODES:
