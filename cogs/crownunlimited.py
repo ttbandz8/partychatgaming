@@ -6662,6 +6662,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         corruption_ap_buff = 65
                     auto_battle = True
 
+            if difficulty == "EASY":
+                auto_battle = True
+
 
             if mode in PVP_MODES or mode in RAID_MODES:
                 if mode in RAID_MODES:
@@ -20711,7 +20714,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                         else:
                             corrupted_message = ""
-                            if mode != "ABYSS" and mode not in RAID_MODES and mode not in PVP_MODES:
+                            if mode != "ABYSS" and mode not in RAID_MODES and mode not in PVP_MODES and difficulty != "EASY":
                                 if universe['CORRUPTED']:
                                     corrupted_message = await crown_utilities.corrupted_universe_handler(ctx, selected_universe, difficulty)
                                     if not corrupted_message:
