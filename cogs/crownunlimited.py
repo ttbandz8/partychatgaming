@@ -13916,24 +13916,24 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         t_attack = t_attack + t_attackcalc
                                         t_defense = t_defense + t_defensecalc
                                     t_used_focus = True
-                                    if mode not in AUTO_BATTLE_modes:
-                                        if mode in B_modes:
-                                            embedVar = discord.Embed(title=f"**{t_card}** Enters Focus State",
-                                                                    description=f"{t_powerup}", colour=0xe91e63)
-                                            embedVar.add_field(name=f"A great aura starts to envelop **{t_card}** ",
-                                                            value=f"{t_aura}")
-                                            embedVar.set_footer(text=f"{t_card} Says: 'Now, are you ready for a real fight?'")
-                                            
-                                            previous_moves.append(f"*{turn_total}:* 🌀 **{t_card}** Focused and Says: 'Now, are you ready for a real fight?'")
-                                            # await asyncio.sleep(2)
-                                        else:
-                                            embedVar = discord.Embed(title=f"{t_card} FOCUSED",
-                                                                    description=f"**{t_card} says**\n{t_focus_description}",
-                                                                    colour=0xe91e63)
-                                            embedVar.add_field(name=f"{t_card} focused and {healmessage}",
-                                                            value="All stats & stamina increased")
-                                            
-                                            previous_moves.append(f"*{turn_total}:* 🌀 **{t_card}** focused and {healmessage}")
+                                    # if mode not in AUTO_BATTLE_modes:
+                                    if mode in B_modes:
+                                        embedVar = discord.Embed(title=f"**{t_card}** Enters Focus State",
+                                                                description=f"{t_powerup}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"A great aura starts to envelop **{t_card}** ",
+                                                        value=f"{t_aura}")
+                                        embedVar.set_footer(text=f"{t_card} Says: 'Now, are you ready for a real fight?'")
+                                        
+                                        previous_moves.append(f"*{turn_total}:* 🌀 **{t_card}** focused and {healmessage}")
+                                        # await asyncio.sleep(2)
+                                    else:
+                                        embedVar = discord.Embed(title=f"{t_card} FOCUSED",
+                                                                description=f"**{t_card} says**\n{t_focus_description}",
+                                                                colour=0xe91e63)
+                                        embedVar.add_field(name=f"{t_card} focused and {healmessage}",
+                                                        value="All stats & stamina increased")
+                                        
+                                        previous_moves.append(f"*{turn_total}:* 🌀 **{t_card}** focused and {healmessage}")
                                     if not t_used_resolve and t_used_focus and t_universe == "Digimon":  # Digimon Universal Trait
                                         # fortitude or luck is based on health
                                         fortitude = 0.0
