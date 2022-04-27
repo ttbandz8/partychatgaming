@@ -7055,19 +7055,20 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
             # if randomized_battle:
             #     private_channel = ctx.author
+            battle_ping_message = await private_channel.send(f"{ctx.author.mention}")
             if mode not in PVP_MODES and mode not in B_modes and mode != "ABYSS" and mode not in RAID_MODES and mode not in co_op_modes:
-                embedVar = discord.Embed(title=f"✅ Confirm Start! ({currentopponent + 1}/{total_legends})", description=f"{ctx.author.mention}\n**{o_card}** VS **{t_card}**")
+                embedVar = discord.Embed(title=f"✅ Confirm Start! ({currentopponent + 1}/{total_legends})", description=f"**{o_card}** VS **{t_card}**")
                 embedVar.set_image(url="attachment://image.png")
                 embedVar.set_thumbnail(url=ctx.author.avatar_url)
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card)
             if mode == "ABYSS":
-                embedVar = discord.Embed(title=f"🌑 Abyss Floor {universe['FLOOR']}\n✨ Confirm Start!  ({currentopponent + 1}/{total_legends})", description=f"{ctx.author.mention}\n**{o_card}** VS **{t_card}**")
+                embedVar = discord.Embed(title=f"🌑 Abyss Floor {universe['FLOOR']}\n✨ Confirm Start!  ({currentopponent + 1}/{total_legends})", description=f"**{o_card}** VS **{t_card}**")
                 embedVar.set_image(url="attachment://image.png")
                 embedVar.set_thumbnail(url=ctx.author.avatar_url)
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card)
             
             if mode in PVP_MODES and tutorial:
-                embedVar = discord.Embed(title=f"✅ Click Start Match to Begin the Tutorial!", description=f"{ctx.author.mention}\nYou : **{o_card}** VS **{t_card}**")
+                embedVar = discord.Embed(title=f"✅ Click Start Match to Begin the Tutorial!", description=f"You : **{o_card}** VS **{t_card}**")
                 embedVar.set_image(url="attachment://image.png")
                 embedVar.set_thumbnail(url=ctx.author.avatar_url)
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card)
@@ -7120,7 +7121,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
             try:
                 button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[
-                            start_tales_buttons_action_row], timeout=120, check=check)
+                            start_tales_buttons_action_row], timeout=180, check=check)
 
                 if button_ctx.custom_id == "start_tales_no":
                     await battle_msg.delete()
@@ -7132,7 +7133,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                     await button_ctx.send(f"Game has been saved.")
                     return
                 if button_ctx.custom_id == "start_tales_yes" or button_ctx.custom_id == "start_auto_tales":
-                    if button_ctx.custom_id == "start_auto_tales":
+                    await battle_ping_message.delete()
+                    if button_ctx.custom_id == "start_auto_tales" or start_anyway:
                         mode = 'ATales'
                         embedVar = discord.Embed(title=f"Auto Battle has started", color=0xe74c3c)
                         embedVar.set_thumbnail(url=ctx.author.avatar_url)
@@ -13919,24 +13921,24 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         t_attack = t_attack + t_attackcalc
                                         t_defense = t_defense + t_defensecalc
                                     t_used_focus = True
-                                    if mode not in AUTO_BATTLE_modes:
-                                        if mode in B_modes:
-                                            embedVar = discord.Embed(title=f"**{t_card}** Enters Focus State",
-                                                                    description=f"{t_powerup}", colour=0xe91e63)
-                                            embedVar.add_field(name=f"A great aura starts to envelop **{t_card}** ",
-                                                            value=f"{t_aura}")
-                                            embedVar.set_footer(text=f"{t_card} Says: 'Now, are you ready for a real fight?'")
-                                            
-                                            previous_moves.append(f"*{turn_total}:* 🌀 **{t_card}** Focused and Says: 'Now, are you ready for a real fight?'")
-                                            # await asyncio.sleep(2)
-                                        else:
-                                            embedVar = discord.Embed(title=f"{t_card} FOCUSED",
-                                                                    description=f"**{t_card} says**\n{t_focus_description}",
-                                                                    colour=0xe91e63)
-                                            embedVar.add_field(name=f"{t_card} focused and {healmessage}",
-                                                            value="All stats & stamina increased")
-                                            
-                                            previous_moves.append(f"*{turn_total}:* 🌀 **{t_card}** focused and {healmessage}")
+                                    # if mode not in AUTO_BATTLE_modes:
+                                    if mode in B_modes:
+                                        embedVar = discord.Embed(title=f"**{t_card}** Enters Focus State",
+                                                                description=f"{t_powerup}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"A great aura starts to envelop **{t_card}** ",
+                                                        value=f"{t_aura}")
+                                        embedVar.set_footer(text=f"{t_card} Says: 'Now, are you ready for a real fight?'")
+                                        
+                                        previous_moves.append(f"*{turn_total}:* 🌀 **{t_card}** focused and {healmessage}")
+                                        # await asyncio.sleep(2)
+                                    else:
+                                        embedVar = discord.Embed(title=f"{t_card} FOCUSED",
+                                                                description=f"**{t_card} says**\n{t_focus_description}",
+                                                                colour=0xe91e63)
+                                        embedVar.add_field(name=f"{t_card} focused and {healmessage}",
+                                                        value="All stats & stamina increased")
+                                        
+                                        previous_moves.append(f"*{turn_total}:* 🌀 **{t_card}** focused and {healmessage}")
                                     if not t_used_resolve and t_used_focus and t_universe == "Digimon":  # Digimon Universal Trait
                                         # fortitude or luck is based on health
                                         fortitude = 0.0
@@ -21166,6 +21168,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                     'message': str(ex),
                     'trace': trace
                 }))
+                await battle_ping_message.delete()
+                await battle_msg.delete()
                 guild = self.bot.get_guild(main.guild_id)
                 channel = guild.get_channel(main.guild_channel)
                 await channel.send(f"'PLAYER': **{str(ctx.author)}**, 'GUILD': **{str(ctx.author.guild)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
