@@ -7134,7 +7134,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                     return
                 if button_ctx.custom_id == "start_tales_yes" or button_ctx.custom_id == "start_auto_tales":
                     await battle_ping_message.delete()
-                    if button_ctx.custom_id == "start_auto_tales" or start_anyway:
+                    if button_ctx.custom_id == "start_auto_tales":
                         mode = 'ATales'
                         embedVar = discord.Embed(title=f"Auto Battle has started", color=0xe74c3c)
                         embedVar.set_thumbnail(url=ctx.author.avatar_url)

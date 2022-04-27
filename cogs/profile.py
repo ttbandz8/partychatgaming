@@ -584,7 +584,6 @@ class Profile(commands.Cog):
 
                                     if button_ctx.custom_id == "no":
                                         await button_ctx.send("Sell cancelled. ")
-                                        self.stop = True
                                     if button_ctx.custom_id == "yes":
                                         db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'CARDS': card_name}})
                                         db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'CARD_LEVELS': {'CARD': card_name}}})
@@ -645,7 +644,6 @@ class Profile(commands.Cog):
 
                                     if button_ctx.custom_id == "no":
                                         await button_ctx.send("Dismantle cancelled. ")
-                                        self.stop = True
                                     if button_ctx.custom_id == "yes":
                                         if selected_universe in current_gems:
                                             query = {'DID': str(ctx.author.id)}
@@ -659,7 +657,7 @@ class Profile(commands.Cog):
                                         db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'CARD_LEVELS': {'CARD': card_name}}})
                                         #await crown_utilities.bless(sell_price, ctx.author.id)
                                         await button_ctx.send("Dismantled.")
-                                        self.stop = True
+                                       
                                 except Exception as ex:
                                     trace = []
                                     tb = ex.__traceback__
@@ -1098,7 +1096,6 @@ class Profile(commands.Cog):
 
                                     if button_ctx.custom_id == "no":
                                         await button_ctx.send("Sell cancelled. Please press the Exit button if you are done reselling titles.")
-                                        self.stop = True
                                     if button_ctx.custom_id == "yes":
                                         db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'TITLES': title_name}})
                                         await crown_utilities.bless(sell_price, ctx.author.id)
@@ -1156,7 +1153,6 @@ class Profile(commands.Cog):
 
                                     if button_ctx.custom_id == "no":
                                         await button_ctx.send("Dismantle cancelled. ")
-                                        self.stop = True
                                     if button_ctx.custom_id == "yes":
                                         if selected_universe in current_gems:
                                             query = {'DID': str(ctx.author.id)}
@@ -1169,7 +1165,6 @@ class Profile(commands.Cog):
                                         db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'TITLES': title_name}})
                                         await crown_utilities.bless(sell_price, ctx.author.id)
                                         await button_ctx.send("Dismantled.")
-                                        self.stop = True
                                 except Exception as ex:
                                     trace = []
                                     tb = ex.__traceback__
@@ -1478,7 +1473,6 @@ class Profile(commands.Cog):
 
                                     if button_ctx.custom_id == "no":
                                         await button_ctx.send("Sell cancelled. Please press the Exit button if you are done reselling titles.")
-                                        self.stop = True
                                     if button_ctx.custom_id == "yes":
                                         db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'ARMS': {'ARM': str(arm_name)}}})
                                         await crown_utilities.bless(sell_price, ctx.author.id)
@@ -1538,7 +1532,6 @@ class Profile(commands.Cog):
 
                                     if button_ctx.custom_id == "no":
                                         await button_ctx.send("Dismantle cancelled. ")
-                                        self.stop = True
                                     if button_ctx.custom_id == "yes":
                                         if selected_universe in current_gems:
                                             query = {'DID': str(ctx.author.id)}
@@ -1551,7 +1544,6 @@ class Profile(commands.Cog):
                                         db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'ARMS': {'ARM': str(arm_name)}}})
                                         await crown_utilities.bless(sell_price, ctx.author.id)
                                         await button_ctx.send("Dismantled.")
-                                        self.stop = True
                                 except Exception as ex:
                                     trace = []
                                     tb = ex.__traceback__
