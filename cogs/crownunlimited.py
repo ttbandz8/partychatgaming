@@ -7052,19 +7052,20 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
             # if randomized_battle:
             #     private_channel = ctx.author
+            battle_ping_message = await private_channel.send(f"{ctx.author.mention}")
             if mode not in PVP_MODES and mode not in B_modes and mode != "ABYSS" and mode not in RAID_MODES and mode not in co_op_modes:
-                embedVar = discord.Embed(title=f"✅ Confirm Start! ({currentopponent + 1}/{total_legends})", description=f"{ctx.author.mention}\n**{o_card}** VS **{t_card}**")
+                embedVar = discord.Embed(title=f"✅ Confirm Start! ({currentopponent + 1}/{total_legends})", description=f"**{o_card}** VS **{t_card}**")
                 embedVar.set_image(url="attachment://image.png")
                 embedVar.set_thumbnail(url=ctx.author.avatar_url)
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card)
             if mode == "ABYSS":
-                embedVar = discord.Embed(title=f"🌑 Abyss Floor {universe['FLOOR']}\n✨ Confirm Start!  ({currentopponent + 1}/{total_legends})", description=f"{ctx.author.mention}\n**{o_card}** VS **{t_card}**")
+                embedVar = discord.Embed(title=f"🌑 Abyss Floor {universe['FLOOR']}\n✨ Confirm Start!  ({currentopponent + 1}/{total_legends})", description=f"**{o_card}** VS **{t_card}**")
                 embedVar.set_image(url="attachment://image.png")
                 embedVar.set_thumbnail(url=ctx.author.avatar_url)
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card)
             
             if mode in PVP_MODES and tutorial:
-                embedVar = discord.Embed(title=f"✅ Click Start Match to Begin the Tutorial!", description=f"{ctx.author.mention}\nYou : **{o_card}** VS **{t_card}**")
+                embedVar = discord.Embed(title=f"✅ Click Start Match to Begin the Tutorial!", description=f"You : **{o_card}** VS **{t_card}**")
                 embedVar.set_image(url="attachment://image.png")
                 embedVar.set_thumbnail(url=ctx.author.avatar_url)
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card)
@@ -7117,7 +7118,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
             try:
                 button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[
-                            start_tales_buttons_action_row], timeout=120, check=check)
+                            start_tales_buttons_action_row], timeout=180, check=check)
 
                 if button_ctx.custom_id == "start_tales_no":
                     await battle_msg.delete()
@@ -7129,7 +7130,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                     await button_ctx.send(f"Game has been saved.")
                     return
                 if button_ctx.custom_id == "start_tales_yes" or button_ctx.custom_id == "start_auto_tales":
-                    if button_ctx.custom_id == "start_auto_tales":
+                    await battle_ping_message.delete()
+                    if button_ctx.custom_id == "start_auto_tales" or start_anyway:
                         mode = 'ATales'
                         embedVar = discord.Embed(title=f"Auto Battle has started", color=0xe74c3c)
                         embedVar.set_thumbnail(url=ctx.author.avatar_url)
@@ -21163,6 +21165,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                     'message': str(ex),
                     'trace': trace
                 }))
+                await battle_ping_message.delete()
+                await battle_msg.delete()
                 guild = self.bot.get_guild(main.guild_id)
                 channel = guild.get_channel(main.guild_channel)
                 await channel.send(f"'PLAYER': **{str(ctx.author)}**, 'GUILD': **{str(ctx.author.guild)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
