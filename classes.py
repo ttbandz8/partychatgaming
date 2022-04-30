@@ -46,7 +46,8 @@ class USER():
     CREATOR: bool = field(default_factory=lambda: False)
     VOTED: bool = field(default_factory=lambda: False)
     USED_CODES: list[str] = field(default_factory=lambda: [""])
-
+    BATTLE_HISTORY: int = field(default_factory=lambda: 6)
+    
 @dataclass(frozen=True, order=True)
 class CODES():
     CODE_INPUT: str = field(default_factory=lambda: '')

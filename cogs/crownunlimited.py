@@ -3481,7 +3481,6 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
                 draw.text((730, 457), f"{stamina}", (255, 255, 255), font=health_and_stamina_font, stroke_width=1,
                         stroke_fill=(0, 0, 0), align="left")
 
-
             # Attack & Shield (Defense)
             a_sizing = (89, 515)
             d_sizing = (1062, 515)
@@ -3489,6 +3488,11 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
                 a_sizing = (78, 515)
             if int(defense) > 99:
                 d_sizing = (1048, 515)
+            if int(attack) > 999:
+                a_sizing = (70, 515)
+            if int(defense) > 999:
+                d_sizing = (1040, 515)
+
 
             draw.text(a_sizing, f"{round(attack)}", (255, 255, 255), font=attack_and_shield_font, stroke_width=1,
                       stroke_fill=(0, 0, 0), align="center")
@@ -6117,7 +6121,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                         embedVar.set_thumbnail(url=ctx.author.avatar_url)
                         universe_embed_list.append(embedVar)
 
-        custom_button = manage_components.create_button(style=3, label="Select")
+        custom_button = manage_components.create_button(style=3, label="Start")
         
 
         async def custom_function(self, button_ctx):
@@ -6579,6 +6583,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             if sowner['PATRON']:
                 auto_battle = True
             difficulty = sowner['DIFFICULTY']
+            battle_history_message_amount = sowner['BATTLE_HISTORY']
             o_title_passive_type = stats['o_title_passive_type']
             o_title_passive_value = stats['o_title_passive_value']
             operformance = stats['operformance']
@@ -7011,7 +7016,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             if auto_battle:
                 start_tales_buttons.append(
                     manage_components.create_button(
-                        style=ButtonStyle.blue,
+                        style=ButtonStyle.grey,
                         label="Auto Battle",
                         custom_id="start_auto_tales"
                     )
@@ -7147,8 +7152,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         if previous_moves:
                             previous_moves_len = len(previous_moves)
                             # print(f"LIST LEN: {previous_moves_len}")
-                            if previous_moves_len >= 6:
-                                previous_moves = previous_moves[-6:]
+                            if previous_moves_len >= battle_history_message_amount:
+                                previous_moves = previous_moves[-battle_history_message_amount:]
                             
                             previous_moves_into_embed = "\n\n".join(previous_moves)
                         
@@ -7235,10 +7240,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     o_attack = 25
                                 if o_defense <= 30:
                                     o_defense = 30
-                                if o_attack > 999:
-                                    o_attack = 999
-                                if o_defense > 999:
-                                    o_defense = 999
+                                if o_attack > 9999:
+                                    o_attack = 9999
+                                if o_defense > 9999:
+                                    o_defense = 9999
                                 if o_health >= o_max_health:
                                     o_health = o_max_health
 
@@ -8710,10 +8715,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     t_attack = 25
                                 if t_defense <= 30:
                                     t_defense = 30
-                                if t_attack >= 999:
-                                    t_attack = 999
-                                if t_defense >= 999:
-                                    t_defense = 999
+                                if t_attack >= 9999:
+                                    t_attack = 9999
+                                if t_defense >= 9999:
+                                    t_defense = 9999
                                 if t_health >= t_max_health:
                                     t_health = t_max_health
                                 if turn_total == 0:
@@ -10978,10 +10983,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     o_attack = 25
                                 if o_defense <= 30:
                                     o_defense = 30
-                                if o_attack >= 999:
-                                    o_attack = 999
-                                if o_defense >= 999:
-                                    o_defense = 999
+                                if o_attack >= 9999:
+                                    o_attack = 9999
+                                if o_defense >= 9999:
+                                    o_defense = 9999
                                 if o_health >= o_max_health:
                                     o_health = o_max_health
 
@@ -11264,7 +11269,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         # embedVar.set_image(url="attachment://image.png")
                                         embedVar.set_thumbnail(url=ctx.author.avatar_url)
                                         embedVar.set_footer(
-                                            text=f"{t_card}: ❤️{t_health} 🌀{t_stamina} 🗡️{t_attack}/🛡️{t_defense}\n{o_card}: ❤️{o_health} 🌀{o_stamina} 🗡️{o_attack}/🛡️{o_defense} <-- You",
+                                            text=f"{t_card}: ❤️{t_health} 🌀{t_stamina} 🗡️{t_attack}/🛡️{t_defense}\n{o_card}: ❤️{o_health} 🌀{o_stamina} 🗡️{o_attack}/🛡️{o_defense}",
                                             icon_url="https://cdn.discordapp.com/emojis/789290881654980659.gif?v=1")
                                         await battle_msg.edit(embed=embedVar, components=[])
                                         # await asyncio.sleep(2)
@@ -13822,10 +13827,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     t_attack = 25
                                 if t_defense <= 30:
                                     t_defense = 30
-                                if t_attack >= 999:
-                                    t_attack = 999
-                                if t_defense >= 999:
-                                    t_defense = 999
+                                if t_attack >= 9999:
+                                    t_attack = 9999
+                                if t_defense >= 9999:
+                                    t_defense = 9999
                                 if t_health >= t_max_health:
                                     t_health = t_max_health
                                 # o_pet_used = True
@@ -14082,7 +14087,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     
                                     """), color=0xe74c3c)
                                     embedVar.set_footer(
-                                        text=f"{t_card}: ❤️{t_health} 🌀{t_stamina} 🗡️{t_attack}/🛡️{t_defense}\n{o_card}: ❤️{o_health} 🌀{o_stamina} 🗡️{o_attack}/🛡️{o_defense} <-- You",
+                                        text=f"{t_card}: ❤️{t_health} 🌀{t_stamina} 🗡️{t_attack}/🛡️{t_defense}\n{o_card}: ❤️{o_health} 🌀{o_stamina} 🗡️{o_attack}/🛡️{o_defense}",
                                         icon_url="https://cdn.discordapp.com/emojis/789290881654980659.gif?v=1")
 
 
@@ -15947,10 +15952,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         c_attack = 25
                                     if c_defense <= 30:
                                         c_defense = 30
-                                    if c_attack > 999:
-                                        c_attack = 999
-                                    if c_defense > 999:
-                                        c_defense = 999
+                                    if c_attack > 9999:
+                                        c_attack = 9999
+                                    if c_defense > 9999:
+                                        c_defense = 9999
                                     if c_health >= c_max_health:
                                         c_health = c_max_health
                                     # Tutorial Instructions
@@ -18587,10 +18592,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         t_attack = 25
                                     if t_defense <= 30:
                                         t_defense = 30
-                                    if t_attack >= 999:
-                                        t_attack = 999
-                                    if t_defense >= 999:
-                                        t_defense = 999
+                                    if t_attack >= 9999:
+                                        t_attack = 9999
+                                    if t_defense >= 9999:
+                                        t_defense = 9999
                                     if t_health >= t_max_health:
                                         t_health = t_max_health
                                     # o_pet_used = True

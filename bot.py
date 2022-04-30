@@ -720,45 +720,10 @@ async def register(ctx):
 
 
    if r_response:
-      embedVar = discord.Embed(title=f"**Welcome to Crown Unlimited**!", description=textwrap.dedent(f"""
-      Welcome {ctx.author.mention}!                                                                                           
-      
-      Collect and level **Cards**, **Summons**, and **Accessories** to create powerful builds
-      Conquer **Universes**, Defeat **Bosses**, and Rule **PVP** for prizes and rank, **Solo** and **Multiplayer**! 
-      Discover **Enhancers!!** - Special Abilities used to boost your Cards, Summons, and Accessories in battle!
-
-      **Card Basics**
-      🀄 - Card Tier *1-7*
-      :trident: - Card Level *1-500*
-      :heart:  - Card Health (HLT)
-      :cyclone: - Card Stamina (ST)
-      🗡️ - Attack (ATK) *Blue Crystal* 🟦
-      🛡️ - Defense (DEF) *Red Crystal* 🟥
-      :drop_of_blood: - Card Passive *Enhancers applied at the start of the battle*
-
-      **Accessories & Summons**
-      :reminder_ribbon: - Title  *Title enhancers are applied each turn, passively.*
-      :mechanical_arm: - Arm *Arm enhancers are applied passively throughout the duration of battle.*
-      🧬 - Summon *Summons use Active Enhancers that are available during battle after you Resolve*
-      
-      **Currency**
-      :coin: - Coins *Buy Items in the /shop and /trinketshop*
-      :gem: - Gems *Craft Universe Hearts and Souls*
-
-      IMPORTANT REMINDER! ⬇️
-      Use **/daily** to claim your **Daily Reward!**
-      **/tutorial** - Tutorial Battle
-      **/crown** - Read Game Manual
-      **/help** - Help Menu
-      **/enhancers** - Enhancer Help Menu
-      **/difficulty** - Change difficulty setting!
-      """), colour=0xe91e63)
-      embedVar.set_footer(text="Changing your Discord Account Name or Numbers will break your Crown Unlimited Account.")
-      await ctx.author.send(embed=embedVar)
-      await ctx.send(embed=embedVar)
+      await ctx.send(f"🆕 Registration Started!\n{ctx.author.mention}, prepare to select a starting universe.")
       vault = db.createVault(data.newVault({'OWNER': str(ctx.author), 'DID' : str(ctx.author.id)}))
       await asyncio.sleep(3)
-      await ctx.send(f"{ctx.author.mention}, prepare to select a starter universe.")
+      await ctx.send(f"{ctx.author.mention}, your starting universe will give you 🎴 cards and 🎗️ 🦾 accessories from that universe to get you started on your journey!")
       await asyncio.sleep(3)
 
       try:
@@ -927,6 +892,49 @@ async def register(ctx):
                                  icon_url="https://cdn.discordapp.com/emojis/877233426770583563.gif?v=1")
                      #await button_ctx.send(f"Nice choice {ctx.author.mention}!\n\nCreate your first **Build**!\n**/cards** Select your 🎴  Card\n**/titles** Select your 🎗️ Title\n**/arms** Select your 🦾  Arm\n\nOnce you're done, run **/tutorial** to begin the **Tutorial Battle**! ⚔️")
                      await button_ctx.send(embed=embedVar)
+                     await asyncio.sleep(3)
+
+                     embedVar = discord.Embed(title=f"**Welcome to Crown Unlimited**!", description=textwrap.dedent(f"""
+                     Welcome {ctx.author.mention}!                                                                                           
+                     
+                     Congrats on selecting your starting universe! **Now what?**
+                     Let's take a look at some of the basic information you need to get started below.
+
+                     **Card Basics**
+                     🀄 - **Card Tier** *1-7*
+                     :trident: - **Card Level** *1-500*
+                     :heart: - **Card Health** (HLT)
+                     :cyclone: - **Card Stamina** (ST)
+                     🗡️ - **Attack (ATK)** Blue Crystal 🟦
+                     🛡️ - **Defense (DEF)** Red Crystal 🟥
+                     :drop_of_blood: - Card Passive *Enhancers applied at the start of the battle*
+
+                     **Accessories & Summons**
+                     :reminder_ribbon: - **Title accessory**  *Title enhancers are applied each turn, passively.*
+                     :mechanical_arm: - **Arm accessory** *Arm enhancers are applied passively throughout the duration of battle.*
+                     🧬 - **Summon!** *Summons use Active Enhancers that are available during battle after you Resolve*
+                     
+                     **Currency**
+                     :coin: - **Coins** *Buy Items in the /shop and /trinketshop*
+                     :gem: - **Gems** *Craft Universe Hearts, Souls, Cards, and Destiny Lines!*
+
+                     **Let's get started playing the game!**
+                     **Step 1:** Use the /daily command right now for your daily reward!
+                     **Step 2:** Use /cards to open your list of cards and equip a card you just got!
+                     **Step 3:** Use /titles and equip one of the titles you just got!
+                     **Step 4:** Use /arms and equip one of the new arms you just got!
+                     **Step 5:** Use /tutorial to learn how to play through battle!
+
+                     If you need additional help! ⬇️
+                     **/crown** - Read Game Manual
+                     **/help** - Help Menu
+                     **/enhancers** - Enhancer Help Menu
+                     **/difficulty** - Change difficulty setting! You start on easy mode.
+                     """), colour=0xe91e63)
+                     embedVar.set_footer(text="Changing your Discord Account Name or Numbers will break your Crown Unlimited Account.")
+                     await ctx.author.send(embed=embedVar)
+                     await ctx.send(embed=embedVar)
+
                      self.stop = True
             except Exception as ex:
                trace = []
@@ -1473,7 +1481,7 @@ async def called_once_a_day():
    
    universe = [x for x in db.queryExploreUniverses()]
    universe_list_length = len(universe)
-   universe_selection = round(random.randint(0, int(universe_list_length)))
+   universe_selection = round(random.randint(1, int(universe_list_length)))
    selected_universe = universe[int(universe_selection)]
    universe_image = selected_universe['PATH']
    universe_name = selected_universe['TITLE']
@@ -1579,21 +1587,6 @@ async def daily(ctx):
 
 @bot.command()
 @commands.check(validate_user)
-async def updatestock(ctx, stock: int):
-   args = stock
-   if ctx.author.guild_permissions.administrator == True and args == 612232:
-      try:
-         c_resp = db.updateManyCards({"$set": {"STOCK": 100}})
-         t_resp = db.updateManyTitles({"$set": {"STOCK": 100}})
-         a_resp = db.updateManyArms({"$set": {"STOCK": 100}})
-         await ctx.send("Stock has been updated. ")
-      except Exception as e:
-         await ctx.send(f"Stock unable to be updated: {e}")
-   else:
-      print(m.ADMIN_ONLY_COMMAND)
-
-@bot.command()
-@commands.check(validate_user)
 async def servers(ctx):
    if ctx.author.guild_permissions.administrator == True:
       try:
@@ -1652,6 +1645,21 @@ async def gift(ctx, player: User, amount: int):
       await crown_utilities.curse(amount_plus_tax, ctx.author.id)
       await ctx.send(f":coin:{amount} has been gifted to {user2.mention}.")
       return
+
+@slash.slash(name="battlehistory", description="How much battle history do you want to see during battle? 2 - 6", guild_ids=guild_ids)
+async def battlehistory(ctx, history: int):
+   try:
+      allowed = [2,3,4,5,6]
+      if history not in allowed:
+         await ctx.send("You must enter a number between 2 and 6 only. Try again.")
+         return
+      user_query = {"DID": str(ctx.author.id)}
+      update_query = {"$set": {"BATTLE_HISTORY": history}}
+      db.updateUserNoFilter(user_query, update_query)
+      await ctx.send(f"You will now see up to {str(history)} history messages during battle.")
+   except Exception as e:
+      await ctx.send(e)
+
 
 
 @slash.slash(name="Donate", description="Donate money to Guild", guild_ids=guild_ids)
@@ -2974,7 +2982,7 @@ async def addfield(ctx, collection, new_field, field_type):
       if field_type == 'string':
          field_type = "EASY"
       elif field_type == 'int':
-         field_type = 1
+         field_type = 6
       elif field_type == 'list':
          field_type = []
       elif field_type == 'bool':

@@ -92,6 +92,7 @@ class Lookup(commands.Cog):
                 family = d['FAMILY']
                 titles = d['TITLE']
                 arm = d['ARM']
+                battle_history = d['BATTLE_HISTORY']
                 avatar = d['AVATAR']
                 matches = d['MATCHES']
                 tournament_wins = d['TOURNAMENT_WINS']
@@ -192,7 +193,8 @@ class Lookup(commands.Cog):
                 :flags: | **Association: **{guild}
                 :military_helmet: | **Guild: **{team} 
                 :family_mwgb: | **Family: **{family}
-
+                
+                ⚙️ **Battle History Setting** {str(battle_history)} messages
                 ⚙️ **Difficulty** {difficulty.lower().capitalize()}
                 """), colour=000000)
                 embed1.set_thumbnail(url=avatar)
