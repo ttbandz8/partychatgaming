@@ -51,13 +51,9 @@ class Lookup(commands.Cog):
                             option_type=3,
                             required=True,
                             choices=[
-                                # create_choice(
-                                #     name="Auto Battler",
-                                #     value="ATales"
-                                # ),
                                 create_choice(
                                     name="Lookup Player",
-                                    value="player"
+                                    value="user"
                                 ),
                                 create_choice(
                                     name="Lookup Guild",
@@ -88,8 +84,11 @@ class Lookup(commands.Cog):
                         ),
                     ]
         ,guild_ids=main.guild_ids)
-    async def lookup(self, ctx, selection, player: User, name: str):
-        if selection == "player":
+    async def lookup(self, ctx, selection, player: None, name: None):
+        print("Hello world")
+        print(player)
+        print(name)
+        if selection == "user":
             await player(self, ctx, player)
         if selection == "guild":
             await guild(self, ctx, name)
@@ -138,7 +137,8 @@ def guild_buff_toggle(player, team):
 
 
 async def player(self, ctx, player = None):
-    await ctx.defer()
+    print("Hello world")
+    # await ctx.defer()
     a_registered_player = await crown_utilities.player_check(ctx)
     if not a_registered_player:
         return
