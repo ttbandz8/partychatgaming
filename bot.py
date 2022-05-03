@@ -2336,265 +2336,6 @@ async def buffswap(ctx, player, team):
       }))
 
 
-
-@slash.slash(description="Purchase Boosts", guild_ids=guild_ids)
-@commands.check(validate_user)
-async def trinketshop(ctx):
-   user_query = {'DID': str(ctx.author.id)}
-   user = db.queryUser(user_query)
-   if user['LEVEL'] < 11:
-      await ctx.send(f"🔓 Unlock the Trinket Shop by completing Floor 10 of the 🌑 Abyss! Use /abyss to enter the abyss.")
-      return
-   patron_flag = user['PATRON']
-   current_arm = user['ARM']
-   storage_type = user['STORAGE_TYPE']
-   storage_pricing = (storage_type + 1) * 1500000
-   storage_pricing_text = f"{'{:,}'.format(storage_pricing)}" 
-   arm_info = db.queryArm({'ARM': str(current_arm)})
-   boss_arm = False
-   dungeon_arm = False
-   boss_message = "Nice Arm!"
-   durability_message = "100,000"
-   if arm_info['AVAILABLE'] == False and arm_info['EXCLUSIVE'] == False:
-      boss_arm = True
-   elif arm_info['AVAILABLE'] == True and arm_info['EXCLUSIVE'] == True:
-      dungeon_arm= True
-   if boss_arm:
-      boss_message = "Cannot Repair"
-      durability_message = "UNAVAILABLE"
-   elif dungeon_arm:
-      boss_message = "Dungeon eh?!"
-   vault = db.altQueryVault({'DID' : str(ctx.author.id)})
-   current_card = user['CARD']
-   has_gabes_purse = user['TOURNAMENT_WINS']
-   balance = vault['BALANCE']
-   icon = ":coin:"
-   if balance >= 1000000:
-      icon = ":money_with_wings:"
-   elif balance >=650000:
-      icon = ":moneybag:"
-   elif balance >= 150000:
-      icon = ":dollar:"
-   
-   owned_arms = []
-   current_durability = 0
-   for arms in vault['ARMS']:
-      if arms['ARM'] == current_arm:
-         current_durability = arms['DUR']
-      
-
-   sell_buttons = [
-         manage_components.create_button(
-            style=ButtonStyle.green,
-            label="🔋 1️⃣",
-            custom_id="1"
-         ),
-         manage_components.create_button(
-            style=ButtonStyle.blue,
-            label="🔋 2️⃣",
-            custom_id="2"
-         ),
-         manage_components.create_button(
-            style=ButtonStyle.red,
-            label="🔋 3️⃣",
-            custom_id="3"
-         ),
-         manage_components.create_button(
-            style=ButtonStyle.red,
-            label="⚒️ 4️⃣",
-            custom_id="5"
-         ),
-         manage_components.create_button(
-            style=ButtonStyle.grey,
-            label="Cancel",
-            custom_id="cancel"
-         )
-      ]
-   
-   util_sell_buttons = [
-         manage_components.create_button(
-            style=ButtonStyle.grey,
-            label="Gabe's Purse 👛",
-            custom_id="4"
-         ),
-         manage_components.create_button(
-            style=ButtonStyle.grey,
-            label="Storage 💼",
-            custom_id="6"
-         )
-   ]
-   sell_buttons_action_row = manage_components.create_actionrow(*sell_buttons)
-   util_sell_buttons_action_row = manage_components.create_actionrow(*util_sell_buttons)
-   embedVar = discord.Embed(title=f":tickets: | **Trinket Shop** - {icon}{'{:,}'.format(balance)} ", description=textwrap.dedent(f"""\
-   Welcome {ctx.author.mention}!
-   Purchase **Card XP** and **Arm Durability**!
-   🎴 Card:  **{current_card}**
-   🦾 Arm: **{current_arm}** *{boss_message}*
-   
-
-   🔋 1️⃣ **10 Levels** for :coin: **80,000**
-   
-   🔋 2️⃣ **30 Levels** for :dollar: **220,000**
-
-   🔋 3️⃣ **100 Levels** for :moneybag: **650,000**
-
-   ⚒️ 4️⃣ **50 Durability** for :dollar: **{durability_message}**
-
-   💼 **Storage Tier {str(storage_type + 1)}**: :money_with_wings: **{storage_pricing_text}**
-
-
-   Purchase **Gabe's Purse** to Keep ALL ITEMS when **Rebirthing**
-   *You will not be able to select a new starting universe!*
-
-   **Gabe's Purse** 👛 for :money_with_wings: **10,000,000**
-
-   What would you like to buy?
-   """), colour=0xf1c40f)
-   embedVar.set_footer(text="Boosts are used immediately upon purchase. Click cancel to exit purchase.", icon_url="https://cdn.discordapp.com/emojis/784402243519905792.gif?v=1")
-   msg = await ctx.send(embed=embedVar, components=[sell_buttons_action_row, util_sell_buttons_action_row])
-
-   def check(button_ctx):
-      return button_ctx.author == ctx.author
-
-   try:
-      button_ctx: ComponentContext = await manage_components.wait_for_component(bot, components=[sell_buttons_action_row, util_sell_buttons_action_row], timeout=120,check=check)
-      levels_gained = 0
-      price = 0
-      exp_boost_buttons = ["1", "2", "3"]
-      if button_ctx.custom_id == "1":
-         levels_gained = 10
-         price = 80000
-      if button_ctx.custom_id == "2":
-         levels_gained = 30
-         price = 220000
-      if button_ctx.custom_id == "3":
-         levels_gained = 100
-         price=650000
-      if button_ctx.custom_id == "5":
-         levels_gained = 50
-         price=100000
-
-
-      if button_ctx.custom_id == "cancel":
-         await msg.edit(components=[])
-         return
-
-      if button_ctx.custom_id in exp_boost_buttons:
-         if price > balance:
-            await button_ctx.send("You're too broke to buy. Get your money up.", hidden=True)
-            return
-
-         card_info = {}
-         for level in vault['CARD_LEVELS']:
-            if level['CARD'] == current_card:
-               card_info = level
-
-         lvl = card_info['LVL']
-         max_lvl = 200
-         if lvl >= max_lvl:
-            await button_ctx.send(f"**{current_card}** is already at max Trinket level. You may level up in /tales, but you can no longer purchase levels for this card.", hidden=True)
-            return
-
-         elif (levels_gained + lvl) > max_lvl:
-            levels_gained =  max_lvl - lvl
-
-
-         atk_def_buff = round(levels_gained / 2)
-         ap_buff = round(levels_gained / 3)
-         hlt_buff = (round(levels_gained / 20) * 25)
-
-         query = {'DID': str(ctx.author.id)}
-         update_query = {'$set': {'CARD_LEVELS.$[type].' + "EXP": 0}, '$inc': {'CARD_LEVELS.$[type].' + "LVL": levels_gained, 'CARD_LEVELS.$[type].' + "ATK": atk_def_buff, 'CARD_LEVELS.$[type].' + "DEF": atk_def_buff, 'CARD_LEVELS.$[type].' + "AP": ap_buff, 'CARD_LEVELS.$[type].' + "HLT": hlt_buff}}
-         filter_query = [{'type.'+ "CARD": str(current_card)}]
-         response = db.updateVault(query, update_query, filter_query)
-         await crown_utilities.curse(price, str(ctx.author.id))
-         await button_ctx.send(f"**{str(current_card)}** gained {levels_gained} levels!")
-
-         if button_ctx.custom_id == "cancel":
-            await button_ctx.send("Sell ended.", hidden=True)
-            return
-
-      if button_ctx.custom_id == "4":
-         price = 10000000
-         if price > balance:
-            await button_ctx.send("Insufficent funds.", hidden=True)
-            return
-         if has_gabes_purse:
-            await button_ctx.send("You already own Gabes Purse. You cannot purchase more than one.", hidden=True)
-            return
-         else:
-            update = db.updateUserNoFilterAlt(user_query, {'$set': {'TOURNAMENT_WINS': 1}})
-            await crown_utilities.curse(10000000, str(ctx.author.id))
-            await button_ctx.send("Gabe's Purse has been purchased!")
-            return
-      
-      if button_ctx.custom_id == "5":
-         if boss_arm:
-            await button_ctx.send("Sorry I can't repair **Boss** Arms ...", hidden=True)
-            return
-         if price > balance:
-            await button_ctx.send("Insufficent funds.", hidden=True)
-            return
-         if current_durability >= 100:
-            await button_ctx.send(f"🦾 {current_arm} is already at Max Durability. ⚒️",hidden=True)
-            return
-         else:
-            try:
-               new_durability = current_durability + levels_gained
-               if new_durability > 100:
-                  levels_gained = 100 - current_durability
-               query = {'DID': str(ctx.author.id)}
-               update_query = {'$inc': {'ARMS.$[type].' + 'DUR': levels_gained}}
-               filter_query = [{'type.' + "ARM": str(current_arm)}]
-               resp = db.updateVault(query, update_query, filter_query)
-
-               await crown_utilities.curse(price, str(ctx.author.id))
-               await button_ctx.send(f"{current_arm}'s ⚒️ durability has increased by **{levels_gained}**!")
-               return
-            except:
-               await ctx.send("Failed to purchase durability boost.", hidden=True)
-
-      if button_ctx.custom_id == "6":
-         if storage_pricing > balance:
-            await button_ctx.send("Insufficent funds.", hidden=True)
-            await msg.edit(components=[])
-            return
-            
-         if not patron_flag and storage_type >= 2:
-            await button_ctx.send("Only Patrons may purchase more than 30 additional storage. To become a Patron, visit https://www.patreon.com/partychatgaming?fan_landing=true.", hidden=True)
-            await msg.edit(components=[])
-            return
-            
-         if storage_type == 10:
-            await button_ctx.send("You already have max storage.")
-            await msg.edit(components=[])
-            return
-            
-         else:
-            update = db.updateUserNoFilterAlt(user_query, {'$inc': {'STORAGE_TYPE': 1}})
-            await crown_utilities.curse(storage_pricing, str(ctx.author.id))
-            await button_ctx.send(f"Storage Tier {str(storage_type + 1)} has been purchased!")
-            await msg.edit(components=[])
-            return
-
-   except Exception as ex:
-      trace = []
-      tb = ex.__traceback__
-      while tb is not None:
-         trace.append({
-            "filename": tb.tb_frame.f_code.co_filename,
-            "name": tb.tb_frame.f_code.co_name,
-            "lineno": tb.tb_lineno
-         })
-         tb = tb.tb_next
-      print(str({
-         'type': type(ex).__name__,
-         'message': str(ex),
-         'trace': trace
-      }))
-      await ctx.send("Trinket Shop closed unexpectedly. Seek support.", hidden=True)
-
-
 @slash.slash(name="Bounty", description="Set Association Bounty", guild_ids=guild_ids)
 @commands.check(validate_user)
 async def bounty(ctx, amount):
@@ -3407,78 +3148,78 @@ async def addfield(ctx, collection, new_field, field_type):
 #         }))
 #         pass
 
-@slash.slash(name="Menu", description="Menu Options for things to do", guild_ids=guild_ids)
-@commands.check(validate_user)
-async def menu(ctx):
-   try:
-      response = db.queryAllMenu()
-      profile, story, pvp, objectives = "", "", "", ""
-      for menu in response:
-         if menu['NAME'] == "Profile":
-            profile = menu['PATH']
-         if menu['NAME'] == "Story":
-            story = menu['PATH']
-         if menu['NAME'] == "PVP":
-            pvp = menu['PATH']
-         if menu['NAME'] == "Objectives":
-            objectives = menu['PATH']
+# @slash.slash(name="Menu", description="Menu Options for things to do", guild_ids=guild_ids)
+# @commands.check(validate_user)
+# async def menu(ctx):
+#    try:
+#       response = db.queryAllMenu()
+#       profile, story, pvp, objectives = "", "", "", ""
+#       for menu in response:
+#          if menu['NAME'] == "Profile":
+#             profile = menu['PATH']
+#          if menu['NAME'] == "Story":
+#             story = menu['PATH']
+#          if menu['NAME'] == "PVP":
+#             pvp = menu['PATH']
+#          if menu['NAME'] == "Objectives":
+#             objectives = menu['PATH']
 
-      embedVar1 = discord.Embed(title= f"Story Mode", description="Journey through Universes to defeat powerful foes to unlock vast new worlds, tough boss fights, and new possibilities! Click arrow below to go to the next page!", colour=0x7289da)
-      embedVar1.set_image(url=story)
-      embedVar1.set_footer(text=f"use /crown for additional assistance")
+#       embedVar1 = discord.Embed(title= f"Story Mode", description="Journey through Universes to defeat powerful foes to unlock vast new worlds, tough boss fights, and new possibilities! Click arrow below to go to the next page!", colour=0x7289da)
+#       embedVar1.set_image(url=story)
+#       embedVar1.set_footer(text=f"use /crown for additional assistance")
 
-      embedVar2 = discord.Embed(title= f"Profile Menu", description="View and Edit your Cards, Titles, Arms, and Summons to craft new Builds and strategies.", colour=0x7289da)
-      embedVar2.set_image(url=profile)
-      # embedVar2.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
-      embedVar2.set_footer(text=f"use /crown for additional assistance")
+#       embedVar2 = discord.Embed(title= f"Profile Menu", description="View and Edit your Cards, Titles, Arms, and Summons to craft new Builds and strategies.", colour=0x7289da)
+#       embedVar2.set_image(url=profile)
+#       # embedVar2.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
+#       embedVar2.set_footer(text=f"use /crown for additional assistance")
 
-      embedVar3 = discord.Embed(title= f"PVP Mode", description="Face off against friend or foe!", colour=0x7289da)
-      embedVar3.set_image(url=pvp)
-      # embedVar3.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
-      embedVar3.set_footer(text=f"use /crown for additional assistance")
+#       embedVar3 = discord.Embed(title= f"PVP Mode", description="Face off against friend or foe!", colour=0x7289da)
+#       embedVar3.set_image(url=pvp)
+#       # embedVar3.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
+#       embedVar3.set_footer(text=f"use /crown for additional assistance")
 
-      embedVar4 = discord.Embed(title= f"TIPS", description="5 Primary Objectives of Crown Unlimited.", colour=0x7289da)
-      embedVar4.set_image(url=objectives)
-      # embedVar4.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
-      embedVar4.set_footer(text=f"use /crown for additional assistance")
+#       embedVar4 = discord.Embed(title= f"TIPS", description="5 Primary Objectives of Crown Unlimited.", colour=0x7289da)
+#       embedVar4.set_image(url=objectives)
+#       # embedVar4.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
+#       embedVar4.set_footer(text=f"use /crown for additional assistance")
 
-      paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
-      paginator.add_reaction('⏮️', "first")
-      paginator.add_reaction('⬅️', "back")
-      paginator.add_reaction('🔒', "lock")
-      paginator.add_reaction('➡️', "next")
-      paginator.add_reaction('⏭️', "last")
-      embeds = [embedVar1, embedVar3,embedVar2, embedVar4]
-      await paginator.run(embeds)
+#       paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+#       paginator.add_reaction('⏮️', "first")
+#       paginator.add_reaction('⬅️', "back")
+#       paginator.add_reaction('🔒', "lock")
+#       paginator.add_reaction('➡️', "next")
+#       paginator.add_reaction('⏭️', "last")
+#       embeds = [embedVar1, embedVar3,embedVar2, embedVar4]
+#       await paginator.run(embeds)
 
-   except Exception as e:
-      await ctx.send(f"Error has occurred: {e}")
-Crest_dict = {'Unbound': ':ideograph_advantage:',
-              'My Hero Academia': ':sparkle:',
-              'League Of Legends': ':u6307:',
-              'Kanto Region': ':chart:',
-              'Naruto': ':u7121:',
-              'Bleach': ':u6709:',
-              'God Of War': ':u7533:',
-              'Chainsawman': ':accept:',
-              'One Punch Man': ':u55b6:',
-              'Johto Region': ':u6708:',
-              'Black Clover': ':ophiuchus:',
-              'Demon Slayer': ':aries:',
-              'Attack On Titan': ':taurus:',
-              '7ds': ':capricorn:',
-              'Hoenn Region': ':leo:',
-              'Digimon': ':cancer:',
-              'Fate': ':u6e80:',
-              'Solo Leveling': ':u5408:',
-              'Souls': ':sos:',
-              'Dragon Ball Z': ':u5272:',
-              'Sinnoh Region': ':u7981:',
-              'Death Note': ':white_flower:',
-              'Crown Rift Awakening': ':u7a7a:',
-              'Crown Rift Slayers': ':sa:',
-              'Crown Rift Madness': ':m:',
-              'Persona': ':o:'}
+#    except Exception as e:
+#       await ctx.send(f"Error has occurred: {e}")
+# Crest_dict = {'Unbound': ':ideograph_advantage:',
+#               'My Hero Academia': ':sparkle:',
+#               'League Of Legends': ':u6307:',
+#               'Kanto Region': ':chart:',
+#               'Naruto': ':u7121:',
+#               'Bleach': ':u6709:',
+#               'God Of War': ':u7533:',
+#               'Chainsawman': ':accept:',
+#               'One Punch Man': ':u55b6:',
+#               'Johto Region': ':u6708:',
+#               'Black Clover': ':ophiuchus:',
+#               'Demon Slayer': ':aries:',
+#               'Attack On Titan': ':taurus:',
+#               '7ds': ':capricorn:',
+#               'Hoenn Region': ':leo:',
+#               'Digimon': ':cancer:',
+#               'Fate': ':u6e80:',
+#               'Solo Leveling': ':u5408:',
+#               'Souls': ':sos:',
+#               'Dragon Ball Z': ':u5272:',
+#               'Sinnoh Region': ':u7981:',
+#               'Death Note': ':white_flower:',
+#               'Crown Rift Awakening': ':u7a7a:',
+#               'Crown Rift Slayers': ':sa:',
+#               'Crown Rift Madness': ':m:',
+#               'Persona': ':o:'}
 
 
 if config('ENV') == "production":

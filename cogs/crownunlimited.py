@@ -40,10 +40,8 @@ import destiny as d
 class CrownUnlimited(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self._cd = commands.CooldownMapping.from_cooldown(1, 3000,
-                                                          commands.BucketType.member)  # Change accordingly. Currently every 8 minutes (3600 seconds == 60 minutes)
-        self._lvl_cd = commands.CooldownMapping.from_cooldown(1, 600,
-                                                          commands.BucketType.member)
+        self._cd = commands.CooldownMapping.from_cooldown(1, 3000, commands.BucketType.member)  # Change accordingly. Currently every 8 minutes (3600 seconds == 60 minutes)
+        self._lvl_cd = commands.CooldownMapping.from_cooldown(1, 600, commands.BucketType.member)
     co_op_modes = ['CTales', 'DTales', 'CDungeon', 'DDungeon']
     ai_co_op_modes = ['DTales', 'DDungeon']
     U_modes = ['ATales', 'Tales', 'CTales', 'DTales']
@@ -1946,71 +1944,6 @@ class CrownUnlimited(commands.Cog):
         paginator.add_reaction('⏭️', "last")
         embeds = embed_list
         await paginator.run(embeds)
-
-
-    @cog_ext.cog_slash(description="View Gems", guild_ids=main.guild_ids)
-    async def gems(self, ctx: SlashContext):
-        a_registered_player = await crown_utilities.player_check(ctx)
-        if not a_registered_player:
-            return
-
-
-        vault = db.queryVault({'DID': str(ctx.author.id)})
-        current_gems = vault['GEMS']
-        if current_gems:
-            number_of_gems_universes = len(current_gems)
-
-            gem_details = []
-            for gd in current_gems:
-                heart = ""
-                soul = ""
-                if gd['UNIVERSE_HEART']:
-                    heart = "💟"
-                else:
-                    heart = "💔"
-
-                if gd['UNIVERSE_SOUL']:
-                    soul = "🌹"
-                else:
-                    soul = "🥀"
-
-                gem_details.append(
-                    f"🌍 **{gd['UNIVERSE']}**\n💎 {'{:,}'.format(gd['GEMS'])}\nUniverse Heart {heart}\nUniverse Soul {soul}\n")
-
-            # Adding to array until divisible by 10
-            while len(gem_details) % 10 != 0:
-                gem_details.append("")
-            # Check if divisible by 10, then start to split evenly
-
-            if len(gem_details) % 10 == 0:
-                first_digit = int(str(len(gem_details))[:1])
-                if len(gem_details) >= 89:
-                    if first_digit == 1:
-                        first_digit = 10
-                gems_broken_up = np.array_split(gem_details, first_digit)
-
-            # If it's not an array greater than 10, show paginationless embed
-            if len(gem_details) < 10:
-                embedVar = discord.Embed(title=f"Gems", description="\n".join(gem_details),
-                                        colour=0x7289da)
-                await ctx.send(embed=embedVar)
-
-            embed_list = []
-            for i in range(0, len(gems_broken_up)):
-                globals()['embedVar%s' % i] = discord.Embed(title=f"Gems",
-                                                            description="\n".join(gems_broken_up[i]), colour=0x7289da)
-                embed_list.append(globals()['embedVar%s' % i])
-
-            paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
-            paginator.add_reaction('⏮️', "first")
-            paginator.add_reaction('⬅️', "back")
-            paginator.add_reaction('🔐', "lock")
-            paginator.add_reaction('➡️', "next")
-            paginator.add_reaction('⏭️', "last")
-            embeds = embed_list
-            await paginator.run(embeds)
-        else:
-            await ctx.send("You currently own no 💎.")
 
 
     @cog_ext.cog_slash(description="View all Summons of a Universe you unlocked", guild_ids=main.guild_ids)
