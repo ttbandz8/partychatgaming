@@ -17,12 +17,12 @@ from PIL import Image, ImageFont, ImageDraw
 import requests
 import random
 from .crownunlimited import showcard, cardback, enhancer_mapping, enhancer_suffix_mapping, passive_enhancer_suffix_mapping
+from discord_slash.utils.manage_commands import create_option, create_choice
 from discord_slash import cog_ext, SlashContext
 from discord_slash import SlashCommand
 from discord_slash.utils import manage_components
 from discord_slash.model import ButtonStyle
 from dinteractions_Paginator import Paginator
-from discord_slash.utils.manage_commands import create_option, create_choice
 
 
 
@@ -32,7 +32,7 @@ class Views(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print('Cards Cog is ready!')
+        print('Views Cog is ready!')
 
     async def cog_check(self, ctx):
         return await main.validate_user(ctx)
@@ -105,8 +105,7 @@ class Views(commands.Cog):
                                 ),
                             ]
                         )
-                    ]
-        , guild_ids=main.guild_ids)
+                    ], guild_ids=main.guild_ids)
     async def quickview(self, ctx, selection, name):
         if selection == "cards":
             await viewcard(self, ctx, name)
@@ -122,7 +121,6 @@ class Views(commands.Cog):
             await viewhall(self, ctx, name)
         if selection == "house":
             await viewhouse(self, ctx, name)
-
 
 
 def setup(bot):
