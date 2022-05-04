@@ -438,18 +438,18 @@ class CrownUnlimited(commands.Cog):
                                required=True,
                                choices=[
                                    create_choice(
-                                       name="Duo Tales (Normal)",
+                                       name="⚔️ Duo Tales (Normal)",
                                        value="DTales"
                                    ),
                                    create_choice(
-                                       name="Duo Dungeon (Hard)",
+                                       name="🔥 Duo Dungeon (Hard)",
                                        value="DDungeon"
                                    )
                                ]
                            )
                        ]
         , guild_ids=main.guild_ids)
-    async def duo(self, ctx: SlashContext, deck: int, mode: str):
+    async def duopve(self, ctx: SlashContext, deck: int, mode: str):
         a_registered_player = await crown_utilities.player_check(ctx)
         if not a_registered_player:
             return
@@ -540,22 +540,22 @@ class CrownUnlimited(commands.Cog):
                                required=True,
                                choices=[
                                    create_choice(
-                                       name="Co-Op Tales (Normal)",
+                                       name="⚔️ Co-Op Tales (Normal)",
                                        value="CTales"
                                    ),
                                    create_choice(
-                                       name="Co-Op Dungeon (Hard)",
+                                       name="🔥 Co-Op Dungeon (Hard)",
                                        value="CDungeon"
                                    ),
                                    create_choice(
-                                       name="Co-Op Boss (Extreme)",
+                                       name="👹 Co-Op Boss Enounter (Extreme)",
                                        value="CBoss"
                                    ),
                                ]
                            )
                        ]
         , guild_ids=main.guild_ids)
-    async def coop(self, ctx: SlashContext, user: User, mode: str):
+    async def cooppve(self, ctx: SlashContext, user: User, mode: str):
         a_registered_player = await crown_utilities.player_check(ctx)
         if not a_registered_player:
             return
@@ -1072,26 +1072,32 @@ class CrownUnlimited(commands.Cog):
                                 #     value="ATales"
                                 # ),
                                 create_choice(
-                                    name="Tales (Normal)",
+                                    name="🌑 The Abyss! *climb the ladder*",
+                                    value="Abyss"
+                                ),
+                                create_choice(
+                                    name="⚔️ Tales! *normal pve*",
                                     value="Tales"
                                 ),
                                 create_choice(
-                                    name="Dungeon (Hard)",
+                                    name="🔥 Dungeon! *extreme pve*",
                                     value="Dungeon"
                                 ),
                                 create_choice(
-                                    name="Boss Battle (Extreme)",
+                                    name="👹 Boss Encounter! *impossible pve*",
                                     value="Boss"
                                 ),
                             ]
                         )
                     ]
         , guild_ids=main.guild_ids)
-    async def tales(self, ctx: SlashContext, mode: str):
+    async def pve(self, ctx: SlashContext, mode: str):
         a_registered_player = await crown_utilities.player_check(ctx)
         if not a_registered_player:
             return
-
+        if mode == "Abyss":
+            await abyss(self, ctx)
+            return
         U_modes = ['ATales', 'Tales', 'CTales', 'DTales', 'tales']
         D_modes = ['CDungeon', 'DDungeon', 'Dungeon', 'ADungeon', 'dungeon']
         B_MODES = ['Boss', 'CBoss', 'boss']
@@ -1172,207 +1178,8 @@ class CrownUnlimited(commands.Cog):
             return
 
 
-    @cog_ext.cog_slash(description="Enter the Abyss", guild_ids=main.guild_ids)
-    async def abyss(self, ctx: SlashContext):
-        await ctx.defer()
-        a_registered_player = await crown_utilities.player_check(ctx)
-        if not a_registered_player:
-            return
-
-
-        private_channel = ctx
-        mode = "ABYSS"
-        if isinstance(private_channel.channel, discord.channel.DMChannel):
-            await private_channel.send(m.SERVER_FUNCTION_ONLY)
-            return
-
-        try:
-            sowner = db.queryUser({'DID': str(ctx.author.id)})
-            if sowner['DIFFICULTY'] == "EASY":
-                await ctx.send("The Abyss is unavailable on Easy Mode! Use /difficulty to change your difficulty setting.")
-                return
-
-            vault = db.altQueryVault({'DID': str(ctx.author.id)})
-            maxed_out_messages = []
-            bad_message = ""
-                 
-            oteam = sowner['TEAM']
-            ofam = sowner['FAMILY']
-            oguild = "PCG"
-
-            checks = db.queryCard({'NAME': sowner['CARD']})
-            abyss = db.queryAbyss({'FLOOR': sowner['LEVEL']})
-
-            if not abyss:
-                await ctx.send("The **Abyss** has shifted. More floors will be available soon.")
-                return
-
-
-            if abyss['FLOOR'] in abyss_floor_reward_list:
-                current_titles = vault['TITLES']
-                if len(current_titles) >=25:
-                    maxed_out_messages.append("You have max amount of Titles. You won't be able to earn the **Floor Title**.")
-
-                current_arms = []
-                for arm in vault['ARMS']:
-                    current_arms.append(arm['ARM'])
-                    if len(current_arms) >=25:
-                        maxed_out_messages.append("You have max amount of Arms. You won't be able to earn the **Floor Arm**.")
-
-                current_cards = vault['CARDS']
-                if len(current_cards) >= 25:
-                    maxed_out_messages.append("You have max amount of Cards. You won't be able to earn the **Floor Card**.")
-
-                if maxed_out_messages:
-                    bad_message = "\n".join(maxed_out_messages)
-
-            enemies = abyss['ENEMIES']
-            level = int(abyss['SPECIAL_BUFF'])
-            floor = abyss['FLOOR']
-            card_to_earn = enemies[-1] 
-            title = abyss['TITLE']
-            arm = abyss['ARM']
-            abyss_pet = abyss['PET']
-            banned_cards = abyss['BANNED_CARDS']
-            banned_titles = abyss['BANNED_TITLES']
-            banned_arms = abyss['BANNED_ARMS']
-            banned_universes = abyss['BANNED_UNIVERSES']
-            banned_pets = abyss['BANNED_PETS']
-            banned_card_tiers = abyss['BANNED_TIERS']
-
-            # Convert tiers into strings from ints
-            tier_conversion = [str(tier) for tier in banned_card_tiers]
-            
-            abyss_buttons = [
-                manage_components.create_button(
-                    style=ButtonStyle.blue,
-                    label="Begin",
-                    custom_id="Yes"
-                ),
-                manage_components.create_button(
-                    style=ButtonStyle.red,
-                    label="Quit",
-                    custom_id="No"
-                )
-            ]
-
-            abyss_buttons_action_row = manage_components.create_actionrow(*abyss_buttons)
-
-            if abyss['FLOOR'] in abyss_floor_reward_list:
-                unlockable_message = f"⭐ Drops on this Floor\nUnlockable Card: **{card_to_earn}**\nUnlockable Title: **{title}**\nUnlockable Arm: **{arm}**\n"
-            else:
-                unlockable_message = ""
-
-            embedVar = discord.Embed(title=f":new_moon: Abyss Floor {floor}  ⚔️{len(enemies)}", description=textwrap.dedent(f"""
-            {unlockable_message}
-            {bad_message}
-            """))
-            embedVar.set_footer(text="Each floor must be completed all the way through to advance to the next floor.")
-            if banned_cards:
-                embedVar.add_field(name=":flower_playing_cards: Banned Cards", value="\n".join(banned_cards),
-                                inline=True)
-            if banned_titles:
-                embedVar.add_field(name=":reminder_ribbon: Banned Titles", value="\n".join(banned_titles), inline=True)         
-            if banned_arms:
-                embedVar.add_field(name="🦾 Banned Arms", value="\n".join(banned_arms), inline=True)           
-            if banned_pets:
-                embedVar.add_field(name="🧬 Banned Summons", value="\n".join(banned_pets))
-            if banned_universes:
-                embedVar.add_field(name=":ringed_planet: Banned Universes", value="\n".join(banned_universes),
-                                inline=True)
-            if banned_card_tiers:
-                embedVar.add_field(name="🀄 Banned Card Tiers", value="\n".join(tier_conversion),
-                                inline=True)
-
-            msg = await private_channel.send(embed=embedVar, components=[abyss_buttons_action_row])
-
-            def check(button_ctx):
-                return button_ctx.author == ctx.author
-
-            try:
-                button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[
-                    abyss_buttons_action_row, abyss_buttons], timeout=120, check=check)
-
-                if button_ctx.custom_id == "Yes":
-                    await button_ctx.defer(ignore=True)
-                    await msg.edit(components=[])
-                    if sowner['CARD'] in banned_cards:
-                        await private_channel.send(
-                            f":x: **{sowner['CARD']}** is banned on floor {floor}. Use another card.")
-                        return
-                    if sowner['TITLE'] in banned_titles:
-                        await private_channel.send(
-                            f":x: **{sowner['TITLE']}** is banned on floor {floor}. Use another title.")
-                        return
-                    if sowner['ARM'] in banned_arms:
-                        await private_channel.send(
-                            f":x: **{sowner['ARM']}** is banned on floor {floor}. Use another arm.")
-                        return
-                    if sowner['PET'] in banned_pets:
-                        await private_channel.send(
-                            f":x: **{sowner['PET']}** is banned on floor {floor}. Use another pet.")
-                        return
-                    if checks['UNIVERSE'] in banned_universes:
-                        await private_channel.send(
-                            f":x: **{checks['UNIVERSE']}** cards are banned on floor {floor}. Use another card.")
-                        return
-                    
-                    if str(checks['TIER']) in tier_conversion:
-                        await private_channel.send(
-                            f":x: Tier **{str(checks['TIER'])}** cards are banned on floor {floor}. Use another card.")
-                        return
-                    await battle_commands(self, ctx, mode, abyss, None, None, oguild, None, None, sowner, oteam, ofam, 0, None, None, None, level, None, None, None, None)
-                    
-                elif button_ctx.custom_id == "No":
-                    await button_ctx.send("Leaving the Abyss...")
-                    await msg.edit(components=[])
-                    return
-                else:
-                    await button_ctx.send("Leaving the Abyss...")
-                    await msg.edit(components=[])
-                    return
-            except Exception as ex:
-                trace = []
-                tb = ex.__traceback__
-                while tb is not None:
-                    trace.append({
-                        "filename": tb.tb_frame.f_code.co_filename,
-                        "name": tb.tb_frame.f_code.co_name,
-                        "lineno": tb.tb_lineno
-                    })
-                    tb = tb.tb_next
-                print(str({
-                    'type': type(ex).__name__,
-                    'message': str(ex),
-                    'trace': trace
-                }))
-                guild = self.bot.get_guild(main.guild_id)
-                channel = guild.get_channel(main.guild_channel)
-                await channel.send(f"'PLAYER': **{str(ctx.author)}**, 'GUILD': **{str(ctx.author.guild)}**,  TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
-                return
-        except Exception as ex:
-            trace = []
-            tb = ex.__traceback__
-            while tb is not None:
-                trace.append({
-                    "filename": tb.tb_frame.f_code.co_filename,
-                    "name": tb.tb_frame.f_code.co_name,
-                    "lineno": tb.tb_lineno
-                })
-                tb = tb.tb_next
-            print(str({
-                'type': type(ex).__name__,
-                'message': str(ex),
-                'trace': trace
-            }))
-            guild = self.bot.get_guild(main.guild_id)
-            channel = guild.get_channel(main.guild_channel)
-            await channel.send(f"'PLAYER': **{str(ctx.author)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
-            return
-    
-
     @cog_ext.cog_slash(description="PvP Battle", guild_ids=main.guild_ids)
-    async def battle(self, ctx: SlashContext, player: User):
+    async def pvp(self, ctx: SlashContext, player: User):
         try:
             await ctx.defer()
             a_registered_player = await crown_utilities.player_check(ctx)
@@ -1643,385 +1450,55 @@ class CrownUnlimited(commands.Cog):
             return
 
 
-    @cog_ext.cog_slash(description="View all Cards of a Universe you unlocked", guild_ids=main.guild_ids)
-    async def cardlist(self, ctx: SlashContext, universe: str):
-        a_registered_player = await crown_utilities.player_check(ctx)
-        if not a_registered_player:
-            return
-
-        universe_data = db.queryUniverse({'TITLE': {"$regex": str(universe), "$options": "i"}})
-        user = db.queryUser({'DID': str(ctx.author.id)})
-        list_of_cards = db.queryAllCardsBasedOnUniverse({'UNIVERSE': {"$regex": str(universe), "$options": "i"}})
-        cards = [x for x in list_of_cards]
-        dungeon_card_details = []
-        tales_card_details = []
-        destiny_card_details = []
-        for card in cards:
-            available = ""
-            is_skin = ""
-            if card['AVAILABLE'] and card['EXCLUSIVE']:
-                available = ":purple_circle:"
-            elif card['AVAILABLE'] and not card['HAS_COLLECTION']:
-                available = ":green_circle:"
-            elif card['HAS_COLLECTION']:
-                available = ":blue_circle:"
-            else:
-                available = "🟠"
-            if card['IS_SKIN']:
-                is_skin = ":white_circle:"
-            if card['EXCLUSIVE'] and not card['HAS_COLLECTION']:
-                dungeon_card_details.append(
-                    f"{is_skin}{available}  :mahjong: {card['TIER']} **{card['NAME']}**\n:heart: {card['HLT']} :dagger: {card['ATK']}  🛡️ {card['DEF']}\n")
-            elif not card['HAS_COLLECTION']:
-                tales_card_details.append(
-                    f"{is_skin}{available} :mahjong: {card['TIER']} **{card['NAME']}**\n:heart: {card['HLT']} :dagger: {card['ATK']}  🛡️ {card['DEF']}\n")
-            elif card['HAS_COLLECTION']:
-                destiny_card_details.append(
-                    f"{is_skin}{available} :mahjong: {card['TIER']} **{card['NAME']}**\n:heart: {card['HLT']} :dagger: {card['ATK']}  🛡️ {card['DEF']}\n")
-
-        all_cards = []
-        if tales_card_details:
-            for t in tales_card_details:
-                all_cards.append(t)
-
-        if dungeon_card_details:
-            for d in dungeon_card_details:
-                all_cards.append(d)
-
-        if destiny_card_details:
-            for de in destiny_card_details:
-                all_cards.append(de)
-
-        total_cards = len(all_cards)
-
-        # Adding to array until divisible by 10
-        while len(all_cards) % 10 != 0:
-            all_cards.append("")
-        # Check if divisible by 10, then start to split evenly
-
-        if len(all_cards) % 10 == 0:
-            first_digit = int(str(len(all_cards))[:1])
-            if len(all_cards) >= 89:
-                if first_digit == 1:
-                    first_digit = 10
-            # first_digit = 10
-            cards_broken_up = np.array_split(all_cards, first_digit)
-
-        # If it's not an array greater than 10, show paginationless embed
-        if len(all_cards) < 10:
-            embedVar = discord.Embed(title=f"{universe} Card List", description="\n".join(all_cards), colour=0x7289da)
-            embedVar.set_footer(
-                text=f"{total_cards} Total Cards\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔵 Destiny Line\n🟠 Unavailable\n⚪ Skin")
-            await ctx.send(embed=embedVar)
-
-        embed_list = []
-        for i in range(0, len(cards_broken_up)):
-            globals()['embedVar%s' % i] = discord.Embed(
-                title=f":flower_playing_cards: {universe_data['TITLE']} Card List",
-                description="\n".join(cards_broken_up[i]), colour=0x7289da)
-            globals()['embedVar%s' % i].set_footer(
-                text=f"{total_cards} Total Cards\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔵 Destiny Line\n🟠 Unavailable\n⚪ Skin\n/viewcard 'Card Name' - View Card Details\n/destinies 'Universe Name' -View Destiny Lines")
-            embed_list.append(globals()['embedVar%s' % i])
-
-        paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
-        paginator.add_reaction('⏮️', "first")
-        paginator.add_reaction('⬅️', "back")
-        paginator.add_reaction('🔐', "lock")
-        paginator.add_reaction('➡️', "next")
-        paginator.add_reaction('⏭️', "last")
-        embeds = embed_list
-        await paginator.run(embeds)
-
-
-    @cog_ext.cog_slash(description="View all Titles of a Universe you unlocked", guild_ids=main.guild_ids)
-    async def titlelist(self, ctx: SlashContext, universe: str):
-        a_registered_player = await crown_utilities.player_check(ctx)
-        if not a_registered_player:
-            return
-
-
-        universe_data = db.queryUniverse({'TITLE': {"$regex": universe, "$options": "i"}})
-        user = db.queryUser({'DID': str(ctx.author.id)})
-        list_of_titles = db.queryAllTitlesBasedOnUniverses({'UNIVERSE': {"$regex": str(universe), "$options": "i"}})
-        titles = [x for x in list_of_titles]
-        dungeon_titles_details = []
-        tales_titles_details = []
-        for title in titles:
-            title_passive = title['ABILITIES'][0]
-            title_passive_type = list(title_passive.keys())[0]
-            title_passive_value = list(title_passive.values())[0]
-
-            available = ""
-            if title['AVAILABLE'] and title['EXCLUSIVE']:
-                available = ":purple_circle:"
-            elif title['AVAILABLE']:
-                available = ":green_circle:"
-            else:
-                available = ":red_circle:"
-            if title['EXCLUSIVE']:
-                dungeon_titles_details.append(
-                    f"{available} :reminder_ribbon: **{title['TITLE']}**\n**{title_passive_type}:** {title_passive_value}\n")
-            else:
-                tales_titles_details.append(
-                    f"{available} :reminder_ribbon: **{title['TITLE']}**\n**{title_passive_type}:** {title_passive_value}\n")
-
-        all_titles = []
-        if tales_titles_details:
-            for t in tales_titles_details:
-                all_titles.append(t)
-
-        if dungeon_titles_details:
-            for d in dungeon_titles_details:
-                all_titles.append(d)
-
-        total_titles = len(all_titles)
-
-        # Adding to array until divisible by 10
-        while len(all_titles) % 10 != 0:
-            all_titles.append("")
-        # Check if divisible by 10, then start to split evenly
-        if len(all_titles) % 10 == 0:
-            first_digit = int(str(len(all_titles))[:1])
-            if len(all_titles) >= 89:
-                if first_digit == 1:
-                    first_digit = 10
-            titles_broken_up = np.array_split(all_titles, first_digit)
-
-        # If it's not an array greater than 10, show paginationless embed
-        if len(all_titles) < 10:
-            embedVar = discord.Embed(title=f"{universe} Title List", description="\n".join(all_titles), colour=0x7289da)
-            # embedVar.set_thumbnail(url={universe_data['PATH']})
-            embedVar.set_footer(text=f"{total_titles} Total Titles\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔴 Boss Drop")
-            await ctx.send(embed=embedVar)
-
-        embed_list = []
-        for i in range(0, len(titles_broken_up)):
-            globals()['embedVar%s' % i] = discord.Embed(title=f":reminder_ribbon: {universe_data['TITLE']} Title List",
-                                                        description="\n".join(titles_broken_up[i]), colour=0x7289da)
-            # globals()['embedVar%s' % i].set_thumbnail(url={universe_data['PATH']})
-            globals()['embedVar%s' % i].set_footer(
-                text=f"{total_titles} Total Titles\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔴 Boss Drop\n/viewtitle 'Title Name' - View Title Details")
-            embed_list.append(globals()['embedVar%s' % i])
-
-        paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
-        paginator.add_reaction('⏮️', "first")
-        paginator.add_reaction('⬅️', "back")
-        paginator.add_reaction('🔐', "lock")
-        paginator.add_reaction('➡️', "next")
-        paginator.add_reaction('⏭️', "last")
-        embeds = embed_list
-        await paginator.run(embeds)
-
-
-    @cog_ext.cog_slash(description="View all Arms of a Universe you unlocked", guild_ids=main.guild_ids)
-    async def armlist(self, ctx: SlashContext, universe: str):
-        a_registered_player = await crown_utilities.player_check(ctx)
-        if not a_registered_player:
-            return
-
-
-        universe_data = db.queryUniverse({'TITLE': {"$regex": universe, "$options": "i"}})
-        user = db.queryUser({'DID': str(ctx.author.id)})
-        list_of_arms = db.queryAllArmsBasedOnUniverses({'UNIVERSE': {"$regex": str(universe), "$options": "i"}})
-        arms = [x for x in list_of_arms]
-        dungeon_arms_details = []
-        tales_arms_details = []
-        for arm in arms:
-            arm_passive = arm['ABILITIES'][0]
-            arm_passive_type = list(arm_passive.keys())[0]
-            arm_passive_value = list(arm_passive.values())[0]
-            available = ""
-            if arm['AVAILABLE'] and arm['EXCLUSIVE']:
-                available = ":purple_circle:"
-            elif arm['AVAILABLE']:
-                available = ":green_circle:"
-            else:
-                available = ":red_circle:"
-            if arm['EXCLUSIVE']:
-                dungeon_arms_details.append(
-                    f"{available} 🦾 **{arm['ARM']}**\n**{arm_passive_type}:** {arm_passive_value}\n")
-            else:
-                tales_arms_details.append(
-                    f"{available} 🦾 **{arm['ARM']}**\n**{arm_passive_type}:** {arm_passive_value}\n")
-
-        all_arms = []
-        if tales_arms_details:
-            for t in tales_arms_details:
-                all_arms.append(t)
-
-        if dungeon_arms_details:
-            for d in dungeon_arms_details:
-                all_arms.append(d)
-
-        total_arms = len(all_arms)
-        # Adding to array until divisible by 10
-        while len(all_arms) % 10 != 0:
-            all_arms.append("")
-        # Check if divisible by 10, then start to split evenly
-        if len(all_arms) % 10 == 0:
-            first_digit = int(str(len(all_arms))[:1])
-            if len(all_arms) >= 89:
-                if first_digit == 1:
-                    first_digit = 10
-            arms_broken_up = np.array_split(all_arms, first_digit)
-
-        # If it's not an array greater than 10, show paginationless embed
-        if len(all_arms) < 10:
-            embedVar = discord.Embed(title=f"{universe} Arms List", description="\n".join(all_arms), colour=0x7289da)
-            embedVar.set_footer(text=f"{total_arms} Total Arms\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔴 Boss Drop")
-            await ctx.send(embed=embedVar)
-
-        embed_list = []
-        for i in range(0, len(arms_broken_up)):
-            globals()['embedVar%s' % i] = discord.Embed(title=f"🦾 {universe_data['TITLE']} Arms List",
-                                                        description="\n".join(arms_broken_up[i]), colour=0x7289da)
-            globals()['embedVar%s' % i].set_footer(
-                text=f"{total_arms} Total Arms\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔴 Boss Drop\n/viewarm 'Arm Name' - View Arm Details")
-            embed_list.append(globals()['embedVar%s' % i])
-
-        paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
-        paginator.add_reaction('⏮️', "first")
-        paginator.add_reaction('⬅️', "back")
-        paginator.add_reaction('🔐', "lock")
-        paginator.add_reaction('➡️', "next")
-        paginator.add_reaction('⏭️', "last")
-        embeds = embed_list
-        await paginator.run(embeds)
-
-
-    @cog_ext.cog_slash(description="View all Destinies of a Universe you unlocked", guild_ids=main.guild_ids)
-    async def destinylist(self, ctx: SlashContext, universe: str):
-        a_registered_player = await crown_utilities.player_check(ctx)
-        if not a_registered_player:
-            return
-
-
-        universe_data = db.queryUniverse({'TITLE': {"$regex": universe, "$options": "i"}})
-        user = db.queryUser({'DID': str(ctx.author.id)})
-        destinies = []
-        for destiny in d.destiny:
-            if destiny["UNIVERSE"].upper() == universe.upper():
-                destinies.append(destiny)
-
-        destiny_details = []
-        for de in destinies:
-            destiny_details.append(
-                f":sparkles: **{de['NAME']}**\nDefeat {de['DEFEAT']} with {' '.join(de['USE_CARDS'])} {str(de['REQUIRED'])} times: Unlock **{de['EARN']}**\n")
-
-        total_destinies = len(destiny_details)
-
-        # Adding to array until divisible by 10
-        while len(destiny_details) % 10 != 0:
-            destiny_details.append("")
-        # Check if divisible by 10, then start to split evenly
-
-        if len(destiny_details) % 10 == 0:
-            first_digit = int(str(len(destiny_details))[:1])
-            if len(destiny_details) >= 89:
-                if first_digit == 1:
-                    first_digit = 10
-            destinies_broken_up = np.array_split(destiny_details, first_digit)
-
-        # If it's not an array greater than 10, show paginationless embed
-        if len(destiny_details) < 10:
-            embedVar = discord.Embed(title=f"{universe} Destiny List", description="\n".join(destiny_details),
-                                    colour=0x7289da)
-            globals()['embedVar%s' % i].set_footer(text=f"{total_destinies} Total Destiny Lines")
-            await ctx.send(embed=embedVar)
-
-        embed_list = []
-        for i in range(0, len(destinies_broken_up)):
-            globals()['embedVar%s' % i] = discord.Embed(title=f":rosette: {universe_data['TITLE']} Destiny List",
-                                                        description="\n".join(destinies_broken_up[i]), colour=0x7289da)
-            globals()['embedVar%s' % i].set_footer(text=f"{total_destinies} Total Destiny Lines")
-            embed_list.append(globals()['embedVar%s' % i])
-
-        paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
-        paginator.add_reaction('⏮️', "first")
-        paginator.add_reaction('⬅️', "back")
-        paginator.add_reaction('🔐', "lock")
-        paginator.add_reaction('➡️', "next")
-        paginator.add_reaction('⏭️', "last")
-        embeds = embed_list
-        await paginator.run(embeds)
-
-
-    @cog_ext.cog_slash(description="View all Summons of a Universe you unlocked", guild_ids=main.guild_ids)
-    async def summonlist(self, ctx: SlashContext, universe: str):
-        a_registered_player = await crown_utilities.player_check(ctx)
-        if not a_registered_player:
-            return
-
-
-        universe_data = db.queryUniverse({'TITLE': {"$regex": universe, "$options": "i"}})
-        user = db.queryUser({'DID': str(ctx.author.id)})
-        list_of_pets = db.queryAllPetsBasedOnUniverses({'UNIVERSE': {"$regex": str(universe), "$options": "i"}})
-        pets = [x for x in list_of_pets]
-        dungeon_pets_details = []
-        tales_pets_details = []
-        for pet in pets:
-            pet_ability = list(pet['ABILITIES'][0].keys())[0]
-            pet_ability_power = list(pet['ABILITIES'][0].values())[0]
-            pet_ability_type = list(pet['ABILITIES'][0].values())[1]
-            available = ""
-            if pet['AVAILABLE'] and pet['EXCLUSIVE']:
-                available = ":purple_circle:"
-            elif pet['AVAILABLE']:
-                available = ":green_circle:"
-            else:
-                available = ":red_circle:"
-            if pet['EXCLUSIVE']:
-                dungeon_pets_details.append(
-                    f"{available} 🧬 **{pet['PET']}**\n**{pet_ability}:** {pet_ability_power}\n**Type:** {pet_ability_type}\n")
-            else:
-                tales_pets_details.append(
-                    f"{available} 🧬 **{pet['PET']}**\n**{pet_ability}:** {pet_ability_power}\n**Type:** {pet_ability_type}\n")
-
-        all_pets = []
-        if tales_pets_details:
-            for t in tales_pets_details:
-                all_pets.append(t)
-
-        if dungeon_pets_details:
-            for d in dungeon_pets_details:
-                all_pets.append(d)
-
-        total_pets = len(all_pets)
-
-        # Adding to array until divisible by 10
-        while len(all_pets) % 10 != 0:
-            all_pets.append("")
-
-        # Check if divisible by 10, then start to split evenly
-        if len(all_pets) % 10 == 0:
-            first_digit = int(str(len(all_pets))[:1])
-            if len(all_pets) >= 89:
-                if first_digit == 1:
-                    first_digit = 10
-            pets_broken_up = np.array_split(all_pets, first_digit)
-
-        # If it's not an array greater than 10, show paginationless embed
-        if len(all_pets) < 10:
-            embedVar = discord.Embed(title=f"{universe} Summon List", description="\n".join(all_pets), colour=0x7289da)
-            embedVar.set_footer(text=f"{total_pets} Total Summons\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔴 Boss Drop")
-            await ctx.send(embed=embedVar)
-
-        embed_list = []
-        for i in range(0, len(pets_broken_up)):
-            globals()['embedVar%s' % i] = discord.Embed(title=f"🧬 {universe_data['TITLE']} Summon List",
-                                                        description="\n".join(pets_broken_up[i]), colour=0x7289da)
-            globals()['embedVar%s' % i].set_footer(
-                text=f"{total_pets} Total Summons\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔴 Boss Drop\n/viewsummon 'Summon Name' - View Summon Details")
-            embed_list.append(globals()['embedVar%s' % i])
-
-        paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
-        paginator.add_reaction('⏮️', "first")
-        paginator.add_reaction('⬅️', "back")
-        paginator.add_reaction('🔐', "lock")
-        paginator.add_reaction('➡️', "next")
-        paginator.add_reaction('⏭️', "last")
-        embeds = embed_list
-        await paginator.run(embeds)
+    @cog_ext.cog_slash(description="view all an universe has to offer",
+                       options=[
+                           create_option(
+                               name="universe_name",
+                               description="name of the universe you're searching for",
+                               option_type=3,
+                               required=True
+                           ),
+                           create_option(
+                               name="selection",
+                               description="what would you like to search for",
+                               option_type=3,
+                               required=True,
+                               choices=[
+                                create_choice(
+                                    name="🎴 View All Cards",
+                                    value="cards",
+                                ),
+                                create_choice(
+                                    name="🎗️ View All Titles",
+                                    value="titles",
+                                ),
+                                create_choice(
+                                    name="🦾 View All Arms",
+                                    value="arms",
+                                ),
+                                create_choice(
+                                    name="🧬 View All Summons",
+                                    value="summons",
+                                ),
+                                create_choice(
+                                    name="✨ View All Destiny Lines",
+                                    value="destinies",
+                                ),
+                               ]
+                           )
+                       ]
+        , guild_ids=main.guild_ids)
+    async def viewall(self, ctx, selection, universe_name):
+        if selection == "cards":
+            await cardlist(self, ctx, universe_name)
+        if selection == "titles":
+            await titlelist(self, ctx, universe_name)
+        if selection == "arms":
+            await armlist(self, ctx, universe_name)
+        if selection == "summons":
+            await summonlist(self, ctx, universe_name)
+        if selection == "destinies":
+            await destinylist(self, ctx, universe_name)
 
 
     @cog_ext.cog_slash(description="View all available Universes", guild_ids=main.guild_ids)
@@ -3699,6 +3176,583 @@ def cardback(d, max_health, health, max_stamina, stamina, resolved, arm, focused
 
 def setup(bot):
     bot.add_cog(CrownUnlimited(bot))
+
+
+
+async def abyss(self, ctx: SlashContext):
+    await ctx.defer()
+    a_registered_player = await crown_utilities.player_check(ctx)
+    if not a_registered_player:
+        return
+
+
+    private_channel = ctx
+    mode = "ABYSS"
+    if isinstance(private_channel.channel, discord.channel.DMChannel):
+        await private_channel.send(m.SERVER_FUNCTION_ONLY)
+        return
+
+    try:
+        sowner = db.queryUser({'DID': str(ctx.author.id)})
+        if sowner['DIFFICULTY'] == "EASY":
+            await ctx.send("The Abyss is unavailable on Easy Mode! Use /difficulty to change your difficulty setting.")
+            return
+
+        vault = db.altQueryVault({'DID': str(ctx.author.id)})
+        maxed_out_messages = []
+        bad_message = ""
+                
+        oteam = sowner['TEAM']
+        ofam = sowner['FAMILY']
+        oguild = "PCG"
+
+        checks = db.queryCard({'NAME': sowner['CARD']})
+        abyss = db.queryAbyss({'FLOOR': sowner['LEVEL']})
+
+        if not abyss:
+            await ctx.send("The **Abyss** has shifted. More floors will be available soon.")
+            return
+
+
+        if abyss['FLOOR'] in abyss_floor_reward_list:
+            current_titles = vault['TITLES']
+            if len(current_titles) >=25:
+                maxed_out_messages.append("You have max amount of Titles. You won't be able to earn the **Floor Title**.")
+
+            current_arms = []
+            for arm in vault['ARMS']:
+                current_arms.append(arm['ARM'])
+                if len(current_arms) >=25:
+                    maxed_out_messages.append("You have max amount of Arms. You won't be able to earn the **Floor Arm**.")
+
+            current_cards = vault['CARDS']
+            if len(current_cards) >= 25:
+                maxed_out_messages.append("You have max amount of Cards. You won't be able to earn the **Floor Card**.")
+
+            if maxed_out_messages:
+                bad_message = "\n".join(maxed_out_messages)
+
+        enemies = abyss['ENEMIES']
+        level = int(abyss['SPECIAL_BUFF'])
+        floor = abyss['FLOOR']
+        card_to_earn = enemies[-1] 
+        title = abyss['TITLE']
+        arm = abyss['ARM']
+        abyss_pet = abyss['PET']
+        banned_cards = abyss['BANNED_CARDS']
+        banned_titles = abyss['BANNED_TITLES']
+        banned_arms = abyss['BANNED_ARMS']
+        banned_universes = abyss['BANNED_UNIVERSES']
+        banned_pets = abyss['BANNED_PETS']
+        banned_card_tiers = abyss['BANNED_TIERS']
+
+        # Convert tiers into strings from ints
+        tier_conversion = [str(tier) for tier in banned_card_tiers]
+        
+        abyss_buttons = [
+            manage_components.create_button(
+                style=ButtonStyle.blue,
+                label="Begin",
+                custom_id="Yes"
+            ),
+            manage_components.create_button(
+                style=ButtonStyle.red,
+                label="Quit",
+                custom_id="No"
+            )
+        ]
+
+        abyss_buttons_action_row = manage_components.create_actionrow(*abyss_buttons)
+
+        if abyss['FLOOR'] in abyss_floor_reward_list:
+            unlockable_message = f"⭐ Drops on this Floor\nUnlockable Card: **{card_to_earn}**\nUnlockable Title: **{title}**\nUnlockable Arm: **{arm}**\n"
+        else:
+            unlockable_message = ""
+
+        embedVar = discord.Embed(title=f":new_moon: Abyss Floor {floor}  ⚔️{len(enemies)}", description=textwrap.dedent(f"""
+        {unlockable_message}
+        {bad_message}
+        """))
+        embedVar.set_footer(text="Each floor must be completed all the way through to advance to the next floor.")
+        if banned_cards:
+            embedVar.add_field(name=":flower_playing_cards: Banned Cards", value="\n".join(banned_cards),
+                            inline=True)
+        if banned_titles:
+            embedVar.add_field(name=":reminder_ribbon: Banned Titles", value="\n".join(banned_titles), inline=True)         
+        if banned_arms:
+            embedVar.add_field(name="🦾 Banned Arms", value="\n".join(banned_arms), inline=True)           
+        if banned_pets:
+            embedVar.add_field(name="🧬 Banned Summons", value="\n".join(banned_pets))
+        if banned_universes:
+            embedVar.add_field(name=":ringed_planet: Banned Universes", value="\n".join(banned_universes),
+                            inline=True)
+        if banned_card_tiers:
+            embedVar.add_field(name="🀄 Banned Card Tiers", value="\n".join(tier_conversion),
+                            inline=True)
+
+        msg = await private_channel.send(embed=embedVar, components=[abyss_buttons_action_row])
+
+        def check(button_ctx):
+            return button_ctx.author == ctx.author
+
+        try:
+            button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[
+                abyss_buttons_action_row, abyss_buttons], timeout=120, check=check)
+
+            if button_ctx.custom_id == "Yes":
+                await button_ctx.defer(ignore=True)
+                await msg.edit(components=[])
+                if sowner['CARD'] in banned_cards:
+                    await private_channel.send(
+                        f":x: **{sowner['CARD']}** is banned on floor {floor}. Use another card.")
+                    return
+                if sowner['TITLE'] in banned_titles:
+                    await private_channel.send(
+                        f":x: **{sowner['TITLE']}** is banned on floor {floor}. Use another title.")
+                    return
+                if sowner['ARM'] in banned_arms:
+                    await private_channel.send(
+                        f":x: **{sowner['ARM']}** is banned on floor {floor}. Use another arm.")
+                    return
+                if sowner['PET'] in banned_pets:
+                    await private_channel.send(
+                        f":x: **{sowner['PET']}** is banned on floor {floor}. Use another pet.")
+                    return
+                if checks['UNIVERSE'] in banned_universes:
+                    await private_channel.send(
+                        f":x: **{checks['UNIVERSE']}** cards are banned on floor {floor}. Use another card.")
+                    return
+                
+                if str(checks['TIER']) in tier_conversion:
+                    await private_channel.send(
+                        f":x: Tier **{str(checks['TIER'])}** cards are banned on floor {floor}. Use another card.")
+                    return
+                await battle_commands(self, ctx, mode, abyss, None, None, oguild, None, None, sowner, oteam, ofam, 0, None, None, None, level, None, None, None, None)
+                
+            elif button_ctx.custom_id == "No":
+                await button_ctx.send("Leaving the Abyss...")
+                await msg.edit(components=[])
+                return
+            else:
+                await button_ctx.send("Leaving the Abyss...")
+                await msg.edit(components=[])
+                return
+        except Exception as ex:
+            trace = []
+            tb = ex.__traceback__
+            while tb is not None:
+                trace.append({
+                    "filename": tb.tb_frame.f_code.co_filename,
+                    "name": tb.tb_frame.f_code.co_name,
+                    "lineno": tb.tb_lineno
+                })
+                tb = tb.tb_next
+            print(str({
+                'type': type(ex).__name__,
+                'message': str(ex),
+                'trace': trace
+            }))
+            guild = self.bot.get_guild(main.guild_id)
+            channel = guild.get_channel(main.guild_channel)
+            await channel.send(f"'PLAYER': **{str(ctx.author)}**, 'GUILD': **{str(ctx.author.guild)}**,  TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
+            return
+    except Exception as ex:
+        trace = []
+        tb = ex.__traceback__
+        while tb is not None:
+            trace.append({
+                "filename": tb.tb_frame.f_code.co_filename,
+                "name": tb.tb_frame.f_code.co_name,
+                "lineno": tb.tb_lineno
+            })
+            tb = tb.tb_next
+        print(str({
+            'type': type(ex).__name__,
+            'message': str(ex),
+            'trace': trace
+        }))
+        guild = self.bot.get_guild(main.guild_id)
+        channel = guild.get_channel(main.guild_channel)
+        await channel.send(f"'PLAYER': **{str(ctx.author)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
+        return
+
+
+async def cardlist(self, ctx: SlashContext, universe: str):
+    a_registered_player = await crown_utilities.player_check(ctx)
+    if not a_registered_player:
+        return
+
+    universe_data = db.queryUniverse({'TITLE': {"$regex": str(universe), "$options": "i"}})
+    user = db.queryUser({'DID': str(ctx.author.id)})
+    list_of_cards = db.queryAllCardsBasedOnUniverse({'UNIVERSE': {"$regex": str(universe), "$options": "i"}})
+    cards = [x for x in list_of_cards]
+    dungeon_card_details = []
+    tales_card_details = []
+    destiny_card_details = []
+    for card in cards:
+        available = ""
+        is_skin = ""
+        if card['AVAILABLE'] and card['EXCLUSIVE']:
+            available = ":purple_circle:"
+        elif card['AVAILABLE'] and not card['HAS_COLLECTION']:
+            available = ":green_circle:"
+        elif card['HAS_COLLECTION']:
+            available = ":blue_circle:"
+        else:
+            available = "🟠"
+        if card['IS_SKIN']:
+            is_skin = ":white_circle:"
+        if card['EXCLUSIVE'] and not card['HAS_COLLECTION']:
+            dungeon_card_details.append(
+                f"{is_skin}{available}  :mahjong: {card['TIER']} **{card['NAME']}**\n:heart: {card['HLT']} :dagger: {card['ATK']}  🛡️ {card['DEF']}\n")
+        elif not card['HAS_COLLECTION']:
+            tales_card_details.append(
+                f"{is_skin}{available} :mahjong: {card['TIER']} **{card['NAME']}**\n:heart: {card['HLT']} :dagger: {card['ATK']}  🛡️ {card['DEF']}\n")
+        elif card['HAS_COLLECTION']:
+            destiny_card_details.append(
+                f"{is_skin}{available} :mahjong: {card['TIER']} **{card['NAME']}**\n:heart: {card['HLT']} :dagger: {card['ATK']}  🛡️ {card['DEF']}\n")
+
+    all_cards = []
+    if tales_card_details:
+        for t in tales_card_details:
+            all_cards.append(t)
+
+    if dungeon_card_details:
+        for d in dungeon_card_details:
+            all_cards.append(d)
+
+    if destiny_card_details:
+        for de in destiny_card_details:
+            all_cards.append(de)
+
+    total_cards = len(all_cards)
+
+    # Adding to array until divisible by 10
+    while len(all_cards) % 10 != 0:
+        all_cards.append("")
+    # Check if divisible by 10, then start to split evenly
+
+    if len(all_cards) % 10 == 0:
+        first_digit = int(str(len(all_cards))[:1])
+        if len(all_cards) >= 89:
+            if first_digit == 1:
+                first_digit = 10
+        # first_digit = 10
+        cards_broken_up = np.array_split(all_cards, first_digit)
+
+    # If it's not an array greater than 10, show paginationless embed
+    if len(all_cards) < 10:
+        embedVar = discord.Embed(title=f"{universe} Card List", description="\n".join(all_cards), colour=0x7289da)
+        embedVar.set_footer(
+            text=f"{total_cards} Total Cards\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔵 Destiny Line\n🟠 Unavailable\n⚪ Skin")
+        await ctx.send(embed=embedVar)
+
+    embed_list = []
+    for i in range(0, len(cards_broken_up)):
+        globals()['embedVar%s' % i] = discord.Embed(
+            title=f":flower_playing_cards: {universe_data['TITLE']} Card List",
+            description="\n".join(cards_broken_up[i]), colour=0x7289da)
+        globals()['embedVar%s' % i].set_footer(
+            text=f"{total_cards} Total Cards\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔵 Destiny Line\n🟠 Unavailable\n⚪ Skin\n/viewcard 'Card Name' - View Card Details\n/destinies 'Universe Name' -View Destiny Lines")
+        embed_list.append(globals()['embedVar%s' % i])
+
+    paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+    paginator.add_reaction('⏮️', "first")
+    paginator.add_reaction('⬅️', "back")
+    paginator.add_reaction('🔐', "lock")
+    paginator.add_reaction('➡️', "next")
+    paginator.add_reaction('⏭️', "last")
+    embeds = embed_list
+    await paginator.run(embeds)
+
+
+async def titlelist(self, ctx: SlashContext, universe: str):
+    a_registered_player = await crown_utilities.player_check(ctx)
+    if not a_registered_player:
+        return
+
+
+    universe_data = db.queryUniverse({'TITLE': {"$regex": universe, "$options": "i"}})
+    user = db.queryUser({'DID': str(ctx.author.id)})
+    list_of_titles = db.queryAllTitlesBasedOnUniverses({'UNIVERSE': {"$regex": str(universe), "$options": "i"}})
+    titles = [x for x in list_of_titles]
+    dungeon_titles_details = []
+    tales_titles_details = []
+    for title in titles:
+        title_passive = title['ABILITIES'][0]
+        title_passive_type = list(title_passive.keys())[0]
+        title_passive_value = list(title_passive.values())[0]
+
+        available = ""
+        if title['AVAILABLE'] and title['EXCLUSIVE']:
+            available = ":purple_circle:"
+        elif title['AVAILABLE']:
+            available = ":green_circle:"
+        else:
+            available = ":red_circle:"
+        if title['EXCLUSIVE']:
+            dungeon_titles_details.append(
+                f"{available} :reminder_ribbon: **{title['TITLE']}**\n**{title_passive_type}:** {title_passive_value}\n")
+        else:
+            tales_titles_details.append(
+                f"{available} :reminder_ribbon: **{title['TITLE']}**\n**{title_passive_type}:** {title_passive_value}\n")
+
+    all_titles = []
+    if tales_titles_details:
+        for t in tales_titles_details:
+            all_titles.append(t)
+
+    if dungeon_titles_details:
+        for d in dungeon_titles_details:
+            all_titles.append(d)
+
+    total_titles = len(all_titles)
+
+    # Adding to array until divisible by 10
+    while len(all_titles) % 10 != 0:
+        all_titles.append("")
+    # Check if divisible by 10, then start to split evenly
+    if len(all_titles) % 10 == 0:
+        first_digit = int(str(len(all_titles))[:1])
+        if len(all_titles) >= 89:
+            if first_digit == 1:
+                first_digit = 10
+        titles_broken_up = np.array_split(all_titles, first_digit)
+
+    # If it's not an array greater than 10, show paginationless embed
+    if len(all_titles) < 10:
+        embedVar = discord.Embed(title=f"{universe} Title List", description="\n".join(all_titles), colour=0x7289da)
+        # embedVar.set_thumbnail(url={universe_data['PATH']})
+        embedVar.set_footer(text=f"{total_titles} Total Titles\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔴 Boss Drop")
+        await ctx.send(embed=embedVar)
+
+    embed_list = []
+    for i in range(0, len(titles_broken_up)):
+        globals()['embedVar%s' % i] = discord.Embed(title=f":reminder_ribbon: {universe_data['TITLE']} Title List",
+                                                    description="\n".join(titles_broken_up[i]), colour=0x7289da)
+        # globals()['embedVar%s' % i].set_thumbnail(url={universe_data['PATH']})
+        globals()['embedVar%s' % i].set_footer(
+            text=f"{total_titles} Total Titles\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔴 Boss Drop\n/viewtitle 'Title Name' - View Title Details")
+        embed_list.append(globals()['embedVar%s' % i])
+
+    paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+    paginator.add_reaction('⏮️', "first")
+    paginator.add_reaction('⬅️', "back")
+    paginator.add_reaction('🔐', "lock")
+    paginator.add_reaction('➡️', "next")
+    paginator.add_reaction('⏭️', "last")
+    embeds = embed_list
+    await paginator.run(embeds)
+
+
+async def armlist(self, ctx: SlashContext, universe: str):
+    a_registered_player = await crown_utilities.player_check(ctx)
+    if not a_registered_player:
+        return
+
+
+    universe_data = db.queryUniverse({'TITLE': {"$regex": universe, "$options": "i"}})
+    user = db.queryUser({'DID': str(ctx.author.id)})
+    list_of_arms = db.queryAllArmsBasedOnUniverses({'UNIVERSE': {"$regex": str(universe), "$options": "i"}})
+    arms = [x for x in list_of_arms]
+    dungeon_arms_details = []
+    tales_arms_details = []
+    for arm in arms:
+        arm_passive = arm['ABILITIES'][0]
+        arm_passive_type = list(arm_passive.keys())[0]
+        arm_passive_value = list(arm_passive.values())[0]
+        available = ""
+        if arm['AVAILABLE'] and arm['EXCLUSIVE']:
+            available = ":purple_circle:"
+        elif arm['AVAILABLE']:
+            available = ":green_circle:"
+        else:
+            available = ":red_circle:"
+        if arm['EXCLUSIVE']:
+            dungeon_arms_details.append(
+                f"{available} 🦾 **{arm['ARM']}**\n**{arm_passive_type}:** {arm_passive_value}\n")
+        else:
+            tales_arms_details.append(
+                f"{available} 🦾 **{arm['ARM']}**\n**{arm_passive_type}:** {arm_passive_value}\n")
+
+    all_arms = []
+    if tales_arms_details:
+        for t in tales_arms_details:
+            all_arms.append(t)
+
+    if dungeon_arms_details:
+        for d in dungeon_arms_details:
+            all_arms.append(d)
+
+    total_arms = len(all_arms)
+    # Adding to array until divisible by 10
+    while len(all_arms) % 10 != 0:
+        all_arms.append("")
+    # Check if divisible by 10, then start to split evenly
+    if len(all_arms) % 10 == 0:
+        first_digit = int(str(len(all_arms))[:1])
+        if len(all_arms) >= 89:
+            if first_digit == 1:
+                first_digit = 10
+        arms_broken_up = np.array_split(all_arms, first_digit)
+
+    # If it's not an array greater than 10, show paginationless embed
+    if len(all_arms) < 10:
+        embedVar = discord.Embed(title=f"{universe} Arms List", description="\n".join(all_arms), colour=0x7289da)
+        embedVar.set_footer(text=f"{total_arms} Total Arms\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔴 Boss Drop")
+        await ctx.send(embed=embedVar)
+
+    embed_list = []
+    for i in range(0, len(arms_broken_up)):
+        globals()['embedVar%s' % i] = discord.Embed(title=f"🦾 {universe_data['TITLE']} Arms List",
+                                                    description="\n".join(arms_broken_up[i]), colour=0x7289da)
+        globals()['embedVar%s' % i].set_footer(
+            text=f"{total_arms} Total Arms\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔴 Boss Drop\n/viewarm 'Arm Name' - View Arm Details")
+        embed_list.append(globals()['embedVar%s' % i])
+
+    paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+    paginator.add_reaction('⏮️', "first")
+    paginator.add_reaction('⬅️', "back")
+    paginator.add_reaction('🔐', "lock")
+    paginator.add_reaction('➡️', "next")
+    paginator.add_reaction('⏭️', "last")
+    embeds = embed_list
+    await paginator.run(embeds)
+
+
+async def destinylist(self, ctx: SlashContext, universe: str):
+    a_registered_player = await crown_utilities.player_check(ctx)
+    if not a_registered_player:
+        return
+
+
+    universe_data = db.queryUniverse({'TITLE': {"$regex": universe, "$options": "i"}})
+    user = db.queryUser({'DID': str(ctx.author.id)})
+    destinies = []
+    for destiny in d.destiny:
+        if destiny["UNIVERSE"].upper() == universe.upper():
+            destinies.append(destiny)
+
+    destiny_details = []
+    for de in destinies:
+        destiny_details.append(
+            f":sparkles: **{de['NAME']}**\nDefeat {de['DEFEAT']} with {' '.join(de['USE_CARDS'])} {str(de['REQUIRED'])} times: Unlock **{de['EARN']}**\n")
+
+    total_destinies = len(destiny_details)
+
+    # Adding to array until divisible by 10
+    while len(destiny_details) % 10 != 0:
+        destiny_details.append("")
+    # Check if divisible by 10, then start to split evenly
+
+    if len(destiny_details) % 10 == 0:
+        first_digit = int(str(len(destiny_details))[:1])
+        if len(destiny_details) >= 89:
+            if first_digit == 1:
+                first_digit = 10
+        destinies_broken_up = np.array_split(destiny_details, first_digit)
+
+    # If it's not an array greater than 10, show paginationless embed
+    if len(destiny_details) < 10:
+        embedVar = discord.Embed(title=f"{universe} Destiny List", description="\n".join(destiny_details),
+                                colour=0x7289da)
+        globals()['embedVar%s' % i].set_footer(text=f"{total_destinies} Total Destiny Lines")
+        await ctx.send(embed=embedVar)
+
+    embed_list = []
+    for i in range(0, len(destinies_broken_up)):
+        globals()['embedVar%s' % i] = discord.Embed(title=f":rosette: {universe_data['TITLE']} Destiny List",
+                                                    description="\n".join(destinies_broken_up[i]), colour=0x7289da)
+        globals()['embedVar%s' % i].set_footer(text=f"{total_destinies} Total Destiny Lines")
+        embed_list.append(globals()['embedVar%s' % i])
+
+    paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+    paginator.add_reaction('⏮️', "first")
+    paginator.add_reaction('⬅️', "back")
+    paginator.add_reaction('🔐', "lock")
+    paginator.add_reaction('➡️', "next")
+    paginator.add_reaction('⏭️', "last")
+    embeds = embed_list
+    await paginator.run(embeds)
+
+
+async def summonlist(self, ctx: SlashContext, universe: str):
+    a_registered_player = await crown_utilities.player_check(ctx)
+    if not a_registered_player:
+        return
+
+
+    universe_data = db.queryUniverse({'TITLE': {"$regex": universe, "$options": "i"}})
+    user = db.queryUser({'DID': str(ctx.author.id)})
+    list_of_pets = db.queryAllPetsBasedOnUniverses({'UNIVERSE': {"$regex": str(universe), "$options": "i"}})
+    pets = [x for x in list_of_pets]
+    dungeon_pets_details = []
+    tales_pets_details = []
+    for pet in pets:
+        pet_ability = list(pet['ABILITIES'][0].keys())[0]
+        pet_ability_power = list(pet['ABILITIES'][0].values())[0]
+        pet_ability_type = list(pet['ABILITIES'][0].values())[1]
+        available = ""
+        if pet['AVAILABLE'] and pet['EXCLUSIVE']:
+            available = ":purple_circle:"
+        elif pet['AVAILABLE']:
+            available = ":green_circle:"
+        else:
+            available = ":red_circle:"
+        if pet['EXCLUSIVE']:
+            dungeon_pets_details.append(
+                f"{available} 🧬 **{pet['PET']}**\n**{pet_ability}:** {pet_ability_power}\n**Type:** {pet_ability_type}\n")
+        else:
+            tales_pets_details.append(
+                f"{available} 🧬 **{pet['PET']}**\n**{pet_ability}:** {pet_ability_power}\n**Type:** {pet_ability_type}\n")
+
+    all_pets = []
+    if tales_pets_details:
+        for t in tales_pets_details:
+            all_pets.append(t)
+
+    if dungeon_pets_details:
+        for d in dungeon_pets_details:
+            all_pets.append(d)
+
+    total_pets = len(all_pets)
+
+    # Adding to array until divisible by 10
+    while len(all_pets) % 10 != 0:
+        all_pets.append("")
+
+    # Check if divisible by 10, then start to split evenly
+    if len(all_pets) % 10 == 0:
+        first_digit = int(str(len(all_pets))[:1])
+        if len(all_pets) >= 89:
+            if first_digit == 1:
+                first_digit = 10
+        pets_broken_up = np.array_split(all_pets, first_digit)
+
+    # If it's not an array greater than 10, show paginationless embed
+    if len(all_pets) < 10:
+        embedVar = discord.Embed(title=f"{universe} Summon List", description="\n".join(all_pets), colour=0x7289da)
+        embedVar.set_footer(text=f"{total_pets} Total Summons\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔴 Boss Drop")
+        await ctx.send(embed=embedVar)
+
+    embed_list = []
+    for i in range(0, len(pets_broken_up)):
+        globals()['embedVar%s' % i] = discord.Embed(title=f"🧬 {universe_data['TITLE']} Summon List",
+                                                    description="\n".join(pets_broken_up[i]), colour=0x7289da)
+        globals()['embedVar%s' % i].set_footer(
+            text=f"{total_pets} Total Summons\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔴 Boss Drop\n/viewsummon 'Summon Name' - View Summon Details")
+        embed_list.append(globals()['embedVar%s' % i])
+
+    paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+    paginator.add_reaction('⏮️', "first")
+    paginator.add_reaction('⬅️', "back")
+    paginator.add_reaction('🔐', "lock")
+    paginator.add_reaction('➡️', "next")
+    paginator.add_reaction('⏭️', "last")
+    embeds = embed_list
+    await paginator.run(embeds)
+
+
 
 
 async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict, otitle: dict, t: dict, ttitle: dict,

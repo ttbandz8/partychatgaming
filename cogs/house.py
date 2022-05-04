@@ -56,35 +56,5 @@ class House(commands.Cog):
         else:
             await ctx.send(m.HOUSE_DOESNT_EXIST)
 
-    @cog_ext.cog_slash(description="View a House", guild_ids=main.guild_ids)
-    async def viewhouse(self, ctx, house: str):
-        a_registered_player = await crown_utilities.player_check(ctx)
-        if not a_registered_player:
-            return
-
-        house = db.queryHouse({'HOUSE': {"$regex": f"^{str(house)}$", "$options": "i"}})
-        if house:
-            house_house = house['HOUSE']
-            house_price = house['PRICE']
-            house_img = house['PATH']
-            house_multiplier = house['MULT']
-
-            message=""
-            
-            price_message ="" 
-            price_message = f":coin: {'{:,}'.format(house_price)}"
-
-
-            embedVar = discord.Embed(title=f"{house_house}\n{price_message}".format(self), colour=000000)
-            embedVar.set_image(url=house_img)
-            embedVar.add_field(name="Income Multiplier", value=f"Family earns **{house_multiplier}x** :coin: per match!", inline=False)
-            embedVar.set_footer(text=f"/houses - House Menu")
-
-            await ctx.send(embed=embedVar)
-
-        else:
-            await ctx.send(m.HOUSE_DOESNT_EXIST, delete_after=3)
-
-
 def setup(bot):
     bot.add_cog(House(bot))

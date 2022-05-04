@@ -227,7 +227,6 @@ class Profile(commands.Cog):
             await trinketshop(self, ctx)
 
 
-
 async def summons(self, ctx):
     await ctx.defer()
     a_registered_player = await crown_utilities.player_check(ctx)

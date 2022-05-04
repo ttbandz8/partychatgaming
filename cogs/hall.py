@@ -62,41 +62,5 @@ class Hall(commands.Cog):
         else:
             await ctx.send(m.HALL_DOESNT_EXIST)
 
-    @cog_ext.cog_slash(description="View a Hall", guild_ids=main.guild_ids)
-    async def viewhall(self, ctx, hall: str):
-        a_registered_player = await crown_utilities.player_check(ctx)
-        if not a_registered_player:
-            return
-
-        hall = db.queryHall({'HALL':{"$regex": f"^{str(hall)}$", "$options": "i"}})
-        if hall:
-            hall_hall = hall['HALL']
-            hall_price = hall['PRICE']
-            hall_img = hall['PATH']
-            hall_multiplier = hall['MULT']
-            hall_fee = hall['FEE']
-            hall_split = hall['SPLIT']
-            hall_def = hall['DEFENSE']
-
-            message=""
-            
-            price_message ="" 
-            price_message = f":coin: {'{:,}'.format(hall_price)}"
-
-
-            embedVar = discord.Embed(title=f"{hall_hall}\n{price_message}", colour=000000)
-            embedVar.set_image(url=hall_img)
-            embedVar.add_field(name="Bounty Fee", value=f"**{'{:,}'.format(hall_fee)}** :yen: per **Raid**!", inline=False)
-            embedVar.add_field(name="Multiplier", value=f"Association earns **{hall_multiplier}x** :coin: per match!", inline=False)
-            embedVar.add_field(name="Split", value=f"**Guilds** earn **{hall_split}x** :coin: per match!", inline=False)
-            embedVar.add_field(name="Defenses", value=f"**Shield** Defense Boost: **{hall_def}x**", inline=False)
-            embedVar.set_footer(text=f"/halls - Hall Menu")
-
-            await ctx.send(embed=embedVar)
-
-        else:
-            await ctx.send(m.HALL_DOESNT_EXIST, delete_after=3)
-
-
 def setup(bot):
     bot.add_cog(Hall(bot))
