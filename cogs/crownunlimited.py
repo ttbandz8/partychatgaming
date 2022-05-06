@@ -572,7 +572,7 @@ class CrownUnlimited(commands.Cog):
 
 
             companion = db.queryUser({'DID': str(user.id)})
-            if sowner['DIFFICULTY'] != "EASY":
+            # if sowner['DIFFICULTY'] != "EASY":
                 # if sowner['LEVEL'] < 4:
                 #     await ctx.send(f"🔓 Unlock **Co-op** by completing **Floor 3** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
                 #     return
@@ -1451,58 +1451,58 @@ class CrownUnlimited(commands.Cog):
             return
 
 
-    @cog_ext.cog_slash(description="view all cards, titles, arms, or more that an universe has to offer",
-                       options=[
-                           create_option(
-                               name="universe_name",
-                               description="name of the universe to view stuff from",
-                               option_type=3,
-                               required=True
-                           ),
-                           create_option(
-                               name="selection",
-                               description="view all cards, titles, arms, summons, or destiny lines",
-                               option_type=3,
-                               required=True,
-                               choices=[
-                                create_choice(
-                                    name="🎴 View All Cards",
-                                    value="cards",
-                                ),
-                                create_choice(
-                                    name="🎗️ View All Titles",
-                                    value="titles",
-                                ),
-                                create_choice(
-                                    name="🦾 View All Arms",
-                                    value="arms",
-                                ),
-                                create_choice(
-                                    name="🧬 View All Summons",
-                                    value="summons",
-                                ),
-                                create_choice(
-                                    name="✨ View All Destiny Lines",
-                                    value="destinies",
-                                ),
-                               ]
-                           )
-                       ]
-        , guild_ids=main.guild_ids)
-    async def viewall(self, ctx, selection, universe_name):
-        if selection == "cards":
-            await cardlist(self, ctx, universe_name)
-        if selection == "titles":
-            await titlelist(self, ctx, universe_name)
-        if selection == "arms":
-            await armlist(self, ctx, universe_name)
-        if selection == "summons":
-            await summonlist(self, ctx, universe_name)
-        if selection == "destinies":
-            await destinylist(self, ctx, universe_name)
+    # @cog_ext.cog_slash(description="view all cards, titles, arms, or more that an universe has to offer",
+    #                    options=[
+    #                        create_option(
+    #                            name="universe_name",
+    #                            description="name of the universe to view stuff from",
+    #                            option_type=3,
+    #                            required=True
+    #                        ),
+    #                        create_option(
+    #                            name="selection",
+    #                            description="view all cards, titles, arms, summons, or destiny lines",
+    #                            option_type=3,
+    #                            required=True,
+    #                            choices=[
+    #                             create_choice(
+    #                                 name="🎴 View All Cards",
+    #                                 value="cards",
+    #                             ),
+    #                             create_choice(
+    #                                 name="🎗️ View All Titles",
+    #                                 value="titles",
+    #                             ),
+    #                             create_choice(
+    #                                 name="🦾 View All Arms",
+    #                                 value="arms",
+    #                             ),
+    #                             create_choice(
+    #                                 name="🧬 View All Summons",
+    #                                 value="summons",
+    #                             ),
+    #                             create_choice(
+    #                                 name="✨ View All Destiny Lines",
+    #                                 value="destinies",
+    #                             )
+    #                            ]
+    #                        )
+    #                    ]
+    #     , guild_ids=main.guild_ids)
+    # async def viewall(self, ctx, selection, universe_name):
+    #     if selection == "cards":
+    #         await cardlist(self, ctx, universe_name)
+    #     if selection == "titles":
+    #         await titlelist(self, ctx, universe_name)
+    #     if selection == "arms":
+    #         await armlist(self, ctx, universe_name)
+    #     if selection == "summons":
+    #         await summonlist(self, ctx, universe_name)
+    #     if selection == "destinies":
+    #         await destinylist(self, ctx, universe_name)
 
 
-    @cog_ext.cog_slash(description="View all available Universes", guild_ids=main.guild_ids)
+    @cog_ext.cog_slash(description="View all available Universes and their cards, summons, destinies, and accessories", guild_ids=main.guild_ids)
     async def universes(self, ctx: SlashContext):
         a_registered_player = await crown_utilities.player_check(ctx)
         if not a_registered_player:
@@ -1530,7 +1530,43 @@ class CrownUnlimited(commands.Cog):
                     embedVar.set_image(url=uni['PATH'])
                     universe_embed_list.append(embedVar)
 
-            await Paginator(bot=self.bot, ctx=ctx, deleteAfterTimeout=True, pages=universe_embed_list).run()
+            buttons = [
+                manage_components.create_button(style=3, label="🎴 Cards", custom_id="cards"),
+                manage_components.create_button(style=1, label="🎗️ Titles", custom_id="titles"),
+                manage_components.create_button(style=1, label="🦾 Arms", custom_id="arms"),
+                manage_components.create_button(style=1, label="🧬 Summons", custom_id="summons"),
+                manage_components.create_button(style=2, label="✨ Destinies", custom_id="destinies")
+            ]
+            custom_action_row = manage_components.create_actionrow(*buttons)
+
+
+            async def custom_function(self, button_ctx):
+                universe_name = str(button_ctx.origin_message.embeds[0].title)
+                await button_ctx.defer(ignore=True)
+                if button_ctx.author == ctx.author:
+                    if button_ctx.custom_id == "cards":
+                        await cardlist(self, ctx, universe_name)
+                        self.stop = True
+                    if button_ctx.custom_id == "titles":
+                        await titlelist(self, ctx, universe_name)
+                        self.stop = True
+                    if button_ctx.custom_id == "arms":
+                        await armlist(self, ctx, universe_name)
+                        self.stop = True
+                    if button_ctx.custom_id == "summons":
+                        await summonlist(self, ctx, universe_name)
+                        self.stop = True
+                    if button_ctx.custom_id == "destinies":
+                        await destinylist(self, ctx, universe_name)
+                        self.stop = True
+                else:
+                    await ctx.send("This is not your command.")
+
+
+            await Paginator(bot=self.bot, ctx=ctx, useQuitButton=True, deleteAfterTimeout=True, pages=universe_embed_list, customActionRow=[
+                custom_action_row,
+                custom_function,
+            ]).run()
 
 
         except Exception as ex:
