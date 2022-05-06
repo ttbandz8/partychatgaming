@@ -409,11 +409,11 @@ class CrownUnlimited(commands.Cog):
             }))
     
 
-    @cog_ext.cog_slash(description="Duo Tales with AI",
+    @cog_ext.cog_slash(description="Duo pve to earn cards, accessories, gold, gems, and more with your AI companion",
                        options=[
                            create_option(
                                name="deck",
-                               description="AI Preset",
+                               description="AI Preset (this is from your preset list)",
                                option_type=3,
                                required=True,
                                choices=[
@@ -449,7 +449,7 @@ class CrownUnlimited(commands.Cog):
                            )
                        ]
         , guild_ids=main.guild_ids)
-    async def duopve(self, ctx: SlashContext, deck: int, mode: str):
+    async def duo(self, ctx: SlashContext, deck: int, mode: str):
         a_registered_player = await crown_utilities.player_check(ctx)
         if not a_registered_player:
             return
@@ -525,11 +525,11 @@ class CrownUnlimited(commands.Cog):
             return
 
 
-    @cog_ext.cog_slash(description="Co-op Tales with Friends",
+    @cog_ext.cog_slash(description="Co-op pve to earn cards, accessories, gold, gems, and more with friends",
                        options=[
                            create_option(
                                name="user",
-                               description="Difficulty Level",
+                               description="player you want to co-op with",
                                option_type=6,
                                required=True
                            ),
@@ -555,7 +555,7 @@ class CrownUnlimited(commands.Cog):
                            )
                        ]
         , guild_ids=main.guild_ids)
-    async def cooppve(self, ctx: SlashContext, user: User, mode: str):
+    async def coop(self, ctx: SlashContext, user: User, mode: str):
         a_registered_player = await crown_utilities.player_check(ctx)
         if not a_registered_player:
             return
@@ -573,13 +573,13 @@ class CrownUnlimited(commands.Cog):
 
             companion = db.queryUser({'DID': str(user.id)})
             if sowner['DIFFICULTY'] != "EASY":
-                if sowner['LEVEL'] < 4:
-                    await ctx.send(f"🔓 Unlock **Co-op** by completing **Floor 3** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
-                    return
+                # if sowner['LEVEL'] < 4:
+                #     await ctx.send(f"🔓 Unlock **Co-op** by completing **Floor 3** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
+                #     return
                 
-                elif companion['LEVEL'] < 4:
-                    await ctx.send(f"🔓 {user.mention} Has not unlocked **Co-op**! Complete **Floor 3** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
-                    return
+                # elif companion['LEVEL'] < 4:
+                #     await ctx.send(f"🔓 {user.mention} Has not unlocked **Co-op**! Complete **Floor 3** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
+                #     return
 
             if sowner['DIFFICULTY'] == "EASY" and mode in D_modes or mode in B_MODES:
                 await ctx.send("Dungeons and Boss fights unavailable on Easy Mode! Use /difficulty to change your difficulty setting.")
@@ -1059,11 +1059,11 @@ class CrownUnlimited(commands.Cog):
             return
 
 
-    @cog_ext.cog_slash(description="Conquer Tales to Unlock New Universes!",
+    @cog_ext.cog_slash(description="pve to earn cards, accessories, gold, gems, and more as a solo player",
                     options=[
                         create_option(
                             name="mode",
-                            description="Difficulty Level",
+                            description="abyss: climb ladder, tales: normal pve mode, dungeon: hard pve run, and boss: extreme encounters",
                             option_type=3,
                             required=True,
                             choices=[
@@ -1072,26 +1072,26 @@ class CrownUnlimited(commands.Cog):
                                 #     value="ATales"
                                 # ),
                                 create_choice(
-                                    name="🌑 The Abyss! *climb the ladder*",
+                                    name="🌑 The Abyss!",
                                     value="Abyss"
                                 ),
                                 create_choice(
-                                    name="⚔️ Tales! *normal pve*",
+                                    name="⚔️ Tale Run!",
                                     value="Tales"
                                 ),
                                 create_choice(
-                                    name="🔥 Dungeon! *extreme pve*",
+                                    name="🔥 Dungeon Run!",
                                     value="Dungeon"
                                 ),
                                 create_choice(
-                                    name="👹 Boss Encounter! *impossible pve*",
+                                    name="👹 Boss Encounter!",
                                     value="Boss"
                                 ),
                             ]
                         )
                     ]
         , guild_ids=main.guild_ids)
-    async def pve(self, ctx: SlashContext, mode: str):
+    async def solo(self, ctx: SlashContext, mode: str):
         a_registered_player = await crown_utilities.player_check(ctx)
         if not a_registered_player:
             return
@@ -1178,10 +1178,11 @@ class CrownUnlimited(commands.Cog):
             return
 
 
-    @cog_ext.cog_slash(description="PvP Battle", guild_ids=main.guild_ids)
-    async def pvp(self, ctx: SlashContext, player: User):
+    @cog_ext.cog_slash(description="pvp battle against a friend or rival", guild_ids=main.guild_ids)
+    async def pvp(self, ctx: SlashContext, opponent: User):
         try:
             await ctx.defer()
+            player = opponent
             a_registered_player = await crown_utilities.player_check(ctx)
             if not a_registered_player:
                 return
@@ -1268,7 +1269,7 @@ class CrownUnlimited(commands.Cog):
             return
 
 
-    @cog_ext.cog_slash(description="Tutorial Battle", guild_ids=main.guild_ids)
+    @cog_ext.cog_slash(description="tutorial battle to learn how to play crown unlimited", guild_ids=main.guild_ids)
     async def tutorial(self, ctx: SlashContext):
         try:
             await ctx.defer()
@@ -1450,17 +1451,17 @@ class CrownUnlimited(commands.Cog):
             return
 
 
-    @cog_ext.cog_slash(description="view all an universe has to offer",
+    @cog_ext.cog_slash(description="view all cards, titles, arms, or more that an universe has to offer",
                        options=[
                            create_option(
                                name="universe_name",
-                               description="name of the universe you're searching for",
+                               description="name of the universe to view stuff from",
                                option_type=3,
                                required=True
                            ),
                            create_option(
                                name="selection",
-                               description="what would you like to search for",
+                               description="view all cards, titles, arms, summons, or destiny lines",
                                option_type=3,
                                required=True,
                                choices=[

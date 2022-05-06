@@ -121,11 +121,11 @@ class Profile(commands.Cog):
             await ctx.send("You aren't registered.", hidden=True)
 
 
-    @cog_ext.cog_slash(description="Select an operation from the menu!",
+    @cog_ext.cog_slash(description="main menu where all your important game items and builds are",
                     options=[
                         create_option(
                             name="selection",
-                            description="Select an option!",
+                            description="select an option to continue",
                             option_type=3,
                             required=True,
                             choices=[

@@ -65,7 +65,7 @@ class Views(commands.Cog):
                     options=[
                         create_option(
                             name="name",
-                            description="name of what you want to view",
+                            description="name of card, title, arm, summons, universe, hall, or house you want to view",
                             option_type=3,
                             required=True
                         ),

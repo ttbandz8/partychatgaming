@@ -69,6 +69,7 @@ else:
 
 slash = SlashCommand(bot, sync_commands=True)
 
+
 async def load(ctx, extension):
    # Goes into cogs folder and looks for extension
    bot.load_extension(f'cogs.{extension}')
@@ -1611,6 +1612,11 @@ async def servers(ctx):
          
    else:
       await ctx.send("Admin only.")
+
+
+# @bot.command()
+# async def buc(ctx):
+#    await bot._http.overwrite_application_command(int(bot.me.id), [])
 
 
 @bot.event
@@ -3225,6 +3231,6 @@ async def addfield(ctx, collection, new_field, field_type):
 if config('ENV') == "production":
    DISCORD_TOKEN = config('DISCORD_TOKEN_TEST')
 else:
-   DISCORD_TOKEN = config('DISCORD_TOKEN_FOR_TESTING')
+   DISCORD_TOKEN = config('NEW_TEST_DISCORD_TOKEN')
 
 bot.run(DISCORD_TOKEN)
