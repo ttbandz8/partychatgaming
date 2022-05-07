@@ -1067,10 +1067,10 @@ class CrownUnlimited(commands.Cog):
                             option_type=3,
                             required=True,
                             choices=[
-                                # create_choice(
-                                #     name="Auto Battler",
-                                #     value="ATales"
-                                # ),
+                                create_choice(
+                                    name="🆘 The Tutorial",
+                                    value="Tutorial"
+                                ),
                                 create_choice(
                                     name="🌑 The Abyss!",
                                     value="Abyss"
@@ -1097,6 +1097,9 @@ class CrownUnlimited(commands.Cog):
             return
         if mode == "Abyss":
             await abyss(self, ctx)
+            return
+        if mode == "Tutorial":
+            await tutorial(self, ctx)
             return
         U_modes = ['ATales', 'Tales', 'CTales', 'DTales', 'tales']
         D_modes = ['CDungeon', 'DDungeon', 'Dungeon', 'ADungeon', 'dungeon']
@@ -1245,83 +1248,6 @@ class CrownUnlimited(commands.Cog):
             # selected_universe = {"TITLE": "Naruto"}
             if private_channel:
                 await battle_commands(self, ctx, mode, None, None, None, oguild, None, None, sowner, oteam, None, opponent, tteam, tguild, None, None, None, None, None, None)
-            else:
-                await ctx.send("Failed to start battle!")
-        except Exception as ex:
-            trace = []
-            tb = ex.__traceback__
-            while tb is not None:
-                trace.append({
-                    "filename": tb.tb_frame.f_code.co_filename,
-                    "name": tb.tb_frame.f_code.co_name,
-                    "lineno": tb.tb_lineno
-                })
-                tb = tb.tb_next
-            print(str({
-                'PLAYER': str(ctx.author),
-                'type': type(ex).__name__,
-                'message': str(ex),
-                'trace': trace
-            }))
-            guild = self.bot.get_guild(main.guild_id)
-            channel = guild.get_channel(main.guild_channel)
-            await channel.send(f"'PLAYER': **{str(ctx.author)}**, 'GUILD': **{str(ctx.author.guild)}**,  TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
-            return
-
-
-    @cog_ext.cog_slash(description="tutorial battle to learn how to play crown unlimited", guild_ids=main.guild_ids)
-    async def tutorial(self, ctx: SlashContext):
-        try:
-            await ctx.defer()
-            a_registered_player = await crown_utilities.player_check(ctx)
-            if not a_registered_player:
-                return
-
-
-            await ctx.send(":crown: Building Tutorial Match...", delete_after=10)
-            private_channel = ctx
-            starttime = time.asctime()
-            h_gametime = starttime[11:13]
-            m_gametime = starttime[14:16]
-            s_gametime = starttime[17:19]
-
-            # Tutorial Code
-            tutorialbot = '837538366509154407'
-            legendbot = '845672426113466395'
-            tutorial_user = await self.bot.fetch_user(tutorialbot)
-            opponent = db.queryUser({'DISNAME': str(tutorial_user)})
-            oppDID = opponent['DID']
-            tutorial = False
-            if oppDID == tutorialbot or oppDID == legendbot:
-                tutorial = True
-            mode = "PVP"
-
-            # Get Session Owner Disname for scoring
-            sowner = db.queryUser({'DID': str(ctx.author.id)})
-            opponent = db.queryUser({'DISNAME': str(tutorial_user)})
-            oteam = sowner['TEAM']
-            tteam = opponent['TEAM']
-            oteam_info = db.queryTeam({'TEAM_NAME':str(oteam)})
-            tteam_info = db.queryTeam({'TEAM_NAME':str(tteam)})
-            if oteam_info:
-                oguild = oteam_info['GUILD']
-            else:
-                oguild ="PCG"
-            if tteam_info:
-                tguild = tteam_info['GUILD']
-            else:
-                tguild ="PCG"
-
-            o = db.queryCard({'NAME': sowner['CARD']})
-            otitle = db.queryTitle({'TITLE': sowner['TITLE']})
-
-            t = db.queryCard({'NAME': opponent['CARD']})
-            ttitle = db.queryTitle({'TITLE': opponent['TITLE']})
-
-            # universe = "Naruto"
-            # selected_universe = {"TITLE": "Naruto"}
-            if private_channel:
-                await battle_commands(self, ctx, mode, None, None, None, oguild, None, None, sowner, oteam, None, opponent, tteam, tguild, None, None, None, None, None, "Tutorial")
             else:
                 await ctx.send("Failed to start battle!")
         except Exception as ex:
@@ -1689,6 +1615,83 @@ class CrownUnlimited(commands.Cog):
     #             validator = True
     #     if private_channel.guild and validator:
     #         await discord.TextChannel.delete(private_channel.channel, reason=None)
+
+
+
+async def tutorial(self, ctx: SlashContext):
+    try:
+        await ctx.defer()
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
+
+        await ctx.send(":crown: Building Tutorial Match...", delete_after=10)
+        private_channel = ctx
+        starttime = time.asctime()
+        h_gametime = starttime[11:13]
+        m_gametime = starttime[14:16]
+        s_gametime = starttime[17:19]
+
+        # Tutorial Code
+        tutorialbot = '837538366509154407'
+        legendbot = '845672426113466395'
+        tutorial_user = await self.bot.fetch_user(tutorialbot)
+        opponent = db.queryUser({'DISNAME': str(tutorial_user)})
+        oppDID = opponent['DID']
+        tutorial = False
+        if oppDID == tutorialbot or oppDID == legendbot:
+            tutorial = True
+        mode = "PVP"
+
+        # Get Session Owner Disname for scoring
+        sowner = db.queryUser({'DID': str(ctx.author.id)})
+        opponent = db.queryUser({'DISNAME': str(tutorial_user)})
+        oteam = sowner['TEAM']
+        tteam = opponent['TEAM']
+        oteam_info = db.queryTeam({'TEAM_NAME':str(oteam)})
+        tteam_info = db.queryTeam({'TEAM_NAME':str(tteam)})
+        if oteam_info:
+            oguild = oteam_info['GUILD']
+        else:
+            oguild ="PCG"
+        if tteam_info:
+            tguild = tteam_info['GUILD']
+        else:
+            tguild ="PCG"
+
+        o = db.queryCard({'NAME': sowner['CARD']})
+        otitle = db.queryTitle({'TITLE': sowner['TITLE']})
+
+        t = db.queryCard({'NAME': opponent['CARD']})
+        ttitle = db.queryTitle({'TITLE': opponent['TITLE']})
+
+        # universe = "Naruto"
+        # selected_universe = {"TITLE": "Naruto"}
+        if private_channel:
+            await battle_commands(self, ctx, mode, None, None, None, oguild, None, None, sowner, oteam, None, opponent, tteam, tguild, None, None, None, None, None, "Tutorial")
+        else:
+            await ctx.send("Failed to start battle!")
+    except Exception as ex:
+        trace = []
+        tb = ex.__traceback__
+        while tb is not None:
+            trace.append({
+                "filename": tb.tb_frame.f_code.co_filename,
+                "name": tb.tb_frame.f_code.co_name,
+                "lineno": tb.tb_lineno
+            })
+            tb = tb.tb_next
+        print(str({
+            'PLAYER': str(ctx.author),
+            'type': type(ex).__name__,
+            'message': str(ex),
+            'trace': trace
+        }))
+        guild = self.bot.get_guild(main.guild_id)
+        channel = guild.get_channel(main.guild_channel)
+        await channel.send(f"'PLAYER': **{str(ctx.author)}**, 'GUILD': **{str(ctx.author.guild)}**,  TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
+        return
 
 
 async def score(owner, user: User):

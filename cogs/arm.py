@@ -28,7 +28,7 @@ class Arm(commands.Cog):
         return await main.validate_user(ctx)
 
     @cog_ext.cog_slash(description="Equip an Arm")
-    async def fastequiparm(self, ctx, arm: str):
+    async def equiparm(self, ctx, arm: str):
         arm_name = arm
         user_query = {'DID': str(ctx.author.id)}
         user = db.queryUser(user_query)

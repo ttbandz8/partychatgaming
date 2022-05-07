@@ -32,7 +32,7 @@ class Titles(commands.Cog):
         return await main.validate_user(ctx)
 
     @cog_ext.cog_slash(description="Equip a Title", guild_ids=main.guild_ids)
-    async def fastequiptitle(self, ctx, title: str):
+    async def equiptitle(self, ctx, title: str):
         a_registered_player = await crown_utilities.player_check(ctx)
         if not a_registered_player:
             return

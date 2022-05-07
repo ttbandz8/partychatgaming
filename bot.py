@@ -86,34 +86,73 @@ for filename in os.listdir('./cogs'):
 
 bot.remove_command("help")
 
-@slash.slash(name="Help", description="List of Commands", guild_ids=guild_ids)
-async def help(ctx: SlashContext):
+@slash.slash(name="Help", description="Learn the commands", options=[
+                        create_option(
+                            name="selection",
+                            description="select an option you need help with",
+                            option_type=3,
+                            required=True,
+                            choices=[
+                                create_choice(
+                                    name="❓ What do these emoji's mean?",
+                                    value="legend",
+                                ),
+                                create_choice(
+                                    name="⚔️ How to Play?",
+                                    value="play",
+                                ),
+                                create_choice(
+                                    name="👑 Your Cards, Accessories, Quests, Destinies, Shop, Blacksmith, Trade, Gift, Analysis, Codes",
+                                    value="menu",
+                                ),
+                                create_choice(
+                                    name="🌍 All Info, Cards, Accessories, Quests, Destinies a universe has to offer",
+                                    value="universe",
+                                ),
+                                create_choice(
+                                    name="👥 Family, Guild, Association",
+                                    value="teams",
+                                ),
+                            ]
+                        )
+                    ]
+ ,guild_ids=guild_ids)
+async def help(ctx: SlashContext, selection):
    avatar="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png"
+   
+   if selection == "menu":
+      embedVar = discord.Embed(title= f"Your stuff, your way!", description=h.CTAP_COMMANDS, colour=0x7289da)
+      embedVar.set_thumbnail(url=avatar)
+      embedVar.set_footer(text=f"/crown - Crown Unlimited Manual")
+      await ctx.send(embed=embedVar)
+      return
 
-   embedVar1 = discord.Embed(title= f"Bot Commands", description=h.BOT_COMMANDS, colour=0x7289da)
-   embedVar1.set_thumbnail(url=avatar)
-   embedVar1.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
-   embedVar1.set_footer(text=f"/crown - Crown Unlimited Manual")
+   if selection == "legend":
+      embedVar = discord.Embed(title= f"What do these emoji's mean?", description=h.LEGEND, colour=0x7289da)
+      embedVar.set_thumbnail(url=avatar)
+      embedVar.set_footer(text=f"/crown - Crown Unlimited Manual")
+      await ctx.send(embed=embedVar)
+      return
 
-   embedVar2 = discord.Embed(title= f"Crown Unlimited Commands", description=h.CROWN_UNLIMITED_COMMANDS, colour=0x7289da)
-   embedVar2.set_thumbnail(url=avatar)
-   embedVar2.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
-   embedVar2.set_footer(text=f"/crown - Crown Unlimited Manual")
-
-   embedVar3 = discord.Embed(title= f"Cards, Titles, Arms, Summons and Shop", description=h.CTAP_COMMANDS, colour=0x7289da)
-   embedVar3.set_thumbnail(url=avatar)
-   embedVar3.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
-   embedVar3.set_footer(text=f"/crown - Crown Unlimited Manual")
-
-   embedVar4 = discord.Embed(title= f"Common Symbols", description=h.LEGEND, colour=0x7289da)
-   embedVar4.set_thumbnail(url=avatar)
-   embedVar4.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
-   embedVar4.set_footer(text=f"/crown - Crown Unlimited Manual")
+   if selection == "play":
+      embedVar = discord.Embed(title= f"Start playing now!", description=h.CROWN_UNLIMITED_GAMES, colour=0x7289da)
+      embedVar.set_thumbnail(url=avatar)
+      embedVar.set_footer(text=f"/crown - Crown Unlimited Manual")
+      await ctx.send(embed=embedVar)
+      return
 
 
-   embeds = [embedVar4, embedVar2,embedVar3, embedVar1]
+   if selection == "universe":
+      embedVar = discord.Embed(title= f"🌍 Universe Info!", description=h.UNIVERSE_STUFF, colour=0x7289da)
+      embedVar.set_thumbnail(url=avatar)
+      embedVar.set_footer(text=f"/crown - Crown Unlimited Manual")
+      await ctx.send(embed=embedVar)
+      return
 
-   await Paginator(bot=bot, ctx=ctx, pages=embeds, timeout=60).run()
+   if selection == "teams":
+      embedVar = discord.Embed(title= f"Gang up and play!", description=h.BOT_COMMANDS, colour=0x7289da)
+      embedVar.set_thumbnail(url=avatar)
+      embedVar.set_footer(text=f"/crown - Crown Unlimited Manual")
 
 
 async def validate_user(ctx):
@@ -878,16 +917,16 @@ async def register(ctx):
                      destiny_drop_message_into_embded = "\n".join(destiny_message)
                      embedVar = discord.Embed(title=f":crown: Create your **Build!**",description=textwrap.dedent(f"""
                      *Nice Choice {ctx.author.mention}!*
-                     Create a **/build** with your **Starting Items**
+                     Create a build with your **Starting Items**
                      Use **/difficulty** to change your difficulty settings
                      By default, you start on Easy mode
                      
                      """),colour=0x1abc9c)
-                     embedVar.add_field(name=f"🎴 **Cards** */cards to open your Cards*", value=f"{card_drop_message_into_embded}", inline=True)
-                     embedVar.add_field(name=f":reminder_ribbon: **Titles** */titles to open your Titles*", value=f"{title_drop_message_into_embded}", inline=True)
-                     embedVar.add_field(name=f":mechanical_arm: **Arms** */arms to open your Arms*", value=f"{arm_drop_message_into_embded}", inline=True)
+                     embedVar.add_field(name=f"🎴 **Cards** */menu to open your Cards*", value=f"{card_drop_message_into_embded}", inline=True)
+                     embedVar.add_field(name=f":reminder_ribbon: **Titles** */menu to open your Titles*", value=f"{title_drop_message_into_embded}", inline=True)
+                     embedVar.add_field(name=f":mechanical_arm: **Arms** */menu to open your Arms*", value=f"{arm_drop_message_into_embded}", inline=True)
                      if has_destiny:
-                        embedVar.add_field(name=f"✨ **Destinies** */destinylist to open your Destinies*", value=f"{destiny_drop_message_into_embded}", inline=False)
+                        embedVar.add_field(name=f"✨ **Destinies** */menu to open your Destinies*", value=f"{destiny_drop_message_into_embded}", inline=False)
                      embedVar.set_author(name=f"Registration Complete!", icon_url=user_info['AVATAR'])
                      embedVar.set_footer(text="Use /tutorial to start the tutorial match!",
                                  icon_url="https://cdn.discordapp.com/emojis/877233426770583563.gif?v=1")
@@ -896,41 +935,22 @@ async def register(ctx):
                      await asyncio.sleep(3)
 
                      embedVar = discord.Embed(title=f"**Welcome to Crown Unlimited**!", description=textwrap.dedent(f"""
-                     Welcome {ctx.author.mention}!                                                                                           
+                     Welcome 🆕 {ctx.author.mention}!                                                                                           
                      
                      Congrats on selecting your starting universe! **Now what?**
-                     Let's take a look at some of the basic information you need to get started below.
-
-                     **Card Basics**
-                     🀄 - **Card Tier** *1-7*
-                     :trident: - **Card Level** *1-500*
-                     :heart: - **Card Health** (HLT)
-                     :cyclone: - **Card Stamina** (ST)
-                     🗡️ - **Attack (ATK)** Blue Crystal 🟦
-                     🛡️ - **Defense (DEF)** Red Crystal 🟥
-                     :drop_of_blood: - Card Passive *Enhancers applied at the start of the battle*
-
-                     **Accessories & Summons**
-                     :reminder_ribbon: - **Title accessory**  *Title enhancers are applied each turn, passively.*
-                     :mechanical_arm: - **Arm accessory** *Arm enhancers are applied passively throughout the duration of battle.*
-                     🧬 - **Summon!** *Summons use Active Enhancers that are available during battle after you Resolve*
-                     
-                     **Currency**
-                     :coin: - **Coins** *Buy Items in the /shop and /trinketshop*
-                     :gem: - **Gems** *Craft Universe Hearts, Souls, Cards, and Destiny Lines!*
 
                      **Let's get started playing the game!**
                      **Step 1:** Use the /daily command right now for your daily reward!
-                     **Step 2:** Use /cards to open your list of cards and equip a card you just got!
-                     **Step 3:** Use /titles and equip one of the titles you just got!
-                     **Step 4:** Use /arms and equip one of the new arms you just got!
-                     **Step 5:** Use /tutorial to learn how to play through battle!
+                     **Step 2:** Use /menu to open your list of cards, titles, and arms and equip a card you just got!
+                     **Step 3:** Use /solo and select **tutorial** to learn how to play through battle!
+
+                     **The /help command is your ❤️ Friend!**
+                     Use the help command dropdown to learn more about Crown Unlimited!
 
                      If you need additional help! ⬇️
                      **/crown** - Read Game Manual
-                     **/help** - Help Menu
                      **/enhancers** - Enhancer Help Menu
-                     **/difficulty** - Change difficulty setting! You start on easy mode.
+                     **/difficulty** - Change difficulty setting! **You start on easy mode**
                      """), colour=0xe91e63)
                      embedVar.set_footer(text="Changing your Discord Account Name or Numbers will break your Crown Unlimited Account.")
                      await ctx.author.send(embed=embedVar)

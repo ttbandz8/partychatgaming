@@ -30,7 +30,7 @@ class Pet(commands.Cog):
         return await main.validate_user(ctx)
 
     @cog_ext.cog_slash(description="Equip Summon", guild_ids=main.guild_ids)
-    async def fastequipsummon(self, ctx, summon: str):
+    async def equipsummon(self, ctx, summon: str):
         a_registered_player = await crown_utilities.player_check(ctx)
         if not a_registered_player:
             return

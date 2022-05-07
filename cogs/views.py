@@ -38,7 +38,7 @@ class Views(commands.Cog):
         return await main.validate_user(ctx)
 
     @cog_ext.cog_slash(description="Equip a Card", guild_ids=main.guild_ids)
-    async def fastequipcard(self, ctx, card: str):
+    async def equipcard(self, ctx, card: str):
         a_registered_player = await crown_utilities.player_check(ctx)
         if not a_registered_player:
             return
@@ -106,7 +106,7 @@ class Views(commands.Cog):
                             ]
                         )
                     ], guild_ids=main.guild_ids)
-    async def quickview(self, ctx, selection, name):
+    async def view(self, ctx, selection, name):
         if selection == "cards":
             await viewcard(self, ctx, name)
         if selection == "titles":
