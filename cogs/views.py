@@ -76,31 +76,31 @@ class Views(commands.Cog):
                             required=True,
                             choices=[
                                 create_choice(
-                                    name="🎴 View Card",
+                                    name="🎴 It's a Card",
                                     value="cards",
                                 ),
                                 create_choice(
-                                    name="🎗️ View Titles",
+                                    name="🎗️ It's a Title",
                                     value="titles",
                                 ),
                                 create_choice(
-                                    name="🦾 View Arms",
+                                    name="🦾 It's an Arm",
                                     value="arms",
                                 ),
                                 create_choice(
-                                    name="🧬 View Summons",
+                                    name="🧬 It's a Summon",
                                     value="summons",
                                 ),
                                 create_choice(
-                                    name="🌍 View Universe",
+                                    name="🌍 It's a Universe",
                                     value="universe",
                                 ),
                                 create_choice(
-                                    name="🎏 View Hall",
+                                    name="🎏 It's a Hall",
                                     value="hall",
                                 ),
                                 create_choice(
-                                    name="🏠 View House",
+                                    name="🏠 It's a House",
                                     value="house",
                                 ),
                             ]

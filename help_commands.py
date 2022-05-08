@@ -58,7 +58,7 @@ LEGEND = textwrap.dedent(f"""\
 🧬 - **Summon!** *Summons use Active Enhancers that are available during battle after you Resolve*
 
 **Currency**
-🪙 - **Coins** *Buy items in the shop and blacksmith*
+💰 - **Coins** *Buy items in the shop and blacksmith*
 💎 - **Gems** *Craft universe hearts, souls, cards, and destiny lines!*
 """)
 
