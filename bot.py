@@ -951,6 +951,8 @@ async def register(ctx):
                      **/crown** - Read Game Manual
                      **/enhancers** - Enhancer Help Menu
                      **/difficulty** - Change difficulty setting! **You start on easy mode**
+
+                     [Join the Crown Unlimited Support Server](https://discord.gg/2JkCqcN3hB)
                      """), colour=0xe91e63)
                      embedVar.set_footer(text="Changing your Discord Account Name or Numbers will break your Crown Unlimited Account.")
                      await ctx.author.send(embed=embedVar)
