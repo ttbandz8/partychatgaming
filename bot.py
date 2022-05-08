@@ -973,7 +973,7 @@ async def register(ctx):
                   'trace': trace
                }))   
          
-         await Paginator(bot=bot, ctx=ctx, disableAfterTimeout=True, timeout = 200,pages=universe_embed_list, customActionRow=[
+         await Paginator(bot=bot, ctx=ctx, disableAfterTimeout=True, timeout=5000, pages=universe_embed_list, customActionRow=[
             custom_action_row,
             custom_function,
          ]).run()
@@ -987,20 +987,20 @@ async def register(ctx):
          await ctx.send(f"{ctx.author.mention} your Registration was cancelled. You must interact before the timeout!")
          
       
-         # trace = []
-         # tb = ex.__traceback__
-         # while tb is not None:
-         #    trace.append({
-         #          "filename": tb.tb_frame.f_code.co_filename,
-         #          "name": tb.tb_frame.f_code.co_name,
-         #          "lineno": tb.tb_lineno
-         #    })
-         #    tb = tb.tb_next
-         # print(str({
-         #       'type': type(ex).__name__,
-         #       'message': str(ex),
-         #       'trace': trace
-         # }))
+         trace = []
+         tb = ex.__traceback__
+         while tb is not None:
+            trace.append({
+                  "filename": tb.tb_frame.f_code.co_filename,
+                  "name": tb.tb_frame.f_code.co_name,
+                  "lineno": tb.tb_lineno
+            })
+            tb = tb.tb_next
+         print(str({
+               'type': type(ex).__name__,
+               'message': str(ex),
+               'trace': trace
+         }))
       # await ctx.send(m.USER_HAS_REGISTERED, delete_after=5)
    else:
       await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=3)
@@ -3220,32 +3220,32 @@ async def addfield(ctx, collection, new_field, field_type):
 
 #    except Exception as e:
 #       await ctx.send(f"Error has occurred: {e}")
-# Crest_dict = {'Unbound': ':ideograph_advantage:',
-#               'My Hero Academia': ':sparkle:',
-#               'League Of Legends': ':u6307:',
-#               'Kanto Region': ':chart:',
-#               'Naruto': ':u7121:',
-#               'Bleach': ':u6709:',
-#               'God Of War': ':u7533:',
-#               'Chainsawman': ':accept:',
-#               'One Punch Man': ':u55b6:',
-#               'Johto Region': ':u6708:',
-#               'Black Clover': ':ophiuchus:',
-#               'Demon Slayer': ':aries:',
-#               'Attack On Titan': ':taurus:',
-#               '7ds': ':capricorn:',
-#               'Hoenn Region': ':leo:',
-#               'Digimon': ':cancer:',
-#               'Fate': ':u6e80:',
-#               'Solo Leveling': ':u5408:',
-#               'Souls': ':sos:',
-#               'Dragon Ball Z': ':u5272:',
-#               'Sinnoh Region': ':u7981:',
-#               'Death Note': ':white_flower:',
-#               'Crown Rift Awakening': ':u7a7a:',
-#               'Crown Rift Slayers': ':sa:',
-#               'Crown Rift Madness': ':m:',
-#               'Persona': ':o:'}
+Crest_dict = {'Unbound': ':ideograph_advantage:',
+              'My Hero Academia': ':sparkle:',
+              'League Of Legends': ':u6307:',
+              'Kanto Region': ':chart:',
+              'Naruto': ':u7121:',
+              'Bleach': ':u6709:',
+              'God Of War': ':u7533:',
+              'Chainsawman': ':accept:',
+              'One Punch Man': ':u55b6:',
+              'Johto Region': ':u6708:',
+              'Black Clover': ':ophiuchus:',
+              'Demon Slayer': ':aries:',
+              'Attack On Titan': ':taurus:',
+              '7ds': ':capricorn:',
+              'Hoenn Region': ':leo:',
+              'Digimon': ':cancer:',
+              'Fate': ':u6e80:',
+              'Solo Leveling': ':u5408:',
+              'Souls': ':sos:',
+              'Dragon Ball Z': ':u5272:',
+              'Sinnoh Region': ':u7981:',
+              'Death Note': ':white_flower:',
+              'Crown Rift Awakening': ':u7a7a:',
+              'Crown Rift Slayers': ':sa:',
+              'Crown Rift Madness': ':m:',
+              'Persona': ':o:'}
 
 
 if config('ENV') == "production":
