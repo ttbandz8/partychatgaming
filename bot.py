@@ -663,7 +663,7 @@ async def crown(ctx):
    await Paginator(bot=bot, ctx=ctx, pages=embeds, timeout=60).run()
   
 
-@slash.slash(description="Rewards for daily voting", guild_ids=guild_ids)
+@slash.slash(description="Rewards for voting", guild_ids=guild_ids)
 async def voted(ctx):
    try:
       query = {'DID': str(ctx.author.id)}
@@ -708,7 +708,7 @@ async def voted(ctx):
             embedVar = discord.Embed(title=f"❌ Daily Voter Rewards!", description=textwrap.dedent(f"""\
             You have not voted for Crown Unlimited today, {ctx.author.mention}!
 
-            To earn your daily voter rewards, [Vote for Crown Unlimited!](https://top.gg/bot/955704903198711808/vote)
+            To earn your voter rewards, [Vote for Crown Unlimited!](https://top.gg/bot/955704903198711808/vote)
 
             **What are the Daily Voter Rewards?** 
             :coin: **{'{:,}'.format(500000)}**
@@ -1488,7 +1488,7 @@ async def on_command_error(ctx, error):
       await ctx.send(f"Crown Unlimited has been Rate Limited")
 
 
-@tasks.loop(hours=1)
+@tasks.loop(minutes=30)
 async def called_once_a_day():
    guild = bot.get_guild(guild_id)
    channel = guild.get_channel(966810770987966484)
@@ -1529,7 +1529,7 @@ called_once_a_day.start()
 
 @slash.slash(name="Daily", description="Receive your daily reward and quests", guild_ids=guild_ids)
 @commands.check(validate_user)
-@commands.cooldown(1, 60*60*24, commands.BucketType.user)
+@commands.cooldown(1, 60*60*12, commands.BucketType.user)
 async def daily(ctx):
    try:
       dailyamount = 250000
@@ -1576,7 +1576,7 @@ async def daily(ctx):
       Defeat **{opponents[q1]}** to earn :coin: {'{:,}'.format(q1_earn)}
       Defeat **{opponents[q2]}** to earn :coin: {'{:,}'.format(q2_earn)}
       Defeat **{opponents[q3]}** to earn :coin: {'{:,}'.format(q3_earn)}
-      Use **/quests** command to complete your quests!
+      Use **/menu** command to open Quests and complete your quests!
 
       Use **/voted** command to receive Daily voting rewards!
 

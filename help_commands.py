@@ -33,12 +33,16 @@ CROWN_UNLIMITED_GAMES = textwrap.dedent(f"""\
 
 **PVP**
 **/pvp** - Battle a rival in PVP mode
+
+[Join the Crown Unlimited Support Server](https://discord.gg/2JkCqcN3hB)
 """)
 
 
 UNIVERSE_STUFF = textwrap.dedent(f"""\
 **View Universes!**
 **/universes** - View all available universe info including all available cards, accessories, and destinies
+
+[Join the Crown Unlimited Support Server](https://discord.gg/2JkCqcN3hB)
 """)
 
 
@@ -60,6 +64,8 @@ LEGEND = textwrap.dedent(f"""\
 **Currency**
 💰 - **Coins** *Buy items in the shop and blacksmith*
 💎 - **Gems** *Craft universe hearts, souls, cards, and destiny lines!*
+
+[Join the Crown Unlimited Support Server](https://discord.gg/2JkCqcN3hB)
 """)
 
 
@@ -104,6 +110,8 @@ BOT_COMMANDS = textwrap.dedent(f"""\
 **/houses** - Show list of available houses
 **/viewhouse** - View House Information
 **/buyhouse** - Buy and move into a new family house
+
+[Join the Crown Unlimited Support Server](https://discord.gg/2JkCqcN3hB)
 """)
 
 
@@ -132,4 +140,6 @@ CTAP_COMMANDS = textwrap.dedent(f"""\
 */equipsummon*
 ------------------
 */view*
+
+[Join the Crown Unlimited Support Server](https://discord.gg/2JkCqcN3hB)
 """)
