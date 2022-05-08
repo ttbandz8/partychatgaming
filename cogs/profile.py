@@ -162,7 +162,7 @@ class Profile(commands.Cog):
                                     value="quests",
                                 ),
                                 create_choice(
-                                    name="🪙 My Money",
+                                    name="💰 My Money",
                                     value="balance",
                                 ),
                                 create_choice(
