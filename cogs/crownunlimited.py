@@ -2789,19 +2789,20 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
             
             
             move1_ap = ap1
-            move1_text = f"💥 {list(move1.keys())[0]}: {move1_ap} {ebasic}"
+            basic_attack_emoji = set_emoji(list(move1.values())[2])
+            super_attack_emoji = set_emoji(list(move2.values())[2])
+            ultimate_attack_emoji = set_emoji(list(move3.values())[2])
+            
+            move1_text = f"{basic_attack_emoji} {list(move1.keys())[0]}: {move1_ap} {ebasic}"
 
             
             move2_ap = ap2
-            move2_text = f"☄️ {list(move2.keys())[0]}: {move2_ap} {especial}"
+            move2_text = f"{super_attack_emoji} {list(move2.keys())[0]}: {move2_ap} {especial}"
 
             
             move3_ap = ap3
-            move3_text = f"🏵️ {list(move3.keys())[0]}: {move3_ap} {eultimate}"
+            move3_text = f"{ultimate_attack_emoji} {list(move3.keys())[0]}: {move3_ap} {eultimate}"
             
-
-            
-                
 
             move_enhanced = moveset[3]
             move_enhanced_ap = enh1
@@ -2994,6 +2995,38 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
             'trace': trace
         }))
         return
+
+
+def set_emoji(element):
+    emoji = ""
+    if element == "PHYSICAL":
+        emoji = "👊"
+    if element == "FIRE":
+        emoji = "🔥"
+    if element == "ICE":
+        emoji = "❄️"
+    if element == "WATER":
+        emoji = "💧"
+    if element == "EARTH":
+        emoji = "🌱"
+    if element == "ELECTRIC":
+        emoji = "🌩️"
+    if element == "WIND":
+        emoji = "🌪️"
+    if element == "PSYCHIC":
+        emoji = "🔮"
+    if element == "DEATH":
+        emoji = "☠️"
+    if element == "LIFE":
+        emoji = "❤️‍🔥"
+    if element == "LIGHT":
+        emoji = "🌕"
+    if element == "DARK":
+        emoji = "🌑"
+
+    return emoji
+       
+   
 
 
 def showsummon(url, summon, message, lvl, bond):
