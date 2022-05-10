@@ -198,18 +198,132 @@ async def route_to_storage(player, card_name, current_cards, card_owned, price, 
         # await channel.send(f"'PLAYER': **{str(player)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
 
 
-# async def bless_all(ctx, amount: int):
-#     guild = main.bot.get_guild(main.guild_id)
-#     channel = guild.get_channel(main.guild_channel)
-#     message_channel = channel
-#     try:
-#         all_users = db.queryAllVault()
-#         for user in all_users:
-#             await bless(amount, user['DID'])
-#         await ctx.send(f"All Crown Unlimited Players have been blessed. 👑")
-#     except Exception as e:
-#     print(e)
+def set_emoji(element):
+    emoji = ""
+    if element == "PHYSICAL":
+        emoji = "👊"
+    if element == "FIRE":
+        emoji = "🔥"
+    if element == "ICE":
+        emoji = "❄️"
+    if element == "WATER":
+        emoji = "💧"
+    if element == "EARTH":
+        emoji = "🌱"
+    if element == "ELECTRIC":
+        emoji = "🌩️"
+    if element == "WIND":
+        emoji = "🌪️"
+    if element == "PSYCHIC":
+        emoji = "🔮"
+    if element == "DEATH":
+        emoji = "☠️"
+    if element == "LIFE":
+        emoji = "❤️‍🔥"
+    if element == "LIGHT":
+        emoji = "🌕"
+    if element == "DARK":
+        emoji = "🌑"
 
+    return emoji
+
+
+def set_affinities(card):
+    try:
+        weaknesses = card['WEAKNESS']
+        resistances = card['RESISTANT']
+        repels = card['REPEL']
+        absorbs = card['ABSORB']
+        immunity = card['IMMUNE']
+
+        weakness_list = []
+        resistance_list = []
+        repels_list = []
+        absorb_list = []
+        immune_list = []
+
+        message_list = []
+
+        weakness_msg = ""
+        resistances_msg = ""
+        repels_msg = ""
+        absorb_msg = ""
+        immune_msg = ""
+
+        message_to = ""
+
+        for weakness in weaknesses:
+            if weakness:
+                emoji = set_emoji(weakness)
+                weakness_list.append(emoji)
+
+        for resistance in resistances:
+            if resistance:
+                emoji = set_emoji(resistance)
+                resistance_list.append(emoji)
+
+        for repel in repels:
+            if repel:
+                emoji = set_emoji(repel)
+                repels_list.append(emoji)
+
+        for absorb in absorbs:
+            if absorb:
+                emoji = set_emoji(absorb)
+                absorb_list.append(emoji)
+
+        for immune in immunity:
+            if immune:
+                emoji = set_emoji(immune)
+                immune_list.append(emoji)
+
+        if weakness_list:
+            weakness_msg = " ".join(weakness_list)
+            message_list.append(f"**Weaknesses:** {weakness_msg}")
+        
+        if resistance_list:
+            resistances_msg = " ".join(resistance_list)
+            message_list.append(f"**Resistances:** {resistances_msg}")
+        
+        if repels_list:
+            repels_msg = " ".join(repels_list)
+            message_list.append(f"**Repels:** {repels_msg}")
+
+        if absorb_list:
+            absorb_msg = " ".join(absorb_list)
+            message_list.append(f"**Absorbs:** {absorb_msg}")
+
+        if immune_list:
+            immune_msg = " ".join(immune_list)
+            message_list.append(f"**Immune:** {immune_msg}")
+
+        if message_list:
+            message_to = "\n".join(message_list)
+        
+        if  not message_list:
+            message_to = "No Affinities"
+
+        affinity_message = textwrap.dedent(f"""\
+        {message_to}
+        """)
+
+        return affinity_message
+    except Exception as ex:
+        trace = []
+        tb = ex.__traceback__
+        while tb is not None:
+            trace.append({
+                "filename": tb.tb_frame.f_code.co_filename,
+                "name": tb.tb_frame.f_code.co_name,
+                "lineno": tb.tb_lineno
+            })
+            tb = tb.tb_next
+        print(str({
+            'player': str(player),
+            'type': type(ex).__name__,
+            'message': str(ex),
+            'trace': trace
+        }))
 
 async def corrupted_universe_handler(ctx, universe, difficulty):
     try:

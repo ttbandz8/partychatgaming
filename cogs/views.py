@@ -155,6 +155,7 @@ async def viewcard(self, ctx, card: str):
             o_defense = card['DEF']
             o_type = card['TYPE']
             o_passive = card['PASS'][0]
+            affinity_message = crown_utilities.set_affinities(card)
             o_speed = card['SPD']
             o_show = card['UNIVERSE']
             o_has_collection = card['HAS_COLLECTION']
@@ -275,7 +276,7 @@ async def viewcard(self, ctx, card: str):
                 🏃 {o_speed}
 
                 🩸 {passive_name}: {passive_type} {passive_num}{passive_enhancer_suffix_mapping[passive_type]}                
-                
+
                 💥 {move1}: {move1ap}
                 ☄️ {move2}: {move2ap}
                 🏵️ {move3}: {move3ap}
@@ -283,6 +284,7 @@ async def viewcard(self, ctx, card: str):
 
                 ♾️ {traitmessage}
                 """), colour=000000)
+                embedVar.add_field(name="AFFINITIES", value=f"{affinity_message}")
                 embedVar.set_footer(text=f"{tip}")
                 await ctx.send(embed=embedVar)
 
@@ -291,6 +293,7 @@ async def viewcard(self, ctx, card: str):
                                     o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, 0, None)
 
                 embedVar = discord.Embed(title=f"", colour=000000)
+                embedVar.add_field(name="AFFINITIES", value=f"{affinity_message}")
                 embedVar.set_image(url="attachment://image.png")
                 embedVar.set_thumbnail(url=show_img)
                 embedVar.set_author(name=textwrap.dedent(f"""\

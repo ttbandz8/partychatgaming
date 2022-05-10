@@ -2789,9 +2789,9 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
             
             
             move1_ap = ap1
-            basic_attack_emoji = set_emoji(list(move1.values())[2])
-            super_attack_emoji = set_emoji(list(move2.values())[2])
-            ultimate_attack_emoji = set_emoji(list(move3.values())[2])
+            basic_attack_emoji = crown_utilities.set_emoji(list(move1.values())[2])
+            super_attack_emoji = crown_utilities.set_emoji(list(move2.values())[2])
+            ultimate_attack_emoji = crown_utilities.set_emoji(list(move3.values())[2])
             
             move1_text = f"{basic_attack_emoji} {list(move1.keys())[0]}: {move1_ap} {ebasic}"
 
@@ -2997,34 +2997,6 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
         return
 
 
-def set_emoji(element):
-    emoji = ""
-    if element == "PHYSICAL":
-        emoji = "👊"
-    if element == "FIRE":
-        emoji = "🔥"
-    if element == "ICE":
-        emoji = "❄️"
-    if element == "WATER":
-        emoji = "💧"
-    if element == "EARTH":
-        emoji = "🌱"
-    if element == "ELECTRIC":
-        emoji = "🌩️"
-    if element == "WIND":
-        emoji = "🌪️"
-    if element == "PSYCHIC":
-        emoji = "🔮"
-    if element == "DEATH":
-        emoji = "☠️"
-    if element == "LIFE":
-        emoji = "❤️‍🔥"
-    if element == "LIGHT":
-        emoji = "🌕"
-    if element == "DARK":
-        emoji = "🌑"
-
-    return emoji
        
    
 
