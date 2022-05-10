@@ -256,7 +256,10 @@ class CARDS():
     TOURNAMENT_REQUIREMENTS: int = field(default_factory=lambda: 0)
     TIMESTAMP: str = now
     MOVESET: list[str] = field(
-        default_factory=lambda: [{'MOVE1': 20, "STAM": 10}, {'MOVE2': 50, "STAM": 30}, {'ULTIMATE': 100, "STAM": 80},
+        default_factory=lambda: [
+        {'MOVE1': 20, "STAM": 10, "ELEMENT": "FIRE"}, 
+        {'MOVE2': 50, "STAM": 30, "ELEMENT": "ELECTRIC"}, 
+        {'ULTIMATE': 100, "STAM": 80, "ELEMENT": "DARK"},
                                  {'ENHANCER': 0, "STAM": 20, "TYPE": "TYPE"}])
     RPATH: str = field(default_factory=lambda: "N/A")
     RNAME: str = field(default_factory=lambda: "N/A")
