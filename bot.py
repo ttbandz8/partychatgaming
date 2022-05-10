@@ -2743,6 +2743,24 @@ async def code(ctx, code_input: str):
 #       await ctx.send("Admin only")
 
 
+# @bot.command()
+# @commands.check(validate_user)
+# async def elements(ctx):
+#    try:
+#       all_cards = db.queryAllCards()
+
+#       for card in all_cards:
+#          query = {"NAME": card['NAME']}
+#          update_query1 = {"$set": {"MOVESET.0.ELEMENT": "FIRE"}}
+#          update_query2 = {"$set": {"MOVESET.1.ELEMENT": "ELECTRIC"}}
+#          update_query3 = {"$set": {"MOVESET.2.ELEMENT": "DARK"}}
+
+#          db.updateCard(query, update_query1)
+#          db.updateCard(query, update_query2)
+#          db.updateCard(query, update_query3)
+#    except:
+#       print("errored out")
+
 @bot.command()
 @commands.check(validate_user)
 async def addfield(ctx, collection, new_field, field_type):
