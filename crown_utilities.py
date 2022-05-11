@@ -216,6 +216,10 @@ def set_emoji(element):
         emoji = "🌪️"
     if element == "PSYCHIC":
         emoji = "🔮"
+    if element == "RANGED":
+        emoji = "🏹"
+    if element == "POISON":
+        emoji = "🧪"
     if element == "DEATH":
         emoji = "☠️"
     if element == "LIFE":

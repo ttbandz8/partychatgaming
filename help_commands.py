@@ -68,6 +68,38 @@ LEGEND = textwrap.dedent(f"""\
 [Join the Crown Unlimited Support Server](https://discord.gg/2JkCqcN3hB)
 """)
 
+ELEMENTS = textwrap.dedent(f"""\
+👊 Physical - Normal Damage
+
+🔥 Fire - Does 20% Double DMG on next opponent turn 
+
+❄️ Ice - Freezes opponents Enhancer for 1 turn 
+
+💧 Water - increases all water attack dmg by 25 Flat 
+
+🌱 Earth - Cannot be Parried. Increases Def by 15% AP
+
+⚡️ Electric- Add 3% to Shock damage, added to each attack
+
+🌪️ Wind - Cannot Miss 
+
+🔮 Psychic - Penetrates Barriers. Reduce opponent ATK & DEF by 8% AP 
+
+☠️ Death - Adds 5% opponent max health as damage
+
+❤️‍🔥 Life - Heal for 15% AP 
+
+🔅 Light - Regain 50% Stamina Cost
+
+♠️ Dark- Penetrates shields & drains 5 stamina 
+
+🧪 Poison - opponent takes additional 8 damage each turn stacking up to 100
+
+🏹 Ranged - If ST > 80 deals 1.3x Damage
+
+[Join the Crown Unlimited Support Server](https://discord.gg/2JkCqcN3hB)
+""")
+
 
 BOT_COMMANDS = textwrap.dedent(f"""\
 **Guild Commands**

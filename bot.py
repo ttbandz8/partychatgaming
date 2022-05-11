@@ -98,6 +98,10 @@ bot.remove_command("help")
                                     value="legend",
                                 ),
                                 create_choice(
+                                    name="🔅 What are elements?",
+                                    value="elements",
+                                ),
+                                create_choice(
                                     name="⚔️ How to Play?",
                                     value="play",
                                 ),
@@ -129,6 +133,13 @@ async def help(ctx: SlashContext, selection):
 
    if selection == "legend":
       embedVar = discord.Embed(title= f"What do these emoji's mean?", description=h.LEGEND, colour=0x7289da)
+      embedVar.set_thumbnail(url=avatar)
+      embedVar.set_footer(text=f"/crown - Crown Unlimited Manual")
+      await ctx.send(embed=embedVar)
+      return
+
+   if selection == "elements":
+      embedVar = discord.Embed(title= f"What does each element do?", description=h.ELEMENTS, colour=0x7289da)
       embedVar.set_thumbnail(url=avatar)
       embedVar.set_footer(text=f"/crown - Crown Unlimited Manual")
       await ctx.send(embed=embedVar)
