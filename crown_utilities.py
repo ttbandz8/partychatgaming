@@ -228,6 +228,65 @@ def set_emoji(element):
     return emoji
 
 
+def check_affinities(player, card, basic_element, super_element, ultimate_element):
+    # card = card you want to check
+    weaknesses = card['WEAKNESS']
+    resistances = card['RESISTANT']
+    repels = card['REPEL']
+    absorbs = card['ABSORB']
+    immunity = card['IMMUNE']
+
+    is_weak = False
+    is_resistant = False
+    does_repel = False
+    does_absorb = False
+    is_immune = False
+
+    affinities = {
+        "PLAYER": player,
+        "BASIC": "",
+        "SUPER": "",
+        "ULTIMATE": ""
+    }
+
+    if basic_element in weaknesses:
+        affinities['BASIC'] = "WEAKNESS"
+    if basic_element in resistances:
+        affinities['BASIC'] = "RESISTANT"
+    if basic_element in repels:
+        affinities['BASIC'] = "REPELS"
+    if basic_element in absorbs:
+        affinities['BASIC'] = "ABSORBS"
+    if basic_element in immunity:
+        affinities['BASIC'] = "IMMUNE"
+
+    if super_element in weaknesses:
+        affinities['SUPER'] = "WEAKNESS"
+    if super_element in resistances:
+        affinities['SUPER'] = "RESISTANT"
+    if super_element in repels:
+        affinities['SUPER'] = "REPELS"
+    if super_element in absorbs:
+        affinities['SUPER'] = "ABSORBS"
+    if super_element in immunity:
+        affinities['SUPER'] = "IMMUNE"
+
+    if ultimate_element in weaknesses:
+        affinities['ULTIMATE'] = "WEAKNESS"
+    if ultimate_element in resistances:
+        affinities['ULTIMATE'] = "RESISTANT"
+    if ultimate_element in repels:
+        affinities['ULTIMATE'] = "REPELS"
+    if ultimate_element in absorbs:
+        affinities['ULTIMATE'] = "ABSORBS"
+    if ultimate_element in immunity:
+        affinities['ULTIMATE'] = "IMMUNE"
+
+    
+
+    return affinities
+
+
 def set_affinities(card):
     try:
         weaknesses = card['WEAKNESS']
@@ -319,11 +378,11 @@ def set_affinities(card):
             })
             tb = tb.tb_next
         print(str({
-            'player': str(player),
             'type': type(ex).__name__,
             'message': str(ex),
             'trace': trace
         }))
+
 
 async def corrupted_universe_handler(ctx, universe, difficulty):
     try:
