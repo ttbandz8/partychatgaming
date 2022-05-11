@@ -2404,6 +2404,7 @@ def damage_cal(opponent_affinity, move_type, move_element, universe, card, abili
             low = dmg - (dmg * .10)
             high = dmg + (dmg * .10)
 
+            move_emoji = crown_utilities.set_emoji(move_element)
             if move_element == "WIND":
                 is_wind_element = True
             if move_element == "RANGED" and stamina >= 80:
@@ -2426,29 +2427,29 @@ def damage_cal(opponent_affinity, move_type, move_element, universe, card, abili
             if hit_roll <= miss_hit:
                 if universe == 'Crown Rift Slayers':
                     true_dmg = round(true_dmg * 2)
-                    message = f'🩸 Feint Attack! {move} Critically Hits for **{true_dmg}**!! :boom: '
+                    message = f'🩸{move_emoji} Feint Attack! {move} Critically Hits for **{true_dmg}**!! :boom: '
                 elif is_wind_element:
                     true_dmg = round(true_dmg)
                     message = f'🌪️ Wind Attack! {move} hits for **{true_dmg}**!'       
                 else:
                     true_dmg = 0
-                    message = f'⚔️ {move} misses! :dash:'
+                    message = f'{move_emoji} {move} misses! :dash:'
             elif hit_roll <= low_hit and hit_roll > miss_hit:
                 true_dmg = round(true_dmg * .70)
-                message = f'⚔️ {move} used! Chips for **{true_dmg}**! :anger:'
+                message = f'{move_emoji} {move} used! Chips for **{true_dmg}**! :anger:'
             elif hit_roll <= med_hit and hit_roll > low_hit:
                 true_dmg = round(true_dmg * .85)
-                message = f'⚔️ {move} used! Connects for **{true_dmg}**! :bangbang:'
+                message = f'{move_emoji} {move} used! Connects for **{true_dmg}**! :bangbang:'
             elif hit_roll <= standard_hit and hit_roll > med_hit:
                 true_dmg = round(true_dmg)
-                message = f'⚔️ {move} used! Hits for **{true_dmg}**! :anger_right:'
+                message = f'{move_emoji} {move} used! Hits for **{true_dmg}**! :anger_right:'
             elif hit_roll == 20:
                 if universe == 'Crown Rift Awakening':
                     true_dmg = round(true_dmg * 4)
-                    message = f"🩸 Blood Awakeking! {move} Mortally Wounds for **{true_dmg}**!! :boom: "
+                    message = f"🩸{move_emoji} Blood Awakeking! {move} Mortally Wounds for **{true_dmg}**!! :boom: "
                 else:
                     true_dmg = round(true_dmg * 2)
-                    message = f"⚔️ {move} used! Critically Hits for **{true_dmg}**!! :boom: "
+                    message = f"{move_emoji} {move} used! Critically Hits for **{true_dmg}**!! :boom: "
 
             if move_stamina == 80:
                 # message = f"{special_description}\n" + message
@@ -8603,6 +8604,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_health = o_health - dmg['DMG']
                                                     elif dmg['ABSORB']:
                                                         t_health = t_health + dmg['DMG']
+                                                    elif dmg['ELEMENT'] == water_element:
+                                                        o_water_buff = o_water_buff + 25
+                                                        t_health = t_health - (dmg['DMG'] + o_water_buff)
                                                     else:
                                                         t_health = t_health - dmg['DMG']
 
@@ -8880,6 +8884,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health - dmg['DMG']
                                                         elif dmg['ABSORB']:
                                                             t_health = t_health + dmg['DMG']
+                                                        elif dmg['ELEMENT'] == water_element:
+                                                            o_water_buff = o_water_buff + 25
+                                                            t_health = t_health - (dmg['DMG'] + o_water_buff)
                                                         else:
                                                             t_health = t_health - dmg['DMG']
 
@@ -10044,6 +10051,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health - dmg['DMG']
                                                         elif dmg['ABSORB']:
                                                             o_health = o_health + dmg['DMG']
+                                                        elif dmg['ELEMENT'] == water_element:
+                                                            t_water_buff = t_water_buff + 25
+                                                            o_health = o_health - (dmg['DMG'] + t_water_buff)
                                                         else:
                                                             o_health = o_health - dmg['DMG']
 
@@ -10301,8 +10311,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = t_health - int(dmg['DMG'])
                                                             elif dmg['ABSORB']:
                                                                 o_health = o_health + int(dmg['DMG'])
+                                                            elif dmg['ELEMENT'] == water_element:
+                                                                t_water_buff = t_water_buff + 25
+                                                                o_health = o_health - (dmg['DMG'] + t_water_buff)
                                                             else:
-                                                                o_health = o_health - int(dmg['DMG'])
+                                                                o_health = o_health - dmg['DMG']
 
                                                             if dmg['ELEMENT'] == earth_element:
                                                                 t_defense = t_defense + (dmg['DMG'] * .15)
@@ -11100,6 +11113,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = t_health - dmg['DMG']
                                                     elif dmg['ABSORB']:
                                                         o_health = o_health + dmg['DMG']
+                                                    elif dmg['ELEMENT'] == water_element:
+                                                        t_water_buff = t_water_buff + 25
+                                                        o_health = o_health - (dmg['DMG'] + t_water_buff)
                                                     else:
                                                         o_health = o_health - dmg['DMG']
 
@@ -11335,8 +11351,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health - int(dmg['DMG'])
                                                         elif dmg['ABSORB']:
                                                             o_health = o_health + int(dmg['DMG'])
+                                                        elif dmg['ELEMENT'] == water_element:
+                                                            t_water_buff = t_water_buff + 25
+                                                            o_health = o_health - (dmg['DMG'] + t_water_buff)
                                                         else:
-                                                            o_health = o_health - int(dmg['DMG'])
+                                                            o_health = o_health - dmg['DMG']
 
                                                         if dmg['ELEMENT'] == earth_element:
                                                             t_defense = t_defense + (dmg['DMG'] * .15)
@@ -12565,6 +12584,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_health = o_health - dmg['DMG']
                                                     elif dmg['ABSORB']:
                                                         t_health = t_health + dmg['DMG']
+                                                    elif dmg['ELEMENT'] == water_element:
+                                                        o_water_buff = o_water_buff + 25
+                                                        t_health = t_health - (dmg['DMG'] + o_water_buff)
                                                     else:
                                                         t_health = t_health - dmg['DMG']
                                                     
@@ -12822,8 +12844,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health - int(dmg['DMG'])
                                                         elif dmg['ABSORB']:
                                                             t_health = t_health + int(dmg['DMG'])
+                                                        elif dmg['ELEMENT'] == water_element:
+                                                            o_water_buff = o_water_buff + 25
+                                                            t_health = t_health - (dmg['DMG'] + o_water_buff)
                                                         else:
-                                                            t_health = t_health - int(dmg['DMG'])
+                                                            t_health = t_health - dmg['DMG']
 
 
                                                         if dmg['ELEMENT'] == earth_element:
@@ -14051,10 +14076,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health - dmg['DMG']
                                                         elif dmg['ABSORB']:
                                                             t_health = t_health + dmg['DMG']
+                                                        elif dmg['ELEMENT'] == water_element:
+                                                            o_water_buff = o_water_buff + 25
+                                                            t_health = t_health - (dmg['DMG'] + o_water_buff)
                                                         else:
                                                             t_health = t_health - dmg['DMG']
-                                                        
-    
+        
                                                         if dmg['ELEMENT'] == earth_element:
                                                             o_defense = o_defense + (dmg['DMG'] * .15)
 
@@ -14327,8 +14354,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_health = o_health - int(dmg['DMG'])
                                                             elif dmg['ABSORB']:
                                                                 t_health = t_health + int(dmg['DMG'])
+                                                            elif dmg['ELEMENT'] == water_element:
+                                                                o_water_buff = o_water_buff + 25
+                                                                t_health = t_health - (dmg['DMG'] + o_water_buff)
                                                             else:
-                                                                t_health = t_health - int(dmg['DMG'])
+                                                                t_health = t_health - dmg['DMG']
 
                                                             if dmg['ELEMENT'] == earth_element:
                                                                 o_defense = o_defense + (dmg['DMG'] * .15)
@@ -15903,9 +15933,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_health = t_health - dmg['DMG']
                                                 elif dmg['ABSORB']:
                                                     o_health = o_health + dmg['DMG']
+                                                elif dmg['ELEMENT'] == water_element:
+                                                    t_water_buff = t_water_buff + 25
+                                                    o_health = o_health - (dmg['DMG'] + t_water_buff)
                                                 else:
                                                     o_health = o_health - dmg['DMG']
-
+                                                
                                                 if dmg['ELEMENT'] == earth_element:
                                                     t_defense = t_defense + (dmg['DMG'] * .15)
 
@@ -16145,9 +16178,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = t_health - int(dmg['DMG'])
                                                             elif dmg['ABSORB']:
                                                                 c_health = c_health + int(dmg['DMG'])
+                                                            elif dmg['ELEMENT'] == water_element:
+                                                                t_water_buff = t_water_buff + 25
+                                                                c_health = c_health - (dmg['DMG'] + t_water_buff)
                                                             else:
-                                                                c_health = c_health - int(dmg['DMG'])
-
+                                                                c_health = c_health - dmg['DMG']
+                                                            
                                                             if dmg['ELEMENT'] == earth_element:
                                                                 t_defense = t_defense + (dmg['DMG'] * .15)
 
@@ -16414,8 +16450,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = t_health - int(dmg['DMG'])
                                                             elif dmg['ABSORB']:
                                                                 o_health = o_health + int(dmg['DMG'])
+                                                            elif dmg['ELEMENT'] == water_element:
+                                                                t_water_buff = t_water_buff + 25
+                                                                o_health = o_health - (dmg['DMG'] + t_water_buff)
                                                             else:
-                                                                o_health = o_health - int(dmg['DMG'])
+                                                                o_health = o_health - dmg['DMG']
 
                                                             if dmg['ELEMENT'] == earth_element:
                                                                 t_defense = t_defense + (dmg['DMG'] * .15)
@@ -16687,8 +16726,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health - int(dmg['DMG'])
                                                         elif dmg['ABSORB']:
                                                             o_health = o_health + int(dmg['DMG'])
+                                                        elif dmg['ELEMENT'] == water_element:
+                                                            t_water_buff = t_water_buff + 25
+                                                            o_health = o_health - (dmg['DMG'] + t_water_buff)
                                                         else:
-                                                            o_health = o_health - int(dmg['DMG'])
+                                                            o_health = o_health - dmg['DMG']
 
                                                         if dmg['ELEMENT'] == earth_element:
                                                             t_defense = t_defense + (dmg['DMG'] * .15)
@@ -18188,9 +18230,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 c_health = c_health - int(dmg['DMG'])
                                                             elif dmg['ABSORB']:
                                                                 t_health = t_health + int(dmg['DMG'])
+                                                            elif dmg['ELEMENT'] == water_element:
+                                                                c_water_buff = c_water_buff + 25
+                                                                t_health = t_health - (dmg['DMG'] + c_water_buff)
                                                             else:
-                                                                t_health = t_health - int(dmg['DMG'])
-
+                                                                t_health = t_health - dmg['DMG']
 
                                                             if dmg['ELEMENT'] == earth_element:
                                                                 c_defense = c_defense + (dmg['DMG'] * .15)
@@ -19156,6 +19200,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 c_health = c_health - dmg['DMG']
                                                             elif dmg['ABSORB']:
                                                                 t_health = t_health + dmg['DMG']
+                                                            elif dmg['ELEMENT'] == water_element:
+                                                                c_water_buff = c_water_buff + 25
+                                                                t_health = t_health - (dmg['DMG'] + c_water_buff)
                                                             else:
                                                                 t_health = t_health - dmg['DMG']
 
@@ -19430,8 +19477,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     c_health = c_health - int(dmg['DMG'])
                                                                 elif dmg['ABSORB']:
                                                                     t_health = t_health + int(dmg['DMG'])
+                                                                elif dmg['ELEMENT'] == water_element:
+                                                                    c_water_buff = c_water_buff + 25
+                                                                    t_health = t_health - (dmg['DMG'] + c_water_buff)
                                                                 else:
-                                                                    t_health = t_health - int(dmg['DMG'])
+                                                                    t_health = t_health - dmg['DMG']
 
                                                                 if dmg['ELEMENT'] == earth_element:
                                                                     c_defense = c_defense + (dmg['DMG'] * .15)
@@ -20770,6 +20820,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = t_health - dmg['DMG']
                                                     elif dmg['ABSORB']:
                                                         c_health = c_health + dmg['DMG']
+                                                    elif dmg['ELEMENT'] == water_element:
+                                                        t_water_buff = t_water_buff + 25
+                                                        c_health = c_health - (dmg['DMG'] + t_water_buff)
                                                     else:
                                                         c_health = c_health - dmg['DMG']
 
@@ -21024,8 +21077,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = t_health - int(dmg['DMG'])
                                                             elif dmg['ABSORB']:
                                                                 o_health = o_health + int(dmg['DMG'])
+                                                            elif dmg['ELEMENT'] == water_element:
+                                                                t_water_buff = t_water_buff + 25
+                                                                o_health = o_health - (dmg['DMG'] + t_water_buff)
                                                             else:
-                                                                o_health = o_health - int(dmg['DMG'])
+                                                                o_health = o_health - dmg['DMG']
 
                                                             if dmg['ELEMENT'] == earth_element:
                                                                 t_defense = t_defense + (dmg['DMG'] * .15)
@@ -21314,8 +21370,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = t_health - int(dmg['DMG'])
                                                             elif dmg['ABSORB']:
                                                                 c_health = c_health + int(dmg['DMG'])
+                                                            elif dmg['ELEMENT'] == water_element:
+                                                                t_water_buff = t_water_buff + 25
+                                                                c_health = c_health - (dmg['DMG'] + t_water_buff)
                                                             else:
-                                                                c_health = c_health - int(dmg['DMG'])
+                                                                c_health = c_health - dmg['DMG']
 
                                                             if dmg['ELEMENT'] == earth_element:
                                                                 t_defense = t_defense + (dmg['DMG'] * .15)
