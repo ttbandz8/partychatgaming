@@ -7287,9 +7287,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
             start_tales_buttons_action_row = manage_components.create_actionrow(*start_tales_buttons)
 
-            tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff
-            tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff
-            tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff
+            tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff + t_shock_buff
+            tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff + t_shock_buff
+            tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff + t_shock_buff
             tenh1 = list(t_enhancer.values())[0]
             tenh_name = list(t_enhancer.values())[2]
             
@@ -7428,7 +7428,18 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         if mode in PVP_MODES or mode in RAID_MODES:
                             # Player 1 Turn Start
                             if turn == 0:
-
+                                if t_burn_dmg:
+                                    o_health = o_health - t_burn_dmg
+                                    previous_moves.append(f"*{turn_total}:* 🔥 **{o_card}** burned for **{t_burn_dmg}** dmg...")
+                                if t_freeze_enh:
+                                    previous_moves.append(f"*{turn_total}:* ❄️ **{o_card}** enhancer has been frozen...")
+                                if t_poison_dmg:
+                                    o_health = o_health - t_poison_dmg
+                                    previous_moves.append(f"*{turn_total}:* 🧪 **{o_card}** poisoned for **{t_poison_dmg}** dmg...")
+                                
+                                o_burn_dmg = 0
+                                o_freeze_enh = False
+                                                    
                                 if o_title_passive_type:
                                     if o_title_passive_type == "HLT":
                                         o_health = round(round(o_health + ((o_title_passive_value / 100) * o_health)))
@@ -7770,9 +7781,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         turn = 0
                                 else:
                                     # Ap Levels
-                                    ap1 = list(o_1.values())[0] + ocard_lvl_ap_buff
-                                    ap2 = list(o_2.values())[0] + ocard_lvl_ap_buff
-                                    ap3 = list(o_3.values())[0] + ocard_lvl_ap_buff + demon_slayer_buff
+                                    ap1 = list(o_1.values())[0] + ocard_lvl_ap_buff + o_shock_buff
+                                    ap2 = list(o_2.values())[0] + ocard_lvl_ap_buff + o_shock_buff
+                                    ap3 = list(o_3.values())[0] + ocard_lvl_ap_buff + demon_slayer_buff + o_shock_buff
                                     enh1 = list(o_enhancer.values())[0]
                                     enh_name = list(o_enhancer.values())[2]
                                     pet_enh_name = list(opet_move.values())[2]
@@ -8612,10 +8623,23 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_health = o_health + (dmg['DMG'] * .15)
 
                                                     if dmg['ELEMENT'] == phsycic_element:
-                                                        t_defense = t_defense - (dmg['DMG'] * .8)
-                                                        t_attack = t_attack - (dmg['DMG'] * .8)
+                                                        t_defense = t_defense - (dmg['DMG'] * .08)
+                                                        t_attack = t_attack - (dmg['DMG'] * .08)
 
+                                                    if dmg['ELEMENT'] == fire_element:
+                                                        o_burn_dmg = dmg['DMG'] * .25
 
+                                                    if dmg['ELEMENT'] == ice_element:
+                                                        o_freeze_enh = True
+
+                                                    if dmg['ELEMENT'] == water_element:
+                                                        o_water_buff = o_water_buff + 25
+
+                                                    if dmg['ELEMENT'] == electric_element:
+                                                        o_shock_buff = o_shock_buff +  (dmg['DMG'] * .05)
+
+                                                    if dmg['ELEMENT'] == poison_element:
+                                                        o_poison_dmg = o_poison_dmg + 8
 
                                                 o_stamina = o_stamina - 20
                                                 o_block_used = True
@@ -8876,8 +8900,23 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health + (dmg['DMG'] * .15)
 
                                                         if dmg['ELEMENT'] == phsycic_element:
-                                                            t_defense = t_defense - (dmg['DMG'] * .8)
-                                                            t_attack = t_attack - (dmg['DMG'] * .8)
+                                                            t_defense = t_defense - (dmg['DMG'] * .08)
+                                                            t_attack = t_attack - (dmg['DMG'] * .08)
+
+                                                        if dmg['ELEMENT'] == fire_element:
+                                                            o_burn_dmg = dmg['DMG'] * .25
+
+                                                        if dmg['ELEMENT'] == ice_element:
+                                                            o_freeze_enh = True
+
+                                                        if dmg['ELEMENT'] == water_element:
+                                                            o_water_buff = o_water_buff + 25
+
+                                                        if dmg['ELEMENT'] == electric_element:
+                                                            o_shock_buff = o_shock_buff +  (dmg['DMG'] * .05)
+
+                                                        if dmg['ELEMENT'] == poison_element:
+                                                            o_poison_dmg = o_poison_dmg + 8
 
                                                         # t_health = t_health - dmg['DMG']
                                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
@@ -8966,6 +9005,18 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 
                             # Player 2 Turn Start
                             elif turn == 1:
+                                if o_burn_dmg:
+                                    t_health = t_health - o_burn_dmg
+                                    previous_moves.append(f"*{turn_total}:* 🔥 **{t_card}** burned for **{o_burn_dmg}** dmg...")
+                                if o_freeze_enh:
+                                    previous_moves.append(f"*{turn_total}:* ❄️ **{t_card}** enhancer has been frozen...")
+                                if o_poison_dmg:
+                                    t_health = t_health - o_poison_dmg
+                                    previous_moves.append(f"*{turn_total}:* 🧪 **{t_card}** poisoned for **{o_poison_dmg}** dmg...")
+
+                                t_burn_dmg = 0
+                                t_freeze_enh = False
+
                                 if t_title_passive_type:
                                     if t_title_passive_type == "HLT":
                                         t_health = round(t_health + ((t_title_passive_value / 100) * t_health))
@@ -9266,9 +9317,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     # Check If Playing Bot
                                     if botActive != True and raidActive == False:
                                         # PlayUser
-                                        tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff
-                                        tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff
-                                        tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff
+                                        tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff + t_shock_buff
+                                        tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff + t_shock_buff
+                                        tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff + t_shock_buff
                                         tenh1 = list(t_enhancer.values())[0]
                                         tenh_name = list(t_enhancer.values())[2]
                                         tpet_enh_name = list(tpet_move.values())[2]
@@ -10013,10 +10064,24 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health + (dmg['DMG'] * .15)
 
                                                         if dmg['ELEMENT'] == phsycic_element:
-                                                            o_defense = o_defense - (dmg['DMG'] * .8)
-                                                            o_attack = o_attack - (dmg['DMG'] * .8)
+                                                            o_defense = o_defense - (dmg['DMG'] * .08)
+                                                            o_attack = o_attack - (dmg['DMG'] * .08)
 
-               
+                                                        if dmg['ELEMENT'] == fire_element:
+                                                            t_burn_dmg = dmg['DMG'] * .25
+
+                                                        if dmg['ELEMENT'] == ice_element:
+                                                            t_freeze_enh = True
+
+                                                        if dmg['ELEMENT'] == water_element:
+                                                            t_water_buff = t_water_buff + 25
+
+                                                        if dmg['ELEMENT'] == electric_element:
+                                                            t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
+
+                                                        if dmg['ELEMENT'] == poison_element:
+                                                            t_poison_dmg = t_poison_dmg + 8
+
                                                         
                                                     t_stamina = t_stamina - 20
                                                     t_block_used = True
@@ -10256,8 +10321,24 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = t_health + (dmg['DMG'] * .15)
 
                                                             if dmg['ELEMENT'] == phsycic_element:
-                                                                o_defense = o_defense - (dmg['DMG'] * .8)
-                                                                o_attack = o_attack - (dmg['DMG'] * .8)
+                                                                o_defense = o_defense - (dmg['DMG'] * .08)
+                                                                o_attack = o_attack - (dmg['DMG'] * .08)
+
+                                                            if dmg['ELEMENT'] == fire_element:
+                                                                t_burn_dmg = dmg['DMG'] * .25
+
+                                                            if dmg['ELEMENT'] == ice_element:
+                                                                t_freeze_enh = True
+
+                                                            if dmg['ELEMENT'] == water_element:
+                                                                t_water_buff = t_water_buff + 25
+
+                                                            if dmg['ELEMENT'] == electric_element:
+                                                                t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
+
+                                                            if dmg['ELEMENT'] == poison_element:
+                                                                t_poison_dmg = t_poison_dmg + 8
+
 
                                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                                             previous_moves.append(f"*{turn_total}:* **{t_card}**: {dmg['MESSAGE']}")
@@ -10341,9 +10422,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     # Play Bot
                                     else:
                                         # UNIVERSE CARD
-                                        tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff
-                                        tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff
-                                        tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff
+                                        tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff + t_shock_buff
+                                        tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff + t_shock_buff
+                                        tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff + t_shock_buff
                                         tenh1 = list(t_enhancer.values())[0]
                                         tenh_name = list(t_enhancer.values())[2]
                                         tpet_enh_name = list(tpet_move.values())[2]
@@ -11039,9 +11120,23 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = t_health + (dmg['DMG'] * .15)
 
                                                     if dmg['ELEMENT'] == phsycic_element:
-                                                        o_defense = o_defense - (dmg['DMG'] * .8)
-                                                        o_attack = o_attack - (dmg['DMG'] * .8)
+                                                        o_defense = o_defense - (dmg['DMG'] * .08)
+                                                        o_attack = o_attack - (dmg['DMG'] * .08)
 
+                                                    if dmg['ELEMENT'] == fire_element:
+                                                        t_burn_dmg = dmg['DMG'] * .25
+
+                                                    if dmg['ELEMENT'] == ice_element:
+                                                        t_freeze_enh = True
+
+                                                    if dmg['ELEMENT'] == water_element:
+                                                        t_water_buff = t_water_buff + 25
+
+                                                    if dmg['ELEMENT'] == electric_element:
+                                                        t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
+
+                                                    if dmg['ELEMENT'] == poison_element:
+                                                        t_poison_dmg = t_poison_dmg + 8
 
 
 
@@ -11260,9 +11355,24 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health + (dmg['DMG'] * .15)
 
                                                         if dmg['ELEMENT'] == phsycic_element:
-                                                            o_defense = o_defense - (dmg['DMG'] * .8)
-                                                            o_attack = o_attack - (dmg['DMG'] * .8)
+                                                            o_defense = o_defense - (dmg['DMG'] * .08)
+                                                            o_attack = o_attack - (dmg['DMG'] * .08)
 
+
+                                                        if dmg['ELEMENT'] == fire_element:
+                                                            t_burn_dmg = dmg['DMG'] * .25
+
+                                                        if dmg['ELEMENT'] == ice_element:
+                                                            t_freeze_enh = True
+
+                                                        if dmg['ELEMENT'] == water_element:
+                                                            t_water_buff = t_water_buff + 25
+
+                                                        if dmg['ELEMENT'] == electric_element:
+                                                            t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
+
+                                                        if dmg['ELEMENT'] == poison_element:
+                                                            t_poison_dmg = t_poison_dmg + 8
 
                                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)  
                                                         previous_moves.append(f"*{turn_total}:* **{t_card}**: {dmg['MESSAGE']}")  
@@ -11313,6 +11423,17 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         else:
                             # Player 1 Turn Start
                             if turn == 0:
+                                if t_burn_dmg:
+                                    o_health = o_health - t_burn_dmg
+                                    previous_moves.append(f"*{turn_total}:* 🔥 **{o_card}** burned for **{t_burn_dmg}** dmg...")
+                                if t_freeze_enh:
+                                    previous_moves.append(f"*{turn_total}:* ❄️ **{o_card}** enhancer has been frozen...")
+                                if t_poison_dmg:
+                                    o_health = o_health - t_poison_dmg
+                                    previous_moves.append(f"*{turn_total}:* 🧪 **{o_card}** poisoned for **{t_poison_dmg}** dmg...")
+                                o_burn_dmg = 0
+                                o_freeze_enh = False
+
                                 # if previous_moves:
                                 #     previous_moves_len = len(previous_moves)
                                 #     # print(f"LIST LEN: {previous_moves_len}")
@@ -11678,9 +11799,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 else:
                                     if mode in AUTO_BATTLE_modes:
                                         # UNIVERSE CARD
-                                        ap1 = list(o_1.values())[0] + ocard_lvl_ap_buff
-                                        ap2 = list(o_2.values())[0] + ocard_lvl_ap_buff
-                                        ap3 = list(o_3.values())[0] + ocard_lvl_ap_buff + demon_slayer_buff
+                                        ap1 = list(o_1.values())[0] + ocard_lvl_ap_buff + o_shock_buff
+                                        ap2 = list(o_2.values())[0] + ocard_lvl_ap_buff + o_shock_buff
+                                        ap3 = list(o_3.values())[0] + ocard_lvl_ap_buff + demon_slayer_buff + o_shock_buff
                                         enh1 = list(o_enhancer.values())[0]
                                         enh_name = list(o_enhancer.values())[2]
                                         pet_enh_name = list(opet_move.values())[2]
@@ -12464,9 +12585,23 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_health = o_health + (dmg['DMG'] * .15)
 
                                                     if dmg['ELEMENT'] == phsycic_element:
-                                                        t_defense = t_defense - (dmg['DMG'] * .8)
-                                                        t_attack = t_attack - (dmg['DMG'] * .8)
+                                                        t_defense = t_defense - (dmg['DMG'] * .08)
+                                                        t_attack = t_attack - (dmg['DMG'] * .08)
 
+                                                    if dmg['ELEMENT'] == fire_element:
+                                                        o_burn_dmg = dmg['DMG'] * .25
+
+                                                    if dmg['ELEMENT'] == ice_element:
+                                                        o_freeze_enh = True
+
+                                                    if dmg['ELEMENT'] == water_element:
+                                                        o_water_buff = o_water_buff + 25
+
+                                                    if dmg['ELEMENT'] == electric_element:
+                                                        o_shock_buff = o_shock_buff +  (dmg['DMG'] * .05)
+
+                                                    if dmg['ELEMENT'] == poison_element:
+                                                        o_poison_dmg = o_poison_dmg + 8
 
                                                 if mode in co_op_modes:
                                                     block_message = f"**{o_card}**: Defended 🛡️ **{c_card}**"
@@ -12708,8 +12843,23 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health + (dmg['DMG'] * .15)
 
                                                         if dmg['ELEMENT'] == phsycic_element:
-                                                            t_defense = t_defense - (dmg['DMG'] * .8)
-                                                            t_attack = t_attack - (dmg['DMG'] * .8)
+                                                            t_defense = t_defense - (dmg['DMG'] * .08)
+                                                            t_attack = t_attack - (dmg['DMG'] * .08)
+
+                                                        if dmg['ELEMENT'] == fire_element:
+                                                            o_burn_dmg = dmg['DMG'] * .25
+
+                                                        if dmg['ELEMENT'] == ice_element:
+                                                            o_freeze_enh = True
+
+                                                        if dmg['ELEMENT'] == water_element:
+                                                            o_water_buff = o_water_buff + 25
+
+                                                        if dmg['ELEMENT'] == electric_element:
+                                                            o_shock_buff = o_shock_buff +  (dmg['DMG'] * .05)
+
+                                                        if dmg['ELEMENT'] == poison_element:
+                                                            o_poison_dmg = o_poison_dmg + 8
 
                                                         previous_moves.append(f"*{turn_total}:* **{o_card}**: {dmg['MESSAGE']}")
                                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
@@ -12756,9 +12906,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 turn = 0
                                     else:
                                         # UNIVERSE CARD
-                                        ap1 = list(o_1.values())[0] + ocard_lvl_ap_buff
-                                        ap2 = list(o_2.values())[0] + ocard_lvl_ap_buff
-                                        ap3 = list(o_3.values())[0] + ocard_lvl_ap_buff + demon_slayer_buff
+                                        ap1 = list(o_1.values())[0] + ocard_lvl_ap_buff + o_shock_buff
+                                        ap2 = list(o_2.values())[0] + ocard_lvl_ap_buff + o_shock_buff
+                                        ap3 = list(o_3.values())[0] + ocard_lvl_ap_buff + demon_slayer_buff + o_shock_buff
                                         enh1 = list(o_enhancer.values())[0]
                                         enh_name = list(o_enhancer.values())[2]
                                         pet_enh_name = list(opet_move.values())[2]
@@ -13922,9 +14072,23 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health + (dmg['DMG'] * .15)
 
                                                         if dmg['ELEMENT'] == phsycic_element:
-                                                            t_defense = t_defense - (dmg['DMG'] * .8)
-                                                            t_attack = t_attack - (dmg['DMG'] * .8)
+                                                            t_defense = t_defense - (dmg['DMG'] * .08)
+                                                            t_attack = t_attack - (dmg['DMG'] * .08)
 
+                                                        if dmg['ELEMENT'] == fire_element:
+                                                            o_burn_dmg = dmg['DMG'] * .25
+
+                                                        if dmg['ELEMENT'] == ice_element:
+                                                            o_freeze_enh = True
+
+                                                        if dmg['ELEMENT'] == water_element:
+                                                            o_water_buff = o_water_buff + 25
+
+                                                        if dmg['ELEMENT'] == electric_element:
+                                                            o_shock_buff = o_shock_buff +  (dmg['DMG'] * .05)
+
+                                                        if dmg['ELEMENT'] == poison_element:
+                                                            o_poison_dmg = o_poison_dmg + 8
 
                                                     if mode in co_op_modes:
                                                         block_message = f"**{o_card}**: Defended 🛡️ **{c_card}**"
@@ -14183,9 +14347,23 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_health = o_health + (dmg['DMG'] * .15)
 
                                                             if dmg['ELEMENT'] == phsycic_element:
-                                                                t_defense = t_defense - (dmg['DMG'] * .8)
-                                                                t_attack = t_attack - (dmg['DMG'] * .8)
+                                                                t_defense = t_defense - (dmg['DMG'] * .08)
+                                                                t_attack = t_attack - (dmg['DMG'] * .08)
 
+                                                            if dmg['ELEMENT'] == fire_element:
+                                                                o_burn_dmg = dmg['DMG'] * .25
+
+                                                            if dmg['ELEMENT'] == ice_element:
+                                                                o_freeze_enh = True
+
+                                                            if dmg['ELEMENT'] == water_element:
+                                                                o_water_buff = o_water_buff + 25
+
+                                                            if dmg['ELEMENT'] == electric_element:
+                                                                o_shock_buff = o_shock_buff +  (dmg['DMG'] * .05)
+
+                                                            if dmg['ELEMENT'] == poison_element:
+                                                                o_poison_dmg = o_poison_dmg + 8
 
                                                             previous_moves.append(f"*{turn_total}:* **{o_card}**: {dmg['MESSAGE']}")
                                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
@@ -14273,9 +14451,20 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             channel = guild.get_channel(main.guild_channel)
                                             await channel.send(f"'PLAYER': **{str(ctx.author)}**, 'GUILD': **{str(ctx.author.guild)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
 
-                            # Opponent Turn Start
                             
                             elif turn == 1:
+                                if o_burn_dmg:
+                                    t_health = t_health - o_burn_dmg
+                                    previous_moves.append(f"*{turn_total}:* 🔥 **{t_card}** burned for **{t_burn_dmg}** dmg...")
+                                if o_freeze_enh:
+                                    previous_moves.append(f"*{turn_total}:* ❄️ **{t_card}** enhancer has been frozen...")
+                                if o_poison_dmg:
+                                    t_health = t_health - o_poison_dmg
+                                    previous_moves.append(f"*{turn_total}:* 🧪 **{t_card}** poisoned for **{o_poison_dmg}** dmg...")
+
+                                t_burn_dmg = 0
+                                t_freeze_enh = False
+
                                 if t_title_passive_type:
                                     if t_title_passive_type == "HLT":
                                         t_health = round(t_health + ((t_title_passive_value / 100) * t_health))
@@ -14641,9 +14830,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     else:
                                         turn_selector = 0
                                     if mode not in AUTO_BATTLE_modes:
-                                        tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff + corruption_ap_buff
-                                        tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff + corruption_ap_buff
-                                        tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff + corruption_ap_buff
+                                        tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff + corruption_ap_buff + t_shock_buff
+                                        tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff + corruption_ap_buff + t_shock_buff
+                                        tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff + corruption_ap_buff + t_shock_buff
                                         tenh1 = list(t_enhancer.values())[0]
                                         tenh_name = list(t_enhancer.values())[2]
                                         tpet_enh_name = list(tpet_move.values())[2]
@@ -15734,8 +15923,23 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_health = t_health + (dmg['DMG'] * .15)
 
                                                 if dmg['ELEMENT'] == phsycic_element:
-                                                    o_defense = o_defense - (dmg['DMG'] * .8)
-                                                    o_attack = o_attack - (dmg['DMG'] * .8)
+                                                    o_defense = o_defense - (dmg['DMG'] * .08)
+                                                    o_attack = o_attack - (dmg['DMG'] * .08)
+
+                                                if dmg['ELEMENT'] == fire_element:
+                                                    t_burn_dmg = dmg['DMG'] * .25
+
+                                                if dmg['ELEMENT'] == ice_element:
+                                                    t_freeze_enh = True
+
+                                                if dmg['ELEMENT'] == water_element:
+                                                    t_water_buff = t_water_buff + 25
+
+                                                if dmg['ELEMENT'] == electric_element:
+                                                    t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
+
+                                                if dmg['ELEMENT'] == poison_element:
+                                                    t_poison_dmg = t_poison_dmg + 8
 
                                             t_stamina = t_stamina - 20
                                             t_block_used = True
@@ -15961,8 +16165,23 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = t_health + (dmg['DMG'] * .15)
 
                                                             if dmg['ELEMENT'] == phsycic_element:
-                                                                c_defense = c_defense - (dmg['DMG'] * .8)
-                                                                c_attack = c_attack - (dmg['DMG'] * .8)
+                                                                c_defense = c_defense - (dmg['DMG'] * .08)
+                                                                c_attack = c_attack - (dmg['DMG'] * .08)
+
+                                                            if dmg['ELEMENT'] == fire_element:
+                                                                t_burn_dmg = dmg['DMG'] * .25
+
+                                                            if dmg['ELEMENT'] == ice_element:
+                                                                t_freeze_enh = True
+
+                                                            if dmg['ELEMENT'] == water_element:
+                                                                t_water_buff = t_water_buff + 25
+
+                                                            if dmg['ELEMENT'] == electric_element:
+                                                                t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
+
+                                                            if dmg['ELEMENT'] == poison_element:
+                                                                t_poison_dmg = t_poison_dmg + 8
 
 
                                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
@@ -16215,9 +16434,23 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = t_health + (dmg['DMG'] * .15)
 
                                                             if dmg['ELEMENT'] == phsycic_element:
-                                                                o_defense = o_defense - (dmg['DMG'] * .8)
-                                                                o_attack = o_attack - (dmg['DMG'] * .8)
+                                                                o_defense = o_defense - (dmg['DMG'] * .08)
+                                                                o_attack = o_attack - (dmg['DMG'] * .08)
 
+                                                            if dmg['ELEMENT'] == fire_element:
+                                                                t_burn_dmg = dmg['DMG'] * .25
+
+                                                            if dmg['ELEMENT'] == ice_element:
+                                                                t_freeze_enh = True
+
+                                                            if dmg['ELEMENT'] == water_element:
+                                                                t_water_buff = t_water_buff + 25
+
+                                                            if dmg['ELEMENT'] == electric_element:
+                                                                t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
+
+                                                            if dmg['ELEMENT'] == poison_element:
+                                                                t_poison_dmg = t_poison_dmg + 8
 
                                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                                             previous_moves.append(f"*{turn_total}:* **{t_card}**: {dmg['MESSAGE']}")
@@ -16474,8 +16707,24 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health + (dmg['DMG'] * .15)
 
                                                         if dmg['ELEMENT'] == phsycic_element:
-                                                            o_defense = o_defense - (dmg['DMG'] * .8)
-                                                            o_attack = o_attack - (dmg['DMG'] * .8)
+                                                            o_defense = o_defense - (dmg['DMG'] * .08)
+                                                            o_attack = o_attack - (dmg['DMG'] * .08)
+
+
+                                                        if dmg['ELEMENT'] == fire_element:
+                                                            t_burn_dmg = dmg['DMG'] * .25
+
+                                                        if dmg['ELEMENT'] == ice_element:
+                                                            t_freeze_enh = True
+
+                                                        if dmg['ELEMENT'] == water_element:
+                                                            t_water_buff = t_water_buff + 25
+
+                                                        if dmg['ELEMENT'] == electric_element:
+                                                            t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
+
+                                                        if dmg['ELEMENT'] == poison_element:
+                                                            t_poison_dmg = t_poison_dmg + 8
 
 
                                                         previous_moves.append(f"*{turn_total}:* **{t_card}**: {dmg['MESSAGE']}")
@@ -16527,6 +16776,17 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             elif mode in co_op_modes and turn != (0 or 1):
                                 # Companion Turn Start
                                 if turn == 2:
+                                    if t_burn_dmg:
+                                        c_health = c_health - t_burn_dmg
+                                        previous_moves.append(f"*{turn_total}:* 🔥 **{c_card}** burned for **{t_burn_dmg}** dmg...")
+                                    if t_freeze_enh:
+                                        previous_moves.append(f"*{turn_total}:* ❄️ **{c_card}** enhancer has been frozen...")
+                                    if t_poison_dmg:
+                                        c_health = c_health - t_poison_dmg
+                                        previous_moves.append(f"*{turn_total}:* 🧪 **{c_card}** poisoned for **{t_poison_dmg}** dmg...")
+
+                                    c_burn_dmg = 0
+                                    c_freeze_enh = False
 
                                     if c_title_passive_type:
                                         if c_title_passive_type == "HLT":
@@ -16818,9 +17078,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     else:
                                         if mode in ai_co_op_modes:
                                             # UNIVERSE CARD
-                                            cap1 = list(c_1.values())[0] + ccard_lvl_ap_buff
-                                            cap2 = list(c_2.values())[0] + ccard_lvl_ap_buff
-                                            cap3 = list(c_3.values())[0] + ccard_lvl_ap_buff + cdemon_slayer_buff
+                                            cap1 = list(c_1.values())[0] + ccard_lvl_ap_buff + c_shock_buff
+                                            cap2 = list(c_2.values())[0] + ccard_lvl_ap_buff + c_shock_buff
+                                            cap3 = list(c_3.values())[0] + ccard_lvl_ap_buff + cdemon_slayer_buff + c_shock_buff
                                             cenh1 = list(c_enhancer.values())[0]
                                             cenh_name = list(c_enhancer.values())[2]
                                             cpet_enh_name = list(cpet_move.values())[2]
@@ -17949,9 +18209,24 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 c_health = c_health + (dmg['DMG'] * .15)
 
                                                             if dmg['ELEMENT'] == phsycic_element:
-                                                                t_defense = t_defense - (dmg['DMG'] * .8)
-                                                                t_attack = t_attack - (dmg['DMG'] * .8)
+                                                                t_defense = t_defense - (dmg['DMG'] * .08)
+                                                                t_attack = t_attack - (dmg['DMG'] * .08)
 
+
+                                                            if dmg['ELEMENT'] == fire_element:
+                                                                c_burn_dmg = dmg['DMG'] * .25
+
+                                                            if dmg['ELEMENT'] == ice_element:
+                                                                c_freeze_enh = True
+
+                                                            if dmg['ELEMENT'] == water_element:
+                                                                c_water_buff = c_water_buff + 25
+
+                                                            if dmg['ELEMENT'] == electric_element:
+                                                                c_shock_buff = c_shock_buff +  (dmg['DMG'] * .05)
+
+                                                            if dmg['ELEMENT'] == poison_element:
+                                                                c_poison_dmg = c_poison_dmg + 8
 
                                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_c)
                                                             previous_moves.append(f"*{turn_total}:* **{c_card}**: {dmg['MESSAGE']}")
@@ -18005,9 +18280,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     previous_moves.append(f"*{turn_total}:* **{c_card}** not enough Stamina to use this move") 
                                                     turn = 2
                                         else:
-                                            cap1 = list(c_1.values())[0] + ccard_lvl_ap_buff
-                                            cap2 = list(c_2.values())[0] + ccard_lvl_ap_buff
-                                            cap3 = list(c_3.values())[0] + ccard_lvl_ap_buff + cdemon_slayer_buff
+                                            cap1 = list(c_1.values())[0] + ccard_lvl_ap_buff + c_shock_buff
+                                            cap2 = list(c_2.values())[0] + ccard_lvl_ap_buff + c_shock_buff
+                                            cap3 = list(c_3.values())[0] + ccard_lvl_ap_buff + cdemon_slayer_buff + c_shock_buff
                                             cenh1 = list(c_enhancer.values())[0]
                                             cenh_name = list(c_enhancer.values())[2]
                                             cpet_enh_name = list(cpet_move.values())[2]
@@ -18147,9 +18422,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             util_action_row = manage_components.create_actionrow(*util_buttons)
                                             coop_util_action_row = manage_components.create_actionrow(*coop_util_buttons)
 
-                                            cap1 = list(c_1.values())[0] + ccard_lvl_ap_buff
-                                            cap2 = list(c_2.values())[0] + ccard_lvl_ap_buff
-                                            cap3 = list(c_3.values())[0] + ccard_lvl_ap_buff + cdemon_slayer_buff
+                                            cap1 = list(c_1.values())[0] + ccard_lvl_ap_buff + c_shock_buff
+                                            cap2 = list(c_2.values())[0] + ccard_lvl_ap_buff + c_shock_buff
+                                            cap3 = list(c_3.values())[0] + ccard_lvl_ap_buff + cdemon_slayer_buff + c_shock_buff
                                             cenh1 = list(c_enhancer.values())[0]
                                             cenh_name = list(c_enhancer.values())[2]
                                             cpet_enh_name = list(cpet_move.values())[2]
@@ -18901,10 +19176,24 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 c_health = c_health + (dmg['DMG'] * .15)
 
                                                             if dmg['ELEMENT'] == phsycic_element:
-                                                                t_defense = t_defense - (dmg['DMG'] * .8)
-                                                                t_attack = t_attack - (dmg['DMG'] * .8)
+                                                                t_defense = t_defense - (dmg['DMG'] * .08)
+                                                                t_attack = t_attack - (dmg['DMG'] * .08)
 
-                                                        
+                                                            if dmg['ELEMENT'] == fire_element:
+                                                                c_burn_dmg = dmg['DMG'] * .25
+
+                                                            if dmg['ELEMENT'] == ice_element:
+                                                                c_freeze_enh = True
+
+                                                            if dmg['ELEMENT'] == water_element:
+                                                                c_water_buff = c_water_buff + 25
+
+                                                            if dmg['ELEMENT'] == electric_element:
+                                                                c_shock_buff = c_shock_buff +  (dmg['DMG'] * .05)
+
+                                                            if dmg['ELEMENT'] == poison_element:
+                                                                c_poison_dmg = c_poison_dmg + 8
+
                                                         c_block_used = True
                                                         c_stamina = c_stamina - 20
                                                         c_defense = round(c_defense * 2)
@@ -19161,8 +19450,24 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     c_health = c_health + (dmg['DMG'] * .15)
 
                                                                 if dmg['ELEMENT'] == phsycic_element:
-                                                                    t_defense = t_defense - (dmg['DMG'] * .8)
-                                                                    t_attack = t_attack - (dmg['DMG'] * .8)
+                                                                    t_defense = t_defense - (dmg['DMG'] * .08)
+                                                                    t_attack = t_attack - (dmg['DMG'] * .08)
+
+
+                                                                if dmg['ELEMENT'] == fire_element:
+                                                                    c_burn_dmg = dmg['DMG'] * .25
+
+                                                                if dmg['ELEMENT'] == ice_element:
+                                                                    c_freeze_enh = True
+
+                                                                if dmg['ELEMENT'] == water_element:
+                                                                    c_water_buff = c_water_buff + 25
+
+                                                                if dmg['ELEMENT'] == electric_element:
+                                                                    c_shock_buff = c_shock_buff +  (dmg['DMG'] * .05)
+
+                                                                if dmg['ELEMENT'] == poison_element:
+                                                                    c_poison_dmg = c_poison_dmg + 8
 
 
                                                                 embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=0xe91e63)
@@ -19250,6 +19555,18 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                 # Opponent Turn Start
                                 elif turn == 3:
+                                    if c_burn_dmg:
+                                        t_health = t_health - c_burn_dmg
+                                        previous_moves.append(f"*{turn_total}:* 🔥 **{t_card}** burned for **{c_burn_dmg}** dmg...")
+                                    if c_freeze_enh:
+                                        previous_moves.append(f"*{turn_total}:* ❄️ **{t_card}** enhancer has been frozen...")
+                                    if c_poison_dmg:
+                                        t_health = t_health - c_poison_dmg
+                                        previous_moves.append(f"*{turn_total}:* 🧪 **{t_card}** poisoned for **{c_poison_dmg}** dmg...")
+
+                                    t_burn_dmg = 0
+                                    t_freeze_enh = False
+
                                     if t_title_passive_type:
                                         if t_title_passive_type == "HLT":
                                             t_health = round(t_health + ((t_title_passive_value / 100) * t_health))
@@ -19534,9 +19851,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             turn = 3
                                     else:
                                         # UNIVERSE CARD
-                                        tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff + corruption_ap_buff
-                                        tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff + corruption_ap_buff
-                                        tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff + corruption_ap_buff
+                                        tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff + corruption_ap_buff + t_shock_buff
+                                        tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff + corruption_ap_buff + t_shock_buff
+                                        tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff + corruption_ap_buff + t_shock_buff
                                         tenh1 = list(t_enhancer.values())[0]
                                         tenh_name = list(t_enhancer.values())[2]
                                         tpet_enh_name = list(tpet_move.values())[2]
@@ -20473,9 +20790,23 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = t_health + (dmg['DMG'] * .15)
 
                                                     if dmg['ELEMENT'] == phsycic_element:
-                                                        c_defense = c_defense - (dmg['DMG'] * .8)
-                                                        c_attack = c_attack - (dmg['DMG'] * .8)
+                                                        c_defense = c_defense - (dmg['DMG'] * .08)
+                                                        c_attack = c_attack - (dmg['DMG'] * .08)
 
+                                                    if dmg['ELEMENT'] == fire_element:
+                                                        t_burn_dmg = dmg['DMG'] * .25
+
+                                                    if dmg['ELEMENT'] == ice_element:
+                                                        t_freeze_enh = True
+
+                                                    if dmg['ELEMENT'] == water_element:
+                                                        t_water_buff = t_water_buff + 25
+
+                                                    if dmg['ELEMENT'] == electric_element:
+                                                        t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
+
+                                                    if dmg['ELEMENT'] == poison_element:
+                                                        t_poison_dmg = t_poison_dmg + 8
 
                                                 t_stamina = t_stamina - 20
                                                 t_block_used = True
@@ -20713,8 +21044,24 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = t_health + (dmg['DMG'] * .15)
 
                                                             if dmg['ELEMENT'] == phsycic_element:
-                                                                o_defense = o_defense - (dmg['DMG'] * .8)
-                                                                o_attack = o_attack - (dmg['DMG'] * .8)
+                                                                o_defense = o_defense - (dmg['DMG'] * .08)
+                                                                o_attack = o_attack - (dmg['DMG'] * .08)
+
+
+                                                            if dmg['ELEMENT'] == fire_element:
+                                                                t_burn_dmg = dmg['DMG'] * .25
+
+                                                            if dmg['ELEMENT'] == ice_element:
+                                                                t_freeze_enh = True
+
+                                                            if dmg['ELEMENT'] == water_element:
+                                                                t_water_buff = t_water_buff + 25
+
+                                                            if dmg['ELEMENT'] == electric_element:
+                                                                t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
+
+                                                            if dmg['ELEMENT'] == poison_element:
+                                                                t_poison_dmg = t_poison_dmg + 8
 
 
                                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
@@ -20987,8 +21334,24 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = t_health + (dmg['DMG'] * .15)
 
                                                             if dmg['ELEMENT'] == phsycic_element:
-                                                                c_defense = c_defense - (dmg['DMG'] * .8)
-                                                                c_attack = c_attack - (dmg['DMG'] * .8)
+                                                                c_defense = c_defense - (dmg['DMG'] * .08)
+                                                                c_attack = c_attack - (dmg['DMG'] * .08)
+
+                                                            if dmg['ELEMENT'] == fire_element:
+                                                                t_burn_dmg = dmg['DMG'] * .25
+
+                                                            if dmg['ELEMENT'] == ice_element:
+                                                                t_freeze_enh = True
+
+                                                            if dmg['ELEMENT'] == water_element:
+                                                                t_water_buff = t_water_buff + 25
+
+                                                            if dmg['ELEMENT'] == electric_element:
+                                                                t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
+
+                                                            if dmg['ELEMENT'] == poison_element:
+                                                                t_poison_dmg = t_poison_dmg + 8
+
 
 
                                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)

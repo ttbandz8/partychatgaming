@@ -79,7 +79,7 @@ ELEMENTS = textwrap.dedent(f"""\
 
 🌱 Earth - Cannot be Parried. Increases Def by 15% AP
 
-⚡️ Electric- Add 3% to Shock damage, added to each attack
+⚡️ Electric- Add 5% to Shock damage, added to each attack
 
 🌪️ Wind - Cannot Miss 
 
