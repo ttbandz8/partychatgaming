@@ -2419,7 +2419,7 @@ def damage_cal(opponent_affinity, move_type, move_element, universe, card, abili
             med_hit = 13  # Medium Damage
             standard_hit = 19  # Standard Damage
             high_hit = 20  # Crit Hit
-            hit_roll = random.randint(3, 20)
+            hit_roll = random.randint(2, 21)
 
             if move_element == "SPIRIT" and hit_roll > 3:
                 hit_roll = hit_roll + 5
@@ -2447,7 +2447,7 @@ def damage_cal(opponent_affinity, move_type, move_element, universe, card, abili
             elif hit_roll <= standard_hit and hit_roll > med_hit:
                 true_dmg = round(true_dmg)
                 message = f'{move_emoji} {move} used! Hits for **{true_dmg}**! :anger_right:'
-            elif hit_roll == 20:
+            elif hit_roll >= 20:
                 if universe == 'Crown Rift Awakening':
                     true_dmg = round(true_dmg * 4)
                     message = f"🩸{move_emoji} Blood Awakeking! {move} Mortally Wounds for **{true_dmg}**!! :boom: "
