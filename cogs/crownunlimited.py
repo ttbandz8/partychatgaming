@@ -15190,7 +15190,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             c_attack, t_special_move_description, turn_total,
                                                             tcard_lvl_ap_buff, None)
                                         else:
-                                            dmg = damage_cal(_opponent_affinities, ultimate_attack_name, tmove3_element, t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_stamina,
+                                            dmg = damage_cal(o_opponent_affinities, ultimate_attack_name, tmove3_element, t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_stamina,
                                                             t_enhancer_used, t_health, o_health, o_stamina, t_max_health,
                                                             o_attack, t_special_move_description, turn_total,
                                                             tcard_lvl_ap_buff, None)
