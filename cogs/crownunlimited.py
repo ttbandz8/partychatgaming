@@ -7151,6 +7151,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             earth_element = "EARTH"
             electric_element = "ELECTRIC"
             wind_element = "WIND"
+            spirit_element = "SPIRIT"
             phsycic_element = "PHSYCIC"
             death_element = "DEATH"
             life_element = "LIFE"
