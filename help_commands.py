@@ -73,7 +73,7 @@ ELEMENTS = textwrap.dedent(f"""\
 
 🔥 Fire - Does 20% Double DMG on next opponent turn 
 
-❄️ Ice - Freezes opponents Enhancer for 1 turn 
+❄️ Ice - After 5 uses opponent freezes and loses 1 turn 
 
 💧 Water - increases all water attack dmg by 25 Flat 
 
