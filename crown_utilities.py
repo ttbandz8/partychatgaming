@@ -228,6 +228,8 @@ def set_emoji(element):
         emoji = "🌕"
     if element == "DARK":
         emoji = "🌑"
+    if element == "SPIRIT":
+        emoji = "💙"
 
     return emoji
 

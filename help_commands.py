@@ -71,7 +71,7 @@ LEGEND = textwrap.dedent(f"""\
 ELEMENTS = textwrap.dedent(f"""\
 👊 Physical - Normal Damage
 
-🔥 Fire - Does 20% Double DMG on next opponent turn 
+🔥 Fire - Does 30% damage of previous attack on next opponent turn 
 
 ❄️ Ice - After 5 uses opponent freezes and loses 1 turn 
 
@@ -96,6 +96,8 @@ ELEMENTS = textwrap.dedent(f"""\
 🧪 Poison - opponent takes additional 8 damage each turn stacking up to 100
 
 🏹 Ranged - If ST > 80 deals 1.3x Damage
+
+💙 Soul - Has higher chance of crit attack
 
 [Join the Crown Unlimited Support Server](https://discord.gg/2JkCqcN3hB)
 """)

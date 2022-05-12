@@ -2421,6 +2421,10 @@ def damage_cal(opponent_affinity, move_type, move_element, universe, card, abili
             high_hit = 20  # Crit Hit
             hit_roll = random.randint(3, 20)
 
+            if move_element == "SPIRIT" and hit_roll > 3:
+                hit_roll = hit_roll + 5
+
+
             if ranged_attack:
                 true_dmg = round(true_dmg * 1.4)
 
@@ -4602,8 +4606,6 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         omove3_text = list(o_3.keys())[0]
         omove3_element = list(o_3.values())[2]
 
-        o_opponent_affinities = crown_utilities.check_affinities("t", o, omove1_element, omove2_element, omove3_element)
-
         omove_enhanced_text = list(o_enhancer.keys())[0]
 
         opetmove_text = list(opet.keys())[3]  # Name of the ability
@@ -4760,11 +4762,6 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             tmove_enhanced_text = list(t_enhancer.keys())[0]
             tpetmove_text = list(tpet_passive.keys())[0]
 
-            t_opponent_affinities = crown_utilities.check_affinities("o", t, tmove1_element, tmove2_element, tmove3_element)
-
-            if companion:
-                t_for_c_opponent_affinities = crown_utilities.check_affinities("c", t, tmove1_element, tmove2_element, tmove3_element)
-
             tpetmove_text = list(tpet.keys())[3]  # Name of the ability
             tpetmove_ap = (tpet_bond * tpet_lvl) + list(tpet_passive.values())[0] # Ability Power
             tpet_move = {str(tpetmove_text): int(tpetmove_ap), 'STAM': 15, 'TYPE': str(tpet_passive_type)}
@@ -4782,11 +4779,6 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             tmove3_element = list(t_3.values())[2]
             tmove_enhanced_text = list(t_enhancer.keys())[0]
             tpetmove_text = list(tpet_passive.keys())[0]
-
-            t_opponent_affinities = crown_utilities.check_affinities("o", t, tmove1_element, tmove2_element, tmove3_element)
-
-            if companion:
-                t_for_c_opponent_affinities = crown_utilities.check_affinities("c", t, tmove1_element, tmove2_element, tmove3_element)
    
             tpetmove_ap = (tpet_bond * tpet_lvl) + list(tpet_passive.values())[0]  # Ability Power
             tpetmove_type = list(tpet_passive.values())[1]
@@ -5012,6 +5004,16 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         if companion and mode not in ai_co_op_modes:
             c_attack = c_attack + (c_user['REBIRTH'] * 10)
             c_defense = c_defense + (c_user['REBIRTH'] * 10)
+
+        o_opponent_affinities = crown_utilities.check_affinities("t", o, tmove1_element, tmove2_element, tmove3_element)
+
+        t_opponent_affinities = crown_utilities.check_affinities("o", t, omove1_element, omove2_element, omove3_element)
+
+        if companion:
+            t_for_c_opponent_affinities = crown_utilities.check_affinities("c", t, cmove1_element, cmove2_element, cmove3_element)
+            c_opponent_affinities = crown_utilities.check_affinities("t", c, tmove1_element, tmove2_element, tmove3_element)
+
+
 
         STATS = {
             'o_full_card_info': o,
@@ -6769,6 +6771,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             o_super_emoji = crown_utilities.set_emoji(omove2_element)
             omove3_element = stats['omove3_element']
             o_ultimate_emoji = crown_utilities.set_emoji(omove3_element)
+            # print(f"O BASIC: {}")
+            # print(f"O SUPER: {}")
+            # print(f"O ULTIMATE: {}")
             operformance = stats['operformance']
             o_card = stats['o_card']
             ocard_lvl = stats['ocard_lvl']
@@ -8636,7 +8641,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_attack = t_attack - (dmg['DMG'] * .08)
 
                                                     if dmg['ELEMENT'] == fire_element:
-                                                        o_burn_dmg = dmg['DMG'] * .25
+                                                        o_burn_dmg = round(dmg['DMG'] * .30)
 
 
                                                     if dmg['ELEMENT'] == water_element:
@@ -8920,7 +8925,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_attack = t_attack - (dmg['DMG'] * .08)
 
                                                         if dmg['ELEMENT'] == fire_element:
-                                                            o_burn_dmg = dmg['DMG'] * .25
+                                                            o_burn_dmg = round(dmg['DMG'] * .30)
 
                                                         if dmg['ELEMENT'] == water_element:
                                                             o_water_buff = o_water_buff + 25
@@ -10094,7 +10099,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_attack = o_attack - (dmg['DMG'] * .08)
 
                                                         if dmg['ELEMENT'] == fire_element:
-                                                            t_burn_dmg = dmg['DMG'] * .25
+                                                            t_burn_dmg = round(dmg['DMG'] * .30)
 
 
                                                         if dmg['ELEMENT'] == water_element:
@@ -10360,7 +10365,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_attack = o_attack - (dmg['DMG'] * .08)
 
                                                             if dmg['ELEMENT'] == fire_element:
-                                                                t_burn_dmg = dmg['DMG'] * .25
+                                                                t_burn_dmg = round(dmg['DMG'] * .30)
 
 
                                                             if dmg['ELEMENT'] == water_element:
@@ -11167,7 +11172,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_attack = o_attack - (dmg['DMG'] * .08)
 
                                                     if dmg['ELEMENT'] == fire_element:
-                                                        t_burn_dmg = dmg['DMG'] * .25
+                                                        t_burn_dmg = round(dmg['DMG'] * .30)
 
 
                                                     if dmg['ELEMENT'] == water_element:
@@ -11410,7 +11415,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
 
                                                         if dmg['ELEMENT'] == fire_element:
-                                                            t_burn_dmg = dmg['DMG'] * .25
+                                                            t_burn_dmg = round(dmg['DMG'] * .30)
 
 
                                                         if dmg['ELEMENT'] == water_element:
@@ -12642,7 +12647,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_attack = t_attack - (dmg['DMG'] * .08)
 
                                                     if dmg['ELEMENT'] == fire_element:
-                                                        o_burn_dmg = dmg['DMG'] * .25
+                                                        o_burn_dmg = round(dmg['DMG'] * .30)
 
 
                                                     if dmg['ELEMENT'] == water_element:
@@ -12913,7 +12918,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_attack = t_attack - (dmg['DMG'] * .08)
 
                                                         if dmg['ELEMENT'] == fire_element:
-                                                            o_burn_dmg = dmg['DMG'] * .25
+                                                            o_burn_dmg = round(dmg['DMG'] * .30)
 
                                                         if dmg['ELEMENT'] == water_element:
                                                             o_water_buff = o_water_buff + 25
@@ -14141,7 +14146,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_attack = t_attack - (dmg['DMG'] * .08)
 
                                                         if dmg['ELEMENT'] == fire_element:
-                                                            o_burn_dmg = dmg['DMG'] * .25
+                                                            o_burn_dmg = round(dmg['DMG'] * .30)
 
 
                                                         if dmg['ELEMENT'] == water_element:
@@ -14431,7 +14436,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_attack = t_attack - (dmg['DMG'] * .08)
 
                                                             if dmg['ELEMENT'] == fire_element:
-                                                                o_burn_dmg = dmg['DMG'] * .25
+                                                                o_burn_dmg = round(dmg['DMG'] * .30)
 
                                                             if dmg['ELEMENT'] == water_element:
                                                                 o_water_buff = o_water_buff + 25
@@ -16018,7 +16023,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     o_attack = o_attack - (dmg['DMG'] * .08)
 
                                                 if dmg['ELEMENT'] == fire_element:
-                                                    t_burn_dmg = dmg['DMG'] * .25
+                                                    t_burn_dmg = round(dmg['DMG'] * .30)
 
                                                 if dmg['ELEMENT'] == water_element:
                                                     t_water_buff = t_water_buff + 25
@@ -16266,7 +16271,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 c_attack = c_attack - (dmg['DMG'] * .08)
 
                                                             if dmg['ELEMENT'] == fire_element:
-                                                                t_burn_dmg = dmg['DMG'] * .25
+                                                                t_burn_dmg = round(dmg['DMG'] * .30)
 
 
                                                             if dmg['ELEMENT'] == water_element:
@@ -16542,7 +16547,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_attack = o_attack - (dmg['DMG'] * .08)
 
                                                             if dmg['ELEMENT'] == fire_element:
-                                                                t_burn_dmg = dmg['DMG'] * .25
+                                                                t_burn_dmg = round(dmg['DMG'] * .30)
 
                                                             if dmg['ELEMENT'] == water_element:
                                                                 t_water_buff = t_water_buff + 25
@@ -16822,7 +16827,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
 
                                                         if dmg['ELEMENT'] == fire_element:
-                                                            t_burn_dmg = dmg['DMG'] * .25
+                                                            t_burn_dmg = round(dmg['DMG'] * .30)
 
                                                         if dmg['ELEMENT'] == water_element:
                                                             t_water_buff = t_water_buff + 25
@@ -20935,7 +20940,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         c_attack = c_attack - (dmg['DMG'] * .08)
 
                                                     if dmg['ELEMENT'] == fire_element:
-                                                        t_burn_dmg = dmg['DMG'] * .25
+                                                        t_burn_dmg = round(dmg['DMG'] * .30)
 
                                                     if dmg['ELEMENT'] == water_element:
                                                         t_water_buff = t_water_buff + 25
@@ -21197,7 +21202,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
 
                                                             if dmg['ELEMENT'] == fire_element:
-                                                                t_burn_dmg = dmg['DMG'] * .25
+                                                                t_burn_dmg = round(dmg['DMG'] * .30)
 
                                                             if dmg['ELEMENT'] == water_element:
                                                                 t_water_buff = t_water_buff + 25
@@ -21493,7 +21498,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 c_attack = c_attack - (dmg['DMG'] * .08)
 
                                                             if dmg['ELEMENT'] == fire_element:
-                                                                t_burn_dmg = dmg['DMG'] * .25
+                                                                t_burn_dmg = round(dmg['DMG'] * .30)
 
                                                             if dmg['ELEMENT'] == ice_element:
                                                                 t_freeze_enh = True
