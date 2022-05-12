@@ -97,7 +97,7 @@ ELEMENTS = textwrap.dedent(f"""\
 
 🏹 Ranged - If ST > 80 deals 1.3x Damage
 
-💙 Soul - Has higher chance of crit attack
+💙 Spirit - Has higher chance of crit attack
 
 [Join the Crown Unlimited Support Server](https://discord.gg/2JkCqcN3hB)
 """)
