@@ -974,12 +974,8 @@ def updateCardWithFilter(query, new_value, arrayFilters):
 
 def updateCard(query, new_value):
     try:
-        cardexists = card_exists({'NAME': query['NAME']})
-        if cardexists:
-            cards_col.update_one(query, new_value)
-            return True
-        else:
-            return False
+        cards_col.update_one(query, new_value)
+        return True
     except:
         return False
 
