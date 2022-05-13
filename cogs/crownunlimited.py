@@ -7321,15 +7321,15 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             battle_ping_message = await private_channel.send(f"{ctx.author.mention}")
             if mode not in PVP_MODES and mode not in B_modes and mode != "ABYSS" and mode not in RAID_MODES and mode not in co_op_modes:
                 embedVar = discord.Embed(title=f"✅ Confirm Start! ({currentopponent + 1}/{total_legends})", description=f"**{o_card}** VS **{t_card}**")
-                embedVar.add_field(name="YOUR AFFINITIES", value=f"{o_affinity_message}")
-                embedVar.add_field(name="OPPONENT AFFINITIES", value=f"{t_affinity_message}")
+                embedVar.add_field(name="__Your Affinities__", value=f"{o_affinity_message}")
+                embedVar.add_field(name="__Opponent Affinities__", value=f"{t_affinity_message}")
                 embedVar.set_image(url="attachment://image.png")
                 embedVar.set_thumbnail(url=ctx.author.avatar_url)
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card)
             if mode == "ABYSS":
                 embedVar = discord.Embed(title=f"🌑 Abyss Floor {universe['FLOOR']}\n✨ Confirm Start!  ({currentopponent + 1}/{total_legends})", description=f"**{o_card}** VS **{t_card}**")
-                embedVar.add_field(name="YOUR AFFINITIES", value=f"{o_affinity_message}")
-                embedVar.add_field(name="OPPONENT AFFINITIES", value=f"{t_affinity_message}")
+                embedVar.add_field(name="__Your Affinities__", value=f"{o_affinity_message}")
+                embedVar.add_field(name="__Opponent Affinities__", value=f"{t_affinity_message}")
                 embedVar.set_image(url="attachment://image.png")
                 embedVar.set_thumbnail(url=ctx.author.avatar_url)
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card)
@@ -7337,55 +7337,55 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             if mode in PVP_MODES and tutorial:
                 embedVar = discord.Embed(title=f"✅ Click Start Match to Begin the Tutorial!", description=f"You : **{o_card}** VS **{t_card}**")
                 embedVar.set_image(url="attachment://image.png")
-                embedVar.add_field(name="YOUR AFFINITIES", value=f"{o_affinity_message}")
-                embedVar.add_field(name="OPPONENT AFFINITIES", value=f"{t_affinity_message}")
+                embedVar.add_field(name="__Your Affinities__", value=f"{o_affinity_message}")
+                embedVar.add_field(name="__Opponent Affinities__", value=f"{t_affinity_message}")
                 embedVar.set_thumbnail(url=ctx.author.avatar_url)
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card)
                 
             elif mode in PVP_MODES and tutorial == False:
                 embedVar = discord.Embed(title=f"✅ Confirm PVP Battle!", description=f"{user2.mention}\n**{o_card}** VS **{t_card}**")
                 embedVar.set_thumbnail(url=ctx.author.avatar_url)
-                embedVar.add_field(name="YOUR AFFINITIES", value=f"{o_affinity_message}")
-                embedVar.add_field(name="OPPONENT AFFINITIES", value=f"{t_affinity_message}")
+                embedVar.add_field(name="__Your Affinities__", value=f"{o_affinity_message}")
+                embedVar.add_field(name="__Opponent Affinities__", value=f"{t_affinity_message}")
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row])      
                 
             elif mode in RAID_MODES:
                 embedVar = discord.Embed(title=f"✅ Confirm Raid Battle!", description=f"{ctx.author.mention}\n**{o_card}** VS **{t_card}**")
                 embedVar.set_image(url="attachment://image.png")
-                embedVar.add_field(name="YOUR AFFINITIES", value=f"{o_affinity_message}")
-                embedVar.add_field(name="OPPONENT AFFINITIES", value=f"{t_affinity_message}")
+                embedVar.add_field(name="__Your Affinities__", value=f"{o_affinity_message}")
+                embedVar.add_field(name="__Opponent Affinities__", value=f"{t_affinity_message}")
                 embedVar.set_thumbnail(url=ctx.author.avatar_url)
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card)
             
             if mode in co_op_modes and mode not in ai_co_op_modes and mode not in B_modes:
                 embedVar = discord.Embed(title=f"✅ Confirm Co-Op Battle! ({currentopponent + 1}/{total_legends})", description=f"{ctx.author.mention}\n**{o_card}** & **{c_card}** VS **{t_card}**")
                 embedVar.set_image(url="attachment://image.png")
-                embedVar.add_field(name="YOUR AFFINITIES", value=f"{o_affinity_message}")
-                embedVar.add_field(name="OPPONENT AFFINITIES", value=f"{t_affinity_message}")
+                embedVar.add_field(name="__Your Affinities__", value=f"{o_affinity_message}")
+                embedVar.add_field(name="__Opponent Affinities__", value=f"{t_affinity_message}")
                 embedVar.set_thumbnail(url=ctx.author.avatar_url)
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card)
                 
             if mode in ai_co_op_modes:
                 embedVar = discord.Embed(title=f"✅ Confirm Duo Battle! ({currentopponent + 1}/{total_legends})", description=f"{ctx.author.mention}\n**{o_card}** & **{c_card}** VS **{t_card}**")
                 embedVar.set_image(url="attachment://image.png")
-                embedVar.add_field(name="YOUR AFFINITIES", value=f"{o_affinity_message}")
-                embedVar.add_field(name="OPPONENT AFFINITIES", value=f"{t_affinity_message}")
+                embedVar.add_field(name="__Your Affinities__", value=f"{o_affinity_message}")
+                embedVar.add_field(name="__Opponent Affinities__", value=f"{t_affinity_message}")
                 embedVar.set_thumbnail(url=ctx.author.avatar_url)
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card) 
                 
             if mode in B_modes and mode not in co_op_modes:
                 embedVar = discord.Embed(title=f"✅ Boss Fight!", description=f"{ctx.author.mention}\n**{o_card}** VS **{t_card}**")
                 embedVar.set_image(url="attachment://image.png")
-                embedVar.add_field(name="YOUR AFFINITIES", value=f"{o_affinity_message}")
-                embedVar.add_field(name="OPPONENT AFFINITIES", value=f"{t_affinity_message}")
+                embedVar.add_field(name="__Your Affinities__", value=f"{o_affinity_message}")
+                embedVar.add_field(name="__Opponent Affinities__", value=f"{t_affinity_message}")
                 embedVar.set_thumbnail(url=ctx.author.avatar_url)
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card)
                 
             if mode in B_modes and mode in co_op_modes:
                 embedVar = discord.Embed(title=f"✅ Boss Fight!", description=f"{ctx.author.mention}\n**{o_card}** & **{c_card}** VS **{t_card}**")
                 embedVar.set_image(url="attachment://image.png")
-                embedVar.add_field(name="YOUR AFFINITIES", value=f"{o_affinity_message}")
-                embedVar.add_field(name="OPPONENT AFFINITIES", value=f"{t_affinity_message}")
+                embedVar.add_field(name="__Your Affinities__", value=f"{o_affinity_message}")
+                embedVar.add_field(name="__Opponent Affinities__", value=f"{t_affinity_message}")
                 embedVar.set_thumbnail(url=ctx.author.avatar_url)
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card)
 

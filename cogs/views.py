@@ -284,7 +284,7 @@ async def viewcard(self, ctx, card: str):
 
                 ♾️ {traitmessage}
                 """), colour=000000)
-                embedVar.add_field(name="AFFINITIES", value=f"{affinity_message}")
+                embedVar.add_field(name="__Affinities__", value=f"{affinity_message}")
                 embedVar.set_footer(text=f"{tip}")
                 await ctx.send(embed=embedVar)
 
@@ -293,7 +293,7 @@ async def viewcard(self, ctx, card: str):
                                     o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, 0, None)
 
                 embedVar = discord.Embed(title=f"", colour=000000)
-                embedVar.add_field(name="AFFINITIES", value=f"{affinity_message}")
+                embedVar.add_field(name="__Affinities__", value=f"{affinity_message}")
                 embedVar.set_image(url="attachment://image.png")
                 embedVar.set_thumbnail(url=show_img)
                 embedVar.set_author(name=textwrap.dedent(f"""\

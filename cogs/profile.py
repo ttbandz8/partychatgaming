@@ -2287,7 +2287,7 @@ async def build(self, ctx):
 
                     ♾️ {traitmessage}
                     """),colour=000000)
-                    embedVar.add_field(name="AFFINITIES", value=f"{affinity_message}")
+                    embedVar.add_field(name="__Affinities__", value=f"{affinity_message}")
                     embedVar.set_image(url="attachment://image.png")
                     if card_lvl != 500:
                         embedVar.set_footer(text=f"EXP Until Next Level: {150 - card_exp}\nRebirth Buff: +{rebirthBonus}\n{warningmessage}")
@@ -2302,7 +2302,7 @@ async def build(self, ctx):
                     card_file = showcard(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, cardtitle, focused, o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, card_lvl, None)
 
                     embedVar = discord.Embed(title=f"".format(self), colour=000000)
-                    embedVar.add_field(name="AFFINITIES", value=f"{affinity_message}")
+                    embedVar.add_field(name="__Affinities__", value=f"{affinity_message}")
                     embedVar.set_image(url="attachment://image.png")
                     embedVar.set_author(name=textwrap.dedent(f"""\
                     {titlemessage}
@@ -2489,7 +2489,7 @@ async def cards(self, ctx):
                 🩸 **{passive_name}:** {passive_type} {passive_num}{passive_enhancer_suffix_mapping[passive_type]}
                 ♾️ {traitmessage}
                 """), colour=0x7289da)
-                embedVar.add_field(name="AFFINITIES", value=f"{affinity_message}")
+                embedVar.add_field(name="__Affinities__", value=f"{affinity_message}")
                 embedVar.set_thumbnail(url=show_img)
                 embedVar.set_footer(text=f"/enhancers - 🩸 Enhancer Menu")
                 embed_list.append(embedVar)
