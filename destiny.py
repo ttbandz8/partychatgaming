@@ -2610,16 +2610,6 @@ destiny = [
         "UNIVERSE": "Dragon Ball Z"
     },
     {
-        "NAME": "Trained By Roshi",
-        "WINS": 0,
-        "REQUIRED": 5,
-        "DEFEAT": "Goku",
-        "USE_CARDS": ["Master Roshi"],
-        "EARN": "Goku", 
-        "COMPLETED": False,
-        "UNIVERSE": "Dragon Ball Z"
-    },
-    {
         "NAME": "The Ultimate Battle Of All Universes",
         "WINS": 0,
         "REQUIRED": 15,
