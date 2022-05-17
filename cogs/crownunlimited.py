@@ -7159,6 +7159,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             dark_element = "DARK"
             poison_element = "POISON"
             ranged_element = "RANGED"
+            bleed_element = "BLEED"
+            time_element = "TIME"
+            gravity_element = "GRAVITY"
+            recoil_element = "RECOIL"
 
             o_burn_dmg = 0
             o_poison_dmg = 0
@@ -7167,6 +7171,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             o_water_buff = 0
             o_shock_buff = 0
             o_psychic_debuff = 0
+            o_bleed_counter = 0
+            o_bleed_hit = True
 
             t_burn_dmg = 0
             t_poison_dmg = 0
@@ -7175,7 +7181,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             t_water_buff = 0
             t_shock_buff = 0
             t_psychic_debuff = 0
-            
+            t_bleed_counter = 0
+            t_bleed_hit = True
+
             c_burn_dmg = 0
             c_poison_dmg = 0
             c_freeze_enh = False
@@ -7183,6 +7191,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             c_water_buff = 0
             c_shock_buff = 0
             c_psychic_debuff = 0
+            c_bleed_counter = 0
+            c_bleed_hit = True
 
 
             if o_universe == "Solo Leveling":
@@ -7438,6 +7448,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         if mode in PVP_MODES or mode in RAID_MODES:
                             # Player 1 Turn Start
                             if turn == 0:
+                                if t_bleed_hit:
+                                    t_bleed_hit = False
+                                    bleed_dmg = 10 * turn_total
+                                    o_health = o_health - bleed_dmg
+                                    previous_moves.append(f"(**{turn_total}**) 🩸 **{o_card}** shredded for **{bleed_dmg}** bleed dmg...")
+
                                 if t_burn_dmg:
                                     o_health = o_health - t_burn_dmg
                                     previous_moves.append(f"(**{turn_total}**) 🔥 **{o_card}** burned for **{t_burn_dmg}** dmg...")
@@ -8621,6 +8637,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     else:
                                                         t_health = t_health - dmg['DMG']
 
+
+                                                    if dmg['ELEMENT'] == time_element:
+                                                        o_stamina = 0
+
                                                     if dmg['ELEMENT'] == earth_element:
                                                         o_defense = o_defense + (dmg['DMG'] * .15)
 
@@ -8636,6 +8656,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                     if dmg['ELEMENT'] == life_element:
                                                         o_health = o_health + (dmg['DMG'] * .15)
+
+                                                    if dmg['ELEMENT'] == recoil_element:
+                                                        o_health = o_health - (dmg['DMG'] * .30)
+
 
                                                     if dmg['ELEMENT'] == phsycic_element:
                                                         t_defense = t_defense - (dmg['DMG'] * .08)
@@ -8659,6 +8683,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if o_ice_counter == 5:
                                                             o_freeze_enh = True
                                                             o_ice_counter = 0
+
+                                                    if dmg['ELEMENT'] == bleed_element:
+                                                        o_bleed_counter = o_bleed_counter + 1
+                                                        if o_bleed_counter == 10:
+                                                            o_bleed_hit = True
+                                                            o_bleed_counter = 0
+
+
 
                                                 o_stamina = o_stamina - 20
                                                 o_block_used = True
@@ -8908,6 +8940,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if dmg['ELEMENT'] == earth_element:
                                                             o_defense = o_defense + (dmg['DMG'] * .15)
 
+                                                        if dmg['ELEMENT'] == recoil_element:
+                                                            o_health = o_health - (dmg['DMG'] * .30)
+
+                                                        if dmg['ELEMENT'] == time_element:
+                                                            o_stamina = 0
+
+
                                                         if dmg['ELEMENT'] == death_element:
                                                             t_max_health = t_max_health - (dmg['DMG'] * .05)
 
@@ -8942,6 +8981,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if o_ice_counter == 5:
                                                                 o_freeze_enh = True
                                                                 o_ice_counter = 0
+
+                                                        if dmg['ELEMENT'] == bleed_element:
+                                                            o_bleed_counter = o_bleed_counter + 1
+                                                            if o_bleed_counter == 10:
+                                                                o_bleed_hit = True
+                                                                o_bleed_counter = 0
+
 
 
 
@@ -9032,6 +9078,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 
                             # Player 2 Turn Start
                             elif turn == 1:
+                                if o_bleed_hit:
+                                    o_bleed_hit = False
+                                    bleed_dmg = 10 * turn_total
+                                    t_health = t_health - bleed_dmg
+                                    previous_moves.append(f"(**{turn_total}**) 🩸 **{t_card}** shredded for **{bleed_dmg}** bleed dmg...")
                                 if o_burn_dmg:
                                     t_health = t_health - o_burn_dmg
                                     previous_moves.append(f"(**{turn_total}**) 🔥 **{t_card}** burned for **{o_burn_dmg}** dmg...")
@@ -10082,6 +10133,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if dmg['ELEMENT'] == earth_element:
                                                             t_defense = t_defense + (dmg['DMG'] * .15)
 
+                                                        if dmg['ELEMENT'] == recoil_element:
+                                                            t_health = t_health - (dmg['DMG'] * .30)
+
+                                                        if dmg['ELEMENT'] == time_element:
+                                                            t_stamina = 0
+
+
                                                         if dmg['ELEMENT'] == death_element:
                                                             o_max_health = o_max_health - (dmg['DMG'] * .05)
 
@@ -10118,6 +10176,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_freeze_enh = True
                                                                 t_ice_counter = 0
 
+                                                        if dmg['ELEMENT'] == bleed_element:
+                                                            t_bleed_counter = t_bleed_counter + 1
+                                                            if t_bleed_counter == 10:
+                                                                t_bleed_hit = True
+                                                                t_bleed_counter = 0
 
 
                                                         
@@ -10347,6 +10410,19 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                             if dmg['ELEMENT'] == earth_element:
                                                                 t_defense = t_defense + (dmg['DMG'] * .15)
+
+                                                            if dmg['ELEMENT'] == recoil_element:
+                                                                t_health = t_health - (dmg['DMG'] * .30)
+
+                                                            if dmg['ELEMENT'] == time_element:
+                                                                t_stamina = 0
+
+
+                                                            if dmg['ELEMENT'] == bleed_element:
+                                                                t_bleed_counter = t_bleed_counter + 1
+                                                                if t_bleed_counter == 10:
+                                                                    t_bleed_hit = True
+                                                                    t_bleed_counter = 0
 
                                                             if dmg['ELEMENT'] == death_element:
                                                                 o_max_health = o_max_health - (dmg['DMG'] * .05)
@@ -11150,7 +11226,17 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     else:
                                                         o_health = o_health - dmg['DMG']
 
+                                                    if dmg['ELEMENT'] == time_element:
+                                                        t_stamina = 0
 
+                                                    if dmg['ELEMENT'] == bleed_element:
+                                                        t_bleed_counter = t_bleed_counter + 1
+                                                        if t_bleed_counter == 10:
+                                                            t_bleed_hit = True
+                                                            t_bleed_counter = 0
+
+                                                    if dmg['ELEMENT'] == recoil_element:
+                                                        t_health = t_health - (dmg['DMG'] * .30)
 
                                                     if dmg['ELEMENT'] == earth_element:
                                                         t_defense = t_defense + (dmg['DMG'] * .15)
@@ -11394,6 +11480,19 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_freeze_enh = True
                                                                 t_ice_counter = 0
 
+                                                        if dmg['ELEMENT'] == time_element:
+                                                            t_stamina = 0
+
+                                                        if dmg['ELEMENT'] == bleed_element:
+                                                            t_bleed_counter = t_bleed_counter + 1
+                                                            if t_bleed_counter == 10:
+                                                                t_bleed_hit = True
+                                                                t_bleed_counter = 0
+
+
+                                                        if dmg['ELEMENT'] == recoil_element:
+                                                            t_health = t_health - (dmg['DMG'] * .30)
+
                                                         if dmg['ELEMENT'] == earth_element:
                                                             t_defense = t_defense + (dmg['DMG'] * .15)
 
@@ -11477,6 +11576,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         else:
                             # Player 1 Turn Start
                             if turn == 0:
+                                if t_bleed_hit:
+                                    t_bleed_hit = False
+                                    bleed_dmg = 10 * turn_total
+                                    o_health = o_health - bleed_dmg
+                                    previous_moves.append(f"(**{turn_total}**) 🩸 **{o_card}** shredded for **{bleed_dmg}** bleed dmg...")
+
+
                                 if t_burn_dmg:
                                     o_health = o_health - t_burn_dmg
                                     previous_moves.append(f"(**{turn_total}**) 🔥 **{o_card}** burned for **{t_burn_dmg}** dmg...")
@@ -12626,7 +12732,19 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = t_health - (dmg['DMG'] + o_water_buff)
                                                     else:
                                                         t_health = t_health - dmg['DMG']
-                                                    
+
+                                                    if dmg['ELEMENT'] == recoil_element:
+                                                        o_health = o_health - (dmg['DMG'] * .30)
+
+                                                    if dmg['ELEMENT'] == time_element:
+                                                        o_stamina = 0
+
+                                                    if dmg['ELEMENT'] == bleed_element:
+                                                        o_bleed_counter = o_bleed_counter + 1
+                                                        if o_bleed_counter == 10:
+                                                            o_bleed_hit = True
+                                                            o_bleed_counter = 0
+
                                                     if dmg['ELEMENT'] == earth_element:
                                                         o_defense = o_defense + (dmg['DMG'] * .15)
 
@@ -12897,6 +13015,18 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if o_ice_counter == 5:
                                                                 o_freeze_enh = True
                                                                 o_ice_counter = 0
+
+                                                        if dmg['ELEMENT'] == time_element:
+                                                            o_stamina = 0
+
+                                                        if dmg['ELEMENT'] == bleed_element:
+                                                            o_bleed_counter = o_bleed_counter + 1
+                                                            if o_bleed_counter == 10:
+                                                                o_bleed_hit= True
+                                                                o_bleed_counter = 0
+
+                                                        if dmg['ELEMENT'] == recoil_element:
+                                                            o_health = o_health - (dmg['DMG'] * .30)
 
                                                         if dmg['ELEMENT'] == earth_element:
                                                             o_defense = o_defense + (dmg['DMG'] * .15)
@@ -14125,7 +14255,19 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health - (dmg['DMG'] + o_water_buff)
                                                         else:
                                                             t_health = t_health - dmg['DMG']
-        
+
+                                                        if dmg['ELEMENT'] == recoil_element:
+                                                            o_health = o_health - (dmg['DMG'] * .30)
+
+                                                        if dmg['ELEMENT'] == time_element:
+                                                            o_stamina = 0
+
+                                                        if dmg['ELEMENT'] == bleed_element:
+                                                            o_bleed_counter = o_bleed_counter + 1
+                                                            if o_bleed_counter == 10:
+                                                                o_bleed_hit= True
+                                                                o_bleed_counter = 0
+
                                                         if dmg['ELEMENT'] == earth_element:
                                                             o_defense = o_defense + (dmg['DMG'] * .15)
 
@@ -14415,6 +14557,17 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if o_ice_counter == 5:
                                                                     o_freeze_enh = True
                                                                     o_ice_counter = 0
+                                                            if dmg['ELEMENT'] == recoil_element:
+                                                                o_health = o_health - (dmg['DMG'] * .30)
+
+                                                            if dmg['ELEMENT'] == time_element:
+                                                                o_stamina = 0
+
+                                                            if dmg['ELEMENT'] == bleed_element:
+                                                                o_bleed_counter = o_bleed_counter + 1
+                                                                if o_bleed_counter == 10:
+                                                                    o_bleed_hit= True
+                                                                    o_bleed_counter = 0
 
                                                             if dmg['ELEMENT'] == earth_element:
                                                                 o_defense = o_defense + (dmg['DMG'] * .15)
@@ -14536,6 +14689,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                             
                             elif turn == 1:
+                                if o_bleed_hit:
+                                    o_bleed_hit = False
+                                    bleed_dmg = 10 * turn_total
+                                    t_health = t_health - bleed_dmg
+                                    previous_moves.append(f"(**{turn_total}**) 🩸 **{t_card}** shredded for **{bleed_dmg}** bleed dmg...")
                                 if o_burn_dmg:
                                     t_health = t_health - o_burn_dmg
                                     previous_moves.append(f"(**{turn_total}**) 🔥 **{t_card}** burned for **{t_burn_dmg}** dmg...")
@@ -16003,6 +16161,18 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_freeze_enh = True
                                                         t_ice_counter = 0
 
+                                                if dmg['ELEMENT'] == bleed_element:
+                                                    t_bleed_counter = t_bleed_counter + 1
+                                                    if t_bleed_counter == 10:
+                                                        t_bleed_hit = True
+                                                        t_bleed_counter = 0
+
+                                                if dmg['ELEMENT'] == time_element:
+                                                    t_stamina = 0
+
+                                                if dmg['ELEMENT'] == recoil_element:
+                                                    t_health = t_health - (dmg['DMG'] * .30)
+
                                                 if dmg['ELEMENT'] == earth_element:
                                                     t_defense = t_defense + (dmg['DMG'] * .15)
 
@@ -16250,6 +16420,18 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if t_ice_counter == 5:
                                                                     t_freeze_enh = True
                                                                     t_ice_counter = 0
+
+                                                            if dmg['ELEMENT'] == time_element:
+                                                                t_stamina = 0
+
+                                                            if dmg['ELEMENT'] == bleed_element:
+                                                                t_bleed_counter = t_bleed_counter + 1
+                                                                if t_bleed_counter == 10:
+                                                                    t_bleed_hit = True
+                                                                    t_bleed_counter = 0
+
+                                                            if dmg['ELEMENT'] == recoil_element:
+                                                                t_health = t_health - (dmg['DMG'] * .30)
 
                                                             if dmg['ELEMENT'] == earth_element:
                                                                 t_defense = t_defense + (dmg['DMG'] * .15)
@@ -16526,6 +16708,18 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if t_ice_counter == 5:
                                                                     t_freeze_enh = True
                                                                     t_ice_counter = 0
+
+                                                            if dmg['ELEMENT'] == time_element:
+                                                                t_stamina = 0
+
+                                                            if dmg['ELEMENT'] == bleed_element:
+                                                                t_bleed_counter = t_bleed_counter + 1
+                                                                if t_bleed_counter == 10:
+                                                                    t_bleed_hit = True
+                                                                    t_bleed_counter = 0
+
+                                                            if dmg['ELEMENT'] == recoil_element:
+                                                                t_health = t_health - (dmg['DMG'] * .30)
 
                                                             if dmg['ELEMENT'] == earth_element:
                                                                 t_defense = t_defense + (dmg['DMG'] * .15)
@@ -16806,6 +17000,18 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_freeze_enh = True
                                                                 t_ice_counter = 0
 
+                                                        if dmg['ELEMENT'] == time_element:
+                                                            t_stamina = 0
+
+                                                        if dmg['ELEMENT'] == bleed_element:
+                                                            t_bleed_counter = t_bleed_counter + 1
+                                                            if t_bleed_counter == 10:
+                                                                t_bleed_hit = True
+                                                                t_bleed_counter = 0
+
+                                                        if dmg['ELEMENT'] == recoil_element:
+                                                            t_health = t_health - (dmg['DMG'] * .30)
+
                                                         if dmg['ELEMENT'] == earth_element:
                                                             t_defense = t_defense + (dmg['DMG'] * .15)
 
@@ -16889,6 +17095,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             elif mode in co_op_modes and turn != (0 or 1):
                                 # Companion Turn Start
                                 if turn == 2:
+                                    if t_bleed_hit:
+                                        t_bleed_hit = False
+                                        bleed_dmg = 10 * turn_total
+                                        c_health = c_health - bleed_dmg
+                                        previous_moves.append(f"(**{turn_total}**) 🩸 **{c_card}** shredded for **{bleed_dmg}** bleed dmg...")
+
                                     if t_burn_dmg:
                                         c_health = c_health - t_burn_dmg
                                         previous_moves.append(f"(**{turn_total}**) 🔥 **{c_card}** burned for **{t_burn_dmg}** dmg...")
@@ -18316,6 +18528,18 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     c_freeze_enh = True
                                                                     c_ice_counter = 0
 
+                                                            if dmg['ELEMENT'] == time_element:
+                                                                c_stamina = 0
+
+                                                            if dmg['ELEMENT'] == bleed_element:
+                                                                c_bleed_counter = c_bleed_counter + 1
+                                                                if c_bleed_counter == 10:
+                                                                    c_bleed_hit = True
+                                                                    c_bleed_counter = 0
+
+                                                            if dmg['ELEMENT'] == recoil_element:
+                                                                c_health = c_health - (dmg['DMG'] * .30)
+
                                                             if dmg['ELEMENT'] == earth_element:
                                                                 c_defense = c_defense + (dmg['DMG'] * .15)
 
@@ -19290,6 +19514,19 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     c_freeze_enh = True
                                                                     c_ice_counter = 0
 
+                                                            if dmg['ELEMENT'] == time_element:
+                                                                c_stamina = 0
+
+                                                            if dmg['ELEMENT'] == bleed_element:
+                                                                c_bleed_counter = c_bleed_counter + 1
+                                                                if c_bleed_counter == 10:
+                                                                    c_bleed_hit = True
+                                                                    c_bleed_counter = 0
+
+
+                                                            if dmg['ELEMENT'] == recoil_element:
+                                                                c_health = c_health - (dmg['DMG'] * .30)
+
                                                             if dmg['ELEMENT'] == earth_element:
                                                                 c_defense = c_defense + (dmg['DMG'] * .15)
 
@@ -19571,6 +19808,19 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                         c_freeze_enh = True
                                                                         c_ice_counter = 0
 
+                                                                if dmg['ELEMENT'] == time_element:
+                                                                    c_stamina = 0
+
+                                                                if dmg['ELEMENT'] == bleed_element:
+                                                                    c_bleed_counter = c_bleed_counter + 1
+                                                                    if c_bleed_counter == 10:
+                                                                        c_bleed_hit = True
+                                                                        c_bleed_counter = 0
+
+
+                                                                if dmg['ELEMENT'] == recoil_element:
+                                                                    c_health = c_health - (dmg['DMG'] * .30)
+
                                                                 if dmg['ELEMENT'] == earth_element:
                                                                     c_defense = c_defense + (dmg['DMG'] * .15)
 
@@ -19691,6 +19941,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                 # Opponent Turn Start
                                 elif turn == 3:
+                                    if c_bleed_hit:
+                                        c_bleed_hit = False
+                                        bleed_dmg = 10 * turn_total
+                                        t_health = t_health - bleed_dmg
+                                        previous_moves.append(f"(**{turn_total}**) 🩸 **{t_card}** shredded for **{bleed_dmg}** bleed dmg...")
+
                                     if c_burn_dmg:
                                         t_health = t_health - c_burn_dmg
                                         previous_moves.append(f"(**{turn_total}**) 🔥 **{t_card}** burned for **{c_burn_dmg}** dmg...")
@@ -20920,6 +21176,18 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_freeze_enh = True
                                                             t_ice_counter = 0
 
+                                                    if dmg['ELEMENT'] == time_element:
+                                                        t_stamina = 0
+
+                                                    if dmg['ELEMENT'] == bleed_element:
+                                                        t_bleed_counter = t_bleed_counter + 1
+                                                        if t_bleed_counter == 10:
+                                                            t_bleed_hit = True
+                                                            t_bleed_counter = 0
+
+                                                    if dmg['ELEMENT'] == recoil_element:
+                                                        t_health = t_health - (dmg['DMG'] * .30)
+
                                                     if dmg['ELEMENT'] == earth_element:
                                                         t_defense = t_defense + (dmg['DMG'] * .15)
 
@@ -21180,6 +21448,18 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if t_ice_counter == 5:
                                                                     t_freeze_enh = True
                                                                     t_ice_counter = 0
+
+                                                            if dmg['ELEMENT'] == time_element:
+                                                                t_stamina = 0
+
+                                                            if dmg['ELEMENT'] == bleed_element:
+                                                                t_bleed_counter = t_bleed_counter + 1
+                                                                if t_bleed_counter == 10:
+                                                                    t_bleed_hit = True
+                                                                    t_bleed_counter = 0
+
+                                                            if dmg['ELEMENT'] == recoil_element:
+                                                                t_health = t_health - (dmg['DMG'] * .30)
 
                                                             if dmg['ELEMENT'] == earth_element:
                                                                 t_defense = t_defense + (dmg['DMG'] * .15)
@@ -21477,6 +21757,18 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if t_ice_counter == 5:
                                                                     t_freeze_enh = True
                                                                     t_ice_counter = 0
+
+                                                            if dmg['ELEMENT'] == time_element:
+                                                                t_stamina = 0
+
+                                                            if dmg['ELEMENT'] == bleed_element:
+                                                                t_bleed_counter = t_bleed_counter + 1
+                                                                if t_bleed_counter == 10:
+                                                                    t_bleed_hit = True
+                                                                    t_bleed_counter = 0
+
+                                                            if dmg['ELEMENT'] == recoil_element:
+                                                                t_health = t_health - (dmg['DMG'] * .30)
 
                                                             if dmg['ELEMENT'] == earth_element:
                                                                 t_defense = t_defense + (dmg['DMG'] * .15)

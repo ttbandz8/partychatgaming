@@ -99,6 +99,12 @@ ELEMENTS = textwrap.dedent(f"""\
 
 💙 Spirit - Has higher chance of crit attack
 
+⛓️ Recoil - Deals 30% damage back to you
+
+⌛ Time - You Focus after attacking
+
+🩸 Bleed - After 10 Attacks deal 10x turn count damage to opponent
+
 [Join the Crown Unlimited Support Server](https://discord.gg/2JkCqcN3hB)
 """)
 
