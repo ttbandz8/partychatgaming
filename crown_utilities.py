@@ -418,7 +418,7 @@ async def corrupted_universe_handler(ctx, universe, difficulty):
                     }
                     filter_query = [{'type.' + "UNIVERSE": uni['UNIVERSE']}]
                     res = db.updateVault(query, update_query, filter_query)
-                    return f"You earned 💎 {'{:,}'.format(gem_reward)}"
+                    return f"You earned 💎 **{'{:,}'.format(gem_reward)}**"
         else:
             return "You must dismantle a card from this universe to enable crafting."
 
@@ -469,6 +469,7 @@ async def cardlevel(card: str, player, mode: str, universe: str):
                     has_universe_soul = True
 
         lvl = cardinfo['LVL']
+        new_lvl = lvl + 1
         lvl_req = 150
         exp = cardinfo['EXP']
         exp_gain = 0
@@ -550,7 +551,7 @@ async def cardlevel(card: str, player, mode: str, universe: str):
                                         'CARD_LEVELS.$[type].' + "AP": ap_buff, 'CARD_LEVELS.$[type].' + "HLT": hlt_buff}}
                 filter_query = [{'type.' + "CARD": str(card)}]
                 response = db.updateVault(query, update_query, filter_query)
-                await user.send(f"**{card}** leveled up!")
+                await user.send(f"**{card}** leveled up to level **{new_lvl}**!")
     except Exception as ex:
         trace = []
         tb = ex.__traceback__
