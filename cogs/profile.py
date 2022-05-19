@@ -1926,7 +1926,7 @@ async def craft_adjuster(self, player, vault, universe, price, item, skin_list):
                                 if mytrait:
                                     traitmessage = f"**{mytrait['EFFECT']}:** {mytrait['TRAIT']}"
                                     
-                                skin_stats = showcard(skins, skins['HLT'],skins['HLT'], skins['STAM'],skins['STAM'], False, base_title, False, skins['ATK'], skins['DEF'], 0, move1ap, move2ap, move3ap, enhap, enh, 0, None )
+                                skin_stats = showcard(skins, "none", skins['HLT'],skins['HLT'], skins['STAM'],skins['STAM'], False, base_title, False, skins['ATK'], skins['DEF'], 0, move1ap, move2ap, move3ap, enhap, enh, 0, None )
                                 embedVar = discord.Embed(title= f"{skins['NAME']}", description=textwrap.dedent(f"""
                                 :mahjong: {skins['TIER']}: 🃏 **{skins['SKIN_FOR']}** 
                                 :heart: **{skins['HLT']}** :dagger: **{skins['ATK']}** :shield: **{skins['DEF']}**
@@ -2299,7 +2299,7 @@ async def build(self, ctx):
                     return
                 
                 else:
-                    card_file = showcard(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, cardtitle, focused, o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, card_lvl, None)
+                    card_file = showcard(card, arm, o_max_health, o_health, o_max_stamina, o_stamina, resolved, cardtitle, focused, o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, card_lvl, None)
 
                     embedVar = discord.Embed(title=f"".format(self), colour=000000)
                     embedVar.add_field(name="__Affinities__", value=f"{affinity_message}")
@@ -3355,6 +3355,7 @@ async def arms(self, ctx):
             for arm in arms_list:
                 index = arms_list.index(arm)
                 resp = db.queryArm({"ARM": str(arm['ARM'])})
+                element = resp['ELEMENT']
                 arm_passive = resp['ABILITIES'][0]
                 arm_passive_type = list(arm_passive.keys())[0]
                 arm_passive_value = list(arm_passive.values())[0]
@@ -3365,16 +3366,32 @@ async def arms(self, ctx):
                     icon = ":fire:"
                 elif arm_available == False and arm_exclusive ==False:
                     icon = ":japanese_ogre:"
+                element_available = ['BASIC', 'SPECIAL', 'ULTIMATE']
+                if element and arm_passive_type in element_available:
+                    element_name = element
+                    element = crown_utilities.set_emoji(element)
+                    arm_type = f"**{arm_passive_type.title()} {element_name.title()} Attack**"
+                    arm_message = f"{element} **{resp['ARM']}:** {arm_passive_value}"
+                    footer = f"The new {arm_passive_type.title()} attack will reflect on your card when equipped"
+
+                else:
+                    arm_type = f"**Unique Passive**"
+                    arm_message = f":microbe: **{arm_passive_type.title()}:** {arm_passive_value}"
+                    footer = f"{arm_passive_type}: {enhancer_mapping[arm_passive_type]}"
+
+
 
                 embedVar = discord.Embed(title= f"{resp['ARM']}", description=textwrap.dedent(f"""
                 {icon} **[{index}]**
-                :microbe: **{arm_passive_type}:** {arm_passive_value}
+
+                {arm_type}
+                {arm_message}
                 :earth_africa: **Universe:** {resp['UNIVERSE']}
                 ⚒️ {arm['DUR']}
                 """), 
                 colour=0x7289da)
                 embedVar.set_thumbnail(url=avatar)
-                embedVar.set_footer(text=f"{arm_passive_type}: {enhancer_mapping[arm_passive_type]}")
+                embedVar.set_footer(text=f"")
                 embed_list.append(embedVar)
             
             buttons = [

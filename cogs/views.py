@@ -16,7 +16,7 @@ from discord import Member
 from PIL import Image, ImageFont, ImageDraw
 import requests
 import random
-from .crownunlimited import showcard, cardback, enhancer_mapping, enhancer_suffix_mapping, passive_enhancer_suffix_mapping
+from .crownunlimited import showcard, showsummon, cardback, enhancer_mapping, enhancer_suffix_mapping, passive_enhancer_suffix_mapping
 from discord_slash.utils.manage_commands import create_option, create_choice
 from discord_slash import cog_ext, SlashContext
 from discord_slash import SlashCommand
@@ -289,7 +289,7 @@ async def viewcard(self, ctx, card: str):
                 await ctx.send(embed=embedVar)
 
             else:
-                card_file = showcard(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, title, focused,
+                card_file = showcard(card, "none", o_max_health, o_health, o_max_stamina, o_stamina, resolved, title, focused,
                                     o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, 0, None)
 
                 embedVar = discord.Embed(title=f"", colour=000000)
@@ -451,10 +451,15 @@ async def viewarm(self, ctx, arm: str):
     arm_name = arm
     arm = db.queryArm({'ARM': {"$regex": f"^{str(arm_name)}$", "$options": "i"}})
     if arm:
+        element_available = ['BASIC', 'SPECIAL', 'ULTIMATE']
         arm_arm = arm['ARM']
         arm_show = arm['UNIVERSE']
         arm_price = arm['PRICE']
         exclusive = arm['EXCLUSIVE']
+        element = arm['ELEMENT']
+        if element:
+            element_name = element.title()
+            element = crown_utilities.set_emoji(element)
 
         if arm_show != 'Unbound':
             arm_show_img = db.queryUniverse({'TITLE': arm_show})['PATH']
@@ -473,13 +478,13 @@ async def viewarm(self, ctx, arm: str):
 
         if o_arm_passive_type == 'BASIC':
             typetext = 'Basic'
-            message=f"{arm_arm} is an BASIC arm"
+            message=f"{arm_arm} is a basic attack arm"
         elif o_arm_passive_type == 'SPECIAL':
             typetext = 'Special'
-            message=f"{arm_arm} is a SPECIAL arm"
+            message=f"{arm_arm} is a special attack arm"
         elif o_arm_passive_type == 'ULTIMATE':
             typetext = 'Ultimate'
-            message=f"{arm_arm} is a ULTIMATE arm"
+            message=f"{arm_arm} is an ultimate attack arm"
         elif o_arm_passive_type == 'ULTIMAX':
             typetext = 'Ultimax'
             message=f"{arm_arm} is a ULTIMAX arm"
@@ -501,8 +506,14 @@ async def viewarm(self, ctx, arm: str):
         embedVar = discord.Embed(title=f"{Crest_dict[arm_show]} {arm_arm}\n{price_message}".format(self), colour=000000)
         if arm_show != "Unbound":
             embedVar.set_thumbnail(url=arm_show_img)
-        embedVar.add_field(name=f"Unique Passive", value=f"Increases {typetext} by **{o_arm_passive_value}**", inline=False)
-        embedVar.set_footer(text=f"{o_arm_passive_type}: {enhancer_mapping[o_arm_passive_type]}")
+        if o_arm_passive_type in element_available:
+            # embedVar.add_field(name=f"Arm Move Element", value=f"{element}", inline=False)
+            embedVar.add_field(name=f"{typetext} {element_name} Attack", value=f"{element} **{arm_arm}**: **{o_arm_passive_value}**", inline=False)
+            embedVar.set_footer(text=f"The new {typetext} attack will reflect on your card when equipped")
+
+        else:
+            embedVar.add_field(name=f"Unique Passive", value=f"Increases {typetext} by **{o_arm_passive_value}**", inline=False)
+            embedVar.set_footer(text=f"{o_arm_passive_type}: {enhancer_mapping[o_arm_passive_type]}")
 
         await ctx.send(embed=embedVar)
 

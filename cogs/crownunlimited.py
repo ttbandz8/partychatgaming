@@ -4,6 +4,7 @@ import time
 from re import T
 import discord
 from discord.ext import commands
+from orjson import OPT_INDENT_2
 import bot as main
 import crown_utilities
 import db
@@ -52,7 +53,7 @@ class CrownUnlimited(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print('Crown Unlimited Cog is ready!')
+        print('Anime VS+ Cog is ready!')
 
     async def cog_check(self, ctx):
         return await main.validate_user(ctx)
@@ -2721,7 +2722,7 @@ def get_card(url, cardname, cardtype):
         }))
         return
 
-def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focused, attack, defense, turn_total, ap1,
+def showcard(d, arm, max_health, health, max_stamina, stamina, resolved, title, focused, attack, defense, turn_total, ap1,
              ap2, ap3, enh1, enhname, lvl, op_defense):
     # Card Name can be 16 Characters before going off Card
     # Lower Card Name Font once after 16 characters
@@ -2825,22 +2826,40 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
                 move3 = moveset[2]
                 move2 = moveset[1]
                 move1 = moveset[0]
+
+            if arm != "none":
+                arm_passive = arm['ABILITIES'][0]
+                arm_name = arm['ARM']
+                arm_price = arm['PRICE']
+                arm_element = arm['ELEMENT']
+                arm_passive_type = list(arm_passive.keys())[0]
+                arm_passive_value = list(arm_passive.values())[0]
+                if arm_passive_type == 'BASIC':
+                    move1 = {arm_name: arm_passive_value, "STAM": 10, "ELEMENT": arm_element}
+                elif arm_passive_type == 'SPECIAL':
+                    move2 = {arm_name: arm_passive_value, "STAM": 30, "ELEMENT": arm_element}
+                elif arm_passive_type == 'ULTIMATE':
+                    move3 = {arm_name: arm_passive_value, "STAM": 80, "ELEMENT": arm_element}
+
                 
             
-            
-            move1_ap = ap1
             basic_attack_emoji = crown_utilities.set_emoji(list(move1.values())[2])
             super_attack_emoji = crown_utilities.set_emoji(list(move2.values())[2])
             ultimate_attack_emoji = crown_utilities.set_emoji(list(move3.values())[2])
-            
-            move1_text = f"{basic_attack_emoji} {list(move1.keys())[0]}: {move1_ap} {ebasic}"
 
-            
+            move1_ap = ap1
             move2_ap = ap2
-            move2_text = f"{super_attack_emoji} {list(move2.keys())[0]}: {move2_ap} {especial}"
-
-            
             move3_ap = ap3
+            if arm != "none":
+                if arm_passive_type == 'BASIC':
+                    move1_ap = arm_passive_value
+                if arm_passive_type == 'SPECIAL':
+                    move2_ap = arm_passive_value
+                if arm_passive_type == 'ULTIMATE':
+                    move3_ap = arm_passive_value
+
+            move1_text = f"{basic_attack_emoji} {list(move1.keys())[0]}: {move1_ap} {ebasic}"
+            move2_text = f"{super_attack_emoji} {list(move2.keys())[0]}: {move2_ap} {especial}"
             move3_text = f"{ultimate_attack_emoji} {list(move3.keys())[0]}: {move3_ap} {eultimate}"
             
 
@@ -3565,7 +3584,7 @@ async def titlelist(self, ctx: SlashContext, universe: str):
     tales_titles_details = []
     for title in titles:
         title_passive = title['ABILITIES'][0]
-        title_passive_type = list(title_passive.keys())[0]
+        title_passive_type = list(title_passive.keys())[0].title()
         title_passive_value = list(title_passive.values())[0]
 
         available = ""
@@ -3644,8 +3663,18 @@ async def armlist(self, ctx: SlashContext, universe: str):
     tales_arms_details = []
     for arm in arms:
         arm_passive = arm['ABILITIES'][0]
-        arm_passive_type = list(arm_passive.keys())[0]
+        arm_passive_type = list(arm_passive.keys())[0].title()
         arm_passive_value = list(arm_passive.values())[0]
+
+        arm_message = f"🦾 **{arm['ARM']}**\n**{arm_passive_type}:** {arm_passive_value}\n"
+
+        element = arm['ELEMENT']
+        element_available = ['BASIC', 'SPECIAL', 'ULTIMATE']
+        if element and arm_passive_type.upper() in element_available:
+            element_name = element
+            element = crown_utilities.set_emoji(element)
+            arm_message = f"🦾 **{arm['ARM']}**\n{element} **{arm_passive_type} {element_name.title()} Attack:** {arm_passive_value}\n"
+
         available = ""
         if arm['AVAILABLE'] and arm['EXCLUSIVE']:
             available = ":purple_circle:"
@@ -3653,12 +3682,14 @@ async def armlist(self, ctx: SlashContext, universe: str):
             available = ":green_circle:"
         else:
             available = ":red_circle:"
+
+        
         if arm['EXCLUSIVE']:
             dungeon_arms_details.append(
-                f"{available} 🦾 **{arm['ARM']}**\n**{arm_passive_type}:** {arm_passive_value}\n")
+                f"{available} {arm_message}")
         else:
             tales_arms_details.append(
-                f"{available} 🦾 **{arm['ARM']}**\n**{arm_passive_type}:** {arm_passive_value}\n")
+                f"{available} {arm_message}")
 
     all_arms = []
     if tales_arms_details:
@@ -3942,6 +3973,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         oarm_passive = oarm['ABILITIES'][0]
         oarm_name = oarm['ARM']
         oarm_price = oarm['PRICE']
+        oarm_element = oarm['ELEMENT']
 
         vault = db.queryVault({'DID': str(o_user['DID']), 'PETS.NAME': o_user['PET']})
         
@@ -4054,6 +4086,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 carm_passive = carm['ABILITIES'][0]
                 carm_name = carm['ARM']
                 carm_price = carm['PRICE']
+                carm_element = carm['ELEMENT']
             else:
                 cperformance = c_user['PERFORMANCE']
                 cvault = db.queryVault({'DID': c_user['DID'], 'PETS.NAME': c_user['PET']})
@@ -4071,6 +4104,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 carm_universe = carm['UNIVERSE']
                 carm_passive = carm['ABILITIES'][0]
                 carm_name = carm['ARM']
+                carm_element = carm['ELEMENT']
 
             cpet_passive_type = cpet['TYPE']
             cpet_name = cpet['NAME']
@@ -4162,6 +4196,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             tarm_passive = tarm['ABILITIES'][0]
             tarm_name = tarm['ARM']
             tarm_price = tarm['PRICE']
+            tarm_element = tarm['ELEMENT']
 
             tvault = db.queryVault({'DID': str(t_user['DID']), 'PETS.NAME': t_user['PET']})
             if mode in pvp_modes:
@@ -4252,6 +4287,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 tarm = db.queryArm({'ARM': universe[enemy_arm]})
 
             tarm_universe = tarm['UNIVERSE']
+            tarm_element = tarm['ELEMENT']
             t_destiny = t['HAS_COLLECTION']
             if mode in B_modes:
                 tpet = db.queryPet({'PET': enemy_pet})
@@ -4320,6 +4356,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
 
             tarm_passive = tarm['ABILITIES'][0]
             tarm_name = tarm['ARM']
+            tarm_element = tarm['ELEMENT']
             t_card = t['NAME']
             t_gif = t['GIF']
             t_card_path = t['PATH']
@@ -4422,6 +4459,16 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             c_atk_chainsaw = False
             if c_universe == "Chainsawman":
                 c_chainsaw = True
+
+            carm_passive_type = list(carm_passive.keys())[0]
+            carm_passive_value = list(carm_passive.values())[0]
+            if carm_passive_type == 'BASIC':
+                c_1 = {carm_name: carm_passive_value, "STAM": 10, "ELEMENT": carm_element}
+            elif oarm_passive_type == 'SPECIAL':
+                c_2 = {carm_name: carm_passive_value, "STAM": 30, "ELEMENT": carm_element}
+            elif oarm_passive_type == 'ULTIMATE':
+                c_3 = {carm_name: carm_passive_value, "STAM": 80, "ELEMENT": carm_element}
+
 
             cmove1_text = list(c_1.keys())[0]
             cmove1_element = list(c_1.values())[2]
@@ -4547,13 +4594,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             cparry_count = 0
             carm_siphon_active = False
             csiphon_value = 0
-            if carm_passive_type == 'BASIC':
-                c_1[cmove1_text] = c_1[cmove1_text] + carm_passive_value
-            elif carm_passive_type == 'SPECIAL':
-                c_2[cmove2_text] = c_2[cmove2_text] + carm_passive_value
-            elif carm_passive_type == 'ULTIMATE':
-                c_3[cmove3_text] = c_3[cmove3_text] + carm_passive_value
-            elif carm_passive_type == 'ULTIMAX':
+            if carm_passive_type == 'ULTIMAX':
                 c_1[cmove1_text] = c_1[cmove1_text] + carm_passive_value
                 c_2[cmove2_text] = c_2[cmove2_text] + carm_passive_value
                 c_3[cmove3_text] = c_3[cmove3_text] + carm_passive_value
@@ -4598,6 +4639,16 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         o_atk_chainsaw = False
         if o_universe == "Chainsawman":
             o_chainsaw = True
+
+        oarm_passive_type = list(oarm_passive.keys())[0]
+        oarm_passive_value = list(oarm_passive.values())[0]
+        if oarm_passive_type == 'BASIC':
+            o_1 = {oarm_name: oarm_passive_value, "STAM": 10, "ELEMENT": oarm_element}
+        elif oarm_passive_type == 'SPECIAL':
+            o_2 = {oarm_name: oarm_passive_value, "STAM": 30, "ELEMENT": oarm_element}
+        elif oarm_passive_type == 'ULTIMATE':
+            o_3 = {oarm_name: oarm_passive_value, "STAM": 80, "ELEMENT": oarm_element}
+
 
         omove1_text = list(o_1.keys())[0]
         omove1_element = list(o_1.values())[2]
@@ -4721,13 +4772,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         oparry_count = 0
         oarm_siphon_active = False
         osiphon_value = 0
-        if oarm_passive_type == 'BASIC':
-            o_1[omove1_text] = o_1[omove1_text] + oarm_passive_value
-        elif oarm_passive_type == 'SPECIAL':
-            o_2[omove2_text] = o_2[omove2_text] + oarm_passive_value
-        elif oarm_passive_type == 'ULTIMATE':
-            o_3[omove3_text] = o_3[omove3_text] + oarm_passive_value
-        elif oarm_passive_type == 'ULTIMAX':
+        if oarm_passive_type == 'ULTIMAX':
             o_1[omove1_text] = o_1[omove1_text] + oarm_passive_value
             o_2[omove2_text] = o_2[omove2_text] + oarm_passive_value
             o_3[omove3_text] = o_3[omove3_text] + oarm_passive_value
@@ -4753,6 +4798,16 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             t_3 = t_moveset[2]
             t_enhancer = t_moveset[3]
 
+            tarm_passive_type = list(tarm_passive.keys())[0]
+            tarm_passive_value = list(tarm_passive.values())[0]
+            if tarm_passive_type == 'BASIC':
+                t_1 = {tarm_name: tarm_passive_value, "STAM": 10, "ELEMENT": tarm_element}
+            elif oarm_passive_type == 'SPECIAL':
+                t_2 = {tarm_name: tarm_passive_value, "STAM": 30, "ELEMENT": tarm_element}
+            elif oarm_passive_type == 'ULTIMATE':
+                t_3 = {tarm_name: tarm_passive_value, "STAM": 80, "ELEMENT": tarm_element}
+
+
             tmove1_text = list(t_1.keys())[0]
             tmove1_element = list(t_1.values())[2]
             tmove2_text = list(t_2.keys())[0]
@@ -4770,7 +4825,16 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             t_2 = t_moveset[1]
             t_3 = t_moveset[2]
             t_enhancer = t_moveset[3]
-            
+
+            tarm_passive_type = list(tarm_passive.keys())[0]
+            tarm_passive_value = list(tarm_passive.values())[0]
+            if tarm_passive_type == 'BASIC':
+                t_1 = {tarm_name: tarm_passive_value, "STAM": 10, "ELEMENT": tarm_element}
+            elif oarm_passive_type == 'SPECIAL':
+                t_2 = {tarm_name: tarm_passive_value, "STAM": 30, "ELEMENT": tarm_element}
+            elif oarm_passive_type == 'ULTIMATE':
+                t_3 = {tarm_name: tarm_passive_value, "STAM": 80, "ELEMENT": tarm_element}
+
             tmove1_text = list(t_1.keys())[0]
             tmove1_element = list(t_1.values())[2]
             tmove2_text = list(t_2.keys())[0]
@@ -4910,13 +4974,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         tparry_count = 0
         tarm_siphon_active = False
         tsiphon_value = 0
-        if tarm_passive_type == 'BASIC':
-            t_1[tmove1_text] = t_1[tmove1_text] + tarm_passive_value
-        elif tarm_passive_type == 'SPECIAL':
-            t_2[tmove2_text] = t_2[tmove2_text] + tarm_passive_value
-        elif tarm_passive_type == 'ULTIMATE':
-            t_3[tmove3_text] = t_3[tmove3_text] + tarm_passive_value
-        elif tarm_passive_type == 'ULTIMAX':
+        if tarm_passive_type == 'ULTIMAX':
             t_1[tmove1_text] = t_1[tmove1_text] + tarm_passive_value
             t_2[tmove2_text] = t_2[tmove2_text] + tarm_passive_value
             t_3[tmove3_text] = t_3[tmove3_text] + tarm_passive_value
@@ -6590,7 +6648,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                 'message': str(ex),
                 'trace': trace
             }))
-            embedVar = discord.Embed(title=f"Unable to start boss fight. Seek support in the Crown Unlimited support server https://discord.gg/cqP4M92", delete_after=30, colour=0xe91e63)
+            embedVar = discord.Embed(title=f"Unable to start boss fight. Seek support in the Anime VS+ support server https://discord.gg/cqP4M92", delete_after=30, colour=0xe91e63)
             await ctx.send(embed=embedVar)
             guild = self.bot.get_guild(main.guild_id)
             channel = guild.get_channel(main.guild_channel)
@@ -7315,11 +7373,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             
             # UNIVERSE CARD
             if t_universe == "Souls" and t_used_resolve:
-                player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina,
+                player_2_card = showcard(t, tarm,t_max_health, t_health, t_max_stamina, t_stamina,
                                     t_used_resolve, ttitle, t_used_focus, t_attack, t_defense,
                                     turn_total, tap2, tap3, tap3, tenh1, tenh_name, tcard_lvl, o_defense)
             else:
-                player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina,
+                player_2_card = showcard(t, tarm,t_max_health, t_health, t_max_stamina, t_stamina,
                                         t_used_resolve, ttitle, t_used_focus, t_attack, t_defense,
                                         turn_total, tap1, tap2, tap3, tenh1, tenh_name, tcard_lvl, o_defense)
             # await private_channel.send(file=player_2_card)
@@ -7558,7 +7616,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 # Tutorial Instructions
                                 if turn_total == 0:
                                     if botActive:
-                                        embedVar = discord.Embed(title=f"Welcome to **Crown Unlimited**!",
+                                        embedVar = discord.Embed(title=f"Welcome to **Anime VS+**!",
                                                                 description=f"Follow the instructions to learn how to play the Game!",
                                                                 colour=0xe91e63)
                                         embedVar.add_field(name="**How do I play?**",
@@ -7819,11 +7877,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                     # UNIVERSE CARD
                                     if o_universe == "Souls" and o_used_resolve:
-                                        player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina,
+                                        player_1_card = showcard(o, oarm,o_max_health, o_health, o_max_stamina, o_stamina,
                                                                 o_used_resolve, otitle, o_used_focus, o_attack, o_defense,
                                                                 turn_total, ap2, ap3, ap3, enh1, enh_name, ocard_lvl, t_defense)
                                     else:
-                                        player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina,
+                                        player_1_card = showcard(o, oarm,o_max_health, o_health, o_max_stamina, o_stamina,
                                                                 o_used_resolve, otitle, o_used_focus, o_attack, o_defense,
                                                                 turn_total, ap1, ap2, ap3, enh1, enh_name, ocard_lvl, t_defense)
                                     # await private_channel.send(file=player_1_card)
@@ -9184,7 +9242,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     t_health = t_max_health
                                 if turn_total == 0:
                                     if botActive:
-                                        embedVar = discord.Embed(title=f"Welcome to **Crown Unlimited**!",
+                                        embedVar = discord.Embed(title=f"Welcome to **Anime VS+**!",
                                                                 description=f"Follow the instructions to learn how to play the Game!",
                                                                 colour=0xe91e63)
                                         embedVar.add_field(name="**How do I play?**",
@@ -9406,11 +9464,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         tpet_msg_on_resolve = ""
                                         # UNIVERSE CARD
                                         if t_universe == "Souls" and t_used_resolve:
-                                            player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina,
+                                            player_2_card = showcard(t, tarm,t_max_health, t_health, t_max_stamina, t_stamina,
                                                                 t_used_resolve, ttitle, t_used_focus, t_attack, t_defense,
                                                                 turn_total, tap2, tap3, tap3, tenh1, tenh_name, tcard_lvl, o_defense)
                                         else:
-                                            player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina,
+                                            player_2_card = showcard(t, tarm,t_max_health, t_health, t_max_stamina, t_stamina,
                                                                     t_used_resolve, ttitle, t_used_focus, t_attack, t_defense,
                                                                     turn_total, tap1, tap2, tap3, tenh1, tenh_name, tcard_lvl, o_defense)
                                                                 
@@ -10551,11 +10609,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         tpet_msg_on_resolve = ""
                                         # UNIVERSE CARD
                                         if t_universe == "Souls" and t_used_resolve:
-                                            player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina,
+                                            player_2_card = showcard(t, tarm,t_max_health, t_health, t_max_stamina, t_stamina,
                                                                 t_used_resolve, ttitle, t_used_focus, t_attack, t_defense,
                                                                 turn_total, tap2, tap3, tap3, tenh1, tenh_name, tcard_lvl, o_defense)
                                         else:
-                                            player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina,
+                                            player_2_card = showcard(t, tarm,t_max_health, t_health, t_max_stamina, t_stamina,
                                                                     t_used_resolve, ttitle, t_used_focus, t_attack, t_defense,
                                                                     turn_total, tap1, tap2, tap3, tenh1, tenh_name, tcard_lvl, o_defense)
                                             
@@ -11970,11 +12028,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         pet_msg_on_resolve = ""
                                         # UNIVERSE CARD
                                         if o_universe == "Souls" and o_used_resolve:
-                                            player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina,
+                                            player_1_card = showcard(o, oarm,o_max_health, o_health, o_max_stamina, o_stamina,
                                                                     o_used_resolve, otitle, o_used_focus, o_attack, o_defense,
                                                                     turn_total, ap2, ap3, ap3, enh1, enh_name, ocard_lvl, t_defense)
                                         else:
-                                            player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina,
+                                            player_1_card = showcard(o, oarm,o_max_health, o_health, o_max_stamina, o_stamina,
                                                                     o_used_resolve, otitle, o_used_focus, o_attack, o_defense,
                                                                     turn_total, ap1, ap2, ap3, enh1, enh_name, ocard_lvl, t_defense)
                                         
@@ -13115,11 +13173,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                         # UNIVERSE CARD
                                         if o_universe == "Souls" and o_used_resolve:
-                                            player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina,
+                                            player_1_card = showcard(o, oarm,o_max_health, o_health, o_max_stamina, o_stamina,
                                                                     o_used_resolve, otitle, o_used_focus, o_attack, o_defense,
                                                                     turn_total, ap2, ap3, ap3, enh1, enh_name, ocard_lvl, t_defense)
                                         else:
-                                            player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina,
+                                            player_1_card = showcard(o, oarm,o_max_health, o_health, o_max_stamina, o_stamina,
                                                                     o_used_resolve, otitle, o_used_focus, o_attack, o_defense,
                                                                     turn_total, ap1, ap2, ap3, enh1, enh_name, ocard_lvl, t_defense)
 
@@ -15086,11 +15144,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         # UNIVERSE CARD
 
                                         if t_universe == "Souls" and t_used_resolve:
-                                            player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina,
+                                            player_2_card = showcard(t, tarm,t_max_health, t_health, t_max_stamina, t_stamina,
                                                                 t_used_resolve, ttitle, t_used_focus, t_attack, t_defense,
                                                                 turn_total, tap2, tap3, tap3, tenh1, tenh_name, tcard_lvl, o_defense)
                                         else:
-                                            player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina,
+                                            player_2_card = showcard(t, tarm,t_max_health, t_health, t_max_stamina, t_stamina,
                                                                     t_used_resolve, ttitle, t_used_focus, t_attack, t_defense,
                                                                     turn_total, tap1, tap2, tap3, tenh1, tenh_name, tcard_lvl, o_defense)
                                             
@@ -17413,11 +17471,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             cpet_enh_name = list(cpet_move.values())[2]
                                             cpet_msg_on_resolve = ""
                                             if c_universe == "Souls" and c_used_resolve:
-                                                companion_card = showcard(c, c_max_health, c_health, c_max_stamina, c_stamina,
+                                                companion_card = showcard(c, carm,c_max_health, c_health, c_max_stamina, c_stamina,
                                                                     c_used_resolve, ctitle, c_used_focus, c_attack, c_defense,
                                                                     turn_total, cap2, cap3, cap3, cenh1, cenh_name, ccard_lvl, t_defense)
                                             else:
-                                                companion_card = showcard(c, c_max_health, c_health, c_max_stamina, c_stamina,
+                                                companion_card = showcard(c, carm,c_max_health, c_health, c_max_stamina, c_stamina,
                                                                         c_used_resolve, ctitle, c_used_focus, c_attack, c_defense,
                                                                         turn_total, cap1, cap2, cap3, cenh1, cenh_name, ccard_lvl, t_defense)
 
@@ -18634,11 +18692,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             cpet_enh_name = list(cpet_move.values())[2]
                                             cpet_msg_on_resolve = ""
                                             if c_universe == "Souls" and c_used_resolve:
-                                                companion_card = showcard(c, c_max_health, c_health, c_max_stamina, c_stamina,
+                                                companion_card = showcard(c, carm,c_max_health, c_health, c_max_stamina, c_stamina,
                                                                     c_used_resolve, ctitle, c_used_focus, c_attack, c_defense,
                                                                     turn_total, cap2, cap3, cap3, cenh1, cenh_name, ccard_lvl, t_defense)
                                             else:
-                                                companion = showcard(c, c_max_health, c_health, c_max_stamina, c_stamina,
+                                                companion = showcard(c, carm,c_max_health, c_health, c_max_stamina, c_stamina,
                                                                     c_used_resolve, ctitle, c_used_focus, c_attack, c_defense,
                                                                     turn_total, cap1, cap2, cap3, cenh1, cenh_name, ccard_lvl, t_defense)
 
@@ -20254,11 +20312,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         tpet_msg_on_resolve = ""
                                         # UNIVERSE CARD
                                         if t_universe == "Souls" and t_used_resolve:
-                                            player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina,
+                                            player_2_card = showcard(t, tarm,t_max_health, t_health, t_max_stamina, t_stamina,
                                                                 t_used_resolve, ttitle, t_used_focus, t_attack, t_defense,
                                                                 turn_total, tap2, tap3, tap3, tenh1, tenh_name, tcard_lvl, c_defense)
                                         else:
-                                            player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina,
+                                            player_2_card = showcard(t, tarm,t_max_health, t_health, t_max_stamina, t_stamina,
                                                                     t_used_resolve, ttitle, t_used_focus, t_attack, t_defense,
                                                                     turn_total, tap1, tap2, tap3, tenh1, tenh_name, tcard_lvl, c_defense)
                                                                 
