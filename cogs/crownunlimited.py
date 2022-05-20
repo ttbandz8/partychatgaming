@@ -6813,9 +6813,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 stats = await build_player_stats(self, randomized_battle, ctx, sowner, o, otitle, t, ttitle, mode,
                                                  universe, currentopponent, oteam, ofam, abyss_scaling, None, None,
                                                  None, None, None, None, None, None, None, None)
-            auto_battle = stats['auto_battle']
-            if sowner['PATRON']:
-                auto_battle = True
+            auto_battle = True
             difficulty = sowner['DIFFICULTY']
             battle_history_message_amount = sowner['BATTLE_HISTORY']
             o_full_card_info = stats['o_full_card_info']
@@ -6911,10 +6909,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         corruption_atk_buff = 80
                         corruption_def_buff = 120
                         corruption_ap_buff = 65
-                    auto_battle = True
-
-            if difficulty == "EASY":
-                auto_battle = True
 
 
             if mode in PVP_MODES or mode in RAID_MODES:
