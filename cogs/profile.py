@@ -1190,7 +1190,7 @@ async def shop(self, ctx):
         completed_dungeons = user['DUNGEONS']
         available_universes = []
         riftShopOpen = False
-        shopName = ':shopping_cart: Crown Shop'
+        shopName = ':shopping_cart: Shop'
         if user['RIFT'] == 1:
             riftShopOpen = True
             shopName = ':crystal_ball: Rift Shop'
@@ -1499,7 +1499,7 @@ async def craft(self, ctx):
             #skin_alert_message = f"No Skins for {card_info['NAME']}"
         available_universes = []
         riftShopOpen = False
-        shopName = ':shopping_cart: Crown Shop'
+        shopName = ':shopping_cart: Shop'
         if user['RIFT'] == 1:
             riftShopOpen = True
             shopName = ':crystal_ball: Rift Shop'
@@ -2201,16 +2201,24 @@ async def build(self, ctx):
                 move1 = list(o_1.keys())[0]
                 move1ap = list(o_1.values())[0] + card_lvl_ap_buff
                 move1_stamina = list(o_1.values())[1]
+                move1_element = list(o_1.values())[2]
+                move1_emoji = crown_utilities.set_emoji(move1_element)
                 
                 # Move 2
                 move2 = list(o_2.keys())[0]
                 move2ap = list(o_2.values())[0] + card_lvl_ap_buff
                 move2_stamina = list(o_2.values())[1]
+                move2_element = list(o_2.values())[2]
+                move2_emoji = crown_utilities.set_emoji(move2_element)
+
 
                 # Move 3
                 move3 = list(o_3.keys())[0]
                 move3ap = list(o_3.values())[0] + card_lvl_ap_buff
                 move3_stamina = list(o_3.values())[1]
+                move3_element = list(o_3.values())[2]
+                move3_emoji = crown_utilities.set_emoji(move3_element)
+
 
                 # Move Enhancer
                 move4 = list(o_enhancer.keys())[0]
@@ -2280,9 +2288,9 @@ async def build(self, ctx):
                     🧬 **{active_pet['NAME']}: {active_pet['TYPE']}: {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]} | Bond {bond} {bond_message} / Level {lvl} {lvl_message}**
                     🩸 **{passive_name}:** {passive_type} {passive_num}{passive_enhancer_suffix_mapping[passive_type]}                
                     
-                    💥 **{move1}:** {move1ap}
-                    ☄️ **{move2}:** {move2ap}
-                    🏵️ **{move3}:** {move3ap}
+                    {move1_emoji} **{move1}:** {move1ap}
+                    {move2_emoji} **{move2}:** {move2ap}
+                    {move3_emoji} **{move3}:** {move3ap}
                     🦠 **{move4}:** {move4enh} {move4ap}{enhancer_suffix_mapping[move4enh]}
 
                     ♾️ {traitmessage}
@@ -2442,16 +2450,24 @@ async def cards(self, ctx):
                 move1 = list(o_1.keys())[0]
                 move1ap = list(o_1.values())[0] + card_lvl_ap_buff
                 move1_stamina = list(o_1.values())[1]
+                move1_element = list(o_1.values())[2]
+                move1_emoji = crown_utilities.set_emoji(move1_element)
                 
                 # Move 2
                 move2 = list(o_2.keys())[0]
                 move2ap = list(o_2.values())[0] + card_lvl_ap_buff
                 move2_stamina = list(o_2.values())[1]
+                move2_element = list(o_2.values())[2]
+                move2_emoji = crown_utilities.set_emoji(move2_element)
+
 
                 # Move 3
                 move3 = list(o_3.keys())[0]
                 move3ap = list(o_3.values())[0] + card_lvl_ap_buff
                 move3_stamina = list(o_3.values())[1]
+                move3_element = list(o_3.values())[2]
+                move3_emoji = crown_utilities.set_emoji(move3_element)
+
 
                 # Move Enhancer
                 move4 = list(o_enhancer.keys())[0]
@@ -2481,9 +2497,9 @@ async def cards(self, ctx):
                 {card_tier}: {lvl}
                 :heart: **{resp['HLT']}** :dagger: **{resp['ATK']}** :shield: **{resp['DEF']}** 🏃 **{resp['SPD']}**
 
-                💥 **{move1}:** {move1ap}
-                ☄️ **{move2}:** {move2ap}
-                🏵️ **{move3}:** {move3ap}
+                {move1_emoji} **{move1}:** {move1ap}
+                {move2_emoji} **{move2}:** {move2ap}
+                {move3_emoji} **{move3}:** {move3ap}
                 🦠 **{move4}:** {move4enh} {move4ap}{enhancer_suffix_mapping[move4enh]}
 
                 🩸 **{passive_name}:** {passive_type} {passive_num}{passive_enhancer_suffix_mapping[passive_type]}

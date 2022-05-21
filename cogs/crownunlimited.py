@@ -4,7 +4,6 @@ import time
 from re import T
 import discord
 from discord.ext import commands
-from orjson import OPT_INDENT_2
 import bot as main
 import crown_utilities
 import db
@@ -256,7 +255,7 @@ class CrownUnlimited(commands.Cog):
             resolved = False
             focused = False
             turn = 0
-            card_file = showcard(cards[rand_card], o_max_health, o_health, o_max_stamina, o_stamina, resolved, cardtitle, focused, o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, card_lvl, None)
+            card_file = showcard(cards[rand_card], "none", o_max_health, o_health, o_max_stamina, o_stamina, resolved, cardtitle, focused, o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, card_lvl, None)
 
             embedVar.set_image(url="attachment://image.png")
             embedVar.set_thumbnail(url=message.author.avatar_url)
@@ -452,6 +451,9 @@ class CrownUnlimited(commands.Cog):
                        ]
         , guild_ids=main.guild_ids)
     async def duo(self, ctx: SlashContext, deck: int, mode: str):
+        await ctx.send("Currently down for maintenance")
+        return
+
         a_registered_player = await crown_utilities.player_check(ctx)
         if not a_registered_player:
             return
@@ -558,6 +560,9 @@ class CrownUnlimited(commands.Cog):
                        ]
         , guild_ids=main.guild_ids)
     async def coop(self, ctx: SlashContext, user: User, mode: str):
+        await ctx.send("Currently down for maintenance")
+        return
+
         a_registered_player = await crown_utilities.player_check(ctx)
         if not a_registered_player:
             return
@@ -1094,6 +1099,8 @@ class CrownUnlimited(commands.Cog):
                     ]
         , guild_ids=main.guild_ids)
     async def solo(self, ctx: SlashContext, mode: str):
+        await ctx.send("Currently down for maintenance")
+        return
         a_registered_player = await crown_utilities.player_check(ctx)
         if not a_registered_player:
             return
@@ -1185,6 +1192,8 @@ class CrownUnlimited(commands.Cog):
 
     @cog_ext.cog_slash(description="pvp battle against a friend or rival", guild_ids=main.guild_ids)
     async def pvp(self, ctx: SlashContext, opponent: User):
+        await ctx.send("Currently down for maintenance")
+        return
         try:
             await ctx.defer()
             player = opponent
@@ -5152,7 +5161,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             'o_enhancer_used': o_enhancer_used,
             'o_final_stand': o_final_stand,
             't_card': t_card,
-            'tarm': tarm_name,
+            'tarm': tarm,
             'tarm_name': tarm_name,
             'tarm_passive_type' : tarm_passive_type,
             'tarm_passive_value' : tarm_passive_value,
@@ -5294,7 +5303,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 't_card': t_card,
                 'tcard_lvl': tcard_lvl,
                 'tperformance': tperformance,
-                'tarm': tarm_name,
+                'tarm': tarm,
                 'tarm_name': tarm_name,
                 'tarm_passive_type' : tarm_passive_type,
                 'tarm_passive_value' : tarm_passive_value,
@@ -5436,7 +5445,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 't_card': t_card,
                 'tcard_lvl': tcard_lvl,
                 'tperformance': operformance,
-                'tarm': tarm_name,
+                'tarm': tarm,
                 'tarm_name': tarm_name,
                 'tarm_passive_type' : tarm_passive_type,
                 'tarm_passive_value' : tarm_passive_value,
@@ -5576,7 +5585,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 'o_enhancer_used': o_enhancer_used,
                 'o_final_stand': o_final_stand,
                 't_card': t_card,
-                'tarm': tarm_name,
+                'tarm': tarm,
                 'tarm_name': tarm_name,
                 'tarm_passive_type' : tarm_passive_type,
                 'tarm_passive_value' : tarm_passive_value,
@@ -5738,7 +5747,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 'o_enhancer_used': o_enhancer_used,
                 'o_final_stand': o_final_stand,
                 't_card': t_card,
-                'tarm': tarm_name,
+                'tarm': tarm,
                 'tarm_name': tarm_name,
                 'tarm_passive_type' : tarm_passive_type,
                 'tarm_passive_value' : tarm_passive_value,
@@ -5961,7 +5970,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 'o_final_stand': o_final_stand,
                 't_card': t_card,
                 'tarm_name': tarm_name,
-                'tarm': tarm_name,
+                'tarm': tarm,
                 'tcard_lvl': tcard_lvl,
                 't_universe': t_universe,
                 't_attack': t_attack,
@@ -7224,7 +7233,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             o_shock_buff = 0
             o_psychic_debuff = 0
             o_bleed_counter = 0
-            o_bleed_hit = True
+            o_bleed_hit = False
 
             t_burn_dmg = 0
             t_poison_dmg = 0
@@ -7234,7 +7243,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             t_shock_buff = 0
             t_psychic_debuff = 0
             t_bleed_counter = 0
-            t_bleed_hit = True
+            t_bleed_hit = False
 
             c_burn_dmg = 0
             c_poison_dmg = 0
@@ -7244,7 +7253,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             c_shock_buff = 0
             c_psychic_debuff = 0
             c_bleed_counter = 0
-            c_bleed_hit = True
+            c_bleed_hit = False
 
 
             if o_universe == "Solo Leveling":
@@ -7367,11 +7376,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             
             # UNIVERSE CARD
             if t_universe == "Souls" and t_used_resolve:
-                player_2_card = showcard(t, tarm,t_max_health, t_health, t_max_stamina, t_stamina,
+                player_2_card = showcard(t, tarm, t_max_health, t_health, t_max_stamina, t_stamina,
                                     t_used_resolve, ttitle, t_used_focus, t_attack, t_defense,
                                     turn_total, tap2, tap3, tap3, tenh1, tenh_name, tcard_lvl, o_defense)
             else:
-                player_2_card = showcard(t, tarm,t_max_health, t_health, t_max_stamina, t_stamina,
+                player_2_card = showcard(t, tarm, t_max_health, t_health, t_max_stamina, t_stamina,
                                         t_used_resolve, ttitle, t_used_focus, t_attack, t_defense,
                                         turn_total, tap1, tap2, tap3, tenh1, tenh_name, tcard_lvl, o_defense)
             # await private_channel.send(file=player_2_card)
@@ -8694,7 +8703,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_stamina = 0
 
                                                     if dmg['ELEMENT'] == earth_element:
-                                                        o_defense = o_defense + (dmg['DMG'] * .15)
+                                                        o_defense = o_defense + (dmg['DMG'] * .20)
 
                                                     if dmg['ELEMENT'] == death_element:
                                                         t_max_health = t_max_health - (dmg['DMG'] * .05)
@@ -8732,7 +8741,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                     if dmg['ELEMENT'] == ice_element:
                                                         o_ice_counter = o_ice_counter + 1
-                                                        if o_ice_counter == 5:
+                                                        if o_ice_counter == 3:
                                                             o_freeze_enh = True
                                                             o_ice_counter = 0
 
@@ -8990,7 +8999,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health - dmg['DMG']
 
                                                         if dmg['ELEMENT'] == earth_element:
-                                                            o_defense = o_defense + (dmg['DMG'] * .15)
+                                                            o_defense = o_defense + (dmg['DMG'] * .20)
 
                                                         if dmg['ELEMENT'] == recoil_element:
                                                             o_health = o_health - (dmg['DMG'] * .30)
@@ -9030,7 +9039,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         
                                                         if dmg['ELEMENT'] == ice_element:
                                                             o_ice_counter = o_ice_counter + 1
-                                                            if o_ice_counter == 5:
+                                                            if o_ice_counter == 3:
                                                                 o_freeze_enh = True
                                                                 o_ice_counter = 0
 
@@ -10183,7 +10192,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health - dmg['DMG']
 
                                                         if dmg['ELEMENT'] == earth_element:
-                                                            t_defense = t_defense + (dmg['DMG'] * .15)
+                                                            t_defense = t_defense + (dmg['DMG'] * .20)
 
                                                         if dmg['ELEMENT'] == recoil_element:
                                                             t_health = t_health - (dmg['DMG'] * .30)
@@ -10224,7 +10233,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
     
                                                         if dmg['ELEMENT'] == ice_element:
                                                             t_ice_counter = t_ice_counter + 1
-                                                            if t_ice_counter == 5:
+                                                            if t_ice_counter == 3:
                                                                 t_freeze_enh = True
                                                                 t_ice_counter = 0
 
@@ -10461,7 +10470,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_health = o_health - dmg['DMG']
 
                                                             if dmg['ELEMENT'] == earth_element:
-                                                                t_defense = t_defense + (dmg['DMG'] * .15)
+                                                                t_defense = t_defense + (dmg['DMG'] * .20)
 
                                                             if dmg['ELEMENT'] == recoil_element:
                                                                 t_health = t_health - (dmg['DMG'] * .30)
@@ -10508,7 +10517,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                             if dmg['ELEMENT'] == ice_element:
                                                                 t_ice_counter = t_ice_counter + 1
-                                                                if t_ice_counter == 5:
+                                                                if t_ice_counter == 3:
                                                                     t_freeze_enh = True
                                                                     t_ice_counter = 0
 
@@ -11291,7 +11300,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = t_health - (dmg['DMG'] * .30)
 
                                                     if dmg['ELEMENT'] == earth_element:
-                                                        t_defense = t_defense + (dmg['DMG'] * .15)
+                                                        t_defense = t_defense + (dmg['DMG'] * .20)
 
                                                     if dmg['ELEMENT'] == death_element:
                                                         o_max_health = o_max_health - (dmg['DMG'] * .05)
@@ -11528,7 +11537,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                         if dmg['ELEMENT'] == ice_element:
                                                             t_ice_counter = t_ice_counter + 1
-                                                            if t_ice_counter == 5:
+                                                            if t_ice_counter == 3:
                                                                 t_freeze_enh = True
                                                                 t_ice_counter = 0
 
@@ -11546,7 +11555,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health - (dmg['DMG'] * .30)
 
                                                         if dmg['ELEMENT'] == earth_element:
-                                                            t_defense = t_defense + (dmg['DMG'] * .15)
+                                                            t_defense = t_defense + (dmg['DMG'] * .20)
 
                                                         if dmg['ELEMENT'] == death_element:
                                                             o_max_health = o_max_health - (dmg['DMG'] * .05)
@@ -12798,7 +12807,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_bleed_counter = 0
 
                                                     if dmg['ELEMENT'] == earth_element:
-                                                        o_defense = o_defense + (dmg['DMG'] * .15)
+                                                        o_defense = o_defense + (dmg['DMG'] * .20)
 
                                                     if dmg['ELEMENT'] == death_element:
                                                         t_max_health = t_max_health - (dmg['DMG'] * .05)
@@ -12832,7 +12841,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                     if dmg['ELEMENT'] == ice_element:
                                                         o_ice_counter = o_ice_counter + 1
-                                                        if o_ice_counter == 5:
+                                                        if o_ice_counter == 3:
                                                             o_freeze_enh = True
                                                             o_ice_counter = 0
 
@@ -13064,7 +13073,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                         if dmg['ELEMENT'] == ice_element:
                                                             o_ice_counter = o_ice_counter + 1
-                                                            if o_ice_counter == 5:
+                                                            if o_ice_counter == 3:
                                                                 o_freeze_enh = True
                                                                 o_ice_counter = 0
 
@@ -13081,7 +13090,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health - (dmg['DMG'] * .30)
 
                                                         if dmg['ELEMENT'] == earth_element:
-                                                            o_defense = o_defense + (dmg['DMG'] * .15)
+                                                            o_defense = o_defense + (dmg['DMG'] * .20)
 
                                                         if dmg['ELEMENT'] == death_element:
                                                             t_max_health = t_max_health - (dmg['DMG'] * .05)
@@ -14321,7 +14330,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_bleed_counter = 0
 
                                                         if dmg['ELEMENT'] == earth_element:
-                                                            o_defense = o_defense + (dmg['DMG'] * .15)
+                                                            o_defense = o_defense + (dmg['DMG'] * .20)
 
                                                         if dmg['ELEMENT'] == death_element:
                                                             t_max_health = t_max_health - (dmg['DMG'] * .05)
@@ -14355,7 +14364,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                         if dmg['ELEMENT'] == ice_element:
                                                             o_ice_counter = o_ice_counter + 1
-                                                            if o_ice_counter == 5:
+                                                            if o_ice_counter == 3:
                                                                 o_freeze_enh = True
                                                                 o_ice_counter = 0
 
@@ -14606,7 +14615,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                             if dmg['ELEMENT'] == ice_element:
                                                                 o_ice_counter = o_ice_counter + 1
-                                                                if o_ice_counter == 5:
+                                                                if o_ice_counter == 3:
                                                                     o_freeze_enh = True
                                                                     o_ice_counter = 0
                                                             if dmg['ELEMENT'] == recoil_element:
@@ -14622,7 +14631,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     o_bleed_counter = 0
 
                                                             if dmg['ELEMENT'] == earth_element:
-                                                                o_defense = o_defense + (dmg['DMG'] * .15)
+                                                                o_defense = o_defense + (dmg['DMG'] * .20)
 
                                                             if dmg['ELEMENT'] == death_element:
                                                                 t_max_health = t_max_health - (dmg['DMG'] * .05)
@@ -16209,7 +16218,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 
                                                 if dmg['ELEMENT'] == ice_element:
                                                     t_ice_counter = t_ice_counter + 1
-                                                    if t_ice_counter == 5:
+                                                    if t_ice_counter == 3:
                                                         t_freeze_enh = True
                                                         t_ice_counter = 0
 
@@ -16226,7 +16235,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_health = t_health - (dmg['DMG'] * .30)
 
                                                 if dmg['ELEMENT'] == earth_element:
-                                                    t_defense = t_defense + (dmg['DMG'] * .15)
+                                                    t_defense = t_defense + (dmg['DMG'] * .20)
 
                                                 if dmg['ELEMENT'] == death_element:
                                                     o_max_health = o_max_health - (dmg['DMG'] * .05)
@@ -16469,7 +16478,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             
                                                             if dmg['ELEMENT'] == ice_element:
                                                                 t_ice_counter = t_ice_counter + 1
-                                                                if t_ice_counter == 5:
+                                                                if t_ice_counter == 3:
                                                                     t_freeze_enh = True
                                                                     t_ice_counter = 0
 
@@ -16486,7 +16495,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = t_health - (dmg['DMG'] * .30)
 
                                                             if dmg['ELEMENT'] == earth_element:
-                                                                t_defense = t_defense + (dmg['DMG'] * .15)
+                                                                t_defense = t_defense + (dmg['DMG'] * .20)
 
                                                             if dmg['ELEMENT'] == death_element:
                                                                 c_max_health = c_max_health - (dmg['DMG'] * .05)
@@ -16757,7 +16766,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                             if dmg['ELEMENT'] == ice_element:
                                                                 t_ice_counter = t_ice_counter + 1
-                                                                if t_ice_counter == 5:
+                                                                if t_ice_counter == 3:
                                                                     t_freeze_enh = True
                                                                     t_ice_counter = 0
 
@@ -16774,7 +16783,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = t_health - (dmg['DMG'] * .30)
 
                                                             if dmg['ELEMENT'] == earth_element:
-                                                                t_defense = t_defense + (dmg['DMG'] * .15)
+                                                                t_defense = t_defense + (dmg['DMG'] * .20)
 
                                                             if dmg['ELEMENT'] == death_element:
                                                                 o_max_health = o_max_health - (dmg['DMG'] * .05)
@@ -17048,7 +17057,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                         if dmg['ELEMENT'] == ice_element:
                                                             t_ice_counter = t_ice_counter + 1
-                                                            if t_ice_counter == 5:
+                                                            if t_ice_counter == 3:
                                                                 t_freeze_enh = True
                                                                 t_ice_counter = 0
 
@@ -17065,7 +17074,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health - (dmg['DMG'] * .30)
 
                                                         if dmg['ELEMENT'] == earth_element:
-                                                            t_defense = t_defense + (dmg['DMG'] * .15)
+                                                            t_defense = t_defense + (dmg['DMG'] * .20)
 
                                                         if dmg['ELEMENT'] == death_element:
                                                             o_max_health = o_max_health - (dmg['DMG'] * .05)
@@ -18576,7 +18585,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                             if dmg['ELEMENT'] == ice_element:
                                                                 c_ice_counter = c_ice_counter + 1
-                                                                if c_ice_counter == 5:
+                                                                if c_ice_counter == 3:
                                                                     c_freeze_enh = True
                                                                     c_ice_counter = 0
 
@@ -18593,7 +18602,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 c_health = c_health - (dmg['DMG'] * .30)
 
                                                             if dmg['ELEMENT'] == earth_element:
-                                                                c_defense = c_defense + (dmg['DMG'] * .15)
+                                                                c_defense = c_defense + (dmg['DMG'] * .20)
 
                                                             if dmg['ELEMENT'] == death_element:
                                                                 t_max_health = t_max_health - (dmg['DMG'] * .05)
@@ -19562,7 +19571,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                             if dmg['ELEMENT'] == ice_element:
                                                                 c_ice_counter = c_ice_counter + 1
-                                                                if c_ice_counter == 5:
+                                                                if c_ice_counter == 3:
                                                                     c_freeze_enh = True
                                                                     c_ice_counter = 0
 
@@ -19580,7 +19589,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 c_health = c_health - (dmg['DMG'] * .30)
 
                                                             if dmg['ELEMENT'] == earth_element:
-                                                                c_defense = c_defense + (dmg['DMG'] * .15)
+                                                                c_defense = c_defense + (dmg['DMG'] * .20)
 
                                                             if dmg['ELEMENT'] == death_element:
                                                                 t_max_health = t_max_health - (dmg['DMG'] * .05)
@@ -19856,7 +19865,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                                 if dmg['ELEMENT'] == ice_element:
                                                                     c_ice_counter = c_ice_counter + 1
-                                                                    if c_ice_counter == 5:
+                                                                    if c_ice_counter == 3:
                                                                         c_freeze_enh = True
                                                                         c_ice_counter = 0
 
@@ -19874,7 +19883,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     c_health = c_health - (dmg['DMG'] * .30)
 
                                                                 if dmg['ELEMENT'] == earth_element:
-                                                                    c_defense = c_defense + (dmg['DMG'] * .15)
+                                                                    c_defense = c_defense + (dmg['DMG'] * .20)
 
                                                                 if dmg['ELEMENT'] == death_element:
                                                                     t_max_health = t_max_health - (dmg['DMG'] * .05)
@@ -21224,7 +21233,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                     if dmg['ELEMENT'] == ice_element:
                                                         t_ice_counter = t_ice_counter + 1
-                                                        if t_ice_counter == 5:
+                                                        if t_ice_counter == 3:
                                                             t_freeze_enh = True
                                                             t_ice_counter = 0
 
@@ -21241,7 +21250,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = t_health - (dmg['DMG'] * .30)
 
                                                     if dmg['ELEMENT'] == earth_element:
-                                                        t_defense = t_defense + (dmg['DMG'] * .15)
+                                                        t_defense = t_defense + (dmg['DMG'] * .20)
 
                                                     if dmg['ELEMENT'] == death_element:
                                                         c_max_health = c_max_health - (dmg['DMG'] * .05)
@@ -21497,7 +21506,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                             if dmg['ELEMENT'] == ice_element:
                                                                 t_ice_counter = t_ice_counter + 1
-                                                                if t_ice_counter == 5:
+                                                                if t_ice_counter == 3:
                                                                     t_freeze_enh = True
                                                                     t_ice_counter = 0
 
@@ -21514,7 +21523,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = t_health - (dmg['DMG'] * .30)
 
                                                             if dmg['ELEMENT'] == earth_element:
-                                                                t_defense = t_defense + (dmg['DMG'] * .15)
+                                                                t_defense = t_defense + (dmg['DMG'] * .20)
 
                                                             if dmg['ELEMENT'] == death_element:
                                                                 o_max_health = o_max_health - (dmg['DMG'] * .05)
@@ -21806,7 +21815,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                             if dmg['ELEMENT'] == ice_element:
                                                                 t_ice_counter = t_ice_counter + 1
-                                                                if t_ice_counter == 5:
+                                                                if t_ice_counter == 3:
                                                                     t_freeze_enh = True
                                                                     t_ice_counter = 0
 
@@ -21823,7 +21832,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = t_health - (dmg['DMG'] * .30)
 
                                                             if dmg['ELEMENT'] == earth_element:
-                                                                t_defense = t_defense + (dmg['DMG'] * .15)
+                                                                t_defense = t_defense + (dmg['DMG'] * .20)
 
                                                             if dmg['ELEMENT'] == death_element:
                                                                 c_max_health = c_max_health - (dmg['DMG'] * .05)

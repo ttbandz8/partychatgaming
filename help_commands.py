@@ -16,7 +16,7 @@ CROWN_UNLIMITED_GAMES = textwrap.dedent(f"""\
 
 
 **PVE Game Modes**
-**🆘 The Tutorial** - Learn crown unlimited battle system
+**🆘 The Tutorial** - Learn Anime VS+ battle system
 **🌑 The Abyss** - Climb the ladder for rewards and unlockables
 **⚔️ Tales** - Normal battle mode to earn cards, accessories and more
 **🔥 Dungeon** - Hard battle mode to earn dungeon cards, dungeon accessories, and more
@@ -34,7 +34,7 @@ CROWN_UNLIMITED_GAMES = textwrap.dedent(f"""\
 **PVP**
 **/pvp** - Battle a rival in PVP mode
 
-[Join the Crown Unlimited Support Server](https://discord.gg/2JkCqcN3hB)
+[Join the Anime VS+ Support Server](https://discord.gg/2JkCqcN3hB)
 """)
 
 
@@ -42,7 +42,7 @@ UNIVERSE_STUFF = textwrap.dedent(f"""\
 **View Universes!**
 **/universes** - View all available universe info including all available cards, accessories, and destinies
 
-[Join the Crown Unlimited Support Server](https://discord.gg/2JkCqcN3hB)
+[Join the Anime VS+ Support Server](https://discord.gg/2JkCqcN3hB)
 """)
 
 
@@ -65,7 +65,7 @@ LEGEND = textwrap.dedent(f"""\
 💰 - **Coins** *Buy items in the shop and blacksmith*
 💎 - **Gems** *Craft universe hearts, souls, cards, and destiny lines!*
 
-[Join the Crown Unlimited Support Server](https://discord.gg/2JkCqcN3hB)
+[Join the Anime VS+ Support Server](https://discord.gg/2JkCqcN3hB)
 """)
 
 ELEMENTS = textwrap.dedent(f"""\
@@ -73,11 +73,11 @@ ELEMENTS = textwrap.dedent(f"""\
 
 🔥 Fire - Does 30% damage of previous attack on next opponent turn 
 
-❄️ Ice - After 5 uses opponent freezes and loses 1 turn 
+❄️ Ice - After 3 uses opponent freezes and loses 1 turn 
 
 💧 Water - increases all water attack dmg by 25 Flat 
 
-🌱 Earth - Cannot be Parried. Increases Def by 15% AP
+🌱 Earth - Cannot be Parried. Increases Def by 20% AP
 
 ⚡️ Electric- Add 5% to Shock damage, added to each attack
 
@@ -105,7 +105,7 @@ ELEMENTS = textwrap.dedent(f"""\
 
 🩸 Bleed - After 10 Attacks deal 10x turn count damage to opponent
 
-[Join the Crown Unlimited Support Server](https://discord.gg/2JkCqcN3hB)
+[Join the Anime VS+ Support Server](https://discord.gg/2JkCqcN3hB)
 """)
 
 
@@ -151,7 +151,7 @@ BOT_COMMANDS = textwrap.dedent(f"""\
 **/viewhouse** - View House Information
 **/buyhouse** - Buy and move into a new family house
 
-[Join the Crown Unlimited Support Server](https://discord.gg/2JkCqcN3hB)
+[Join the Anime VS+ Support Server](https://discord.gg/2JkCqcN3hB)
 """)
 
 
@@ -181,5 +181,5 @@ CTAP_COMMANDS = textwrap.dedent(f"""\
 ------------------
 */view*
 
-[Join the Crown Unlimited Support Server](https://discord.gg/2JkCqcN3hB)
+[Join the Anime VS+ Support Server](https://discord.gg/2JkCqcN3hB)
 """)

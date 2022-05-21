@@ -268,7 +268,7 @@ async def enhancers(ctx):
             return
 
 
-@slash.slash(name="Crown", description="Anime VS+ Manual", guild_ids=guild_ids)
+@slash.slash(name="Anime VS+", description="Anime VS+ Manual", guild_ids=guild_ids)
 async def animevs(ctx):
    avatar="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png"
 
@@ -429,7 +429,7 @@ async def animevs(ctx):
    - Bypass Abyss Requirements for Tales, Coop and Duo
    - No Destinies, Dungeons, Bosses, Drops, Raids or Abyss
    
-   **Normal** *Play Crown Unlmited the Intended Way*
+   **Normal** *Play Anime VS+ the Intended Way*
    - Traverse the **/abyss** to earn levels and unlock modes
    - Standard drop rates for items in game modes
    - Rebirth for increase in base stats and drop rates
@@ -466,14 +466,14 @@ async def animevs(ctx):
    
    👤 **Solo**/tales
    **Tales:** Single player adventures where you traverse through your favorite universes as characters from various worlds!
-   **Dungeon:** Hard version of tales with better loot and better drop rates! (Unlocks after completing **Crown Tale**)
-   **Boss:** End Game battles featuring Iconic Villians from Crown Universes. (Unlocks after completing **Crown Dungeon**)
+   **Dungeon:** Hard version of tales with better loot and better drop rates! (Unlocks after completing **Anime VS+ Tale**)
+   **Boss:** End Game battles featuring Iconic Villians from Anime VS+ Universes. (Unlocks after completing **Anime VS+ Dungeon**)
    
    👥 **Duo**/duo *Beta*
    **Tales Deck(1-3):** Battle with your favorite AI preset in this Duo Tale!
    **Dungeon Deck(1-3):** Bring your strongest builds through the Darkest Duo Dungeons.
  
-   🔮 **Crown Rifts**
+   🔮 **Anime VS+ Rifts**
    Mash-Up Universes featuring heroes and villians connected through common traits and themes!
    *Pay attention, Rifts will not stay open if you continue through your Tale!*
    """),colour=0x7289da)
@@ -495,8 +495,8 @@ async def animevs(ctx):
    🤼 **PVP**
    **/battle @player:** Select your Build and Challenge any Anime VS+ Player to a quick match!
    
-   🔮 **Crown Rifts**
-   Crown Rifts are Co-Op Compatable and Helping other players in Co-Op **WILL NOT** close your open Rift!
+   🔮 **Anime VS+ Rifts**
+   Anime VS+ Rifts are Co-Op Compatable and Helping other players in Co-Op **WILL NOT** close your open Rift!
    Grind Those Rifts Together!
    
    """),colour=0x7289da)
@@ -594,7 +594,7 @@ async def animevs(ctx):
 
    embedVar13 = discord.Embed(title= f"Associations",description=textwrap.dedent(f"""\
    **Association Explained**
-   Associations in Crown Unlmited are formed by an Oath between two Guild Owners
+   Associations in Anime VS+ are formed by an Oath between two Guild Owners
    
    The Oathgiver becomes the **Founder** and the Oathreciever becomes the ****Sworn and Shield****.
    
