@@ -1190,7 +1190,7 @@ async def shop(self, ctx):
         completed_dungeons = user['DUNGEONS']
         available_universes = []
         riftShopOpen = False
-        shopName = ':shopping_cart: Crown Shop'
+        shopName = ':shopping_cart: Shop'
         if user['RIFT'] == 1:
             riftShopOpen = True
             shopName = ':crystal_ball: Rift Shop'
@@ -1499,7 +1499,7 @@ async def craft(self, ctx):
             #skin_alert_message = f"No Skins for {card_info['NAME']}"
         available_universes = []
         riftShopOpen = False
-        shopName = ':shopping_cart: Crown Shop'
+        shopName = ':shopping_cart: Shop'
         if user['RIFT'] == 1:
             riftShopOpen = True
             shopName = ':crystal_ball: Rift Shop'
@@ -1926,7 +1926,7 @@ async def craft_adjuster(self, player, vault, universe, price, item, skin_list):
                                 if mytrait:
                                     traitmessage = f"**{mytrait['EFFECT']}:** {mytrait['TRAIT']}"
                                     
-                                skin_stats = showcard(skins, skins['HLT'],skins['HLT'], skins['STAM'],skins['STAM'], False, base_title, False, skins['ATK'], skins['DEF'], 0, move1ap, move2ap, move3ap, enhap, enh, 0, None )
+                                skin_stats = showcard(skins, "none", skins['HLT'],skins['HLT'], skins['STAM'],skins['STAM'], False, base_title, False, skins['ATK'], skins['DEF'], 0, move1ap, move2ap, move3ap, enhap, enh, 0, None )
                                 embedVar = discord.Embed(title= f"{skins['NAME']}", description=textwrap.dedent(f"""
                                 :mahjong: {skins['TIER']}: 🃏 **{skins['SKIN_FOR']}** 
                                 :heart: **{skins['HLT']}** :dagger: **{skins['ATK']}** :shield: **{skins['DEF']}**
@@ -2144,7 +2144,7 @@ async def build(self, ctx):
                 o_rebirth = d['REBIRTH']
                 performance_mode = d['PERFORMANCE']
                 card_tier = card['TIER']
-                
+                affinity_message = crown_utilities.set_affinities(card)
         
                 rebirthBonus = o_rebirth * 10
                 traits = ut.traits
@@ -2201,16 +2201,24 @@ async def build(self, ctx):
                 move1 = list(o_1.keys())[0]
                 move1ap = list(o_1.values())[0] + card_lvl_ap_buff
                 move1_stamina = list(o_1.values())[1]
+                move1_element = list(o_1.values())[2]
+                move1_emoji = crown_utilities.set_emoji(move1_element)
                 
                 # Move 2
                 move2 = list(o_2.keys())[0]
                 move2ap = list(o_2.values())[0] + card_lvl_ap_buff
                 move2_stamina = list(o_2.values())[1]
+                move2_element = list(o_2.values())[2]
+                move2_emoji = crown_utilities.set_emoji(move2_element)
+
 
                 # Move 3
                 move3 = list(o_3.keys())[0]
                 move3ap = list(o_3.values())[0] + card_lvl_ap_buff
                 move3_stamina = list(o_3.values())[1]
+                move3_element = list(o_3.values())[2]
+                move3_emoji = crown_utilities.set_emoji(move3_element)
+
 
                 # Move Enhancer
                 move4 = list(o_enhancer.keys())[0]
@@ -2280,13 +2288,14 @@ async def build(self, ctx):
                     🧬 **{active_pet['NAME']}: {active_pet['TYPE']}: {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]} | Bond {bond} {bond_message} / Level {lvl} {lvl_message}**
                     🩸 **{passive_name}:** {passive_type} {passive_num}{passive_enhancer_suffix_mapping[passive_type]}                
                     
-                    💥 **{move1}:** {move1ap}
-                    ☄️ **{move2}:** {move2ap}
-                    🏵️ **{move3}:** {move3ap}
+                    {move1_emoji} **{move1}:** {move1ap}
+                    {move2_emoji} **{move2}:** {move2ap}
+                    {move3_emoji} **{move3}:** {move3ap}
                     🦠 **{move4}:** {move4enh} {move4ap}{enhancer_suffix_mapping[move4enh]}
 
                     ♾️ {traitmessage}
                     """),colour=000000)
+                    embedVar.add_field(name="__Affinities__", value=f"{affinity_message}")
                     embedVar.set_image(url="attachment://image.png")
                     if card_lvl != 500:
                         embedVar.set_footer(text=f"EXP Until Next Level: {150 - card_exp}\nRebirth Buff: +{rebirthBonus}\n{warningmessage}")
@@ -2298,9 +2307,10 @@ async def build(self, ctx):
                     return
                 
                 else:
-                    card_file = showcard(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, cardtitle, focused, o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, card_lvl, None)
+                    card_file = showcard(card, arm, o_max_health, o_health, o_max_stamina, o_stamina, resolved, cardtitle, focused, o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, card_lvl, None)
 
                     embedVar = discord.Embed(title=f"".format(self), colour=000000)
+                    embedVar.add_field(name="__Affinities__", value=f"{affinity_message}")
                     embedVar.set_image(url="attachment://image.png")
                     embedVar.set_author(name=textwrap.dedent(f"""\
                     {titlemessage}
@@ -2398,6 +2408,7 @@ async def cards(self, ctx):
                 card_exclusive = resp['EXCLUSIVE']
                 card_collection = resp['HAS_COLLECTION']
                 show_img = db.queryUniverse({'TITLE': resp['UNIVERSE']})['PATH']
+                affinity_message = crown_utilities.set_affinities(resp)
                 o_show = resp['UNIVERSE']
                 icon = ":flower_playing_cards:"
                 if card_available and card_exclusive:
@@ -2439,16 +2450,24 @@ async def cards(self, ctx):
                 move1 = list(o_1.keys())[0]
                 move1ap = list(o_1.values())[0] + card_lvl_ap_buff
                 move1_stamina = list(o_1.values())[1]
+                move1_element = list(o_1.values())[2]
+                move1_emoji = crown_utilities.set_emoji(move1_element)
                 
                 # Move 2
                 move2 = list(o_2.keys())[0]
                 move2ap = list(o_2.values())[0] + card_lvl_ap_buff
                 move2_stamina = list(o_2.values())[1]
+                move2_element = list(o_2.values())[2]
+                move2_emoji = crown_utilities.set_emoji(move2_element)
+
 
                 # Move 3
                 move3 = list(o_3.keys())[0]
                 move3ap = list(o_3.values())[0] + card_lvl_ap_buff
                 move3_stamina = list(o_3.values())[1]
+                move3_element = list(o_3.values())[2]
+                move3_emoji = crown_utilities.set_emoji(move3_element)
+
 
                 # Move Enhancer
                 move4 = list(o_enhancer.keys())[0]
@@ -2473,19 +2492,20 @@ async def cards(self, ctx):
                     traitmessage = f"**{mytrait['EFFECT']}:** {mytrait['TRAIT']}"
 
 
-                embedVar = discord.Embed(title= f"{resp['NAME']}", description=textwrap.dedent(f"""
+                embedVar = discord.Embed(title= f"{resp['NAME']}", description=textwrap.dedent(f"""\
                 {icon} **[{index}]** 
                 {card_tier}: {lvl}
                 :heart: **{resp['HLT']}** :dagger: **{resp['ATK']}** :shield: **{resp['DEF']}** 🏃 **{resp['SPD']}**
-                
-                💥 **{move1}:** {move1ap}
-                ☄️ **{move2}:** {move2ap}
-                🏵️ **{move3}:** {move3ap}
+
+                {move1_emoji} **{move1}:** {move1ap}
+                {move2_emoji} **{move2}:** {move2ap}
+                {move3_emoji} **{move3}:** {move3ap}
                 🦠 **{move4}:** {move4enh} {move4ap}{enhancer_suffix_mapping[move4enh]}
 
                 🩸 **{passive_name}:** {passive_type} {passive_num}{passive_enhancer_suffix_mapping[passive_type]}
                 ♾️ {traitmessage}
                 """), colour=0x7289da)
+                embedVar.add_field(name="__Affinities__", value=f"{affinity_message}")
                 embedVar.set_thumbnail(url=show_img)
                 embedVar.set_footer(text=f"/enhancers - 🩸 Enhancer Menu")
                 embed_list.append(embedVar)
@@ -3351,6 +3371,7 @@ async def arms(self, ctx):
             for arm in arms_list:
                 index = arms_list.index(arm)
                 resp = db.queryArm({"ARM": str(arm['ARM'])})
+                element = resp['ELEMENT']
                 arm_passive = resp['ABILITIES'][0]
                 arm_passive_type = list(arm_passive.keys())[0]
                 arm_passive_value = list(arm_passive.values())[0]
@@ -3361,16 +3382,32 @@ async def arms(self, ctx):
                     icon = ":fire:"
                 elif arm_available == False and arm_exclusive ==False:
                     icon = ":japanese_ogre:"
+                element_available = ['BASIC', 'SPECIAL', 'ULTIMATE']
+                if element and arm_passive_type in element_available:
+                    element_name = element
+                    element = crown_utilities.set_emoji(element)
+                    arm_type = f"**{arm_passive_type.title()} {element_name.title()} Attack**"
+                    arm_message = f"{element} **{resp['ARM']}:** {arm_passive_value}"
+                    footer = f"The new {arm_passive_type.title()} attack will reflect on your card when equipped"
+
+                else:
+                    arm_type = f"**Unique Passive**"
+                    arm_message = f":microbe: **{arm_passive_type.title()}:** {arm_passive_value}"
+                    footer = f"{arm_passive_type}: {enhancer_mapping[arm_passive_type]}"
+
+
 
                 embedVar = discord.Embed(title= f"{resp['ARM']}", description=textwrap.dedent(f"""
                 {icon} **[{index}]**
-                :microbe: **{arm_passive_type}:** {arm_passive_value}
+
+                {arm_type}
+                {arm_message}
                 :earth_africa: **Universe:** {resp['UNIVERSE']}
                 ⚒️ {arm['DUR']}
                 """), 
                 colour=0x7289da)
                 embedVar.set_thumbnail(url=avatar)
-                embedVar.set_footer(text=f"{arm_passive_type}: {enhancer_mapping[arm_passive_type]}")
+                embedVar.set_footer(text=f"")
                 embed_list.append(embedVar)
             
             buttons = [

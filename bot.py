@@ -98,6 +98,10 @@ bot.remove_command("help")
                                     value="legend",
                                 ),
                                 create_choice(
+                                    name="🔅 What are elements?",
+                                    value="elements",
+                                ),
+                                create_choice(
                                     name="⚔️ How to Play?",
                                     value="play",
                                 ),
@@ -123,21 +127,28 @@ async def help(ctx: SlashContext, selection):
    if selection == "menu":
       embedVar = discord.Embed(title= f"Your stuff, your way!", description=h.CTAP_COMMANDS, colour=0x7289da)
       embedVar.set_thumbnail(url=avatar)
-      embedVar.set_footer(text=f"/crown - Crown Unlimited Manual")
+      embedVar.set_footer(text=f"/animevs - Anime VS+ Manual")
       await ctx.send(embed=embedVar)
       return
 
    if selection == "legend":
       embedVar = discord.Embed(title= f"What do these emoji's mean?", description=h.LEGEND, colour=0x7289da)
       embedVar.set_thumbnail(url=avatar)
-      embedVar.set_footer(text=f"/crown - Crown Unlimited Manual")
+      embedVar.set_footer(text=f"/animevs - Anime VS+ Manual")
+      await ctx.send(embed=embedVar)
+      return
+
+   if selection == "elements":
+      embedVar = discord.Embed(title= f"What does each element do?", description=h.ELEMENTS, colour=0x7289da)
+      embedVar.set_thumbnail(url=avatar)
+      embedVar.set_footer(text=f"/animevs - Anime VS+ Manual")
       await ctx.send(embed=embedVar)
       return
 
    if selection == "play":
       embedVar = discord.Embed(title= f"Start playing now!", description=h.CROWN_UNLIMITED_GAMES, colour=0x7289da)
       embedVar.set_thumbnail(url=avatar)
-      embedVar.set_footer(text=f"/crown - Crown Unlimited Manual")
+      embedVar.set_footer(text=f"/animevs - Anime VS+ Manual")
       await ctx.send(embed=embedVar)
       return
 
@@ -145,14 +156,14 @@ async def help(ctx: SlashContext, selection):
    if selection == "universe":
       embedVar = discord.Embed(title= f"🌍 Universe Info!", description=h.UNIVERSE_STUFF, colour=0x7289da)
       embedVar.set_thumbnail(url=avatar)
-      embedVar.set_footer(text=f"/crown - Crown Unlimited Manual")
+      embedVar.set_footer(text=f"/animevs - Anime VS+ Manual")
       await ctx.send(embed=embedVar)
       return
 
    if selection == "teams":
       embedVar = discord.Embed(title= f"Gang up and play!", description=h.BOT_COMMANDS, colour=0x7289da)
       embedVar.set_thumbnail(url=avatar)
-      embedVar.set_footer(text=f"/crown - Crown Unlimited Manual")
+      embedVar.set_footer(text=f"/animevs - Anime VS+ Manual")
 
 
 async def validate_user(ctx):
@@ -181,57 +192,57 @@ async def enhancers(ctx):
       embedVar1 = discord.Embed(title= f"Enhancer Type: Boosts",colour=0x7289da)
       embedVar1.set_thumbnail(url=avatar)
       embedVar1.add_field(name="`BOOSTS`", value="**ATK**\n**Title, Arm, Card Passive Effect:** Increase Attack by Flat AP value.\n**Card Active Enhancer Effect:** Increase Attack By AP %.\n\n**DEF**\n**Title, Arm, Card Passive Effect:** Increase Defense by Flat AP value.\n**Card Active Enhancer Effect:** Increase Defense By AP %.\n\n**HLT**\n**Title, Arm, Card Passive Effect:** Increase Health by Flat AP value.\n**Card Active Enhancer Effect:** Increase Health By Flat AP + 16% of Current Health.\n\n**STAM** - Increase Stamina by Flat AP\n\n")
-      embedVar1.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
+      embedVar1.set_footer(text=f"/animevs - Anime VS+ Manual\n/help - Bot Help")
 
       embedVar2 = discord.Embed(title= f"Enhancer Type: Steals",colour=0x7289da)
       embedVar2.set_thumbnail(url=avatar)
       embedVar2.add_field(name="`STEALS`", value="**FLOG**- Steal Opponent Attack and Add it to Your Attack by AP %\n\n**WITHER**- Steal Opponent Defense and Add it to Your Defense by AP %\n\n**LIFE**\n**Title, Arm, Card Passive Effect:** Steal Opponent Health and Add it to your Max Health by AP %\n**Card Active Enhancer Effect:** Steal Opponent Health and Add it to your Current Health by Flat AP + 9% of Opponent Current Health. \n\n**DRAIN** - Steal Opponent Stamina and Add it to your Stamina by Flat AP\n\n")
-      embedVar2.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
+      embedVar2.set_footer(text=f"/animevs - Anime VS+ Manual\n/help - Bot Help")
 
       embedVar3 = discord.Embed(title= f"Enhancer Type: Sacrifice",colour=0x7289da)
       embedVar3.set_thumbnail(url=avatar)
       embedVar3.add_field(name="`SACRIFICE`", value="**RAGE** - Decrease Your Defense by AP %, Increase Your Attack by Amount of Decreased Defense\n\n**BRACE** - Decrease Your Attack by AP %, Increase Your Defense By Amount of Decreased Attack\n\n**BZRK** - Decrease Your Current Health by AP %,  Increase Your Attack by Amount of Decreased Health\n\n**CRYSTAL** - Decrease Your Health by AP %, Increase Your Defense by Amount of Decreased Health\n\n")
-      embedVar3.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
+      embedVar3.set_footer(text=f"/animevs - Anime VS+ Manual\n/help - Bot Help")
 
       embedVar4 = discord.Embed(title= f"Enhancer Type: Conversion",colour=0x7289da)
       embedVar4.set_thumbnail(url=avatar)
       embedVar4.add_field(name="`CONVERSION`", value="**STANCE** - Swap Your Attack and Defense, Increase Your Defense By Flat AP\n\n**CONFUSE** - Swap Opponenet Attack and Defense, Decrease Opponent Defense by Flat AP\n\n")
-      embedVar4.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
+      embedVar4.set_footer(text=f"/animevs - Anime VS+ Manual\n/help - Bot Help")
 
       embedVar5 = discord.Embed(title= f"Enhancer Type: Time Manipulation",colour=0x7289da)
       embedVar5.set_thumbnail(url=avatar)
       embedVar5.add_field(name="`TIME MANIPULATION`", value="**BLINK**  - Decrease Your Stamina by Flat AP, Increase Opponent Stamina by Flat AP\n\n**SLOW** - Increase Opponent Stamina, Decrease Your Stamina then Swap Stamina with Opponent\n\n**HASTE** - Increase your Stamina, Decrease Opponent Stamina then Swap Stamina with Opponent\n\n")
-      embedVar5.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
+      embedVar5.set_footer(text=f"/animevs - Anime VS+ Manual\n/help - Bot Help")
 
       embedVar6 = discord.Embed(title= f"Enhancer Type: Control",colour=0x7289da)
       embedVar6.set_thumbnail(url=avatar)
       embedVar6.add_field(name="`CONTROL`", value="**SOULCHAIN** - You and Your Opponent's Stamina Equal Flat AP\n\n**GAMBLE** - You and Your Opponent's Health Equal Flat AP\n\n")
-      embedVar6.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
+      embedVar6.set_footer(text=f"/animevs - Anime VS+ Manual\n/help - Bot Help")
 
       embedVar7 = discord.Embed(title= f"Enhancer Type: Fortitude",colour=0x7289da)
       embedVar7.set_thumbnail(url=avatar)
       embedVar7.add_field(name="`FORTITUDE`", value="**GROWTH**- Decrease Your Max Health by AP %, Increase Your Attack and Defense by AP %\n\n**FEAR** - Decrease Your Max Health by AP %, Decrease Opponent Attack and Defense by AP %\n\n")
-      embedVar7.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
+      embedVar7.set_footer(text=f"/animevs - Anime VS+ Manual\n/help - Bot Help")
 
       embedVar8 = discord.Embed(title= f"Enhancer Type: Damage",colour=0x7289da)
       embedVar8.set_thumbnail(url=avatar)
       embedVar8.add_field(name="`DAMAGE`", value="**WAVE** - Deal Flat AP Damage to Opponent. AP Decreases each turn (Can Crit). *If used on turn that is divisible by 10 you will deal 75% AP Damage.*\n\n**BLAST** - Deal Flat AP Damage to Opponent. AP Increases each turn.\n\n")
-      embedVar8.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
+      embedVar8.set_footer(text=f"/animevs - Anime VS+ Manual\n/help - Bot Help")
 
       embedVar9 = discord.Embed(title= f"Enhancer Type: Divinity",colour=0x7289da)
       embedVar9.set_thumbnail(url=avatar)
       embedVar9.add_field(name="`DIVINITY`", value="**CREATION** - Increase Max Health by Flat AP. AP Decreases each turn (Can Crit). *If used on turn that is divisible by 10 you will heal Health & Max Health for 75% AP.*\n\n**DESTRUCTION** - Decrease Your Opponent Max Health by Flat AP (only opponent on PET use). AP Increases each turn.\n\n")
-      embedVar9.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
+      embedVar9.set_footer(text=f"/animevs - Anime VS+ Manual\n/help - Bot Help")
       
       embedVar10 = discord.Embed(title= f"Arm Enhancer Type: Offensive",colour=0x7289da)
       embedVar10.set_thumbnail(url=avatar)
       embedVar10.add_field(name="`OFFENSE`", value="**BASIC** - Increase 💥 Basic Attack Ability Power by Value \n\n**SPECIAL** - Increase ☄️ Special Attack Ability Power by Value \n\n**ULTIMATE** - Increase 🏵️ Ultimate Attack Ability Power by Value \n\n**ULTIMAX** - Increase **ALL** Attack Move Ability Power by Value \n\n**MANA** - Increase 🦠 Enhancer Ability Power by Percentage \n\n💉 **SIPHON** - Heal for 10% DMG + AP\n\n")
-      embedVar10.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
+      embedVar10.set_footer(text=f"/animevs - Anime VS+ Manual\n/help - Bot Help")
       
       embedVar11 = discord.Embed(title= f"Arm Enhancer Type: Defensive",colour=0x7289da)
       embedVar11.set_thumbnail(url=avatar)
       embedVar11.add_field(name="`DEFENSE`", value="🌐 **SHIELD**- Grant Damage absorbing Shield until destroyed \n\n💠 **BARRIER** - Blocks all Attack Damage until player Attacks or is Destoyed (Enhancers Exempt)\n\n🔄 **PARRY** - Reflects 25% Damage back to Attacker\n\n")
-      embedVar11.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
+      embedVar11.set_footer(text=f"/animevs - Anime VS+ Manual\n/help - Bot Help")
       
 
       embeds = [embedVar1, embedVar2, embedVar3, embedVar4, embedVar5, embedVar6, embedVar7, embedVar8, embedVar9, embedVar10, embedVar11]
@@ -257,16 +268,16 @@ async def enhancers(ctx):
             return
 
 
-@slash.slash(name="Crown", description="Crown Unlimited Manual", guild_ids=guild_ids)
-async def crown(ctx):
+@slash.slash(name="Anime VS+", description="Anime VS+ Manual", guild_ids=guild_ids)
+async def animevs(ctx):
    avatar="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png"
 
 
-   embedVar1 = discord.Embed(title= f"About Crown Unlimited",colour=0x7289da)
+   embedVar1 = discord.Embed(title= f"About Anime VS+",colour=0x7289da)
    embedVar1.set_thumbnail(url=avatar)
    embedVar1.add_field(name="**About The Game!**", value=textwrap.dedent(f"""\
       
-   **Crown Unlimited** is a Multiplatform Card Game exploring **Universes** from your favorite Video Game and Anime Series!
+   **Anime VS+** is a Multiplatform Card Game exploring **Universes** from your favorite Video Game and Anime Series!
 
    Explore Tales, Dungeons, and Bosses! Play **Solo**, or with **Friends**!
    
@@ -410,7 +421,7 @@ async def crown(ctx):
    
    embedVar16 = discord.Embed(title= f"Difficulty & Progression", description=textwrap.dedent(f"""\
    ⚙️**Difficulty**
-   Crown Unlimited allows you to tailor your experience to your desired level.
+   Anime VS+ allows you to tailor your experience to your desired level.
    
    **3 Difficulties**
    **Easy** *Play the game freely and casually*
@@ -418,7 +429,7 @@ async def crown(ctx):
    - Bypass Abyss Requirements for Tales, Coop and Duo
    - No Destinies, Dungeons, Bosses, Drops, Raids or Abyss
    
-   **Normal** *Play Crown Unlmited the Intended Way*
+   **Normal** *Play Anime VS+ the Intended Way*
    - Traverse the **/abyss** to earn levels and unlock modes
    - Standard drop rates for items in game modes
    - Rebirth for increase in base stats and drop rates
@@ -455,14 +466,14 @@ async def crown(ctx):
    
    👤 **Solo**/tales
    **Tales:** Single player adventures where you traverse through your favorite universes as characters from various worlds!
-   **Dungeon:** Hard version of tales with better loot and better drop rates! (Unlocks after completing **Crown Tale**)
-   **Boss:** End Game battles featuring Iconic Villians from Crown Universes. (Unlocks after completing **Crown Dungeon**)
+   **Dungeon:** Hard version of tales with better loot and better drop rates! (Unlocks after completing **Anime VS+ Tale**)
+   **Boss:** End Game battles featuring Iconic Villians from Anime VS+ Universes. (Unlocks after completing **Anime VS+ Dungeon**)
    
    👥 **Duo**/duo *Beta*
    **Tales Deck(1-3):** Battle with your favorite AI preset in this Duo Tale!
    **Dungeon Deck(1-3):** Bring your strongest builds through the Darkest Duo Dungeons.
  
-   🔮 **Crown Rifts**
+   🔮 **Anime VS+ Rifts**
    Mash-Up Universes featuring heroes and villians connected through common traits and themes!
    *Pay attention, Rifts will not stay open if you continue through your Tale!*
    """),colour=0x7289da)
@@ -482,10 +493,10 @@ async def crown(ctx):
    **Assist** - Assist applies your enhancer to buff your **Companion**. *Damage dealing enahncers apply to enemy*
 
    🤼 **PVP**
-   **/battle @player:** Select your Build and Challenge any Crown Unlimited Player to a quick match!
+   **/battle @player:** Select your Build and Challenge any Anime VS+ Player to a quick match!
    
-   🔮 **Crown Rifts**
-   Crown Rifts are Co-Op Compatable and Helping other players in Co-Op **WILL NOT** close your open Rift!
+   🔮 **Anime VS+ Rifts**
+   Anime VS+ Rifts are Co-Op Compatable and Helping other players in Co-Op **WILL NOT** close your open Rift!
    Grind Those Rifts Together!
    
    """),colour=0x7289da)
@@ -538,7 +549,7 @@ async def crown(ctx):
    
    embedVar15 = discord.Embed(title= f"Guilds", description=textwrap.dedent(f"""\
    **Guilds Explained**
-   Use **/guild** to lookup any Crown Unlimited Guild!
+   Use **/guild** to lookup any Anime VS+ Guild!
    
    **Guild Members** earn extra :coin: towards the **Guild Bank** 
 
@@ -552,14 +563,14 @@ async def crown(ctx):
    Guilds earn additional :coin: for every **Tales**, **Dungeon** and **Boss** Victory
    
    **Guild Economy**
-   Players across **Crown Unlimited** can **/donate** :coin: to their favorite Guilds!
+   Players across **Anime VS+** can **/donate** :coin: to their favorite Guilds!
    Guild Owners can ****/pay**** their members a wage.
    """),colour=0x7289da)
    embedVar15.set_thumbnail(url=avatar)
 
    embedVar12 = discord.Embed(title= f"Families",description=textwrap.dedent(f"""\
    **Families Explained**
-   Use **/family** to lookup any Crown Unlimited Family!
+   Use **/family** to lookup any Anime VS+ Family!
    
    Two players with a strong bond can come together and form a **Family**
    
@@ -583,7 +594,7 @@ async def crown(ctx):
 
    embedVar13 = discord.Embed(title= f"Associations",description=textwrap.dedent(f"""\
    **Association Explained**
-   Associations in Crown Unlmited are formed by an Oath between two Guild Owners
+   Associations in Anime VS+ are formed by an Oath between two Guild Owners
    
    The Oathgiver becomes the **Founder** and the Oathreciever becomes the ****Sworn and Shield****.
    
@@ -632,7 +643,7 @@ async def crown(ctx):
    
    **Raid Benefits**
    Earn Large Bounties from guilds.
-   Earn Wins for your Crown Unlimited **Guild**
+   Earn Wins for your Anime VS+ **Guild**
    
    **Shield  Defense Explained**
    The **Shield** has a big repsonsible to defend the **Association** from raids, earning income from **Challengers**.
@@ -706,9 +717,9 @@ async def voted(ctx):
 
          else:
             embedVar = discord.Embed(title=f"❌ Daily Voter Rewards!", description=textwrap.dedent(f"""\
-            You have not voted for Crown Unlimited today, {ctx.author.mention}!
+            You have not voted for Anime VS+ today, {ctx.author.mention}!
 
-            To earn your voter rewards, [Vote for Crown Unlimited!](https://top.gg/bot/955704903198711808/vote)
+            To earn your voter rewards, [Vote for Anime VS+!](https://top.gg/bot/955704903198711808/vote)
 
             **What are the Daily Voter Rewards?** 
             :coin: **{'{:,}'.format(500000)}**
@@ -725,7 +736,7 @@ async def voted(ctx):
 #    response = await bot.fetch_user(player_id)
 #    return response
 
-@slash.slash(description="Register for Crown Unlimited", guild_ids=guild_ids)
+@slash.slash(description="Register for Anime VS+", guild_ids=guild_ids)
 async def register(ctx):
    reg_query = {'DID' : str(ctx.author.id)}
    applied = db.queryUser(reg_query)
@@ -734,7 +745,7 @@ async def register(ctx):
       vault_query = {'DID':str(ctx.author.id)}
       registered = db.queryVault(vault_query)
       if registered:
-         await ctx.send(f"{ctx.author.mention} You already have a Crown Unlimited Account!")
+         await ctx.send(f"{ctx.author.mention} You already have a Anime VS+ Account!")
          return 
       else:
          await ctx.author.send(f"Previous Registration Failed...Lets try again!")
@@ -934,7 +945,7 @@ async def register(ctx):
                      await button_ctx.send(embed=embedVar)
                      await asyncio.sleep(3)
 
-                     embedVar = discord.Embed(title=f"**Welcome to Crown Unlimited**!", description=textwrap.dedent(f"""
+                     embedVar = discord.Embed(title=f"**Welcome to Anime VS+**!", description=textwrap.dedent(f"""
                      Welcome 🆕 {ctx.author.mention}!                                                                                           
                      
                      Congrats on selecting your starting universe! **Now what?**
@@ -945,16 +956,16 @@ async def register(ctx):
                      **Step 3:** Use /solo and select **tutorial** to learn how to play through battle!
 
                      **The /help command is your ❤️ Friend!**
-                     Use the help command dropdown to learn more about Crown Unlimited!
+                     Use the help command dropdown to learn more about Anime VS+!
 
                      If you need additional help! ⬇️
-                     **/crown** - Read Game Manual
+                     **/animevs** - Read Game Manual
                      **/enhancers** - Enhancer Help Menu
                      **/difficulty** - Change difficulty setting! **You start on easy mode**
 
-                     [Join the Crown Unlimited Support Server](https://discord.gg/2JkCqcN3hB)
+                     [Join the Anime VS+ Support Server](https://discord.gg/2JkCqcN3hB)
                      """), colour=0xe91e63)
-                     embedVar.set_footer(text="Changing your Discord Account Name or Numbers will break your Crown Unlimited Account.")
+                     embedVar.set_footer(text="Changing your Discord Account Name or Numbers will break your Anime VS+ Account.")
                      await ctx.author.send(embed=embedVar)
                      await ctx.send(embed=embedVar)
 
@@ -1487,7 +1498,7 @@ async def on_command_error(ctx, error):
     if isinstance(error, discord.HTTPException):
       guild = bot.get_guild(guild_id)
       channel = guild.get_channel(guild_channel)
-      await ctx.send(f"Crown Unlimited has been Rate Limited")
+      await ctx.send(f"Anime VS+ has been Rate Limited")
 
 
 @tasks.loop(minutes=30)
@@ -1583,9 +1594,9 @@ async def daily(ctx):
       Use **/voted** command to receive Daily voting rewards!
 
       [Support our Patreon for Rewards!](https://www.patreon.com/partychatgaming?fan_landing=true)
-      [Vote for Crown Unlimited!](https://top.gg/bot/955704903198711808/vote)
-      [Add Crown Unlimited to your server!](https://discord.com/api/oauth2/authorize?client_id=955704903198711808&permissions=139586955344&scope=applications.commands%20bot)
-      [Join the Crown Unlimited Support Server](https://discord.gg/2JkCqcN3hB)
+      [Vote for Anime VS+!](https://top.gg/bot/955704903198711808/vote)
+      [Add Anime VS+ to your server!](https://discord.com/api/oauth2/authorize?client_id=955704903198711808&permissions=139586955344&scope=applications.commands%20bot)
+      [Join the Anime VS+ Support Server](https://discord.gg/2JkCqcN3hB)
       """), colour=0xf1c40f)
       
       await ctx.send(embed=embedVar)
@@ -2441,7 +2452,7 @@ async def sponsor(ctx, guild: str, amount):
    await ctx.send(f"{guild_name} sponsored {team_name} :coin:{amount}!!!")
    return
 
-@slash.slash(name="Difficulty", description="Change the difficulty setting of Crown Unlimited",
+@slash.slash(name="Difficulty", description="Change the difficulty setting of Anime VS+",
                     options=[
                         create_option(
                             name="mode",
@@ -2574,7 +2585,7 @@ async def blessall(ctx, amount: int):
             all_users = db.queryAllVault()
             for user in all_users:
                await crown_utilities.bless(amount, user['DID'])
-            await ctx.send(f"All Crown Unlimited Players have been blessed. 👑")
+            await ctx.send(f"All Anime VS+ Players have been blessed. 👑")
          except Exception as e:
             print(e)
       else:
@@ -3212,22 +3223,22 @@ async def addfield(ctx, collection, new_field, field_type):
 
 #       embedVar1 = discord.Embed(title= f"Story Mode", description="Journey through Universes to defeat powerful foes to unlock vast new worlds, tough boss fights, and new possibilities! Click arrow below to go to the next page!", colour=0x7289da)
 #       embedVar1.set_image(url=story)
-#       embedVar1.set_footer(text=f"use /crown for additional assistance")
+#       embedVar1.set_footer(text=f"use /animevs for additional assistance")
 
 #       embedVar2 = discord.Embed(title= f"Profile Menu", description="View and Edit your Cards, Titles, Arms, and Summons to craft new Builds and strategies.", colour=0x7289da)
 #       embedVar2.set_image(url=profile)
 #       # embedVar2.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
-#       embedVar2.set_footer(text=f"use /crown for additional assistance")
+#       embedVar2.set_footer(text=f"use /animevs for additional assistance")
 
 #       embedVar3 = discord.Embed(title= f"PVP Mode", description="Face off against friend or foe!", colour=0x7289da)
 #       embedVar3.set_image(url=pvp)
 #       # embedVar3.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
-#       embedVar3.set_footer(text=f"use /crown for additional assistance")
+#       embedVar3.set_footer(text=f"use /animevs for additional assistance")
 
-#       embedVar4 = discord.Embed(title= f"TIPS", description="5 Primary Objectives of Crown Unlimited.", colour=0x7289da)
+#       embedVar4 = discord.Embed(title= f"TIPS", description="5 Primary Objectives of Anime VS+.", colour=0x7289da)
 #       embedVar4.set_image(url=objectives)
 #       # embedVar4.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
-#       embedVar4.set_footer(text=f"use /crown for additional assistance")
+#       embedVar4.set_footer(text=f"use /animevs for additional assistance")
 
 #       paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
 #       paginator.add_reaction('⏮️', "first")

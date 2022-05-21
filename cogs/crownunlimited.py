@@ -52,7 +52,7 @@ class CrownUnlimited(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print('Crown Unlimited Cog is ready!')
+        print('Anime VS+ Cog is ready!')
 
     async def cog_check(self, ctx):
         return await main.validate_user(ctx)
@@ -225,6 +225,7 @@ class CrownUnlimited(commands.Cog):
             o_show = cards[rand_card]['UNIVERSE']
             o_collection = cards[rand_card]['COLLECTION']
             o_destiny = cards[rand_card]['HAS_COLLECTION']
+            affinity_message = crown_utilities.set_affinities(cards[rand_card])
             
             o_1 = o_moveset[0]
             o_2 = o_moveset[1]
@@ -254,7 +255,7 @@ class CrownUnlimited(commands.Cog):
             resolved = False
             focused = False
             turn = 0
-            card_file = showcard(cards[rand_card], o_max_health, o_health, o_max_stamina, o_stamina, resolved, cardtitle, focused, o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, card_lvl, None)
+            card_file = showcard(cards[rand_card], "none", o_max_health, o_health, o_max_stamina, o_stamina, resolved, cardtitle, focused, o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, card_lvl, None)
 
             embedVar.set_image(url="attachment://image.png")
             embedVar.set_thumbnail(url=message.author.avatar_url)
@@ -450,6 +451,9 @@ class CrownUnlimited(commands.Cog):
                        ]
         , guild_ids=main.guild_ids)
     async def duo(self, ctx: SlashContext, deck: int, mode: str):
+        await ctx.send("Currently down for maintenance")
+        return
+
         a_registered_player = await crown_utilities.player_check(ctx)
         if not a_registered_player:
             return
@@ -556,6 +560,9 @@ class CrownUnlimited(commands.Cog):
                        ]
         , guild_ids=main.guild_ids)
     async def coop(self, ctx: SlashContext, user: User, mode: str):
+        await ctx.send("Currently down for maintenance")
+        return
+
         a_registered_player = await crown_utilities.player_check(ctx)
         if not a_registered_player:
             return
@@ -1092,6 +1099,8 @@ class CrownUnlimited(commands.Cog):
                     ]
         , guild_ids=main.guild_ids)
     async def solo(self, ctx: SlashContext, mode: str):
+        await ctx.send("Currently down for maintenance")
+        return
         a_registered_player = await crown_utilities.player_check(ctx)
         if not a_registered_player:
             return
@@ -1183,6 +1192,8 @@ class CrownUnlimited(commands.Cog):
 
     @cog_ext.cog_slash(description="pvp battle against a friend or rival", guild_ids=main.guild_ids)
     async def pvp(self, ctx: SlashContext, opponent: User):
+        await ctx.send("Currently down for maintenance")
+        return
         try:
             await ctx.defer()
             player = opponent
@@ -2009,7 +2020,7 @@ def starting_position(o, t):
         return False
 
 
-def damage_cal(universe, card, ability, attack, defense, op_defense, stamina, enhancer, health, op_health, op_stamina,
+def damage_cal(opponent_affinity, move_type, move_element, universe, card, ability, attack, defense, op_defense, stamina, enhancer, health, op_health, op_stamina,
                maxhealth, op_attack, special_description, turn, ap_buff, other):
     if op_defense <= 0:
         op_defense = 25
@@ -2396,49 +2407,88 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, stamina, en
             # dmg = round((fortitude * attackpower))
 
             # dmg = ((attackpower * (100 * (100 / defensepower))) * .001) + int(ap)
-
+            does_repel = False
+            does_absorb = False
+            is_wind_element = False
+            ranged_attack = False
             low = dmg - (dmg * .10)
             high = dmg + (dmg * .10)
 
+            move_emoji = crown_utilities.set_emoji(move_element)
+            if move_element == "WIND":
+                is_wind_element = True
+            if move_element == "RANGED" and stamina >= 80:
+                ranged_attack = True
+
             true_dmg = (round(random.randint(int(low), int(high)))) + 25
-            message = ""
+
+            message = ""            
 
             miss_hit = 3  # Miss
             low_hit = 7  # Lower Damage
             med_hit = 13  # Medium Damage
             standard_hit = 19  # Standard Damage
             high_hit = 20  # Crit Hit
-            hit_roll = random.randint(3, 20)
+            hit_roll = random.randint(2, 21)
+
+            if move_element == "SPIRIT" and hit_roll > 3:
+                hit_roll = hit_roll + 5
+
+
+            if ranged_attack:
+                true_dmg = round(true_dmg * 1.4)
 
             if hit_roll <= miss_hit:
                 if universe == 'Crown Rift Slayers':
                     true_dmg = round(true_dmg * 2)
-                    message = f'🩸 Feint Attack! {move} Critically Hits for **{true_dmg}**!! :boom: '
+                    message = f'🩸{move_emoji} Feint Attack! {move} Critically Hits for **{true_dmg}**!! :boom: '
+                elif is_wind_element:
+                    true_dmg = round(true_dmg)
+                    message = f'🌪️ Wind Attack! {move} hits for **{true_dmg}**!'       
                 else:
                     true_dmg = 0
-                    message = f'⚔️ {move} misses! :dash:'
+                    message = f'{move_emoji} {move} misses! :dash:'
             elif hit_roll <= low_hit and hit_roll > miss_hit:
                 true_dmg = round(true_dmg * .70)
-                message = f'⚔️ {move} used! Chips for **{true_dmg}**! :anger:'
+                message = f'{move_emoji} {move} used! Chips for **{true_dmg}**! :anger:'
             elif hit_roll <= med_hit and hit_roll > low_hit:
                 true_dmg = round(true_dmg * .85)
-                message = f'⚔️ {move} used! Connects for **{true_dmg}**! :bangbang:'
+                message = f'{move_emoji} {move} used! Connects for **{true_dmg}**! :bangbang:'
             elif hit_roll <= standard_hit and hit_roll > med_hit:
                 true_dmg = round(true_dmg)
-                message = f'⚔️ {move} used! Hits for **{true_dmg}**! :anger_right:'
-            elif hit_roll == 20:
+                message = f'{move_emoji} {move} used! Hits for **{true_dmg}**! :anger_right:'
+            elif hit_roll >= 20:
                 if universe == 'Crown Rift Awakening':
                     true_dmg = round(true_dmg * 4)
-                    message = f"🩸 Blood Awakeking! {move} Mortally Wounds for **{true_dmg}**!! :boom: "
+                    message = f"🩸{move_emoji} Blood Awakeking! {move} Mortally Wounds for **{true_dmg}**!! :boom: "
                 else:
                     true_dmg = round(true_dmg * 2)
-                    message = f"⚔️ {move} used! Critically Hits for **{true_dmg}**!! :boom: "
+                    message = f"{move_emoji} {move} used! Critically Hits for **{true_dmg}**!! :boom: "
 
             if move_stamina == 80:
                 # message = f"{special_description}\n" + message
                 message = message
+
+            if opponent_affinity[move_type] == "WEAKNESS" and not (hit_roll <= miss_hit):
+                true_dmg = round(true_dmg * 1.3)
+                message = f"Opponent is weak to **{move_element.lower()}**! Strong hit for **{true_dmg}**!"
+            if opponent_affinity[move_type] == "RESISTANT" and not (hit_roll <= miss_hit):
+                true_dmg = round(true_dmg * .50)
+                message = f"Opponent is resistant to **{move_element.lower()}**.. Weak hit for **{true_dmg}**!"
+
+            if opponent_affinity[move_type] == "IMMUNE" and not (hit_roll <= miss_hit):
+                true_dmg = 0
+                message = f"Opponent is immune to **{move_element.lower()}**.. **0** dmg dealt!"
+
+            if opponent_affinity[move_type] == "REPELS" and not (hit_roll <= miss_hit):
+                message = f"Opponent repels **{move_element.lower()}** for **{true_dmg}** dmg!"
+                does_repel = True
+            if opponent_affinity[move_type] == "ABSORBS" and not (hit_roll <= miss_hit):
+                message = f"Opponent absorbs **{move_element.lower()}** for **{true_dmg}** dmg!"
+                does_absorb = True
+
             response = {"DMG": true_dmg, "MESSAGE": message, "STAMINA_USED": move_stamina,
-                        "CAN_USE_MOVE": can_use_move_flag, "ENHANCE": False}
+                        "CAN_USE_MOVE": can_use_move_flag, "ENHANCE": False, "REPEL": does_repel, "ABSORB": does_absorb, "ELEMENT": move_element}
             return response
 
         except Exception as ex:
@@ -2681,7 +2731,7 @@ def get_card(url, cardname, cardtype):
         }))
         return
 
-def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focused, attack, defense, turn_total, ap1,
+def showcard(d, arm, max_health, health, max_stamina, stamina, resolved, title, focused, attack, defense, turn_total, ap1,
              ap2, ap3, enh1, enhname, lvl, op_defense):
     # Card Name can be 16 Characters before going off Card
     # Lower Card Name Font once after 16 characters
@@ -2785,23 +2835,42 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
                 move3 = moveset[2]
                 move2 = moveset[1]
                 move1 = moveset[0]
+
+            if arm != "none":
+                arm_passive = arm['ABILITIES'][0]
+                arm_name = arm['ARM']
+                arm_price = arm['PRICE']
+                arm_element = arm['ELEMENT']
+                arm_passive_type = list(arm_passive.keys())[0]
+                arm_passive_value = list(arm_passive.values())[0]
+                if arm_passive_type == 'BASIC':
+                    move1 = {arm_name: arm_passive_value, "STAM": 10, "ELEMENT": arm_element}
+                elif arm_passive_type == 'SPECIAL':
+                    move2 = {arm_name: arm_passive_value, "STAM": 30, "ELEMENT": arm_element}
+                elif arm_passive_type == 'ULTIMATE':
+                    move3 = {arm_name: arm_passive_value, "STAM": 80, "ELEMENT": arm_element}
+
                 
             
-            
+            basic_attack_emoji = crown_utilities.set_emoji(list(move1.values())[2])
+            super_attack_emoji = crown_utilities.set_emoji(list(move2.values())[2])
+            ultimate_attack_emoji = crown_utilities.set_emoji(list(move3.values())[2])
+
             move1_ap = ap1
-            move1_text = f"💥 {list(move1.keys())[0]}: {move1_ap} {ebasic}"
-
-            
             move2_ap = ap2
-            move2_text = f"☄️ {list(move2.keys())[0]}: {move2_ap} {especial}"
-
-            
             move3_ap = ap3
-            move3_text = f"🏵️ {list(move3.keys())[0]}: {move3_ap} {eultimate}"
-            
+            if arm != "none":
+                if arm_passive_type == 'BASIC':
+                    move1_ap = arm_passive_value
+                if arm_passive_type == 'SPECIAL':
+                    move2_ap = arm_passive_value
+                if arm_passive_type == 'ULTIMATE':
+                    move3_ap = arm_passive_value
 
+            move1_text = f"{basic_attack_emoji} {list(move1.keys())[0]}: {move1_ap} {ebasic}"
+            move2_text = f"{super_attack_emoji} {list(move2.keys())[0]}: {move2_ap} {especial}"
+            move3_text = f"{ultimate_attack_emoji} {list(move3.keys())[0]}: {move3_ap} {eultimate}"
             
-                
 
             move_enhanced = moveset[3]
             move_enhanced_ap = enh1
@@ -2994,6 +3063,10 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
             'trace': trace
         }))
         return
+
+
+       
+   
 
 
 def showsummon(url, summon, message, lvl, bond):
@@ -3520,7 +3593,7 @@ async def titlelist(self, ctx: SlashContext, universe: str):
     tales_titles_details = []
     for title in titles:
         title_passive = title['ABILITIES'][0]
-        title_passive_type = list(title_passive.keys())[0]
+        title_passive_type = list(title_passive.keys())[0].title()
         title_passive_value = list(title_passive.values())[0]
 
         available = ""
@@ -3599,8 +3672,18 @@ async def armlist(self, ctx: SlashContext, universe: str):
     tales_arms_details = []
     for arm in arms:
         arm_passive = arm['ABILITIES'][0]
-        arm_passive_type = list(arm_passive.keys())[0]
+        arm_passive_type = list(arm_passive.keys())[0].title()
         arm_passive_value = list(arm_passive.values())[0]
+
+        arm_message = f"🦾 **{arm['ARM']}**\n**{arm_passive_type}:** {arm_passive_value}\n"
+
+        element = arm['ELEMENT']
+        element_available = ['BASIC', 'SPECIAL', 'ULTIMATE']
+        if element and arm_passive_type.upper() in element_available:
+            element_name = element
+            element = crown_utilities.set_emoji(element)
+            arm_message = f"🦾 **{arm['ARM']}**\n{element} **{arm_passive_type} {element_name.title()} Attack:** {arm_passive_value}\n"
+
         available = ""
         if arm['AVAILABLE'] and arm['EXCLUSIVE']:
             available = ":purple_circle:"
@@ -3608,12 +3691,14 @@ async def armlist(self, ctx: SlashContext, universe: str):
             available = ":green_circle:"
         else:
             available = ":red_circle:"
+
+        
         if arm['EXCLUSIVE']:
             dungeon_arms_details.append(
-                f"{available} 🦾 **{arm['ARM']}**\n**{arm_passive_type}:** {arm_passive_value}\n")
+                f"{available} {arm_message}")
         else:
             tales_arms_details.append(
-                f"{available} 🦾 **{arm['ARM']}**\n**{arm_passive_type}:** {arm_passive_value}\n")
+                f"{available} {arm_message}")
 
     all_arms = []
     if tales_arms_details:
@@ -3897,6 +3982,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         oarm_passive = oarm['ABILITIES'][0]
         oarm_name = oarm['ARM']
         oarm_price = oarm['PRICE']
+        oarm_element = oarm['ELEMENT']
 
         vault = db.queryVault({'DID': str(o_user['DID']), 'PETS.NAME': o_user['PET']})
         
@@ -4009,6 +4095,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 carm_passive = carm['ABILITIES'][0]
                 carm_name = carm['ARM']
                 carm_price = carm['PRICE']
+                carm_element = carm['ELEMENT']
             else:
                 cperformance = c_user['PERFORMANCE']
                 cvault = db.queryVault({'DID': c_user['DID'], 'PETS.NAME': c_user['PET']})
@@ -4026,6 +4113,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 carm_universe = carm['UNIVERSE']
                 carm_passive = carm['ABILITIES'][0]
                 carm_name = carm['ARM']
+                carm_element = carm['ELEMENT']
 
             cpet_passive_type = cpet['TYPE']
             cpet_name = cpet['NAME']
@@ -4117,6 +4205,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             tarm_passive = tarm['ABILITIES'][0]
             tarm_name = tarm['ARM']
             tarm_price = tarm['PRICE']
+            tarm_element = tarm['ELEMENT']
 
             tvault = db.queryVault({'DID': str(t_user['DID']), 'PETS.NAME': t_user['PET']})
             if mode in pvp_modes:
@@ -4207,6 +4296,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 tarm = db.queryArm({'ARM': universe[enemy_arm]})
 
             tarm_universe = tarm['UNIVERSE']
+            tarm_element = tarm['ELEMENT']
             t_destiny = t['HAS_COLLECTION']
             if mode in B_modes:
                 tpet = db.queryPet({'PET': enemy_pet})
@@ -4275,6 +4365,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
 
             tarm_passive = tarm['ABILITIES'][0]
             tarm_name = tarm['ARM']
+            tarm_element = tarm['ELEMENT']
             t_card = t['NAME']
             t_gif = t['GIF']
             t_card_path = t['PATH']
@@ -4378,10 +4469,25 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             if c_universe == "Chainsawman":
                 c_chainsaw = True
 
+            carm_passive_type = list(carm_passive.keys())[0]
+            carm_passive_value = list(carm_passive.values())[0]
+            if carm_passive_type == 'BASIC':
+                c_1 = {carm_name: carm_passive_value, "STAM": 10, "ELEMENT": carm_element}
+            elif oarm_passive_type == 'SPECIAL':
+                c_2 = {carm_name: carm_passive_value, "STAM": 30, "ELEMENT": carm_element}
+            elif oarm_passive_type == 'ULTIMATE':
+                c_3 = {carm_name: carm_passive_value, "STAM": 80, "ELEMENT": carm_element}
+
+
             cmove1_text = list(c_1.keys())[0]
+            cmove1_element = list(c_1.values())[2]
             cmove2_text = list(c_2.keys())[0]
+            cmove2_element = list(c_2.values())[2]
             cmove3_text = list(c_3.keys())[0]
+            cmove3_element = list(c_3.values())[2]
             cmove_enhanced_text = list(c_enhancer.keys())[0]
+
+            c_opponent_affinities = crown_utilities.check_affinities("t", c, cmove1_element, cmove2_element, cmove3_element)
 
             cpetmove_text = list(cpet.keys())[3]  # Name of the ability
             cpetmove_ap = (cpet_bond *  cpet_lvl) + list(cpet.values())[3]  # Ability Power
@@ -4497,13 +4603,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             cparry_count = 0
             carm_siphon_active = False
             csiphon_value = 0
-            if carm_passive_type == 'BASIC':
-                c_1[cmove1_text] = c_1[cmove1_text] + carm_passive_value
-            elif carm_passive_type == 'SPECIAL':
-                c_2[cmove2_text] = c_2[cmove2_text] + carm_passive_value
-            elif carm_passive_type == 'ULTIMATE':
-                c_3[cmove3_text] = c_3[cmove3_text] + carm_passive_value
-            elif carm_passive_type == 'ULTIMAX':
+            if carm_passive_type == 'ULTIMAX':
                 c_1[cmove1_text] = c_1[cmove1_text] + carm_passive_value
                 c_2[cmove2_text] = c_2[cmove2_text] + carm_passive_value
                 c_3[cmove3_text] = c_3[cmove3_text] + carm_passive_value
@@ -4549,9 +4649,23 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         if o_universe == "Chainsawman":
             o_chainsaw = True
 
+        oarm_passive_type = list(oarm_passive.keys())[0]
+        oarm_passive_value = list(oarm_passive.values())[0]
+        if oarm_passive_type == 'BASIC':
+            o_1 = {oarm_name: oarm_passive_value, "STAM": 10, "ELEMENT": oarm_element}
+        elif oarm_passive_type == 'SPECIAL':
+            o_2 = {oarm_name: oarm_passive_value, "STAM": 30, "ELEMENT": oarm_element}
+        elif oarm_passive_type == 'ULTIMATE':
+            o_3 = {oarm_name: oarm_passive_value, "STAM": 80, "ELEMENT": oarm_element}
+
+
         omove1_text = list(o_1.keys())[0]
+        omove1_element = list(o_1.values())[2]
         omove2_text = list(o_2.keys())[0]
+        omove2_element = list(o_2.values())[2]
         omove3_text = list(o_3.keys())[0]
+        omove3_element = list(o_3.values())[2]
+
         omove_enhanced_text = list(o_enhancer.keys())[0]
 
         opetmove_text = list(opet.keys())[3]  # Name of the ability
@@ -4667,13 +4781,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         oparry_count = 0
         oarm_siphon_active = False
         osiphon_value = 0
-        if oarm_passive_type == 'BASIC':
-            o_1[omove1_text] = o_1[omove1_text] + oarm_passive_value
-        elif oarm_passive_type == 'SPECIAL':
-            o_2[omove2_text] = o_2[omove2_text] + oarm_passive_value
-        elif oarm_passive_type == 'ULTIMATE':
-            o_3[omove3_text] = o_3[omove3_text] + oarm_passive_value
-        elif oarm_passive_type == 'ULTIMAX':
+        if oarm_passive_type == 'ULTIMAX':
             o_1[omove1_text] = o_1[omove1_text] + oarm_passive_value
             o_2[omove2_text] = o_2[omove2_text] + oarm_passive_value
             o_3[omove3_text] = o_3[omove3_text] + oarm_passive_value
@@ -4699,10 +4807,24 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             t_3 = t_moveset[2]
             t_enhancer = t_moveset[3]
 
+            tarm_passive_type = list(tarm_passive.keys())[0]
+            tarm_passive_value = list(tarm_passive.values())[0]
+            if tarm_passive_type == 'BASIC':
+                t_1 = {tarm_name: tarm_passive_value, "STAM": 10, "ELEMENT": tarm_element}
+            elif oarm_passive_type == 'SPECIAL':
+                t_2 = {tarm_name: tarm_passive_value, "STAM": 30, "ELEMENT": tarm_element}
+            elif oarm_passive_type == 'ULTIMATE':
+                t_3 = {tarm_name: tarm_passive_value, "STAM": 80, "ELEMENT": tarm_element}
+
+
             tmove1_text = list(t_1.keys())[0]
+            tmove1_element = list(t_1.values())[2]
             tmove2_text = list(t_2.keys())[0]
+            tmove2_element = list(t_2.values())[2]
             tmove3_text = list(t_3.keys())[0]
+            tmove3_element = list(t_3.values())[2]
             tmove_enhanced_text = list(t_enhancer.keys())[0]
+            tpetmove_text = list(tpet_passive.keys())[0]
 
             tpetmove_text = list(tpet.keys())[3]  # Name of the ability
             tpetmove_ap = (tpet_bond * tpet_lvl) + list(tpet_passive.values())[0] # Ability Power
@@ -4712,13 +4834,25 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             t_2 = t_moveset[1]
             t_3 = t_moveset[2]
             t_enhancer = t_moveset[3]
-            
+
+            tarm_passive_type = list(tarm_passive.keys())[0]
+            tarm_passive_value = list(tarm_passive.values())[0]
+            if tarm_passive_type == 'BASIC':
+                t_1 = {tarm_name: tarm_passive_value, "STAM": 10, "ELEMENT": tarm_element}
+            elif oarm_passive_type == 'SPECIAL':
+                t_2 = {tarm_name: tarm_passive_value, "STAM": 30, "ELEMENT": tarm_element}
+            elif oarm_passive_type == 'ULTIMATE':
+                t_3 = {tarm_name: tarm_passive_value, "STAM": 80, "ELEMENT": tarm_element}
+
             tmove1_text = list(t_1.keys())[0]
+            tmove1_element = list(t_1.values())[2]
             tmove2_text = list(t_2.keys())[0]
+            tmove2_element = list(t_2.values())[2]
             tmove3_text = list(t_3.keys())[0]
+            tmove3_element = list(t_3.values())[2]
             tmove_enhanced_text = list(t_enhancer.keys())[0]
-            tpetmove_text = list(tpet_passive.keys())[0] 
-            
+            tpetmove_text = list(tpet_passive.keys())[0]
+   
             tpetmove_ap = (tpet_bond * tpet_lvl) + list(tpet_passive.values())[0]  # Ability Power
             tpetmove_type = list(tpet_passive.values())[1]
             tpet_move = {str(tpetmove_text): int(tpetmove_ap), 'STAM': 15, 'TYPE': tpetmove_type}
@@ -4849,13 +4983,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         tparry_count = 0
         tarm_siphon_active = False
         tsiphon_value = 0
-        if tarm_passive_type == 'BASIC':
-            t_1[tmove1_text] = t_1[tmove1_text] + tarm_passive_value
-        elif tarm_passive_type == 'SPECIAL':
-            t_2[tmove2_text] = t_2[tmove2_text] + tarm_passive_value
-        elif tarm_passive_type == 'ULTIMATE':
-            t_3[tmove3_text] = t_3[tmove3_text] + tarm_passive_value
-        elif tarm_passive_type == 'ULTIMAX':
+        if tarm_passive_type == 'ULTIMAX':
             t_1[tmove1_text] = t_1[tmove1_text] + tarm_passive_value
             t_2[tmove2_text] = t_2[tmove2_text] + tarm_passive_value
             t_3[tmove3_text] = t_3[tmove3_text] + tarm_passive_value
@@ -4944,9 +5072,30 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             c_attack = c_attack + (c_user['REBIRTH'] * 10)
             c_defense = c_defense + (c_user['REBIRTH'] * 10)
 
+        o_opponent_affinities = crown_utilities.check_affinities("t", o, tmove1_element, tmove2_element, tmove3_element)
+
+        t_opponent_affinities = crown_utilities.check_affinities("o", t, omove1_element, omove2_element, omove3_element)
+
+        if companion:
+            t_for_c_opponent_affinities = crown_utilities.check_affinities("c", t, cmove1_element, cmove2_element, cmove3_element)
+            c_opponent_affinities = crown_utilities.check_affinities("t", c, tmove1_element, tmove2_element, tmove3_element)
+
+
+
         STATS = {
+            'o_full_card_info': o,
+            't_full_card_info': t,
+            'omove1_element': omove1_element,
+            'omove2_element': omove2_element,
+            'omove3_element': omove3_element,
+            'tmove1_element': tmove1_element,
+            'tmove2_element': tmove2_element,
+            'tmove3_element': tmove3_element,
+            'o_opponent_affinities': o_opponent_affinities,
+            't_opponent_affinities': t_opponent_affinities,
             'auto_battle': auto_battle,
             'operformance': operformance,
+            'o_opponent_affinities': o_opponent_affinities,
             'o_title_passive_type': o_title_passive_type,
             'o_title_passive_value': o_title_passive_value,
             't_title_passive_type': t_title_passive_type,
@@ -5012,13 +5161,14 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             'o_enhancer_used': o_enhancer_used,
             'o_final_stand': o_final_stand,
             't_card': t_card,
-            'tarm': tarm_name,
+            'tarm': tarm,
             'tarm_name': tarm_name,
             'tarm_passive_type' : tarm_passive_type,
             'tarm_passive_value' : tarm_passive_value,
             'tcard_lvl': tcard_lvl,
             't_universe': t_universe,
             't_attack': t_attack,
+            't_opponent_affinities': t_opponent_affinities,
             't_defense': t_defense,
             't_health': t_health,
             't_max_health': t_max_health,
@@ -5072,7 +5222,17 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
 
         if mode in pvp_modes:
             STATS = {
+                'o_full_card_info': o,
+                't_full_card_info': t,
+                'omove1_element': omove1_element,
+                'omove2_element': omove2_element,
+                'omove3_element': omove3_element,
+                'tmove1_element': tmove1_element,
+                'tmove2_element': tmove2_element,
+                'tmove3_element': tmove3_element,
                 'auto_battle': auto_battle,
+                'o_opponent_affinities': o_opponent_affinities,
+                't_opponent_affinities': t_opponent_affinities,
                 'o_title_passive_type': o_title_passive_type,
                 'o_title_passive_value': o_title_passive_value,
                 't_title_passive_type': t_title_passive_type,
@@ -5143,7 +5303,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 't_card': t_card,
                 'tcard_lvl': tcard_lvl,
                 'tperformance': tperformance,
-                'tarm': tarm_name,
+                'tarm': tarm,
                 'tarm_name': tarm_name,
                 'tarm_passive_type' : tarm_passive_type,
                 'tarm_passive_value' : tarm_passive_value,
@@ -5204,6 +5364,16 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             }
         if mode == "RAID":
             STATS = {
+                'o_full_card_info': o,
+                't_full_card_info': t,
+                'omove1_element': omove1_element,
+                'omove2_element': omove2_element,
+                'omove3_element': omove3_element,
+                'tmove1_element': tmove1_element,
+                'tmove2_element': tmove2_element,
+                'tmove3_element': tmove3_element,
+                'o_opponent_affinities': o_opponent_affinities,
+                't_opponent_affinities': t_opponent_affinities,
                 'auto_battle': auto_battle,
                 'o_title_passive_type': o_title_passive_type,
                 'o_title_passive_value': o_title_passive_value,
@@ -5275,7 +5445,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 't_card': t_card,
                 'tcard_lvl': tcard_lvl,
                 'tperformance': operformance,
-                'tarm': tarm_name,
+                'tarm': tarm,
                 'tarm_name': tarm_name,
                 'tarm_passive_type' : tarm_passive_type,
                 'tarm_passive_value' : tarm_passive_value,
@@ -5336,6 +5506,16 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             }
         if mode == "Boss":
             STATS = {
+                'o_full_card_info': o,
+                't_full_card_info': t,
+                'omove1_element': omove1_element,
+                'omove2_element': omove2_element,
+                'omove3_element': omove3_element,
+                'tmove1_element': tmove1_element,
+                'tmove2_element': tmove2_element,
+                'tmove3_element': tmove3_element,
+                'o_opponent_affinities': o_opponent_affinities,
+                't_opponent_affinities': t_opponent_affinities,
                 'auto_battle': auto_battle,
                 'o_title_passive_type': o_title_passive_type,
                 'o_title_passive_value': o_title_passive_value,
@@ -5405,7 +5585,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 'o_enhancer_used': o_enhancer_used,
                 'o_final_stand': o_final_stand,
                 't_card': t_card,
-                'tarm': tarm_name,
+                'tarm': tarm,
                 'tarm_name': tarm_name,
                 'tarm_passive_type' : tarm_passive_type,
                 'tarm_passive_value' : tarm_passive_value,
@@ -5478,6 +5658,22 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
 
         if mode == "CBoss":
             STATS = {
+                'o_full_card_info': o,
+                'c_full_card_info': c,
+                't_full_card_info': t,
+                'omove1_element': omove1_element,
+                'omove2_element': omove2_element,
+                'omove3_element': omove3_element,
+                'tmove1_element': tmove1_element,
+                'tmove2_element': tmove2_element,
+                'tmove3_element': tmove3_element,
+                'cmove1_element': cmove1_element,
+                'cmove2_element': cmove2_element,
+                'cmove3_element': cmove3_element,
+                'o_opponent_affinities': o_opponent_affinities,
+                't_opponent_affinities': t_opponent_affinities,
+                't_for_c_opponent_affinities': t_for_c_opponent_affinities,
+                'c_opponent_affinities': c_opponent_affinities,
                 'auto_battle': auto_battle,
                 'o_title_passive_type': o_title_passive_type,
                 'o_title_passive_value': o_title_passive_value,
@@ -5551,7 +5747,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 'o_enhancer_used': o_enhancer_used,
                 'o_final_stand': o_final_stand,
                 't_card': t_card,
-                'tarm': tarm_name,
+                'tarm': tarm,
                 'tarm_name': tarm_name,
                 'tarm_passive_type' : tarm_passive_type,
                 'tarm_passive_value' : tarm_passive_value,
@@ -5684,6 +5880,22 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
 
         if mode in co_op_modes and mode != "CBoss":
             STATS = {
+                'o_full_card_info': o,
+                'c_full_card_info': c,
+                't_full_card_info': t,
+                'omove1_element': omove1_element,
+                'omove2_element': omove2_element,
+                'omove3_element': omove3_element,
+                'tmove1_element': tmove1_element,
+                'tmove2_element': tmove2_element,
+                'tmove3_element': tmove3_element,
+                'cmove1_element': cmove1_element,
+                'cmove2_element': cmove2_element,
+                'cmove3_element': cmove3_element,
+                'c_opponent_affinities': c_opponent_affinities,
+                'o_opponent_affinities': o_opponent_affinities,
+                't_opponent_affinities': t_opponent_affinities,
+                't_for_c_opponent_affinities': t_for_c_opponent_affinities,
                 'auto_battle': auto_battle,
                 'o_title_passive_type': o_title_passive_type,
                 'o_title_passive_value': o_title_passive_value,
@@ -5758,7 +5970,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 'o_final_stand': o_final_stand,
                 't_card': t_card,
                 'tarm_name': tarm_name,
-                'tarm': tarm_name,
+                'tarm': tarm,
                 'tcard_lvl': tcard_lvl,
                 't_universe': t_universe,
                 't_attack': t_attack,
@@ -6445,7 +6657,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                 'message': str(ex),
                 'trace': trace
             }))
-            embedVar = discord.Embed(title=f"Unable to start boss fight. Seek support in the Crown Unlimited support server https://discord.gg/cqP4M92", delete_after=30, colour=0xe91e63)
+            embedVar = discord.Embed(title=f"Unable to start boss fight. Seek support in the Anime VS+ support server https://discord.gg/cqP4M92", delete_after=30, colour=0xe91e63)
             await ctx.send(embed=embedVar)
             guild = self.bot.get_guild(main.guild_id)
             channel = guild.get_channel(main.guild_channel)
@@ -6466,6 +6678,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
     solo_modes = ['ATales', 'Tales', 'Dungeon', 'Boss']
     opponent_pet_modes = ['Dungeon', 'DDungeon', 'CDungeon']
     RAID_MODES = ['RAID']
+
+    basic_attack_name = "BASIC"
+    special_attack_name = "SUPER"
+    ultimate_attack_name = "ULTIMATE"
 
     # mode = 'ATales'
     try:
@@ -6606,13 +6822,23 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 stats = await build_player_stats(self, randomized_battle, ctx, sowner, o, otitle, t, ttitle, mode,
                                                  universe, currentopponent, oteam, ofam, abyss_scaling, None, None,
                                                  None, None, None, None, None, None, None, None)
-            auto_battle = stats['auto_battle']
-            if sowner['PATRON']:
-                auto_battle = True
+            auto_battle = True
             difficulty = sowner['DIFFICULTY']
             battle_history_message_amount = sowner['BATTLE_HISTORY']
+            o_full_card_info = stats['o_full_card_info']
+            o_affinity_message = crown_utilities.set_affinities(o_full_card_info)
             o_title_passive_type = stats['o_title_passive_type']
             o_title_passive_value = stats['o_title_passive_value']
+            o_opponent_affinities = stats['o_opponent_affinities']
+            omove1_element = stats['omove1_element']
+            o_basic_emoji = crown_utilities.set_emoji(omove1_element)
+            omove2_element = stats['omove2_element']
+            o_super_emoji = crown_utilities.set_emoji(omove2_element)
+            omove3_element = stats['omove3_element']
+            o_ultimate_emoji = crown_utilities.set_emoji(omove3_element)
+            # print(f"O BASIC: {}")
+            # print(f"O SUPER: {}")
+            # print(f"O ULTIMATE: {}")
             operformance = stats['operformance']
             o_card = stats['o_card']
             ocard_lvl = stats['ocard_lvl']
@@ -6692,10 +6918,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         corruption_atk_buff = 80
                         corruption_def_buff = 120
                         corruption_ap_buff = 65
-                    auto_battle = True
-
-            if difficulty == "EASY":
-                auto_battle = True
 
 
             if mode in PVP_MODES or mode in RAID_MODES:
@@ -6704,10 +6926,20 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 else:
                     tperformance = stats['tperformance']
                 t_title_passive_type = stats['t_title_passive_type']
+                t_opponent_affinities = stats['t_opponent_affinities']
+                tmove1_element = stats['tmove1_element']
+                tmove2_element = stats['tmove2_element']
+                tmove3_element = stats['tmove3_element']
+                t_basic_emoji = crown_utilities.set_emoji(tmove1_element)
+                t_super_emoji = crown_utilities.set_emoji(tmove2_element)
+                t_ultimate_emoji = crown_utilities.set_emoji(tmove3_element)
+
                 t_title_passive_value = stats['t_title_passive_value']
                 tpet_lvl = stats['tpet_lvl']
                 tpet_bond = stats['tpet_bond']
                 t_card = stats['t_card']
+                t_full_card_info = stats['t_full_card_info']
+                t_affinity_message = crown_utilities.set_affinities(t_full_card_info)
                 tcard_lvl = stats['tcard_lvl']
                 t_card_path = stats['t_card_path']
                 tarm = stats['tarm']
@@ -6767,11 +6999,20 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 t_defend_used = stats['t_defend_used']
                 t_final_stand = stats['t_final_stand']
             else:
+                tmove1_element = stats['tmove1_element']
+                tmove2_element = stats['tmove2_element']
+                tmove3_element = stats['tmove3_element']
+                t_basic_emoji = crown_utilities.set_emoji(tmove1_element)
+                t_super_emoji = crown_utilities.set_emoji(tmove2_element)
+                t_ultimate_emoji = crown_utilities.set_emoji(tmove3_element)
+                t_opponent_affinities = stats['t_opponent_affinities']
                 t_title_passive_type = stats['t_title_passive_type']
                 t_title_passive_value = stats['t_title_passive_value']
                 tpet_lvl = stats['tpet_lvl']
                 tpet_bond = stats['tpet_bond']
                 t_card = stats['t_card']
+                t_full_card_info = stats['t_full_card_info']
+                t_affinity_message = crown_utilities.set_affinities(t_full_card_info)
                 tcard_lvl = stats['tcard_lvl']
                 tcard_lvl_ap_buff = stats['tcard_lvl_ap_buff']
                 tarm = stats['tarm']
@@ -6861,6 +7102,17 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 c_max_health = 0
 
             if mode in co_op_modes:
+                c_full_card_info = stats['c_full_card_info']
+                c_affinity_message = crown_utilities.set_affinities(c_full_card_info)
+                cmove1_element = stats['cmove1_element']
+                cmove2_element = stats['cmove2_element']
+                cmove3_element = stats['cmove3_element']
+                c_basic_emoji = crown_utilities.set_emoji(cmove1_element)
+                c_super_emoji = crown_utilities.set_emoji(cmove2_element)
+                c_ultimate_emoji = crown_utilities.set_emoji(cmove3_element)
+
+                t_for_c_opponent_affinities = stats['t_for_c_opponent_affinities']
+                c_opponent_affinities = stats['c_opponent_affinities']
                 c_title_passive_type = stats['c_title_passive_type']
                 c_title_passive_value = stats['c_title_passive_value']
                 cpet_lvl = stats['cpet_lvl']
@@ -6953,6 +7205,56 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             o_gow_resolve = False
             t_gow_resolve = False
             c_gow_resolve = False
+
+            fire_element = "FIRE"
+            ice_element = "ICE"
+            water_element = "WATER"
+            earth_element = "EARTH"
+            electric_element = "ELECTRIC"
+            wind_element = "WIND"
+            spirit_element = "SPIRIT"
+            phsycic_element = "PHSYCIC"
+            death_element = "DEATH"
+            life_element = "LIFE"
+            light_element = "LIGHT"
+            dark_element = "DARK"
+            poison_element = "POISON"
+            ranged_element = "RANGED"
+            bleed_element = "BLEED"
+            time_element = "TIME"
+            gravity_element = "GRAVITY"
+            recoil_element = "RECOIL"
+
+            o_burn_dmg = 0
+            o_poison_dmg = 0
+            o_freeze_enh = False
+            o_ice_counter = 0
+            o_water_buff = 0
+            o_shock_buff = 0
+            o_psychic_debuff = 0
+            o_bleed_counter = 0
+            o_bleed_hit = False
+
+            t_burn_dmg = 0
+            t_poison_dmg = 0
+            t_freeze_enh = False
+            t_ice_counter = 0
+            t_water_buff = 0
+            t_shock_buff = 0
+            t_psychic_debuff = 0
+            t_bleed_counter = 0
+            t_bleed_hit = False
+
+            c_burn_dmg = 0
+            c_poison_dmg = 0
+            c_freeze_enh = False
+            c_ice_counter = 0
+            c_water_buff = 0
+            c_shock_buff = 0
+            c_psychic_debuff = 0
+            c_bleed_counter = 0
+            c_bleed_hit = False
+
 
             if o_universe == "Solo Leveling":
                 temp_tarm_shield_active = stats['tarm_shield_active']
@@ -7066,19 +7368,19 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
             start_tales_buttons_action_row = manage_components.create_actionrow(*start_tales_buttons)
 
-            tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff
-            tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff
-            tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff
+            tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff + t_shock_buff
+            tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff + t_shock_buff
+            tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff + t_shock_buff
             tenh1 = list(t_enhancer.values())[0]
             tenh_name = list(t_enhancer.values())[2]
             
             # UNIVERSE CARD
             if t_universe == "Souls" and t_used_resolve:
-                player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina,
+                player_2_card = showcard(t, tarm, t_max_health, t_health, t_max_stamina, t_stamina,
                                     t_used_resolve, ttitle, t_used_focus, t_attack, t_defense,
                                     turn_total, tap2, tap3, tap3, tenh1, tenh_name, tcard_lvl, o_defense)
             else:
-                player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina,
+                player_2_card = showcard(t, tarm, t_max_health, t_health, t_max_stamina, t_stamina,
                                         t_used_resolve, ttitle, t_used_focus, t_attack, t_defense,
                                         turn_total, tap1, tap2, tap3, tenh1, tenh_name, tcard_lvl, o_defense)
             # await private_channel.send(file=player_2_card)
@@ -7090,11 +7392,15 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             battle_ping_message = await private_channel.send(f"{ctx.author.mention}")
             if mode not in PVP_MODES and mode not in B_modes and mode != "ABYSS" and mode not in RAID_MODES and mode not in co_op_modes:
                 embedVar = discord.Embed(title=f"✅ Confirm Start! ({currentopponent + 1}/{total_legends})", description=f"**{o_card}** VS **{t_card}**")
+                embedVar.add_field(name="__Your Affinities__", value=f"{o_affinity_message}")
+                embedVar.add_field(name="__Opponent Affinities__", value=f"{t_affinity_message}")
                 embedVar.set_image(url="attachment://image.png")
                 embedVar.set_thumbnail(url=ctx.author.avatar_url)
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card)
             if mode == "ABYSS":
                 embedVar = discord.Embed(title=f"🌑 Abyss Floor {universe['FLOOR']}\n✨ Confirm Start!  ({currentopponent + 1}/{total_legends})", description=f"**{o_card}** VS **{t_card}**")
+                embedVar.add_field(name="__Your Affinities__", value=f"{o_affinity_message}")
+                embedVar.add_field(name="__Opponent Affinities__", value=f"{t_affinity_message}")
                 embedVar.set_image(url="attachment://image.png")
                 embedVar.set_thumbnail(url=ctx.author.avatar_url)
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card)
@@ -7102,41 +7408,55 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             if mode in PVP_MODES and tutorial:
                 embedVar = discord.Embed(title=f"✅ Click Start Match to Begin the Tutorial!", description=f"You : **{o_card}** VS **{t_card}**")
                 embedVar.set_image(url="attachment://image.png")
+                embedVar.add_field(name="__Your Affinities__", value=f"{o_affinity_message}")
+                embedVar.add_field(name="__Opponent Affinities__", value=f"{t_affinity_message}")
                 embedVar.set_thumbnail(url=ctx.author.avatar_url)
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card)
                 
             elif mode in PVP_MODES and tutorial == False:
                 embedVar = discord.Embed(title=f"✅ Confirm PVP Battle!", description=f"{user2.mention}\n**{o_card}** VS **{t_card}**")
                 embedVar.set_thumbnail(url=ctx.author.avatar_url)
+                embedVar.add_field(name="__Your Affinities__", value=f"{o_affinity_message}")
+                embedVar.add_field(name="__Opponent Affinities__", value=f"{t_affinity_message}")
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row])      
                 
             elif mode in RAID_MODES:
                 embedVar = discord.Embed(title=f"✅ Confirm Raid Battle!", description=f"{ctx.author.mention}\n**{o_card}** VS **{t_card}**")
                 embedVar.set_image(url="attachment://image.png")
+                embedVar.add_field(name="__Your Affinities__", value=f"{o_affinity_message}")
+                embedVar.add_field(name="__Opponent Affinities__", value=f"{t_affinity_message}")
                 embedVar.set_thumbnail(url=ctx.author.avatar_url)
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card)
             
             if mode in co_op_modes and mode not in ai_co_op_modes and mode not in B_modes:
                 embedVar = discord.Embed(title=f"✅ Confirm Co-Op Battle! ({currentopponent + 1}/{total_legends})", description=f"{ctx.author.mention}\n**{o_card}** & **{c_card}** VS **{t_card}**")
                 embedVar.set_image(url="attachment://image.png")
+                embedVar.add_field(name="__Your Affinities__", value=f"{o_affinity_message}")
+                embedVar.add_field(name="__Opponent Affinities__", value=f"{t_affinity_message}")
                 embedVar.set_thumbnail(url=ctx.author.avatar_url)
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card)
                 
             if mode in ai_co_op_modes:
                 embedVar = discord.Embed(title=f"✅ Confirm Duo Battle! ({currentopponent + 1}/{total_legends})", description=f"{ctx.author.mention}\n**{o_card}** & **{c_card}** VS **{t_card}**")
                 embedVar.set_image(url="attachment://image.png")
+                embedVar.add_field(name="__Your Affinities__", value=f"{o_affinity_message}")
+                embedVar.add_field(name="__Opponent Affinities__", value=f"{t_affinity_message}")
                 embedVar.set_thumbnail(url=ctx.author.avatar_url)
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card) 
                 
             if mode in B_modes and mode not in co_op_modes:
                 embedVar = discord.Embed(title=f"✅ Boss Fight!", description=f"{ctx.author.mention}\n**{o_card}** VS **{t_card}**")
                 embedVar.set_image(url="attachment://image.png")
+                embedVar.add_field(name="__Your Affinities__", value=f"{o_affinity_message}")
+                embedVar.add_field(name="__Opponent Affinities__", value=f"{t_affinity_message}")
                 embedVar.set_thumbnail(url=ctx.author.avatar_url)
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card)
                 
             if mode in B_modes and mode in co_op_modes:
                 embedVar = discord.Embed(title=f"✅ Boss Fight!", description=f"{ctx.author.mention}\n**{o_card}** & **{c_card}** VS **{t_card}**")
                 embedVar.set_image(url="attachment://image.png")
+                embedVar.add_field(name="__Your Affinities__", value=f"{o_affinity_message}")
+                embedVar.add_field(name="__Opponent Affinities__", value=f"{t_affinity_message}")
                 embedVar.set_thumbnail(url=ctx.author.avatar_url)
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card)
 
@@ -7157,10 +7477,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                 if button_ctx.custom_id == "start_tales_no":
                     await battle_msg.delete()
+                    await battle_ping_message.delete()
                     return
 
                 if button_ctx.custom_id == "save_tales_yes":
                     await battle_msg.delete()
+                    await battle_ping_message.delete()
                     await save_spot(self, ctx, universe, mode, currentopponent)
                     await button_ctx.send(f"Game has been saved.")
                     return
@@ -7187,7 +7509,26 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         if mode in PVP_MODES or mode in RAID_MODES:
                             # Player 1 Turn Start
                             if turn == 0:
+                                if t_bleed_hit:
+                                    t_bleed_hit = False
+                                    bleed_dmg = 10 * turn_total
+                                    o_health = o_health - bleed_dmg
+                                    previous_moves.append(f"(**{turn_total}**) 🩸 **{o_card}** shredded for **{bleed_dmg}** bleed dmg...")
 
+                                if t_burn_dmg:
+                                    o_health = o_health - t_burn_dmg
+                                    previous_moves.append(f"(**{turn_total}**) 🔥 **{o_card}** burned for **{t_burn_dmg}** dmg...")
+                                if t_freeze_enh:
+                                    previous_moves.append(f"(**{turn_total}**) ❄️ **{o_card}** has been frozen for a turn...")
+                                    turn_total = turn_total + 1
+                                    turn = 1
+                                if t_poison_dmg:
+                                    o_health = o_health - t_poison_dmg
+                                    previous_moves.append(f"(**{turn_total}**) 🧪 **{o_card}** poisoned for **{t_poison_dmg}** dmg...")
+                                
+                                o_burn_dmg = 0
+                                o_freeze_enh = False
+                                                    
                                 if o_title_passive_type:
                                     if o_title_passive_type == "HLT":
                                         o_health = round(round(o_health + ((o_title_passive_value / 100) * o_health)))
@@ -7256,12 +7597,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     embedVar = discord.Embed(title=f"{o_card} Scheduled Death 📓",
                                                             description=f"**{o_card} says**\nYou will die in 50  turns...",
                                                             colour=0xe91e63)
-                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Scheduled Death 📓")
+                                    previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Scheduled Death 📓")
                                 if t_universe == 'Death Note' and turn_total == 0:
                                     embedVar = discord.Embed(title=f"{o_card} Scheduled Death 📓",
                                                             description=f"**{t_card} says**\nYou will die in 50  turns...",
                                                             colour=0xe91e63)
-                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Scheduled Death 📓")
+                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Scheduled Death 📓")
                                 
                                 if o_attack <= 25:
                                     o_attack = 25
@@ -7278,7 +7619,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 # Tutorial Instructions
                                 if turn_total == 0:
                                     if botActive:
-                                        embedVar = discord.Embed(title=f"Welcome to **Crown Unlimited**!",
+                                        embedVar = discord.Embed(title=f"Welcome to **Anime VS+**!",
                                                                 description=f"Follow the instructions to learn how to play the Game!",
                                                                 colour=0xe91e63)
                                         embedVar.add_field(name="**How do I play?**",
@@ -7311,7 +7652,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             title=f"**{o_card}** & {opet_name} VS **{t_card}** & {tpet_name} Ranked Battle has begun!",
                                             description=f"{o_card} Says:\n{o_greeting_description}", colour=0xe91e63)
                                         
-                                        previous_moves.append(f"*{turn_total}:* **{o_card}** & {opet_name} VS **{t_card}** & {tpet_name} Ranked Battle has begun!")
+                                        previous_moves.append(f"(**{turn_total}**) **{o_card}** & {opet_name} VS **{t_card}** & {tpet_name} Ranked Battle has begun!")
                                 if o_health <= (o_max_health * .25):
                                     embed_color_o = 0xe74c3c
                                     if o_chainsaw == True:
@@ -7323,7 +7664,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             embedVar = discord.Embed(title=f"{o_card}'s Devilization",
                                                                     description=f"**{o_card}** Doubles ATK and DEF",
                                                                     colour=0xe91e63)
-                                            previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}**'s Devilization")
+                                            previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸's Devilization")
 
                                 elif o_health <= (o_max_health * .50):
                                     embed_color_o = 0xe67e22
@@ -7336,7 +7677,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             embedVar = discord.Embed(title=f"{o_card}'s Devilization",
                                                                     description=f"**{o_card}** Doubles ATK and DEF",
                                                                     colour=0xe91e63)
-                                            previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}**'s Devilization")
+                                            previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸's Devilization")
                                 elif o_health <= (o_max_health * .75):
                                     embed_color_o = 0xf1c40f
 
@@ -7419,11 +7760,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     o_used_focus = True
                                     
                                     if botActive:
-                                        previous_moves.append(f"*{turn_total}:* 🌀 **{o_card}** focused and {healmessage}")
+                                        previous_moves.append(f"(**{turn_total}**) 🌀 **{o_card}** focused and {healmessage}")
                                     if not botActive:
                                         embedVar = discord.Embed(title=f"{o_card} FOCUSED", description=f"**{o_card} says**\n{o_focus_description}", colour=0xe91e63)
                                         embedVar.add_field(name=f"{o_card} focused and {healmessage}", value="All stats & stamina increased")
-                                        previous_moves.append(f"*{turn_total}:* 🌀 **{o_card}** focused and {healmessage}")
+                                        previous_moves.append(f"(**{turn_total}**) 🌀 **{o_card}** focused and {healmessage}")
                                     # Resolve Check and Calculation
                                     if not o_used_resolve and o_used_focus and o_universe == "Digimon":  # Digimon Universal Trait
                                         # fortitude or luck is based on health
@@ -7445,9 +7786,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         if turn_total <=5:
                                             o_attack = round(o_attack * 2)
                                             o_defense = round(o_defense * 2 )
-                                            previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Transformation: Mega Digivolution!!!")
+                                            previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Transformation: Mega Digivolution!!!")
                                         else:
-                                            previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Transformation: Digivolve")
+                                            previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Transformation: Digivolve")
                                         if botActive and tutorial_resolve==False:
                                             tutorial_resolve = True
                                             embedVar = discord.Embed(title=f"⚡**Resolve Transformation**!",
@@ -7464,25 +7805,25 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     elif o_universe == "League Of Legends":
                                         embedVar = discord.Embed(title=f"Turret Shot hits {t_card} for **{60 + turn_total}** Damage 💥",
                                                                 colour=0xe91e63)
-                                        previous_moves.append(f"*{turn_total}:* 🩸 Turret Shot hits **{t_card}** for **{60 + turn_total}** Damage 💥")
+                                        previous_moves.append(f"(**{turn_total}**) 🩸 Turret Shot hits **{t_card}** for **{60 + turn_total}** Damage 💥")
                                         t_health = round(t_health - (60 + turn_total))
 
                                     elif o_universe == "Solo Leveling":
                                         embedVar = discord.Embed(
                                             title=f"Ruler's Authority... Opponent loses **{30 + turn_total}** 🛡️ 🔻",
                                             colour=0xe91e63)
-                                        previous_moves.append(f"*{turn_total}:* 🩸 Ruler's Authority... Opponent loses **{30 + turn_total}** 🛡️ 🔻")
+                                        previous_moves.append(f"(**{turn_total}**) 🩸 Ruler's Authority... Opponent loses **{30 + turn_total}** 🛡️ 🔻")
                                         t_defense = round(t_defense - (30 + turn_total))
 
                                     elif o_universe == "Dragon Ball Z":
                                         o_health = o_health + t_stamina + turn_total
-                                        previous_moves.append(f"*{turn_total}:* 🩸 Saiyan Spirit... You heal for **{t_stamina + turn_total}** ❤️")
+                                        previous_moves.append(f"(**{turn_total}**) 🩸 Saiyan Spirit... You heal for **{t_stamina + turn_total}** ❤️")
 
 
                                     elif o_universe == "Black Clover":
                                         embedVar = discord.Embed(title=f"Mana Zone! **{o_card}** Increased Stamina 🌀",
                                                                 colour=0xe91e63)
-                                        previous_moves.append(f"*{turn_total}:* 🩸 Mana Zone! **{o_card}** Increased AP & Stamina 🌀")
+                                        previous_moves.append(f"(**{turn_total}**) 🩸 Mana Zone! **{o_card}** Increased AP & Stamina 🌀")
                                         o_stamina = 100
                                         ocard_lvl_ap_buff = ocard_lvl_ap_buff + 30
 
@@ -7492,21 +7833,21 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     description=f"**{o_card} says**\n**Delete**",
                                                                     colour=0xe91e63)
                                             embedVar.add_field(name=f"{t_card} had a heart attack and died", value=f"Death....")
-                                            previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** had a heart attack and died")
+                                            previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 had a heart attack and died")
                                             t_health = 0
 
                                     if t_universe == "One Punch Man":
                                         embedVar = discord.Embed(
                                             title=f"Hero Reinforcements! **{t_card}**  Increased Health & Max Health ❤️",
                                             colour=0xe91e63)
-                                        previous_moves.append(f"*{turn_total}:* 🩸 Hero Reinforcements! **{t_card}**  Increased Health & Max Health ❤️")
+                                        previous_moves.append(f"(**{turn_total}**) 🩸 Hero Reinforcements! **{t_card}**  Increased Health & Max Health ❤️")
                                         t_health = round(t_health + 100)
                                         t_max_health = round(t_max_health + 100)
 
                                     elif t_universe == "7ds":
                                         embedVar = discord.Embed(title=f"Power Of Friendship! 🧬 **{tpet_name}** Rested, **{t_card}** Increased Stamina 🌀",
                                                                 colour=0xe91e63)
-                                        previous_moves.append(f"*{turn_total}:* 🩸 Power Of Friendship! 🧬 **{tpet_name}** Rested, **{t_card}** Increased Stamina 🌀")
+                                        previous_moves.append(f"(**{turn_total}**) 🩸 Power Of Friendship! 🧬 **{tpet_name}** Rested, **{t_card}** Increased Stamina 🌀")
                                         t_stamina = t_stamina + 60
                                         t_pet_used = False
 
@@ -7514,7 +7855,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         embedVar = discord.Embed(
                                             title=f"Combo Recognition! **{t_card}** Increased Attack by **{60 + turn_total}** 🔺 ",
                                             colour=0xe91e63)
-                                        previous_moves.append(f"*{turn_total}:* 🩸 Combo Recognition! **{t_card}** Increased Attack by **{60 + turn_total}** 🔺")
+                                        previous_moves.append(f"(**{turn_total}**) 🩸 Combo Recognition! **{t_card}** Increased Attack by **{60 + turn_total}** 🔺")
                                         t_attack = round(t_attack + (60 + turn_total))
                                     else:
                                         turn_total = turn_total + 1
@@ -7529,9 +7870,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         turn = 0
                                 else:
                                     # Ap Levels
-                                    ap1 = list(o_1.values())[0] + ocard_lvl_ap_buff
-                                    ap2 = list(o_2.values())[0] + ocard_lvl_ap_buff
-                                    ap3 = list(o_3.values())[0] + ocard_lvl_ap_buff + demon_slayer_buff
+                                    ap1 = list(o_1.values())[0] + ocard_lvl_ap_buff + o_shock_buff
+                                    ap2 = list(o_2.values())[0] + ocard_lvl_ap_buff + o_shock_buff
+                                    ap3 = list(o_3.values())[0] + ocard_lvl_ap_buff + demon_slayer_buff + o_shock_buff
                                     enh1 = list(o_enhancer.values())[0]
                                     enh_name = list(o_enhancer.values())[2]
                                     pet_enh_name = list(opet_move.values())[2]
@@ -7539,11 +7880,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                     # UNIVERSE CARD
                                     if o_universe == "Souls" and o_used_resolve:
-                                        player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina,
+                                        player_1_card = showcard(o, oarm,o_max_health, o_health, o_max_stamina, o_stamina,
                                                                 o_used_resolve, otitle, o_used_focus, o_attack, o_defense,
                                                                 turn_total, ap2, ap3, ap3, enh1, enh_name, ocard_lvl, t_defense)
                                     else:
-                                        player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina,
+                                        player_1_card = showcard(o, oarm,o_max_health, o_health, o_max_stamina, o_stamina,
                                                                 o_used_resolve, otitle, o_used_focus, o_attack, o_defense,
                                                                 turn_total, ap1, ap2, ap3, enh1, enh_name, ocard_lvl, t_defense)
                                     # await private_channel.send(file=player_1_card)
@@ -7552,32 +7893,32 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         if temp_tarm_shield_active and not tarm_shield_active:
                                             if oarm_shield_active:
                                                 oshield_value = oshield_value + temp_tshield_value
-                                                previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 **ARISE!** *{tarm_name}* is now yours")
                                                 o_swapped = True
                                             elif not oarm_shield_active:
                                                 oarm_shield_active = True
                                                 oshield_value = temp_tshield_value
-                                                previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 **ARISE!** *{tarm_name}* is now yours")
                                                 o_swapped = True
                                         elif temp_tarm_barrier_active and not tarm_barrier_active:
                                             if oarm_barrier_active:
                                                 obarrier_count = obarrier_count + temp_tbarrier_count
-                                                previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 **ARISE!** *{tarm_name}* is now yours")
                                                 o_swapped = True
                                             elif not oarm_barrier_active:
                                                 oarm_barrier_active = True
                                                 obarrier_count = temp_tbarrier_count
-                                                previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 **ARISE!** *{tarm_name}* is now yours")
                                                 o_swapped = True
                                         elif temp_tarm_parry_active and not tarm_parry_active:
                                             if oarm_parry_active:
                                                 oparry_count = oparry_count + temp_tparry_count
-                                                previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 **ARISE!** *{tarm_name}* is now yours")
                                                 o_swapped = True
                                             elif not oarm_parry_active:
                                                 oarm_parry_active = True
                                                 oparry_count = temp_tparry_count
-                                                previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 **ARISE!** *{tarm_name}* is now yours")
                                                 o_swapped = True
 
 
@@ -7600,7 +7941,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         battle_buttons.append(
                                             manage_components.create_button(
                                                 style=ButtonStyle.green,
-                                                label=f"💥 10",
+                                                label=f"{o_basic_emoji} 10",
                                                 custom_id="1"
                                             )
                                         )
@@ -7609,7 +7950,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         battle_buttons.append(
                                             manage_components.create_button(
                                                 style=ButtonStyle.green,
-                                                label=f"☄️ 30",
+                                                label=f"{o_super_emoji} 30",
                                                 custom_id="2"
                                             )
                                         )
@@ -7619,7 +7960,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         battle_buttons.append(
                                             manage_components.create_button(
                                                 style=ButtonStyle.green,
-                                                label=f"🏵️ 80",
+                                                label=f"{o_ultimate_emoji} 80",
                                                 custom_id="3"
                                             )
                                         )
@@ -7719,7 +8060,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         # calculate data based on selected move
                                         if button_ctx.custom_id == "q" or button_ctx.custom_id == "Q":
                                             o_health = 0
-                                            previous_moves.append(f"*{turn_total}:* 💨 **{o_card}** Fled...")
+                                            previous_moves.append(f"(**{turn_total}**) 💨 **{o_card}** Fled...")
                                             await battle_msg.delete(delay=None)
                                             # await asyncio.sleep(2)
                                             battle_msg = await button_ctx.send(f"{ctx.author.mention} has fled the battle...")
@@ -7738,12 +8079,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 await button_ctx.send(embed=embedVar)
                                                 await asyncio.sleep(2)
                                             if o_universe == "Souls" and o_used_resolve:
-                                                dmg = damage_cal(o_universe, o_card, o_2, o_attack, o_defense, t_defense, o_stamina,
+                                                dmg = damage_cal(t_opponent_affinities, special_attack_name, omove2_element, o_universe, o_card, o_2, o_attack, o_defense, t_defense, o_stamina,
                                                                 o_enhancer_used, o_health, t_health, t_stamina, o_max_health,
                                                                 t_attack, o_special_move_description, turn_total,
                                                                 ocard_lvl_ap_buff, o_1)                                                
                                             else:
-                                                dmg = damage_cal(o_universe, o_card, o_1, o_attack, o_defense, t_defense, o_stamina,
+                                                dmg = damage_cal(t_opponent_affinities, basic_attack_name, omove1_element, o_universe, o_card, o_1, o_attack, o_defense, t_defense, o_stamina,
                                                                 o_enhancer_used, o_health, t_health, t_stamina, o_max_health,
                                                                 t_attack, o_special_move_description, turn_total,
                                                                 ocard_lvl_ap_buff, None)
@@ -7761,12 +8102,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 await button_ctx.send(embed=embedVar)
                                                 await asyncio.sleep(2)
                                             if o_universe == "Souls" and o_used_resolve:
-                                                dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_stamina,
+                                                dmg = damage_cal(t_opponent_affinities, ultimate_attack_name, omove3_element, o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_stamina,
                                                                 o_enhancer_used, o_health, t_health, t_stamina, o_max_health,
                                                                 t_attack, o_special_move_description, turn_total,
                                                                 ocard_lvl_ap_buff, o_2)                                                
                                             else:
-                                                dmg = damage_cal(o_universe, o_card, o_2, o_attack, o_defense, t_defense, o_stamina,
+                                                dmg = damage_cal(t_opponent_affinities, special_attack_name, omove2_element, o_universe, o_card, o_2, o_attack, o_defense, t_defense, o_stamina,
                                                                 o_enhancer_used, o_health, t_health, t_stamina, o_max_health,
                                                                 t_attack, o_special_move_description, turn_total,
                                                                 ocard_lvl_ap_buff, None)
@@ -7783,7 +8124,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     text=f"Ultimate moves will consume most of your ST(Stamina) for Incredible Damage! Use Them Wisely!")
                                                 await button_ctx.send(embed=embedVar)
                                                 await asyncio.sleep(2)
-                                            dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_stamina,
+                                            dmg = damage_cal(t_opponent_affinities, ultimate_attack_name, omove3_element, o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_stamina,
                                                             o_enhancer_used, o_health, t_health, t_stamina, o_max_health,
                                                             t_attack, o_special_move_description, turn_total,
                                                             ocard_lvl_ap_buff, None)
@@ -7793,6 +8134,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 # await asyncio.sleep(1)
                                                 battle_msg = await private_channel.send(f"{o_gif}")
                                                 await asyncio.sleep(2)
+                                        
                                         elif button_ctx.custom_id == "4":
                                             if botActive and tutorial_enhancer==False:
                                                 tutorial_enhancer = True
@@ -7807,12 +8149,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 await button_ctx.send(embed=embedVar)
                                                 await asyncio.sleep(2)
                                             o_enhancer_used = True
-                                            dmg = damage_cal(o_universe, o_card, o_enhancer, o_attack, o_defense, t_defense,
+                                            dmg = damage_cal(t_opponent_affinities, basic_attack_name, omove1_element, o_universe, o_card, o_enhancer, o_attack, o_defense, t_defense,
                                                             o_stamina, o_enhancer_used, o_health, t_health, t_stamina,
                                                             o_max_health, t_attack, o_special_move_description, turn_total,
                                                             ocard_lvl_ap_buff, None)
 
                                             o_enhancer_used = False
+                                        
                                         elif button_ctx.custom_id == "5":
                                             # Resolve Check and Calculation
                                             if not o_used_resolve and o_used_focus:
@@ -7854,7 +8197,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                             colour=0xe91e63)
                                                     embedVar.add_field(name=f"Transformation: Plus Ultra",
                                                                     value="You do not lose a turn after you Resolve.")
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: PLUS ULTRA!")
+                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Resolved: PLUS ULTRA!")
                                                     await button_ctx.defer(ignore=True)
                                                     turn_total = turn_total + 1
                                                     turn = 0
@@ -7885,7 +8228,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     embedVar = discord.Embed(title=f"{o_card} begins Total Concentration Breathing",
                                                                             description=f"**{o_card} says**\n{o_resolve_description}",
                                                                             colour=0xe91e63)
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Total Concentration Breathing!")
+                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Resolved: Total Concentration Breathing!")
                                                     await button_ctx.defer(ignore=True)
                                                     turn_total = turn_total + 1
                                                     turn = 1
@@ -7914,11 +8257,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     embedVar = discord.Embed(title=f"{o_card} Heals from Hashirama Cells",
                                                                             description=f"**{o_card} says**\n{o_resolve_description}",
                                                                             colour=0xe91e63)
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Hashirama Cells heal you for **{o_naruto_heal_buff}**")
+                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Resolved: Hashirama Cells heal you for **{o_naruto_heal_buff}**")
                                                     await button_ctx.defer(ignore=True)
                                                     turn_total = turn_total + 1
                                                     turn = 1
-
 
                                                 elif o_universe == "Attack On Titan":
                                                     # fortitude or luck is based on health
@@ -7946,7 +8288,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                             colour=0xe91e63)
                                                     embedVar.add_field(name=f"Transformation Complete",
                                                                     value=f"Health increased by **{health_boost}**!")
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Titan Mode")
+                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Resolved: Titan Mode")
                                                     await button_ctx.defer(ignore=True)
 
                                                     turn_total = turn_total + 1
@@ -7978,10 +8320,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                             colour=0xe91e63)
                                                     embedVar.add_field(name=f"Transformation: Bankai",
                                                                     value="Gain double Attack on Resolve.")
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Bankai!")
+                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Resolved: Bankai!")
                                                     await button_ctx.defer(ignore=True)
                                                     turn_total = turn_total + 1
                                                     turn = 1
+                                                
                                                 elif o_universe == "God Of War":  # God Of War Trait
                                                     # fortitude or luck is based on health
                                                     fortitude = 0.0
@@ -8003,12 +8346,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     o_pet_used = False
                                                     
                                                     if o_gow_resolve:
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Ascension!")
+                                                        previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Resolved: Ascension!")
                                                     elif not o_gow_resolve:
                                                         o_used_resolve = False
                                                         o_gow_resolve = True
                                                         o_defense = 125
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Crushed Blood Orb: Health Refill")
+                                                        previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Crushed Blood Orb: Health Refill")
                                                     
                                                     embedVar = discord.Embed(title=f"{o_card} ASCENDED :zap:",
                                                                             description=f"**{o_card} says**\n{o_resolve_description}",
@@ -8019,6 +8362,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     await button_ctx.defer(ignore=True)
                                                     turn_total = turn_total + 1
                                                     turn = 1
+                                                
                                                 elif o_universe == "Fate":  # Fate Trait
                                                     # fortitude or luck is based on health
                                                     fortitude = 0.0
@@ -8037,7 +8381,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     o_attack = round(o_attack + o_resolve_attack)
                                                     o_defense = round(o_defense - o_resolve_defense)
 
-                                                    dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense,
+                                                    dmg = damage_cal(t_opponent_affinities, ultimate_attack_name, omove3_element, o_universe, o_card, o_3, o_attack, o_defense, t_defense,
                                                                     o_stamina, o_enhancer_used, o_health, t_health, t_stamina,
                                                                     o_max_health, t_attack, o_special_move_description,
                                                                     turn_total, ocard_lvl_ap_buff, None)
@@ -8048,13 +8392,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         colour=0xe91e63)
                                                     embedVar.add_field(name=f"Transformation: Command Seal",
                                                                     value="On Resolve, Strike with Ultimate, then Focus.")
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Command Seal!")
+                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Resolved: Command Seal!")
                                                     await button_ctx.defer(ignore=True)
                                                     # o_stamina = 0
                                                     o_used_resolve = True
                                                     o_pet_used = False
                                                     turn_total = turn_total + 1
                                                     turn = 1
+                                                
                                                 elif o_universe == "Kanto Region" or o_universe == "Johto Region" or o_universe == "Hoenn Region" or o_universe == "Sinnoh Region" or o_universe == "Kalos Region" or o_universe == "Unova Region" or o_universe == "Alola Region" or o_universe == "Galar Region":  # Pokemon Resolves
                                                     # fortitude or luck is based on health
                                                     fortitude = 0.0
@@ -8082,13 +8427,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     if turn_total >= 50:
                                                         o_max_health = o_max_health + 1000
                                                         o_health = o_health + 1000
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Gigantomax Evolution!!! Gained **1000** HP!!!")
+                                                        previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Resolved: Gigantomax Evolution!!! Gained **1000** HP!!!")
                                                     elif turn_total >=30:
                                                         o_max_health = o_max_health + 500
                                                         o_health = o_health + 500
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Mega Evolution!! Gained **300** HP!")
+                                                        previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Resolved: Mega Evolution!! Gained **300** HP!")
                                                     else:
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Evolution!")
+                                                        previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Resolved: Evolution!")
                                                     await button_ctx.defer(ignore=True)
                                                     turn_total = turn_total + 1
                                                     turn = 1
@@ -8118,10 +8463,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                                 colour=0xe91e63)
                                                         embedVar.add_field(name=f"Nexus Destroyed",
                                                                         value=f"**{o_card}** dealt **{(60 * (o_focus_count + t_focus_count))}** damage.")
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Pentakill! Dealing {(60 * (o_focus_count + t_focus_count))} damage.")
+                                                        previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Resolved: Pentakill! Dealing {(60 * (o_focus_count + t_focus_count))} damage.")
                                                         await button_ctx.defer(ignore=True)
                                                     elif o_universe == "Souls":
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Phase 2: Enhanced Moveset!")
+                                                        previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Phase 2: Enhanced Moveset!")
                                                         await button_ctx.defer(ignore=True)
                                                     else:
                                                         embedVar = discord.Embed(title=f"{o_card} STRENGTHENED RESOLVE :zap:",
@@ -8129,7 +8474,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                                 colour=0xe91e63)
                                                         embedVar.add_field(name=f"Transformation",
                                                                         value="All stats & stamina greatly increased")
-                                                        previous_moves.append(f"*{turn_total}:* ⚡ **{o_card}** Resolved!")
+                                                        previous_moves.append(f"(**{turn_total}**) ⚡ **{o_card}** Resolved!")
                                                         await button_ctx.defer(ignore=True)
                                                     turn_total = turn_total + 1
                                                     turn = 1
@@ -8138,9 +8483,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 embedVar = discord.Embed(title=emessage,
                                                                         description=f"Entering `Resolved State` sacrifices a turn to power up even greater and regain `Stamina`!",
                                                                         colour=0xe91e63)
-                                                previous_moves.append(f"*{turn_total}:* **{o_card}** cannot resolve")
+                                                previous_moves.append(f"(**{turn_total}**) **{o_card}** cannot resolve")
                                                 await button_ctx.defer(ignore=True)
                                                 turn = 0
+                                        
                                         elif button_ctx.custom_id == "6" and mode != "RAID":
                                             # Resolve Check and Calculation
                                             if o_used_resolve and o_used_focus and not o_pet_used:
@@ -8156,7 +8502,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     await button_ctx.send(embed=embedVar)
                                                     await asyncio.sleep(2)
                                                 o_enhancer_used = True
-                                                dmg = damage_cal(o_universe, o_card, opet_move, o_attack, o_defense, t_defense,
+                                                dmg = damage_cal(t_opponent_affinities, basic_attack_name, omove1_element, o_universe, o_card, opet_move, o_attack, o_defense, t_defense,
                                                                 o_stamina, o_enhancer_used, o_health, t_health, t_stamina,
                                                                 o_max_health, t_attack, o_special_move_description, turn_total,
                                                                 ocard_lvl_ap_buff, None)
@@ -8251,7 +8597,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     o_stamina = o_stamina - int(dmg['STAMINA_USED'])
 
                                                     if o_universe == "Persona":
-                                                        petdmg = damage_cal(o_universe, o_card, o_1, o_attack, o_defense,
+                                                        petdmg = damage_cal(t_opponent_affinities, basic_attack_name, omove1_element, o_universe, o_card, o_1, o_attack, o_defense,
                                                                             t_defense, o_stamina, o_enhancer_used, o_health,
                                                                             t_health, t_stamina, o_max_health, t_attack,
                                                                             o_special_move_description, turn_total,
@@ -8269,7 +8615,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             # battle_msg = await private_channel.send(embed=embedVar, file=summon_file)
                                                             # await asyncio.sleep(2)
                                                         #embedVar.set_image(url="attachment://pet.png")
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **Persona**! : **{opet_name}** was summoned from **{o_card}'s** soul dealing **{petdmg['DMG']}** damage!\n**{t_card}** summon disabled!")
+                                                        previous_moves.append(f"(**{turn_total}**) 🩸 **Persona**! : **{opet_name}** was summoned from **{o_card}'s** soul dealing **{petdmg['DMG']}** damage!\n**{t_card}** summon disabled!")
                                                         t_pet_used = True
                                                         if not operformance:
                                                             await asyncio.sleep(2)
@@ -8288,7 +8634,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             summon_file = showsummon(opet_image, opet_name, dmg['MESSAGE'], opet_lvl, opet_bond)
                                                             
                                                         embedVar.set_image(url="attachment://pet.png")
-                                                        previous_moves.append(f"*{turn_total}:* **{o_card}** Summoned 🧬 **{opet_name}**: {dmg['MESSAGE']}")
+                                                        previous_moves.append(f"(**{turn_total}**) **{o_card}** Summoned 🧬 **{opet_name}**: {dmg['MESSAGE']}")
                                                         
                                                         if not operformance:
                                                             await asyncio.sleep(2)
@@ -8299,18 +8645,19 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         
                                                     turn = 0
                                                 else:
-                                                    previous_moves.append(f"*{turn_total}:* 🧬 **{opet_name}** needs a turn to rest...")
+                                                    previous_moves.append(f"(**{turn_total}**) 🧬 **{opet_name}** needs a turn to rest...")
                                                     await button_ctx.defer(ignore=True)
                                                     turn = 0
                                             else:
-                                                previous_moves.append(f"*{turn_total}:* 🧬 **{opet_name}** needs a turn to rest...")
+                                                previous_moves.append(f"(**{turn_total}**) 🧬 **{opet_name}** needs a turn to rest...")
                                                 await button_ctx.defer(ignore=True)
+                                        
                                         elif button_ctx.custom_id == "0": 
                                             if o_universe == "Persona":
                                                 o_stamina = o_stamina
                                                 o_block_used = True
                                                 o_defense = round(o_defense * 2)
-                                                previous_moves.append(f"*{turn_total}:* **{o_pet}:** Blocked 🛡️")
+                                                previous_moves.append(f"(**{turn_total}**) **{o_pet}:** Blocked 🛡️")
                                                 turn_total = turn_total + 1
                                                 turn = 1
                                                 if botActive and tutorial_block==False:
@@ -8330,23 +8677,86 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     await button_ctx.defer(ignore=True)
                                             elif o_stamina >= 20:
                                                 if o_universe == "Attack On Titan":
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 Rally! **{o_card}** Increased Max Health ❤️")
+                                                    previous_moves.append(f"(**{turn_total}**) **Rally** 🩸 ! **{o_card}** Increased Max Health ❤️")
                                                     o_max_health = round(o_max_health + 100)
                                                     o_health = o_health + 100
 
                                                 if o_universe == "Bleach":
-                                                    dmg = damage_cal(o_universe, o_card, o_1, o_attack, o_defense, t_defense, o_stamina,
+                                                    dmg = damage_cal(t_opponent_affinities, basic_attack_name, omove1_element, o_universe, o_card, o_1, o_attack, o_defense, t_defense, o_stamina,
                                                                     o_enhancer_used, o_health, t_health, t_stamina, o_max_health,
                                                                     t_attack, o_special_move_description, turn_total,
                                                                     ocard_lvl_ap_buff, None)
-                                                    previous_moves.append(f"*{turn_total}:* **{o_card}** Exerted their 🩸 Spiritual Pressure dealing {dmg['DMG']} dmg")
-                                                    t_health = t_health - dmg['DMG']
+                                                    
+                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}** Exerted their 🩸 Spiritual Pressure - {dmg['MESSAGE']}")
+                                                    if dmg['REPEL']:
+                                                        o_health = o_health - dmg['DMG']
+                                                    elif dmg['ABSORB']:
+                                                        t_health = t_health + dmg['DMG']
+                                                    elif dmg['ELEMENT'] == water_element:
+                                                        o_water_buff = o_water_buff + 25
+                                                        t_health = t_health - (dmg['DMG'] + o_water_buff)
+                                                    else:
+                                                        t_health = t_health - dmg['DMG']
+
+
+                                                    if dmg['ELEMENT'] == time_element:
+                                                        o_stamina = 0
+
+                                                    if dmg['ELEMENT'] == earth_element:
+                                                        o_defense = o_defense + (dmg['DMG'] * .20)
+
+                                                    if dmg['ELEMENT'] == death_element:
+                                                        t_max_health = t_max_health - (dmg['DMG'] * .05)
+
+                                                    if dmg['ELEMENT'] == light_element:
+                                                        o_stamina = o_stamina + (dmg['STAMINA_USED'] / 2)
+
+                                                    if dmg['ELEMENT'] == dark_element:
+                                                        o_stamina = o_stamina + 5
+                                                        t_stamina = t_stamina - 5
+
+                                                    if dmg['ELEMENT'] == life_element:
+                                                        o_health = o_health + (dmg['DMG'] * .15)
+
+                                                    if dmg['ELEMENT'] == recoil_element:
+                                                        o_health = o_health - (dmg['DMG'] * .25)
+
+
+                                                    if dmg['ELEMENT'] == phsycic_element:
+                                                        t_defense = t_defense - (dmg['DMG'] * .08)
+                                                        t_attack = t_attack - (dmg['DMG'] * .08)
+
+                                                    if dmg['ELEMENT'] == fire_element:
+                                                        o_burn_dmg = round(dmg['DMG'] * .30)
+
+
+                                                    if dmg['ELEMENT'] == water_element:
+                                                        o_water_buff = o_water_buff + 25
+
+                                                    if dmg['ELEMENT'] == electric_element:
+                                                        o_shock_buff = o_shock_buff +  (dmg['DMG'] * .05)
+
+                                                    if dmg['ELEMENT'] == poison_element:
+                                                        o_poison_dmg = o_poison_dmg + 8
+
+                                                    if dmg['ELEMENT'] == ice_element:
+                                                        o_ice_counter = o_ice_counter + 1
+                                                        if o_ice_counter == 3:
+                                                            o_freeze_enh = True
+                                                            o_ice_counter = 0
+
+                                                    if dmg['ELEMENT'] == bleed_element:
+                                                        o_bleed_counter = o_bleed_counter + 1
+                                                        if o_bleed_counter == 10:
+                                                            o_bleed_hit = True
+                                                            o_bleed_counter = 0
+
 
 
                                                 o_stamina = o_stamina - 20
                                                 o_block_used = True
                                                 o_defense = round(o_defense * 2)
-                                                previous_moves.append(f"*{turn_total}:* **{o_card}:** Blocked 🛡️")
+                                                previous_moves.append(f"(**{turn_total}**) **{o_card}:** Blocked 🛡️")
                                                 turn_total = turn_total + 1
                                                 turn = 1
                                                 if botActive and tutorial_block==False:
@@ -8365,7 +8775,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 else:
                                                     await button_ctx.defer(ignore=True)
                                             else:
-                                                previous_moves.append(f"*{turn_total}:* **{o_card}** is too tired to block.")
+                                                previous_moves.append(f"(**{turn_total}**) **{o_card}** is too tired to block.")
                                                 await button_ctx.defer(ignore=True)
                                                 turn = 0
 
@@ -8461,7 +8871,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_stamina = o_stamina - int(dmg['STAMINA_USED'])
 
                                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
-                                                    previous_moves.append(f"*{turn_total}:* **{o_card}**: 🦠 {dmg['MESSAGE']}")
+                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}**: 🦠 {dmg['MESSAGE']}")
                                                     # if botActive:
                                                         # await asyncio.sleep(2)
                                                     turn_total = turn_total + 1
@@ -8475,8 +8885,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     if oarm_barrier_active:
                                                         oarm_barrier_active=False
                                                         embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                        previous_moves.append(f"*{turn_total}:* **{o_card}'s** **Barrier** Disabled!")
-                                                    previous_moves.append(f"*{turn_total}:* **{o_card}**: {dmg['MESSAGE']}")
+                                                        previous_moves.append(f"(**{turn_total}**) **{o_card}'s** **Barrier** Disabled!")
+                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}**: {dmg['MESSAGE']}")
                                                     turn_total = turn_total + 1
                                                     turn = 1
                                                     
@@ -8490,61 +8900,62 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if oarm_barrier_active:
                                                             oarm_barrier_active=False
                                                             embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                            previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
+                                                            previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
 
-                                                        previous_moves.append(f"*{turn_total}:* 🩸**{t_card}**: Substitution Jutsu")
+                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸: Substitution Jutsu")
                                                         if not t_used_resolve:
-                                                            previous_moves.append(f"*{turn_total}:* 🩸**{t_stored_damage}** Hasirama Cells stored. 🩸**{t_naruto_heal_buff}** total stored.")
+                                                            previous_moves.append(f"(**{turn_total}**) 🩸**{t_stored_damage}** Hasirama Cells stored. 🩸**{t_naruto_heal_buff}** total stored.")
 
                                                        # await button_ctx.defer(ignore=True)
-                                                    elif tarm_shield_active:
+                                                    elif tarm_shield_active and dmg['ELEMENT'] != dark_element:
                                                         if tshield_value > 0:
                                                             tshield_value = tshield_value -dmg['DMG']
                                                             t_health = t_health 
                                                             if tshield_value <=0:
                                                                 embedVar = discord.Embed(title=f"{t_card}'s' **Shield** Shattered!", description=f"{o_card} breaks the **Shield**!", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* 🌐**{t_card}**: Shield Shattered!")
+                                                                previous_moves.append(f"(**{turn_total}**) 🌐**{t_card}**: Shield Shattered!")
                                                                 if oarm_barrier_active:
                                                                     oarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
                                                                 
                                                          #       await button_ctx.defer(ignore=True)
                                                                 tarm_shield_active = False
                                                             else:
                                                                 embedVar = discord.Embed(title=f"{t_card} Activates **Shield** 🌐", description=f"**{o_card}** strikes the Shield 🌐\n**{tshield_value} Shield** Left!", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* **{o_card}** strikes **{t_card}**'s Shield 🌐\n**{tshield_value} Shield** Left!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{o_card}** strikes **{t_card}**'s Shield 🌐\n**{tshield_value} Shield** Left!")
                                                                 if oarm_barrier_active:
                                                                     oarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
                                                                 
                                                          #       await button_ctx.defer(ignore=True)
 
-                                                    elif tarm_barrier_active:
+                                                    elif tarm_barrier_active and dmg['ELEMENT'] != phsycic_element:
                                                         if tbarrier_count >1:
                                                             t_health = t_health 
                                                             embedVar = discord.Embed(title=f"{t_card} Activates **Barrier** 💠", description=f"{o_card}'s attack **Nullified**!\n **{tbarrier_count - 1} Barriers** remain!", colour=0xe91e63)
-                                                            previous_moves.append(f"*{turn_total}:* **{t_card}** Activates Barrier 💠 {o_card}'s attack **Nullified**!\n **{tbarrier_count - 1} Barriers** remain!")
+                                                            previous_moves.append(f"(**{turn_total}**) **{t_card}** Activates Barrier 💠 {o_card}'s attack **Nullified**!\n **{tbarrier_count - 1} Barriers** remain!")
                                                             if oarm_barrier_active:
                                                                 oarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
                                                             
                                                       #      await button_ctx.defer(ignore=True)
                                                             tbarrier_count = tbarrier_count - 1
                                                         elif tbarrier_count==1:
                                                             embedVar = discord.Embed(title=f"{t_card}'s **Barrier** Broken!", description=f"{o_card} destroys the **Barrier**", colour=0xe91e63)
-                                                            previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Broken!")
+                                                            previous_moves.append(f"(**{turn_total}**) **{t_card}**'s Barrier Broken!")
                                                             tbarrier_count = tbarrier_count - 1
                                                             if oarm_barrier_active:
                                                                 oarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
                                                             
                                                     #        await button_ctx.defer(ignore=True)
                                                             tarm_barrier_active = False
-                                                    elif tarm_parry_active:
+                                                    
+                                                    elif tarm_parry_active and dmg['ELEMENT'] != earth_element:
                                                         if tparry_count > 1:
                                                             t_health = t_health
                                                             tparry_damage = round(dmg['DMG'])
@@ -8552,11 +8963,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = round(o_health - (tparry_damage * .25))
                                                             tparry_count = tparry_count - 1
                                                             embedVar = discord.Embed(title=f"{t_card} Activates **Parry** 🔄", description=f"{o_card} takes {round(tparry_damage * .25)}! DMG\n **{tparry_count} Parries** to go!!", colour=0xe91e63)
-                                                            previous_moves.append(f"*{turn_total}:* **{t_card}** Activates Parry 🔄  {o_card} takes {round(tparry_damage * .25)}! DMG\n **{tparry_count} Parries** to go!!")
+                                                            previous_moves.append(f"(**{turn_total}**) **{t_card}** Activates Parry 🔄  {o_card} takes {round(tparry_damage * .25)}! DMG\n **{tparry_count} Parries** to go!!")
                                                             if oarm_barrier_active:
                                                                 oarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
                                                             
                                                     #        await button_ctx.defer(ignore=True)
                                                             
@@ -8566,31 +8977,96 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = round(t_health - (tparry_damage * .75))
                                                             o_health = round(o_health - (tparry_damage * .25))
                                                             embedVar = discord.Embed(title=f"{t_card} **Parry** Penetrated!!", description=f"{o_card} takes {round(tparry_damage * .25)}! DMG and breaks the **Parry**", colour=0xe91e63)
-                                                            previous_moves.append(f"*{turn_total}:* **{t_card}** Parry Penetrated! **{o_card}** takes **{round(tparry_damage * .25)}**! DMG and breaks the **Parry**")
+                                                            previous_moves.append(f"(**{turn_total}**) **{t_card}** Parry Penetrated! **{o_card}** takes **{round(tparry_damage * .25)}**! DMG and breaks the **Parry**")
                                                             tparry_count = tparry_count - 1
                                                             if oarm_barrier_active:
                                                                 oarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
                                                             
                                                    #         await button_ctx.defer(ignore=True)
                                                             tarm_parry_active = False
+                                                    
                                                     else:
-                                                        t_health = t_health - dmg['DMG']
+                                                        if dmg['REPEL']:
+                                                            o_health = o_health - dmg['DMG']
+                                                        elif dmg['ABSORB']:
+                                                            t_health = t_health + dmg['DMG']
+                                                        elif dmg['ELEMENT'] == water_element:
+                                                            o_water_buff = o_water_buff + 25
+                                                            t_health = t_health - (dmg['DMG'] + o_water_buff)
+                                                        else:
+                                                            t_health = t_health - dmg['DMG']
+
+                                                        if dmg['ELEMENT'] == earth_element:
+                                                            o_defense = o_defense + (dmg['DMG'] * .20)
+
+                                                        if dmg['ELEMENT'] == recoil_element:
+                                                            o_health = o_health - (dmg['DMG'] * .25)
+
+                                                        if dmg['ELEMENT'] == time_element:
+                                                            o_stamina = 0
+
+
+                                                        if dmg['ELEMENT'] == death_element:
+                                                            t_max_health = t_max_health - (dmg['DMG'] * .05)
+
+                                                        if dmg['ELEMENT'] == light_element:
+                                                            o_stamina = o_stamina + (dmg['STAMINA_USED'] / 2)
+
+                                                        if dmg['ELEMENT'] == dark_element:
+                                                            o_stamina = o_stamina + 5
+                                                            t_stamina = t_stamina - 5
+
+                                                        if dmg['ELEMENT'] == life_element:
+                                                            o_health = o_health + (dmg['DMG'] * .15)
+
+                                                        if dmg['ELEMENT'] == phsycic_element:
+                                                            t_defense = t_defense - (dmg['DMG'] * .08)
+                                                            t_attack = t_attack - (dmg['DMG'] * .08)
+
+                                                        if dmg['ELEMENT'] == fire_element:
+                                                            o_burn_dmg = round(dmg['DMG'] * .30)
+
+                                                        if dmg['ELEMENT'] == water_element:
+                                                            o_water_buff = o_water_buff + 25
+
+                                                        if dmg['ELEMENT'] == electric_element:
+                                                            o_shock_buff = o_shock_buff +  (dmg['DMG'] * .05)
+
+                                                        if dmg['ELEMENT'] == poison_element:
+                                                            o_poison_dmg = o_poison_dmg + 8
+                                                        
+                                                        if dmg['ELEMENT'] == ice_element:
+                                                            o_ice_counter = o_ice_counter + 1
+                                                            if o_ice_counter == 3:
+                                                                o_freeze_enh = True
+                                                                o_ice_counter = 0
+
+                                                        if dmg['ELEMENT'] == bleed_element:
+                                                            o_bleed_counter = o_bleed_counter + 1
+                                                            if o_bleed_counter == 10:
+                                                                o_bleed_hit = True
+                                                                o_bleed_counter = 0
+
+
+
+
+                                                        # t_health = t_health - dmg['DMG']
                                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
-                                                        previous_moves.append(f"*{turn_total}:* **{o_card}**: {dmg['MESSAGE']}")
+                                                        previous_moves.append(f"(**{turn_total}**) **{o_card}**: {dmg['MESSAGE']}")
                                                         if oarm_siphon_active:
                                                             siphon_damage = (dmg['DMG'] * .10) + osiphon_value
                                                             o_health = round(o_health + siphon_damage)
                                                             if o_health >= o_max_health:
                                                                 o_health = o_max_health
-                                                                previous_moves.append(f"*{turn_total}:* **{o_card}**: 💉 Siphoned **Full Health!**")
+                                                                previous_moves.append(f"(**{turn_total}**) **{o_card}**: 💉 Siphoned **Full Health!**")
                                                             else:
-                                                                previous_moves.append(f"*{turn_total}:* **{o_card}**: 💉 Siphoned **{round(siphon_damage)}** Health!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{o_card}**: 💉 Siphoned **{round(siphon_damage)}** Health!")
                                                         if oarm_barrier_active:
                                                             oarm_barrier_active=False
                                                             embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                            previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
+                                                            previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
                                                 #        await button_ctx.defer(ignore=True)
                                                     if t_health <= 0:
                                                         if t_final_stand==True:
@@ -8600,8 +9076,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if oarm_barrier_active:
                                                                     oarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
-                                                                previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Transformation: Last Stand!!!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Transformation: Last Stand!!!")
                                                 #             await button_ctx.defer(ignore=True)
                                                                 t_health = int(.75 * (t_attack + t_defense))
                                                                 
@@ -8622,7 +9098,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         turn = 1
                                                     await button_ctx.defer(ignore=True)    
                                             else:
-                                                previous_moves.append(f"*{turn_total}:* **{o_card}**: Not enough Stamina to use this ability.")
+                                                previous_moves.append(f"(**{turn_total}**) **{o_card}**: Not enough Stamina to use this ability.")
                                                 # embedVar = discord.Embed(title=emessage,
                                                 #                         description=f"Use abilities to Increase `STAM` or enter `FOCUS STATE`!",
                                                 #                         colour=0xe91e63)
@@ -8639,7 +9115,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         else:
                                             await ctx.author.send(f"{ctx.author.mention} your Tutorial Battle was closed. You must interact before the timeout!")
                                             await ctx.send(f"{ctx.author.mention} your Tutorial Battle was closed. You must interact before the timeout!")
-                                        previous_moves.append(f"*{turn_total}:* 💨 **{o_card}** Fled...")
+                                        previous_moves.append(f"(**{turn_total}**) 💨 **{o_card}** Fled...")
                                         o_health = 0
                                     except Exception as ex:
                                         trace = []
@@ -8663,6 +9139,25 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 
                             # Player 2 Turn Start
                             elif turn == 1:
+                                if o_bleed_hit:
+                                    o_bleed_hit = False
+                                    bleed_dmg = 10 * turn_total
+                                    t_health = t_health - bleed_dmg
+                                    previous_moves.append(f"(**{turn_total}**) 🩸 **{t_card}** shredded for **{bleed_dmg}** bleed dmg...")
+                                if o_burn_dmg:
+                                    t_health = t_health - o_burn_dmg
+                                    previous_moves.append(f"(**{turn_total}**) 🔥 **{t_card}** burned for **{o_burn_dmg}** dmg...")
+                                if o_freeze_enh:
+                                    previous_moves.append(f"(**{turn_total}**) ❄️ **{t_card}** has been frozen for a turn...")
+                                    turn_total = turn_total + 1
+                                    turn = 0
+                                if o_poison_dmg:
+                                    t_health = t_health - o_poison_dmg
+                                    previous_moves.append(f"(**{turn_total}**) 🧪 **{t_card}** poisoned for **{o_poison_dmg}** dmg...")
+
+                                t_burn_dmg = 0
+                                t_freeze_enh = False
+
                                 if t_title_passive_type:
                                     if t_title_passive_type == "HLT":
                                         t_health = round(t_health + ((t_title_passive_value / 100) * t_health))
@@ -8728,12 +9223,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     embedVar = discord.Embed(title=f"{o_card} Scheduled Death 📓",
                                                             description=f"**{o_card} says**\nYou will die in 50  turns...",
                                                             colour=0xe91e63)
-                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Scheduled Death 📓")
+                                    previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Scheduled Death 📓")
                                 if t_universe == 'Death Note' and turn_total == 0:
                                     embedVar = discord.Embed(title=f"{o_card} Scheduled Death 📓",
                                                             description=f"**{t_card} says**\nYou will die in 50  turns...",
                                                             colour=0xe91e63)
-                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Scheduled Death 📓")
+                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Scheduled Death 📓")
                                 
                                 if t_block_used == True:
                                     t_block_used = False
@@ -8750,7 +9245,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     t_health = t_max_health
                                 if turn_total == 0:
                                     if botActive:
-                                        embedVar = discord.Embed(title=f"Welcome to **Crown Unlimited**!",
+                                        embedVar = discord.Embed(title=f"Welcome to **Anime VS+**!",
                                                                 description=f"Follow the instructions to learn how to play the Game!",
                                                                 colour=0xe91e63)
                                         embedVar.add_field(name="**How do I play?**",
@@ -8791,7 +9286,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             t_attack = t_attack * 2
                                             embedVar = discord.Embed(title=f"{t_card}'s Devilization",
                                                                     description=f"**{t_card}** Doubles Stats", colour=0xe91e63)
-                                            previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}**'s Devilization")
+                                            previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸's Devilization")
                                 elif t_health <= (t_max_health * .50):
                                     embed_color_t = 0xe67e22
                                     if t_chainsaw == True:
@@ -8802,7 +9297,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             t_attack = t_attack * 2
                                             embedVar = discord.Embed(title=f"{t_card}'s Devilization",
                                                                     description=f"**{t_card}** Doubles Stats", colour=0xe91e63)
-                                            previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}**'s Devilization")
+                                            previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸's Devilization")
                                 elif t_health <= (t_max_health * .75):
                                     embed_color_t = 0xf1c40f
                                 else:
@@ -8871,7 +9366,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     embedVar = discord.Embed(title=f"{t_card} FOCUSED", description=f"**{t_card} says**\n{t_focus_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"{t_card} focused and {healmessage}", value="All stats & stamina increased")
                                     
-                                    previous_moves.append(f"*{turn_total}:* 🌀 **{t_card}** focused and {healmessage}")
+                                    previous_moves.append(f"(**{turn_total}**) 🌀 **{t_card}** focused and {healmessage}")
                                     if not t_used_resolve and t_used_focus and t_universe == "Digimon":  # Digimon Universal Trait
                                         # fortitude or luck is based on health
                                         fortitude = 0.0
@@ -8896,30 +9391,30 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         if turn_total <=5:
                                             t_attack = round(t_attack * 2)
                                             t_defense = round(t_defense * 2 )
-                                            previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Transformation: Mega Digivolution!!!")
+                                            previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Transformation: Mega Digivolution!!!")
                                         else:
-                                            previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Transformation: Digivolve")
+                                            previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Transformation: Digivolve")
                                     elif t_universe == "League Of Legends":
                                         embedVar = discord.Embed(title=f"Turret Shot hits {o_card} for **{60 + turn_total}** Damage 💥",
                                                                 colour=0xe91e63)
-                                        previous_moves.append(f"*{turn_total}:* 🩸 Turret Shot hits **{o_card}** for **{60 + turn_total}** Damage 💥")
+                                        previous_moves.append(f"(**{turn_total}**) 🩸 Turret Shot hits **{o_card}** for **{60 + turn_total}** Damage 💥")
                                         o_health = round(o_health - (60 + turn_total))
 
                                     elif t_universe == "Dragon Ball Z":
                                         t_health = t_health + o_stamina + turn_total
-                                        previous_moves.append(f"*{turn_total}:* 🩸 Saiyan Spirit... You heal for **{o_stamina + turn_total}** ❤️")
+                                        previous_moves.append(f"(**{turn_total}**) 🩸 Saiyan Spirit... You heal for **{o_stamina + turn_total}** ❤️")
 
 
                                     elif t_universe == "Solo Leveling":
                                         embedVar = discord.Embed(
                                             title=f"Ruler's Authority... {o_card} loses **{30 + turn_total}** 🛡️ 🔻",
                                             colour=0xe91e63)
-                                        previous_moves.append(f"*{turn_total}:* 🩸 Ruler's Authority... {o_card} loses **{30 + turn_total}** 🛡️ 🔻")
+                                        previous_moves.append(f"(**{turn_total}**) 🩸 Ruler's Authority... {o_card} loses **{30 + turn_total}** 🛡️ 🔻")
                                         o_defense = round(o_defense - (30 + turn_total))
                                     elif t_universe == "Black Clover":
                                         embedVar = discord.Embed(title=f"Mana Zone! **{t_card}** Increased Stamina 🌀",
                                                                 colour=0xe91e63)
-                                        previous_moves.append(f"*{turn_total}:* 🩸 Mana Zone! **{t_card}** Increased AP & Stamina 🌀")
+                                        previous_moves.append(f"(**{turn_total}**) 🩸 Mana Zone! **{t_card}** Increased AP & Stamina 🌀")
                                         t_stamina = 100
                                         tcard_lvl_ap_buff = tcard_lvl_ap_buff + 30
                                     elif t_universe == "Death Note":
@@ -8928,25 +9423,25 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     description=f"**{t_card} says**\n**Delete**",
                                                                     colour=0xe91e63)
                                             embedVar.add_field(name=f"{o_card} had a heart attack and died", value=f"Death....")
-                                            previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** had a heart attack and died")
+                                            previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 had a heart attack and died")
                                             o_health = 0
                                     if o_universe == "One Punch Man":
                                         embedVar = discord.Embed(title=f"Hero Reinforcements! **{o_card}** Increased Health!  ❤️",
                                                                 colour=0xe91e63)
-                                        previous_moves.append(f"*{turn_total}:* Hero Reinforcements! **{o_card}** Increased Health!  ❤️")
+                                        previous_moves.append(f"(**{turn_total}**) Hero Reinforcements! **{o_card}** Increased Health!  ❤️")
                                         o_health = round(o_health + 100)
                                         o_max_health = round(o_max_health + 100)
                                     elif o_universe == "7ds":
                                         embedVar = discord.Embed(title=f"Power Of Friendship! 🧬 **{opet_name}** Rested, **{o_card}** Increased Stamina 🌀",
                                                                 colour=0xe91e63)
-                                        previous_moves.append(f"*{turn_total}:* 🩸 Power Of Friendship! 🧬 **{opet_name}** Rested, **{o_card}** Increased Stamina 🌀")
+                                        previous_moves.append(f"(**{turn_total}**) 🩸 Power Of Friendship! 🧬 **{opet_name}** Rested, **{o_card}** Increased Stamina 🌀")
                                         o_stamina = o_stamina + 60
                                         o_pet_used = False
                                     elif o_universe == "Souls":
                                         embedVar = discord.Embed(
                                             title=f"Combo Recognition! **{o_card}** Increased Attack by **{60 + turn_total}** 🔺 ",
                                             colour=0xe91e63)
-                                        previous_moves.append(f"*{turn_total}:* 🩸 Combo Recognition! **{o_card}** Increased Attack by **{60 + turn_total}** 🔺")
+                                        previous_moves.append(f"(**{turn_total}**) 🩸 Combo Recognition! **{o_card}** Increased Attack by **{60 + turn_total}** 🔺")
                                         o_attack = round(o_attack + (60 + turn_total))
                                     else:
                                         turn_total = turn_total + 1
@@ -8963,20 +9458,20 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     # Check If Playing Bot
                                     if botActive != True and raidActive == False:
                                         # PlayUser
-                                        tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff
-                                        tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff
-                                        tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff
+                                        tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff + t_shock_buff
+                                        tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff + t_shock_buff
+                                        tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff + t_shock_buff
                                         tenh1 = list(t_enhancer.values())[0]
                                         tenh_name = list(t_enhancer.values())[2]
                                         tpet_enh_name = list(tpet_move.values())[2]
                                         tpet_msg_on_resolve = ""
                                         # UNIVERSE CARD
                                         if t_universe == "Souls" and t_used_resolve:
-                                            player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina,
+                                            player_2_card = showcard(t, tarm,t_max_health, t_health, t_max_stamina, t_stamina,
                                                                 t_used_resolve, ttitle, t_used_focus, t_attack, t_defense,
                                                                 turn_total, tap2, tap3, tap3, tenh1, tenh_name, tcard_lvl, o_defense)
                                         else:
-                                            player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina,
+                                            player_2_card = showcard(t, tarm,t_max_health, t_health, t_max_stamina, t_stamina,
                                                                     t_used_resolve, ttitle, t_used_focus, t_attack, t_defense,
                                                                     turn_total, tap1, tap2, tap3, tenh1, tenh_name, tcard_lvl, o_defense)
                                                                 
@@ -8986,32 +9481,32 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             if temp_oarm_shield_active and not oarm_shield_active:
                                                 if tarm_shield_active:
                                                     tshield_value = tshield_value + temp_oshield_value
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 **ARISE!** *{oarm_name}* is now yours")
                                                     t_swapped = True
                                                 elif not tarm_shield_active:
                                                     tarm_shield_active = True
                                                     tshield_value = temp_oshield_value
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 **ARISE!** *{oarm_name}* is now yours")
                                                     t_swapped = True
                                             elif temp_oarm_barrier_active and not oarm_barrier_active:
                                                 if tarm_barrier_active:
                                                     tbarrier_count = tbarrier_count + temp_obarrier_count
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 **ARISE!** *{oarm_name}* is now yours")
                                                     t_swapped = True
                                                 elif not tarm_barrier_active:
                                                     tarm_barrier_active = True
                                                     tbarrier_count = temp_obarrier_count
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 **ARISE!** *{oarm_name}* is now yours")
                                                     t_swapped = True
                                             elif temp_oarm_parry_active and not oarm_parry_active:
                                                 if tarm_parry_active:
                                                     tparry_count = tparry_count + temp_oparry_count
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 **ARISE!** *{oarm_name}* is now yours")
                                                     t_swapped = True
                                                 elif not tarm_parry_active:
                                                     tarm_parry_active = True
                                                     tparry_count = temp_oparry_count
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 **ARISE!** *{oarm_name}* is now yours")
                                                     t_swapped = True
                                     
 
@@ -9037,7 +9532,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             battle_buttons.append(
                                                 manage_components.create_button(
                                                     style=ButtonStyle.green,
-                                                    label=f"💥 10",
+                                                    label=f"{t_basic_emoji} 10",
                                                     custom_id="1"
                                                 )
                                             )
@@ -9046,7 +9541,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             battle_buttons.append(
                                                 manage_components.create_button(
                                                     style=ButtonStyle.green,
-                                                    label=f"☄️ 30",
+                                                    label=f"{t_super_emoji} 30",
                                                     custom_id="2"
                                                 )
                                             )
@@ -9056,7 +9551,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             battle_buttons.append(
                                                 manage_components.create_button(
                                                     style=ButtonStyle.green,
-                                                    label=f"🏵️ 80",
+                                                    label=f"{t_ultimate_emoji} 80",
                                                     custom_id="3"
                                                 )
                                             )
@@ -9154,7 +9649,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 t_health = 0
                                                 uid = t_DID
                                                 tuser = await self.bot.fetch_user(uid)
-                                                previous_moves.append(f"*{turn_total}:* 💨 **{t_card}** Fled...")
+                                                previous_moves.append(f"(**{turn_total}**) 💨 **{t_card}** Fled...")
                                                 await battle_msg.delete(delay=1)
                                                 await asyncio.sleep(1)
                                                 battle_msg = await private_channel.send(content=f"{tuser.mention} has fled.")
@@ -9162,29 +9657,29 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 #return
                                             if button_ctx.custom_id == "1":
                                                 if t_universe == "Souls" and t_used_resolve:
-                                                    dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_stamina,
+                                                    dmg = damage_cal(o_opponent_affinities, special_attack_name, tmove2_element, t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_stamina,
                                                                     t_enhancer_used, t_health, o_health, o_stamina, t_max_health,
                                                                     o_attack, t_special_move_description, turn_total,
                                                                     tcard_lvl_ap_buff, t_1)
                                                 else:
-                                                    dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense,
+                                                    dmg = damage_cal(o_opponent_affinities, basic_attack_name, tmove1_element, t_universe, t_card, t_1, t_attack, t_defense, o_defense,
                                                                     t_stamina, t_enhancer_used, t_health, o_health, o_stamina,
                                                                     t_max_health, o_attack, t_special_move_description, turn_total,
                                                                     tcard_lvl_ap_buff, None)
                                             elif button_ctx.custom_id == "2":
                                                 if t_universe == "Souls" and t_used_resolve:
-                                                    dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_stamina,
+                                                    dmg = damage_cal(o_opponent_affinities, ultimate_attack_name, tmove3_element, t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_stamina,
                                                                     t_enhancer_used, t_health, o_health, o_stamina, t_max_health,
                                                                     o_attack, t_special_move_description, turn_total,
                                                                     tcard_lvl_ap_buff, t_2)
                                                 else:
-                                                    dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense,
+                                                    dmg = damage_cal(o_opponent_affinities, special_attack_name, tmove2_element, t_universe, t_card, t_2, t_attack, t_defense, o_defense,
                                                                     t_stamina, t_enhancer_used, t_health, o_health, o_stamina,
                                                                     t_max_health, o_attack, t_special_move_description, turn_total,
                                                                     tcard_lvl_ap_buff, None)
                                             elif button_ctx.custom_id == "3":
 
-                                                dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense,
+                                                dmg = damage_cal(o_opponent_affinities, ultimate_attack_name, tmove3_element, t_universe, t_card, t_3, t_attack, t_defense, o_defense,
                                                                 t_stamina, t_enhancer_used, t_health, o_health, o_stamina,
                                                                 t_max_health, o_attack, t_special_move_description, turn_total,
                                                                 tcard_lvl_ap_buff, None)
@@ -9196,7 +9691,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             elif button_ctx.custom_id == "4":
                                                 t_enhancer_used = True
 
-                                                dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense,
+                                                dmg = damage_cal(o_opponent_affinities, basic_attack_name, tmove1_element, t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense,
                                                                 t_stamina, t_enhancer_used, t_health, o_health, o_stamina,
                                                                 t_max_health, o_attack, t_special_move_description, turn_total,
                                                                 tcard_lvl_ap_buff, None)
@@ -9229,7 +9724,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                                 colour=0xe91e63)
                                                         embedVar.add_field(name=f"Transformation: Plus Ultra",
                                                                         value="You do not lose a turn after you Resolve.")
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: PLUS ULTRA!")
+                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: PLUS ULTRA!")
                                                         await button_ctx.defer(ignore=True)
                                                         turn_total = turn_total + 1
                                                         turn = 1
@@ -9259,7 +9754,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         embedVar = discord.Embed(title=f"{t_card} begins Total Concentration Breathing",
                                                                                 description=f"**{t_card} says**\n{t_resolve_description}",
                                                                                 colour=0xe91e63)
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Total Concentration Breathing!")
+                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Total Concentration Breathing!")
                                                         await button_ctx.defer(ignore=True)
                                                         turn_total = turn_total + 1
                                                         turn = 0
@@ -9287,7 +9782,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         embedVar = discord.Embed(title=f"{t_card} Heals from Hashirama Cells",
                                                                                 description=f"**{t_card} says**\n{t_resolve_description}",
                                                                                 colour=0xe91e63)
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Hashirama Cells heal you for **{t_naruto_heal_buff}**")
+                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Hashirama Cells heal you for **{t_naruto_heal_buff}**")
                                                         
                                                         turn_total = turn_total + 1
                                                         turn = 0
@@ -9319,7 +9814,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                                 colour=0xe91e63)
                                                         embedVar.add_field(name=f"Transformation Complete",
                                                                         value=f"Health increased by **{health_boost}**!")
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Titan Mode")
+                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Titan Mode")
                                                         await button_ctx.defer(ignore=True)
 
                                                         turn_total = turn_total + 1
@@ -9352,7 +9847,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                                 colour=0xe91e63)
                                                         embedVar.add_field(name=f"Transformation: Bankai",
                                                                         value="Gain double Attack on Resolve.")
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Bankai!")
+                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Bankai!")
                                                         await button_ctx.defer(ignore=True)
                                                         turn_total = turn_total + 1
                                                         turn = 0
@@ -9377,12 +9872,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_pet_used = False
 
                                                         if t_gow_resolve:
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Ascension!")
+                                                            previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Ascension!")
                                                         elif not t_gow_resolve:
                                                             t_used_resolve = False
                                                             t_gow_resolve = True
                                                             t_defense = 125
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Crushed Blood Orb: Health Refill")
+                                                            previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Crushed Blood Orb: Health Refill")
                                                         
 
                                                         embedVar = discord.Embed(title=f"{t_card} STRENGTHENED RESOLVE :zap:",
@@ -9413,7 +9908,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_defense = round(t_defense - t_resolve_defense)
                                                         t_used_resolve = True
 
-                                                        dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense,
+                                                        dmg = damage_cal(o_opponent_affinities, ultimate_attack_name, tmove3_element, t_universe, t_card, t_3, t_attack, t_defense,
                                                                         o_defense, t_stamina, t_enhancer_used, t_health,
                                                                         o_health, o_stamina, t_max_health, o_attack,
                                                                         t_special_move_description, turn_total,
@@ -9426,7 +9921,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             colour=0xe91e63)
                                                         embedVar.add_field(name=f"Transformation: Command Seal",
                                                                         value="On Resolve, Strike with Ultimate, then Focus.")
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Command Seal!")
+                                                        previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Resolved: Command Seal!")
                                                         await button_ctx.defer(ignore=True)
                                                         # t_stamina = 0
                                                         turn_total = turn_total + 1
@@ -9459,13 +9954,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if turn_total >= 50:
                                                             t_max_health = t_max_health + 1000
                                                             t_health = t_health + 1000
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Gigantomax Evolution!!! Gained **1000** HP!!!")
+                                                            previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Gigantomax Evolution!!! Gained **1000** HP!!!")
                                                         elif turn_total >= 30:
                                                             t_max_health = t_max_health + 300
                                                             t_health = t_health + 300
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Mega Evolution!! Gained **300** HP!")
+                                                            previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Mega Evolution!! Gained **300** HP!")
                                                         else:
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Evolution!")
+                                                            previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Evolution!")
                                                         await button_ctx.defer(ignore=True)
                                                         turn_total = turn_total + 1
                                                         turn = 0
@@ -9496,10 +9991,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                                     colour=0xe91e63)
                                                             embedVar.add_field(name=f"Nexus Destroyed",
                                                                             value=f"**{t_card}** dealt **{(60 * (o_focus_count + t_focus_count))}** damage.")
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Pentakill! Dealing {(60 * (o_focus_count + t_focus_count))} damage.")
+                                                            previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Pentakill! Dealing {(60 * (o_focus_count + t_focus_count))} damage.")
                                                             await button_ctx.defer(ignore=True)
                                                         elif t_universe == "Souls":
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Phase 2: Enhanced Moveset!")
+                                                            previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Phase 2: Enhanced Moveset!")
                                                             await button_ctx.defer(ignore=True)
                                                         else:
                                                             embedVar = discord.Embed(
@@ -9508,18 +10003,18 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 colour=0xe91e63)
                                                             embedVar.add_field(name=f"Transformation",
                                                                             value="All stats & stamina greatly increased")
-                                                            previous_moves.append(f"*{turn_total}:* ⚡ **{t_card}** Resolved!")
+                                                            previous_moves.append(f"(**{turn_total}**) ⚡ **{t_card}** Resolved!")
                                                             await button_ctx.defer(ignore=True)
                                                         turn_total = turn_total + 1
                                                         turn = 0
                                                 else:
-                                                    previous_moves.append(f"*{turn_total}:* {t_card} cannot resolve!")
+                                                    previous_moves.append(f"(**{turn_total}**) {t_card} cannot resolve!")
                                                     turn = 1
                                             elif button_ctx.custom_id == "6" and mode != "RAID":
                                                 # Resolve Check and Calculation
                                                 if t_used_resolve and t_used_focus and not t_pet_used:
                                                     t_enhancer_used = True
-                                                    dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense,
+                                                    dmg = damage_cal(o_opponent_affinities, basic_attack_name, tmove1_element, t_universe, t_card, tpet_move, t_attack, t_defense,
                                                                     o_defense, t_stamina, t_enhancer_used, t_health, o_health,
                                                                     o_stamina, t_max_health, o_attack,
                                                                     t_special_move_description, turn_total, tcard_lvl_ap_buff, None)
@@ -9614,7 +10109,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
                                                         if t_universe == "Persona":
-                                                            petdmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense,
+                                                            petdmg = damage_cal(o_opponent_affinities, basic_attack_name, tmove1_element, t_universe, t_card, t_1, t_attack, t_defense,
                                                                                 o_defense, t_stamina, t_enhancer_used, t_health,
                                                                                 o_health, o_stamina, t_max_health, o_attack,
                                                                                 t_special_move_description, turn_total,
@@ -9632,7 +10127,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 battle_msg = await private_channel.send(embed=embedVar, file=tsummon_file)
                                                                 await asyncio.sleep(2)
                                                                 await battle_msg.delete(delay=None)
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **Persona!** : **{tpet_name}** was summoned from **{t_card}'s** soul dealing **{petdmg['DMG']}** damage!\n**{o_card}** summon disabled!")
+                                                            previous_moves.append(f"(**{turn_total}**) **Persona!** 🩸 : **{tpet_name}** was summoned from **{t_card}'s** soul dealing **{petdmg['DMG']}** damage!\n**{o_card}** summon disabled!")
                                                             o_pet_used = True
                                                             await button_ctx.defer(ignore=True)
                                                             
@@ -9653,20 +10148,20 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             
                                                             #embedVar.set_image(url="attachment://pet.png")
 
-                                                            previous_moves.append(f"*{turn_total}:* **{t_card}** Summoned 🧬 **{tpet_name}**: {dmg['MESSAGE']}")
+                                                            previous_moves.append(f"(**{turn_total}**) **{t_card}** Summoned 🧬 **{tpet_name}**: {dmg['MESSAGE']}")
                                                             
                                                         turn = 1
                                                     else:
-                                                        previous_moves.append(f"*{turn_total}:* 🧬 **{opet_name}** needs a turn to rest...")
+                                                        previous_moves.append(f"(**{turn_total}**) 🧬 **{opet_name}** needs a turn to rest...")
                                                         await button_ctx.defer(ignore=True)
                                                         turn = 1
                                                 else:
-                                                    previous_moves.append(f"*{turn_total}:* {t_card} Could not summon 🧬 **{tpet_name}**. Needs rest")
+                                                    previous_moves.append(f"(**{turn_total}**) {t_card} Could not summon 🧬 **{tpet_name}**. Needs rest")
                                                     await button_ctx.defer(ignore=True)
                                                     turn = 1
                                             elif button_ctx.custom_id == "0":
                                                 if t_universe == "Persona":
-                                                    block_message = f"🩸**Confidant Block!***: **{t_card}** Blocked 🛡️"
+                                                    block_message = f"**Confidant Block!*** 🩸: **{t_card}** Blocked 🛡️"
                                                     t_block_used = True
                                                     t_defense = round(t_defense * 2)
                                                     previous_moves.append(block_message)
@@ -9676,30 +10171,92 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                 if t_stamina >= 20:
                                                     if t_universe == "Attack On Titan":
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 Rally! **{t_card}** Increased Max Health ❤️")
+                                                        previous_moves.append(f"(**{turn_total}**) **Rally** 🩸 ! **{t_card}** Increased Max Health ❤️")
                                                         t_max_health = round(t_max_health + 100)
                                                         t_health = t_health + 100
 
                                                     if t_universe == "Bleach":
-                                                        dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense,
+                                                        dmg = damage_cal(o_opponent_affinities, basic_attack_name, tmove1_element, t_universe, t_card, t_1, t_attack, t_defense, o_defense,
                                                                         t_stamina, t_enhancer_used, t_health, o_health, o_stamina,
                                                                         t_max_health, o_attack, t_special_move_description, turn_total,
                                                                         tcard_lvl_ap_buff, None)
-                                                        previous_moves.append(f"*{turn_total}:* **{t_card}** Exerted their 🩸 Spiritual Pressure dealing {dmg['DMG']} dmg")
-                                                        o_health = o_health - dmg['DMG']
+                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}** Exerted their 🩸 Spiritual Pressure - {dmg['MESSAGE']}")
+                                                        if dmg['REPEL']:
+                                                            t_health = t_health - dmg['DMG']
+                                                        elif dmg['ABSORB']:
+                                                            o_health = o_health + dmg['DMG']
+                                                        elif dmg['ELEMENT'] == water_element:
+                                                            t_water_buff = t_water_buff + 25
+                                                            o_health = o_health - (dmg['DMG'] + t_water_buff)
+                                                        else:
+                                                            o_health = o_health - dmg['DMG']
 
+                                                        if dmg['ELEMENT'] == earth_element:
+                                                            t_defense = t_defense + (dmg['DMG'] * .20)
+
+                                                        if dmg['ELEMENT'] == recoil_element:
+                                                            t_health = t_health - (dmg['DMG'] * .25)
+
+                                                        if dmg['ELEMENT'] == time_element:
+                                                            t_stamina = 0
+
+
+                                                        if dmg['ELEMENT'] == death_element:
+                                                            o_max_health = o_max_health - (dmg['DMG'] * .05)
+
+                                                        if dmg['ELEMENT'] == light_element:
+                                                            t_stamina = t_stamina + (dmg['STAMINA_USED'] / 2)
+
+                                                        if dmg['ELEMENT'] == dark_element:
+                                                            t_stamina = t_stamina + 5
+                                                            o_stamina = o_stamina - 5
+
+                                                        if dmg['ELEMENT'] == life_element:
+                                                            t_health = t_health + (dmg['DMG'] * .15)
+
+                                                        if dmg['ELEMENT'] == phsycic_element:
+                                                            o_defense = o_defense - (dmg['DMG'] * .08)
+                                                            o_attack = o_attack - (dmg['DMG'] * .08)
+
+                                                        if dmg['ELEMENT'] == fire_element:
+                                                            t_burn_dmg = round(dmg['DMG'] * .30)
+
+
+                                                        if dmg['ELEMENT'] == water_element:
+                                                            t_water_buff = t_water_buff + 25
+
+                                                        if dmg['ELEMENT'] == electric_element:
+                                                            t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
+
+                                                        if dmg['ELEMENT'] == poison_element:
+                                                            t_poison_dmg = t_poison_dmg + 8
+    
+                                                        if dmg['ELEMENT'] == ice_element:
+                                                            t_ice_counter = t_ice_counter + 1
+                                                            if t_ice_counter == 3:
+                                                                t_freeze_enh = True
+                                                                t_ice_counter = 0
+
+                                                        if dmg['ELEMENT'] == bleed_element:
+                                                            t_bleed_counter = t_bleed_counter + 1
+                                                            if t_bleed_counter == 10:
+                                                                t_bleed_hit = True
+                                                                t_bleed_counter = 0
+
+
+                                                        
                                                     t_stamina = t_stamina - 20
                                                     t_block_used = True
                                                     t_defense = round(t_defense * 2)
                                                     embedVar = discord.Embed(title=f"**{t_card}** Blocked 🛡️",
                                                                             colour=0xe91e63)
 
-                                                    previous_moves.append(f"*{turn_total}:* **{t_card}** Blocked 🛡️")
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** Blocked 🛡️")
                                                     await button_ctx.defer(ignore=True)
                                                     turn_total = turn_total + 1
                                                     turn = 0
                                                 else:
-                                                    previous_moves.append(f"*{turn_total}:* **{o_card}** is too tired to block.")
+                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}** is too tired to block.")
                                                     await button_ctx.defer(ignore=True)
                                                     turn = 1
 
@@ -9797,7 +10354,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}",
                                                                                 colour=embed_color_t)
-                                                        previous_moves.append(f"*{turn_total}:* **{t_card}**: 🦠 {dmg['MESSAGE']}")
+                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}**: 🦠 {dmg['MESSAGE']}")
                                                         await button_ctx.defer(ignore=True)
                                                         turn_total = turn_total + 1
                                                         turn = 0
@@ -9807,8 +10364,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if tarm_barrier_active:
                                                             tarm_barrier_active=False
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                            previous_moves.append(f"*{turn_total}:* **{t_card}'s** **Barrier** Disabled!")
-                                                        previous_moves.append(f"*{turn_total}:* **{t_card}**: {dmg['MESSAGE']}")
+                                                            previous_moves.append(f"(**{turn_total}**) **{t_card}'s** **Barrier** Disabled!")
+                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}**: {dmg['MESSAGE']}")
                                                         await button_ctx.defer(ignore=True)
                                                         turn_total = turn_total + 1
                                                         turn = 0
@@ -9821,70 +10378,70 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
 
-                                                            previous_moves.append(f"*{turn_total}:* 🩸**{o_card}**: Substitution Jutsu")
+                                                            previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸: Substitution Jutsu")
                                                             if not o_used_resolve:
-                                                                previous_moves.append(f"*{turn_total}:* 🩸**{o_stored_damage}** Hasirama Cells stored. 🩸**{o_naruto_heal_buff}** total stored.")
+                                                                previous_moves.append(f"(**{turn_total}**) 🩸**{o_stored_damage}** Hasirama Cells stored. 🩸**{o_naruto_heal_buff}** total stored.")
                                                             await button_ctx.defer(ignore=True)
 
-                                                        elif oarm_shield_active:
+                                                        elif oarm_shield_active and dmg['ELEMENT'] != dark_element:
                                                             if oshield_value > 0:
                                                                 oshield_value = oshield_value -dmg['DMG']
                                                                 o_health = o_health 
                                                                 if oshield_value <=0:
                                                                     embedVar = discord.Embed(title=f"{o_card}'s' **Shield** Shattered!", description=f"{t_card} breaks the **Shield**!", colour=0xe91e63)
-                                                                    previous_moves.append(f"*{turn_total}:* 🌐**{o_card}**: Shield Shattered!")
+                                                                    previous_moves.append(f"(**{turn_total}**) 🌐**{o_card}**: Shield Shattered!")
                                                                     if tarm_barrier_active:
                                                                         tarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
                                                                     
                                                                     oarm_shield_active = False
                                                                     await button_ctx.defer(ignore=True)
                                                                 else:
                                                                     embedVar = discord.Embed(title=f"{o_card} Activates **Shield** 🌐", description=f"**{t_card}** strikes the Shield 🌐\n**{oshield_value} Shield** Left!", colour=0xe91e63)
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}** strikes **{o_card}**'s Shield 🌐\n**{oshield_value} Shield** Left!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** strikes **{o_card}**'s Shield 🌐\n**{oshield_value} Shield** Left!")
                                                                     if tarm_barrier_active:
                                                                         tarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                                     await button_ctx.defer(ignore=True)
 
-                                                        elif oarm_barrier_active:
+                                                        elif oarm_barrier_active and dmg['ELEMENT'] != phsycic_element:
                                                             if obarrier_count >1:
                                                                 o_health = o_health 
                                                                 embedVar = discord.Embed(title=f"{o_card} Activates **Barrier** 💠", description=f"{t_card}'s attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* **{o_card}** Activates Barrier 💠  **{t_card}'s** attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{o_card}** Activates Barrier 💠  **{t_card}'s** attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!")
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                                 await button_ctx.defer(ignore=True)
                                                                 obarrier_count = obarrier_count - 1
                                                             elif obarrier_count==1:
                                                                 embedVar = discord.Embed(title=f"{o_card}'s **Barrier** Broken!", description=f"{t_card} destroys the **Barrier**", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* **{o_card}**'s Barrier Broken!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{o_card}**'s Barrier Broken!")
                                                                 obarrier_count = obarrier_count - 1
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                                 await button_ctx.defer(ignore=True)
                                                                 oarm_barrier_active = False
                                                         
-                                                        elif oarm_parry_active:
+                                                        elif oarm_parry_active and dmg['ELEMENT'] != earth_element:
                                                             if oparry_count > 1:
                                                                 oparry_damage = round(dmg['DMG'])
                                                                 o_health = round(o_health - (oparry_damage * .75))
                                                                 t_health = round(t_health - (oparry_damage * .25))
                                                                 oparry_count = oparry_count - 1
                                                                 embedVar = discord.Embed(title=f"{o_card} Activates **Parry** 🔄", description=f"{t_card} takes {round(oparry_damage * .25)}! DMG\n **{oparry_count} Parries** to go!!", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* **{o_card}** Activates Parry 🔄 {t_card} takes {round(oparry_damage * .25)}! DMG\n **{oparry_count}  Parries** to go!!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{o_card}** Activates Parry 🔄 {t_card} takes {round(oparry_damage * .25)}! DMG\n **{oparry_count}  Parries** to go!!")
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                                 await button_ctx.defer(ignore=True)
                                                                 
                                                             elif oparry_count==1:
@@ -9892,32 +10449,93 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_health = round(o_health - (oparry_damage * .75))
                                                                 t_health = round(t_health - (oparry_damage * .25))
                                                                 embedVar = discord.Embed(title=f"{o_card} **Parry** Penetrated!!", description=f"{t_card} takes {round(oparry_damage * .25)}! DMG and breaks the **Parry**", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* **{o_card}** Parry Penetrated! **{t_card}** takes **{round(oparry_damage * .25)}**! DMG and breaks the **Parry**")
+                                                                previous_moves.append(f"(**{turn_total}**) **{o_card}** Parry Penetrated! **{t_card}** takes **{round(oparry_damage * .25)}**! DMG and breaks the **Parry**")
                                                                 oparry_count = oparry_count - 1
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                                 await button_ctx.defer(ignore=True)
                                                                 oarm_parry_active = False
                                                         
                                                         else:
-                                                            o_health = o_health - int(dmg['DMG'])
+                                                            if dmg['REPEL']:
+                                                                t_health = t_health - int(dmg['DMG'])
+                                                            elif dmg['ABSORB']:
+                                                                o_health = o_health + int(dmg['DMG'])
+                                                            elif dmg['ELEMENT'] == water_element:
+                                                                t_water_buff = t_water_buff + 25
+                                                                o_health = o_health - (dmg['DMG'] + t_water_buff)
+                                                            else:
+                                                                o_health = o_health - dmg['DMG']
+
+                                                            if dmg['ELEMENT'] == earth_element:
+                                                                t_defense = t_defense + (dmg['DMG'] * .20)
+
+                                                            if dmg['ELEMENT'] == recoil_element:
+                                                                t_health = t_health - (dmg['DMG'] * .25)
+
+                                                            if dmg['ELEMENT'] == time_element:
+                                                                t_stamina = 0
+
+
+                                                            if dmg['ELEMENT'] == bleed_element:
+                                                                t_bleed_counter = t_bleed_counter + 1
+                                                                if t_bleed_counter == 10:
+                                                                    t_bleed_hit = True
+                                                                    t_bleed_counter = 0
+
+                                                            if dmg['ELEMENT'] == death_element:
+                                                                o_max_health = o_max_health - (dmg['DMG'] * .05)
+
+                                                            if dmg['ELEMENT'] == light_element:
+                                                                t_stamina = t_stamina + (dmg['STAMINA_USED'] / 2)
+
+                                                            if dmg['ELEMENT'] == dark_element:
+                                                                t_stamina = t_stamina + 5
+                                                                o_stamina = o_stamina - 5
+
+                                                            if dmg['ELEMENT'] == life_element:
+                                                                t_health = t_health + (dmg['DMG'] * .15)
+
+                                                            if dmg['ELEMENT'] == phsycic_element:
+                                                                o_defense = o_defense - (dmg['DMG'] * .08)
+                                                                o_attack = o_attack - (dmg['DMG'] * .08)
+
+                                                            if dmg['ELEMENT'] == fire_element:
+                                                                t_burn_dmg = round(dmg['DMG'] * .30)
+
+
+                                                            if dmg['ELEMENT'] == water_element:
+                                                                t_water_buff = t_water_buff + 25
+
+                                                            if dmg['ELEMENT'] == electric_element:
+                                                                t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
+
+                                                            if dmg['ELEMENT'] == poison_element:
+                                                                t_poison_dmg = t_poison_dmg + 8
+
+                                                            if dmg['ELEMENT'] == ice_element:
+                                                                t_ice_counter = t_ice_counter + 1
+                                                                if t_ice_counter == 3:
+                                                                    t_freeze_enh = True
+                                                                    t_ice_counter = 0
+
                                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                                            previous_moves.append(f"*{turn_total}:* **{t_card}**: {dmg['MESSAGE']}")
+                                                            previous_moves.append(f"(**{turn_total}**) **{t_card}**: {dmg['MESSAGE']}")
                                                             if tarm_siphon_active:
                                                                 siphon_damage = (dmg['DMG'] * .10) + tsiphon_value
                                                                 t_health = round(t_health + siphon_damage)
                                                                 if t_health >= t_max_health:
                                                                     t_health = t_max_health
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}**: 💉 Siphoned **Full Health!**")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}**: 💉 Siphoned **Full Health!**")
                                                                 else:
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}**: 💉 Siphoned **{round(siphon_damage)}** Health!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}**: 💉 Siphoned **{round(siphon_damage)}** Health!")
                                                                 await button_ctx.defer(ignore=True)
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                             await button_ctx.defer(ignore=True)
                                                         if o_health <= 0:
                                                             if o_final_stand==True:
@@ -9927,8 +10545,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     if tarm_barrier_active:
                                                                         tarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
-                                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Transformation: Last Stand!!!")
+                                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Transformation: Last Stand!!!")
                                                                     
                                                                     o_health = int(.75 * (o_attack + o_defense))
                                                                     
@@ -9956,7 +10574,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                             description=f"Use abilities to Increase `STAM` or enter `FOCUS STATE`!",
                                                                             colour=0xe91e63)
                                                     #await button_ctx.send(embed=embedVar)
-                                                    previous_moves.append(f"*{turn_total}:* **{t_card}**: Not enough Stamina to use this ability.")
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}**: Not enough Stamina to use this ability.")
                                                     turn = 1
                                         # except Exception as e:
                                         #     await ctx.send(f"{ctx.author.mention}, the match has ended. ")
@@ -9985,20 +10603,20 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     # Play Bot
                                     else:
                                         # UNIVERSE CARD
-                                        tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff
-                                        tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff
-                                        tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff
+                                        tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff + t_shock_buff
+                                        tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff + t_shock_buff
+                                        tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff + t_shock_buff
                                         tenh1 = list(t_enhancer.values())[0]
                                         tenh_name = list(t_enhancer.values())[2]
                                         tpet_enh_name = list(tpet_move.values())[2]
                                         tpet_msg_on_resolve = ""
                                         # UNIVERSE CARD
                                         if t_universe == "Souls" and t_used_resolve:
-                                            player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina,
+                                            player_2_card = showcard(t, tarm,t_max_health, t_health, t_max_stamina, t_stamina,
                                                                 t_used_resolve, ttitle, t_used_focus, t_attack, t_defense,
                                                                 turn_total, tap2, tap3, tap3, tenh1, tenh_name, tcard_lvl, o_defense)
                                         else:
-                                            player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina,
+                                            player_2_card = showcard(t, tarm,t_max_health, t_health, t_max_stamina, t_stamina,
                                                                     t_used_resolve, ttitle, t_used_focus, t_attack, t_defense,
                                                                     turn_total, tap1, tap2, tap3, tenh1, tenh_name, tcard_lvl, o_defense)
                                             
@@ -10006,32 +10624,32 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             if temp_oarm_shield_active and not oarm_shield_active:
                                                 if tarm_shield_active:
                                                     tshield_value = tshield_value + temp_oshield_value
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 **ARISE!** *{oarm_name}* is now yours")
                                                     t_swapped = True
                                                 elif not tarm_shield_active:
                                                     tarm_shield_active = True
                                                     tshield_value = temp_oshield_value
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 **ARISE!** *{oarm_name}* is now yours")
                                                     t_swapped = True
                                             elif temp_oarm_barrier_active and not oarm_barrier_active:
                                                 if tarm_barrier_active:
                                                     tbarrier_count = tbarrier_count + temp_obarrier_count
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 **ARISE!** *{oarm_name}* is now yours")
                                                     t_swapped = True
                                                 elif not tarm_barrier_active:
                                                     tarm_barrier_active = True
                                                     tbarrier_count = temp_obarrier_count
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 **ARISE!** *{oarm_name}* is now yours")
                                                     t_swapped = True
                                             elif temp_oarm_parry_active and not oarm_parry_active:
                                                 if tarm_parry_active:
                                                     tparry_count = tparry_count + temp_oparry_count
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 **ARISE!** *{oarm_name}* is now yours")
                                                     t_swapped = True
                                                 elif not tarm_parry_active:
                                                     tarm_parry_active = True
                                                     tparry_count = temp_oparry_count
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 **ARISE!** *{oarm_name}* is now yours")
                                                     t_swapped = True
                                         tembedVar = discord.Embed(title=f"_Turn_ {turn_total}", description=textwrap.dedent(f"""\
                                         {previous_moves_into_embed}
@@ -10045,7 +10663,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                         if t_used_resolve and not t_pet_used and mode != "RAID":
                                             aiMove = 6
-                                        elif tarm_barrier_active: #Ai Barrier Checks
+                                        elif tarm_barrier_active and dmg['ELEMENT'] != phsycic_element: #Ai Barrier Checks
                                             if t_stamina >=20: #Stamina Check For Enhancer
                                                 aiMove = await ai_enhancer_moves(turn_total,t_used_focus,t_used_resolve,t_pet_used,t_stamina,
                                                                            t_enhancer['TYPE'],t_health,t_max_health,t_attack,
@@ -10153,28 +10771,28 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             t_health = 0
                                         if int(aiMove) == 1:
                                             if t_universe == "Souls" and t_used_resolve:
-                                                dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_stamina,
+                                                dmg = damage_cal(o_opponent_affinities, special_attack_name, tmove2_element, t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_stamina,
                                                                 t_enhancer_used, t_health, o_health, o_stamina, t_max_health,
                                                                 o_attack, t_special_move_description, turn_total,
                                                                 tcard_lvl_ap_buff, t_1)
                                             else:
-                                                dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense, t_stamina,
+                                                dmg = damage_cal(o_opponent_affinities, basic_attack_name, tmove1_element, t_universe, t_card, t_1, t_attack, t_defense, o_defense, t_stamina,
                                                                 t_enhancer_used, t_health, o_health, o_stamina, t_max_health,
                                                                 o_attack, t_special_move_description, turn_total,
                                                                 tcard_lvl_ap_buff, None)
                                         elif int(aiMove) == 2:
                                             if t_universe == "Souls" and t_used_resolve:
-                                                dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_stamina,
+                                                dmg = damage_cal(o_opponent_affinities, ultimate_attack_name, tmove3_element, t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_stamina,
                                                                 t_enhancer_used, t_health, o_health, o_stamina, t_max_health,
                                                                 o_attack, t_special_move_description, turn_total,
                                                                 tcard_lvl_ap_buff, t_2)
                                             else:
-                                                dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_stamina,
+                                                dmg = damage_cal(o_opponent_affinities, special_attack_name, tmove2_element, t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_stamina,
                                                                 t_enhancer_used, t_health, o_health, o_stamina, t_max_health,
                                                                 o_attack, t_special_move_description, turn_total,
                                                                 tcard_lvl_ap_buff, None)
                                         elif int(aiMove) == 3:
-                                            dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_stamina,
+                                            dmg = damage_cal(o_opponent_affinities, ultimate_attack_name, tmove3_element, t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_stamina,
                                                             t_enhancer_used, t_health, o_health, o_stamina, t_max_health,
                                                             o_attack, t_special_move_description, turn_total,
                                                             tcard_lvl_ap_buff, None)
@@ -10185,7 +10803,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 await asyncio.sleep(1)
                                         elif int(aiMove) == 4:
                                             t_enhancer_used = True
-                                            dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense,
+                                            dmg = damage_cal(o_opponent_affinities, basic_attack_name, tmove1_element, t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense,
                                                             t_stamina, t_enhancer_used, t_health, o_health, o_stamina,
                                                             t_max_health, o_attack, t_special_move_description, turn_total,
                                                             tcard_lvl_ap_buff, None)
@@ -10217,7 +10835,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                             colour=0xe91e63)
                                                     embedVar.add_field(name=f"Transformation: Plus Ultra",
                                                                     value="You do not lose a turn after you Resolve.")
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: PLUS ULTRA!")
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: PLUS ULTRA!")
                                                     turn_total = turn_total + 1
                                                     turn = 1
                                                 elif t_universe == "Demon Slayer": 
@@ -10247,7 +10865,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     embedVar = discord.Embed(title=f"{t_card} begins Total Concentration Breathing",
                                                                             description=f"**{t_card} says**\n{t_resolve_description}",
                                                                             colour=0xe91e63)
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Total Concentration Breathing!")
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Total Concentration Breathing!")
                                                 
                                                     turn_total = turn_total + 1
                                                     turn = 0
@@ -10275,7 +10893,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     embedVar = discord.Embed(title=f"{t_card} Heals from Hashirama Cells",
                                                                             description=f"**{t_card} says**\n{t_resolve_description}",
                                                                             colour=0xe91e63)
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Hashirama Cells heal you for **{t_naruto_heal_buff}**")
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Hashirama Cells heal you for **{t_naruto_heal_buff}**")
                                                     turn_total = turn_total + 1
                                                     turn = 0
 
@@ -10306,7 +10924,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                             colour=0xe91e63)
                                                     embedVar.add_field(name=f"Transformation Complete",
                                                                     value=f"Health increased by **{health_boost}**!")
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Titan Mode")
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Titan Mode")
 
                                                     turn_total = turn_total + 1
                                                     turn = 0
@@ -10337,7 +10955,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                             colour=0xe91e63)
                                                     embedVar.add_field(name=f"Transformation: Bankai",
                                                                     value="Gain double Attack on Resolve.")
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Bankai!")
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Bankai!")
                                                     turn_total = turn_total + 1
                                                     turn = 0
                                                 elif t_universe == "God Of War":  # God Of War Trait
@@ -10360,12 +10978,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_used_resolve = True
 
                                                     if t_gow_resolve:
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Ascension!")
+                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Ascension!")
                                                     elif not t_gow_resolve:
                                                         t_used_resolve = False
                                                         t_gow_resolve = True
                                                         t_defense = 125
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Crushed Blood Orb: Health Refill")
+                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Crushed Blood Orb: Health Refill")
                                                     
 
                                                     embedVar = discord.Embed(title=f"{t_card} STRENGTHENED RESOLVE :zap:",
@@ -10395,7 +11013,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_defense = round(t_defense - t_resolve_defense)
                                                     t_used_resolve = True
 
-                                                    dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense,
+                                                    dmg = damage_cal(o_opponent_affinities, ultimate_attack_name, tmove3_element, t_universe, t_card, t_3, t_attack, t_defense, o_defense,
                                                                     t_stamina, t_enhancer_used, t_health, o_health, o_stamina,
                                                                     t_max_health, o_attack, t_special_move_description,
                                                                     turn_total, tcard_lvl_ap_buff, None)
@@ -10407,7 +11025,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         colour=0xe91e63)
                                                     embedVar.add_field(name=f"Transformation: Command Seal",
                                                                     value="On Resolve, Strike with Ultimate, then Focus.")
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Command Seal!")
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Command Seal!")
                                                     # t_stamina = 0
                                                     turn_total = turn_total + 1
                                                     turn = 0
@@ -10438,13 +11056,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     if turn_total >= 50:
                                                         t_max_health = t_max_health + 1000
                                                         t_health = t_health + 1000
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Gigantomax Evolution!!! Gained **1000** HP!!!")
+                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Gigantomax Evolution!!! Gained **1000** HP!!!")
                                                     elif turn_total >= 30:
                                                         t_max_health = t_max_health + 300
                                                         t_health = t_health + 300
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Mega Evolution!! Gained **300** HP!")
+                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Mega Evolution!! Gained **300** HP!")
                                                     else:
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Evolution!")
+                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Evolution!")
                                                     turn_total = turn_total + 1
                                                     turn = 0
                                                 else:
@@ -10473,9 +11091,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                                 colour=0xe91e63)
                                                         embedVar.add_field(name=f"Nexus Destroyed",
                                                                         value=f"**{t_card}** dealt **{(60 * (o_focus_count + t_focus_count))}** damage.")
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Pentakill! Dealing {(60 * (o_focus_count + t_focus_count))} damage.")
+                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Pentakill! Dealing {(60 * (o_focus_count + t_focus_count))} damage.")
                                                     elif t_universe == "Souls":
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Phase 2: Enhanced Moveset!")
+                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Phase 2: Enhanced Moveset!")
                                                         
                                                     else:
                                                         embedVar = discord.Embed(title=f"{t_card} STRENGTHENED RESOLVE :zap:",
@@ -10483,17 +11101,17 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                                 colour=0xe91e63)
                                                         embedVar.add_field(name=f"Transformation",
                                                                         value="All stats & stamina greatly increased")
-                                                        previous_moves.append(f"*{turn_total}:* ⚡ **{t_card}** Resolved!")
+                                                        previous_moves.append(f"(**{turn_total}**) ⚡ **{t_card}** Resolved!")
                                                     turn_total = turn_total + 1
                                                     turn = 0
                                             else:
-                                                previous_moves.append(f"*{turn_total}:* {t_card} cannot resolve!")
+                                                previous_moves.append(f"(**{turn_total}**) {t_card} cannot resolve!")
                                                 turn = 1
                                         elif int(aiMove) == 6:
                                             # Resolve Check and Calculation
                                             if t_used_resolve and t_used_focus and not t_pet_used and mode != "RAID":
                                                 t_enhancer_used = True
-                                                dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, o_defense,
+                                                dmg = damage_cal(o_opponent_affinities, basic_attack_name, tmove1_element, t_universe, t_card, tpet_move, t_attack, t_defense, o_defense,
                                                                 t_stamina, t_enhancer_used, t_health, o_health, o_stamina,
                                                                 t_max_health, o_attack, t_special_move_description, turn_total,
                                                                 tcard_lvl_ap_buff, None)
@@ -10587,7 +11205,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
                                                     if t_universe == "Persona":
-                                                        petdmg = damage_cal(t_universe, t_card, tpet_move, t_attack,
+                                                        petdmg = damage_cal(o_opponent_affinities, basic_attack_name, tmove1_element, t_universe, t_card, tpet_move, t_attack,
                                                                             t_defense, o_defense, t_stamina,
                                                                             t_enhancer_used, t_health, o_health, o_stamina,
                                                                             t_max_health, o_attack,
@@ -10609,7 +11227,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             await battle_msg.delete(delay=2)
                                                         #embedVar.set_image(url="attachment://pet.png")
     
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **Persona!** : **{tpet_name}** was summoned from **{t_card}'s** soul dealing **{petdmg['DMG']}** damage!\n**{o_card}** summon disabled!")
+                                                        previous_moves.append(f"(**{turn_total}**) **Persona!** 🩸 : **{tpet_name}** was summoned from **{t_card}'s** soul dealing **{petdmg['DMG']}** damage!\n**{o_card}** summon disabled!")
                                                         o_pet_used = True
                                                         #await button_ctx.defer(ignore=True)
                                                         #await battle_msg.delete(delay=2)
@@ -10629,15 +11247,15 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         
                                                         #embedVar.set_image(url="attachment://pet.png")
 
-                                                        previous_moves.append(f"*{turn_total}:* **{t_card}** Summoned 🧬 **{tpet_name}**: {dmg['MESSAGE']}")
+                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}** Summoned 🧬 **{tpet_name}**: {dmg['MESSAGE']}")
                                                             
                                                     turn = 1
                                             else:
-                                                previous_moves.append(f"*{turn_total}:* {t_card} Could not summon 🧬 **{tpet_name}**. Needs rest")
+                                                previous_moves.append(f"(**{turn_total}**) {t_card} Could not summon 🧬 **{tpet_name}**. Needs rest")
                                                 turn = 1
                                         elif int(aiMove) == 7:
                                             if t_universe == "Persona":
-                                                block_message = f"🩸**Confidant Block!***: **{t_card}** Blocked 🛡️"
+                                                block_message = f"**Confidant Block!*** 🩸: **{t_card}** Blocked 🛡️"
                                                 t_block_used = True
                                                 t_defense = round(t_defense * 2)
 
@@ -10649,23 +11267,77 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                             if t_stamina >= 20:
                                                 if t_universe == "Attack On Titan":
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 Rally! **{t_card}** Increased Max Health ❤️")
+                                                    previous_moves.append(f"(**{turn_total}**) **Rally** 🩸 ! **{t_card}** Increased Max Health ❤️")
                                                     t_max_health = round(t_max_health + 100)
                                                     t_health = t_health + 100
 
                                                 if t_universe == "Bleach":
-                                                    dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense,
+                                                    dmg = damage_cal(o_opponent_affinities, basic_attack_name, tmove1_element, t_universe, t_card, t_1, t_attack, t_defense, o_defense,
                                                                     t_stamina, t_enhancer_used, t_health, o_health, o_stamina,
                                                                     t_max_health, o_attack, t_special_move_description, turn_total,
                                                                     tcard_lvl_ap_buff, None)
-                                                    previous_moves.append(f"*{turn_total}:* **{t_card}** Exerted their 🩸 Spiritual Pressure dealing {dmg['DMG']} dmg")
-                                                    o_health = o_health - dmg['DMG']
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** Exerted their 🩸 Spiritual Pressure - {dmg['MESSAGE']}")
+                                                    if dmg['REPEL']:
+                                                        t_health = t_health - dmg['DMG']
+                                                    elif dmg['ABSORB']:
+                                                        o_health = o_health + dmg['DMG']
+                                                    elif dmg['ELEMENT'] == water_element:
+                                                        t_water_buff = t_water_buff + 25
+                                                        o_health = o_health - (dmg['DMG'] + t_water_buff)
+                                                    else:
+                                                        o_health = o_health - dmg['DMG']
+
+                                                    if dmg['ELEMENT'] == time_element:
+                                                        t_stamina = 0
+
+                                                    if dmg['ELEMENT'] == bleed_element:
+                                                        t_bleed_counter = t_bleed_counter + 1
+                                                        if t_bleed_counter == 10:
+                                                            t_bleed_hit = True
+                                                            t_bleed_counter = 0
+
+                                                    if dmg['ELEMENT'] == recoil_element:
+                                                        t_health = t_health - (dmg['DMG'] * .25)
+
+                                                    if dmg['ELEMENT'] == earth_element:
+                                                        t_defense = t_defense + (dmg['DMG'] * .20)
+
+                                                    if dmg['ELEMENT'] == death_element:
+                                                        o_max_health = o_max_health - (dmg['DMG'] * .05)
+
+                                                    if dmg['ELEMENT'] == light_element:
+                                                        t_stamina = t_stamina + (dmg['STAMINA_USED'] / 2)
+
+                                                    if dmg['ELEMENT'] == dark_element:
+                                                        t_stamina = t_stamina + 5
+                                                        o_stamina = o_stamina - 5
+
+                                                    if dmg['ELEMENT'] == life_element:
+                                                        t_health = t_health + (dmg['DMG'] * .15)
+
+                                                    if dmg['ELEMENT'] == phsycic_element:
+                                                        o_defense = o_defense - (dmg['DMG'] * .08)
+                                                        o_attack = o_attack - (dmg['DMG'] * .08)
+
+                                                    if dmg['ELEMENT'] == fire_element:
+                                                        t_burn_dmg = round(dmg['DMG'] * .30)
+
+
+                                                    if dmg['ELEMENT'] == water_element:
+                                                        t_water_buff = t_water_buff + 25
+
+                                                    if dmg['ELEMENT'] == electric_element:
+                                                        t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
+
+                                                    if dmg['ELEMENT'] == poison_element:
+                                                        t_poison_dmg = t_poison_dmg + 8
+
 
 
                                                 t_stamina = t_stamina - 20
                                                 t_block_used = True
                                                 t_defense = round(t_defense * 2)
-                                                previous_moves.append(f"*{turn_total}:* **{t_card}:** Blocked 🛡️")
+                                                previous_moves.append(f"(**{turn_total}**) **{t_card}:** Blocked 🛡️")
                                                 turn_total = turn_total + 1
                                                 turn = 0
                                             else:
@@ -10762,17 +11434,17 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
                                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                                    previous_moves.append(f"*{turn_total}:* **{t_card}**: 🦠 {dmg['MESSAGE']}")
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}**: 🦠 {dmg['MESSAGE']}")
                                                     turn_total = turn_total + 1
                                                     turn = 0
                                                 elif dmg['DMG'] == 0:
                                                     t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                                    previous_moves.append(f"*{turn_total}:* **{t_card}**: {dmg['MESSAGE']}")
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}**: {dmg['MESSAGE']}")
                                                     if tarm_barrier_active:
                                                         tarm_barrier_active=False
                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                        previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                     turn_total = turn_total + 1
                                                     turn = 0
                                                 else:
@@ -10781,64 +11453,64 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_naruto_heal_buff = o_naruto_heal_buff + o_stored_damage
                                                         o_health = o_health 
                                                         embedVar = discord.Embed(title=f"{o_card}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
-                                                        previous_moves.append(f"*{turn_total}:* 🩸**{o_card}**: Substitution Jutsu")
+                                                        previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸: Substitution Jutsu")
                                                         if not o_used_resolve:
-                                                            previous_moves.append(f"*{turn_total}:* 🩸**{o_stored_damage}** Hasirama Cells stored. 🩸**{o_naruto_heal_buff}** total stored.")
+                                                            previous_moves.append(f"(**{turn_total}**) 🩸**{o_stored_damage}** Hasirama Cells stored. 🩸**{o_naruto_heal_buff}** total stored.")
                                                         if tarm_barrier_active:
                                                             tarm_barrier_active=False
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                            previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
-                                                    elif oarm_shield_active:
+                                                            previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
+                                                    elif oarm_shield_active and dmg['ELEMENT'] != dark_element:
                                                         if oshield_value > 0:
                                                             oshield_value = oshield_value -dmg['DMG']
                                                             o_health = o_health 
                                                             if oshield_value <=0:
                                                                 embedVar = discord.Embed(title=f"{o_card}'s' **Shield** Shattered!", description=f"{t_card} breaks the **Shield**!", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* 🌐**{o_card}'s** Shield Shattered!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{o_card}'s** 🌐 Shield Shattered!")
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                                 oarm_shield_active = False
                                                             else:
                                                                 embedVar = discord.Embed(title=f"{o_card} Activates **Shield** 🌐", description=f"**{t_card}** strikes the Shield 🌐\n**{oshield_value} Shield** Left!", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* **{t_card}** strikes **{o_card}**'s Shield 🌐\n**{oshield_value} Shield** Left!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{t_card}** strikes **{o_card}**'s Shield 🌐\n**{oshield_value} Shield** Left!")
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
 
-                                                    elif oarm_barrier_active:
+                                                    elif oarm_barrier_active and dmg['ELEMENT'] != phsycic_element:
                                                         if obarrier_count >1:
                                                             o_health = o_health 
                                                             embedVar = discord.Embed(title=f"{o_card} Activates **Barrier** 💠", description=f"{t_card}'s attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!", colour=0xe91e63)
-                                                            previous_moves.append(f"*{turn_total}:* **{o_card}** Activates Barrier 💠 {t_card}'s attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!")
+                                                            previous_moves.append(f"(**{turn_total}**) **{o_card}** Activates Barrier 💠 {t_card}'s attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!")
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                             obarrier_count = obarrier_count - 1
                                                         elif obarrier_count==1:
                                                             embedVar = discord.Embed(title=f"{o_card}'s **Barrier** Broken!", description=f"{t_card} destroys the **Barrier**", colour=0xe91e63)
                                                             obarrier_count = obarrier_count - 1
-                                                            previous_moves.append(f"*{turn_total}:* **{o_card}**'s Barrier Broken!")
+                                                            previous_moves.append(f"(**{turn_total}**) **{o_card}**'s Barrier Broken!")
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                             oarm_barrier_active = False
-                                                    elif oarm_parry_active:
+                                                    elif oarm_parry_active and dmg['ELEMENT'] != earth_element:
                                                         if oparry_count > 1:
                                                             oparry_damage = round(dmg['DMG'])
                                                             o_health = round(o_health - (oparry_damage * .75))
                                                             t_health = round(t_health - (oparry_damage * .25))
                                                             oparry_count = oparry_count - 1
                                                             embedVar = discord.Embed(title=f"{o_card} Activates **Parry** 🔄", description=f"{t_card} takes {round(oparry_damage * .25)}! DMG\n **{oparry_count} Parries** to go!!", colour=0xe91e63)
-                                                            previous_moves.append(f"*{turn_total}:* **{o_card}** Activates Parry 🔄 {t_card} takes {round(oparry_damage * .25)}! DMG\n **{oparry_count}  Parries** to go!!")
+                                                            previous_moves.append(f"(**{turn_total}**) **{o_card}** Activates Parry 🔄 {t_card} takes {round(oparry_damage * .25)}! DMG\n **{oparry_count}  Parries** to go!!")
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                             
                                                         elif oparry_count==1:
                                                             oparry_damage = round(dmg['DMG'])
@@ -10846,38 +11518,100 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = round(t_health - (oparry_damage * .25))
                                                             oparry_count = oparry_count - 1
                                                             embedVar = discord.Embed(title=f"{o_card} **Parry** Penetrated!!", description=f"{t_card} takes {round(oparry_damage * .25)}! DMG and breaks the **Parry**", colour=0xe91e63)
-                                                            previous_moves.append(f"*{turn_total}:* **{o_card}** Parry Penetrated! **{t_card}** takes **{round(oparry_damage * .25)}**! DMG and breaks the **Parry**")
+                                                            previous_moves.append(f"(**{turn_total}**) **{o_card}** Parry Penetrated! **{t_card}** takes **{round(oparry_damage * .25)}**! DMG and breaks the **Parry**")
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                             oarm_parry_active = False
                                                     else:
-                                                        o_health = o_health - int(dmg['DMG'])
+                                                        if dmg['REPEL']:
+                                                            t_health = t_health - int(dmg['DMG'])
+                                                        elif dmg['ABSORB']:
+                                                            o_health = o_health + int(dmg['DMG'])
+                                                        elif dmg['ELEMENT'] == water_element:
+                                                            t_water_buff = t_water_buff + 25
+                                                            o_health = o_health - (dmg['DMG'] + t_water_buff)
+                                                        else:
+                                                            o_health = o_health - dmg['DMG']
+
+                                                        if dmg['ELEMENT'] == ice_element:
+                                                            t_ice_counter = t_ice_counter + 1
+                                                            if t_ice_counter == 3:
+                                                                t_freeze_enh = True
+                                                                t_ice_counter = 0
+
+                                                        if dmg['ELEMENT'] == time_element:
+                                                            t_stamina = 0
+
+                                                        if dmg['ELEMENT'] == bleed_element:
+                                                            t_bleed_counter = t_bleed_counter + 1
+                                                            if t_bleed_counter == 10:
+                                                                t_bleed_hit = True
+                                                                t_bleed_counter = 0
+
+
+                                                        if dmg['ELEMENT'] == recoil_element:
+                                                            t_health = t_health - (dmg['DMG'] * .25)
+
+                                                        if dmg['ELEMENT'] == earth_element:
+                                                            t_defense = t_defense + (dmg['DMG'] * .20)
+
+                                                        if dmg['ELEMENT'] == death_element:
+                                                            o_max_health = o_max_health - (dmg['DMG'] * .05)
+
+                                                        if dmg['ELEMENT'] == light_element:
+                                                            t_stamina = t_stamina + (dmg['STAMINA_USED'] / 2)
+
+                                                        if dmg['ELEMENT'] == dark_element:
+                                                            t_stamina = t_stamina + 5
+                                                            o_stamina = o_stamina - 5
+
+                                                        if dmg['ELEMENT'] == life_element:
+                                                            t_health = t_health + (dmg['DMG'] * .15)
+
+                                                        if dmg['ELEMENT'] == phsycic_element:
+                                                            o_defense = o_defense - (dmg['DMG'] * .08)
+                                                            o_attack = o_attack - (dmg['DMG'] * .08)
+
+
+                                                        if dmg['ELEMENT'] == fire_element:
+                                                            t_burn_dmg = round(dmg['DMG'] * .30)
+
+
+                                                        if dmg['ELEMENT'] == water_element:
+                                                            t_water_buff = t_water_buff + 25
+
+                                                        if dmg['ELEMENT'] == electric_element:
+                                                            t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
+
+                                                        if dmg['ELEMENT'] == poison_element:
+                                                            t_poison_dmg = t_poison_dmg + 8
+
                                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)  
-                                                        previous_moves.append(f"*{turn_total}:* **{t_card}**: {dmg['MESSAGE']}")  
+                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}**: {dmg['MESSAGE']}")  
                                                         if tarm_siphon_active:
                                                             siphon_damage = (dmg['DMG'] * .10) + tsiphon_value
                                                             t_health = round(t_health + siphon_damage)
                                                             if t_health >= t_max_health:
                                                                 t_health = t_max_health
-                                                                previous_moves.append(f"*{turn_total}:* **{t_card}**: 💉 Siphoned **Full Health!**")
+                                                                previous_moves.append(f"(**{turn_total}**) **{t_card}**: 💉 Siphoned **Full Health!**")
                                                             else:
-                                                                previous_moves.append(f"*{turn_total}:* **{t_card}**: 💉 Siphoned **{round(siphon_damage)}** Health!")    
+                                                                previous_moves.append(f"(**{turn_total}**) **{t_card}**: 💉 Siphoned **{round(siphon_damage)}** Health!")    
                                                         if tarm_barrier_active:
                                                             tarm_barrier_active=False
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                            previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                            previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                     if o_health <= 0:
                                                         if o_final_stand==True:
                                                             if o_universe == "Dragon Ball Z":
                                                                 embedVar = discord.Embed(title=f"{o_card}'s LAST STAND", description=f"{o_card} FINDS RESOLVE", colour=0xe91e63)
                                                                 embedVar.add_field(name=f"**{o_card}** Resolved and continues to fight", value="All stats & stamina increased")
-                                                                previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Transformation: Last Stand!!!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Transformation: Last Stand!!!")
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!") 
+                                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!") 
                                                                 o_health = int(.75 * (o_attack + o_defense))
                                                                 
                                                                 o_stamina = 100
@@ -10897,12 +11631,32 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         turn = 0
 
                                             else:
-                                                previous_moves.append(f"*{turn_total}:* **{t_card}** not enough Stamina to use this move") 
+                                                previous_moves.append(f"(**{turn_total}**) **{t_card}** not enough Stamina to use this move") 
                                                 turn = 1
                         # End the match
                         else:
                             # Player 1 Turn Start
                             if turn == 0:
+                                if t_bleed_hit:
+                                    t_bleed_hit = False
+                                    bleed_dmg = 10 * turn_total
+                                    o_health = o_health - bleed_dmg
+                                    previous_moves.append(f"(**{turn_total}**) 🩸 **{o_card}** shredded for **{bleed_dmg}** bleed dmg...")
+
+
+                                if t_burn_dmg:
+                                    o_health = o_health - t_burn_dmg
+                                    previous_moves.append(f"(**{turn_total}**) 🔥 **{o_card}** burned for **{t_burn_dmg}** dmg...")
+                                if t_freeze_enh:
+                                    previous_moves.append(f"(**{turn_total}**) ❄️ **{o_card}** has been frozen for a turn...")
+                                    turn_total = turn_total + 1
+                                    turn = 1
+                                if t_poison_dmg:
+                                    o_health = o_health - t_poison_dmg
+                                    previous_moves.append(f"(**{turn_total}**) 🧪 **{o_card}** poisoned for **{t_poison_dmg}** dmg...")
+                                o_burn_dmg = 0
+                                o_freeze_enh = False
+
                                 # if previous_moves:
                                 #     previous_moves_len = len(previous_moves)
                                 #     # print(f"LIST LEN: {previous_moves_len}")
@@ -10983,7 +11737,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             description=f"**{o_card} says**\nYou will die in 50  turns...",
                                                             colour=0xe91e63)
                                     
-                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Scheduled Death 📓")
+                                    previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Scheduled Death 📓")
                                 
                                 if mode in B_modes:
                                     embedVar = discord.Embed(title=f"**{t_card}** Boss of `{t_universe}`",
@@ -10998,13 +11752,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 description=f"**{c_card} says**\nYou will die in 50  turns...",
                                                                 colour=0xe91e63)
                                         
-                                        previous_moves.append(f"*{turn_total}:* 🩸 {c_card} Scheduled Death 📓")
+                                        previous_moves.append(f"(**{turn_total}**) 🩸 {c_card} Scheduled Death 📓")
                                 if t_universe == 'Death Note' and turn_total == 0:
                                     embedVar = discord.Embed(title=f"{o_card} Scheduled Death 📓",
                                                             description=f"**{t_card} says**\nYou will die in 50  turns...",
                                                             colour=0xe91e63)
                                     
-                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Scheduled Death 📓")
+                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Scheduled Death 📓")
                                 
                                 if o_attack <= 25:
                                     o_attack = 25
@@ -11060,7 +11814,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             embedVar = discord.Embed(title=f"{o_card}'s Devilization",
                                                                     description=f"**{o_card}** Doubles ATK, DEF, and MAX HEALTH.",
                                                                     colour=0xe91e63)
-                                            previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}**'s Devilization")
+                                            previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸's Devilization")
                                             
 
                                 elif o_health <= (o_max_health * .50):
@@ -11075,7 +11829,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             embedVar = discord.Embed(title=f"{o_card}'s Devilization",
                                                                     description=f"**{o_card}** Doubles ATK, DEF, and MAX HEALTH.",
                                                                     colour=0xe91e63)
-                                            previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}**'s Devilization")
+                                            previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸's Devilization")
                                             
                                 elif o_health <= (o_max_health * .75):
                                     embed_color_o = 0xf1c40f
@@ -11146,7 +11900,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         o_attack = o_attack + o_attackcalc
                                         o_defense = o_defense + o_defensecalc
                                     o_used_focus = True
-                                    previous_moves.append(f"*{turn_total}:* 🌀 **{o_card}** focused and {healmessage}")
+                                    previous_moves.append(f"(**{turn_total}**) 🌀 **{o_card}** focused and {healmessage}")
                                     # embedVar = discord.Embed(title=f"{o_card} FOCUSED", description=f"**{o_card} says**\n{o_focus_description}", colour=0xe91e63)
                                     # embedVar.add_field(name=f"{o_card} focused and {healmessage}", value="All stats & stamina increased")
                                     
@@ -11157,7 +11911,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 description=f"**{o_card} says**\n{o_resolve_description}",
                                                                 colour=0xe91e63)
                                         embedVar.add_field(name=f"Transformation: Digivolve", value="On Focus you Resolve.")
-                                        #previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Transformation: Digivolve")
+                                        #previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Transformation: Digivolve")
                                         
                                         # fortitude or luck is based on health
                                         fortitude = 0.0
@@ -11178,9 +11932,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         if turn_total <=5:
                                             o_attack = round(o_attack * 2)
                                             o_defense = round(o_defense * 2 )
-                                            previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Transformation: Mega Digivolution!!!")
+                                            previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Transformation: Mega Digivolution!!!")
                                         else:
-                                            previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Transformation: Digivolve")
+                                            previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Transformation: Digivolve")
 
                                     elif o_universe == "League Of Legends":
                                         embedVar = discord.Embed(title=f"Turret Shot hits {t_card} for **{60 + turn_total}** Damage 💥",
@@ -11188,12 +11942,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         
                                         t_health = round(t_health - (60 + turn_total))
                                         
-                                        previous_moves.append(f"*{turn_total}:* 🩸 Turret Shot hits **{t_card}** for **{60 + turn_total}** Damage 💥")
+                                        previous_moves.append(f"(**{turn_total}**) 🩸 Turret Shot hits **{t_card}** for **{60 + turn_total}** Damage 💥")
 
 
                                     elif o_universe == "Dragon Ball Z":
                                         o_health = o_health + t_stamina + turn_total
-                                        previous_moves.append(f"*{turn_total}:* 🩸 Saiyan Spirit... You heal for **{t_stamina + turn_total}** ❤️")
+                                        previous_moves.append(f"(**{turn_total}**) 🩸 Saiyan Spirit... You heal for **{t_stamina + turn_total}** ❤️")
 
 
                                     elif o_universe == "Solo Leveling":
@@ -11203,7 +11957,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         
                                         t_defense = round(t_defense - (30 + turn_total))
                                         
-                                        previous_moves.append(f"*{turn_total}:* 🩸 Ruler's Authority... Opponent loses **{30 + turn_total}** 🛡️ 🔻")
+                                        previous_moves.append(f"(**{turn_total}**) 🩸 Ruler's Authority... Opponent loses **{30 + turn_total}** 🛡️ 🔻")
                                     
                                     elif o_universe == "Black Clover":
                                         embedVar = discord.Embed(title=f"Mana Zone! **{o_card}** Increased Stamina 🌀",
@@ -11212,7 +11966,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         o_stamina = 100
                                         ocard_lvl_ap_buff = ocard_lvl_ap_buff + 30
 
-                                        previous_moves.append(f"*{turn_total}:* 🩸 Mana Zone! **{o_card}** Increased AP & Stamina 🌀")
+                                        previous_moves.append(f"(**{turn_total}**) 🩸 Mana Zone! **{o_card}** Increased AP & Stamina 🌀")
                                     
                                     elif o_universe == "Death Note":
                                         if turn_total >= 50:
@@ -11222,7 +11976,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             embedVar.add_field(name=f"{t_card} had a heart attack and died",
                                                             value=f"Death....")
                                             
-                                            previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** had a heart attack and died")
+                                            previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 had a heart attack and died")
                                             
                                             t_health = 0
 
@@ -11234,7 +11988,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         t_health = round(t_health + 100)
                                         t_max_health = round(t_max_health + 100)
 
-                                        previous_moves.append(f"*{turn_total}:* 🩸 Hero Reinforcements! **{t_card}**  Increased Health & Max Health ❤️")
+                                        previous_moves.append(f"(**{turn_total}**) 🩸 Hero Reinforcements! **{t_card}**  Increased Health & Max Health ❤️")
 
                                     elif t_universe == "7ds":
                                         embedVar = discord.Embed(title=f"Power Of Friendship! 🧬 **{opet_name}** Rested, **{o_card}** Increased Stamina 🌀",
@@ -11243,7 +11997,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         t_stamina = t_stamina + 60
                                         t_pet_used = False
                                         
-                                        previous_moves.append(f"*{turn_total}:* 🩸 Power Of Friendship! 🧬 **{tpet_name}** Rested, **{t_card}** Increased Stamina 🌀")
+                                        previous_moves.append(f"(**{turn_total}**) 🩸 Power Of Friendship! 🧬 **{tpet_name}** Rested, **{t_card}** Increased Stamina 🌀")
                                     
                                     elif t_universe == "Souls":
                                         embedVar = discord.Embed(
@@ -11252,7 +12006,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         
                                         t_attack = round(t_attack + (60 + turn_total))
 
-                                        previous_moves.append(f"*{turn_total}:* 🩸 Combo Recognition! **{t_card}** Increased Attack by **{60 + turn_total}** 🔺")
+                                        previous_moves.append(f"(**{turn_total}**) 🩸 Combo Recognition! **{t_card}** Increased Attack by **{60 + turn_total}** 🔺")
                                     
                                     else:
                                         turn_total = turn_total + 1
@@ -11268,20 +12022,20 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 else:
                                     if mode in AUTO_BATTLE_modes:
                                         # UNIVERSE CARD
-                                        ap1 = list(o_1.values())[0] + ocard_lvl_ap_buff
-                                        ap2 = list(o_2.values())[0] + ocard_lvl_ap_buff
-                                        ap3 = list(o_3.values())[0] + ocard_lvl_ap_buff + demon_slayer_buff
+                                        ap1 = list(o_1.values())[0] + ocard_lvl_ap_buff + o_shock_buff
+                                        ap2 = list(o_2.values())[0] + ocard_lvl_ap_buff + o_shock_buff
+                                        ap3 = list(o_3.values())[0] + ocard_lvl_ap_buff + demon_slayer_buff + o_shock_buff
                                         enh1 = list(o_enhancer.values())[0]
                                         enh_name = list(o_enhancer.values())[2]
                                         pet_enh_name = list(opet_move.values())[2]
                                         pet_msg_on_resolve = ""
                                         # UNIVERSE CARD
                                         if o_universe == "Souls" and o_used_resolve:
-                                            player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina,
+                                            player_1_card = showcard(o, oarm,o_max_health, o_health, o_max_stamina, o_stamina,
                                                                     o_used_resolve, otitle, o_used_focus, o_attack, o_defense,
                                                                     turn_total, ap2, ap3, ap3, enh1, enh_name, ocard_lvl, t_defense)
                                         else:
-                                            player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina,
+                                            player_1_card = showcard(o, oarm,o_max_health, o_health, o_max_stamina, o_stamina,
                                                                     o_used_resolve, otitle, o_used_focus, o_attack, o_defense,
                                                                     turn_total, ap1, ap2, ap3, enh1, enh_name, ocard_lvl, t_defense)
                                         
@@ -11308,39 +12062,39 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             if temp_tarm_shield_active and not tarm_shield_active:
                                                 if oarm_shield_active:
                                                     oshield_value = oshield_value + temp_tshield_value
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 **ARISE!** *{tarm_name}* is now yours")
                                                     o_swapped = True
                                                 elif not oarm_shield_active:
                                                     oarm_shield_active = True
                                                     oshield_value = temp_tshield_value
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 **ARISE!** *{tarm_name}* is now yours")
                                                     o_swapped = True
                                             elif temp_tarm_barrier_active and not tarm_barrier_active:
                                                 if oarm_barrier_active:
                                                     obarrier_count = obarrier_count + temp_tbarrier_count
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 **ARISE!** *{tarm_name}* is now yours")
                                                     o_swapped = True
                                                 elif not oarm_barrier_active:
                                                     oarm_barrier_active = True
                                                     obarrier_count = temp_tbarrier_count
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 **ARISE!** *{tarm_name}* is now yours")
                                                     o_swapped = True
                                             elif temp_tarm_parry_active and not tarm_parry_active:
                                                 if oarm_parry_active:
                                                     oparry_count = oparry_count + temp_tparry_count
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 **ARISE!** *{tarm_name}* is now yours")
                                                     o_swapped = True
                                                 elif not oarm_parry_active:
                                                     oarm_parry_active = True
                                                     oparry_count = temp_tparry_count
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 **ARISE!** *{tarm_name}* is now yours")
                                                     o_swapped = True
                                         
                                         aiMove = 0
                                         
                                         if o_used_resolve and not o_pet_used and o_stamina >= 30:
                                             aiMove = 6
-                                        elif oarm_barrier_active: #Ai Barrier Checks
+                                        elif oarm_barrier_active and dmg['ELEMENT'] != phsycic_element: #Ai Barrier Checks
                                             if o_stamina >=20: #Stamina Check For Enhancer
                                                 aiMove = await ai_enhancer_moves(turn_total,o_used_focus,o_used_resolve,o_pet_used,o_stamina,
                                                                             o_enhancer['TYPE'],o_health,o_max_health,o_attack,
@@ -11495,36 +12249,36 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                         if aiMove == 1:
                                             if o_universe == "Souls" and o_used_resolve:
-                                                dmg = damage_cal(o_universe, o_card, o_2, o_attack, o_defense, t_defense, o_stamina,
+                                                dmg = damage_cal(t_opponent_affinities, special_attack_name, omove2_element, o_universe, o_card, o_2, o_attack, o_defense, t_defense, o_stamina,
                                                                 o_enhancer_used, o_health, t_health, t_stamina, o_max_health,
                                                                 t_attack, o_special_move_description, turn_total,
                                                                 ocard_lvl_ap_buff, o_1)                                                
                                             else:
-                                                dmg = damage_cal(o_universe, o_card, o_1, o_attack, o_defense, t_defense, o_stamina,
+                                                dmg = damage_cal(t_opponent_affinities, basic_attack_name, omove1_element, o_universe, o_card, o_1, o_attack, o_defense, t_defense, o_stamina,
                                                                 o_enhancer_used, o_health, t_health, t_stamina, o_max_health,
                                                                 t_attack, o_special_move_description, turn_total,
                                                                 ocard_lvl_ap_buff, None)
                                         elif aiMove == 2:
                                             if o_universe == "Souls" and o_used_resolve:
-                                                dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_stamina,
+                                                dmg = damage_cal(t_opponent_affinities, ultimate_attack_name, omove3_element, o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_stamina,
                                                                 o_enhancer_used, o_health, t_health, t_stamina, o_max_health,
                                                                 t_attack, o_special_move_description, turn_total,
                                                                 ocard_lvl_ap_buff, o_2)                                                
                                             else:
-                                                dmg = damage_cal(o_universe, o_card, o_2, o_attack, o_defense, t_defense, o_stamina,
+                                                dmg = damage_cal(t_opponent_affinities, special_attack_name, omove2_element, o_universe, o_card, o_2, o_attack, o_defense, t_defense, o_stamina,
                                                                 o_enhancer_used, o_health, t_health, t_stamina, o_max_health,
                                                                 t_attack, o_special_move_description, turn_total,
                                                                 ocard_lvl_ap_buff, None)
                                         elif aiMove == 3:
 
-                                            dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_stamina,
+                                            dmg = damage_cal(t_opponent_affinities, ultimate_attack_name, omove3_element, o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_stamina,
                                                             o_enhancer_used, o_health, t_health, t_stamina, o_max_health,
                                                             t_attack, o_special_move_description, turn_total,
                                                             ocard_lvl_ap_buff, None)
                                         elif aiMove == 4:
                                             o_enhancer_used = True
 
-                                            dmg = damage_cal(o_universe, o_card, o_enhancer, o_attack, o_defense, t_defense,
+                                            dmg = damage_cal(t_opponent_affinities, basic_attack_name, omove1_element, o_universe, o_card, o_enhancer, o_attack, o_defense, t_defense,
                                                             o_stamina, o_enhancer_used, o_health, t_health, t_stamina,
                                                             o_max_health, t_attack, o_special_move_description, turn_total,
                                                             ocard_lvl_ap_buff, None)
@@ -11562,7 +12316,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                         inline=False)
                                                         embedVar.set_footer(text=f"{o_card} this is your chance!")
                                                     
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: PLUS ULTRA!")
+                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Resolved: PLUS ULTRA!")
 
                                                     turn_total = turn_total + 1
                                                     turn = 0
@@ -11594,7 +12348,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     embedVar = discord.Embed(title=f"{o_card} begins Total Concentration Breathing",
                                                                             description=f"**{o_card} says**\n{o_resolve_description}",
                                                                             colour=0xe91e63)
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Total Concentration Breathing!")
+                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Resolved: Total Concentration Breathing!")
                                                     turn_total = turn_total + 1
                                                     turn = 1
 
@@ -11622,7 +12376,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     embedVar = discord.Embed(title=f"{o_card} Heals from Hashirama Cells",
                                                                             description=f"**{o_card} says**\n{o_resolve_description}",
                                                                             colour=0xe91e63)
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Hashirama Cells heal you for **{o_naruto_heal_buff}**")
+                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Resolved: Hashirama Cells heal you for **{o_naruto_heal_buff}**")
                                                     turn_total = turn_total + 1
                                                     turn = 1
 
@@ -11660,7 +12414,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                         inline=False)
                                                         embedVar.set_footer(text=f"{o_card} this is your chance!")
 
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Titan Mode")
+                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Resolved: Titan Mode")
 
                                                     turn_total = turn_total + 1
                                                     turn = 1
@@ -11697,7 +12451,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         embedVar.set_footer(text=f"{o_card} this is your chance!")
 
 
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Bankai!")
+                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Resolved: Bankai!")
 
                                                     turn_total = turn_total + 1
                                                     turn = 1
@@ -11722,12 +12476,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     o_pet_used = False
 
                                                     if t_gow_resolve:
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Ascension!")
+                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Ascension!")
                                                     elif not o_gow_resolve:
                                                         o_used_resolve = False
                                                         o_gow_resolve = True
                                                         o_defense = 125
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Crushed Blood Orb: Health Refill")
+                                                        previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Crushed Blood Orb: Health Refill")
                                                     
 
                                                     embedVar = discord.Embed(title=f"{o_card} STRENGTHENED RESOLVE :zap:",
@@ -11770,7 +12524,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         embedVar.add_field(name=f"{t_card}'s Rebuke", value=f"{t_rebuke}",
                                                                         inline=False)
                                                         embedVar.set_footer(text=f"{o_card} this is your chance!")
-                                                    dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense,
+                                                    dmg = damage_cal(t_opponent_affinities, ultimate_attack_name, omove3_element, o_universe, o_card, o_3, o_attack, o_defense,
                                                                     t_defense, o_stamina, o_enhancer_used, o_health,
                                                                     t_health, t_stamina, o_max_health, t_attack,
                                                                     o_special_move_description, turn_total,
@@ -11783,7 +12537,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     embedVar.add_field(name=f"Transformation: Command Seal",
                                                                     value="On Resolve, Strike with Ultimate, then Focus.")
 
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Command Seal!")
+                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Resolved: Command Seal!")
 
                                                     # o_stamina = 0
                                                     o_used_resolve = True
@@ -11822,13 +12576,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     if turn_total >= 50:
                                                         o_max_health = o_max_health + 1000
                                                         o_health = o_health + 1000
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Gigantomax Evolution!!! Gained **1000** HP!!!")
+                                                        previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Resolved: Gigantomax Evolution!!! Gained **1000** HP!!!")
                                                     elif turn_total >= 30:
                                                         o_max_health = o_max_health + 300
                                                         o_health = o_health + 300
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Mega Evolution!! Gained **300** HP!")
+                                                        previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Resolved: Mega Evolution!! Gained **300** HP!")
                                                     else:
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Evolution!")
+                                                        previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Resolved: Evolution!")
 
                                                     turn_total = turn_total + 1
                                                     turn = 1
@@ -11859,9 +12613,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         embedVar.add_field(name=f"Nexus Destroyed",
                                                                         value=f"**{o_card}** dealt **{(60 * (o_focus_count + t_focus_count))}** damage.")
                                                     
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Pentakill! Dealing {(60 * (o_focus_count + t_focus_count))} damage.")
+                                                        previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Resolved: Pentakill! Dealing {(60 * (o_focus_count + t_focus_count))} damage.")
                                                     elif o_universe == "Souls":
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Phase 2: Enhanced Moveset!")
+                                                        previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Phase 2: Enhanced Moveset!")
                                                     else:
                                                         embedVar = discord.Embed(
                                                             title=f"{o_card} STRENGTHENED RESOLVE :zap:",
@@ -11869,7 +12623,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             colour=0xe91e63)
                                                         embedVar.add_field(name=f"Transformation",
                                                                         value="All stats & stamina greatly increased")
-                                                        previous_moves.append(f"*{turn_total}:* ⚡ **{o_card}** Resolved!")
+                                                        previous_moves.append(f"(**{turn_total}**) ⚡ **{o_card}** Resolved!")
 
                                                     if mode in B_modes:
                                                         embedVar.add_field(name=f"{t_card}'s Rebuke", value=f"{t_rebuke}",
@@ -11881,14 +12635,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             else:
                                                 emessage = m.CANNOT_USE_RESOLVE
                                                 embedVar = discord.Embed(title=emessage, colour=0xe91e63)
-                                                previous_moves.append(f"*{turn_total}:* **{o_card}** cannot resolve")
+                                                previous_moves.append(f"(**{turn_total}**) **{o_card}** cannot resolve")
                                                 turn = 0
                                     
                                         elif aiMove == 6:
                                             # Resolve Check and Calculation
                                             if o_used_resolve and o_used_focus and not o_pet_used:
                                                 o_enhancer_used = True
-                                                dmg = damage_cal(o_universe, o_card, opet_move, o_attack, o_defense,
+                                                dmg = damage_cal(t_opponent_affinities, basic_attack_name, omove1_element, o_universe, o_card, opet_move, o_attack, o_defense,
                                                                 t_defense, o_stamina, o_enhancer_used, o_health, t_health,
                                                                 t_stamina, o_max_health, t_attack,
                                                                 o_special_move_description, turn_total, ocard_lvl_ap_buff, None)
@@ -11983,55 +12737,114 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                     o_stamina = o_stamina - int(dmg['STAMINA_USED'])
                                                     if o_universe == "Persona":
-                                                        petdmg = damage_cal(o_universe, o_card, o_1, o_attack, o_defense,
+                                                        petdmg = damage_cal(t_opponent_affinities, basic_attack_name, omove1_element, o_universe, o_card, o_1, o_attack, o_defense,
                                                                             t_defense, o_stamina, o_enhancer_used, o_health,
                                                                             t_health, t_stamina, o_max_health, t_attack,
                                                                             o_special_move_description, turn_total,
                                                                             ocard_lvl_ap_buff, None)
                                                         t_health = t_health - petdmg['DMG']
 
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **Persona!** : **{opet_name}** was summoned from **{o_card}'s** soul dealing **{petdmg['DMG']}** damage!\n**{t_card}** summon disabled!")
+                                                        previous_moves.append(f"(**{turn_total}**) **Persona!** 🩸 : **{opet_name}** was summoned from **{o_card}'s** soul dealing **{petdmg['DMG']}** damage!\n**{t_card}** summon disabled!")
                                                         t_pet_used = True
                                                     else:
-                                                        previous_moves.append(f"*{turn_total}:* **{o_card}** Summoned 🧬 **{opet_name}**: {dmg['MESSAGE']}")
+                                                        previous_moves.append(f"(**{turn_total}**) **{o_card}** Summoned 🧬 **{opet_name}**: {dmg['MESSAGE']}")
                                                     turn = 0
                                                 else:
-                                                    previous_moves.append(f"*{turn_total}:* 🧬 **{opet_name}** needs a turn to rest...")
+                                                    previous_moves.append(f"(**{turn_total}**) 🧬 **{opet_name}** needs a turn to rest...")
                                                     turn = 0
                                             else:
-                                                previous_moves.append(f"*{turn_total}:* 🧬 **{opet_name}** needs a turn to rest...")
+                                                previous_moves.append(f"(**{turn_total}**) 🧬 **{opet_name}** needs a turn to rest...")
                                                 turn = 0
                                         
                                         if aiMove == 0:
                                             block_message = ""
                                             if o_universe == "Persona":
                                                 if mode in co_op_modes:
-                                                    block_message = f"🩸**Confidant Block!***: **{o_card}**: Defended 🛡️ **{c_card}**"
+                                                    block_message = f"**Confidant Block!*** 🩸: **{o_card}**: Defended 🛡️ **{c_card}**"
                                                     o_defend_used = True
                                                 else:
-                                                    block_message = f"🩸**Confidant Block!***: **{o_card}** Blocked 🛡️"
+                                                    block_message = f"**Confidant Block!*** 🩸: **{o_card}** Blocked 🛡️"
                                                     o_block_used = True
                                                 o_defense = round(o_defense * 2)
 
-                                                previous_moves.append(f"*{turn_total}:* {block_message}")
+                                                previous_moves.append(f"(**{turn_total}**) {block_message}")
                                                 turn_total = turn_total + 1
                                                 turn = 1
 
                                             elif o_stamina >= 20:
 
                                                 if o_universe == "Attack On Titan":
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 Rally! **{o_card}** Increased Max Health ❤️")
+                                                    previous_moves.append(f"(**{turn_total}**) **Rally** 🩸 ! **{o_card}** Increased Max Health ❤️")
                                                     o_max_health = round(o_max_health + 100)
                                                     o_health = o_health + 100
 
                                                 if o_universe == "Bleach":
-                                                    dmg = damage_cal(o_universe, o_card, o_1, o_attack, o_defense, t_defense, o_stamina,
+                                                    dmg = damage_cal(t_opponent_affinities, basic_attack_name, omove1_element, o_universe, o_card, o_1, o_attack, o_defense, t_defense, o_stamina,
                                                                     o_enhancer_used, o_health, t_health, t_stamina, o_max_health,
                                                                     t_attack, o_special_move_description, turn_total,
                                                                     ocard_lvl_ap_buff, None)
-                                                    previous_moves.append(f"*{turn_total}:* **{o_card}** Exerted their 🩸 Spiritual Pressure dealing {dmg['DMG']} dmg")
-                                                    t_health = t_health - dmg['DMG']
-                                                    
+                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}** Exerted their 🩸 Spiritual Pressure - {dmg['MESSAGE']}")
+                                                    if dmg['REPEL']:
+                                                        o_health = o_health - dmg['DMG']
+                                                    elif dmg['ABSORB']:
+                                                        t_health = t_health + dmg['DMG']
+                                                    elif dmg['ELEMENT'] == water_element:
+                                                        o_water_buff = o_water_buff + 25
+                                                        t_health = t_health - (dmg['DMG'] + o_water_buff)
+                                                    else:
+                                                        t_health = t_health - dmg['DMG']
+
+                                                    if dmg['ELEMENT'] == recoil_element:
+                                                        o_health = o_health - (dmg['DMG'] * .25)
+
+                                                    if dmg['ELEMENT'] == time_element:
+                                                        o_stamina = 0
+
+                                                    if dmg['ELEMENT'] == bleed_element:
+                                                        o_bleed_counter = o_bleed_counter + 1
+                                                        if o_bleed_counter == 10:
+                                                            o_bleed_hit = True
+                                                            o_bleed_counter = 0
+
+                                                    if dmg['ELEMENT'] == earth_element:
+                                                        o_defense = o_defense + (dmg['DMG'] * .20)
+
+                                                    if dmg['ELEMENT'] == death_element:
+                                                        t_max_health = t_max_health - (dmg['DMG'] * .05)
+
+                                                    if dmg['ELEMENT'] == light_element:
+                                                        o_stamina = o_stamina + (dmg['STAMINA_USED'] / 2)
+
+                                                    if dmg['ELEMENT'] == dark_element:
+                                                        o_stamina = o_stamina + 5
+                                                        t_stamina = t_stamina - 5
+
+                                                    if dmg['ELEMENT'] == life_element:
+                                                        o_health = o_health + (dmg['DMG'] * .15)
+
+                                                    if dmg['ELEMENT'] == phsycic_element:
+                                                        t_defense = t_defense - (dmg['DMG'] * .08)
+                                                        t_attack = t_attack - (dmg['DMG'] * .08)
+
+                                                    if dmg['ELEMENT'] == fire_element:
+                                                        o_burn_dmg = round(dmg['DMG'] * .30)
+
+
+                                                    if dmg['ELEMENT'] == water_element:
+                                                        o_water_buff = o_water_buff + 25
+
+                                                    if dmg['ELEMENT'] == electric_element:
+                                                        o_shock_buff = o_shock_buff +  (dmg['DMG'] * .05)
+
+                                                    if dmg['ELEMENT'] == poison_element:
+                                                        o_poison_dmg = o_poison_dmg + 8
+
+                                                    if dmg['ELEMENT'] == ice_element:
+                                                        o_ice_counter = o_ice_counter + 1
+                                                        if o_ice_counter == 3:
+                                                            o_freeze_enh = True
+                                                            o_ice_counter = 0
+
 
                                                 if mode in co_op_modes:
                                                     block_message = f"**{o_card}**: Defended 🛡️ **{c_card}**"
@@ -12042,11 +12855,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 o_stamina = o_stamina - 20
                                                 o_defense = round(o_defense * 2)
 
-                                                previous_moves.append(f"*{turn_total}:* {block_message}")
+                                                previous_moves.append(f"(**{turn_total}**) {block_message}")
                                                 turn_total = turn_total + 1
                                                 turn = 1
                                             else:
-                                                previous_moves.append(f"*{turn_total}:* **{o_card}** is too tired to block.")
+                                                previous_moves.append(f"(**{turn_total}**) **{o_card}** is too tired to block.")
                                                 turn = 0
                                         
                                         if aiMove != 5 and aiMove != 6 and aiMove != 0:
@@ -12151,7 +12964,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}",
                                                                             colour=embed_color_o)
-                                                    previous_moves.append(f"*{turn_total}:* **{o_card}**: 🦠 {dmg['MESSAGE']}")
+                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}**: 🦠 {dmg['MESSAGE']}")
                                                     turn_total = turn_total + 1
                                                     turn = 1
                                                     # await button_ctx.defer(ignore=True)
@@ -12162,8 +12975,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     if oarm_barrier_active:
                                                         oarm_barrier_active=False
                                                         embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                        previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
-                                                    previous_moves.append(f"*{turn_total}:* **{o_card}**: {dmg['MESSAGE']}")
+                                                        previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
+                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}**: {dmg['MESSAGE']}")
                                                     turn_total = turn_total + 1
                                                     turn = 1
                                                 else:
@@ -12175,52 +12988,52 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if oarm_barrier_active:
                                                             oarm_barrier_active=False
                                                             embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                            previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
+                                                            previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
 
-                                                        previous_moves.append(f"*{turn_total}:* 🩸**{t_card}**: Substitution Jutsu")
+                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸: Substitution Jutsu")
                                                         if not t_used_resolve:
-                                                            previous_moves.append(f"*{turn_total}:* 🩸**{t_stored_damage}** Hasirama Cells stored. 🩸**{t_naruto_heal_buff}** total stored.")
-                                                    elif tarm_shield_active:
+                                                            previous_moves.append(f"(**{turn_total}**) 🩸**{t_stored_damage}** Hasirama Cells stored. 🩸**{t_naruto_heal_buff}** total stored.")
+                                                    elif tarm_shield_active and dmg['ELEMENT'] != dark_element:
 
                                                         if tshield_value > 0:
                                                             tshield_value = tshield_value - dmg['DMG']
                                                             t_health = t_health 
                                                             if tshield_value <=0:
                                                                 embedVar = discord.Embed(title=f"{t_card}'s' **Shield** Shattered!", description=f"{o_card} breaks the **Shield**!", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* 🌐**{t_card}**: Shield Shattered!")
+                                                                previous_moves.append(f"(**{turn_total}**) 🌐**{t_card}**: Shield Shattered!")
                                                                 if oarm_barrier_active:
                                                                     oarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
                                                                 tarm_shield_active = False
                                                             else:
                                                                 embedVar = discord.Embed(title=f"{t_card} Activates **Shield** 🌐", description=f"**{o_card}** strikes the Shield 🌐\n**{tshield_value} Shield** Left!", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* **{o_card}** strikes **{t_card}**'s Shield 🌐\n**{tshield_value} Shield** Left!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{o_card}** strikes **{t_card}**'s Shield 🌐\n**{tshield_value} Shield** Left!")
                                                                 if oarm_barrier_active:
                                                                     oarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
 
-                                                    elif tarm_barrier_active:
+                                                    elif tarm_barrier_active and dmg['ELEMENT'] != phsycic_element:
                                                         if tbarrier_count >1:
                                                             t_health = t_health 
                                                             embedVar = discord.Embed(title=f"{t_card} Activates **Barrier** 💠", description=f"{o_card}'s attack **Nullified**!\n **{tbarrier_count - 1} Barriers** remain!", colour=0xe91e63)
-                                                            previous_moves.append(f"*{turn_total}:* **{t_card}** Activates Barrier 💠 {o_card}'s attack **Nullified**!\n **{tbarrier_count - 1} Barriers** remain!")
+                                                            previous_moves.append(f"(**{turn_total}**) **{t_card}** Activates Barrier 💠 {o_card}'s attack **Nullified**!\n **{tbarrier_count - 1} Barriers** remain!")
                                                             if oarm_barrier_active:
                                                                 oarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
                                                             tbarrier_count = tbarrier_count - 1
                                                         elif tbarrier_count==1:
                                                             embedVar = discord.Embed(title=f"{t_card}'s **Barrier** Broken!", description=f"{o_card} destroys the **Barrier**", colour=0xe91e63)
-                                                            previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Broken!")
+                                                            previous_moves.append(f"(**{turn_total}**) **{t_card}**'s Barrier Broken!")
                                                             tbarrier_count = tbarrier_count - 1
                                                             if oarm_barrier_active:
                                                                 oarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
                                                             tarm_barrier_active = False
-                                                    elif tarm_parry_active:
+                                                    elif tarm_parry_active and dmg['ELEMENT'] != earth_element:
                                                         if tparry_count > 1:
                                                             t_health = t_health
                                                             tparry_damage = round(dmg['DMG'])
@@ -12228,11 +13041,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = round(o_health - (tparry_damage * .25))
                                                             tparry_count = tparry_count - 1
                                                             embedVar = discord.Embed(title=f"{t_card} Activates **Parry** 🔄", description=f"{o_card} takes {round(tparry_damage * .25)}! DMG\n **{tparry_count} Parries** to go!!", colour=0xe91e63)
-                                                            previous_moves.append(f"*{turn_total}:* **{t_card}** Activates Parry 🔄  {o_card} takes {round(tparry_damage * .25)}! DMG\n **{tparry_count} Parries** to go!!")
+                                                            previous_moves.append(f"(**{turn_total}**) **{t_card}** Activates Parry 🔄  {o_card} takes {round(tparry_damage * .25)}! DMG\n **{tparry_count} Parries** to go!!")
                                                             if oarm_barrier_active:
                                                                 oarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
                                                             
                                                         elif tparry_count==1:
                                                             t_health = t_health
@@ -12240,29 +13053,88 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = round(t_health - (tparry_damage * .75))
                                                             o_health = round(o_health - (tparry_damage * .25))
                                                             embedVar = discord.Embed(title=f"{t_card} **Parry** Penetrated!!", description=f"{o_card} takes {round(tparry_damage * .25)}! DMG and breaks the **Parry**", colour=0xe91e63)
-                                                            previous_moves.append(f"*{turn_total}:* **{t_card}** Parry Penetrated! **{o_card}** takes **{round(tparry_damage * .25)}**! DMG and breaks the **Parry**")
+                                                            previous_moves.append(f"(**{turn_total}**) **{t_card}** Parry Penetrated! **{o_card}** takes **{round(tparry_damage * .25)}**! DMG and breaks the **Parry**")
                                                             tparry_count = tparry_count - 1
                                                             if oarm_barrier_active:
                                                                 oarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
                                                             tarm_parry_active = False
                                                     else:
-                                                        previous_moves.append(f"*{turn_total}:* **{o_card}**: {dmg['MESSAGE']}")
-                                                        t_health = t_health - dmg['DMG']
+                                                        if dmg['REPEL']:
+                                                            o_health = o_health - int(dmg['DMG'])
+                                                        elif dmg['ABSORB']:
+                                                            t_health = t_health + int(dmg['DMG'])
+                                                        elif dmg['ELEMENT'] == water_element:
+                                                            o_water_buff = o_water_buff + 25
+                                                            t_health = t_health - (dmg['DMG'] + o_water_buff)
+                                                        else:
+                                                            t_health = t_health - dmg['DMG']
+
+                                                        if dmg['ELEMENT'] == ice_element:
+                                                            o_ice_counter = o_ice_counter + 1
+                                                            if o_ice_counter == 3:
+                                                                o_freeze_enh = True
+                                                                o_ice_counter = 0
+
+                                                        if dmg['ELEMENT'] == time_element:
+                                                            o_stamina = 0
+
+                                                        if dmg['ELEMENT'] == bleed_element:
+                                                            o_bleed_counter = o_bleed_counter + 1
+                                                            if o_bleed_counter == 10:
+                                                                o_bleed_hit= True
+                                                                o_bleed_counter = 0
+
+                                                        if dmg['ELEMENT'] == recoil_element:
+                                                            o_health = o_health - (dmg['DMG'] * .25)
+
+                                                        if dmg['ELEMENT'] == earth_element:
+                                                            o_defense = o_defense + (dmg['DMG'] * .20)
+
+                                                        if dmg['ELEMENT'] == death_element:
+                                                            t_max_health = t_max_health - (dmg['DMG'] * .05)
+
+                                                        if dmg['ELEMENT'] == light_element:
+                                                            o_stamina = o_stamina + (dmg['STAMINA_USED'] / 2)
+
+                                                        if dmg['ELEMENT'] == dark_element:
+                                                            o_stamina = o_stamina + 5
+                                                            t_stamina = t_stamina - 5
+
+                                                        if dmg['ELEMENT'] == life_element:
+                                                            o_health = o_health + (dmg['DMG'] * .15)
+
+                                                        if dmg['ELEMENT'] == phsycic_element:
+                                                            t_defense = t_defense - (dmg['DMG'] * .08)
+                                                            t_attack = t_attack - (dmg['DMG'] * .08)
+
+                                                        if dmg['ELEMENT'] == fire_element:
+                                                            o_burn_dmg = round(dmg['DMG'] * .30)
+
+                                                        if dmg['ELEMENT'] == water_element:
+                                                            o_water_buff = o_water_buff + 25
+
+                                                        if dmg['ELEMENT'] == electric_element:
+                                                            o_shock_buff = o_shock_buff +  (dmg['DMG'] * .05)
+
+                                                        if dmg['ELEMENT'] == poison_element:
+                                                            o_poison_dmg = o_poison_dmg + 8
+
+                                                        previous_moves.append(f"(**{turn_total}**) **{o_card}**: {dmg['MESSAGE']}")
                                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
                                                         if oarm_siphon_active:
                                                             siphon_damage = (dmg['DMG'] * .10) + osiphon_value
                                                             o_health = round(o_health + siphon_damage)
                                                             if o_health >= o_max_health:
                                                                 o_health = o_max_health
-                                                                previous_moves.append(f"*{turn_total}:* **{o_card}**: 💉 Siphoned **Full Health!**")
+                                                                previous_moves.append(f"(**{turn_total}**) **{o_card}**: 💉 Siphoned **Full Health!**")
                                                             else:
-                                                                previous_moves.append(f"*{turn_total}:* **{o_card}**: 💉 Siphoned **{round(siphon_damage)}** Health!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{o_card}**: 💉 Siphoned **{round(siphon_damage)}** Health!")
                                                         if oarm_barrier_active:
                                                             oarm_barrier_active=False
                                                             embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                            previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
+                                                            previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
                                                     if t_health <= 0:
                                                         if t_final_stand==True:
                                                             if t_universe == "Dragon Ball Z":
@@ -12271,8 +13143,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if oarm_barrier_active:
                                                                     oarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
-                                                                previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Transformation: Last Stand!!!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Transformation: Last Stand!!!")
                                                                 t_health = int(.75 * (t_attack + t_defense))
                                                                 
                                                                 t_used_resolve = True
@@ -12290,13 +13162,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         turn_total = turn_total + 1
                                                         turn = 1
                                             else:
-                                                previous_moves.append(f"*{turn_total}:* **{o_card}**: Not enough Stamina to use this ability.")
+                                                previous_moves.append(f"(**{turn_total}**) **{o_card}**: Not enough Stamina to use this ability.")
                                                 turn = 0
                                     else:
                                         # UNIVERSE CARD
-                                        ap1 = list(o_1.values())[0] + ocard_lvl_ap_buff
-                                        ap2 = list(o_2.values())[0] + ocard_lvl_ap_buff
-                                        ap3 = list(o_3.values())[0] + ocard_lvl_ap_buff + demon_slayer_buff
+                                        ap1 = list(o_1.values())[0] + ocard_lvl_ap_buff + o_shock_buff
+                                        ap2 = list(o_2.values())[0] + ocard_lvl_ap_buff + o_shock_buff
+                                        ap3 = list(o_3.values())[0] + ocard_lvl_ap_buff + demon_slayer_buff + o_shock_buff
                                         enh1 = list(o_enhancer.values())[0]
                                         enh_name = list(o_enhancer.values())[2]
                                         pet_enh_name = list(opet_move.values())[2]
@@ -12304,11 +13176,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                         # UNIVERSE CARD
                                         if o_universe == "Souls" and o_used_resolve:
-                                            player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina,
+                                            player_1_card = showcard(o, oarm,o_max_health, o_health, o_max_stamina, o_stamina,
                                                                     o_used_resolve, otitle, o_used_focus, o_attack, o_defense,
                                                                     turn_total, ap2, ap3, ap3, enh1, enh_name, ocard_lvl, t_defense)
                                         else:
-                                            player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina,
+                                            player_1_card = showcard(o, oarm,o_max_health, o_health, o_max_stamina, o_stamina,
                                                                     o_used_resolve, otitle, o_used_focus, o_attack, o_defense,
                                                                     turn_total, ap1, ap2, ap3, enh1, enh_name, ocard_lvl, t_defense)
 
@@ -12316,32 +13188,32 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             if temp_tarm_shield_active and not tarm_shield_active:
                                                 if oarm_shield_active:
                                                     oshield_value = oshield_value + temp_tshield_value
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 **ARISE!** *{tarm_name}* is now yours")
                                                     o_swapped = True
                                                 elif not oarm_shield_active:
                                                     oarm_shield_active = True
                                                     oshield_value = temp_tshield_value
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 **ARISE!** *{tarm_name}* is now yours")
                                                     o_swapped = True
                                             elif temp_tarm_barrier_active and not tarm_barrier_active:
                                                 if oarm_barrier_active:
                                                     obarrier_count = obarrier_count + temp_tbarrier_count
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 **ARISE!** *{tarm_name}* is now yours")
                                                     o_swapped = True
                                                 elif not oarm_barrier_active:
                                                     oarm_barrier_active = True
                                                     obarrier_count = temp_tbarrier_count
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 **ARISE!** *{tarm_name}* is now yours")
                                                     o_swapped = True
                                             elif temp_tarm_parry_active and not tarm_parry_active:
                                                 if oarm_parry_active:
                                                     oparry_count = oparry_count + temp_tparry_count
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 **ARISE!** *{tarm_name}* is now yours")
                                                     o_swapped = True
                                                 elif not oarm_parry_active:
                                                     oarm_parry_active = True
                                                     oparry_count = temp_tparry_count
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 **ARISE!** *{tarm_name}* is now yours")
                                                     o_swapped = True
                                    
 
@@ -12379,7 +13251,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             battle_buttons.append(
                                                 manage_components.create_button(
                                                     style=ButtonStyle.green,
-                                                    label=f"💥 10",
+                                                    label=f"{o_basic_emoji} 10",
                                                     custom_id="1"
                                                 )
                                             )
@@ -12388,7 +13260,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             battle_buttons.append(
                                                 manage_components.create_button(
                                                     style=ButtonStyle.green,
-                                                    label=f"☄️ 30",
+                                                    label=f"{o_super_emoji} 30",
                                                     custom_id="2"
                                                 )
                                             )
@@ -12398,7 +13270,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             battle_buttons.append(
                                                 manage_components.create_button(
                                                     style=ButtonStyle.green,
-                                                    label=f"🏵️ 80",
+                                                    label=f"{o_ultimate_emoji} 80",
                                                     custom_id="3"
                                                 )
                                             )
@@ -12587,7 +13459,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             # calculate data based on selected move
                                             if button_ctx.custom_id == "q" or button_ctx.custom_id == "Q":
                                                 o_health = 0
-                                                previous_moves.append(f"*{turn_total}:* 💨 **{o_card}** Fled...")
+                                                previous_moves.append(f"(**{turn_total}**) 💨 **{o_card}** Fled...")
                                                 await battle_msg.delete(delay=1)
                                                 await asyncio.sleep(1)
                                                 battle_msg = await private_channel.send(content=f"{ctx.author.mention} has fled.")
@@ -12595,29 +13467,29 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             
                                             if button_ctx.custom_id == "1":
                                                 if o_universe == "Souls" and o_used_resolve:
-                                                    dmg = damage_cal(o_universe, o_card, o_2, o_attack, o_defense, t_defense, o_stamina,
+                                                    dmg = damage_cal(t_opponent_affinities, special_attack_name, omove2_element, o_universe, o_card, o_2, o_attack, o_defense, t_defense, o_stamina,
                                                                     o_enhancer_used, o_health, t_health, t_stamina, o_max_health,
                                                                     t_attack, o_special_move_description, turn_total,
                                                                     ocard_lvl_ap_buff, o_1)                                                
                                                 else:
-                                                    dmg = damage_cal(o_universe, o_card, o_1, o_attack, o_defense, t_defense,
+                                                    dmg = damage_cal(t_opponent_affinities, basic_attack_name, omove1_element, o_universe, o_card, o_1, o_attack, o_defense, t_defense,
                                                                     o_stamina, o_enhancer_used, o_health, t_health, t_stamina,
                                                                     o_max_health, t_attack, o_special_move_description, turn_total,
                                                                     ocard_lvl_ap_buff, None)
                                             elif button_ctx.custom_id == "2":
                                                 if o_universe == "Souls" and o_used_resolve:
-                                                    dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_stamina,
+                                                    dmg = damage_cal(t_opponent_affinities, ultimate_attack_name, omove3_element, o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_stamina,
                                                                     o_enhancer_used, o_health, t_health, t_stamina, o_max_health,
                                                                     t_attack, o_special_move_description, turn_total,
                                                                     ocard_lvl_ap_buff, o_2)                                                
                                                 else:
-                                                    dmg = damage_cal(o_universe, o_card, o_2, o_attack, o_defense, t_defense,
+                                                    dmg = damage_cal(t_opponent_affinities, special_attack_name, omove2_element, o_universe, o_card, o_2, o_attack, o_defense, t_defense,
                                                                     o_stamina, o_enhancer_used, o_health, t_health, t_stamina,
                                                                     o_max_health, t_attack, o_special_move_description, turn_total,
                                                                     ocard_lvl_ap_buff, None)
                                             elif button_ctx.custom_id == "3":
 
-                                                dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense,
+                                                dmg = damage_cal(t_opponent_affinities, ultimate_attack_name, omove3_element, o_universe, o_card, o_3, o_attack, o_defense, t_defense,
                                                                 o_stamina, o_enhancer_used, o_health, t_health, t_stamina,
                                                                 o_max_health, t_attack, o_special_move_description, turn_total,
                                                                 ocard_lvl_ap_buff, None)
@@ -12631,7 +13503,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             elif button_ctx.custom_id == "4":
                                                 o_enhancer_used = True
 
-                                                dmg = damage_cal(o_universe, o_card, o_enhancer, o_attack, o_defense, t_defense,
+                                                dmg = damage_cal(t_opponent_affinities, basic_attack_name, omove1_element, o_universe, o_card, o_enhancer, o_attack, o_defense, t_defense,
                                                                 o_stamina, o_enhancer_used, o_health, t_health, t_stamina,
                                                                 o_max_health, t_attack, o_special_move_description, turn_total,
                                                                 ocard_lvl_ap_buff, None)
@@ -12669,7 +13541,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                             inline=False)
                                                             embedVar.set_footer(text=f"{o_card} this is your chance!")
                                                         
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: PLUS ULTRA!")
+                                                        previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Resolved: PLUS ULTRA!")
                                                         await button_ctx.defer(ignore=True)
 
                                                         turn_total = turn_total + 1
@@ -12702,7 +13574,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         embedVar = discord.Embed(title=f"{o_card} begins Total Concentration Breathing",
                                                                                 description=f"**{o_card} says**\n{o_resolve_description}",
                                                                                 colour=0xe91e63)
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Total Concentration Breathing!")
+                                                        previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Resolved: Total Concentration Breathing!")
                                                         await button_ctx.defer(ignore=True)
                                                         turn_total = turn_total + 1
                                                         turn = 1
@@ -12731,7 +13603,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         embedVar = discord.Embed(title=f"{o_card} Heals from Hashirama Cells",
                                                                                 description=f"**{o_card} says**\n{o_resolve_description}",
                                                                                 colour=0xe91e63)
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Hashirama Cells heal you for **{o_naruto_heal_buff}**")
+                                                        previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Resolved: Hashirama Cells heal you for **{o_naruto_heal_buff}**")
                                                         await button_ctx.defer(ignore=True)
                                                         turn_total = turn_total + 1
                                                         turn = 1
@@ -12770,7 +13642,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                             inline=False)
                                                             embedVar.set_footer(text=f"{o_card} this is your chance!")
 
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Titan Mode")
+                                                        previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Resolved: Titan Mode")
                                                         await button_ctx.defer(ignore=True)
 
                                                         turn_total = turn_total + 1
@@ -12808,7 +13680,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             embedVar.set_footer(text=f"{o_card} this is your chance!")
 
 
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Bankai!")
+                                                        previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Resolved: Bankai!")
                                                         await button_ctx.defer(ignore=True)
 
                                                         turn_total = turn_total + 1
@@ -12834,12 +13706,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_pet_used = False
 
                                                         if t_gow_resolve:
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Ascension!")
+                                                            previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Ascension!")
                                                         elif not o_gow_resolve:
                                                             o_used_resolve = False
                                                             o_gow_resolve = True
                                                             o_defense = 125
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Crushed Blood Orb: Health Refill")
+                                                            previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Crushed Blood Orb: Health Refill")
                                                         
 
                                                         embedVar = discord.Embed(title=f"{o_card} STRENGTHENED RESOLVE :zap:",
@@ -12884,7 +13756,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             embedVar.add_field(name=f"{t_card}'s Rebuke", value=f"{t_rebuke}",
                                                                             inline=False)
                                                             embedVar.set_footer(text=f"{o_card} this is your chance!")
-                                                        dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense,
+                                                        dmg = damage_cal(t_opponent_affinities, ultimate_attack_name, omove3_element, o_universe, o_card, o_3, o_attack, o_defense,
                                                                         t_defense, o_stamina, o_enhancer_used, o_health,
                                                                         t_health, t_stamina, o_max_health, t_attack,
                                                                         o_special_move_description, turn_total,
@@ -12897,7 +13769,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         embedVar.add_field(name=f"Transformation: Command Seal",
                                                                         value="On Resolve, Strike with Ultimate, then Focus.")
 
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Command Seal!")
+                                                        previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Resolved: Command Seal!")
                                                         await button_ctx.defer(ignore=True)
 
                                                         # o_stamina = 0
@@ -12937,13 +13809,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if turn_total >= 50:
                                                             o_max_health = o_max_health + 1000
                                                             o_health = o_health + 1000
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Gigantomax Evolution!!! Gained **1000** HP!!!")
+                                                            previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Resolved: Gigantomax Evolution!!! Gained **1000** HP!!!")
                                                         elif turn_total >= 30:
                                                             o_max_health = o_max_health + 300
                                                             o_health = o_health + 300
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Mega Evolution!! Gained **300** HP!")
+                                                            previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Resolved: Mega Evolution!! Gained **300** HP!")
                                                         else:
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Evolution!")
+                                                            previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Resolved: Evolution!")
                                                         await button_ctx.defer(ignore=True)
 
                                                         turn_total = turn_total + 1
@@ -12975,10 +13847,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             embedVar.add_field(name=f"Nexus Destroyed",
                                                                             value=f"**{o_card}** dealt **{(60 * (o_focus_count + t_focus_count))}** damage.")
                                                         
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Resolved: Pentakill! Dealing {(60 * (o_focus_count + t_focus_count))} damage.")
+                                                            previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Resolved: Pentakill! Dealing {(60 * (o_focus_count + t_focus_count))} damage.")
                                                             await button_ctx.defer(ignore=True)
                                                         elif o_universe == "Souls":
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Phase 2: Enhanced Moveset!")
+                                                            previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Phase 2: Enhanced Moveset!")
                                                             await button_ctx.defer(ignore=True)
                                                         else:
                                                             embedVar = discord.Embed(
@@ -12987,7 +13859,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 colour=0xe91e63)
                                                             embedVar.add_field(name=f"Transformation",
                                                                             value="All stats & stamina greatly increased")
-                                                            previous_moves.append(f"*{turn_total}:* ⚡ **{o_card}** Resolved!")
+                                                            previous_moves.append(f"(**{turn_total}**) ⚡ **{o_card}** Resolved!")
                                                             await button_ctx.defer(ignore=True)
 
                                                         if mode in B_modes:
@@ -13000,7 +13872,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 else:
                                                     emessage = m.CANNOT_USE_RESOLVE
                                                     embedVar = discord.Embed(title=emessage, colour=0xe91e63)
-                                                    previous_moves.append(f"*{turn_total}:* **{o_card}** cannot resolve")
+                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}** cannot resolve")
                                                     await button_ctx.defer(ignore=True)
                                                     turn = 0
                                             
@@ -13008,7 +13880,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 # Resolve Check and Calculation
                                                 if o_used_resolve and o_used_focus and not o_pet_used:
                                                     o_enhancer_used = True
-                                                    dmg = damage_cal(o_universe, o_card, opet_move, o_attack, o_defense,
+                                                    dmg = damage_cal(t_opponent_affinities, basic_attack_name, omove1_element, o_universe, o_card, opet_move, o_attack, o_defense,
                                                                     t_defense, o_stamina, o_enhancer_used, o_health, t_health,
                                                                     t_stamina, o_max_health, t_attack,
                                                                     o_special_move_description, turn_total, ocard_lvl_ap_buff, None)
@@ -13103,7 +13975,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                         o_stamina = o_stamina - int(dmg['STAMINA_USED'])
                                                         if o_universe == "Persona":
-                                                            petdmg = damage_cal(o_universe, o_card, o_1, o_attack, o_defense,
+                                                            petdmg = damage_cal(t_opponent_affinities, basic_attack_name, omove1_element, o_universe, o_card, o_1, o_attack, o_defense,
                                                                                 t_defense, o_stamina, o_enhancer_used, o_health,
                                                                                 t_health, t_stamina, o_max_health, t_attack,
                                                                                 o_special_move_description, turn_total,
@@ -13117,12 +13989,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if not operformance:
                                                                 summon_file = showsummon(opet_image, opet_name, dmg['MESSAGE'], opet_lvl, opet_bond)
                                                                 embedVar.set_image(url="attachment://pet.png")
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **Persona!** : **{opet_name}** was summoned from **{o_card}'s** soul dealing **{petdmg['DMG']}** damage!\n**{t_card}** summon disabled!")
+                                                            previous_moves.append(f"(**{turn_total}**) **Persona!** 🩸 : **{opet_name}** was summoned from **{o_card}'s** soul dealing **{petdmg['DMG']}** damage!\n**{t_card}** summon disabled!")
                                                             t_pet_used = True
                                                             # await button_ctx.defer(ignore=True)
                                                             #embedVar.set_image(url="attachment://pet.png")
                                                             
-                                                            #previous_moves.append(f"*{turn_total}:* 🩸 Persona! **{opet_name}** was summoned from **{o_card}**'s soul dealing **{petdmg['DMG']}** damage!")
+                                                            #previous_moves.append(f"(**{turn_total}**) 🩸 Persona! **{opet_name}** was summoned from **{o_card}**'s soul dealing **{petdmg['DMG']}** damage!")
                                                             
                                                             if not operformance:
                                                                 await asyncio.sleep(1)
@@ -13145,7 +14017,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 # await asyncio.sleep(2)
                                                             #embedVar.set_image(url="attachment://pet.png")
                                                             
-                                                            previous_moves.append(f"*{turn_total}:* **{o_card}** Summoned 🧬 **{opet_name}**: {dmg['MESSAGE']}")
+                                                            previous_moves.append(f"(**{turn_total}**) **{o_card}** Summoned 🧬 **{opet_name}**: {dmg['MESSAGE']}")
                                                             # await button_ctx.defer(ignore=True)
                                                             # await battle_msg.delete(delay=None)
                                                             if not operformance:
@@ -13157,17 +14029,17 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             #await battle_msg.delete(delay=None)
                                                         turn = 0
                                                     else:
-                                                        previous_moves.append(f"*{turn_total}:* 🧬 **{opet_name}** needs a turn to rest...")
+                                                        previous_moves.append(f"(**{turn_total}**) 🧬 **{opet_name}** needs a turn to rest...")
                                                         await button_ctx.defer(ignore=True)
                                                         turn = 0
                                                 else:
-                                                    previous_moves.append(f"*{turn_total}:* 🧬 **{opet_name}** needs a turn to rest...")
+                                                    previous_moves.append(f"(**{turn_total}**) 🧬 **{opet_name}** needs a turn to rest...")
                                                     await button_ctx.defer(ignore=True)
                                             
                                             elif mode in co_op_modes:
                                                 if button_ctx.custom_id == "7":
                                                     o_enhancer_used = True
-                                                    dmg = damage_cal(o_universe, o_card, o_enhancer, o_attack, o_defense,
+                                                    dmg = damage_cal(t_opponent_affinities, basic_attack_name, omove1_element, o_universe, o_card, o_enhancer, o_attack, o_defense,
                                                                     c_defense, o_stamina, o_enhancer_used, o_health, c_health,
                                                                     c_stamina, o_max_health, c_attack,
                                                                     o_special_move_description, turn_total, ocard_lvl_ap_buff, None)
@@ -13269,17 +14141,17 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             colour=0xe91e63)
                                                         embedVar.add_field(name=f"{o_card} used {omove_enhanced_text}!",
                                                                         value=f"Enhanced {comp_enh}")
-                                                        previous_moves.append(f"*{turn_total}:* **{o_card}** used {omove_enhanced_text}:👥 Assisting **{c_card}**")
+                                                        previous_moves.append(f"(**{turn_total}**) **{o_card}** used {omove_enhanced_text}:👥 Assisting **{c_card}**")
                                                         await button_ctx.defer(ignore=True)
                                                         turn_total = turn_total + 1
                                                         turn = 1
                                                     else:
-                                                        previous_moves.append(f"*{turn_total}:* {o_card} doesn't have enough Stamina to use this move")
+                                                        previous_moves.append(f"(**{turn_total}**) {o_card} doesn't have enough Stamina to use this move")
                                                         await button_ctx.defer(ignore=True)
                                                         turn = 0
                                                 elif button_ctx.custom_id == "8":
                                                     c_enhancer_used = True
-                                                    dmg = damage_cal(c_universe, c_card, c_enhancer, c_attack, c_defense,
+                                                    dmg = damage_cal(t_opponent_affinities, basic_attack_name, cmove1_element, c_universe, c_card, c_enhancer, c_attack, c_defense,
                                                                     o_defense, c_stamina, c_enhancer_used, c_health, o_health,
                                                                     o_stamina, c_max_health, o_attack,
                                                                     c_special_move_description, turn_total, ccard_lvl_ap_buff, None)
@@ -13379,12 +14251,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             colour=0xe91e63)
                                                         embedVar.add_field(name=f"{c_card} used {cmove_enhanced_text}!",
                                                                         value=f"Enhanced {cenh_type}")
-                                                        previous_moves.append(f'*{turn_total}:* **{c_card}** used {cmove_enhanced_text}:👥 Assisting **{o_card}**')
+                                                        previous_moves.append(f'(**{turn_total}**) **{c_card}** used {cmove_enhanced_text}:👥 Assisting **{o_card}**')
                                                         await button_ctx.defer(ignore=True)
                                                         turn_total = turn_total + 1
                                                         turn = 1
                                                     else:
-                                                        previous_moves.append(f"*{turn_total}:* Not enough Stamina to use this move")
+                                                        previous_moves.append(f"(**{turn_total}**) Not enough Stamina to use this move")
                                                         await button_ctx.defer(ignore=True)
                                                         turn = 0
                                                 elif button_ctx.custom_id == "9":
@@ -13396,12 +14268,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             title=f"**{c_card}** Defended 🛡️ {o_card}",
                                                             colour=0xe91e63)
 
-                                                        previous_moves.append(f"*{turn_total}:* **{c_card}**: Defended 🛡️ **{o_card}**")
+                                                        previous_moves.append(f"(**{turn_total}**) **{c_card}**: Defended 🛡️ **{o_card}**")
                                                         await button_ctx.defer(ignore=True)
                                                         turn_total = turn_total + 1
                                                         turn = 1
                                                     else:
-                                                        previous_moves.append(f"*{turn_total}:* **{c_card}** is too tired to block")
+                                                        previous_moves.append(f"(**{turn_total}**) **{c_card}** is too tired to block")
                                                         await button_ctx.defer(ignore=True)
                                                         turn = 0
 
@@ -13409,15 +14281,15 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 block_message = ""
                                                 if o_universe == "Persona":
                                                     if mode in co_op_modes:
-                                                        block_message = f"🩸**Confidant Block!***: **{o_card}**: Defended 🛡️ **{c_card}**"
+                                                        block_message = f"**Confidant Block!*** 🩸: **{o_card}**: Defended 🛡️ **{c_card}**"
                                                         o_defend_used = True
                                                     else:
-                                                        block_message = f"🩸**Confidant Block!***: **{o_card}** Blocked 🛡️"
+                                                        block_message = f"**Confidant Block!*** 🩸: **{o_card}** Blocked 🛡️"
                                                         o_block_used = True
                                                     o_defense = round(o_defense * 2)
                                                     embedVar = discord.Embed(title=f"{block_message}", colour=0xe91e63)
 
-                                                    previous_moves.append(f"*{turn_total}:* {block_message}")
+                                                    previous_moves.append(f"(**{turn_total}**) {block_message}")
                                                     await button_ctx.defer(ignore=True)
                                                     turn_total = turn_total + 1
                                                     turn = 1
@@ -13425,18 +14297,77 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 elif o_stamina >= 20:
 
                                                     if o_universe == "Attack On Titan":
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 Rally! **{o_card}** Increased Max Health ❤️")
+                                                        previous_moves.append(f"(**{turn_total}**) **Rally** 🩸 ! **{o_card}** Increased Max Health ❤️")
                                                         o_max_health = round(o_max_health + 100)
                                                         o_health = o_health + 100
 
                                                     if o_universe == "Bleach":
-                                                        dmg = damage_cal(o_universe, o_card, o_1, o_attack, o_defense, t_defense, o_stamina,
+                                                        dmg = damage_cal(t_opponent_affinities, basic_attack_name, omove1_element, o_universe, o_card, o_1, o_attack, o_defense, t_defense, o_stamina,
                                                                         o_enhancer_used, o_health, t_health, t_stamina, o_max_health,
                                                                         t_attack, o_special_move_description, turn_total,
                                                                         ocard_lvl_ap_buff, None)
-                                                        previous_moves.append(f"*{turn_total}:* **{o_card}** Exerted their 🩸 Spiritual Pressure dealing {dmg['DMG']} dmg")
-                                                        t_health = t_health - dmg['DMG']
-                                                        
+                                                        previous_moves.append(f"(**{turn_total}**) **{o_card}** Exerted their 🩸 Spiritual Pressure - {dmg['MESSAGE']}")
+                                                        if dmg['REPEL']:
+                                                            o_health = o_health - dmg['DMG']
+                                                        elif dmg['ABSORB']:
+                                                            t_health = t_health + dmg['DMG']
+                                                        elif dmg['ELEMENT'] == water_element:
+                                                            o_water_buff = o_water_buff + 25
+                                                            t_health = t_health - (dmg['DMG'] + o_water_buff)
+                                                        else:
+                                                            t_health = t_health - dmg['DMG']
+
+                                                        if dmg['ELEMENT'] == recoil_element:
+                                                            o_health = o_health - (dmg['DMG'] * .25)
+
+                                                        if dmg['ELEMENT'] == time_element:
+                                                            o_stamina = 0
+
+                                                        if dmg['ELEMENT'] == bleed_element:
+                                                            o_bleed_counter = o_bleed_counter + 1
+                                                            if o_bleed_counter == 10:
+                                                                o_bleed_hit= True
+                                                                o_bleed_counter = 0
+
+                                                        if dmg['ELEMENT'] == earth_element:
+                                                            o_defense = o_defense + (dmg['DMG'] * .20)
+
+                                                        if dmg['ELEMENT'] == death_element:
+                                                            t_max_health = t_max_health - (dmg['DMG'] * .05)
+
+                                                        if dmg['ELEMENT'] == light_element:
+                                                            o_stamina = o_stamina + (dmg['STAMINA_USED'] / 2)
+
+                                                        if dmg['ELEMENT'] == dark_element:
+                                                            o_stamina = o_stamina + 5
+                                                            t_stamina = t_stamina - 5
+
+                                                        if dmg['ELEMENT'] == life_element:
+                                                            o_health = o_health + (dmg['DMG'] * .15)
+
+                                                        if dmg['ELEMENT'] == phsycic_element:
+                                                            t_defense = t_defense - (dmg['DMG'] * .08)
+                                                            t_attack = t_attack - (dmg['DMG'] * .08)
+
+                                                        if dmg['ELEMENT'] == fire_element:
+                                                            o_burn_dmg = round(dmg['DMG'] * .30)
+
+
+                                                        if dmg['ELEMENT'] == water_element:
+                                                            o_water_buff = o_water_buff + 25
+
+                                                        if dmg['ELEMENT'] == electric_element:
+                                                            o_shock_buff = o_shock_buff +  (dmg['DMG'] * .05)
+
+                                                        if dmg['ELEMENT'] == poison_element:
+                                                            o_poison_dmg = o_poison_dmg + 8
+
+                                                        if dmg['ELEMENT'] == ice_element:
+                                                            o_ice_counter = o_ice_counter + 1
+                                                            if o_ice_counter == 3:
+                                                                o_freeze_enh = True
+                                                                o_ice_counter = 0
+
 
                                                     if mode in co_op_modes:
                                                         block_message = f"**{o_card}**: Defended 🛡️ **{c_card}**"
@@ -13448,12 +14379,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     o_defense = round(o_defense * 2)
                                                     embedVar = discord.Embed(title=f"{block_message}", colour=0xe91e63)
 
-                                                    previous_moves.append(f"*{turn_total}:* {block_message}")
+                                                    previous_moves.append(f"(**{turn_total}**) {block_message}")
                                                     await button_ctx.defer(ignore=True)
                                                     turn_total = turn_total + 1
                                                     turn = 1
                                                 else:
-                                                    previous_moves.append(f"*{turn_total}:* **{o_card}** is too tired to block.")
+                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}** is too tired to block.")
                                                     await button_ctx.defer(ignore=True)
                                                     turn = 0
 
@@ -13559,7 +14490,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}",
                                                                                 colour=embed_color_o)
-                                                        previous_moves.append(f"*{turn_total}:* **{o_card}**: 🦠 {dmg['MESSAGE']}")
+                                                        previous_moves.append(f"(**{turn_total}**) **{o_card}**: 🦠 {dmg['MESSAGE']}")
                                                         turn_total = turn_total + 1
                                                         turn = 1
                                                         await button_ctx.defer(ignore=True)
@@ -13570,8 +14501,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if oarm_barrier_active:
                                                             oarm_barrier_active=False
                                                             embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                            previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
-                                                        previous_moves.append(f"*{turn_total}:* **{o_card}**: {dmg['MESSAGE']}")
+                                                            previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
+                                                        previous_moves.append(f"(**{turn_total}**) **{o_card}**: {dmg['MESSAGE']}")
                                                         turn_total = turn_total + 1
                                                         turn = 1
                                                         await button_ctx.defer(ignore=True)
@@ -13584,62 +14515,62 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if oarm_barrier_active:
                                                                 oarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
 
-                                                            previous_moves.append(f"*{turn_total}:* 🩸**{t_card}**: Substitution Jutsu")
+                                                            previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸: Substitution Jutsu")
                                                             if not t_used_resolve:
-                                                                previous_moves.append(f"*{turn_total}:* 🩸**{t_stored_damage}** Hasirama Cells stored. 🩸**{t_naruto_heal_buff}** total stored.")
+                                                                previous_moves.append(f"(**{turn_total}**) 🩸**{t_stored_damage}** Hasirama Cells stored. 🩸**{t_naruto_heal_buff}** total stored.")
                                                             if not botActive:
                                                                 await button_ctx.defer(ignore=True)
-                                                        elif tarm_shield_active:
+                                                        elif tarm_shield_active and dmg['ELEMENT'] != dark_element:
 
                                                             if tshield_value > 0:
                                                                 tshield_value = tshield_value - dmg['DMG']
                                                                 t_health = t_health 
                                                                 if tshield_value <=0:
                                                                     embedVar = discord.Embed(title=f"{t_card}'s' **Shield** Shattered!", description=f"{o_card} breaks the **Shield**!", colour=0xe91e63)
-                                                                    previous_moves.append(f"*{turn_total}:* 🌐**{t_card}**: Shield Shattered!")
+                                                                    previous_moves.append(f"(**{turn_total}**) 🌐**{t_card}**: Shield Shattered!")
                                                                     if oarm_barrier_active:
                                                                         oarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
                                                                     if not botActive:
                                                                         await button_ctx.defer(ignore=True)
                                                                     tarm_shield_active = False
                                                                 else:
                                                                     embedVar = discord.Embed(title=f"{t_card} Activates **Shield** 🌐", description=f"**{o_card}** strikes the Shield 🌐\n**{tshield_value} Shield** Left!", colour=0xe91e63)
-                                                                    previous_moves.append(f"*{turn_total}:* **{o_card}** strikes **{t_card}**'s Shield 🌐\n**{tshield_value} Shield** Left!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}** strikes **{t_card}**'s Shield 🌐\n**{tshield_value} Shield** Left!")
                                                                     if oarm_barrier_active:
                                                                         oarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
                                                                     if not botActive:
                                                                         await button_ctx.defer(ignore=True)
 
-                                                        elif tarm_barrier_active:
+                                                        elif tarm_barrier_active and dmg['ELEMENT'] != phsycic_element:
                                                             if tbarrier_count >1:
                                                                 t_health = t_health 
                                                                 embedVar = discord.Embed(title=f"{t_card} Activates **Barrier** 💠", description=f"{o_card}'s attack **Nullified**!\n **{tbarrier_count - 1} Barriers** remain!", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* **{t_card}** Activates Barrier 💠 {o_card}'s attack **Nullified**!\n **{tbarrier_count - 1} Barriers** remain!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{t_card}** Activates Barrier 💠 {o_card}'s attack **Nullified**!\n **{tbarrier_count - 1} Barriers** remain!")
                                                                 if oarm_barrier_active:
                                                                     oarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
                                                                 if not botActive:
                                                                     await button_ctx.defer(ignore=True)
                                                                 tbarrier_count = tbarrier_count - 1
                                                             elif tbarrier_count==1:
                                                                 embedVar = discord.Embed(title=f"{t_card}'s **Barrier** Broken!", description=f"{o_card} destroys the **Barrier**", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Broken!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{t_card}**'s Barrier Broken!")
                                                                 tbarrier_count = tbarrier_count - 1
                                                                 if oarm_barrier_active:
                                                                     oarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
                                                                 if not botActive:
                                                                     await button_ctx.defer(ignore=True)
                                                                 tarm_barrier_active = False
-                                                        elif tarm_parry_active:
+                                                        elif tarm_parry_active and dmg['ELEMENT'] != earth_element:
                                                             if tparry_count > 1:
                                                                 t_health = t_health
                                                                 tparry_damage = round(dmg['DMG'])
@@ -13647,11 +14578,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_health = round(o_health - (tparry_damage * .25))
                                                                 tparry_count = tparry_count - 1
                                                                 embedVar = discord.Embed(title=f"{t_card} Activates **Parry** 🔄", description=f"{o_card} takes {round(tparry_damage * .25)}! DMG\n **{tparry_count} Parries** to go!!", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* **{t_card}** Activates Parry 🔄  {o_card} takes {round(tparry_damage * .25)}! DMG\n **{tparry_count} Parries** to go!!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{t_card}** Activates Parry 🔄  {o_card} takes {round(tparry_damage * .25)}! DMG\n **{tparry_count} Parries** to go!!")
                                                                 if oarm_barrier_active:
                                                                     oarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
                                                                 if not botActive:
                                                                     await button_ctx.defer(ignore=True)
                                                                 
@@ -13661,32 +14592,91 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = round(t_health - (tparry_damage * .75))
                                                                 o_health = round(o_health - (tparry_damage * .25))
                                                                 embedVar = discord.Embed(title=f"{t_card} **Parry** Penetrated!!", description=f"{o_card} takes {round(tparry_damage * .25)}! DMG and breaks the **Parry**", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* **{t_card}** Parry Penetrated! **{o_card}** takes **{round(tparry_damage * .25)}**! DMG and breaks the **Parry**")
+                                                                previous_moves.append(f"(**{turn_total}**) **{t_card}** Parry Penetrated! **{o_card}** takes **{round(tparry_damage * .25)}**! DMG and breaks the **Parry**")
                                                                 tparry_count = tparry_count - 1
                                                                 if oarm_barrier_active:
                                                                     oarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
                                                                 if not botActive:
                                                                     await button_ctx.defer(ignore=True)
                                                                 tarm_parry_active = False
                                                         else:
-                                                            previous_moves.append(f"*{turn_total}:* **{o_card}**: {dmg['MESSAGE']}")
-                                                            t_health = t_health - dmg['DMG']
+                                                            if dmg['REPEL']:
+                                                                o_health = o_health - int(dmg['DMG'])
+                                                            elif dmg['ABSORB']:
+                                                                t_health = t_health + int(dmg['DMG'])
+                                                            elif dmg['ELEMENT'] == water_element:
+                                                                o_water_buff = o_water_buff + 25
+                                                                t_health = t_health - (dmg['DMG'] + o_water_buff)
+                                                            else:
+                                                                t_health = t_health - dmg['DMG']
+
+
+                                                            if dmg['ELEMENT'] == ice_element:
+                                                                o_ice_counter = o_ice_counter + 1
+                                                                if o_ice_counter == 3:
+                                                                    o_freeze_enh = True
+                                                                    o_ice_counter = 0
+                                                            if dmg['ELEMENT'] == recoil_element:
+                                                                o_health = o_health - (dmg['DMG'] * .25)
+
+                                                            if dmg['ELEMENT'] == time_element:
+                                                                o_stamina = 0
+
+                                                            if dmg['ELEMENT'] == bleed_element:
+                                                                o_bleed_counter = o_bleed_counter + 1
+                                                                if o_bleed_counter == 10:
+                                                                    o_bleed_hit= True
+                                                                    o_bleed_counter = 0
+
+                                                            if dmg['ELEMENT'] == earth_element:
+                                                                o_defense = o_defense + (dmg['DMG'] * .20)
+
+                                                            if dmg['ELEMENT'] == death_element:
+                                                                t_max_health = t_max_health - (dmg['DMG'] * .05)
+
+                                                            if dmg['ELEMENT'] == light_element:
+                                                                o_stamina = o_stamina + (dmg['STAMINA_USED'] / 2)
+
+                                                            if dmg['ELEMENT'] == dark_element:
+                                                                o_stamina = o_stamina + 5
+                                                                t_stamina = t_stamina - 5
+
+                                                            if dmg['ELEMENT'] == life_element:
+                                                                o_health = o_health + (dmg['DMG'] * .15)
+
+                                                            if dmg['ELEMENT'] == phsycic_element:
+                                                                t_defense = t_defense - (dmg['DMG'] * .08)
+                                                                t_attack = t_attack - (dmg['DMG'] * .08)
+
+                                                            if dmg['ELEMENT'] == fire_element:
+                                                                o_burn_dmg = round(dmg['DMG'] * .30)
+
+                                                            if dmg['ELEMENT'] == water_element:
+                                                                o_water_buff = o_water_buff + 25
+
+                                                            if dmg['ELEMENT'] == electric_element:
+                                                                o_shock_buff = o_shock_buff +  (dmg['DMG'] * .05)
+
+                                                            if dmg['ELEMENT'] == poison_element:
+                                                                o_poison_dmg = o_poison_dmg + 8
+
+                                                            previous_moves.append(f"(**{turn_total}**) **{o_card}**: {dmg['MESSAGE']}")
                                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
                                                             if oarm_siphon_active:
                                                                 siphon_damage = (dmg['DMG'] * .10) + osiphon_value
                                                                 o_health = round(o_health + siphon_damage)
                                                                 if o_health >= o_max_health:
                                                                     o_health = o_max_health
-                                                                    previous_moves.append(f"*{turn_total}:* **{o_card}**: 💉 Siphoned **Full Health!**")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}**: 💉 Siphoned **Full Health!**")
                                                                 else:
-                                                                    previous_moves.append(f"*{turn_total}:* **{o_card}**: 💉 Siphoned **{round(siphon_damage)}** Health!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}**: 💉 Siphoned **{round(siphon_damage)}** Health!")
                                                                 await button_ctx.defer(ignore=True)
                                                             if oarm_barrier_active:
                                                                 oarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
                                                             if not botActive:
                                                                 await button_ctx.defer(ignore=True)
                                                         if t_health <= 0:
@@ -13697,8 +14687,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     if oarm_barrier_active:
                                                                         oarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* 💠**{o_card}**'s Barrier Disabled!")
-                                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Transformation: Last Stand!!!")
+                                                                        previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Transformation: Last Stand!!!")
                                                                     if not botActive:
                                                                         await button_ctx.defer(ignore=True)
                                                                     t_health = int(.75 * (t_attack + t_defense))
@@ -13722,7 +14712,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             #if botActive:
                                                                 #await button_ctx.defer(ignore=True)
                                                 else:
-                                                    previous_moves.append(f"*{turn_total}:* **{o_card}**: Not enough Stamina to use this ability.")
+                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}**: Not enough Stamina to use this ability.")
                                                     # embedVar = discord.Embed(title=emessage,
                                                     #                         description=f"Use abilities to Increase `STAM` or enter `FOCUS STATE`!",
                                                     #                         colour=0xe91e63)
@@ -13737,7 +14727,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 await ctx.author.send(f"{ctx.author.mention} your game timed out. Your channel has been closed and your Abyss Floor was Reset.") #Findme
                                                 await ctx.send(f"{ctx.author.mention} your game timed out. Your channel has been closed and your Abyss Floor was Reset.")
                                             # await discord.TextChannel.delete(private_channel, reason=None)
-                                            previous_moves.append(f"*{turn_total}:* 💨 **{o_card}** Fled...")
+                                            previous_moves.append(f"(**{turn_total}**) 💨 **{o_card}** Fled...")
                                             o_health=0
                                         except Exception as ex:
                                             trace = []
@@ -13758,9 +14748,30 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             channel = guild.get_channel(main.guild_channel)
                                             await channel.send(f"'PLAYER': **{str(ctx.author)}**, 'GUILD': **{str(ctx.author.guild)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
 
-                            # Opponent Turn Start
                             
                             elif turn == 1:
+                                if o_bleed_hit:
+                                    o_bleed_hit = False
+                                    bleed_dmg = 10 * turn_total
+                                    t_health = t_health - bleed_dmg
+                                    previous_moves.append(f"(**{turn_total}**) 🩸 **{t_card}** shredded for **{bleed_dmg}** bleed dmg...")
+                                if o_burn_dmg:
+                                    t_health = t_health - o_burn_dmg
+                                    previous_moves.append(f"(**{turn_total}**) 🔥 **{t_card}** burned for **{t_burn_dmg}** dmg...")
+                                if o_freeze_enh:
+                                    previous_moves.append(f"(**{turn_total}**) ❄️ **{t_card}** has been frozen for a turn...")
+                                    turn_total = turn_total + 1
+                                    if mode in co_op_modes:
+                                        turn = 2
+                                    else:
+                                        turn = 0
+                                if o_poison_dmg:
+                                    t_health = t_health - o_poison_dmg
+                                    previous_moves.append(f"(**{turn_total}**) 🧪 **{t_card}** poisoned for **{o_poison_dmg}** dmg...")
+
+                                t_burn_dmg = 0
+                                t_freeze_enh = False
+
                                 if t_title_passive_type:
                                     if t_title_passive_type == "HLT":
                                         t_health = round(t_health + ((t_title_passive_value / 100) * t_health))
@@ -13833,12 +14844,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     embedVar = discord.Embed(title=f"{o_card} Scheduled Death 📓",
                                                             description=f"**{o_card} says**\nYou will die in 50  turns...",
                                                             colour=0xe91e63)
-                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Scheduled Death 📓")
+                                    previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Scheduled Death 📓")
                                 if t_universe == 'Death Note' and turn_total == 0:
                                     embedVar = discord.Embed(title=f"{o_card} Scheduled Death 📓",
                                                             description=f"**{t_card} says**\nYou will die in 50  turns...",
                                                             colour=0xe91e63)
-                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Scheduled Death 📓")
+                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Scheduled Death 📓")
                                 if turn_total == 1 and botActive and mode in B_modes:
                                     embedVar = discord.Embed(title=f"**{t_card}** Says : ", description=f"{t_welcome}",
                                                             colour=0xe91e63)
@@ -13873,7 +14884,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             embedVar = discord.Embed(title=f"{t_card}'s Devilization",
                                                                     description=f"**{t_card}** Doubles Stats", colour=0xe91e63)
                                             
-                                            previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}**'s Devilization")
+                                            previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸's Devilization")
                                 elif t_health <= (t_max_health * .50):
                                     embed_color_t = 0xe67e22
                                     if t_chainsaw == True:
@@ -13886,7 +14897,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             embedVar = discord.Embed(title=f"{t_card}'s Devilization",
                                                                     description=f"**{t_card}** Doubles Stats", colour=0xe91e63)
                                             
-                                            previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}**'s Devilization")
+                                            previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸's Devilization")
                                 elif t_health <= (t_max_health * .75):
                                     embed_color_t = 0xf1c40f
                                 else:
@@ -13961,7 +14972,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         value=f"{t_aura}")
                                         embedVar.set_footer(text=f"{t_card} Says: 'Now, are you ready for a real fight?'")
                                         
-                                        previous_moves.append(f"*{turn_total}:* 🌀 **{t_card}** focused and {healmessage}")
+                                        previous_moves.append(f"(**{turn_total}**) 🌀 **{t_card}** focused and {healmessage}")
                                         # await asyncio.sleep(2)
                                     else:
                                         embedVar = discord.Embed(title=f"{t_card} FOCUSED",
@@ -13970,7 +14981,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         embedVar.add_field(name=f"{t_card} focused and {healmessage}",
                                                         value="All stats & stamina increased")
                                         
-                                        previous_moves.append(f"*{turn_total}:* 🌀 **{t_card}** focused and {healmessage}")
+                                        previous_moves.append(f"(**{turn_total}**) 🌀 **{t_card}** focused and {healmessage}")
                                     if not t_used_resolve and t_used_focus and t_universe == "Digimon":  # Digimon Universal Trait
                                         # fortitude or luck is based on health
                                         fortitude = 0.0
@@ -13995,11 +15006,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         if turn_total <=5:
                                             t_attack = round(t_attack * 2)
                                             t_defense = round(t_defense * 2 )
-                                            previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Transformation: Mega Digivolution!!!")
+                                            previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Transformation: Mega Digivolution!!!")
                                         else:
-                                            previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Transformation: Digivolve")
+                                            previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Transformation: Digivolve")
                                         if mode in B_modes:
-                                            embedVar = discord.Embed(title=f"*{turn_total}:* :zap: **{t_card}** Resolved!", description=f"{t_rmessage}",
+                                            embedVar = discord.Embed(title=f"(**{turn_total}**) :zap: **{t_card}** Resolved!", description=f"{t_rmessage}",
                                                                     colour=0xe91e63)
                                             embedVar.set_footer(text=f"{o_card} this will not be easy...")
                                             await private_channel.send(embed=embedVar)
@@ -14008,25 +15019,25 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     elif t_universe == "League Of Legends":
                                         embedVar = discord.Embed(title=f"Turret Shot hits {o_card} for **{60 + turn_total}** Damage 💥",
                                                                 colour=0xe91e63)
-                                        previous_moves.append(f"*{turn_total}:* 🩸 Turret Shot hits **{o_card}** for **{60 + turn_total}** Damage 💥")
+                                        previous_moves.append(f"(**{turn_total}**) 🩸 Turret Shot hits **{o_card}** for **{60 + turn_total}** Damage 💥")
                                         o_health = round(o_health - (60 + turn_total))
 
                                     elif t_universe == "Dragon Ball Z":
                                         t_health = t_health + o_stamina + turn_total
-                                        previous_moves.append(f"*{turn_total}:* 🩸 Saiyan Spirit... You heal for **{o_stamina + turn_total}** ❤️")
+                                        previous_moves.append(f"(**{turn_total}**) 🩸 Saiyan Spirit... You heal for **{o_stamina + turn_total}** ❤️")
 
 
                                     elif t_universe == "Solo Leveling":
                                         embedVar = discord.Embed(
                                             title=f"Ruler's Authority... {o_card} loses **{30 + turn_total}** 🛡️ 🔻",
                                             colour=0xe91e63)
-                                        previous_moves.append(f"*{turn_total}:* 🩸 Ruler's Authority... {o_card} loses **{30 + turn_total}** 🛡️ 🔻")
+                                        previous_moves.append(f"(**{turn_total}**) 🩸 Ruler's Authority... {o_card} loses **{30 + turn_total}** 🛡️ 🔻")
                                         o_defense = round(o_defense - (30 + turn_total))
 
                                     elif t_universe == "Black Clover":
                                         embedVar = discord.Embed(title=f"Mana Zone! **{t_card}** Increased Stamina 🌀",
                                                                 colour=0xe91e63)
-                                        previous_moves.append(f"*{turn_total}:* 🩸 Mana Zone! **{t_card}** Increased AP & Stamina 🌀")
+                                        previous_moves.append(f"(**{turn_total}**) 🩸 Mana Zone! **{t_card}** Increased AP & Stamina 🌀")
                                         t_stamina = 100
                                         tcard_lvl_ap_buff = tcard_lvl_ap_buff + 30
                                     elif t_universe == "Death Note":
@@ -14035,20 +15046,20 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     description=f"**{t_card} says**\n**Delete**",
                                                                     colour=0xe91e63)
                                             embedVar.add_field(name=f"{o_card} had a heart attack and died", value=f"Death....")
-                                            previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** had a heart attack and died")
+                                            previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 had a heart attack and died")
                                             o_health = 0
 
                                     if o_universe == "One Punch Man":
                                         embedVar = discord.Embed(title=f"Hero Reinforcements! **{t_card}** Increased Health!  ❤️",
                                                                 colour=0xe91e63)
-                                        previous_moves.append(f"*{turn_total}:* Hero Reinforcements! **{o_card}** Increased Health!  ❤️")
+                                        previous_moves.append(f"(**{turn_total}**) Hero Reinforcements! **{o_card}** Increased Health!  ❤️")
                                         o_health = round(o_health + 100)
                                         o_max_health = round(o_max_health + 100)
 
                                     elif o_universe == "7ds":
                                         embedVar = discord.Embed(title=f"Power Of Friendship! 🧬 **{opet_name}** Rested, **{o_card}** Increased Stamina 🌀",
                                                                 colour=0xe91e63)
-                                        previous_moves.append(f"*{turn_total}:* 🩸 Power Of Friendship! 🧬 **{opet_name}** Rested, **{o_card}** Increased Stamina 🌀")
+                                        previous_moves.append(f"(**{turn_total}**) 🩸 Power Of Friendship! 🧬 **{opet_name}** Rested, **{o_card}** Increased Stamina 🌀")
                                         o_stamina = o_stamina + 60
                                         o_pet_used = False
 
@@ -14056,7 +15067,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         embedVar = discord.Embed(
                                             title=f"Combo Recognition! **{t_card}** Increased Attack by **{60 + turn_total}** 🔺 ",
                                             colour=0xe91e63)
-                                        previous_moves.append(f"*{turn_total}:* 🩸 Combo Recognition! **{o_card}** Increased Attack by **{60 + turn_total}** 🔺")
+                                        previous_moves.append(f"(**{turn_total}**) 🩸 Combo Recognition! **{o_card}** Increased Attack by **{60 + turn_total}** 🔺")
                                         o_attack = round(o_attack + (60 + turn_total))
 
                                     else:
@@ -14081,32 +15092,32 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         if temp_oarm_shield_active and not oarm_shield_active:
                                             if tarm_shield_active:
                                                 tshield_value = tshield_value + temp_oshield_value
-                                                previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 **ARISE!** *{oarm_name}* is now yours")
                                                 t_swapped = True
                                             elif not tarm_shield_active:
                                                 tarm_shield_active = True
                                                 tshield_value = temp_oshield_value
-                                                previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 **ARISE!** *{oarm_name}* is now yours")
                                                 t_swapped = True
                                         elif temp_oarm_barrier_active and not oarm_barrier_active:
                                             if tarm_barrier_active:
                                                 tbarrier_count = tbarrier_count + temp_obarrier_count
-                                                previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 **ARISE!** *{oarm_name}* is now yours")
                                                 t_swapped = True
                                             elif not tarm_barrier_active:
                                                 tarm_barrier_active = True
                                                 tbarrier_count = temp_obarrier_count
-                                                previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 **ARISE!** *{oarm_name}* is now yours")
                                                 t_swapped = True
                                         elif temp_oarm_parry_active and not oarm_parry_active:
                                             if tarm_parry_active:
                                                 tparry_count = tparry_count + temp_oparry_count
-                                                previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 **ARISE!** *{oarm_name}* is now yours")
                                                 t_swapped = True
                                             elif not tarm_parry_active:
                                                 tarm_parry_active = True
                                                 tparry_count = temp_oparry_count
-                                                previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 **ARISE!** *{oarm_name}* is now yours")
                                                 t_swapped = True
                                                                   
                                     embedVar = discord.Embed(title=f"➡️ **Opponent Turn** {turn_total}", description=textwrap.dedent(f"""\
@@ -14126,9 +15137,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     else:
                                         turn_selector = 0
                                     if mode not in AUTO_BATTLE_modes:
-                                        tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff + corruption_ap_buff
-                                        tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff + corruption_ap_buff
-                                        tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff + corruption_ap_buff
+                                        tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff + corruption_ap_buff + t_shock_buff
+                                        tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff + corruption_ap_buff + t_shock_buff
+                                        tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff + corruption_ap_buff + t_shock_buff
                                         tenh1 = list(t_enhancer.values())[0]
                                         tenh_name = list(t_enhancer.values())[2]
                                         tpet_enh_name = list(tpet_move.values())[2]
@@ -14136,11 +15147,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         # UNIVERSE CARD
 
                                         if t_universe == "Souls" and t_used_resolve:
-                                            player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina,
+                                            player_2_card = showcard(t, tarm,t_max_health, t_health, t_max_stamina, t_stamina,
                                                                 t_used_resolve, ttitle, t_used_focus, t_attack, t_defense,
                                                                 turn_total, tap2, tap3, tap3, tenh1, tenh_name, tcard_lvl, o_defense)
                                         else:
-                                            player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina,
+                                            player_2_card = showcard(t, tarm,t_max_health, t_health, t_max_stamina, t_stamina,
                                                                     t_used_resolve, ttitle, t_used_focus, t_attack, t_defense,
                                                                     turn_total, tap1, tap2, tap3, tenh1, tenh_name, tcard_lvl, o_defense)
                                             
@@ -14148,32 +15159,32 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             if temp_oarm_shield_active and not oarm_shield_active:
                                                 if tarm_shield_active:
                                                     tshield_value = tshield_value + temp_oshield_value
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 **ARISE!** *{oarm_name}* is now yours")
                                                     t_swapped = True
                                                 elif not tarm_shield_active:
                                                     tarm_shield_active = True
                                                     tshield_value = temp_oshield_value
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 **ARISE!** *{oarm_name}* is now yours")
                                                     t_swapped = True
                                             elif temp_oarm_barrier_active and not oarm_barrier_active:
                                                 if tarm_barrier_active:
                                                     tbarrier_count = tbarrier_count + temp_obarrier_count
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 **ARISE!** *{oarm_name}* is now yours")
                                                     t_swapped = True
                                                 elif not tarm_barrier_active:
                                                     tarm_barrier_active = True
                                                     tbarrier_count = temp_obarrier_count
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 **ARISE!** *{oarm_name}* is now yours")
                                                     t_swapped = True
                                             elif temp_oarm_parry_active and not oarm_parry_active:
                                                 if tarm_parry_active:
                                                     tparry_count = tparry_count + temp_oparry_count
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 **ARISE!** *{oarm_name}* is now yours")
                                                     t_swapped = True
                                                 elif not tarm_parry_active:
                                                     tarm_parry_active = True
                                                     tparry_count = temp_oparry_count
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{oarm_name}* is now yours")
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 **ARISE!** *{oarm_name}* is now yours")
                                                     t_swapped = True
                                         
                                         tembedVar = discord.Embed(title=f"_Turn_ {turn_total}", description=textwrap.dedent(f"""\
@@ -14194,7 +15205,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     
                                     if t_used_resolve and not t_pet_used and t_stamina >= 30:
                                         aiMove = 6
-                                    elif tarm_barrier_active: #Ai Barrier Checks
+                                    elif tarm_barrier_active and dmg['ELEMENT'] != phsycic_element: #Ai Barrier Checks
                                         if t_stamina >=20: #Stamina Check For Enhancer
                                             aiMove = await ai_enhancer_moves(turn_total,t_used_focus,t_used_resolve,t_pet_used,t_stamina,
                                                                         t_enhancer['TYPE'],t_health,t_max_health,t_attack,
@@ -14352,23 +15363,23 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     if int(aiMove) == 1:                                    
                                         if c_block_used == True:
                                             if t_universe == "Souls" and t_used_resolve:
-                                                dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, c_defense, t_stamina,
+                                                dmg = damage_cal(c_opponent_affinities, special_attack_name, tmove2_element, t_universe, t_card, t_2, t_attack, t_defense, c_defense, t_stamina,
                                                                 t_enhancer_used, t_health, c_health, c_stamina, t_max_health,
                                                                 c_attack, t_special_move_description, turn_total,
                                                                 tcard_lvl_ap_buff, t_1)
                                             else:
-                                                dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, c_defense, t_stamina,
+                                                dmg = damage_cal(c_opponent_affinities, basic_attack_name, tmove1_element, t_universe, t_card, t_1, t_attack, t_defense, c_defense, t_stamina,
                                                                 t_enhancer_used, t_health, c_health, c_stamina, t_max_health,
                                                                 c_attack, t_special_move_description, turn_total,
                                                                 tcard_lvl_ap_buff, None)
                                         else:
                                             if t_universe == "Souls" and t_used_resolve:
-                                                dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_stamina,
+                                                dmg = damage_cal(o_opponent_affinities, special_attack_name, tmove2_element, t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_stamina,
                                                                 t_enhancer_used, t_health, o_health, o_stamina, t_max_health,
                                                                 o_attack, t_special_move_description, turn_total,
                                                                 tcard_lvl_ap_buff, t_1)
                                             else:
-                                                dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense, t_stamina,
+                                                dmg = damage_cal(o_opponent_affinities, basic_attack_name, tmove1_element, t_universe, t_card, t_1, t_attack, t_defense, o_defense, t_stamina,
                                                                 t_enhancer_used, t_health, o_health, o_stamina, t_max_health,
                                                                 o_attack, t_special_move_description, turn_total,
                                                                 tcard_lvl_ap_buff, None)
@@ -14376,35 +15387,35 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                         if c_block_used == True:
                                             if t_universe == "Souls" and t_used_resolve:
-                                                dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_stamina,
+                                                dmg = damage_cal(c_opponent_affinities, ultimate_attack_name, tmove3_element, t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_stamina,
                                                                 t_enhancer_used, t_health, c_health, c_stamina, t_max_health,
                                                                 c_attack, t_special_move_description, turn_total,
                                                                 tcard_lvl_ap_buff, t_2)
                                             else:
-                                                dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, c_defense, t_stamina,
+                                                dmg = damage_cal(c_opponent_affinities, special_attack_name, tmove2_element, t_universe, t_card, t_2, t_attack, t_defense, c_defense, t_stamina,
                                                                 t_enhancer_used, t_health, c_health, c_stamina, t_max_health,
                                                                 c_attack, t_special_move_description, turn_total,
                                                                 tcard_lvl_ap_buff, None)
                                         else:
                                             if t_universe == "Souls" and t_used_resolve:
-                                                dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_stamina,
+                                                dmg = damage_cal(o_opponent_affinities, ultimate_attack_name, tmove3_element, t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_stamina,
                                                                 t_enhancer_used, t_health, o_health, o_stamina, t_max_health,
                                                                 o_attack, t_special_move_description, turn_total,
                                                                 tcard_lvl_ap_buff, t_2)
                                             else:
-                                                dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_stamina,
+                                                dmg = damage_cal(o_opponent_affinities, special_attack_name, tmove2_element, t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_stamina,
                                                                 t_enhancer_used, t_health, o_health, o_stamina, t_max_health,
                                                                 o_attack, t_special_move_description, turn_total,
                                                                 tcard_lvl_ap_buff, None)
                                     elif int(aiMove) == 3:
 
                                         if c_block_used == True:
-                                            dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_stamina,
+                                            dmg = damage_cal(c_opponent_affinities, ultimate_attack_name, tmove3_element, t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_stamina,
                                                             t_enhancer_used, t_health, c_health, c_stamina, t_max_health,
                                                             c_attack, t_special_move_description, turn_total,
                                                             tcard_lvl_ap_buff, None)
                                         else:
-                                            dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_stamina,
+                                            dmg = damage_cal(o_opponent_affinities, ultimate_attack_name, tmove3_element, t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_stamina,
                                                             t_enhancer_used, t_health, o_health, o_stamina, t_max_health,
                                                             o_attack, t_special_move_description, turn_total,
                                                             tcard_lvl_ap_buff, None)
@@ -14418,12 +15429,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                         t_enhancer_used = True
                                         if c_block_used == True:
-                                            dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, c_defense,
+                                            dmg = damage_cal(o_opponent_affinities, basic_attack_name, tmove1_element, t_universe, t_card, t_enhancer, t_attack, t_defense, c_defense,
                                                             t_stamina, t_enhancer_used, t_health, c_health, c_stamina,
                                                             t_max_health, c_attack, t_special_move_description, turn_total,
                                                             tcard_lvl_ap_buff, None)
                                         else:
-                                            dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense,
+                                            dmg = damage_cal(o_opponent_affinities, basic_attack_name, tmove1_element, t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense,
                                                             t_stamina, t_enhancer_used, t_health, o_health, o_stamina,
                                                             t_max_health, o_attack, t_special_move_description, turn_total,
                                                             tcard_lvl_ap_buff, None)
@@ -14455,7 +15466,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 t_defense = round(t_defense - t_resolve_defense)
                                                 t_used_resolve = True
                                                 t_pet_used = False
-                                                previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: PLUS ULTRA!")
+                                                previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: PLUS ULTRA!")
                                                 turn_total = turn_total + 1
                                                 turn = 1
 
@@ -14483,7 +15494,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_defense = o_defense
                                                 t_used_resolve = True
                                                 t_pet_used = False
-                                                previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Total Concentration Breathing!")
+                                                previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Total Concentration Breathing!")
 
                                                 turn_total = turn_total + 1
                                                 turn = turn_selector
@@ -14508,7 +15519,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 t_defense = round(t_defense - t_resolve_defense)
                                                 t_used_resolve = True
                                                 t_pet_used = False
-                                                previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Hashirama Cells heal you for **{t_naruto_heal_buff}**")
+                                                previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Hashirama Cells heal you for **{t_naruto_heal_buff}**")
                                                
                                                 turn_total = turn_total + 1
                                                 turn = 0
@@ -14534,7 +15545,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 t_pet_used = False
                                                 health_boost = 100 * t_focus_count
                                                 t_health = t_health + health_boost
-                                                previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Titan Mode")
+                                                previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Titan Mode")
 
                                                 turn_total = turn_total + 1
                                                 turn = turn_selector
@@ -14557,7 +15568,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 # t_defense = 120
                                                 t_used_resolve = True
                                                 t_pet_used = False
-                                                previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Bankai!")
+                                                previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Bankai!")
                                                 turn_total = turn_total + 1
                                                 turn = turn_selector
                                             elif t_universe == "God Of War":  # God Of War Trait
@@ -14579,12 +15590,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 t_pet_used = False
 
                                                 if t_gow_resolve:
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Ascension!")
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Ascension!")
                                                 elif not t_gow_resolve:
                                                     t_used_resolve = False
                                                     t_gow_resolve = True
                                                     t_defense = 125
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Crushed Blood Orb: Health Refill")
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Crushed Blood Orb: Health Refill")
                                                 
                                                     
                                                 turn_total = turn_total + 1
@@ -14605,23 +15616,23 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 t_attack = round(t_attack + t_resolve_attack)
                                                 t_defense = round(t_defense - t_resolve_defense)
                                                 t_used_resolve = True
-                                                previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Command Seal! {dmg['MESSAGE']}")
+                                                previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Command Seal! {dmg['MESSAGE']}")
                                                 if c_block_used == True:
-                                                    dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense,
+                                                    dmg = damage_cal(o_opponent_affinities, ultimate_attack_name, tmove3_element, t_universe, t_card, t_3, t_attack, t_defense, c_defense,
                                                                     t_stamina, t_enhancer_used, t_health, c_health, c_stamina,
                                                                     t_max_health, c_attack, t_special_move_description,
                                                                     turn_total, tcard_lvl_ap_buff, None)
                                                     c_health = c_health - int(dmg['DMG'])
                                                 else:
-                                                    dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense,
+                                                    dmg = damage_cal(o_opponent_affinities, ultimate_attack_name, tmove3_element, t_universe, t_card, t_3, t_attack, t_defense, o_defense,
                                                                     t_stamina, t_enhancer_used, t_health, o_health, o_stamina,
                                                                     t_max_health, o_attack, t_special_move_description,
                                                                     turn_total, tcard_lvl_ap_buff, None)
                                                     o_health = o_health - int(dmg['DMG'])
                                                 t_pet_used = False
 
-                                                previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Command Seal! {dmg['MESSAGE']}")
-                                                    #previous_moves.append(f"*{turn_total}:* 🩸  {dmg['MESSAGE']}")
+                                                previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Command Seal! {dmg['MESSAGE']}")
+                                                    #previous_moves.append(f"(**{turn_total}**) 🩸  {dmg['MESSAGE']}")
                                                 # t_stamina = 0
                                                 turn_total = turn_total + 1
                                                 turn = turn_selector
@@ -14646,13 +15657,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 if turn_total >= 50:
                                                     t_max_health = t_max_health + 1000
                                                     t_health = t_health + 1000
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Gigantomax Evolution!!! Gained **1000** HP!!!")
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Gigantomax Evolution!!! Gained **1000** HP!!!")
                                                 elif turn_total >= 30:
                                                     t_max_health = t_max_health + 300
                                                     t_health = t_health + 300
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Mega Evolution!! Gained **300** HP!")
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Mega Evolution!! Gained **300** HP!")
                                                 else:
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Evolution!")
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Evolution!")
                                                 turn_total = turn_total + 1
                                                 turn = turn_selector
                                             else:
@@ -14681,7 +15692,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                                 colour=0xe91e63)
                                                         embedVar.add_field(name=f"Nexus Destroyed",
                                                                         value=f"**{t_card}** dealt **{(60 * (c_focus_count + t_focus_count))}** damage.")
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Pentakill! Dealing {(60 * (c_focus_count + t_focus_count))} damage.")
+                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Pentakill! Dealing {(60 * (c_focus_count + t_focus_count))} damage.")
                                                     else:
                                                         o_health = o_health - (60 * (o_focus_count + t_focus_count))
                                                         embedVar = discord.Embed(title=f"{t_card} PENTA KILL!",
@@ -14689,9 +15700,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                                 colour=0xe91e63)
                                                         embedVar.add_field(name=f"Nexus Destroyed",
                                                                         value=f"**{t_card}** dealt **{(60 * (o_focus_count + t_focus_count))}** damage.")
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Pentakill! Dealing {(60 * (o_focus_count + t_focus_count))} damage.")
+                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Pentakill! Dealing {(60 * (o_focus_count + t_focus_count))} damage.")
                                                 elif t_universe == "Souls":
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Phase 2: Enhanced Moveset!")
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Phase 2: Enhanced Moveset!")
                                                     
                                                 else:
                                                     embedVar = discord.Embed(title=f"{t_card} STRENGTHENED RESOLVE :zap:",
@@ -14699,11 +15710,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                             colour=0xe91e63)
                                                     embedVar.add_field(name=f"Transformation",
                                                                     value="All stats & stamina greatly increased")
-                                                    previous_moves.append(f"*{turn_total}:* ⚡ **{t_card}** Resolved!")
+                                                    previous_moves.append(f"(**{turn_total}**) ⚡ **{t_card}** Resolved!")
                                                 turn_total = turn_total + 1
                                                 turn = turn_selector
                                         else:
-                                            previous_moves.append(f"*{turn_total}:* {t_card} cannot resolve!")
+                                            previous_moves.append(f"(**{turn_total}**) {t_card} cannot resolve!")
                                             turn = 1
                                     elif int(aiMove) == 6:
                                         # Resolve Check and Calculation
@@ -14711,7 +15722,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             if mode in co_op_modes:
                                                 if c_block_used == True:
                                                     t_enhancer_used = True
-                                                    dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense,
+                                                    dmg = damage_cal(o_opponent_affinities, basic_attack_name, tmove1_element, t_universe, t_card, tpet_move, t_attack, t_defense,
                                                                     c_defense, t_stamina, t_enhancer_used, t_health, c_health,
                                                                     c_stamina, t_max_health, c_attack,
                                                                     t_special_move_description, turn_total, tcard_lvl_ap_buff, None)
@@ -14804,7 +15815,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 c_max_health = 1
                                                         t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                                         if t_universe == "Persona":
-                                                            petdmg = damage_cal(t_universe, t_card, t_1, t_attack,
+                                                            petdmg = damage_cal(o_opponent_affinities, basic_attack_name, tmove1_element, t_universe, t_card, t_1, t_attack,
                                                                                 t_defense, c_defense, t_stamina,
                                                                                 t_enhancer_used, t_health, c_health,
                                                                                 c_stamina, t_max_health, c_attack,
@@ -14826,7 +15837,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     await asyncio.sleep(2)
                                                                     await battle_msg.delete(delay=2)
                                                             #embedVar.set_image(url="attachment://pet.png")
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **Persona!** : **{tpet_name}** was summoned from **{t_card}'s** soul dealing **{petdmg['DMG']}** damage!\n**{c_card}** summon disabled!")
+                                                            previous_moves.append(f"(**{turn_total}**) **Persona!** 🩸 : **{tpet_name}** was summoned from **{t_card}'s** soul dealing **{petdmg['DMG']}** damage!\n**{c_card}** summon disabled!")
                                                             c_pet_used = True
                                                             
                                                         else:
@@ -14841,7 +15852,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                             embedVar.set_image(url="attachment://pet.png")
                                                             
-                                                            previous_moves.append(f"*{turn_total}:* **{t_card}** Summoned 🧬 **{tpet_name}**: {dmg['MESSAGE']}")
+                                                            previous_moves.append(f"(**{turn_total}**) **{t_card}** Summoned 🧬 **{tpet_name}**: {dmg['MESSAGE']}")
 
 
                                                             #await battle_msg.delete(delay=2)
@@ -14853,7 +15864,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             #     await battle_msg.delete(delay=2)
 
                                                         # if t_universe == "Persona":
-                                                        #     petdmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense,
+                                                        #     petdmg = damage_cal(o_opponent_affinities, basic_attack_name, tmove1_element, t_universe, t_card, t_1, t_attack, t_defense,
                                                         #                         c_defense, t_stamina, t_enhancer_used, t_health,
                                                         #                         c_health, c_stamina, t_max_health, c_attack,
                                                         #                         t_special_move_description, turn_total,
@@ -14862,12 +15873,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         turn = turn_selector
                                                     else:
                                                         # if mode not in AUTO_BATTLE_modes:
-                                                        previous_moves.append(f"*{turn_total}:* {t_card} Could not summon 🧬 **{tpet_name}**. Needs rest")
+                                                        previous_moves.append(f"(**{turn_total}**) {t_card} Could not summon 🧬 **{tpet_name}**. Needs rest")
                                                             # await private_channel.send(f"{tpet_name} needs a turn to rest...")
                                                         turn = 1
                                                 else:
                                                     t_enhancer_used = True
-                                                    dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense,
+                                                    dmg = damage_cal(o_opponent_affinities, basic_attack_name, tmove1_element, t_universe, t_card, tpet_move, t_attack, t_defense,
                                                                     o_defense, t_stamina, t_enhancer_used, t_health, o_health,
                                                                     o_stamina, t_max_health, o_attack,
                                                                     t_special_move_description, turn_total, tcard_lvl_ap_buff, None)
@@ -14962,7 +15973,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                         
                                                         if t_universe == "Persona":
-                                                            petdmg = damage_cal(t_universe, t_card, t_1, t_attack,
+                                                            petdmg = damage_cal(o_opponent_affinities, basic_attack_name, tmove1_element, t_universe, t_card, t_1, t_attack,
                                                                                 t_defense, c_defense, t_stamina,
                                                                                 t_enhancer_used, t_health, c_health,
                                                                                 c_stamina, t_max_health, c_attack,
@@ -14988,7 +15999,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     await asyncio.sleep(2)
                                                                     await battle_msg.delete(delay=2)
                                                             #embedVar.set_image(url="attachment://pet.png")
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **Persona!** : **{tpet_name}** was summoned from **{t_card}'s** soul dealing **{petdmg['DMG']}** damage!\n**{c_card}** summon disabled!")
+                                                            previous_moves.append(f"(**{turn_total}**) **Persona!** 🩸 : **{tpet_name}** was summoned from **{t_card}'s** soul dealing **{petdmg['DMG']}** damage!\n**{c_card}** summon disabled!")
                                                             c_pet_used = True
                                                             
                                                         else:
@@ -15001,7 +16012,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
                                                                 
                                                             embedVar.set_image(url="attachment://pet.png")
-                                                            previous_moves.append(f"*{turn_total}:* **{t_card}** Summoned 🧬 **{tpet_name}**: {dmg['MESSAGE']}")
+                                                            previous_moves.append(f"(**{turn_total}**) **{t_card}** Summoned 🧬 **{tpet_name}**: {dmg['MESSAGE']}")
 
                                                             #await battle_msg.delete(delay=2)
                                                             if mode not in AUTO_BATTLE_modes:
@@ -15012,7 +16023,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     await battle_msg.delete(delay=2)
 
                                                         # if t_universe == "Persona":
-                                                        #     petdmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense,
+                                                        #     petdmg = damage_cal(o_opponent_affinities, basic_attack_name, tmove1_element, t_universe, t_card, t_1, t_attack, t_defense,
                                                         #                         c_defense, t_stamina, t_enhancer_used, t_health,
                                                         #                         c_health, c_stamina, t_max_health, c_attack,
                                                         #                         t_special_move_description, turn_total,
@@ -15020,12 +16031,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         #     o_health = o_health - petdmg['DMG']
                                                         turn = 1
                                                     else:
-                                                        previous_moves.append(f"*{turn_total}:* {t_card} Could not summon 🧬 **{tpet_name}**. Needs rest")
+                                                        previous_moves.append(f"(**{turn_total}**) {t_card} Could not summon 🧬 **{tpet_name}**. Needs rest")
                                                         turn = 1
 
                                             else:
                                                 t_enhancer_used = True
-                                                dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, o_defense,
+                                                dmg = damage_cal(o_opponent_affinities, basic_attack_name, tmove1_element, t_universe, t_card, tpet_move, t_attack, t_defense, o_defense,
                                                                 t_stamina, t_enhancer_used, t_health, o_health, o_stamina,
                                                                 t_max_health, o_attack, t_special_move_description, turn_total,
                                                                 tcard_lvl_ap_buff, None)
@@ -15120,7 +16131,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                     
                                                     if t_universe == "Persona":
-                                                        petdmg = damage_cal(t_universe, t_card, tpet_move, t_attack,
+                                                        petdmg = damage_cal(o_opponent_affinities, basic_attack_name, tmove1_element, t_universe, t_card, tpet_move, t_attack,
                                                                             t_defense, o_defense, t_stamina,
                                                                             t_enhancer_used, t_health, o_health, o_stamina,
                                                                             t_max_health, o_attack,
@@ -15144,7 +16155,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 await asyncio.sleep(2)
                                                                 await battle_msg.delete(delay=2)
                                                         #embedVar.set_image(url="attachment://pet.png")
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **Persona!** : **{tpet_name}** was summoned from **{t_card}'s** soul dealing **{petdmg['DMG']}** damage!\n**{o_card}** summon disabled!")
+                                                        previous_moves.append(f"(**{turn_total}**) **Persona!** 🩸 : **{tpet_name}** was summoned from **{t_card}'s** soul dealing **{petdmg['DMG']}** damage!\n**{o_card}** summon disabled!")
                                                         o_pet_used = True
                                                         
                                                     else:
@@ -15156,7 +16167,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
                                                                 
                                                         
-                                                        previous_moves.append(f"*{turn_total}:* **{t_card}** Summoned 🧬 **{tpet_name}**: {dmg['MESSAGE']}")
+                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}** Summoned 🧬 **{tpet_name}**: {dmg['MESSAGE']}")
                                                 
                                                         #await battle_msg.delete(delay=2)
                                                         if mode not in AUTO_BATTLE_modes:
@@ -15168,13 +16179,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                     turn = 1
                                                 else:
-                                                    previous_moves.append(f"*{turn_total}:* {t_card} Could not summon 🧬 **{tpet_name}**. Needs rest")
+                                                    previous_moves.append(f"(**{turn_total}**) {t_card} Could not summon 🧬 **{tpet_name}**. Needs rest")
                                                     turn = 1
                                         else:
-                                            previous_moves.append(f"*{turn_total}:* {t_card} Could not summon 🧬 **{tpet_name}**. Needs rest")
+                                            previous_moves.append(f"(**{turn_total}**) {t_card} Could not summon 🧬 **{tpet_name}**. Needs rest")
                                     elif int(aiMove) == 7:
                                         if t_universe == "Persona":
-                                            block_message = f"🩸**Confidant Block!***: **{t_card}** Blocked 🛡️"
+                                            block_message = f"**Confidant Block!*** 🩸: **{t_card}** Blocked 🛡️"
                                             t_block_used = True
                                             t_defense = round(t_defense * 2)
 
@@ -15185,23 +16196,80 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                         if t_stamina >= 20:
                                             if t_universe == "Attack On Titan":
-                                                previous_moves.append(f"*{turn_total}:* 🩸 Rally! **{t_card}** Increased Max Health ❤️")
+                                                previous_moves.append(f"(**{turn_total}**) **Rally** 🩸 ! **{t_card}** Increased Max Health ❤️")
                                                 t_max_health = round(t_max_health + 100)
                                                 t_health = t_health + 100
 
                                             if t_universe == "Bleach":
-                                                dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense,
+                                                dmg = damage_cal(o_opponent_affinities, basic_attack_name, tmove1_element, t_universe, t_card, t_1, t_attack, t_defense, o_defense,
                                                                 t_stamina, t_enhancer_used, t_health, o_health, o_stamina,
                                                                 t_max_health, o_attack, t_special_move_description, turn_total,
                                                                 tcard_lvl_ap_buff, None)
-                                                previous_moves.append(f"*{turn_total}:* **{t_card}** Exerted their 🩸 Spiritual Pressure dealing {dmg['DMG']} dmg")
-                                                o_health = o_health - dmg['DMG']
+                                                previous_moves.append(f"(**{turn_total}**) **{t_card}** Exerted their 🩸 Spiritual Pressure - {dmg['MESSAGE']}")
+                                                if dmg['REPEL']:
+                                                    t_health = t_health - dmg['DMG']
+                                                elif dmg['ABSORB']:
+                                                    o_health = o_health + dmg['DMG']
+                                                elif dmg['ELEMENT'] == water_element:
+                                                    t_water_buff = t_water_buff + 25
+                                                    o_health = o_health - (dmg['DMG'] + t_water_buff)
+                                                else:
+                                                    o_health = o_health - dmg['DMG']
+                                                
+                                                if dmg['ELEMENT'] == ice_element:
+                                                    t_ice_counter = t_ice_counter + 1
+                                                    if t_ice_counter == 3:
+                                                        t_freeze_enh = True
+                                                        t_ice_counter = 0
 
+                                                if dmg['ELEMENT'] == bleed_element:
+                                                    t_bleed_counter = t_bleed_counter + 1
+                                                    if t_bleed_counter == 10:
+                                                        t_bleed_hit = True
+                                                        t_bleed_counter = 0
+
+                                                if dmg['ELEMENT'] == time_element:
+                                                    t_stamina = 0
+
+                                                if dmg['ELEMENT'] == recoil_element:
+                                                    t_health = t_health - (dmg['DMG'] * .25)
+
+                                                if dmg['ELEMENT'] == earth_element:
+                                                    t_defense = t_defense + (dmg['DMG'] * .20)
+
+                                                if dmg['ELEMENT'] == death_element:
+                                                    o_max_health = o_max_health - (dmg['DMG'] * .05)
+
+                                                if dmg['ELEMENT'] == light_element:
+                                                    t_stamina = t_stamina + (dmg['STAMINA_USED'] / 2)
+
+                                                if dmg['ELEMENT'] == dark_element:
+                                                    t_stamina = t_stamina + 5
+                                                    o_stamina = o_stamina - 5
+
+                                                if dmg['ELEMENT'] == life_element:
+                                                    t_health = t_health + (dmg['DMG'] * .15)
+
+                                                if dmg['ELEMENT'] == phsycic_element:
+                                                    o_defense = o_defense - (dmg['DMG'] * .08)
+                                                    o_attack = o_attack - (dmg['DMG'] * .08)
+
+                                                if dmg['ELEMENT'] == fire_element:
+                                                    t_burn_dmg = round(dmg['DMG'] * .30)
+
+                                                if dmg['ELEMENT'] == water_element:
+                                                    t_water_buff = t_water_buff + 25
+
+                                                if dmg['ELEMENT'] == electric_element:
+                                                    t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
+
+                                                if dmg['ELEMENT'] == poison_element:
+                                                    t_poison_dmg = t_poison_dmg + 8
 
                                             t_stamina = t_stamina - 20
                                             t_block_used = True
                                             t_defense = round(t_defense * 2)
-                                            previous_moves.append(f"*{turn_total}:* **{t_card}:** Blocked 🛡️")
+                                            previous_moves.append(f"(**{turn_total}**) **{t_card}:** Blocked 🛡️")
                                             turn_total = turn_total + 1
                                             turn = turn_selector
                                         else:
@@ -15308,7 +16376,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         else:
                                                             t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
-                                                        previous_moves.append(f"*{turn_total}:* **{t_card}**: 🦠 {dmg['MESSAGE']}")
+                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}**: 🦠 {dmg['MESSAGE']}")
                                                         turn_total = turn_total + 1
                                                         turn = turn_selector
                                                     elif dmg['DMG'] == 0:
@@ -15316,8 +16384,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if tarm_barrier_active:
                                                             tarm_barrier_active=False
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                            previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
-                                                        previous_moves.append(f"*{turn_total}:* **{t_card}**: {dmg['MESSAGE']}")
+                                                            previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
+                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}**: {dmg['MESSAGE']}")
                                                         turn_total = turn_total + 1
                                                         turn = turn_selector
                                                     else:
@@ -15325,24 +16393,24 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             c_stored_damage = round(dmg['DMG'])
                                                             c_naruto_heal_buff = c_naruto_heal_buff + c_stored_damage
                                                             c_health = c_health 
-                                                            previous_moves.append(f"*{turn_total}:* {c_card}: Substitution Jutsu")
+                                                            previous_moves.append(f"(**{turn_total}**) {c_card}: Substitution Jutsu")
                                                             if not c_used_resolve:
-                                                                previous_moves.append(f"*{turn_total}:* 🩸**{c_stored_damage}** Hasirama Cells stored. 🩸**{c_naruto_heal_buff}** total stored.")
+                                                                previous_moves.append(f"(**{turn_total}**) 🩸**{c_stored_damage}** Hasirama Cells stored. 🩸**{c_naruto_heal_buff}** total stored.")
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
-                                                        elif carm_shield_active:
+                                                                previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
+                                                        elif carm_shield_active and dmg['ELEMENT'] != dark_element:
                                                             if cshield_value > 0:
                                                                 cshield_value = cshield_value -dmg['DMG']
                                                                 c_health = c_health 
                                                                 if cshield_value <=0:
                                                                     embedVar = discord.Embed(title=f"{c_card}'s' **Shield** Shattered!", description=f"{t_card} breaks the **Shield**!", colour=0xe91e63)
-                                                                    previous_moves.append(f"*{turn_total}:* 🌐{c_card}'s Shield Shattered!")
+                                                                    previous_moves.append(f"(**{turn_total}**) 🌐{c_card}'s Shield Shattered!")
                                                                     if tarm_barrier_active:
                                                                         tarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                                     carm_shield_active = False
                                                                 else:
                                                                     embedVar = discord.Embed(title=f"{c_card} Activates **Shield** 🌐", description=f"**{t_card}** strikes the Shield 🌐\n**{cshield_value} Shield** Left!", colour=0xe91e63)
@@ -15351,26 +16419,26 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                     #await private_channel.send(embed=embedVar)
 
-                                                        elif carm_barrier_active:
+                                                        elif carm_barrier_active and dmg['ELEMENT'] != phsycic_element:
                                                             if cbarrier_count >1:
                                                                 c_health = c_health 
                                                                 embedVar = discord.Embed(title=f"{c_card} Activates **Barrier** 💠", description=f"{t_card}'s attack **Nullified**!\n 💠{cbarrier_count - 1} **Barriers** remain!", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* {c_card} Activates Barrier 💠 {t_card}'s attack **Nullified**!\n💠 {cbarrier_count - 1} **Barriers** remain!")
+                                                                previous_moves.append(f"(**{turn_total}**) {c_card} Activates Barrier 💠 {t_card}'s attack **Nullified**!\n💠 {cbarrier_count - 1} **Barriers** remain!")
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                                 cbarrier_count = cbarrier_count - 1
                                                             elif cbarrier_count==1:
                                                                 embedVar = discord.Embed(title=f"{c_card}'s **Barrier** Broken!", description=f"{t_card} destroys the **Barrier**", colour=0xe91e63)
                                                                 cbarrier_count = cbarrier_count - 1
-                                                                previous_moves.append(f"*{turn_total}:* {c_card}'s Barrier Broken!")
+                                                                previous_moves.append(f"(**{turn_total}**) {c_card}'s Barrier Broken!")
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                                 carm_barrier_active = False
-                                                        elif carm_parry_active:
+                                                        elif carm_parry_active and dmg['ELEMENT'] != earth_element:
                                                             if cparry_count > 1:
                                                                 c_health = c_health
                                                                 cparry_damage = round(dmg['DMG'])
@@ -15378,11 +16446,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = round(t_health - (cparry_damage * .25))
                                                                 cparry_count = cparry_count - 1
                                                                 embedVar = discord.Embed(title=f"{c_card} Activates **Parry** 🔄", description=f"{t_card} takes {round(cparry_damage * .25)}! DMG\n **{cparry_count} Parries** to go!!", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* {c_card} Activates Parry 🔄")
+                                                                previous_moves.append(f"(**{turn_total}**) {c_card} Activates Parry 🔄")
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                                 
                                                             elif cparry_count==1:
                                                                 c_health = c_health
@@ -15390,41 +16458,102 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 c_health = round(c_health - (cparry_damage * .75))
                                                                 t_health = round(t_health - (cparry_damage * .25))
                                                                 embedVar = discord.Embed(title=f"{c_card} **Parry** Penetrated!!", description=f"{t_card} takes {round(cparry_damage * .25)}! DMG and breaks the **Parry**", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* **{c_card}** Parry Penetrated! **{t_card}** takes **{round(cparry_damage * .25)}** ! DMG and breaks the **Parry**")
+                                                                previous_moves.append(f"(**{turn_total}**) **{c_card}** Parry Penetrated! **{t_card}** takes **{round(cparry_damage * .25)}** ! DMG and breaks the **Parry**")
                                                                 cparry_count = cparry_count - 1
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                                 carm_parry_active = False
                                                         else:
-                                                            c_health = c_health - int(dmg['DMG'])
+                                                            if dmg['REPEL']:
+                                                                t_health = t_health - int(dmg['DMG'])
+                                                            elif dmg['ABSORB']:
+                                                                c_health = c_health + int(dmg['DMG'])
+                                                            elif dmg['ELEMENT'] == water_element:
+                                                                t_water_buff = t_water_buff + 25
+                                                                c_health = c_health - (dmg['DMG'] + t_water_buff)
+                                                            else:
+                                                                c_health = c_health - dmg['DMG']
+                                                            
+                                                            if dmg['ELEMENT'] == ice_element:
+                                                                t_ice_counter = t_ice_counter + 1
+                                                                if t_ice_counter == 3:
+                                                                    t_freeze_enh = True
+                                                                    t_ice_counter = 0
+
+                                                            if dmg['ELEMENT'] == time_element:
+                                                                t_stamina = 0
+
+                                                            if dmg['ELEMENT'] == bleed_element:
+                                                                t_bleed_counter = t_bleed_counter + 1
+                                                                if t_bleed_counter == 10:
+                                                                    t_bleed_hit = True
+                                                                    t_bleed_counter = 0
+
+                                                            if dmg['ELEMENT'] == recoil_element:
+                                                                t_health = t_health - (dmg['DMG'] * .25)
+
+                                                            if dmg['ELEMENT'] == earth_element:
+                                                                t_defense = t_defense + (dmg['DMG'] * .20)
+
+                                                            if dmg['ELEMENT'] == death_element:
+                                                                c_max_health = c_max_health - (dmg['DMG'] * .05)
+
+                                                            if dmg['ELEMENT'] == light_element:
+                                                                t_stamina = t_stamina + (dmg['STAMINA_USED'] / 2)
+
+                                                            if dmg['ELEMENT'] == dark_element:
+                                                                t_stamina = t_stamina + 5
+                                                                c_stamina = c_stamina - 5
+
+                                                            if dmg['ELEMENT'] == life_element:
+                                                                t_health = t_health + (dmg['DMG'] * .15)
+
+                                                            if dmg['ELEMENT'] == phsycic_element:
+                                                                c_defense = c_defense - (dmg['DMG'] * .08)
+                                                                c_attack = c_attack - (dmg['DMG'] * .08)
+
+                                                            if dmg['ELEMENT'] == fire_element:
+                                                                t_burn_dmg = round(dmg['DMG'] * .30)
+
+
+                                                            if dmg['ELEMENT'] == water_element:
+                                                                t_water_buff = t_water_buff + 25
+
+                                                            if dmg['ELEMENT'] == electric_element:
+                                                                t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
+
+                                                            if dmg['ELEMENT'] == poison_element:
+                                                                t_poison_dmg = t_poison_dmg + 8
+
+
                                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                                            previous_moves.append(f"*{turn_total}:* **{t_card}**: {dmg['MESSAGE']}")
+                                                            previous_moves.append(f"(**{turn_total}**) **{t_card}**: {dmg['MESSAGE']}")
                                                             if tarm_siphon_active:
                                                                 siphon_damage = (dmg['DMG'] * .10) + tsiphon_value
                                                                 t_health = round(t_health + siphon_damage)
                                                                 if t_health >= t_max_health:
                                                                     t_health = t_max_health
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}**: 💉 Siphoned **Full Health!**")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}**: 💉 Siphoned **Full Health!**")
                                                                 else:
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}**: 💉 Siphoned **{round(siphon_damage)}** Health!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}**: 💉 Siphoned **{round(siphon_damage)}** Health!")
 
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                             
-                                                                previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                         if c_health <= 0:
                                                             if c_final_stand==True:
                                                                 if c_universe == "Dragon Ball Z":
                                                                     embedVar = discord.Embed(title=f"{c_card}'s LAST STAND", description=f"{c_card} FINDS RESOLVE", colour=0xe91e63)
                                                                     embedVar.add_field(name=f"{c_card} resolved and continues to fight", value="All stats & stamina increased")
-                                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Transformation: Last Stand!!!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 Transformation: Last Stand!!!")
                                                                     if tarm_barrier_active:
                                                                         tarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                                     c_health = int(.75 * (c_attack + c_defense))
                                                                     
                                                                     c_used_resolve = True
@@ -15443,7 +16572,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             turn = turn_selector
                                                 else:
                                                     #await private_channel.send(m.NOT_ENOUGH_STAMINA)
-                                                    previous_moves.append(f"*{turn_total}:* **{t_card}** not enough Stamina to use this move") 
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** not enough Stamina to use this move") 
                                                     turn = 1
                                             else:
                                                 if dmg['CAN_USE_MOVE']:
@@ -15541,115 +16670,174 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_stamina = t_stamina
                                                         else:
                                                             t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-                                                        previous_moves.append(f"*{turn_total}:* **{t_card}**: 🦠 {dmg['MESSAGE']}")
+                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}**: 🦠 {dmg['MESSAGE']}")
                                                         turn_total = turn_total + 1
                                                         turn = turn_selector
                                                     elif dmg['DMG'] == 0:
                                                         t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-                                                        previous_moves.append(f"*{turn_total}:* **{t_card}**: {dmg['MESSAGE']}")
+                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}**: {dmg['MESSAGE']}")
                                                         if tarm_barrier_active:
                                                             tarm_barrier_active=False
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                            previous_moves.append(f"*{turn_total}:* 🦠 💠**{t_card}**'s Barrier Disabled!")
+                                                            previous_moves.append(f"(**{turn_total}**) 🦠 **{t_card}**'s 💠 Barrier Disabled!")
                                                         turn_total = turn_total + 1
                                                         turn = turn_selector
                                                     else:
                                                         if o_universe == "Naruto" and o_stamina < 10:
                                                             o_health = o_health
-                                                            previous_moves.append(f"*{turn_total}:* 🩸**{o_card}**: Substitution Jutsu")
+                                                            previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸: Substitution Jutsu")
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
-                                                        elif oarm_shield_active:
+                                                                previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
+                                                        elif oarm_shield_active and dmg['ELEMENT'] != dark_element:
                                                             if oshield_value > 0:
                                                                 oshield_value = oshield_value -dmg['DMG']
                                                                 o_health = o_health 
                                                                 if oshield_value <=0:
-                                                                    previous_moves.append(f"*{turn_total}:* 🌐**{o_card}'s** Shield Shattered!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}'s** 🌐 Shield Shattered!")
                                                                     if tarm_barrier_active:
                                                                         tarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                                     oarm_shield_active = False
                                                                 else:
                                                                     embedVar = discord.Embed(title=f"{o_card} Activates **Shield** 🌐", description=f"**{t_card}** strikes the Shield 🌐\n**{oshield_value} Shield** Left!", colour=0xe91e63)
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}** strikes **{o_card}**'s Shield 🌐\n**{oshield_value} Shield** Left!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** strikes **{o_card}**'s Shield 🌐\n**{oshield_value} Shield** Left!")
                                                                     if tarm_barrier_active:
                                                                         tarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
 
-                                                        elif oarm_barrier_active:
+                                                        elif oarm_barrier_active and dmg['ELEMENT'] != phsycic_element:
                                                             if obarrier_count >1:
                                                                 o_health = o_health 
                                                                 embedVar = discord.Embed(title=f"{o_card} Activates **Barrier** 💠", description=f"{t_card}'s attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* **{o_card}** Activates Barrier 💠 {t_card}'s attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{o_card}** Activates Barrier 💠 {t_card}'s attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!")
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                                 obarrier_count = obarrier_count - 1
                                                             elif obarrier_count==1:
                                                                 embedVar = discord.Embed(title=f"{o_card}'s **Barrier** Broken!", description=f"{t_card} destroys the **Barrier**", colour=0xe91e63)
                                                                 obarrier_count = obarrier_count - 1
-                                                                previous_moves.append(f"*{turn_total}:* **{o_card}**'s Barrier Broken!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{o_card}**'s Barrier Broken!")
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                                 oarm_barrier_active = False
-                                                        elif oarm_parry_active:
+                                                        elif oarm_parry_active and dmg['ELEMENT'] != earth_element:
                                                             if oparry_count > 1:
                                                                 oparry_damage = round(dmg['DMG'])
                                                                 o_health = round(o_health - (oparry_damage * .75))
                                                                 t_health = round(t_health - (oparry_damage * .25))
                                                                 oparry_count = oparry_count - 1
                                                                 embedVar = discord.Embed(title=f"{o_card} Activates **Parry** 🔄", description=f"{t_card} takes {round(oparry_damage * .25)}! DMG\n **{oparry_count} Parries** to go!!", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* **{o_card}** Activates Parry 🔄 {t_card} takes {round(oparry_damage * .25)}! DMG\n **{oparry_count}  Parries** to go!!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{o_card}** Activates Parry 🔄 {t_card} takes {round(oparry_damage * .25)}! DMG\n **{oparry_count}  Parries** to go!!")
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                                 
                                                             elif oparry_count==1:
                                                                 oparry_damage = round(dmg['DMG'])
                                                                 o_health = round(o_health - (oparry_damage * .75))
                                                                 t_health = round(t_health - (oparry_damage * .25))
                                                                 embedVar = discord.Embed(title=f"{o_card} **Parry** Penetrated!!", description=f"{t_card} takes {round(oparry_damage * .25)}! DMG and breaks the **Parry**", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* **{o_card}** Parry Penetrated! **{t_card}** takes **{round(oparry_damage * .25)}**! DMG and breaks the **Parry**")
+                                                                previous_moves.append(f"(**{turn_total}**) **{o_card}** Parry Penetrated! **{t_card}** takes **{round(oparry_damage * .25)}**! DMG and breaks the **Parry**")
                                                                 oparry_count = oparry_count - 1
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     private_channel.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                                 oarm_parry_active = False
                                                         else:
-                                                            o_health = o_health - int(dmg['DMG'])
+                                                            if dmg['REPEL']:
+                                                                t_health = t_health - int(dmg['DMG'])
+                                                            elif dmg['ABSORB']:
+                                                                o_health = o_health + int(dmg['DMG'])
+                                                            elif dmg['ELEMENT'] == water_element:
+                                                                t_water_buff = t_water_buff + 25
+                                                                o_health = o_health - (dmg['DMG'] + t_water_buff)
+                                                            else:
+                                                                o_health = o_health - dmg['DMG']
+
+                                                            if dmg['ELEMENT'] == ice_element:
+                                                                t_ice_counter = t_ice_counter + 1
+                                                                if t_ice_counter == 3:
+                                                                    t_freeze_enh = True
+                                                                    t_ice_counter = 0
+
+                                                            if dmg['ELEMENT'] == time_element:
+                                                                t_stamina = 0
+
+                                                            if dmg['ELEMENT'] == bleed_element:
+                                                                t_bleed_counter = t_bleed_counter + 1
+                                                                if t_bleed_counter == 10:
+                                                                    t_bleed_hit = True
+                                                                    t_bleed_counter = 0
+
+                                                            if dmg['ELEMENT'] == recoil_element:
+                                                                t_health = t_health - (dmg['DMG'] * .25)
+
+                                                            if dmg['ELEMENT'] == earth_element:
+                                                                t_defense = t_defense + (dmg['DMG'] * .20)
+
+                                                            if dmg['ELEMENT'] == death_element:
+                                                                o_max_health = o_max_health - (dmg['DMG'] * .05)
+
+                                                            if dmg['ELEMENT'] == light_element:
+                                                                t_stamina = t_stamina + (dmg['STAMINA_USED'] / 2)
+
+                                                            if dmg['ELEMENT'] == dark_element:
+                                                                t_stamina = t_stamina + 5
+                                                                o_stamina = o_stamina - 5
+
+                                                            if dmg['ELEMENT'] == life_element:
+                                                                t_health = t_health + (dmg['DMG'] * .15)
+
+                                                            if dmg['ELEMENT'] == phsycic_element:
+                                                                o_defense = o_defense - (dmg['DMG'] * .08)
+                                                                o_attack = o_attack - (dmg['DMG'] * .08)
+
+                                                            if dmg['ELEMENT'] == fire_element:
+                                                                t_burn_dmg = round(dmg['DMG'] * .30)
+
+                                                            if dmg['ELEMENT'] == water_element:
+                                                                t_water_buff = t_water_buff + 25
+
+                                                            if dmg['ELEMENT'] == electric_element:
+                                                                t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
+
+                                                            if dmg['ELEMENT'] == poison_element:
+                                                                t_poison_dmg = t_poison_dmg + 8
+
                                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                                            previous_moves.append(f"*{turn_total}:* **{t_card}**: {dmg['MESSAGE']}")
+                                                            previous_moves.append(f"(**{turn_total}**) **{t_card}**: {dmg['MESSAGE']}")
                                                             if tarm_siphon_active:
                                                                 siphon_damage = (dmg['DMG'] * .10) + tsiphon_value
                                                                 t_health = round(t_health + siphon_damage)
                                                                 if t_health >= t_max_health:
                                                                     t_health = t_max_health
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}**: 💉 Siphoned **Full Health!**")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}**: 💉 Siphoned **Full Health!**")
                                                                 else:
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}**: 💉 Siphoned **{round(siphon_damage)}** Health!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}**: 💉 Siphoned **{round(siphon_damage)}** Health!")
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 private_channel.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                         if o_health <= 0:
                                                             if o_final_stand == True:
                                                                 if o_universe == "Dragon Ball Z":
                                                                     embedVar = discord.Embed(title=f"{o_card}'s LAST STAND", description=f"{o_card} FINDS RESOLVE", colour=0xe91e63)
                                                                     private_channel.add_field(name=f"**{o_card}** Resolved and continues to fight", value="All stats & stamina increased")
-                                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Transformation: Last Stand!!!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Transformation: Last Stand!!!")
                                                                     if tarm_barrier_active:
                                                                         tarm_barrier_active=False
                                                                         private_channel.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                                     o_health = int(.75 * (o_attack + o_defense))
                                                                     o_attack = o_attack + (.50 * o_attack)
                                                                     o_defense = o_defense + (.50 * o_defense)
@@ -15669,7 +16857,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             turn_total = turn_total + 1
                                                             turn = turn_selector
                                                 else:
-                                                    previous_moves.append(f"*{turn_total}:* {t_card} not enough Stamina to use move")
+                                                    previous_moves.append(f"(**{turn_total}**) {t_card} not enough Stamina to use move")
                                                     turn = 1
                                         else:
                                             if dmg['CAN_USE_MOVE']:
@@ -15767,16 +16955,16 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_stamina = t_stamina
                                                     else:
                                                         t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-                                                    previous_moves.append(f"*{turn_total}:* **{t_card}**: 🦠 {dmg['MESSAGE']}")
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}**: 🦠 {dmg['MESSAGE']}")
                                                     turn_total = turn_total + 1
                                                     turn = turn_selector
                                                 elif dmg['DMG'] == 0:
                                                     t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-                                                    previous_moves.append(f"*{turn_total}:* **{t_card}**: {dmg['MESSAGE']}")
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}**: {dmg['MESSAGE']}")
                                                     if tarm_barrier_active:
                                                         tarm_barrier_active=False
                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                        previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                         
                                                     turn_total = turn_total + 1
                                                     turn = turn_selector
@@ -15785,102 +16973,163 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_stored_damage = round(dmg['DMG'])
                                                         o_naruto_heal_buff = o_naruto_heal_buff + o_stored_damage
                                                         o_health = o_health 
-                                                        previous_moves.append(f"*{turn_total}:* 🩸**{o_card}**: Substitution Jutsu")
+                                                        previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸: Substitution Jutsu")
                                                         if not o_used_resolve:
-                                                            previous_moves.append(f"*{turn_total}:* 🩸**{o_stored_damage}** Hasirama Cells stored. 🩸**{o_naruto_heal_buff}** total stored.")
+                                                            previous_moves.append(f"(**{turn_total}**) 🩸**{o_stored_damage}** Hasirama Cells stored. 🩸**{o_naruto_heal_buff}** total stored.")
                                                         if tarm_barrier_active:
                                                             tarm_barrier_active=False
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                            previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
-                                                    elif oarm_shield_active:
+                                                            previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
+                                                    elif oarm_shield_active and dmg['ELEMENT'] != dark_element:
                                                         if oshield_value > 0:
                                                             oshield_value = oshield_value -dmg['DMG']
                                                             o_health = o_health 
                                                             if oshield_value <=0:
                                                                 embedVar = discord.Embed(title=f"{o_card}'s' **Shield** Shattered!", description=f"{t_card} breaks the **Shield**!", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* 🌐**{o_card}'s** Shield Shattered!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{o_card}'s** 🌐 Shield Shattered!")
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                                 oarm_shield_active = False
                                                             else:
                                                                 embedVar = discord.Embed(title=f"{o_card} Activates **Shield** 🌐", description=f"**{t_card}** strikes the Shield 🌐\n**{oshield_value} Shield** Left!", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* **{t_card}** strikes **{o_card}**'s Shield 🌐\n**{oshield_value} Shield** Left!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{t_card}** strikes **{o_card}**'s Shield 🌐\n**{oshield_value} Shield** Left!")
                                                                 if tarm_barrier_active: 
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
 
-                                                    elif oarm_barrier_active:
+                                                    elif oarm_barrier_active and dmg['ELEMENT'] != phsycic_element:
                                                         if obarrier_count >1:
                                                             o_health = o_health 
                                                             embedVar = discord.Embed(title=f"{o_card} Activates **Barrier** 💠", description=f"{t_card}'s attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!", colour=0xe91e63)
-                                                            previous_moves.append(f"*{turn_total}:* **{o_card}** Activates Barrier 💠  {t_card}'s attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!")
+                                                            previous_moves.append(f"(**{turn_total}**) **{o_card}** Activates Barrier 💠  {t_card}'s attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!")
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                             obarrier_count = obarrier_count - 1
                                                         elif obarrier_count==1:
                                                             embedVar = discord.Embed(title=f"{o_card}'s **Barrier** Broken!", description=f"{t_card} destroys the **Barrier**", colour=0xe91e63)
-                                                            previous_moves.append(f"*{turn_total}:* **{o_card}**'s Barrier Broken!")
+                                                            previous_moves.append(f"(**{turn_total}**) **{o_card}**'s Barrier Broken!")
                                                             obarrier_count = obarrier_count - 1
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                             oarm_barrier_active = False
-                                                    elif oarm_parry_active:
+                                                    elif oarm_parry_active and dmg['ELEMENT'] != earth_element:
                                                         if oparry_count > 1:
                                                             oparry_damage = round(dmg['DMG'])
                                                             o_health = round(o_health - (oparry_damage * .75))
                                                             t_health = round(t_health - (oparry_damage * .25))
                                                             oparry_count = oparry_count - 1
                                                             embedVar = discord.Embed(title=f"{o_card} Activates **Parry** 🔄", description=f"{t_card} takes {round(oparry_damage * .25)}! DMG\n **{oparry_count} Parries** to go!!", colour=0xe91e63)
-                                                            previous_moves.append(f"*{turn_total}:* **{o_card}** Activates Parry 🔄 {t_card} takes {round(oparry_damage * .25)}! DMG\n **{oparry_count}  Parries** to go!!")
+                                                            previous_moves.append(f"(**{turn_total}**) **{o_card}** Activates Parry 🔄 {t_card} takes {round(oparry_damage * .25)}! DMG\n **{oparry_count}  Parries** to go!!")
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                             
                                                         elif oparry_count==1:
                                                             oparry_damage = round(dmg['DMG'])
                                                             o_health = round(o_health - (oparry_damage * .75))
                                                             t_health = round(t_health - (oparry_damage * .25))
                                                             embedVar = discord.Embed(title=f"{o_card} **Parry** Penetrated!!", description=f"{t_card} takes {round(oparry_damage * .25)}! DMG and breaks the **Parry**", colour=0xe91e63)
-                                                            previous_moves.append(f"*{turn_total}:* **{o_card}** Parry Penetrated! **{t_card}** takes **{round(oparry_damage * .25)}**! DMG and breaks the **Parry**")
+                                                            previous_moves.append(f"(**{turn_total}**) **{o_card}** Parry Penetrated! **{t_card}** takes **{round(oparry_damage * .25)}**! DMG and breaks the **Parry**")
                                                             oparry_count = oparry_count - 1
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                             oarm_parry_active = False
                                                     else:
-                                                        o_health = o_health - int(dmg['DMG'])
-                                                        previous_moves.append(f"*{turn_total}:* **{t_card}**: {dmg['MESSAGE']}")
+                                                        if dmg['REPEL']:
+                                                            t_health = t_health - int(dmg['DMG'])
+                                                        elif dmg['ABSORB']:
+                                                            o_health = o_health + int(dmg['DMG'])
+                                                        elif dmg['ELEMENT'] == water_element:
+                                                            t_water_buff = t_water_buff + 25
+                                                            o_health = o_health - (dmg['DMG'] + t_water_buff)
+                                                        else:
+                                                            o_health = o_health - dmg['DMG']
+
+                                                        if dmg['ELEMENT'] == ice_element:
+                                                            t_ice_counter = t_ice_counter + 1
+                                                            if t_ice_counter == 3:
+                                                                t_freeze_enh = True
+                                                                t_ice_counter = 0
+
+                                                        if dmg['ELEMENT'] == time_element:
+                                                            t_stamina = 0
+
+                                                        if dmg['ELEMENT'] == bleed_element:
+                                                            t_bleed_counter = t_bleed_counter + 1
+                                                            if t_bleed_counter == 10:
+                                                                t_bleed_hit = True
+                                                                t_bleed_counter = 0
+
+                                                        if dmg['ELEMENT'] == recoil_element:
+                                                            t_health = t_health - (dmg['DMG'] * .25)
+
+                                                        if dmg['ELEMENT'] == earth_element:
+                                                            t_defense = t_defense + (dmg['DMG'] * .20)
+
+                                                        if dmg['ELEMENT'] == death_element:
+                                                            o_max_health = o_max_health - (dmg['DMG'] * .05)
+
+                                                        if dmg['ELEMENT'] == light_element:
+                                                            t_stamina = t_stamina + (dmg['STAMINA_USED'] / 2)
+
+                                                        if dmg['ELEMENT'] == dark_element:
+                                                            t_stamina = t_stamina + 5
+                                                            o_stamina = o_stamina - 5
+
+                                                        if dmg['ELEMENT'] == life_element:
+                                                            t_health = t_health + (dmg['DMG'] * .15)
+
+                                                        if dmg['ELEMENT'] == phsycic_element:
+                                                            o_defense = o_defense - (dmg['DMG'] * .08)
+                                                            o_attack = o_attack - (dmg['DMG'] * .08)
+
+
+                                                        if dmg['ELEMENT'] == fire_element:
+                                                            t_burn_dmg = round(dmg['DMG'] * .30)
+
+                                                        if dmg['ELEMENT'] == water_element:
+                                                            t_water_buff = t_water_buff + 25
+
+                                                        if dmg['ELEMENT'] == electric_element:
+                                                            t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
+
+                                                        if dmg['ELEMENT'] == poison_element:
+                                                            t_poison_dmg = t_poison_dmg + 8
+
+
+                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}**: {dmg['MESSAGE']}")
                                                         if tarm_siphon_active:
                                                             siphon_damage = (dmg['DMG'] * .10) + tsiphon_value
                                                             t_health = round(t_health + siphon_damage)
                                                             if t_health >= t_max_health:
                                                                 t_health = t_max_health
-                                                                previous_moves.append(f"*{turn_total}:* **{t_card}**: 💉 Siphoned **Full Health!**")
+                                                                previous_moves.append(f"(**{turn_total}**) **{t_card}**: 💉 Siphoned **Full Health!**")
                                                             else:
-                                                                previous_moves.append(f"*{turn_total}:* **{t_card}**: 💉 Siphoned **{round(siphon_damage)}** Health!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{t_card}**: 💉 Siphoned **{round(siphon_damage)}** Health!")
                                                         if tarm_barrier_active:
                                                             tarm_barrier_active=False
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                            previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                            previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                     if o_health <= 0:
                                                         if o_final_stand == True:
                                                             if o_universe == "Dragon Ball Z":
                                                                 embedVar = discord.Embed(title=f"{o_card}'s LAST STAND", description=f"{o_card} FINDS RESOLVE", colour=0xe91e63)
                                                                 embedVar.add_field(name=f"**{o_card}** Resolved and continues to fight", value="All stats & stamina increased")
-                                                                previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Transformation: Last Stand!!!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Transformation: Last Stand!!!")
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!") 
+                                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!") 
                                                                 o_health = int(.75 * (o_attack + o_defense))
                                                                 o_attack = o_attack + (.50 * o_attack)
                                                                 o_defense = o_defense + (.50 * o_defense)
@@ -15900,13 +17149,32 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         turn_total = turn_total + 1
                                                         turn = turn_selector
                                             else:
-                                                previous_moves.append(f"*{turn_total}:* **{t_card}** not enough Stamina to use this move") 
+                                                previous_moves.append(f"(**{turn_total}**) **{t_card}** not enough Stamina to use this move") 
                                                    
                                                 turn = 1
 
                             elif mode in co_op_modes and turn != (0 or 1):
                                 # Companion Turn Start
                                 if turn == 2:
+                                    if t_bleed_hit:
+                                        t_bleed_hit = False
+                                        bleed_dmg = 10 * turn_total
+                                        c_health = c_health - bleed_dmg
+                                        previous_moves.append(f"(**{turn_total}**) 🩸 **{c_card}** shredded for **{bleed_dmg}** bleed dmg...")
+
+                                    if t_burn_dmg:
+                                        c_health = c_health - t_burn_dmg
+                                        previous_moves.append(f"(**{turn_total}**) 🔥 **{c_card}** burned for **{t_burn_dmg}** dmg...")
+                                    if t_freeze_enh:
+                                        previous_moves.append(f"(**{turn_total}**) ❄️ **{c_card}** has been frozen for a turn...")
+                                        turn_total = turn_total + 1
+                                        turn = 3
+                                    if t_poison_dmg:
+                                        c_health = c_health - t_poison_dmg
+                                        previous_moves.append(f"(**{turn_total}**) 🧪 **{c_card}** poisoned for **{t_poison_dmg}** dmg...")
+
+                                    c_burn_dmg = 0
+                                    c_freeze_enh = False
 
                                     if c_title_passive_type:
                                         if c_title_passive_type == "HLT":
@@ -16090,7 +17358,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         embedVar.add_field(name=f"{c_card} focused and {healmessage}",
                                                         value="All stats & stamina increased")
                                         #await private_channel.send(embed=embedVar)
-                                        previous_moves.append(f"*{turn_total}:* 🌀 **{c_card}** focused and {healmessage}")
+                                        previous_moves.append(f"(**{turn_total}**) 🌀 **{c_card}** focused and {healmessage}")
                                         if not c_used_resolve and c_used_focus and c_universe == "Digimon":  # Digimon Universal Trait
                                             embedVar = discord.Embed(title=f"{c_card} STRENGTHENED RESOLVE :zap:",
                                                                     description=f"**{c_card} says**\n{c_resolve_description}",
@@ -16116,21 +17384,21 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             if turn_total <=5:
                                                 c_attack = round(c_attack * 2)
                                                 c_defense = round(c_defense * 2 )
-                                                previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Transformation: Mega Digivolution!!!")
+                                                previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 Transformation: Mega Digivolution!!!")
                                             else:
-                                                previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Transformation: Digivolve")
+                                                previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 Transformation: Digivolve")
 
 
                                         elif c_universe == "League Of Legends":
                                             embedVar = discord.Embed(title=f"Turret Shot hits {t_card} for **{60 + turn_total}** Damage 💥",
                                                                     colour=0xe91e63)
                                             #await private_channel.send(embed=embedVar)
-                                            previous_moves.append(f"*{turn_total}:* 🩸 Turret Shot hits **{t_card}** for **{60 + turn_total}** Damage 💥")
+                                            previous_moves.append(f"(**{turn_total}**) 🩸 Turret Shot hits **{t_card}** for **{60 + turn_total}** Damage 💥")
                                             t_health = round(t_health - (60 + turn_total))
 
                                         elif c_universe == "Dragon Ball Z":
                                             c_health = c_health + t_stamina + turn_total
-                                            previous_moves.append(f"*{turn_total}:* 🩸 Saiyan Spirit... You heal for **{t_stamina + turn_total}** ❤️")
+                                            previous_moves.append(f"(**{turn_total}**) 🩸 Saiyan Spirit... You heal for **{t_stamina + turn_total}** ❤️")
 
 
                                         elif c_universe == "Solo Leveling":
@@ -16138,14 +17406,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 title=f"Ruler's Authority... {t_card} loses **{30 + turn_total}** 🛡️ 🔻",
                                                 colour=0xe91e63)
                                             #await private_channel.send(embed=embedVar)
-                                            previous_moves.append(f"*{turn_total}:* 🩸 Ruler's Authority... {t_card} loses **{30 + turn_total}** 🛡️ 🔻")
+                                            previous_moves.append(f"(**{turn_total}**) 🩸 Ruler's Authority... {t_card} loses **{30 + turn_total}** 🛡️ 🔻")
                                             t_defense = round(t_defense - (30 + turn_total))
 
                                         elif c_universe == "Black Clover":
                                             embedVar = discord.Embed(title=f"Mana Zone! {c_card} Increased Stamina 🌀",
                                                                     colour=0xe91e63)
                                             #await private_channel.send(embed=embedVar)
-                                            previous_moves.append(f"*{turn_total}:* 🩸 Mana Zone! **{c_card}** Increased AP & Stamina 🌀")
+                                            previous_moves.append(f"(**{turn_total}**) 🩸 Mana Zone! **{c_card}** Increased AP & Stamina 🌀")
                                             c_stamina = 100
                                             ccard_lvl_ap_buff = ccard_lvl_ap_buff + 30
                                         elif c_universe == "Death Note":
@@ -16156,7 +17424,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 embedVar.add_field(name=f"{t_card} had a heart attack and died",
                                                                 value=f"Death....")
                                                 #await private_channel.send(embed=embedVar)
-                                                previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** had a heart attack and died")
+                                                previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 had a heart attack and died")
                                                 t_health = 0
 
                                         if t_universe == "One Punch Man":
@@ -16164,7 +17432,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 title=f"Hero Reinforcements! **{t_card}**  Increased Health & Max Health ❤️",
                                                 colour=0xe91e63)
                                             #await private_channel.send(embed=embedVar)
-                                            previous_moves.append(f"*{turn_total}:* Hero Reinforcements! **{t_card}** Increased Health!  ❤️")
+                                            previous_moves.append(f"(**{turn_total}**) Hero Reinforcements! **{t_card}** Increased Health!  ❤️")
                                             t_health = round(t_health + 100)
                                             t_max_health = round(t_max_health + 100)
 
@@ -16172,7 +17440,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             embedVar = discord.Embed(
                                                 title=f"Power Of Friendship! 🧬 **{tpet_name}** Rested, **{t_card}** Increased Stamina 🌀", colour=0xe91e63)
                                             #await private_channel.send(embed=embedVar)
-                                            previous_moves.append(f"*{turn_total}:* 🩸 Power Of Friendship! 🧬 **{tpet_name}** Rested, **{t_card}** Increased Stamina 🌀")
+                                            previous_moves.append(f"(**{turn_total}**) 🩸 Power Of Friendship! 🧬 **{tpet_name}** Rested, **{t_card}** Increased Stamina 🌀")
                                             t_stamina = t_stamina + 60
                                             t_pet_used = False
 
@@ -16181,7 +17449,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 title=f"Combo Recognition! **{t_card}** Increased Attack by **{60 + turn_total}** 🔺 ",
                                                 colour=0xe91e63)
                                             #await private_channel.send(embed=embedVar)
-                                            previous_moves.append(f"*{turn_total}:* 🩸 Combo Recognition! **{o_card}** Increased Attack by **{60 + turn_total}** 🔺")
+                                            previous_moves.append(f"(**{turn_total}**) 🩸 Combo Recognition! **{o_card}** Increased Attack by **{60 + turn_total}** 🔺")
                                             t_attack = round(t_attack + (60 + turn_total))
 
                                         else:
@@ -16198,19 +17466,19 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     else:
                                         if mode in ai_co_op_modes:
                                             # UNIVERSE CARD
-                                            cap1 = list(c_1.values())[0] + ccard_lvl_ap_buff
-                                            cap2 = list(c_2.values())[0] + ccard_lvl_ap_buff
-                                            cap3 = list(c_3.values())[0] + ccard_lvl_ap_buff + cdemon_slayer_buff
+                                            cap1 = list(c_1.values())[0] + ccard_lvl_ap_buff + c_shock_buff
+                                            cap2 = list(c_2.values())[0] + ccard_lvl_ap_buff + c_shock_buff
+                                            cap3 = list(c_3.values())[0] + ccard_lvl_ap_buff + cdemon_slayer_buff + c_shock_buff
                                             cenh1 = list(c_enhancer.values())[0]
                                             cenh_name = list(c_enhancer.values())[2]
                                             cpet_enh_name = list(cpet_move.values())[2]
                                             cpet_msg_on_resolve = ""
                                             if c_universe == "Souls" and c_used_resolve:
-                                                companion_card = showcard(c, c_max_health, c_health, c_max_stamina, c_stamina,
+                                                companion_card = showcard(c, carm,c_max_health, c_health, c_max_stamina, c_stamina,
                                                                     c_used_resolve, ctitle, c_used_focus, c_attack, c_defense,
                                                                     turn_total, cap2, cap3, cap3, cenh1, cenh_name, ccard_lvl, t_defense)
                                             else:
-                                                companion_card = showcard(c, c_max_health, c_health, c_max_stamina, c_stamina,
+                                                companion_card = showcard(c, carm,c_max_health, c_health, c_max_stamina, c_stamina,
                                                                         c_used_resolve, ctitle, c_used_focus, c_attack, c_defense,
                                                                         turn_total, cap1, cap2, cap3, cenh1, cenh_name, ccard_lvl, t_defense)
 
@@ -16218,32 +17486,32 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 if temp_tarm_shield_active and not tarm_shield_active:
                                                     if carm_shield_active:
                                                         cshield_value = cshield_value + temp_tshield_value
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                        previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 **ARISE!** *{tarm_name}* is now yours")
                                                         c_swapped = True
                                                     elif not carm_shield_active:
                                                         carm_shield_active = True
                                                         cshield_value = temp_tshield_value
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                        previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 **ARISE!** *{tarm_name}* is now yours")
                                                         c_swapped = True
                                                 elif temp_tarm_barrier_active and not tarm_barrier_active:
                                                     if carm_barrier_active:
                                                         cbarrier_count = cbarrier_count + temp_tbarrier_count
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                        previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 **ARISE!** *{tarm_name}* is now yours")
                                                         c_swapped = True
                                                     elif not carm_barrier_active:
                                                         carm_barrier_active = True
                                                         cbarrier_count = temp_tbarrier_count
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                        previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 **ARISE!** *{tarm_name}* is now yours")
                                                         c_swapped = True
                                                 elif temp_tarm_parry_active and not tarm_parry_active:
                                                     if carm_parry_active:
                                                         cparry_count = cparry_count + temp_tparry_count
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                        previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 **ARISE!** *{tarm_name}* is now yours")
                                                         c_swapped = True
                                                     elif not carm_parry_active:
                                                         carm_parry_active = True
                                                         cparry_count = temp_tparry_count
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                        previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 **ARISE!** *{tarm_name}* is now yours")
                                                         c_swapped = True
 
                                             #await private_channel.send(file=companion_card)
@@ -16258,7 +17526,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                             if c_used_resolve and not c_pet_used:
                                                 aiMove = 6
-                                            elif carm_barrier_active: #Ai Barrier Checks
+                                            elif carm_barrier_active and dmg['ELEMENT'] != phsycic_element: #Ai Barrier Checks
                                                 if t_stamina >=20: #Stamina Check For Enhancer
                                                     aiMove = await ai_enhancer_moves(turn_total,c_used_focus,c_used_resolve,c_pet_used,c_stamina,
                                                                             c_enhancer['TYPE'],c_health,c_max_health,c_attack,
@@ -16462,38 +17730,38 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                 if private_channel.guild:
                                                     await private_channel.send(f"{user2.mention} has fled the battle...")
-                                                    previous_moves.append(f"*{turn_total}:* 💨 **{c_card}** Fled...")
+                                                    previous_moves.append(f"(**{turn_total}**) 💨 **{c_card}** Fled...")
                                                     # await discord.TextChannel.delete(private_channel, reason=None)
                                                 else:
 
                                                     await private_channel.send(f"You fled the battle...")
-                                                    previous_moves.append(f"*{turn_total}:* 💨 **{c_card}** Fled...")
+                                                    previous_moves.append(f"(**{turn_total}**) 💨 **{c_card}** Fled...")
                                                 return
                                             if aiMove == 1:
                                                 if c_universe == "Souls" and c_used_resolve:
-                                                    dmg = damage_cal(c_universe, c_card, c_2, c_attack, c_defense, t_defense,
+                                                    dmg = damage_cal(t_opponent_affinities, special_attack_name, cmove2_element, c_universe, c_card, c_2, c_attack, c_defense, t_defense,
                                                                 c_stamina, c_enhancer_used, c_health, t_health, t_stamina,
                                                                 c_max_health, t_attack, c_special_move_description, turn_total,
                                                                 ccard_lvl_ap_buff, c_1)
                                                 else:
-                                                    dmg = damage_cal(c_universe, c_card, c_1, c_attack, c_defense, t_defense,
+                                                    dmg = damage_cal(t_opponent_affinities, basic_attack_name, cmove1_element, c_universe, c_card, c_1, c_attack, c_defense, t_defense,
                                                                     c_stamina, c_enhancer_used, c_health, t_health, t_stamina,
                                                                     c_max_health, t_attack, c_special_move_description, turn_total,
                                                                     ccard_lvl_ap_buff, None)
                                             elif aiMove == 2:
                                                 if c_universe == "Souls" and c_used_resolve:
-                                                    dmg = damage_cal(c_universe, c_card, c_3, c_attack, c_defense, t_defense,
+                                                    dmg = damage_cal(t_opponent_affinities, ultimate_attack_name, cmove3_element, c_universe, c_card, c_3, c_attack, c_defense, t_defense,
                                                                 c_stamina, c_enhancer_used, c_health, t_health, t_stamina,
                                                                 c_max_health, t_attack, c_special_move_description, turn_total,
                                                                 ccard_lvl_ap_buff, c_2)
                                                 else:
-                                                    dmg = damage_cal(c_universe, c_card, c_2, c_attack, c_defense, t_defense,
+                                                    dmg = damage_cal(t_opponent_affinities, special_attack_name, cmove2_element, c_universe, c_card, c_2, c_attack, c_defense, t_defense,
                                                                     c_stamina, c_enhancer_used, c_health, t_health, t_stamina,
                                                                     c_max_health, t_attack, c_special_move_description, turn_total,
                                                                     ccard_lvl_ap_buff, None)
                                             elif aiMove == 3:
 
-                                                dmg = damage_cal(c_universe, c_card, c_3, c_attack, c_defense, t_defense,
+                                                dmg = damage_cal(t_opponent_affinities, ultimate_attack_name, cmove3_element, c_universe, c_card, c_3, c_attack, c_defense, t_defense,
                                                                 c_stamina, c_enhancer_used, c_health, t_health, t_stamina,
                                                                 c_max_health, t_attack, c_special_move_description, turn_total,
                                                                 ccard_lvl_ap_buff, None)
@@ -16505,7 +17773,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             elif aiMove == 4:
                                                 c_enhancer_used = True
 
-                                                dmg = damage_cal(c_universe, c_card, c_enhancer, c_attack, c_defense, t_defense,
+                                                dmg = damage_cal(t_opponent_affinities, basic_attack_name, cmove1_element, c_universe, c_card, c_enhancer, c_attack, c_defense, t_defense,
                                                                 c_stamina, c_enhancer_used, c_health, t_health, t_stamina,
                                                                 c_max_health, t_attack, c_special_move_description, turn_total,
                                                                 ccard_lvl_ap_buff, None)
@@ -16539,7 +17807,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         embedVar.add_field(name=f"Transformation: Plus Ultra",
                                                                         value="You do not lose a turn after you Resolve.")
                                                         #await private_channel.send(embed=embedVar)
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: PLUS ULTRA!")
+                                                        previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 Resolved: PLUS ULTRA!")
 
                                                         turn_total = turn_total + 1
                                                         turn = 2
@@ -16571,7 +17839,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         embedVar = discord.Embed(title=f"{c_card} begins Total Concentration Breathing",
                                                                                 description=f"**{c_card} says**\n{c_resolve_description}",
                                                                                 colour=0xe91e63)
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: Total Concentration Breathing!")
+                                                        previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 Resolved: Total Concentration Breathing!")
                                                         
                                                         turn_total = turn_total + 1
                                                         turn = 0
@@ -16601,7 +17869,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         embedVar = discord.Embed(title=f"{c_card} Heals from Hashirama Cells",
                                                                                 description=f"**{c_card} says**\n{c_resolve_description}",
                                                                                 colour=0xe91e63)
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: Hashirama Cells heal you for **{c_naruto_heal_buff}**!")
+                                                        previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 Resolved: Hashirama Cells heal you for **{c_naruto_heal_buff}**!")
                                                         
                                                         turn_total = turn_total + 1
                                                         turn = 0
@@ -16634,7 +17902,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         embedVar.add_field(name=f"Transformation Complete",
                                                                         value=f"Health increased by **{health_boost}**!")
                                                         #await private_channel.send(embed=embedVar)
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: Titan Mode")
+                                                        previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 Resolved: Titan Mode")
 
                                                         turn_total = turn_total + 1
                                                         turn = 3
@@ -16666,7 +17934,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         embedVar.add_field(name=f"Transformation: Bankai",
                                                                         value="Gain double Attack on Resolve.")
                                                         #await private_channel.send(embed=embedVar)
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: Bankai!")
+                                                        previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 Resolved: Bankai!")
                                                         turn_total = turn_total + 1
                                                         turn = 3
                                                     elif c_universe == "God Of War":  # God Of War Trait
@@ -16691,12 +17959,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                         
                                                         if c_gow_resolve:
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: Ascension!")
+                                                            previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 Resolved: Ascension!")
                                                         elif not c_gow_resolve:
                                                             c_used_resolve = False
                                                             c_gow_resolve = True
                                                             c_defense = 125
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Crushed Blood Orb: Health Refill")
+                                                            previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 Crushed Blood Orb: Health Refill")
                                                         
 
                                                         embedVar = discord.Embed(title=f"{c_card} ASCENDED :zap:",
@@ -16726,7 +17994,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         c_attack = round(c_attack + c_resolve_attack)
                                                         c_defense = round(c_defense - c_resolve_defense)
 
-                                                        dmg = damage_cal(c_universe, c_card, c_3, c_attack, c_defense,
+                                                        dmg = damage_cal(t_opponent_affinities, ultimate_attack_name, cmove3_element, c_universe, c_card, c_3, c_attack, c_defense,
                                                                         t_defense, c_stamina, c_enhancer_used, c_health,
                                                                         t_health, t_stamina, c_max_health, t_attack,
                                                                         c_special_move_description, turn_total,
@@ -16738,8 +18006,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             colour=0xe91e63)
                                                         embedVar.add_field(name=f"Transformation: Command Seal",
                                                                         value="On Resolve, Strike with Ultimate, then Focus.")
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: Command Seal! {dmg['MESSAGE']}")
-                                                       # previous_moves.append(f"*{turn_total}:* 🩸  {dmg['MESSAGE']}")
+                                                        previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 Resolved: Command Seal! {dmg['MESSAGE']}")
+                                                       # previous_moves.append(f"(**{turn_total}**) 🩸  {dmg['MESSAGE']}")
                                                         #await private_channel.send(embed=embedVar)
                                                         # c_stamina = 0
                                                         c_used_resolve = True
@@ -16774,13 +18042,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if turn_total >= 50:
                                                             c_max_health = c_max_health + 1000
                                                             c_health = c_health + 1000
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: Gigantomax Evolution!!! Gained **1000** HP!!!")
+                                                            previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 Resolved: Gigantomax Evolution!!! Gained **1000** HP!!!")
                                                         elif turn_total >= 30:
                                                             c_max_health = c_max_health + 300
                                                             c_health = c_health + 300
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: Mega Evolution!! Gained **300** HP!")
+                                                            previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 Resolved: Mega Evolution!! Gained **300** HP!")
                                                         else:
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: Evolution!")
+                                                            previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 Resolved: Evolution!")
                                                         turn_total = turn_total + 1
                                                         turn = 3
                                                     else:  # Standard Resolve
@@ -16809,9 +18077,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                                     colour=0xe91e63)
                                                             embedVar.add_field(name=f"Nexus Destroyed",
                                                                             value=f"**{c_card}** dealt **{(60 * (c_focus_count + t_focus_count))}** damage.")
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: Pentakill! Dealing {(60 * (c_focus_count + t_focus_count))} damage.")
+                                                            previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 Resolved: Pentakill! Dealing {(60 * (c_focus_count + t_focus_count))} damage.")
                                                         elif c_universe == "Souls":
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Phase 2: Enhanced Moveset!")
+                                                            previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 Phase 2: Enhanced Moveset!")
                                                             
                                                         else:
                                                             embedVar = discord.Embed(
@@ -16820,17 +18088,17 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 colour=0xe91e63)
                                                             embedVar.add_field(name=f"Transformation",
                                                                             value="All stats & stamina greatly increased")
-                                                            previous_moves.append(f"*{turn_total}:* ⚡ **{c_card}** Resolved!")
+                                                            previous_moves.append(f"(**{turn_total}**) ⚡ **{c_card}** Resolved!")
                                                         #await private_channel.send(embed=embedVar)
                                                         turn_total = turn_total + 1
                                                         turn = 3
                                                 else:
-                                                    previous_moves.append(f"*{turn_total}:* {c_card} cannot resolve!")
+                                                    previous_moves.append(f"(**{turn_total}**) {c_card} cannot resolve!")
                                             elif aiMove == 6:
                                                 # Resolve Check and Calculation
                                                 if c_used_resolve and c_used_focus and not c_pet_used:
                                                     c_enhancer_used = True
-                                                    dmg = damage_cal(c_universe, c_card, cpet_move, c_attack, c_defense,
+                                                    dmg = damage_cal(t_opponent_affinities, basic_attack_name, cmove1_element, c_universe, c_card, cpet_move, c_attack, c_defense,
                                                                     t_defense, c_stamina, c_enhancer_used, c_health, t_health,
                                                                     t_stamina, c_max_health, t_attack,
                                                                     c_special_move_description, turn_total, ccard_lvl_ap_buff, None)
@@ -16924,7 +18192,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                         #c_stamina = c_stamina - int(dmg['STAMINA_USED'])
                                                         if c_universe == "Persona":
-                                                            petdmg = damage_cal(c_universe, c_card, c_1, c_attack, c_defense,
+                                                            petdmg = damage_cal(t_opponent_affinities, basic_attack_name, cmove1_element, c_universe, c_card, c_1, c_attack, c_defense,
                                                                                 t_defense, c_stamina, c_enhancer_used, c_health,
                                                                                 t_health, t_stamina, c_max_health, t_attack,
                                                                                 c_special_move_description, turn_total,
@@ -16945,7 +18213,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 await battle_msg.delete(delay=None)
 
                                                             #await private_channel.send(embed=embedVar)
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **Persona!** : **{cpet_name}** was summoned from **{c_card}'s** soul dealing **{petdmg['DMG']}** damage!")
+                                                            previous_moves.append(f"(**{turn_total}**) **Persona!** 🩸 : **{cpet_name}** was summoned from **{c_card}'s** soul dealing **{petdmg['DMG']}** damage!")
                                                             t_pet_used=True
                                                         else:
                                                             embedVar = discord.Embed(#Findmet
@@ -16960,20 +18228,20 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 await asyncio.sleep(2)
                                                                 await battle_msg.delete(delay=2)
                                                             
-                                                            previous_moves.append(f"*{turn_total}:* **{c_card}** Summoned 🧬 **{cpet_name}**: {dmg['MESSAGE']}")
+                                                            previous_moves.append(f"(**{turn_total}**) **{c_card}** Summoned 🧬 **{cpet_name}**: {dmg['MESSAGE']}")
                                                             
                                                             
                                                         turn = 2
                                                     else:
                                                         #await private_channel.send(f"{cpet_name} needs a turn to rest...")
-                                                        previous_moves.append(f"*{turn_total}:* {c_card} Could not summon 🧬 **{cpet_name}**. Needs rest")
+                                                        previous_moves.append(f"(**{turn_total}**) {c_card} Could not summon 🧬 **{cpet_name}**. Needs rest")
                                                         turn = 2
                                                 else:
                                                     #await private_channel.send(f"{cpet_name} needs a turn to rest...")
-                                                    previous_moves.append(f"*{turn_total}:* {c_card} Could not summon 🧬 **{cpet_name}**. Needs rest")
+                                                    previous_moves.append(f"(**{turn_total}**) {c_card} Could not summon 🧬 **{cpet_name}**. Needs rest")
                                             elif aiMove == 8:
                                                 c_enhancer_used = True
-                                                dmg = damage_cal(c_universe, c_card, c_enhancer, c_attack, c_defense, o_defense,
+                                                dmg = damage_cal(t_opponent_affinities, basic_attack_name, cmove1_element, c_universe, c_card, c_enhancer, c_attack, c_defense, o_defense,
                                                                 c_stamina, c_enhancer_used, c_health, o_health, o_stamina,
                                                                 c_max_health, o_attack, c_special_move_description, turn_total,
                                                                 ccard_lvl_ap_buff, None)
@@ -17075,12 +18343,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     embedVar.add_field(name=f"{c_card} used {cmove_enhanced_text}!",
                                                                     value=f"Enhanced {cenh_type}")
                                                     #await private_channel.send(embed=embedVar)
-                                                    previous_moves.append(f'*{turn_total}:* **{c_card}** used {cmove_enhanced_text}:👥 Assisting **{o_card}**')
+                                                    previous_moves.append(f'(**{turn_total}**) **{c_card}** used {cmove_enhanced_text}:👥 Assisting **{o_card}**')
                                                     turn_total = turn_total + 1
                                                     turn = 3
                                                 else:
                                                     #await private_channel.send(m.NOT_ENOUGH_STAMINA)
-                                                    previous_moves.append(f"*{turn_total}:* **{c_card}** not enough Stamina to use this move") 
+                                                    previous_moves.append(f"(**{turn_total}**) **{c_card}** not enough Stamina to use this move") 
                                                     turn = 2
                                             elif aiMove == 7:
                                                 if c_stamina >= 20:
@@ -17088,15 +18356,15 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     c_stamina = c_stamina - 20
                                                     c_defense = round(c_defense * 2)
                                                     embedVar = discord.Embed(
-                                                        title=f"{c_card} Defended 🛡️ {o_card}", colour=0xe91e63)
+                                                        title=f"**{c_card}** Defended 🛡️ {o_card}", colour=0xe91e63)
 
                                                     #await private_channel.send(embed=embedVar)
-                                                    previous_moves.append(f"*{turn_total}:* **{c_card}**: Defended 🛡️ **{o_card}**")
+                                                    previous_moves.append(f"(**{turn_total}**) **{c_card}**: Defended 🛡️ **{o_card}**")
                                                     turn_total = turn_total + 1
                                                     turn = 3
                                                 else:
                                                     #await private_channel.send(f"{c_card} is too tired to block...")
-                                                    previous_moves.append(f"*{turn_total}:* **{c_card}** is too tired to block.")
+                                                    previous_moves.append(f"(**{turn_total}**) **{c_card}** is too tired to block.")
                                                     turn = 2
 
                                             if aiMove != 5 and aiMove != 6 and aiMove != 7 and aiMove != 8:
@@ -17203,17 +18471,17 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}",
                                                                                 colour=embed_color_c)
                                                         #await private_channel.send(embed=embedVar)
-                                                        previous_moves.append(f"*{turn_total}:* **{c_card}**: 🦠 {dmg['MESSAGE']}")
+                                                        previous_moves.append(f"(**{turn_total}**) **{c_card}**: 🦠 {dmg['MESSAGE']}")
                                                         turn_total = turn_total + 1
                                                         turn = 3
                                                     elif dmg['DMG'] == 0:
                                                         c_stamina = c_stamina - int(dmg['STAMINA_USED'])
 
                                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_c)
-                                                        previous_moves.append(f"*{turn_total}:* **{c_card}**: {dmg['MESSAGE']}")
+                                                        previous_moves.append(f"(**{turn_total}**) **{c_card}**: {dmg['MESSAGE']}")
                                                         if carm_barrier_active:
                                                             carm_barrier_active=False
-                                                            previous_moves.append(f"*{turn_total}:* 💠**{c_card}**'s Barrier Disabled!")
+                                                            previous_moves.append(f"(**{turn_total}**) **{c_card}**'s 💠 Barrier Disabled!")
                                                         
                                                         turn_total = turn_total + 1
                                                         turn = 3
@@ -17223,58 +18491,58 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_naruto_heal_buff = t_naruto_heal_buff + t_stored_damage
                                                             t_health = t_health 
                                                             embedVar = discord.Embed(title=f"{t_card}: Substitution Jutsu", description=f"{c_card} strikes a log", colour=0xe91e63)
-                                                            previous_moves.append(f"*{turn_total}:* 🩸**{t_card}**: Substitution Jutsu")
+                                                            previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸: Substitution Jutsu")
                                                             if not t_used_resolve:
-                                                                previous_moves.append(f"*{turn_total}:* 🩸**{t_stored_damage}** Hasirama Cells stored. 🩸**{t_naruto_heal_buff}** total stored.")
+                                                                previous_moves.append(f"(**{turn_total}**) 🩸**{t_stored_damage}** Hasirama Cells stored. 🩸**{t_naruto_heal_buff}** total stored.")
                                                             if carm_barrier_active:
                                                                 carm_barrier_active=False
                                                                 embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* 💠**{c_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{c_card}**'s 💠 Barrier Disabled!")
                                                             #await private_channel.send(embed=embedVar)
-                                                        elif tarm_shield_active:
+                                                        elif tarm_shield_active and dmg['ELEMENT'] != dark_element:
                                                             if tshield_value > 0:
                                                                 tshield_value = tshield_value -dmg['DMG']
                                                                 t_health = t_health 
                                                                 if tshield_value <=0:
                                                                     embedVar = discord.Embed(title=f"{t_card}'s' **Shield** Shattered!", description=f"{c_card} breaks the **Shield**!", colour=0xe91e63)
-                                                                    previous_moves.append(f"*{turn_total}:* 🌐**{t_card}'s** Shield Shattered!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}'s** 🌐 Shield Shattered!")
                                                                     if carm_barrier_active:
                                                                         carm_barrier_active=False
                                                                         embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* 💠**{c_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"(**{turn_total}**) **{c_card}**'s 💠 Barrier Disabled!")
                                                                     #await private_channel.send(embed=embedVar)
                                                                     tarm_shield_active = False
                                                                 else:
                                                                     embedVar = discord.Embed(title=f"{t_card} Activates **Shield** 🌐", description=f"**{c_card}** strikes the Shield 🌐\n**{tshield_value} Shield** Left!", colour=0xe91e63)
-                                                                    previous_moves.append(f"*{turn_total}:* **{c_card}** strikes **{t_card}**'s Shield 🌐\n**{tshield_value} Shield** Left!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{c_card}** strikes **{t_card}**'s Shield 🌐\n**{tshield_value} Shield** Left!")
                                                                     if carm_barrier_active:
                                                                         carm_barrier_active=False
                                                                         embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* 💠**{c_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"(**{turn_total}**) **{c_card}**'s 💠 Barrier Disabled!")
                                                                     #await private_channel.send(embed=embedVar)
 
-                                                        elif tarm_barrier_active:
+                                                        elif tarm_barrier_active and dmg['ELEMENT'] != phsycic_element and dmg['ELEMENT'] != phsycic_element:
                                                             if tbarrier_count >1:
                                                                 t_health = t_health 
                                                                 embedVar = discord.Embed(title=f"{t_card} Activates **Barrier** 💠", description=f"{c_card}'s attack **Nullified**!\n **{tbarrier_count - 1} Barriers** remain!", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* **{t_card}** Activates Barrier 💠 {c_card}'s attack **Nullified**!\n💠 {tbarrier_count - 1} **Barriers** remain!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{t_card}** Activates Barrier 💠 {c_card}'s attack **Nullified**!\n💠 {tbarrier_count - 1} **Barriers** remain!")
                                                                 if carm_barrier_active:
                                                                     carm_barrier_active=False
                                                                     embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* 💠**{c_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{c_card}**'s 💠 Barrier Disabled!")
                                                                 #await private_channel.send(embed=embedVar)
                                                                 tbarrier_count = tbarrier_count - 1
                                                             elif tbarrier_count==1:
                                                                 embedVar = discord.Embed(title=f"{t_card}'s **Barrier** Broken!", description=f"{c_card} destroys the **Barrier**", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Broken!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{t_card}**'s Barrier Broken!")
                                                                 tbarrier_count = tbarrier_count - 1
                                                                 if carm_barrier_active:
                                                                     carm_barrier_active=False
                                                                     embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* 💠**{c_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{c_card}**'s 💠 Barrier Disabled!")
                                                                 #await private_channel.send(embed=embedVar)
                                                                 tarm_barrier_active = False
-                                                        elif tarm_parry_active:
+                                                        elif tarm_parry_active and dmg['ELEMENT'] != earth_element:
                                                             if tparry_count > 1:
                                                                 t_health = t_health
                                                                 tparry_damage = round(dmg['DMG'])
@@ -17282,11 +18550,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 c_health = round(c_health - (tparry_damage * .25))
                                                                 tparry_count = tparry_count - 1
                                                                 embedVar = discord.Embed(title=f"{t_card} Activates **Parry** 🔄", description=f"{c_card} takes {round(tparry_damage * .25)}! DMG\n **{tparry_count} Parries** to go!!", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* **{t_card}** Activates Parry 🔄 {c_card} takes {round(tparry_damage * .25)}! DMG\n **{tparry_count}  Parries** to go!!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{t_card}** Activates Parry 🔄 {c_card} takes {round(tparry_damage * .25)}! DMG\n **{tparry_count}  Parries** to go!!")
                                                                 if carm_barrier_active:
                                                                     carm_barrier_active=False
                                                                     embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* 💠**{c_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{c_card}**'s 💠 Barrier Disabled!")
                                                                 #await private_channel.send(embed=embedVar)
                                                                 
                                                             elif tparry_count==1:
@@ -17295,42 +18563,104 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = round(t_health - (tparry_damage * .75))
                                                                 c_health = round(c_health - (tparry_damage * .25))
                                                                 embedVar = discord.Embed(title=f"{t_card} **Parry** Penetrated!!", description=f"{c_card} takes {round(tparry_damage * .25)}! DMG and breaks the **Parry**", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* **{t_card}** Parry Penetrated! **{c_card}** takes **{round(tparry_damage * .25)}**! DMG and breaks the **Parry**")
+                                                                previous_moves.append(f"(**{turn_total}**) **{t_card}** Parry Penetrated! **{c_card}** takes **{round(tparry_damage * .25)}**! DMG and breaks the **Parry**")
                                                                 tparry_count = tparry_count - 1
                                                                 if carm_barrier_active:
                                                                     carm_barrier_active=False
                                                                     embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* 💠**{c_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{c_card}**'s 💠 Barrier Disabled!")
                                                                 #await private_channel.send(embed=embedVar)
                                                                 tarm_parry_active = False
                                                         else:
-                                                            t_health = t_health - dmg['DMG']
+                                                            if dmg['REPEL']:
+                                                                c_health = c_health - int(dmg['DMG'])
+                                                            elif dmg['ABSORB']:
+                                                                t_health = t_health + int(dmg['DMG'])
+                                                            elif dmg['ELEMENT'] == water_element:
+                                                                c_water_buff = c_water_buff + 25
+                                                                t_health = t_health - (dmg['DMG'] + c_water_buff)
+                                                            else:
+                                                                t_health = t_health - dmg['DMG']
+
+
+                                                            if dmg['ELEMENT'] == ice_element:
+                                                                c_ice_counter = c_ice_counter + 1
+                                                                if c_ice_counter == 3:
+                                                                    c_freeze_enh = True
+                                                                    c_ice_counter = 0
+
+                                                            if dmg['ELEMENT'] == time_element:
+                                                                c_stamina = 0
+
+                                                            if dmg['ELEMENT'] == bleed_element:
+                                                                c_bleed_counter = c_bleed_counter + 1
+                                                                if c_bleed_counter == 10:
+                                                                    c_bleed_hit = True
+                                                                    c_bleed_counter = 0
+
+                                                            if dmg['ELEMENT'] == recoil_element:
+                                                                c_health = c_health - (dmg['DMG'] * .25)
+
+                                                            if dmg['ELEMENT'] == earth_element:
+                                                                c_defense = c_defense + (dmg['DMG'] * .20)
+
+                                                            if dmg['ELEMENT'] == death_element:
+                                                                t_max_health = t_max_health - (dmg['DMG'] * .05)
+
+                                                            if dmg['ELEMENT'] == light_element:
+                                                                o_stamina = o_stamina + (dmg['STAMINA_USED'] / 2)
+
+                                                            if dmg['ELEMENT'] == dark_element:
+                                                                c_stamina = c_stamina + 5
+                                                                t_stamina = t_stamina - 5
+
+                                                            if dmg['ELEMENT'] == life_element:
+                                                                c_health = c_health + (dmg['DMG'] * .15)
+
+                                                            if dmg['ELEMENT'] == phsycic_element:
+                                                                t_defense = t_defense - (dmg['DMG'] * .08)
+                                                                t_attack = t_attack - (dmg['DMG'] * .08)
+
+
+                                                            if dmg['ELEMENT'] == fire_element:
+                                                                c_burn_dmg = dmg['DMG'] * .25
+
+
+                                                            if dmg['ELEMENT'] == water_element:
+                                                                c_water_buff = c_water_buff + 25
+
+                                                            if dmg['ELEMENT'] == electric_element:
+                                                                c_shock_buff = c_shock_buff +  (dmg['DMG'] * .05)
+
+                                                            if dmg['ELEMENT'] == poison_element:
+                                                                c_poison_dmg = c_poison_dmg + 8
+
                                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_c)
-                                                            previous_moves.append(f"*{turn_total}:* **{c_card}**: {dmg['MESSAGE']}")
+                                                            previous_moves.append(f"(**{turn_total}**) **{c_card}**: {dmg['MESSAGE']}")
                                                             if carm_siphon_active:
                                                                 siphon_damage = (dmg['DMG'] * .10) + csiphon_value
                                                                 c_health = round(c_health + siphon_damage)
                                                                 if c_health >= c_max_health:
                                                                     c_health = c_max_health
-                                                                    previous_moves.append(f"*{turn_total}:* **{c_card}**: 💉 Siphoned **Full Health!**")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{c_card}**: 💉 Siphoned **Full Health!**")
                                                                 else:
-                                                                    previous_moves.append(f"*{turn_total}:* **{c_card}**: 💉 Siphoned **{round(siphon_damage)}** Health!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{c_card}**: 💉 Siphoned **{round(siphon_damage)}** Health!")
                                                                 await button_ctx.defer(ignore=True)
                                                             if carm_barrier_active:
                                                                 carm_barrier_active=False
                                                                 embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* 💠**{c_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{c_card}**'s 💠 Barrier Disabled!")
                                                             #await private_channel.send(embed=embedVar)
                                                         if t_health <= 0:
                                                             if t_final_stand==True:
                                                                 if t_universe == "Dragon Ball Z":
                                                                     embedVar = discord.Embed(title=f"{t_card}'s LAST STAND", description=f"{t_card} FINDS RESOLVE", colour=0xe91e63)
                                                                     embedVar.add_field(name=f"**{t_card}** Resolved and continues to fight", value="All stats & stamina increased")
-                                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Transformation: Last Stand!!!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Transformation: Last Stand!!!")
                                                                     if carm_barrier_active:
                                                                         carm_barrier_active=False
                                                                         embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* 💠**{c_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"(**{turn_total}**) **{c_card}**'s 💠 Barrier Disabled!")
                                                                     #await private_channel.send(embed=embedVar)
                                                                     t_health = int(.75 * (t_attack + t_defense))
                                                                     
@@ -17354,22 +18684,22 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                             description=f"Use abilities to Increase `STAM` or enter `FOCUS STATE`!",
                                                                             colour=0xe91e63)
                                                     #await private_channel.send(embed=embedVar)
-                                                    previous_moves.append(f"*{turn_total}:* **{c_card}** not enough Stamina to use this move") 
+                                                    previous_moves.append(f"(**{turn_total}**) **{c_card}** not enough Stamina to use this move") 
                                                     turn = 2
                                         else:
-                                            cap1 = list(c_1.values())[0] + ccard_lvl_ap_buff
-                                            cap2 = list(c_2.values())[0] + ccard_lvl_ap_buff
-                                            cap3 = list(c_3.values())[0] + ccard_lvl_ap_buff + cdemon_slayer_buff
+                                            cap1 = list(c_1.values())[0] + ccard_lvl_ap_buff + c_shock_buff
+                                            cap2 = list(c_2.values())[0] + ccard_lvl_ap_buff + c_shock_buff
+                                            cap3 = list(c_3.values())[0] + ccard_lvl_ap_buff + cdemon_slayer_buff + c_shock_buff
                                             cenh1 = list(c_enhancer.values())[0]
                                             cenh_name = list(c_enhancer.values())[2]
                                             cpet_enh_name = list(cpet_move.values())[2]
                                             cpet_msg_on_resolve = ""
                                             if c_universe == "Souls" and c_used_resolve:
-                                                companion_card = showcard(c, c_max_health, c_health, c_max_stamina, c_stamina,
+                                                companion_card = showcard(c, carm,c_max_health, c_health, c_max_stamina, c_stamina,
                                                                     c_used_resolve, ctitle, c_used_focus, c_attack, c_defense,
                                                                     turn_total, cap2, cap3, cap3, cenh1, cenh_name, ccard_lvl, t_defense)
                                             else:
-                                                companion = showcard(c, c_max_health, c_health, c_max_stamina, c_stamina,
+                                                companion = showcard(c, carm,c_max_health, c_health, c_max_stamina, c_stamina,
                                                                     c_used_resolve, ctitle, c_used_focus, c_attack, c_defense,
                                                                     turn_total, cap1, cap2, cap3, cenh1, cenh_name, ccard_lvl, t_defense)
 
@@ -17377,32 +18707,32 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 if temp_tarm_shield_active and not tarm_shield_active:
                                                     if carm_shield_active:
                                                         cshield_value = cshield_value + temp_tshield_value
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                        previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 **ARISE!** *{tarm_name}* is now yours")
                                                         c_swapped = True
                                                     elif not carm_shield_active:
                                                         carm_shield_active = True
                                                         cshield_value = temp_tshield_value
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                        previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 **ARISE!** *{tarm_name}* is now yours")
                                                         c_swapped = True
                                                 elif temp_tarm_barrier_active and not tarm_barrier_active:
                                                     if carm_barrier_active:
                                                         cbarrier_count = cbarrier_count + temp_tbarrier_count
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                        previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 **ARISE!** *{tarm_name}* is now yours")
                                                         c_swapped = True
                                                     elif not carm_barrier_active:
                                                         carm_barrier_active = True
                                                         cbarrier_count = temp_tbarrier_count
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                        previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 **ARISE!** *{tarm_name}* is now yours")
                                                         c_swapped = True
                                                 elif temp_tarm_parry_active and not tarm_parry_active:
                                                     if carm_parry_active:
                                                         cparry_count = cparry_count + temp_tparry_count
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                        previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 **ARISE!** *{tarm_name}* is now yours")
                                                         c_swapped = True
                                                     elif not carm_parry_active:
                                                         carm_parry_active = True
                                                         cparry_count = temp_tparry_count
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** **ARISE!** *{tarm_name}* is now yours")
+                                                        previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 **ARISE!** *{tarm_name}* is now yours")
                                                         c_swapped = True
 
 
@@ -17427,7 +18757,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 battle_buttons.append(
                                                     manage_components.create_button(
                                                         style=ButtonStyle.green,
-                                                        label=f"💥 10",
+                                                        label=f"{c_basic_emoji} 10",
                                                         custom_id="1"
                                                     )
                                                 )
@@ -17436,7 +18766,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 battle_buttons.append(
                                                     manage_components.create_button(
                                                         style=ButtonStyle.green,
-                                                        label=f"☄️ 30",
+                                                        label=f"{c_super_emoji} 30",
                                                         custom_id="2"
                                                     )
                                                 )
@@ -17446,7 +18776,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 battle_buttons.append(
                                                     manage_components.create_button(
                                                         style=ButtonStyle.green,
-                                                        label=f"🏵️ 80",
+                                                        label=f"{c_ultimate_emoji} 80",
                                                         custom_id="3"
                                                     )
                                                 )
@@ -17499,9 +18829,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             util_action_row = manage_components.create_actionrow(*util_buttons)
                                             coop_util_action_row = manage_components.create_actionrow(*coop_util_buttons)
 
-                                            cap1 = list(c_1.values())[0] + ccard_lvl_ap_buff
-                                            cap2 = list(c_2.values())[0] + ccard_lvl_ap_buff
-                                            cap3 = list(c_3.values())[0] + ccard_lvl_ap_buff + cdemon_slayer_buff
+                                            cap1 = list(c_1.values())[0] + ccard_lvl_ap_buff + c_shock_buff
+                                            cap2 = list(c_2.values())[0] + ccard_lvl_ap_buff + c_shock_buff
+                                            cap3 = list(c_3.values())[0] + ccard_lvl_ap_buff + cdemon_slayer_buff + c_shock_buff
                                             cenh1 = list(c_enhancer.values())[0]
                                             cenh_name = list(c_enhancer.values())[2]
                                             cpet_enh_name = list(cpet_move.values())[2]
@@ -17568,37 +18898,37 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                     if private_channel.guild:
                                                         await private_channel.send(f"{user2.mention} has fled the battle...")
-                                                        previous_moves.append(f"*{turn_total}:* 💨 **{c_card}** Fled...")
+                                                        previous_moves.append(f"(**{turn_total}**) 💨 **{c_card}** Fled...")
                                                         # await discord.TextChannel.delete(private_channel, reason=None)
                                                     else:
                                                         await private_channel.send(f"You fled the battle...")
-                                                        previous_moves.append(f"*{turn_total}:* 💨 **{c_card}** Fled...")
+                                                        previous_moves.append(f"(**{turn_total}**) 💨 **{c_card}** Fled...")
                                                     #return
                                                 if button_ctx.custom_id == "1":
                                                     if c_universe == "Souls" and c_used_resolve:
-                                                        dmg = damage_cal(c_universe, c_card, c_2, c_attack, c_defense, t_defense,
+                                                        dmg = damage_cal(t_opponent_affinities, special_attack_name, cmove2_element, c_universe, c_card, c_2, c_attack, c_defense, t_defense,
                                                                     c_stamina, c_enhancer_used, c_health, t_health, t_stamina,
                                                                     c_max_health, t_attack, c_special_move_description, turn_total,
                                                                     ccard_lvl_ap_buff, c_1)
                                                     else:
-                                                        dmg = damage_cal(c_universe, c_card, c_1, c_attack, c_defense, t_defense,
+                                                        dmg = damage_cal(t_opponent_affinities, basic_attack_name, cmove1_element, c_universe, c_card, c_1, c_attack, c_defense, t_defense,
                                                                         c_stamina, c_enhancer_used, c_health, t_health, t_stamina,
                                                                         c_max_health, t_attack, c_special_move_description,
                                                                         turn_total, ccard_lvl_ap_buff, None)
                                                 elif button_ctx.custom_id == "2":
                                                     if c_universe == "Souls" and c_used_resolve:
-                                                        dmg = damage_cal(c_universe, c_card, c_3, c_attack, c_defense, t_defense,
+                                                        dmg = damage_cal(t_opponent_affinities, ultimate_attack_name, cmove3_element, c_universe, c_card, c_3, c_attack, c_defense, t_defense,
                                                                     c_stamina, c_enhancer_used, c_health, t_health, t_stamina,
                                                                     c_max_health, t_attack, c_special_move_description, turn_total,
                                                                     ccard_lvl_ap_buff, c_2)
                                                     else:
-                                                        dmg = damage_cal(c_universe, c_card, c_2, c_attack, c_defense, t_defense,
+                                                        dmg = damage_cal(t_opponent_affinities, special_attack_name, cmove2_element, c_universe, c_card, c_2, c_attack, c_defense, t_defense,
                                                                         c_stamina, c_enhancer_used, c_health, t_health, t_stamina,
                                                                         c_max_health, t_attack, c_special_move_description,
                                                                         turn_total, ccard_lvl_ap_buff, None)
                                                 elif button_ctx.custom_id == "3":
 
-                                                    dmg = damage_cal(c_universe, c_card, c_3, c_attack, c_defense, t_defense,
+                                                    dmg = damage_cal(t_opponent_affinities, ultimate_attack_name, cmove3_element, c_universe, c_card, c_3, c_attack, c_defense, t_defense,
                                                                     c_stamina, c_enhancer_used, c_health, t_health, t_stamina,
                                                                     c_max_health, t_attack, c_special_move_description,
                                                                     turn_total, ccard_lvl_ap_buff, None)
@@ -17610,7 +18940,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 elif button_ctx.custom_id == "4":
                                                     c_enhancer_used = True
 
-                                                    dmg = damage_cal(c_universe, c_card, c_enhancer, c_attack, c_defense,
+                                                    dmg = damage_cal(t_opponent_affinities, basic_attack_name, cmove1_element, c_universe, c_card, c_enhancer, c_attack, c_defense,
                                                                     t_defense, c_stamina, c_enhancer_used, c_health, t_health,
                                                                     t_stamina, c_max_health, t_attack,
                                                                     c_special_move_description, turn_total, ccard_lvl_ap_buff, None)
@@ -17644,7 +18974,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             embedVar.add_field(name=f"Transformation: Plus Ultra",
                                                                             value="You do not lose a turn after you Resolve.")
                                                             #await button_ctx.send(embed=embedVar)
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: PLUS ULTRA!")
+                                                            previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 Resolved: PLUS ULTRA!")
                                                             await button_ctx.defer(ignore=True)
                                                             turn_total = turn_total + 1
                                                             turn = 2
@@ -17676,7 +19006,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             embedVar = discord.Embed(title=f"{c_card} begins Total Concentration Breathing",
                                                                                     description=f"**{c_card} says**\n{c_resolve_description}",
                                                                                     colour=0xe91e63)
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: Total Concentration Breathing!")
+                                                            previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 Resolved: Total Concentration Breathing!")
                                                             await button_ctx.defer(ignore=True)
                                                             turn_total = turn_total + 1
                                                             turn = 0
@@ -17705,7 +19035,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             embedVar = discord.Embed(title=f"{c_card} Heals from Hashirama Cells",
                                                                                     description=f"**{c_card} says**\n{c_resolve_description}",
                                                                                     colour=0xe91e63)
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: Hashirama Cells heal you for **{c_naruto_heal_buff}**")
+                                                            previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 Resolved: Hashirama Cells heal you for **{c_naruto_heal_buff}**")
                                                             await button_ctx.defer(ignore=True)
                                                             turn_total = turn_total + 1
                                                             turn = 0
@@ -17740,7 +19070,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             embedVar.add_field(name=f"Transformation Complete",
                                                                             value=f"Health increased by **{health_boost}**!")
                                                             #await button_ctx.send(embed=embedVar)
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: Titan Mode")
+                                                            previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 Resolved: Titan Mode")
                                                             await button_ctx.defer(ignore=True)
                                                             turn_total = turn_total + 1
                                                             turn = 3
@@ -17772,7 +19102,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             embedVar.add_field(name=f"Transformation: Bankai",
                                                                             value="Gain double Attack on Resolve.")
                                                             #await button_ctx.send(embed=embedVar)
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: Bankai!")
+                                                            previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 Resolved: Bankai!")
                                                             await button_ctx.defer(ignore=True)
                                                             turn_total = turn_total + 1
                                                             turn = 3
@@ -17797,12 +19127,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             c_pet_used = False
 
                                                             if c_gow_resolve:
-                                                                previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: Ascension!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 Resolved: Ascension!")
                                                             elif not c_gow_resolve:
                                                                 c_used_resolve = False
                                                                 c_gow_resolve = True
                                                                 c_defense = 125
-                                                                previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Crushed Blood Orb: Health Refill")
+                                                                previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 Crushed Blood Orb: Health Refill")
                                                             
 
                                                             embedVar = discord.Embed(
@@ -17834,7 +19164,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             c_attack = round(c_attack + c_resolve_attack)
                                                             c_defense = round(c_defense - c_resolve_defense)
 
-                                                            dmg = damage_cal(c_universe, c_card, c_3, c_attack, c_defense,
+                                                            dmg = damage_cal(t_opponent_affinities, ultimate_attack_name, cmove3_element, c_universe, c_card, c_3, c_attack, c_defense,
                                                                             t_defense, c_stamina, c_enhancer_used, c_health,
                                                                             t_health, t_stamina, c_max_health, t_attack,
                                                                             c_special_move_description, turn_total,
@@ -17847,7 +19177,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             embedVar.add_field(name=f"Transformation: Command Seal",
                                                                             value="On Resolve, Strike with Ultimate, then Focus.")
                                                             #await button_ctx.send(embed=embedVar)
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: Command Seal! {dmg['MESSAGE']}")
+                                                            previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 Resolved: Command Seal! {dmg['MESSAGE']}")
                                                             await button_ctx.defer(ignore=True)
                                                             # c_stamina = 0
                                                             c_used_resolve = True
@@ -17884,13 +19214,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if turn_total >= 50:
                                                                 c_max_health = c_max_health + 1000
                                                                 c_health = c_health + 1000
-                                                                previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: Gigantomax Evolution!!! Gained **1000** HP!!!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 Resolved: Gigantomax Evolution!!! Gained **1000** HP!!!")
                                                             elif turn_total >= 30:
                                                                 c_max_health = c_max_health + 300
                                                                 c_health = c_health + 300
-                                                                previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: Mega Evolution!! Gained **300** HP!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 Resolved: Mega Evolution!! Gained **300** HP!")
                                                             else:
-                                                                previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: Evolution!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 Resolved: Evolution!")
                                                             turn_total = turn_total + 1
                                                             turn = 3
                                                         else:  # Standard Resolve
@@ -17919,10 +19249,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                                         colour=0xe91e63)
                                                                 embedVar.add_field(name=f"Nexus Destroyed",
                                                                                 value=f"**{c_card}** dealt **{(60 * (c_focus_count + t_focus_count))}** damage.")
-                                                                previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Resolved: Pentakill! Dealing {(60 * (c_focus_count + t_focus_count))} damage.")
+                                                                previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 Resolved: Pentakill! Dealing {(60 * (c_focus_count + t_focus_count))} damage.")
                                                                 await button_ctx.defer(ignore=True)
                                                             elif c_universe == "Souls":
-                                                                previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Phase 2: Enhanced Moveset!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 Phase 2: Enhanced Moveset!")
                                                                 await button_ctx.defer(ignore=True)
                                                             else:
                                                                 embedVar = discord.Embed(
@@ -17931,19 +19261,19 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     colour=0xe91e63)
                                                                 embedVar.add_field(name=f"Transformation",
                                                                                 value="All stats & stamina greatly increased")
-                                                                previous_moves.append(f"*{turn_total}:* ⚡ **{c_card}** Resolved!")
+                                                                previous_moves.append(f"(**{turn_total}**) ⚡ **{c_card}** Resolved!")
                                                             #await button_ctx.send(embed=embedVar)
                                                             await button_ctx.defer(ignore=True)
                                                             turn_total = turn_total + 1
                                                             turn = 3
                                                     else:
-                                                        previous_moves.append(f"*{turn_total}:* {c_card} cannot resolve!")
+                                                        previous_moves.append(f"(**{turn_total}**) {c_card} cannot resolve!")
                                                         await button_ctx.defer(ignore=True)
                                                 elif button_ctx.custom_id == "6":
                                                     # Resolve Check and Calculation
                                                     if c_used_resolve and c_used_focus and not c_pet_used:
                                                         c_enhancer_used = True
-                                                        dmg = damage_cal(c_universe, c_card, cpet_move, c_attack, c_defense,
+                                                        dmg = damage_cal(t_opponent_affinities, basic_attack_name, cmove1_element, c_universe, c_card, cpet_move, c_attack, c_defense,
                                                                         t_defense, c_stamina, c_enhancer_used, c_health,
                                                                         t_health, t_stamina, c_max_health, t_attack,
                                                                         c_special_move_description, turn_total,
@@ -18038,7 +19368,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                             #c_stamina = c_stamina - int(dmg['STAMINA_USED'])
                                                             if c_universe == "Persona":
-                                                                petdmg = damage_cal(c_universe, c_card, c_1, c_attack,
+                                                                petdmg = damage_cal(t_opponent_affinities, basic_attack_name, cmove1_element, c_universe, c_card, c_1, c_attack,
                                                                                     c_defense, t_defense, c_stamina,
                                                                                     c_enhancer_used, c_health, t_health,
                                                                                     t_stamina, c_max_health, t_attack,
@@ -18060,7 +19390,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     await battle_msg.delete(delay=None)
                                                                 
                                                                 #await button_ctx.send(embed=embedVar, file=csummon_file)
-                                                                previous_moves.append(f"*{turn_total}:* 🩸 **Persona!** : **{cpet_name}** was summoned from **{c_card}'s** soul dealing **{petdmg['DMG']}** damage!\n**{t_card}** summon disabled!")
+                                                                previous_moves.append(f"(**{turn_total}**) **Persona!** 🩸 : **{cpet_name}** was summoned from **{c_card}'s** soul dealing **{petdmg['DMG']}** damage!\n**{t_card}** summon disabled!")
                                                                 t_pet_used = True
                                                                 await button_ctx.defer(ignore=True)
                                                                 
@@ -18078,21 +19408,21 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     battle_msg = await private_channel.send(embed=embedVar, file=csummon_file)
                                                                     await asyncio.sleep(2)
                                                                     await battle_msg.delete(delay=None)
-                                                                previous_moves.append(f"*{turn_total}:* **{c_card}** Summoned 🧬 **{cpet_name}**: {dmg['MESSAGE']}")
+                                                                previous_moves.append(f"(**{turn_total}**) **{c_card}** Summoned 🧬 **{cpet_name}**: {dmg['MESSAGE']}")
                                                                 
                                                                 await button_ctx.defer(ignore=True)
                                                                 
                                                             turn = 2
                                                         else:
-                                                            previous_moves.append(f"*{turn_total}:* {c_card} Could not summon 🧬 **{cpet_name}**. Needs rest")
+                                                            previous_moves.append(f"(**{turn_total}**) {c_card} Could not summon 🧬 **{cpet_name}**. Needs rest")
                                                             await button_ctx.defer(ignore=True)
                                                             turn = 2
                                                     else:
-                                                        previous_moves.append(f"*{turn_total}:* {c_card} Could not summon 🧬 **{cpet_name}**. Needs rest")
+                                                        previous_moves.append(f"(**{turn_total}**) {c_card} Could not summon 🧬 **{cpet_name}**. Needs rest")
                                                         await button_ctx.defer(ignore=True)
                                                 elif button_ctx.custom_id == "7":
                                                     c_enhancer_used = True
-                                                    dmg = damage_cal(c_universe, c_card, c_enhancer, c_attack, c_defense,
+                                                    dmg = damage_cal(t_opponent_affinities, basic_attack_name, cmove1_element, c_universe, c_card, c_enhancer, c_attack, c_defense,
                                                                     o_defense, c_stamina, c_enhancer_used, c_health, o_health,
                                                                     o_stamina, c_max_health, o_attack,
                                                                     c_special_move_description, turn_total, ccard_lvl_ap_buff, None)
@@ -18193,22 +19523,22 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         embedVar.add_field(name=f"{c_card} used {cmove_enhanced_text}!",
                                                                         value=f"Enhanced {cenh_type}")
                                                         #await button_ctx.send(embed=embedVar)
-                                                        previous_moves.append(f'*{turn_total}:* **{c_card}** used {cmove_enhanced_text}:👥 Assisting **{o_card}**')
+                                                        previous_moves.append(f'(**{turn_total}**) **{c_card}** used {cmove_enhanced_text}:👥 Assisting **{o_card}**')
                                                         await button_ctx.defer(ignore=True)
                                                         turn_total = turn_total + 1
                                                         turn = 3
                                                     else:
-                                                        previous_moves.append(f"*{turn_total}:* **{c_card}** not enough Stamina to use this move")
+                                                        previous_moves.append(f"(**{turn_total}**) **{c_card}** not enough Stamina to use this move")
                                                         await button_ctx.defer(ignore=True)
                                                         turn = 2
                                                         await button_ctx.defer(ignore=True)
                                                 elif button_ctx.custom_id == "0":
                                                     if c_universe == "Persona":
-                                                        block_message = f"🩸**Confidant Block!***: **{c_card}** Blocked 🛡️"
+                                                        block_message = f"**Confidant Block!*** 🩸: **{c_card}** Blocked 🛡️"
                                                         c_block_used = True
                                                         c_defense = round(c_defense * 2)
                                                         embedVar = discord.Embed(
-                                                            title=f"{c_card} Defended 🛡️ {o_card}",
+                                                            title=f"**{c_card}** Defended 🛡️ {o_card}",
                                                             colour=0xe91e63)
 
                                                         #await button_ctx.send(embed=embedVar)
@@ -18219,33 +19549,92 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                     if c_stamina >= 20:
                                                         if c_universe == "Attack On Titan":
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 Rally! **{c_card}** Increased Max Health ❤️")
+                                                            previous_moves.append(f"(**{turn_total}**) **Rally** 🩸 ! **{c_card}** Increased Max Health ❤️")
                                                             c_max_health = round(c_max_health + 100)
                                                             c_health = c_health + 100
 
                                                         if c_universe == "Bleach":
-                                                            dmg = damage_cal(c_universe, c_card, c_1, c_attack, c_defense, t_defense,
+                                                            dmg = damage_cal(t_opponent_affinities, basic_attack_name, cmove1_element, c_universe, c_card, c_1, c_attack, c_defense, t_defense,
                                                                         c_stamina, c_enhancer_used, c_health, t_health, t_stamina,
                                                                         c_max_health, t_attack, c_special_move_description,
                                                                         turn_total, ccard_lvl_ap_buff, None)
-                                                            previous_moves.append(f"*{turn_total}:* **{c_card}** Exerted their 🩸 Spiritual Pressure dealing {dmg['DMG']} dmg")
-                                                            c_health = c_health - dmg['DMG']
+                                                            previous_moves.append(f"(**{turn_total}**) **{c_card}** Exerted their 🩸 Spiritual Pressure - {dmg['MESSAGE']}")
+                                                            if dmg['REPEL']:
+                                                                c_health = c_health - dmg['DMG']
+                                                            elif dmg['ABSORB']:
+                                                                t_health = t_health + dmg['DMG']
+                                                            elif dmg['ELEMENT'] == water_element:
+                                                                c_water_buff = c_water_buff + 25
+                                                                t_health = t_health - (dmg['DMG'] + c_water_buff)
+                                                            else:
+                                                                t_health = t_health - dmg['DMG']
 
-                                                        
+                                                            if dmg['ELEMENT'] == ice_element:
+                                                                c_ice_counter = c_ice_counter + 1
+                                                                if c_ice_counter == 3:
+                                                                    c_freeze_enh = True
+                                                                    c_ice_counter = 0
+
+                                                            if dmg['ELEMENT'] == time_element:
+                                                                c_stamina = 0
+
+                                                            if dmg['ELEMENT'] == bleed_element:
+                                                                c_bleed_counter = c_bleed_counter + 1
+                                                                if c_bleed_counter == 10:
+                                                                    c_bleed_hit = True
+                                                                    c_bleed_counter = 0
+
+
+                                                            if dmg['ELEMENT'] == recoil_element:
+                                                                c_health = c_health - (dmg['DMG'] * .25)
+
+                                                            if dmg['ELEMENT'] == earth_element:
+                                                                c_defense = c_defense + (dmg['DMG'] * .20)
+
+                                                            if dmg['ELEMENT'] == death_element:
+                                                                t_max_health = t_max_health - (dmg['DMG'] * .05)
+
+                                                            if dmg['ELEMENT'] == light_element:
+                                                                o_stamina = o_stamina + (dmg['STAMINA_USED'] / 2)
+
+                                                            if dmg['ELEMENT'] == dark_element:
+                                                                c_stamina = c_stamina + 5
+                                                                t_stamina = t_stamina - 5
+
+                                                            if dmg['ELEMENT'] == life_element:
+                                                                c_health = c_health + (dmg['DMG'] * .15)
+
+                                                            if dmg['ELEMENT'] == phsycic_element:
+                                                                t_defense = t_defense - (dmg['DMG'] * .08)
+                                                                t_attack = t_attack - (dmg['DMG'] * .08)
+
+                                                            if dmg['ELEMENT'] == fire_element:
+                                                                c_burn_dmg = dmg['DMG'] * .25
+
+
+                                                            if dmg['ELEMENT'] == water_element:
+                                                                c_water_buff = c_water_buff + 25
+
+                                                            if dmg['ELEMENT'] == electric_element:
+                                                                c_shock_buff = c_shock_buff +  (dmg['DMG'] * .05)
+
+                                                            if dmg['ELEMENT'] == poison_element:
+                                                                c_poison_dmg = c_poison_dmg + 8
+
                                                         c_block_used = True
                                                         c_stamina = c_stamina - 20
                                                         c_defense = round(c_defense * 2)
                                                         embedVar = discord.Embed(
-                                                            title=f"{c_card} Defended 🛡️ {o_card}",
+                                                            title=f"**{c_card}** Defended 🛡️ {o_card}",
                                                             colour=0xe91e63)
 
                                                         #await button_ctx.send(embed=embedVar)
-                                                        previous_moves.append(f"*{turn_total}:* **{c_card}**: Defended 🛡️ **{o_card}**")
+                                                        previous_moves.append(f"(**{turn_total}**) **{c_card}**: Defended 🛡️ **{o_card}**")
                                                         turn_total = turn_total + 1
                                                         turn = 3
                                                         await button_ctx.defer(ignore=True)
                                                     else:
-                                                        previous_moves.append(f"*{turn_total}:* **{c_card}** is too tired to block.")
+                                                        previous_moves.append(f"(**{turn_total}**) **{c_card}** is too tired to block.")
                                                         turn = 2
                                                         await button_ctx.defer(ignore=True)
 
@@ -18353,7 +19742,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}",
                                                                                     colour=embed_color_c)
                                                             #await button_ctx.send(embed=embedVar)
-                                                            previous_moves.append(f"*{turn_total}:* **{c_card}**: 🦠 {dmg['MESSAGE']}")
+                                                            previous_moves.append(f"(**{turn_total}**) **{c_card}**: 🦠 {dmg['MESSAGE']}")
                                                             turn_total = turn_total + 1
                                                             turn = 3
                                                             await button_ctx.defer(ignore=True)
@@ -18361,11 +19750,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             c_stamina = c_stamina - int(dmg['STAMINA_USED'])
 
                                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_c)
-                                                            previous_moves.append(f"*{turn_total}:* **{c_card}**: {dmg['MESSAGE']}")
+                                                            previous_moves.append(f"(**{turn_total}**) **{c_card}**: {dmg['MESSAGE']}")
                                                             if carm_barrier_active:
                                                                 carm_barrier_active=False
                                                                 embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* 💠**{c_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{c_card}**'s 💠 Barrier Disabled!")
                                                             #await button_ctx.send(embed=embedVar)
                                                             turn_total = turn_total + 1
                                                             turn = 3
@@ -18376,63 +19765,63 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_naruto_heal_buff = t_naruto_heal_buff + t_stored_damage
                                                                 t_health = t_health 
                                                                 embedVar = discord.Embed(title=f"{t_card}: Substitution Jutsu", description=f"{c_card} strikes a log", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* 🩸**{t_card}**: Substitution Jutsu")
+                                                                previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸: Substitution Jutsu")
                                                                 if not t_used_resolve:
-                                                                    previous_moves.append(f"*{turn_total}:* 🩸**{t_stored_damage}** Hasirama Cells stored. 🩸**{t_naruto_heal_buff}** total stored.")
+                                                                    previous_moves.append(f"(**{turn_total}**) 🩸**{t_stored_damage}** Hasirama Cells stored. 🩸**{t_naruto_heal_buff}** total stored.")
                                                                 if carm_barrier_active:
                                                                     carm_barrier_active=False
                                                                     embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* 💠**{c_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{c_card}**'s 💠 Barrier Disabled!")
                                                                 #await private_channel.send(embed=embedVar)
                                                                 await button_ctx.defer(ignore=True)
-                                                            elif tarm_shield_active:
+                                                            elif tarm_shield_active and dmg['ELEMENT'] != dark_element:
                                                                 if tshield_value > 0:
                                                                     tshield_value = tshield_value -dmg['DMG']
                                                                     t_health = t_health 
                                                                     if tshield_value <=0:
                                                                         embedVar = discord.Embed(title=f"{t_card}'s' **Shield** Shattered!", description=f"{c_card} breaks the **Shield**!", colour=0xe91e63)
-                                                                        previous_moves.append(f"*{turn_total}:* 🌐**{t_card}'s** Shield Shattered!")
+                                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}'s** 🌐 Shield Shattered!")
                                                                         if carm_barrier_active:
                                                                             carm_barrier_active=False
                                                                             embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                            previous_moves.append(f"*{turn_total}:* 💠**{c_card}**'s Barrier Disabled!")
+                                                                            previous_moves.append(f"(**{turn_total}**) **{c_card}**'s 💠 Barrier Disabled!")
                                                                         #await private_channel.send(embed=embedVar)
                                                                         tarm_shield_active = False
                                                                         await button_ctx.defer(ignore=True)
                                                                     else:
                                                                         embedVar = discord.Embed(title=f"{t_card} Activates **Shield** 🌐", description=f"**{c_card}** strikes the Shield 🌐\n**{tshield_value} Shield** Left!", colour=0xe91e63)
-                                                                        previous_moves.append(f"*{turn_total}:* **{c_card}** strikes **{t_card}**'s Shield 🌐\n**{tshield_value} Shield** Left!")
+                                                                        previous_moves.append(f"(**{turn_total}**) **{c_card}** strikes **{t_card}**'s Shield 🌐\n**{tshield_value} Shield** Left!")
                                                                         if carm_barrier_active:
                                                                             carm_barrier_active=False
                                                                             embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                            previous_moves.append(f"*{turn_total}:* 💠**{c_card}**'s Barrier Disabled!")
+                                                                            previous_moves.append(f"(**{turn_total}**) **{c_card}**'s 💠 Barrier Disabled!")
                                                                         #await private_channel.send(embed=embedVar)
                                                                         await button_ctx.defer(ignore=True)
 
-                                                            elif tarm_barrier_active:
+                                                            elif tarm_barrier_active and dmg['ELEMENT'] != phsycic_element and dmg['ELEMENT'] != phsycic_element:
                                                                 if tbarrier_count >1:
                                                                     t_health = t_health 
                                                                     embedVar = discord.Embed(title=f"{t_card} Activates **Barrier** 💠", description=f"{c_card}'s attack **Nullified**!\n **{tbarrier_count - 1} Barriers** remain!", colour=0xe91e63)
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}** Activates Barrier 💠  {c_card}'s attack **Nullified**!\n💠 {tbarrier_count - 1} **Barriers** remain!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** Activates Barrier 💠  {c_card}'s attack **Nullified**!\n💠 {tbarrier_count - 1} **Barriers** remain!")
                                                                     if carm_barrier_active:
                                                                         carm_barrier_active=False
                                                                         embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* 💠**{c_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"(**{turn_total}**) **{c_card}**'s 💠 Barrier Disabled!")
                                                                     #await private_channel.send(embed=embedVar)
                                                                     await button_ctx.defer(ignore=True)
                                                                     tbarrier_count = tbarrier_count - 1
                                                                 elif tbarrier_count==1:
                                                                     embedVar = discord.Embed(title=f"{t_card}'s **Barrier** Broken!", description=f"{c_card} destroys the **Barrier**", colour=0xe91e63)
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}**'s Barrier Broken!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}**'s Barrier Broken!")
                                                                     tbarrier_count = tbarrier_count - 1
                                                                     if carm_barrier_active:
                                                                         carm_barrier_active=False
                                                                         embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* 💠**{c_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"(**{turn_total}**) **{c_card}**'s 💠 Barrier Disabled!")
                                                                     #await private_channel.send(embed=embedVar)
                                                                     await button_ctx.defer(ignore=True)
                                                                     tarm_barrier_active = False
-                                                            elif tarm_parry_active:
+                                                            elif tarm_parry_active and dmg['ELEMENT'] != earth_element:
                                                                 if tparry_count > 1:
                                                                     t_health = t_health
                                                                     tparry_damage = round(dmg['DMG'])
@@ -18440,11 +19829,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     c_health = round(c_health - (tparry_damage * .25))
                                                                     tparry_count = tparry_count - 1
                                                                     embedVar = discord.Embed(title=f"{t_card} Activates **Parry** 🔄", description=f"{c_card} takes {round(tparry_damage * .25)}! DMG\n **{tparry_count} Parries** to go!!", colour=0xe91e63)
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}** Activates Parry 🔄 {c_card} takes {round(tparry_damage * .25)}! DMG\n **{tparry_count}  Parries** to go!!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** Activates Parry 🔄 {c_card} takes {round(tparry_damage * .25)}! DMG\n **{tparry_count}  Parries** to go!!")
                                                                     if carm_barrier_active:
                                                                         carm_barrier_active=False
                                                                         embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* 💠**{c_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"(**{turn_total}**) **{c_card}**'s 💠 Barrier Disabled!")
                                                                     #await private_channel.send(embed=embedVar)
                                                                     await button_ctx.defer(ignore=True)
                                                                     
@@ -18454,32 +19843,95 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     t_health = round(t_health - (tparry_damage * .75))
                                                                     c_health = round(c_health - (tparry_damage * .25))
                                                                     embedVar = discord.Embed(title=f"{t_card} **Parry** Penetrated!!", description=f"{c_card} takes {round(tparry_damage * .25)}! DMG and breaks the **Parry**", colour=0xe91e63)
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}** Parry Penetrated! **{c_card}** takes **{round(tparry_damage * .25)}**! DMG and breaks the **Parry**")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** Parry Penetrated! **{c_card}** takes **{round(tparry_damage * .25)}**! DMG and breaks the **Parry**")
                                                                     tparry_count = tparry_count - 1
                                                                     if carm_barrier_active:
                                                                         carm_barrier_active=False
                                                                         embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* 💠**{c_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"(**{turn_total}**) **{c_card}**'s 💠 Barrier Disabled!")
                                                                     #await private_channel.send(embed=embedVar)
                                                                     tarm_parry_active = False
                                                                     await button_ctx.defer(ignore=True)
                                                             else:
-                                                                t_health = t_health - dmg['DMG']
+                                                                if dmg['REPEL']:
+                                                                    c_health = c_health - int(dmg['DMG'])
+                                                                elif dmg['ABSORB']:
+                                                                    t_health = t_health + int(dmg['DMG'])
+                                                                elif dmg['ELEMENT'] == water_element:
+                                                                    c_water_buff = c_water_buff + 25
+                                                                    t_health = t_health - (dmg['DMG'] + c_water_buff)
+                                                                else:
+                                                                    t_health = t_health - dmg['DMG']
+
+                                                                if dmg['ELEMENT'] == ice_element:
+                                                                    c_ice_counter = c_ice_counter + 1
+                                                                    if c_ice_counter == 3:
+                                                                        c_freeze_enh = True
+                                                                        c_ice_counter = 0
+
+                                                                if dmg['ELEMENT'] == time_element:
+                                                                    c_stamina = 0
+
+                                                                if dmg['ELEMENT'] == bleed_element:
+                                                                    c_bleed_counter = c_bleed_counter + 1
+                                                                    if c_bleed_counter == 10:
+                                                                        c_bleed_hit = True
+                                                                        c_bleed_counter = 0
+
+
+                                                                if dmg['ELEMENT'] == recoil_element:
+                                                                    c_health = c_health - (dmg['DMG'] * .25)
+
+                                                                if dmg['ELEMENT'] == earth_element:
+                                                                    c_defense = c_defense + (dmg['DMG'] * .20)
+
+                                                                if dmg['ELEMENT'] == death_element:
+                                                                    t_max_health = t_max_health - (dmg['DMG'] * .05)
+
+                                                                if dmg['ELEMENT'] == light_element:
+                                                                    o_stamina = o_stamina + (dmg['STAMINA_USED'] / 2)
+
+                                                                if dmg['ELEMENT'] == dark_element:
+                                                                    c_stamina = c_stamina + 5
+                                                                    t_stamina = t_stamina - 5
+
+                                                                if dmg['ELEMENT'] == life_element:
+                                                                    c_health = c_health + (dmg['DMG'] * .15)
+
+                                                                if dmg['ELEMENT'] == phsycic_element:
+                                                                    t_defense = t_defense - (dmg['DMG'] * .08)
+                                                                    t_attack = t_attack - (dmg['DMG'] * .08)
+
+
+                                                                if dmg['ELEMENT'] == fire_element:
+                                                                    c_burn_dmg = dmg['DMG'] * .25
+
+
+                                                                if dmg['ELEMENT'] == water_element:
+                                                                    c_water_buff = c_water_buff + 25
+
+                                                                if dmg['ELEMENT'] == electric_element:
+                                                                    c_shock_buff = c_shock_buff +  (dmg['DMG'] * .05)
+
+                                                                if dmg['ELEMENT'] == poison_element:
+                                                                    c_poison_dmg = c_poison_dmg + 8
+
+
                                                                 embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* **{c_card}**: {dmg['MESSAGE']}")
+                                                                previous_moves.append(f"(**{turn_total}**) **{c_card}**: {dmg['MESSAGE']}")
                                                                 if carm_siphon_active:
                                                                     siphon_damage = (dmg['DMG'] * .10) + csiphon_value
                                                                     c_health = round(c_health + siphon_damage)
                                                                     if c_health >= c_max_health:
                                                                         c_health = c_max_health
-                                                                        previous_moves.append(f"*{turn_total}:* **{c_card}**: 💉 Siphoned **Full Health!**")
+                                                                        previous_moves.append(f"(**{turn_total}**) **{c_card}**: 💉 Siphoned **Full Health!**")
                                                                     else:
-                                                                        previous_moves.append(f"*{turn_total}:* **{c_card}**: 💉 Siphoned **{round(siphon_damage)}** Health!")
+                                                                        previous_moves.append(f"(**{turn_total}**) **{c_card}**: 💉 Siphoned **{round(siphon_damage)}** Health!")
                                                                     await button_ctx.defer(ignore=True)
                                                                 if carm_barrier_active:
                                                                     carm_barrier_active=False
                                                                     embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* 💠**{c_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{c_card}**'s 💠 Barrier Disabled!")
                                                                 #await private_channel.send(embed=embedVar)
                                                                 await button_ctx.defer(ignore=True)
                                                             if t_health <= 0:
@@ -18487,11 +19939,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     if t_universe == "Dragon Ball Z":
                                                                         embedVar = discord.Embed(title=f"{t_card}'s LAST STAND", description=f"{t_card} FINDS RESOLVE", colour=0xe91e63)
                                                                         embedVar.add_field(name=f"**{t_card}** Resolved and continues to fight", value="All stats & stamina increased")
-                                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Transformation: Last Stand!!!")
+                                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Transformation: Last Stand!!!")
                                                                         if carm_barrier_active:
                                                                             carm_barrier_active=False
                                                                             embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                            previous_moves.append(f"*{turn_total}:* 💠**{c_card}**'s Barrier Disabled!")
+                                                                            previous_moves.append(f"(**{turn_total}**) **{c_card}**'s 💠 Barrier Disabled!")
                                                                         #await private_channel.send(embed=embedVar)
                                                                         t_health = int(.75 * (t_attack + t_defense))
                                                                         
@@ -18518,7 +19970,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                                 description=f"Use abilities to Increase `STAM` or enter `FOCUS STATE`!",
                                                                                 colour=0xe91e63)
                                                         #await button_ctx.send(embed=embedVar)
-                                                        previous_moves.append(f"*{turn_total}:* **{c_card}** not enough Stamina to use this move") 
+                                                        previous_moves.append(f"(**{turn_total}**) **{c_card}** not enough Stamina to use this move") 
                                                         turn = 2
                                                         await button_ctx.defer(ignore=True)
                                             except asyncio.TimeoutError:
@@ -18526,7 +19978,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 await ctx.author.send(f"{ctx.author.mention} your game timed out. Your channel has been closed but your spot in the tales has been saved where you last left off.")
                                                 await ctx.send(f"{ctx.author.mention} your game timed out. Your channel has been closed but your spot in the tales has been saved where you last left off.")
                                                 # await discord.TextChannel.delete(private_channel, reason=None)
-                                                previous_moves.append(f"*{turn_total}:* 💨 **{c_card}** Fled...")
+                                                previous_moves.append(f"(**{turn_total}**) 💨 **{c_card}** Fled...")
                                                 c_health = 0
                                                 o_health = 0
                                             except Exception as ex:
@@ -18550,6 +20002,26 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                 # Opponent Turn Start
                                 elif turn == 3:
+                                    if c_bleed_hit:
+                                        c_bleed_hit = False
+                                        bleed_dmg = 10 * turn_total
+                                        t_health = t_health - bleed_dmg
+                                        previous_moves.append(f"(**{turn_total}**) 🩸 **{t_card}** shredded for **{bleed_dmg}** bleed dmg...")
+
+                                    if c_burn_dmg:
+                                        t_health = t_health - c_burn_dmg
+                                        previous_moves.append(f"(**{turn_total}**) 🔥 **{t_card}** burned for **{c_burn_dmg}** dmg...")
+                                    if c_freeze_enh:
+                                        previous_moves.append(f"(**{turn_total}**) ❄️ **{t_card}** has been frozen for a turn...")
+                                        turn_total = turn_total + 1
+                                        turn = 0
+                                    if c_poison_dmg:
+                                        t_health = t_health - c_poison_dmg
+                                        previous_moves.append(f"(**{turn_total}**) 🧪 **{t_card}** poisoned for **{c_poison_dmg}** dmg...")
+
+                                    t_burn_dmg = 0
+                                    t_freeze_enh = False
+
                                     if t_title_passive_type:
                                         if t_title_passive_type == "HLT":
                                             t_health = round(t_health + ((t_title_passive_value / 100) * t_health))
@@ -18638,7 +20110,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 embedVar = discord.Embed(title=f"{t_card}'s Devilization",
                                                                         description=f"**{t_card}** Doubles Stats",
                                                                         colour=0xe91e63)
-                                                previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}**'s Devilization")
+                                                previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸's Devilization")
 
                                     elif t_health <= (t_max_health * .50):
                                         embed_color_t = 0xe67e22
@@ -18652,7 +20124,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 embedVar = discord.Embed(title=f"{t_card}'s Devilization",
                                                                         description=f"**{t_card}** Doubles Stats",
                                                                         colour=0xe91e63)
-                                                previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}**'s Devilization")
+                                                previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸's Devilization")
                                     elif t_health <= (t_max_health * .75):
                                         embed_color_t = 0xf1c40f
                                     else:
@@ -18719,9 +20191,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             embedVar.add_field(name=f"A great aura starts to envelop **{t_card}** ",
                                                             value=f"{t_aura}")
                                             embedVar.set_footer(text=f"{t_card} Says: 'Now, are you ready for a real fight?'")
-                                            previous_moves.append(f"*{turn_total}:* 🌀 **{t_card}** Focused and Says: 'Now, are you ready for a real fight?'")
+                                            previous_moves.append(f"(**{turn_total}**) 🌀 **{t_card}** Focused and Says: 'Now, are you ready for a real fight?'")
                                         else:
-                                            previous_moves.append(f"*{turn_total}:* 🌀 **{t_card}** focused and {healmessage}")
+                                            previous_moves.append(f"(**{turn_total}**) 🌀 **{t_card}** focused and {healmessage}")
                                         if not t_used_resolve:
                                             t_attack = t_attack + t_attackcalc
                                             t_defense = t_defense + t_defensecalc
@@ -18752,21 +20224,21 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             if turn_total <=5:
                                                 t_attack = round(t_attack * 2)
                                                 t_defense = round(t_defense * 2 )
-                                                previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Transformation: Mega Digivolution!!!")
+                                                previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Transformation: Mega Digivolution!!!")
                                             else:
-                                                previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Transformation: Digivolve")
+                                                previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Transformation: Digivolve")
 
 
                                         elif t_universe == "League Of Legends":
                                             embedVar = discord.Embed(title=f"Turret Shot hits {c_card} for **{60 + turn_total}** Damage 💥",
                                                                     colour=0xe91e63)
                                             #await private_channel.send(embed=embedVar)
-                                            previous_moves.append(f"*{turn_total}:* 🩸 Turret Shot hits **{c_card}** for **{60 + turn_total}** Damage 💥")
+                                            previous_moves.append(f"(**{turn_total}**) 🩸 Turret Shot hits **{c_card}** for **{60 + turn_total}** Damage 💥")
                                             c_health = round(c_health - (60 + turn_total))
 
                                         elif t_universe == "Dragon Ball Z":
                                             t_health = t_health + c_stamina
-                                            previous_moves.append(f"*{turn_total}:* 🩸 Saiyan Spirit... You heal for **{c_stamina + turn_total}** ❤️")
+                                            previous_moves.append(f"(**{turn_total}**) 🩸 Saiyan Spirit... You heal for **{c_stamina + turn_total}** ❤️")
 
 
                                         elif t_universe == "Solo Leveling":
@@ -18774,14 +20246,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 title=f"Ruler's Authority... {c_card} loses **{30 + turn_total}** 🛡️ 🔻",
                                                 colour=0xe91e63)
                                             #await private_channel.send(embed=embedVar)
-                                            previous_moves.append(f"*{turn_total}:* 🩸 Ruler's Authority... {c_card} loses **{30 + turn_total}** 🛡️ 🔻")
+                                            previous_moves.append(f"(**{turn_total}**) 🩸 Ruler's Authority... {c_card} loses **{30 + turn_total}** 🛡️ 🔻")
                                             c_defense = round(c_defense - (30 + turn_total))
 
                                         elif t_universe == "Black Clover":
                                             embedVar = discord.Embed(title=f"Mana Zone! **{t_card}** Increased Stamina 🌀",
                                                                     colour=0xe91e63)
                                             #await private_channel.send(embed=embedVar)
-                                            previous_moves.append(f"*{turn_total}:* 🩸 Mana Zone! **{t_card}** Increased AP & Stamina 🌀")
+                                            previous_moves.append(f"(**{turn_total}**) 🩸 Mana Zone! **{t_card}** Increased AP & Stamina 🌀")
                                             t_stamina = 100
                                             tcard_lvl_ap_buff = tcard_lvl_ap_buff + 30
 
@@ -18793,7 +20265,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 embedVar.add_field(name=f"{o_card} had a heart attack and died",
                                                                 value=f"Death....")
                                                 #await private_channel.send(embed=embedVar)
-                                                previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** had a heart attack and died")
+                                                previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 had a heart attack and died")
                                                 c_health = 0
 
                                         if c_universe == "One Punch Man":
@@ -18801,7 +20273,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 title=f"Hero Reinforcements! {c_card}  Increased Health & Max Health ❤️",
                                                 colour=0xe91e63)
                                             #await private_channel.send(embed=embedVar)
-                                            previous_moves.append(f"*{turn_total}:* 🩸 Hero Reinforcements! **{c_card}**  Increased Health & Max Health ❤️")
+                                            previous_moves.append(f"(**{turn_total}**) 🩸 Hero Reinforcements! **{c_card}**  Increased Health & Max Health ❤️")
                                             c_health = round(c_health + 100)
                                             c_max_health = round(c_max_health + 100)
 
@@ -18809,7 +20281,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             embedVar = discord.Embed(
                                                 title=f"Power Of Friendship! 🧬 Summon Rested {c_card} Increased Stamina 🌀", colour=0xe91e63)
                                             #await private_channel.send(embed=embedVar)
-                                            previous_moves.append(f"*{turn_total}:* 🩸 Power Of Friendship! 🧬 **{cpet_name}** Rested, **{c_card}** Increased Stamina 🌀")
+                                            previous_moves.append(f"(**{turn_total}**) 🩸 Power Of Friendship! 🧬 **{cpet_name}** Rested, **{c_card}** Increased Stamina 🌀")
                                             c_stamina = c_stamina + 60
                                             c_pet_used = False
 
@@ -18818,7 +20290,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 title=f"Combo Recognition! {c_card} Increased Attack by **{60 + turn_total}** 🔺 ",
                                                 colour=0xe91e63)
                                             #await private_channel.send(embed=embedVar)
-                                            previous_moves.append(f"*{turn_total}:* 🩸 Combo Recognition! **{c_card}** Increased Attack by **{60 + turn_total}** 🔺")
+                                            previous_moves.append(f"(**{turn_total}**) 🩸 Combo Recognition! **{c_card}** Increased Attack by **{60 + turn_total}** 🔺")
                                             c_attack = round(c_attack + (60 + turn_total))
 
                                         else:
@@ -18834,20 +20306,20 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             turn = 3
                                     else:
                                         # UNIVERSE CARD
-                                        tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff + corruption_ap_buff
-                                        tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff + corruption_ap_buff
-                                        tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff + corruption_ap_buff
+                                        tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff + corruption_ap_buff + t_shock_buff
+                                        tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff + corruption_ap_buff + t_shock_buff
+                                        tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff + corruption_ap_buff + t_shock_buff
                                         tenh1 = list(t_enhancer.values())[0]
                                         tenh_name = list(t_enhancer.values())[2]
                                         tpet_enh_name = list(tpet_move.values())[2]
                                         tpet_msg_on_resolve = ""
                                         # UNIVERSE CARD
                                         if t_universe == "Souls" and t_used_resolve:
-                                            player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina,
+                                            player_2_card = showcard(t, tarm,t_max_health, t_health, t_max_stamina, t_stamina,
                                                                 t_used_resolve, ttitle, t_used_focus, t_attack, t_defense,
                                                                 turn_total, tap2, tap3, tap3, tenh1, tenh_name, tcard_lvl, c_defense)
                                         else:
-                                            player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina,
+                                            player_2_card = showcard(t, tarm,t_max_health, t_health, t_max_stamina, t_stamina,
                                                                     t_used_resolve, ttitle, t_used_focus, t_attack, t_defense,
                                                                     turn_total, tap1, tap2, tap3, tenh1, tenh_name, tcard_lvl, c_defense)
                                                                 
@@ -18856,32 +20328,32 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             if temp_carm_shield_active and not carm_shield_active:
                                                 if tarm_shield_active:
                                                     tshield_value = tshield_value + temp_cshield_value
-                                                    previous_moves.append(f"*{turn_total}:* *{turn_total}:* 🩸 **{t_card}** **ARISE!** *{carm_name}* is now yours")
+                                                    previous_moves.append(f"(**{turn_total}**) (**{turn_total}**) **{t_card}** 🩸 **ARISE!** *{carm_name}* is now yours")
                                                     t_swapped = True
                                                 elif not tarm_shield_active:
                                                     tarm_shield_active = True
                                                     tshield_value = temp_cshield_value
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{carm_name}* is now yours")
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 **ARISE!** *{carm_name}* is now yours")
                                                     t_swapped = True
                                             elif temp_carm_barrier_active and not carm_barrier_active:
                                                 if tarm_barrier_active:
                                                     tbarrier_count = tbarrier_count + temp_cbarrier_count
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{carm_name}* is now yours")
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 **ARISE!** *{carm_name}* is now yours")
                                                     t_swapped = True
                                                 elif not tarm_barrier_active:
                                                     tarm_barrier_active = True
                                                     tbarrier_count = temp_cbarrier_count
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{carm_name}* is now yours")
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 **ARISE!** *{carm_name}* is now yours")
                                                     t_swapped = True
                                             elif temp_carm_parry_active and not carm_parry_active:
                                                 if tarm_parry_active:
                                                     tparry_count = tparry_count + temp_cparry_count
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{carm_name}* is now yours")
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 **ARISE!** *{carm_name}* is now yours")
                                                     t_swapped = True
                                                 elif not tarm_parry_active:
                                                     tarm_parry_active = True
                                                     tparry_count = temp_cparry_count
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** **ARISE!** *{carm_name}* is now yours")
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 **ARISE!** *{carm_name}* is now yours")
                                                     t_swapped = True
 
 
@@ -18896,7 +20368,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                         if t_used_resolve and not t_pet_used:
                                             aiMove = 6
-                                        elif tarm_barrier_active: #Ai Barrier Checks
+                                        elif tarm_barrier_active and dmg['ELEMENT'] != phsycic_element: #Ai Barrier Checks
                                             if t_stamina >=20: #Stamina Check For Enhancer
                                                 aiMove = await ai_enhancer_moves(turn_total,t_used_focus,t_used_resolve,t_pet_used,t_stamina,
                                                                            t_enhancer['TYPE'],t_health,t_max_health,t_attack,
@@ -19027,23 +20499,23 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                             if o_defend_used == True:
                                                 if t_universe == "Souls" and t_used_resolve:
-                                                    dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_stamina,
+                                                    dmg = damage_cal(o_opponent_affinities, special_attack_name, tmove2_element, t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_stamina,
                                                                     t_enhancer_used, t_health, o_health, o_stamina, t_max_health,
                                                                     o_attack, t_special_move_description, turn_total,
                                                                     tcard_lvl_ap_buff, t_1)
                                                 else:
-                                                    dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense,
+                                                    dmg = damage_cal(o_opponent_affinities, basic_attack_name, tmove1_element, t_universe, t_card, t_1, t_attack, t_defense, o_defense,
                                                                     t_stamina, t_enhancer_used, t_health, o_health, o_stamina,
                                                                     t_max_health, o_attack, t_special_move_description, turn_total,
                                                                     tcard_lvl_ap_buff, None)
                                             else:
                                                 if t_universe == "Souls" and t_used_resolve:
-                                                    dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, c_defense, t_stamina,
+                                                    dmg = damage_cal(c_opponent_affinities, special_attack_name, tmove2_element, t_universe, t_card, t_2, t_attack, t_defense, c_defense, t_stamina,
                                                                     t_enhancer_used, t_health, c_health, c_stamina, t_max_health,
                                                                     c_attack, t_special_move_description, turn_total,
                                                                     tcard_lvl_ap_buff, t_1)
                                                 else:
-                                                    dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, c_defense,
+                                                    dmg = damage_cal(c_opponent_affinities, basic_attack_name, tmove1_element, t_universe, t_card, t_1, t_attack, t_defense, c_defense,
                                                                     t_stamina, t_enhancer_used, t_health, c_health, c_stamina,
                                                                     t_max_health, c_attack, t_special_move_description, turn_total,
                                                                     tcard_lvl_ap_buff, None)
@@ -19051,35 +20523,35 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                             if o_defend_used == True:
                                                 if t_universe == "Souls" and t_used_resolve:
-                                                    dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_stamina,
+                                                    dmg = damage_cal(o_opponent_affinities, ultimate_attack_name, tmove3_element, t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_stamina,
                                                                     t_enhancer_used, t_health, o_health, o_stamina, t_max_health,
                                                                     o_attack, t_special_move_description, turn_total,
                                                                     tcard_lvl_ap_buff, t_2)
                                                 else:
-                                                    dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense,
+                                                    dmg = damage_cal(o_opponent_affinities, special_attack_name, tmove2_element, t_universe, t_card, t_2, t_attack, t_defense, o_defense,
                                                                     t_stamina, t_enhancer_used, t_health, o_health, o_stamina,
                                                                     t_max_health, o_attack, t_special_move_description, turn_total,
                                                                     tcard_lvl_ap_buff, None)
                                             else:
                                                 if t_universe == "Souls" and t_used_resolve:
-                                                    dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_stamina,
+                                                    dmg = damage_cal(c_opponent_affinities, ultimate_attack_name, tmove3_element, t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_stamina,
                                                                     t_enhancer_used, t_health, c_health, c_stamina, t_max_health,
                                                                     c_attack, t_special_move_description, turn_total,
                                                                     tcard_lvl_ap_buff, t_2)
                                                 else:
-                                                    dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, c_defense,
+                                                    dmg = damage_cal(c_opponent_affinities, special_attack_name, tmove2_element, t_universe, t_card, t_2, t_attack, t_defense, c_defense,
                                                                     t_stamina, t_enhancer_used, t_health, c_health, c_stamina,
                                                                     t_max_health, c_attack, t_special_move_description, turn_total,
                                                                     tcard_lvl_ap_buff, None)
                                         elif int(aiMove) == 3:
 
                                             if o_defend_used == True:
-                                                dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense,
+                                                dmg = damage_cal(o_opponent_affinities, ultimate_attack_name, tmove3_element, t_universe, t_card, t_3, t_attack, t_defense, o_defense,
                                                                 t_stamina, t_enhancer_used, t_health, o_health, o_stamina,
                                                                 t_max_health, o_attack, t_special_move_description, turn_total,
                                                                 tcard_lvl_ap_buff, None)
                                             else:
-                                                dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense,
+                                                dmg = damage_cal(c_opponent_affinities, ultimate_attack_name, tmove3_element, t_universe, t_card, t_3, t_attack, t_defense, c_defense,
                                                                 t_stamina, t_enhancer_used, t_health, c_health, c_stamina,
                                                                 t_max_health, c_attack, t_special_move_description, turn_total,
                                                                 tcard_lvl_ap_buff, None)
@@ -19092,12 +20564,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                             t_enhancer_used = True
                                             if o_defend_used == True:
-                                                dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense,
+                                                dmg = damage_cal(o_opponent_affinities, basic_attack_name, tmove1_element, t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense,
                                                                 t_stamina, t_enhancer_used, t_health, o_health, o_stamina,
                                                                 t_max_health, o_attack, t_special_move_description, turn_total,
                                                                 tcard_lvl_ap_buff, None)
                                             else:
-                                                dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, c_defense,
+                                                dmg = damage_cal(t_for_c_opponent_affinities, basic_attack_name, tmove1_element, t_universe, t_card, t_enhancer, t_attack, t_defense, c_defense,
                                                                 t_stamina, t_enhancer_used, t_health, c_health, c_stamina,
                                                                 t_max_health, c_attack, t_special_move_description, turn_total,
                                                                 tcard_lvl_ap_buff, None)
@@ -19135,7 +20607,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                             colour=0xe91e63)
                                                     embedVar.add_field(name=f"Transformation: Plus Ultra",
                                                                     value="You do not lose a turn after you Resolve.")
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: PLUS ULTRA!")
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: PLUS ULTRA!")
                                                     #await private_channel.send(embed=embedVar)
                                                     turn_total = turn_total + 1
                                                     turn = 3
@@ -19167,7 +20639,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     embedVar = discord.Embed(title=f"{t_card} begins Total Concentration Breathing",
                                                                             description=f"**{t_card} says**\n{t_resolve_description}",
                                                                             colour=0xe91e63)
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Total Concentration Breathing!")
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Total Concentration Breathing!")
                                                     
                                                     turn_total = turn_total + 1
                                                     turn = 0
@@ -19195,7 +20667,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     embedVar = discord.Embed(title=f"{t_card} Heals from Hashirama Cells",
                                                                             description=f"**{t_card} says**\n{t_resolve_description}",
                                                                             colour=0xe91e63)
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Hashirama Cells heal you for **{t_naruto_heal_buff}**")
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Hashirama Cells heal you for **{t_naruto_heal_buff}**")
                                                     turn_total = turn_total + 1
                                                     turn = 0
 
@@ -19227,7 +20699,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                             colour=0xe91e63)
                                                     embedVar.add_field(name=f"Transformation Complete",
                                                                     value=f"Health increased by **{health_boost}**!")
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Titan Mode")
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Titan Mode")
                                                     #await private_channel.send(embed=embedVar)
                                                     turn_total = turn_total + 1
                                                     turn = 0
@@ -19259,7 +20731,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                             colour=0xe91e63)
                                                     embedVar.add_field(name=f"Transformation: Bankai",
                                                                     value="Gain double Attack on Resolve.")
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Bankai!")
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Bankai!")
                                                     #await private_channel.send(embed=embedVar)
                                                     turn_total = turn_total + 1
                                                     turn = 0
@@ -19283,12 +20755,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_used_resolve = True
                                                     t_pet_used = False
                                                     if t_gow_resolve:
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Ascension!")
+                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Ascension!")
                                                     elif not t_gow_resolve:
                                                         t_used_resolve = False
                                                         t_gow_resolve = True
                                                         t_defense = 125
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Crushed Blood Orb: Health Refill")
+                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Crushed Blood Orb: Health Refill")
 
                                                     embedVar = discord.Embed(title=f"{t_card} STRENGTHENED RESOLVE :zap:",
                                                                             description=f"**{t_card} says**\n{t_resolve_description}",
@@ -19325,14 +20797,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     value="On Resolve, Strike with Ultimate, then Focus.")
                                                     #await private_channel.send(embed=embedVar)
                                                     if o_defend_used == True:
-                                                        dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense,
+                                                        dmg = damage_cal(o_opponent_affinities, ultimate_attack_name, tmove3_element, t_universe, t_card, t_3, t_attack, t_defense,
                                                                         o_defense, t_stamina, t_enhancer_used, t_health,
                                                                         o_health, o_stamina, t_max_health, o_attack,
                                                                         t_special_move_description, turn_total,
                                                                         tcard_lvl_ap_buff, None)
                                                         o_health = o_health - int(dmg['DMG'])
                                                     else:
-                                                        dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense,
+                                                        dmg = damage_cal(t_for_c_opponent_affinities, ultimate_attack_name, tmove3_element, t_universe, t_card, t_3, t_attack, t_defense,
                                                                         c_defense, t_stamina, t_enhancer_used, t_health,
                                                                         c_health, c_stamina, t_max_health, c_attack,
                                                                         t_special_move_description, turn_total,
@@ -19340,7 +20812,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         c_health = c_health - int(dmg['DMG'])
                                                     t_pet_used = False
                                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Command Seal! {dmg['MESSAGE']}")
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Command Seal! {dmg['MESSAGE']}")
                                                     #await private_channel.send(embed=embedVar)
                                                     # t_stamina = 0
                                                     turn_total = turn_total + 1
@@ -19373,13 +20845,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     if turn_total >= 50:
                                                         t_max_health = t_max_health + 1000
                                                         t_health = t_health + 1000
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Gigantomax Evolution!!! Gained **1000** HP!!!")
+                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Gigantomax Evolution!!! Gained **1000** HP!!!")
                                                     elif turn_total >= 30:
                                                         t_max_health = t_max_health + 300
                                                         t_health = t_health + 300
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Mega Evolution!! Gained **300** HP!")
+                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Mega Evolution!! Gained **300** HP!")
                                                     else:
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Evolution!")
+                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Evolution!")
                                                     #await private_channel.send(embed=embedVar)
                                                     turn_total = turn_total + 1
                                                     turn = 0
@@ -19411,7 +20883,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                                     colour=0xe91e63)
                                                             embedVar.add_field(name=f"Nexus Destroyed",
                                                                             value=f"**{t_card}** dealt **{(60 * (o_focus_count + t_focus_count))}** damage.")
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Pentakill! Dealing {(60 * (o_focus_count + t_focus_count))} damage.")
+                                                            previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Pentakill! Dealing {(60 * (o_focus_count + t_focus_count))} damage.")
                                                         else:
                                                             c_health = c_health - (60 * (c_focus_count + t_focus_count))
                                                             embedVar = discord.Embed(title=f"{t_card} PENTA KILL!",
@@ -19419,9 +20891,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                                     colour=0xe91e63)
                                                             embedVar.add_field(name=f"Nexus Destroyed",
                                                                             value=f"**{t_card}** dealt **{(60 * (c_focus_count + t_focus_count))}** damage.")
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Resolved: Pentakill! Dealing {(60 * (c_focus_count + t_focus_count))} damage.")
+                                                            previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Pentakill! Dealing {(60 * (c_focus_count + t_focus_count))} damage.")
                                                     elif t_universe == "Souls":
-                                                        previous_moves.append(f"*{turn_total}:* 🩸 **{t_card}** Phase 2: Enhanced Moveset!")
+                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Phase 2: Enhanced Moveset!")
                                                         
                                                     else:
                                                         embedVar = discord.Embed(title=f"{t_card} STRENGTHENED RESOLVE :zap:",
@@ -19429,19 +20901,19 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                                 colour=0xe91e63)
                                                         embedVar.add_field(name=f"Transformation",
                                                                         value="All stats & stamina greatly increased")
-                                                        previous_moves.append(f"*{turn_total}:* ⚡ **{t_card}** Resolved!")
+                                                        previous_moves.append(f"(**{turn_total}**) ⚡ **{t_card}** Resolved!")
                                                     #await private_channel.send(embed=embedVar)
                                                     turn_total = turn_total + 1
                                                     turn = 0
                                             else:
-                                                previous_moves.append(f"*{turn_total}:* {t_card} cannot resolve!")
+                                                previous_moves.append(f"(**{turn_total}**) {t_card} cannot resolve!")
                                                 turn = 3
                                         elif int(aiMove) == 6:
                                             # Resolve Check and Calculation
                                             if t_used_resolve and t_used_focus and not t_pet_used:
                                                 if o_defend_used == True:
                                                     t_enhancer_used = True
-                                                    dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense,
+                                                    dmg = damage_cal(o_opponent_affinities, basic_attack_name, tmove1_element, t_universe, t_card, tpet_move, t_attack, t_defense,
                                                                     o_defense, t_stamina, t_enhancer_used, t_health, o_health,
                                                                     o_stamina, t_max_health, o_attack,
                                                                     t_special_move_description, turn_total, tcard_lvl_ap_buff, None)
@@ -19535,7 +21007,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
                                                         if t_universe == "Persona":
-                                                            petdmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense,
+                                                            petdmg = damage_cal(t_for_c_opponent_affinities, basic_attack_name, tmove1_element, t_universe, t_card, t_1, t_attack, t_defense,
                                                                                 c_defense, t_stamina, t_enhancer_used, t_health,
                                                                                 c_health, c_stamina, t_max_health, c_attack,
                                                                                 t_special_move_description, turn_total,
@@ -19557,7 +21029,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             
                                                             embedVar.set_image(url="attachment://pet.png")
                                                             #await button_ctx.send(embed=embedVar)
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **Persona!** : **{tpet_name}** was summoned from **{t_card}'s** soul dealing **{petdmg['DMG']}** damage!\n**{c_card}** summon disabled!")
+                                                            previous_moves.append(f"(**{turn_total}**) **Persona!** 🩸 : **{tpet_name}** was summoned from **{t_card}'s** soul dealing **{petdmg['DMG']}** damage!\n**{c_card}** summon disabled!")
                                                             c_pet_used = True
                                                             
                                                             
@@ -19576,15 +21048,15 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             
                                                             embedVar.set_image(url="attachment://pet.png")
                                                             #await private_channel.send(embed=embedVar)
-                                                            previous_moves.append(f"*{turn_total}:* **{t_card}** Summoned 🧬 **{tpet_name}**: {dmg['MESSAGE']}")
+                                                            previous_moves.append(f"(**{turn_total}**) **{t_card}** Summoned 🧬 **{tpet_name}**: {dmg['MESSAGE']}")
                                                             
                                                         turn = 3
                                                     else:
-                                                        previous_moves.append(f"*{turn_total}:* {t_card} Could not summon 🧬 **{tpet_name}**. Needs rest")
+                                                        previous_moves.append(f"(**{turn_total}**) {t_card} Could not summon 🧬 **{tpet_name}**. Needs rest")
                                                         turn = 3
                                                 else:
                                                     t_enhancer_used = True
-                                                    dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense,
+                                                    dmg = damage_cal(t_for_c_opponent_affinities, basic_attack_name, tmove1_element, t_universe, t_card, tpet_move, t_attack, t_defense,
                                                                     c_defense, t_stamina, t_enhancer_used, t_health, c_health,
                                                                     c_stamina, t_max_health, c_attack,
                                                                     t_special_move_description, turn_total, tcard_lvl_ap_buff, None)
@@ -19678,7 +21150,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
                                                         if t_universe == "Persona":
-                                                            petdmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense,
+                                                            petdmg = damage_cal(t_for_c_opponent_affinities, basic_attack_name, tmove1_element, t_universe, t_card, t_1, t_attack, t_defense,
                                                                                 c_defense, t_stamina, t_enhancer_used, t_health,
                                                                                 c_health, c_stamina, t_max_health, c_attack,
                                                                                 t_special_move_description, turn_total,
@@ -19701,7 +21173,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             
                                                             #embedVar.set_image(url="attachment://pet.png")
                                                             #await button_ctx.send(embed=embedVar)
-                                                            previous_moves.append(f"*{turn_total}:* 🩸 **Persona!** : **{tpet_name}** was summoned from **{t_card}'s** soul dealing **{petdmg['DMG']}** damage!\n**{c_card}** summon disabled!")
+                                                            previous_moves.append(f"(**{turn_total}**) **Persona!** 🩸 : **{tpet_name}** was summoned from **{t_card}'s** soul dealing **{petdmg['DMG']}** damage!\n**{c_card}** summon disabled!")
                                                             c_pet_used = True
                                                             
                                                         else:
@@ -19719,15 +21191,15 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             
                                                             
                                                             
-                                                            previous_moves.append(f"*{turn_total}:* **{t_card}** Summoned 🧬 **{tpet_name}**: {dmg['MESSAGE']}")
+                                                            previous_moves.append(f"(**{turn_total}**) **{t_card}** Summoned 🧬 **{tpet_name}**: {dmg['MESSAGE']}")
                                                             
                                                         turn = 3
                                                     else:
-                                                        previous_moves.append(f"*{turn_total}:* {t_card} Could not summon 🧬 **{tpet_name}**. Needs rest")
+                                                        previous_moves.append(f"(**{turn_total}**) {t_card} Could not summon 🧬 **{tpet_name}**. Needs rest")
                                                         turn = 3
                                         elif int(aiMove) == 7:
                                             if t_universe == "Persona":
-                                                block_message = f"🩸**Confidant Block!***: **{t_card}** Blocked 🛡️"
+                                                block_message = f"**Confidant Block!*** 🩸: **{t_card}** Blocked 🛡️"
                                                 t_block_used = True
                                                 t_defense = round(t_defense * 2)
 
@@ -19739,23 +21211,80 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                             if t_stamina >= 20:
                                                 if t_universe == "Attack On Titan":
-                                                    previous_moves.append(f"*{turn_total}:* 🩸 Rally! **{t_card}** Increased Max Health ❤️")
+                                                    previous_moves.append(f"(**{turn_total}**) **Rally** 🩸 ! **{t_card}** Increased Max Health ❤️")
                                                     t_max_health = round(t_max_health + 100)
                                                     t_health = t_health + 100
 
                                                 if t_universe == "Bleach":
-                                                    dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense,
+                                                    dmg = damage_cal(o_opponent_affinities, basic_attack_name, tmove1_element, t_universe, t_card, t_1, t_attack, t_defense, o_defense,
                                                                     t_stamina, t_enhancer_used, t_health, o_health, o_stamina,
                                                                     t_max_health, o_attack, t_special_move_description, turn_total,
                                                                     tcard_lvl_ap_buff, None)
-                                                    previous_moves.append(f"*{turn_total}:* **{t_card}** Exerted their 🩸 Spiritual Pressure dealing {dmg['DMG']} dmg")
-                                                    c_health = c_health - dmg['DMG']
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** Exerted their 🩸 Spiritual Pressure - {dmg['MESSAGE']}")
+                                                    if dmg['REPEL']:
+                                                        t_health = t_health - dmg['DMG']
+                                                    elif dmg['ABSORB']:
+                                                        c_health = c_health + dmg['DMG']
+                                                    elif dmg['ELEMENT'] == water_element:
+                                                        t_water_buff = t_water_buff + 25
+                                                        c_health = c_health - (dmg['DMG'] + t_water_buff)
+                                                    else:
+                                                        c_health = c_health - dmg['DMG']
 
+                                                    if dmg['ELEMENT'] == ice_element:
+                                                        t_ice_counter = t_ice_counter + 1
+                                                        if t_ice_counter == 3:
+                                                            t_freeze_enh = True
+                                                            t_ice_counter = 0
+
+                                                    if dmg['ELEMENT'] == time_element:
+                                                        t_stamina = 0
+
+                                                    if dmg['ELEMENT'] == bleed_element:
+                                                        t_bleed_counter = t_bleed_counter + 1
+                                                        if t_bleed_counter == 10:
+                                                            t_bleed_hit = True
+                                                            t_bleed_counter = 0
+
+                                                    if dmg['ELEMENT'] == recoil_element:
+                                                        t_health = t_health - (dmg['DMG'] * .25)
+
+                                                    if dmg['ELEMENT'] == earth_element:
+                                                        t_defense = t_defense + (dmg['DMG'] * .20)
+
+                                                    if dmg['ELEMENT'] == death_element:
+                                                        c_max_health = c_max_health - (dmg['DMG'] * .05)
+
+                                                    if dmg['ELEMENT'] == light_element:
+                                                        t_stamina = t_stamina + (dmg['STAMINA_USED'] / 2)
+
+                                                    if dmg['ELEMENT'] == dark_element:
+                                                        t_stamina = t_stamina + 5
+                                                        c_stamina = c_stamina - 5
+
+                                                    if dmg['ELEMENT'] == life_element:
+                                                        t_health = t_health + (dmg['DMG'] * .15)
+
+                                                    if dmg['ELEMENT'] == phsycic_element:
+                                                        c_defense = c_defense - (dmg['DMG'] * .08)
+                                                        c_attack = c_attack - (dmg['DMG'] * .08)
+
+                                                    if dmg['ELEMENT'] == fire_element:
+                                                        t_burn_dmg = round(dmg['DMG'] * .30)
+
+                                                    if dmg['ELEMENT'] == water_element:
+                                                        t_water_buff = t_water_buff + 25
+
+                                                    if dmg['ELEMENT'] == electric_element:
+                                                        t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
+
+                                                    if dmg['ELEMENT'] == poison_element:
+                                                        t_poison_dmg = t_poison_dmg + 8
 
                                                 t_stamina = t_stamina - 20
                                                 t_block_used = True
                                                 t_defense = round(t_defense * 2)
-                                                previous_moves.append(f"*{turn_total}:* **{t_card}:** Blocked 🛡️")
+                                                previous_moves.append(f"(**{turn_total}**) **{t_card}:** Blocked 🛡️")
                                                 turn_total = turn_total + 1
                                                 turn = 0
                                             else:
@@ -19865,17 +21394,17 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}",
                                                                                 colour=embed_color_t)
                                                         #await private_channel.send(embed=embedVar)
-                                                        previous_moves.append(f"*{turn_total}:* **{t_card}**: 🦠 {dmg['MESSAGE']}")
+                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}**: 🦠 {dmg['MESSAGE']}")
                                                         turn_total = turn_total + 1
                                                         turn = 0
                                                     elif dmg['DMG'] == 0:
                                                         t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                                        previous_moves.append(f"*{turn_total}:* **{t_card}**: {dmg['MESSAGE']}")
+                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}**: {dmg['MESSAGE']}")
                                                         if tarm_barrier_active:
                                                             tarm_barrier_active=False
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                            previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                            previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                         #await private_channel.send(embed=embedVar)
                                                         turn_total = turn_total + 1
                                                         turn = 0
@@ -19885,69 +21414,69 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_naruto_heal_buff = o_naruto_heal_buff + o_stored_damage
                                                             o_health = o_health 
                                                             embedVar = discord.Embed(title=f"{o_card}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
-                                                            previous_moves.append(f"*{turn_total}:* 🩸**{o_card}**: Substitution Jutsu")
+                                                            previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸: Substitution Jutsu")
                                                             if not o_used_resolve:
-                                                                previous_moves.append(f"*{turn_total}:* 🩸**{o_stored_damage}** Hasirama Cells stored. 🩸**{o_naruto_heal_buff}** total stored.")
+                                                                previous_moves.append(f"(**{turn_total}**) 🩸**{o_stored_damage}** Hasirama Cells stored. 🩸**{o_naruto_heal_buff}** total stored.")
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                             #await private_channel.send(embed=embedVar)
-                                                        elif oarm_shield_active:
+                                                        elif oarm_shield_active and dmg['ELEMENT'] != dark_element:
                                                             if oshield_value > 0:
                                                                 oshield_value = oshield_value -dmg['DMG']
                                                                 o_health = o_health 
                                                                 if oshield_value <=0:
                                                                     embedVar = discord.Embed(title=f"{o_card}'s' **Shield** Shattered!", description=f"{t_card} breaks the **Shield**!", colour=0xe91e63)
-                                                                    previous_moves.append(f"*{turn_total}:* 🌐**{o_card}'s** Shield Shattered!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}'s** 🌐 Shield Shattered!")
                                                                     if tarm_barrier_active:
                                                                         tarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                                     #await private_channel.send(embed=embedVar)
                                                                     oarm_shield_active = False
                                                                 else:
                                                                     embedVar = discord.Embed(title=f"{o_card} Activates **Shield** 🌐", description=f"**{t_card}** strikes the Shield 🌐\n**{oshield_value} Shield** Left!", colour=0xe91e63)
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}** strikes **{o_card}**'s Shield 🌐\n**{oshield_value} Shield** Left!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** strikes **{o_card}**'s Shield 🌐\n**{oshield_value} Shield** Left!")
                                                                     if tarm_barrier_active:
                                                                         tarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                                     #await private_channel.send(embed=embedVar)
 
-                                                        elif oarm_barrier_active:
+                                                        elif oarm_barrier_active and dmg['ELEMENT'] != phsycic_element:
                                                             if obarrier_count >1:
                                                                 o_health = o_health 
                                                                 embedVar = discord.Embed(title=f"{o_card} Activates **Barrier** 💠", description=f"{t_card}'s attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* /**{o_card}** Activates Barrier 💠  {t_card}'s attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!")
+                                                                previous_moves.append(f"(**{turn_total}**) /**{o_card}** Activates Barrier 💠  {t_card}'s attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!")
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                                 #await private_channel.send(embed=embedVar)
                                                                 obarrier_count = obarrier_count - 1
                                                             elif obarrier_count==1:
                                                                 embedVar = discord.Embed(title=f"{o_card}'s **Barrier** Broken!", description=f"{t_card} destroys the **Barrier**", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* **{o_card}**'s Barrier Broken!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{o_card}**'s Barrier Broken!")
                                                                 obarrier_count = obarrier_count - 1
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                                 #await private_channel.send(embed=embedVar)
                                                                 oarm_barrier_active = False
-                                                        elif oarm_parry_active:
+                                                        elif oarm_parry_active and dmg['ELEMENT'] != earth_element:
                                                             if oparry_count > 1:
                                                                 oparry_damage = round(dmg['DMG'])
                                                                 o_health = round(o_health - (oparry_damage * .75))
                                                                 t_health = round(t_health - (oparry_damage * .25))
                                                                 oparry_count = oparry_count - 1
                                                                 embedVar = discord.Embed(title=f"{o_card} Activates **Parry** 🔄", description=f"{t_card} takes {round(oparry_damage * .25)}! DMG\n **{oparry_count} Parries** to go!!", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* **{o_card}** Activates Parry 🔄 {t_card} takes {round(oparry_damage * .25)}! DMG\n **{oparry_count}  Parries** to go!!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{o_card}** Activates Parry 🔄 {t_card} takes {round(oparry_damage * .25)}! DMG\n **{oparry_count}  Parries** to go!!")
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                                 #await private_channel.send(embed=embedVar)
                                                                 
                                                             elif oparry_count==1:
@@ -19955,41 +21484,103 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_health = round(o_health - (oparry_damage * .75))
                                                                 t_health = round(t_health - (oparry_damage * .25))
                                                                 embedVar = discord.Embed(title=f"{o_card} **Parry** Penetrated!!", description=f"{t_card} takes {round(oparry_damage * .25)}! DMG and breaks the **Parry**", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* **{o_card}** Parry Penetrated! **{t_card}** takes **{round(oparry_damage * .25)}**! DMG and breaks the **Parry**")
+                                                                previous_moves.append(f"(**{turn_total}**) **{o_card}** Parry Penetrated! **{t_card}** takes **{round(oparry_damage * .25)}**! DMG and breaks the **Parry**")
                                                                 oparry_count = oparry_count - 1
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                                 #await private_channel.send(embed=embedVar)
                                                                 oarm_parry_active = False
                                                         else:
-                                                            o_health = o_health - int(dmg['DMG'])
+                                                            if dmg['REPEL']:
+                                                                t_health = t_health - int(dmg['DMG'])
+                                                            elif dmg['ABSORB']:
+                                                                o_health = o_health + int(dmg['DMG'])
+                                                            elif dmg['ELEMENT'] == water_element:
+                                                                t_water_buff = t_water_buff + 25
+                                                                o_health = o_health - (dmg['DMG'] + t_water_buff)
+                                                            else:
+                                                                o_health = o_health - dmg['DMG']
+
+
+                                                            if dmg['ELEMENT'] == ice_element:
+                                                                t_ice_counter = t_ice_counter + 1
+                                                                if t_ice_counter == 3:
+                                                                    t_freeze_enh = True
+                                                                    t_ice_counter = 0
+
+                                                            if dmg['ELEMENT'] == time_element:
+                                                                t_stamina = 0
+
+                                                            if dmg['ELEMENT'] == bleed_element:
+                                                                t_bleed_counter = t_bleed_counter + 1
+                                                                if t_bleed_counter == 10:
+                                                                    t_bleed_hit = True
+                                                                    t_bleed_counter = 0
+
+                                                            if dmg['ELEMENT'] == recoil_element:
+                                                                t_health = t_health - (dmg['DMG'] * .25)
+
+                                                            if dmg['ELEMENT'] == earth_element:
+                                                                t_defense = t_defense + (dmg['DMG'] * .20)
+
+                                                            if dmg['ELEMENT'] == death_element:
+                                                                o_max_health = o_max_health - (dmg['DMG'] * .05)
+
+                                                            if dmg['ELEMENT'] == light_element:
+                                                                t_stamina = t_stamina + (dmg['STAMINA_USED'] / 2)
+
+                                                            if dmg['ELEMENT'] == dark_element:
+                                                                t_stamina = t_stamina + 5
+                                                                o_stamina = o_stamina - 5
+
+                                                            if dmg['ELEMENT'] == life_element:
+                                                                t_health = t_health + (dmg['DMG'] * .15)
+
+                                                            if dmg['ELEMENT'] == phsycic_element:
+                                                                o_defense = o_defense - (dmg['DMG'] * .08)
+                                                                o_attack = o_attack - (dmg['DMG'] * .08)
+
+
+                                                            if dmg['ELEMENT'] == fire_element:
+                                                                t_burn_dmg = round(dmg['DMG'] * .30)
+
+                                                            if dmg['ELEMENT'] == water_element:
+                                                                t_water_buff = t_water_buff + 25
+
+                                                            if dmg['ELEMENT'] == electric_element:
+                                                                t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
+
+                                                            if dmg['ELEMENT'] == poison_element:
+                                                                t_poison_dmg = t_poison_dmg + 8
+
+
                                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                                            previous_moves.append(f"*{turn_total}:* **{t_card}**: {dmg['MESSAGE']}")
+                                                            previous_moves.append(f"(**{turn_total}**) **{t_card}**: {dmg['MESSAGE']}")
                                                             if tarm_siphon_active:
                                                                 siphon_damage = (dmg['DMG'] * .10) + tsiphon_value
                                                                 t_health = round(t_health + siphon_damage)
                                                                 if t_health >= t_max_health:
                                                                     t_health = t_max_health
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}**: 💉 Siphoned **Full Health!**")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}**: 💉 Siphoned **Full Health!**")
                                                                 else:
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}**: 💉 Siphoned **{round(siphon_damage)}** Health!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}**: 💉 Siphoned **{round(siphon_damage)}** Health!")
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                             #await private_channel.send(embed=embedVar)
                                                         if o_health <= 0:
                                                             if o_final_stand==True:
                                                                 if o_universe == "Dragon Ball Z":
                                                                     embedVar = discord.Embed(title=f"{o_card}'s LAST STAND", description=f"{o_card} FINDS RESOLVE", colour=0xe91e63)
                                                                     embedVar.add_field(name=f"**{o_card}** Resolved and continues to fight", value="All stats & stamina increased")
-                                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{o_card}** Transformation: Last Stand!!!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Transformation: Last Stand!!!")
                                                                     if tarm_barrier_active:
                                                                         tarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                                     #await private_channel.send(embed=embedVar)
                                                                     o_health = int(.75 * (o_attack + o_defense))
                                                                     
@@ -20009,7 +21600,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             turn_total = turn_total + 1
                                                             turn = 0
                                                 else:
-                                                    previous_moves.append(f"*{turn_total}:* **{t_card}** not enough Stamina to use this move") 
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** not enough Stamina to use this move") 
                                                     turn = 3
                                             else:
                                                 if dmg['CAN_USE_MOVE']:
@@ -20110,17 +21701,17 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}",
                                                                                 colour=embed_color_t)
                                                         #await private_channel.send(embed=embedVar)
-                                                        previous_moves.append(f"*{turn_total}:* **{t_card}**: 🦠 {dmg['MESSAGE']}")
+                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}**: 🦠 {dmg['MESSAGE']}")
                                                         turn_total = turn_total + 1
                                                         turn = 0
                                                     elif dmg['DMG'] == 0:
                                                         t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                                        previous_moves.append(f"*{turn_total}:* **{t_card}**: {dmg['MESSAGE']}")
+                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}**: {dmg['MESSAGE']}")
                                                         if tarm_barrier_active:
                                                             tarm_barrier_active=False
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                            previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                            previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                         #await private_channel.send(embed=embedVar)
                                                         turn_total = turn_total + 1
                                                         turn = 0
@@ -20130,58 +21721,58 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             c_naruto_heal_buff = c_naruto_heal_buff + c_stored_damage
                                                             c_health = c_health 
                                                             embedVar = discord.Embed(title=f"{c_card}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
-                                                            previous_moves.append(f"*{turn_total}:* 🩸**{c_card}**: Substitution Jutsu")
+                                                            previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸: Substitution Jutsu")
                                                             if not c_used_resolve:
-                                                                previous_moves.append(f"*{turn_total}:* 🩸**{c_stored_damage}** Hasirama Cells stored. 🩸**{c_naruto_heal_buff}** total stored.")
+                                                                previous_moves.append(f"(**{turn_total}**) 🩸**{c_stored_damage}** Hasirama Cells stored. 🩸**{c_naruto_heal_buff}** total stored.")
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                             #await private_channel.send(embed=embedVar)
-                                                        elif carm_shield_active:
+                                                        elif carm_shield_active and dmg['ELEMENT'] != dark_element:
                                                             if cshield_value > 0:
                                                                 cshield_value = cshield_value -dmg['DMG']
                                                                 c_health = c_health 
                                                                 if cshield_value <=0:
                                                                     embedVar = discord.Embed(title=f"{c_card}'s' **Shield** Shattered!", description=f"{t_card} breaks the **Shield**!", colour=0xe91e63)
-                                                                    previous_moves.append(f"*{turn_total}:* 🌐**{c_card}'s** Shield Shattered!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{c_card}'s** 🌐 Shield Shattered!")
                                                                     if tarm_barrier_active:
                                                                         tarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                                     #await private_channel.send(embed=embedVar)
                                                                     carm_shield_active = False
                                                                 else:
                                                                     embedVar = discord.Embed(title=f"{c_card} Activates **Shield** 🌐", description=f"**{t_card}** strikes the Shield 🌐\n**{cshield_value} Shield** Left!", colour=0xe91e63)
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}** strikes **{c_card}**'s Shield 🌐\n**{cshield_value} Shield** Left!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** strikes **{c_card}**'s Shield 🌐\n**{cshield_value} Shield** Left!")
                                                                     if tarm_barrier_active:
                                                                         tarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                                     #await private_channel.send(embed=embedVar)
 
-                                                        elif carm_barrier_active:
+                                                        elif carm_barrier_active and dmg['ELEMENT'] != phsycic_element:
                                                             if cbarrier_count >1:
                                                                 c_health = c_health 
                                                                 embedVar = discord.Embed(title=f"{c_card} Activates **Barrier** 💠", description=f"{t_card}'s attack **Nullified**!\n 💠{cbarrier_count - 1} **Barriers** remain!", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* **{c_card}** Activates Barrier 💠 {t_card}'s attack **Nullified**!\n💠 {cbarrier_count - 1} **Barriers** remain!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{c_card}** Activates Barrier 💠 {t_card}'s attack **Nullified**!\n💠 {cbarrier_count - 1} **Barriers** remain!")
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                                 #await private_channel.send(embed=embedVar)
                                                                 cbarrier_count = cbarrier_count - 1
                                                             elif cbarrier_count==1:
                                                                 embedVar = discord.Embed(title=f"{c_card}'s **Barrier** Broken!", description=f"{t_card} destroys the **Barrier**", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* **{c_card}**'s Barrier Broken!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{c_card}**'s Barrier Broken!")
                                                                 cbarrier_count = cbarrier_count - 1
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                                 #await private_channel.send(embed=embedVar)
                                                                 carm_barrier_active = False
-                                                        elif carm_parry_active:
+                                                        elif carm_parry_active and dmg['ELEMENT'] != earth_element:
                                                             if cparry_count > 1:
                                                                 c_health = c_health
                                                                 cparry_damage = round(dmg['DMG'])
@@ -20189,11 +21780,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = round(t_health - (cparry_damage * .25))
                                                                 cparry_count = cparry_count - 1
                                                                 embedVar = discord.Embed(title=f"{c_card} Activates **Parry** 🔄", description=f"{t_card} takes {round(cparry_damage * .25)}! DMG\n **{cparry_count} Parries** to go!!", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* **{c_card}** Activates Parry 🔄 {t_card} takes {round(cparry_damage * .25)}! DMG\n **{cparry_count}  Parries** to go!!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{c_card}** Activates Parry 🔄 {t_card} takes {round(cparry_damage * .25)}! DMG\n **{cparry_count}  Parries** to go!!")
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!**")
-                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                                 #await private_channel.send(embed=embedVar)
                                                                 
                                                             elif cparry_count==1:
@@ -20202,41 +21793,106 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 c_health = round(c_health - (cparry_damage * .75))
                                                                 t_health = round(t_health - (cparry_damage * .25))
                                                                 embedVar = discord.Embed(title=f"{c_card} **Parry** Penetrated!!", description=f"{t_card} takes {round(cparry_damage * .25)}! DMG and breaks the **Parry**", colour=0xe91e63)
-                                                                previous_moves.append(f"*{turn_total}:* **{c_card}** Parry Penetrated! **{t_card}** takes **{round(cparry_damage * .25)}**! DMG and breaks the **Parry**")
+                                                                previous_moves.append(f"(**{turn_total}**) **{c_card}** Parry Penetrated! **{t_card}** takes **{round(cparry_damage * .25)}**! DMG and breaks the **Parry**")
                                                                 cparry_count = cparry_count - 1
                                                                 if tarm_barrier_active:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                    previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                                 #await private_channel.send(embed=embedVar)
                                                                 carm_parry_active = False
                                                         else:
-                                                            c_health = c_health - int(dmg['DMG'])
+                                                            if dmg['REPEL']:
+                                                                t_health = t_health - int(dmg['DMG'])
+                                                            elif dmg['ABSORB']:
+                                                                c_health = c_health + int(dmg['DMG'])
+                                                            elif dmg['ELEMENT'] == water_element:
+                                                                t_water_buff = t_water_buff + 25
+                                                                c_health = c_health - (dmg['DMG'] + t_water_buff)
+                                                            else:
+                                                                c_health = c_health - dmg['DMG']
+
+
+                                                            if dmg['ELEMENT'] == ice_element:
+                                                                t_ice_counter = t_ice_counter + 1
+                                                                if t_ice_counter == 3:
+                                                                    t_freeze_enh = True
+                                                                    t_ice_counter = 0
+
+                                                            if dmg['ELEMENT'] == time_element:
+                                                                t_stamina = 0
+
+                                                            if dmg['ELEMENT'] == bleed_element:
+                                                                t_bleed_counter = t_bleed_counter + 1
+                                                                if t_bleed_counter == 10:
+                                                                    t_bleed_hit = True
+                                                                    t_bleed_counter = 0
+
+                                                            if dmg['ELEMENT'] == recoil_element:
+                                                                t_health = t_health - (dmg['DMG'] * .25)
+
+                                                            if dmg['ELEMENT'] == earth_element:
+                                                                t_defense = t_defense + (dmg['DMG'] * .20)
+
+                                                            if dmg['ELEMENT'] == death_element:
+                                                                c_max_health = c_max_health - (dmg['DMG'] * .05)
+
+                                                            if dmg['ELEMENT'] == light_element:
+                                                                t_stamina = t_stamina + (dmg['STAMINA_USED'] / 2)
+
+                                                            if dmg['ELEMENT'] == dark_element:
+                                                                t_stamina = t_stamina + 5
+                                                                c_stamina = c_stamina - 5
+
+                                                            if dmg['ELEMENT'] == life_element:
+                                                                t_health = t_health + (dmg['DMG'] * .15)
+
+                                                            if dmg['ELEMENT'] == phsycic_element:
+                                                                c_defense = c_defense - (dmg['DMG'] * .08)
+                                                                c_attack = c_attack - (dmg['DMG'] * .08)
+
+                                                            if dmg['ELEMENT'] == fire_element:
+                                                                t_burn_dmg = round(dmg['DMG'] * .30)
+
+                                                            if dmg['ELEMENT'] == ice_element:
+                                                                t_freeze_enh = True
+
+                                                            if dmg['ELEMENT'] == water_element:
+                                                                t_water_buff = t_water_buff + 25
+
+                                                            if dmg['ELEMENT'] == electric_element:
+                                                                t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
+
+                                                            if dmg['ELEMENT'] == poison_element:
+                                                                t_poison_dmg = t_poison_dmg + 8
+
+
+
                                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                                            previous_moves.append(f"*{turn_total}:* **{t_card}**: {dmg['MESSAGE']}")
+                                                            previous_moves.append(f"(**{turn_total}**) **{t_card}**: {dmg['MESSAGE']}")
                                                             if tarm_siphon_active:
                                                                 siphon_damage = (dmg['DMG'] * .10) + tsiphon_value
                                                                 t_health = round(t_health + siphon_damage)
                                                                 if t_health >= t_max_health:
                                                                     t_health = t_max_health
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}**: 💉 Siphoned **Full Health!**")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}**: 💉 Siphoned **Full Health!**")
                                                                 else:
-                                                                    previous_moves.append(f"*{turn_total}:* **{t_card}**: 💉 Siphoned **{round(siphon_damage)}** Health!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}**: 💉 Siphoned **{round(siphon_damage)}** Health!")
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                             #await private_channel.send(embed=embedVar)
                                                         if c_health <= 0:
                                                             if c_final_stand==True:
                                                                 if c_universe == "Dragon Ball Z":
                                                                     embedVar = discord.Embed(title=f"{c_card}'s LAST STAND", description=f"{c_card} FINDS RESOLVE", colour=0xe91e63)
                                                                     embedVar.add_field(name=f"{c_card} resolved and continues to fight", value="All stats & stamina increased")
-                                                                    previous_moves.append(f"*{turn_total}:* 🩸 **{c_card}** Transformation: Last Stand!!!")
+                                                                    previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 Transformation: Last Stand!!!")
                                                                     if tarm_barrier_active:
                                                                         tarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                                        previous_moves.append(f"*{turn_total}:* 💠**{t_card}**'s Barrier Disabled!")
+                                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                                     #await private_channel.send(embed=embedVar)
                                                                     c_health = int(.75 * (c_attack + c_defense))
                                                                     
@@ -20256,7 +21912,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             turn = 0
                                                 else:
                                                     #await private_channel.send(m.NOT_ENOUGH_STAMINA)
-                                                    previous_moves.append(f"*{turn_total}:* **{t_card}** not enough Stamina to use this move")
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** not enough Stamina to use this move")
                                                     turn = 3
 
                         # End the match

@@ -312,6 +312,7 @@ class ARM():
     PRICE: int = field(default_factory=lambda: 0)
     TOURNAMENT_REQUIREMENTS: int = field(default_factory=lambda: 0)
     ABILITIES: list[str] = field(default_factory=lambda: [{'TYPE': 0}])
+    ELEMENT: str = field(default_factory=lambda: "")
     UNIVERSE: str = field(default_factory=lambda: "Unbound")
     COLLECTION: str = field(default_factory=lambda: "N/A")
     TIMESTAMP: str = now
