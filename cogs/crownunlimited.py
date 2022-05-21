@@ -451,9 +451,6 @@ class CrownUnlimited(commands.Cog):
                        ]
         , guild_ids=main.guild_ids)
     async def duo(self, ctx: SlashContext, deck: int, mode: str):
-        await ctx.send("Currently down for maintenance")
-        return
-
         a_registered_player = await crown_utilities.player_check(ctx)
         if not a_registered_player:
             return
@@ -560,9 +557,6 @@ class CrownUnlimited(commands.Cog):
                        ]
         , guild_ids=main.guild_ids)
     async def coop(self, ctx: SlashContext, user: User, mode: str):
-        await ctx.send("Currently down for maintenance")
-        return
-
         a_registered_player = await crown_utilities.player_check(ctx)
         if not a_registered_player:
             return
@@ -1099,8 +1093,6 @@ class CrownUnlimited(commands.Cog):
                     ]
         , guild_ids=main.guild_ids)
     async def solo(self, ctx: SlashContext, mode: str):
-        await ctx.send("Currently down for maintenance")
-        return
         a_registered_player = await crown_utilities.player_check(ctx)
         if not a_registered_player:
             return
@@ -1192,8 +1184,6 @@ class CrownUnlimited(commands.Cog):
 
     @cog_ext.cog_slash(description="pvp battle against a friend or rival", guild_ids=main.guild_ids)
     async def pvp(self, ctx: SlashContext, opponent: User):
-        await ctx.send("Currently down for maintenance")
-        return
         try:
             await ctx.defer()
             player = opponent
@@ -7368,8 +7358,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
             start_tales_buttons_action_row = manage_components.create_actionrow(*start_tales_buttons)
 
-            tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff + t_shock_buff
-            tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff + t_shock_buff
+            tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff + t_shock_buff + t_water_buff
+            tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff + t_shock_buff + t_water_buff
             tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff + t_shock_buff
             tenh1 = list(t_enhancer.values())[0]
             tenh_name = list(t_enhancer.values())[2]
@@ -7870,8 +7860,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         turn = 0
                                 else:
                                     # Ap Levels
-                                    ap1 = list(o_1.values())[0] + ocard_lvl_ap_buff + o_shock_buff
-                                    ap2 = list(o_2.values())[0] + ocard_lvl_ap_buff + o_shock_buff
+                                    ap1 = list(o_1.values())[0] + ocard_lvl_ap_buff + o_shock_buff + o_water_buff
+                                    ap2 = list(o_2.values())[0] + ocard_lvl_ap_buff + o_shock_buff + o_water_buff
                                     ap3 = list(o_3.values())[0] + ocard_lvl_ap_buff + demon_slayer_buff + o_shock_buff
                                     enh1 = list(o_enhancer.values())[0]
                                     enh_name = list(o_enhancer.values())[2]
@@ -9458,8 +9448,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     # Check If Playing Bot
                                     if botActive != True and raidActive == False:
                                         # PlayUser
-                                        tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff + t_shock_buff
-                                        tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff + t_shock_buff
+                                        tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff + t_shock_buff + t_water_buff
+                                        tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff + t_shock_buff + t_water_buff
                                         tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff + t_shock_buff
                                         tenh1 = list(t_enhancer.values())[0]
                                         tenh_name = list(t_enhancer.values())[2]
@@ -10603,8 +10593,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     # Play Bot
                                     else:
                                         # UNIVERSE CARD
-                                        tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff + t_shock_buff
-                                        tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff + t_shock_buff
+                                        tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff + t_shock_buff + t_water_buff
+                                        tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff + t_shock_buff + t_water_buff
                                         tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff + t_shock_buff
                                         tenh1 = list(t_enhancer.values())[0]
                                         tenh_name = list(t_enhancer.values())[2]
@@ -12022,8 +12012,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 else:
                                     if mode in AUTO_BATTLE_modes:
                                         # UNIVERSE CARD
-                                        ap1 = list(o_1.values())[0] + ocard_lvl_ap_buff + o_shock_buff
-                                        ap2 = list(o_2.values())[0] + ocard_lvl_ap_buff + o_shock_buff
+                                        ap1 = list(o_1.values())[0] + ocard_lvl_ap_buff + o_shock_buff + o_water_buff
+                                        ap2 = list(o_2.values())[0] + ocard_lvl_ap_buff + o_shock_buff + o_water_buff
                                         ap3 = list(o_3.values())[0] + ocard_lvl_ap_buff + demon_slayer_buff + o_shock_buff
                                         enh1 = list(o_enhancer.values())[0]
                                         enh_name = list(o_enhancer.values())[2]
@@ -13166,8 +13156,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 turn = 0
                                     else:
                                         # UNIVERSE CARD
-                                        ap1 = list(o_1.values())[0] + ocard_lvl_ap_buff + o_shock_buff
-                                        ap2 = list(o_2.values())[0] + ocard_lvl_ap_buff + o_shock_buff
+                                        ap1 = list(o_1.values())[0] + ocard_lvl_ap_buff + o_shock_buff + o_water_buff
+                                        ap2 = list(o_2.values())[0] + ocard_lvl_ap_buff + o_shock_buff + o_water_buff
                                         ap3 = list(o_3.values())[0] + ocard_lvl_ap_buff + demon_slayer_buff + o_shock_buff
                                         enh1 = list(o_enhancer.values())[0]
                                         enh_name = list(o_enhancer.values())[2]
@@ -17466,8 +17456,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     else:
                                         if mode in ai_co_op_modes:
                                             # UNIVERSE CARD
-                                            cap1 = list(c_1.values())[0] + ccard_lvl_ap_buff + c_shock_buff
-                                            cap2 = list(c_2.values())[0] + ccard_lvl_ap_buff + c_shock_buff
+                                            cap1 = list(c_1.values())[0] + ccard_lvl_ap_buff + c_shock_buff + c_water_buff
+                                            cap2 = list(c_2.values())[0] + ccard_lvl_ap_buff + c_shock_buff + c_water_buff
                                             cap3 = list(c_3.values())[0] + ccard_lvl_ap_buff + cdemon_slayer_buff + c_shock_buff
                                             cenh1 = list(c_enhancer.values())[0]
                                             cenh_name = list(c_enhancer.values())[2]
@@ -18687,8 +18677,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     previous_moves.append(f"(**{turn_total}**) **{c_card}** not enough Stamina to use this move") 
                                                     turn = 2
                                         else:
-                                            cap1 = list(c_1.values())[0] + ccard_lvl_ap_buff + c_shock_buff
-                                            cap2 = list(c_2.values())[0] + ccard_lvl_ap_buff + c_shock_buff
+                                            cap1 = list(c_1.values())[0] + ccard_lvl_ap_buff + c_shock_buff + c_water_buff
+                                            cap2 = list(c_2.values())[0] + ccard_lvl_ap_buff + c_shock_buff + c_water_buff
                                             cap3 = list(c_3.values())[0] + ccard_lvl_ap_buff + cdemon_slayer_buff + c_shock_buff
                                             cenh1 = list(c_enhancer.values())[0]
                                             cenh_name = list(c_enhancer.values())[2]
@@ -18829,8 +18819,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             util_action_row = manage_components.create_actionrow(*util_buttons)
                                             coop_util_action_row = manage_components.create_actionrow(*coop_util_buttons)
 
-                                            cap1 = list(c_1.values())[0] + ccard_lvl_ap_buff + c_shock_buff
-                                            cap2 = list(c_2.values())[0] + ccard_lvl_ap_buff + c_shock_buff
+                                            cap1 = list(c_1.values())[0] + ccard_lvl_ap_buff + c_shock_buff + c_water_buff
+                                            cap2 = list(c_2.values())[0] + ccard_lvl_ap_buff + c_shock_buff + c_water_buff
                                             cap3 = list(c_3.values())[0] + ccard_lvl_ap_buff + cdemon_slayer_buff + c_shock_buff
                                             cenh1 = list(c_enhancer.values())[0]
                                             cenh_name = list(c_enhancer.values())[2]

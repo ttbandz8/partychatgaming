@@ -209,7 +209,7 @@ def set_emoji(element):
     if element == "WATER":
         emoji = "💧"
     if element == "EARTH":
-        emoji = "🌱"
+        emoji = "⛰️"
     if element == "ELECTRIC":
         emoji = "🌩️"
     if element == "WIND":
@@ -219,7 +219,7 @@ def set_emoji(element):
     if element == "RANGED":
         emoji = "🏹"
     if element == "POISON":
-        emoji = "🧪"
+        emoji = "<:ToxicMushroom:977583817466470410>"
     if element == "DEATH":
         emoji = "☠️"
     if element == "LIFE":
@@ -231,7 +231,7 @@ def set_emoji(element):
     if element == "SPIRIT":
         emoji = "🧿"
     if element == "BLEED":
-        emoji = "🩸"
+        emoji = "<:bloody_dark:977581034851930142>"
     if element == "RECOIL":
         emoji = "⛓️"
 

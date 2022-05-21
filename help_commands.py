@@ -77,7 +77,7 @@ ELEMENTS = textwrap.dedent(f"""\
 
 💧 Water - increases all water attack dmg by 25 Flat 
 
-🌱 Earth - Cannot be Parried. Increases Def by 20% AP
+⛰️ Earth - Cannot be Parried. Increases Def by 20% AP
 
 ⚡️ Electric- Add 5% to Shock damage, added to each attack
 
@@ -89,11 +89,11 @@ ELEMENTS = textwrap.dedent(f"""\
 
 ❤️‍🔥 Life - Heal for 15% AP 
 
-🔅 Light - Regain 50% Stamina Cost
+🌕 Light - Regain 50% Stamina Cost
 
 ♠️ Dark- Penetrates shields & drains 5 stamina 
 
-🧪 Poison - opponent takes additional 8 damage each turn stacking up to 100
+<:ToxicMushroom:977583817466470410> Poison - opponent takes additional 8 damage each turn stacking up to 100
 
 🏹 Ranged - If ST > 80 deals 1.3x Damage
 
@@ -103,7 +103,7 @@ ELEMENTS = textwrap.dedent(f"""\
 
 ⌛ Time - You Focus after attacking
 
-🩸 Bleed - After 10 Attacks deal 10x turn count damage to opponent
+<:bloody_dark:977581034851930142> Bleed - After 10 Attacks deal 10x turn count damage to opponent
 
 [Join the Anime VS+ Support Server](https://discord.gg/2JkCqcN3hB)
 """)
