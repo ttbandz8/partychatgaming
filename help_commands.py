@@ -99,7 +99,7 @@ ELEMENTS = textwrap.dedent(f"""\
 
 💙 Spirit - Has higher chance of crit attack
 
-⛓️ Recoil - Deals 30% damage back to you
+⛓️ Recoil - Deals 25% damage back to you
 
 ⌛ Time - You Focus after attacking
 

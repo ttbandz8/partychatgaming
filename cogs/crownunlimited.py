@@ -8719,7 +8719,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_health = o_health + (dmg['DMG'] * .15)
 
                                                     if dmg['ELEMENT'] == recoil_element:
-                                                        o_health = o_health - (dmg['DMG'] * .30)
+                                                        o_health = o_health - (dmg['DMG'] * .25)
 
 
                                                     if dmg['ELEMENT'] == phsycic_element:
@@ -9002,7 +9002,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_defense = o_defense + (dmg['DMG'] * .20)
 
                                                         if dmg['ELEMENT'] == recoil_element:
-                                                            o_health = o_health - (dmg['DMG'] * .30)
+                                                            o_health = o_health - (dmg['DMG'] * .25)
 
                                                         if dmg['ELEMENT'] == time_element:
                                                             o_stamina = 0
@@ -10195,7 +10195,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_defense = t_defense + (dmg['DMG'] * .20)
 
                                                         if dmg['ELEMENT'] == recoil_element:
-                                                            t_health = t_health - (dmg['DMG'] * .30)
+                                                            t_health = t_health - (dmg['DMG'] * .25)
 
                                                         if dmg['ELEMENT'] == time_element:
                                                             t_stamina = 0
@@ -10473,7 +10473,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_defense = t_defense + (dmg['DMG'] * .20)
 
                                                             if dmg['ELEMENT'] == recoil_element:
-                                                                t_health = t_health - (dmg['DMG'] * .30)
+                                                                t_health = t_health - (dmg['DMG'] * .25)
 
                                                             if dmg['ELEMENT'] == time_element:
                                                                 t_stamina = 0
@@ -11297,7 +11297,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_bleed_counter = 0
 
                                                     if dmg['ELEMENT'] == recoil_element:
-                                                        t_health = t_health - (dmg['DMG'] * .30)
+                                                        t_health = t_health - (dmg['DMG'] * .25)
 
                                                     if dmg['ELEMENT'] == earth_element:
                                                         t_defense = t_defense + (dmg['DMG'] * .20)
@@ -11552,7 +11552,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
 
                                                         if dmg['ELEMENT'] == recoil_element:
-                                                            t_health = t_health - (dmg['DMG'] * .30)
+                                                            t_health = t_health - (dmg['DMG'] * .25)
 
                                                         if dmg['ELEMENT'] == earth_element:
                                                             t_defense = t_defense + (dmg['DMG'] * .20)
@@ -12795,7 +12795,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = t_health - dmg['DMG']
 
                                                     if dmg['ELEMENT'] == recoil_element:
-                                                        o_health = o_health - (dmg['DMG'] * .30)
+                                                        o_health = o_health - (dmg['DMG'] * .25)
 
                                                     if dmg['ELEMENT'] == time_element:
                                                         o_stamina = 0
@@ -13087,7 +13087,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_bleed_counter = 0
 
                                                         if dmg['ELEMENT'] == recoil_element:
-                                                            o_health = o_health - (dmg['DMG'] * .30)
+                                                            o_health = o_health - (dmg['DMG'] * .25)
 
                                                         if dmg['ELEMENT'] == earth_element:
                                                             o_defense = o_defense + (dmg['DMG'] * .20)
@@ -14318,7 +14318,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health - dmg['DMG']
 
                                                         if dmg['ELEMENT'] == recoil_element:
-                                                            o_health = o_health - (dmg['DMG'] * .30)
+                                                            o_health = o_health - (dmg['DMG'] * .25)
 
                                                         if dmg['ELEMENT'] == time_element:
                                                             o_stamina = 0
@@ -14619,7 +14619,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     o_freeze_enh = True
                                                                     o_ice_counter = 0
                                                             if dmg['ELEMENT'] == recoil_element:
-                                                                o_health = o_health - (dmg['DMG'] * .30)
+                                                                o_health = o_health - (dmg['DMG'] * .25)
 
                                                             if dmg['ELEMENT'] == time_element:
                                                                 o_stamina = 0
@@ -16232,7 +16232,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_stamina = 0
 
                                                 if dmg['ELEMENT'] == recoil_element:
-                                                    t_health = t_health - (dmg['DMG'] * .30)
+                                                    t_health = t_health - (dmg['DMG'] * .25)
 
                                                 if dmg['ELEMENT'] == earth_element:
                                                     t_defense = t_defense + (dmg['DMG'] * .20)
@@ -16492,7 +16492,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     t_bleed_counter = 0
 
                                                             if dmg['ELEMENT'] == recoil_element:
-                                                                t_health = t_health - (dmg['DMG'] * .30)
+                                                                t_health = t_health - (dmg['DMG'] * .25)
 
                                                             if dmg['ELEMENT'] == earth_element:
                                                                 t_defense = t_defense + (dmg['DMG'] * .20)
@@ -16780,7 +16780,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     t_bleed_counter = 0
 
                                                             if dmg['ELEMENT'] == recoil_element:
-                                                                t_health = t_health - (dmg['DMG'] * .30)
+                                                                t_health = t_health - (dmg['DMG'] * .25)
 
                                                             if dmg['ELEMENT'] == earth_element:
                                                                 t_defense = t_defense + (dmg['DMG'] * .20)
@@ -17071,7 +17071,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_bleed_counter = 0
 
                                                         if dmg['ELEMENT'] == recoil_element:
-                                                            t_health = t_health - (dmg['DMG'] * .30)
+                                                            t_health = t_health - (dmg['DMG'] * .25)
 
                                                         if dmg['ELEMENT'] == earth_element:
                                                             t_defense = t_defense + (dmg['DMG'] * .20)
@@ -18599,7 +18599,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     c_bleed_counter = 0
 
                                                             if dmg['ELEMENT'] == recoil_element:
-                                                                c_health = c_health - (dmg['DMG'] * .30)
+                                                                c_health = c_health - (dmg['DMG'] * .25)
 
                                                             if dmg['ELEMENT'] == earth_element:
                                                                 c_defense = c_defense + (dmg['DMG'] * .20)
@@ -19586,7 +19586,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
 
                                                             if dmg['ELEMENT'] == recoil_element:
-                                                                c_health = c_health - (dmg['DMG'] * .30)
+                                                                c_health = c_health - (dmg['DMG'] * .25)
 
                                                             if dmg['ELEMENT'] == earth_element:
                                                                 c_defense = c_defense + (dmg['DMG'] * .20)
@@ -19880,7 +19880,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
 
                                                                 if dmg['ELEMENT'] == recoil_element:
-                                                                    c_health = c_health - (dmg['DMG'] * .30)
+                                                                    c_health = c_health - (dmg['DMG'] * .25)
 
                                                                 if dmg['ELEMENT'] == earth_element:
                                                                     c_defense = c_defense + (dmg['DMG'] * .20)
@@ -21247,7 +21247,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_bleed_counter = 0
 
                                                     if dmg['ELEMENT'] == recoil_element:
-                                                        t_health = t_health - (dmg['DMG'] * .30)
+                                                        t_health = t_health - (dmg['DMG'] * .25)
 
                                                     if dmg['ELEMENT'] == earth_element:
                                                         t_defense = t_defense + (dmg['DMG'] * .20)
@@ -21520,7 +21520,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     t_bleed_counter = 0
 
                                                             if dmg['ELEMENT'] == recoil_element:
-                                                                t_health = t_health - (dmg['DMG'] * .30)
+                                                                t_health = t_health - (dmg['DMG'] * .25)
 
                                                             if dmg['ELEMENT'] == earth_element:
                                                                 t_defense = t_defense + (dmg['DMG'] * .20)
@@ -21829,7 +21829,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     t_bleed_counter = 0
 
                                                             if dmg['ELEMENT'] == recoil_element:
-                                                                t_health = t_health - (dmg['DMG'] * .30)
+                                                                t_health = t_health - (dmg['DMG'] * .25)
 
                                                             if dmg['ELEMENT'] == earth_element:
                                                                 t_defense = t_defense + (dmg['DMG'] * .20)
