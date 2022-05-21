@@ -8038,7 +8038,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     embedVar.set_image(url="attachment://image.png")
                                     embedVar.set_thumbnail(url=ctx.author.avatar_url)
                                     embedVar.set_footer(
-                                        text=f"{t_card}: ❤️{t_health} 🌀{t_stamina} 🗡️{t_attack}/🛡️{t_defense} {tarm_message}",
+                                        text=f"{t_card}: ❤️{round(t_health)} 🌀{round(t_stamina)} 🗡️{round(t_attack)}/🛡️{round(t_defense)} {tarm_message}",
                                         icon_url="https://cdn.discordapp.com/emojis/789290881654980659.gif?v=1")
                                     await battle_msg.delete(delay=1)
                                     await asyncio.sleep(1)
@@ -9626,7 +9626,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         embedVar.add_field(name=f"➡️ **Current Turn** {turn_total}", value=f"{user2.mention} Select move below!")
                                         embedVar.set_image(url="attachment://image.png")
                                         embedVar.set_footer(
-                                            text=f"{o_card}: ❤️{o_health} 🌀{o_stamina} 🗡️{o_attack}/🛡️{o_defense}{oarm_message}",
+                                            text=f"{o_card}: ❤️{round(o_health)} 🌀{round(o_stamina)} 🗡️{round(o_attack)}/🛡️{round(o_defense)}{oarm_message}",
                                             icon_url="https://cdn.discordapp.com/emojis/789290881654980659.gif?v=1")
                                         await battle_msg.delete(delay=1)
                                         await asyncio.sleep(1)
@@ -12050,7 +12050,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         # embedVar.set_image(url="attachment://image.png")
                                         embedVar.set_thumbnail(url=ctx.author.avatar_url)
                                         embedVar.set_footer(
-                                            text=f"{t_card}: ❤️{t_health} 🌀{t_stamina} 🗡️{t_attack}/🛡️{t_defense}\n{o_card}: ❤️{o_health} 🌀{o_stamina} 🗡️{o_attack}/🛡️{o_defense}",
+                                            text=f"{t_card}: ❤️{round(t_health)} 🌀{round(t_stamina)} 🗡️{round(t_attack)}/🛡️{round(t_defense)}\n{o_card}: ❤️{round(o_health)} 🌀{round(o_stamina)} 🗡️{round(o_attack)}/🛡️{round(o_defense)}",
                                             icon_url="https://cdn.discordapp.com/emojis/789290881654980659.gif?v=1")
                                         await battle_msg.edit(embed=embedVar, components=[])
                                         # await asyncio.sleep(2)
@@ -13374,7 +13374,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             elif carm_parry_active:
                                                 carm_message = f"🔄{cparry_count}"
                                             components = [battle_action_row, util_action_row, coop_util_action_row]
-                                            companion_stats = f"\n{c_card}: ❤️{c_health} 🌀{c_stamina} 🗡️{c_attack}/🛡️{c_defense} {carm_message}"
+                                            companion_stats = f"\n{c_card}: ❤️{round(c_health)} 🌀{round(c_stamina)} 🗡️{round(c_attack)}/🛡️{round(c_defense)} {carm_message}"
                                         else:
                                             components = [battle_action_row, util_action_row]
 
@@ -13412,7 +13412,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         embedVar.set_image(url="attachment://image.png")
                                         embedVar.set_thumbnail(url=ctx.author.avatar_url)
                                         embedVar.set_footer(
-                                            text=f"{t_card}: ❤️{t_health} 🌀{t_stamina} 🗡️{t_attack}/🛡️{t_defense} {tarm_message}{companion_stats}",
+                                            text=f"{t_card}: ❤️{round(t_health)} 🌀{round(t_stamina)} 🗡️{round(t_attack)}/🛡️{round(t_defense)} {tarm_message}{companion_stats}",
                                             icon_url="https://cdn.discordapp.com/emojis/789290881654980659.gif?v=1")
                                         await battle_msg.delete(delay=2)
                                         await asyncio.sleep(2)
@@ -15125,7 +15125,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     
                                     """), color=0xe74c3c)
                                     embedVar.set_footer(
-                                        text=f"{t_card}: ❤️{t_health} 🌀{t_stamina} 🗡️{t_attack}/🛡️{t_defense}\n{o_card}: ❤️{o_health} 🌀{o_stamina} 🗡️{o_attack}/🛡️{o_defense}",
+                                        text=f"{t_card}: ❤️{round(t_health)} 🌀{round(t_stamina)} 🗡️{round(t_attack)}/🛡️{round(t_defense)}\n{o_card}: ❤️{round(o_health)} 🌀{round(o_stamina)} 🗡️{round(o_attack)}/🛡️{round(o_defense)}",
                                         icon_url="https://cdn.discordapp.com/emojis/789290881654980659.gif?v=1")
 
 
@@ -18876,7 +18876,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             # await asyncio.sleep(2)
                                             embedVar.set_image(url="attachment://image.png")
                                             embedVar.set_footer(
-                                                text=f"{t_card}: ❤️{t_health} 🌀{t_stamina} 🗡️{t_attack}/🛡️{t_defense} {tarm_message}\n{o_card}: ❤️{o_health} 🌀{o_stamina} 🗡️{o_attack}/🛡️{o_defense} {oarm_message}",
+                                                text=f"{t_card}: ❤️{round(t_health)} 🌀{round(t_stamina)} 🗡️{round(t_attack)}/🛡️{round(t_defense)} {tarm_message}\n{o_card}: ❤️{round(o_health)} 🌀{round(o_stamina)} 🗡️{round(o_attack)}/🛡️{round(o_defense)} {oarm_message}",
                                                 icon_url="https://cdn.discordapp.com/emojis/789290881654980659.gif?v=1")
                                             await battle_msg.delete(delay=2)
                                             await asyncio.sleep(2)
