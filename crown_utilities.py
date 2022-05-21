@@ -203,7 +203,7 @@ def set_emoji(element):
     if element == "PHYSICAL":
         emoji = "👊"
     if element == "FIRE":
-        emoji = "🔥"
+        emoji = "<a:Fire:777975890172837898>"
     if element == "ICE":
         emoji = "❄️"
     if element == "WATER":
