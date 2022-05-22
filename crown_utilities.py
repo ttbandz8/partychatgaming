@@ -209,7 +209,7 @@ def set_emoji(element):
     if element == "WATER":
         emoji = "💧"
     if element == "EARTH":
-        emoji = "🌱"
+        emoji = "⛰️"
     if element == "ELECTRIC":
         emoji = "🌩️"
     if element == "WIND":

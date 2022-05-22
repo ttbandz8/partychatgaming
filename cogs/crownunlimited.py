@@ -2414,13 +2414,13 @@ def damage_cal(opponent_affinity, move_type, move_element, universe, card, abili
 
             message = ""            
 
-            miss_hit = 3  # Miss
-            low_hit = 7  # Lower Damage
+            miss_hit = 2  # Miss
+            low_hit = 6  # Lower Damage
             med_hit = 13  # Medium Damage
             standard_hit = 19  # Standard Damage
             high_hit = 20  # Crit Hit
-            hit_roll = random.randint(2, 21)
-
+            hit_roll = round(random.randint(2, 21))
+            print(f"HIT ROLL: {str(hit_roll)}")
             if move_element == "SPIRIT" and hit_roll > 3:
                 hit_roll = hit_roll + 5
 
@@ -2428,7 +2428,7 @@ def damage_cal(opponent_affinity, move_type, move_element, universe, card, abili
             if ranged_attack:
                 true_dmg = round(true_dmg * 1.4)
 
-            if hit_roll <= miss_hit:
+            if hit_roll < miss_hit:
                 if universe == 'Crown Rift Slayers':
                     true_dmg = round(true_dmg * 2)
                     message = f'🩸{move_emoji} Feint Attack! {move} Critically Hits for **{true_dmg}**!! :boom: '

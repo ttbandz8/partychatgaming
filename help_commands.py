@@ -77,7 +77,7 @@ ELEMENTS = textwrap.dedent(f"""\
 
 💧 Water - increases all water attack dmg by 25 Flat 
 
-🌱 Earth - Cannot be Parried. Increases Def by 20% AP
+⛰️ Earth - Cannot be Parried. Increases Def by 20% AP
 
 ⚡️ Electric- Add 5% to Shock damage, added to each attack
 
