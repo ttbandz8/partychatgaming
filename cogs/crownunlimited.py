@@ -2426,7 +2426,7 @@ def damage_cal(opponent_affinity, move_type, move_element, universe, card, abili
 
 
             if ranged_attack:
-                true_dmg = round(true_dmg * 1.4)
+                true_dmg = round(true_dmg * 1.5)
 
             if hit_roll < miss_hit:
                 # if universe == 'Crown Rift Slayers':

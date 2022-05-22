@@ -472,7 +472,7 @@ async def summons(self, ctx):
                             )
                         ]
                         dismantle_buttons_action_row = manage_components.create_actionrow(*dismantle_buttons)
-                        await button_ctx.send(f"Are you sure you want to dismantle **{summon_name}** for 💎 {round(dismantle_amount)}?", components=[dismantle_buttons_action_row])
+                        msg = await button_ctx.send(f"Are you sure you want to dismantle **{summon_name}** for 💎 {round(dismantle_amount)}?", components=[dismantle_buttons_action_row])
                         
                         def check(button_ctx):
                             return button_ctx.author == ctx.author
@@ -495,7 +495,8 @@ async def summons(self, ctx):
                                 
                                 db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'PETS': {"NAME": str(summon_name)}}})
                                 #await crown_utilities.bless(sell_price, ctx.author.id)
-                                await button_ctx.send("Dismantled.")
+                                await msg.delete()
+                                await button_ctx.send(f"**{summon_name}** has been dismantled.")
                                 self.stop = True
                         except Exception as ex:
                             trace = []
@@ -2556,7 +2557,7 @@ async def cards(self, ctx):
                                 )
                             ]
                             sell_buttons_action_row = manage_components.create_actionrow(*sell_buttons)
-                            await button_ctx.send(f"Are you sure you want to sell **{card_name}** for :coin:{round(sell_price)}?", components=[sell_buttons_action_row])
+                            msg = await button_ctx.send(f"Are you sure you want to sell **{card_name}** for :coin:{round(sell_price)}?", components=[sell_buttons_action_row])
                             
                             def check(button_ctx):
                                 return button_ctx.author == ctx.author
@@ -2571,7 +2572,8 @@ async def cards(self, ctx):
                                     db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'CARDS': card_name}})
                                     db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'CARD_LEVELS': {'CARD': card_name}}})
                                     await crown_utilities.bless(sell_price, ctx.author.id)
-                                    await button_ctx.send("Sold.")
+                                    await msg.delete()
+                                    await button_ctx.send(f"**{card_name}** has been sold.")
                             except Exception as ex:
                                 trace = []
                                 tb = ex.__traceback__
@@ -2616,7 +2618,7 @@ async def cards(self, ctx):
                                 )
                             ]
                             dismantle_buttons_action_row = manage_components.create_actionrow(*dismantle_buttons)
-                            await button_ctx.send(f"Are you sure you want to dismantle **{card_name}** for 💎 {round(dismantle_amount)}?", components=[dismantle_buttons_action_row])
+                            msg = await button_ctx.send(f"Are you sure you want to dismantle **{card_name}** for 💎 {round(dismantle_amount)}?", components=[dismantle_buttons_action_row])
                             
                             def check(button_ctx):
                                 return button_ctx.author == ctx.author
@@ -2639,7 +2641,8 @@ async def cards(self, ctx):
                                     db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'CARDS': card_name}})
                                     db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'CARD_LEVELS': {'CARD': card_name}}})
                                     #await crown_utilities.bless(sell_price, ctx.author.id)
-                                    await button_ctx.send("Dismantled.")
+                                    await msg.delete()
+                                    await button_ctx.send(f"**{card_name}** has been dismantled.")
                                     
                             except Exception as ex:
                                 trace = []
@@ -3066,7 +3069,7 @@ async def titles(self, ctx):
                                 )
                             ]
                             sell_buttons_action_row = manage_components.create_actionrow(*sell_buttons)
-                            await button_ctx.send(f"Are you sure you want to sell **{title_name}** for :coin:{round(sell_price)}?", components=[sell_buttons_action_row])
+                            msg = await button_ctx.send(f"Are you sure you want to sell **{title_name}** for :coin:{round(sell_price)}?", components=[sell_buttons_action_row])
                             
                             def check(button_ctx):
                                 return button_ctx.author == ctx.author
@@ -3080,7 +3083,8 @@ async def titles(self, ctx):
                                 if button_ctx.custom_id == "yes":
                                     db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'TITLES': title_name}})
                                     await crown_utilities.bless(sell_price, ctx.author.id)
-                                    await button_ctx.send("Sold.")
+                                    await msg.delete()
+                                    await button_ctx.send(f"**{title_name}** has been sold.")
                             except Exception as ex:
                                 trace = []
                                 tb = ex.__traceback__
@@ -3123,7 +3127,7 @@ async def titles(self, ctx):
                                 )
                             ]
                             dismantle_buttons_action_row = manage_components.create_actionrow(*dismantle_buttons)
-                            await button_ctx.send(f"Are you sure you want to dismantle **{title_name}** for 💎 {round(dismantle_amount)}?", components=[dismantle_buttons_action_row])
+                            msg = await button_ctx.send(f"Are you sure you want to dismantle **{title_name}** for 💎 {round(dismantle_amount)}?", components=[dismantle_buttons_action_row])
                             
                             def check(button_ctx):
                                 return button_ctx.author == ctx.author
@@ -3145,7 +3149,8 @@ async def titles(self, ctx):
 
                                     db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'TITLES': title_name}})
                                     await crown_utilities.bless(sell_price, ctx.author.id)
-                                    await button_ctx.send("Dismantled.")
+                                    await msg.delete()
+                                    await button_ctx.send(f"**{title_name}** has been dismantled.")
                             except Exception as ex:
                                 trace = []
                                 tb = ex.__traceback__
@@ -3459,7 +3464,7 @@ async def arms(self, ctx):
                                 )
                             ]
                             sell_buttons_action_row = manage_components.create_actionrow(*sell_buttons)
-                            await button_ctx.send(f"Are you sure you want to sell **{arm_name}** for :coin:{round(sell_price)}?", components=[sell_buttons_action_row])
+                            msg = await button_ctx.send(f"Are you sure you want to sell **{arm_name}** for :coin:{round(sell_price)}?", components=[sell_buttons_action_row])
                             
                             def check(button_ctx):
                                 return button_ctx.author == ctx.author
@@ -3473,7 +3478,8 @@ async def arms(self, ctx):
                                 if button_ctx.custom_id == "yes":
                                     db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'ARMS': {'ARM': str(arm_name)}}})
                                     await crown_utilities.bless(sell_price, ctx.author.id)
-                                    await button_ctx.send("Sold.")
+                                    await msg.delete()
+                                    await button_ctx.send(f"**{arm_name}** has been sold.")
                             except Exception as ex:
                                 trace = []
                                 tb = ex.__traceback__
@@ -3518,7 +3524,7 @@ async def arms(self, ctx):
                                 )
                             ]
                             dismantle_buttons_action_row = manage_components.create_actionrow(*dismantle_buttons)
-                            await button_ctx.send(f"Are you sure you want to dismantle **{arm_name}** for 💎 {round(dismantle_amount)}?", components=[dismantle_buttons_action_row])
+                            msg = await button_ctx.send(f"Are you sure you want to dismantle **{arm_name}** for 💎 {round(dismantle_amount)}?", components=[dismantle_buttons_action_row])
                             
                             def check(button_ctx):
                                 return button_ctx.author == ctx.author
@@ -3540,7 +3546,8 @@ async def arms(self, ctx):
 
                                     db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'ARMS': {'ARM': str(arm_name)}}})
                                     await crown_utilities.bless(sell_price, ctx.author.id)
-                                    await button_ctx.send("Dismantled.")
+                                    await msg.delete()
+                                    await button_ctx.send(f"**{arm_name}** has been dismantled.")
                             except Exception as ex:
                                 trace = []
                                 tb = ex.__traceback__
