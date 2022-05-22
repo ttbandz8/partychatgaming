@@ -4466,9 +4466,9 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             carm_passive_value = list(carm_passive.values())[0]
             if carm_passive_type == 'BASIC':
                 c_1 = {carm_name: carm_passive_value, "STAM": 10, "ELEMENT": carm_element}
-            elif oarm_passive_type == 'SPECIAL':
+            elif carm_passive_type == 'SPECIAL':
                 c_2 = {carm_name: carm_passive_value, "STAM": 30, "ELEMENT": carm_element}
-            elif oarm_passive_type == 'ULTIMATE':
+            elif carm_passive_type == 'ULTIMATE':
                 c_3 = {carm_name: carm_passive_value, "STAM": 80, "ELEMENT": carm_element}
 
 
