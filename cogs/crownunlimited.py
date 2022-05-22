@@ -7535,6 +7535,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     o_health = o_health - t_poison_dmg
                                     previous_moves.append(f"🧪 **{o_card}** poisoned for **{t_poison_dmg}** dmg...")
                                 
+                                if o_gravity_hit:
+                                    o_gravity_hit = False
+                                
                                 t_burn_dmg = round(t_burn_dmg / 2)
                                 o_freeze_enh = False
                                                     
@@ -9217,6 +9220,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     t_health = t_health - o_poison_dmg
                                     previous_moves.append(f"🧪 **{t_card}** poisoned for **{o_poison_dmg}** dmg...")
 
+                                if t_gravity_hit:
+                                    t_gravity_hit = False
+                                    
                                 o_burn_dmg = round(o_burn_dmg / 2)
                                 t_freeze_enh = False
 
@@ -11809,6 +11815,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 if t_poison_dmg:
                                     o_health = o_health - t_poison_dmg
                                     previous_moves.append(f"🧪 **{o_card}** poisoned for **{t_poison_dmg}** dmg...")
+                                    
+                                if o_gravity_hit:
+                                    o_gravity_hit = False
                                 t_burn_dmg = round(t_burn_dmg / 2)
                                 o_freeze_enh = False
 
@@ -15020,6 +15029,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     t_health = t_health - o_poison_dmg
                                     previous_moves.append(f"🧪 **{t_card}** poisoned for **{o_poison_dmg}** dmg...")
 
+                                if t_gravity_hit:
+                                    t_gravity_hit = False
+                                
                                 o_burn_dmg = round(o_burn_dmg / 2)
                                 t_freeze_enh = False
 
@@ -17517,6 +17529,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         c_health = c_health - t_poison_dmg
                                         previous_moves.append(f"🧪 **{c_card}** poisoned for **{t_poison_dmg}** dmg...")
 
+                                    if c_gravity_hit:
+                                        c_gravity_hit = False
+                                    
                                     t_burn_dmg = round(t_burn_dmg / 2)
                                     c_freeze_enh = False
 
@@ -20426,6 +20441,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                     c_burn_dmg = round(c_burn_dmg / 2)
                                     t_freeze_enh = False
+                                    
+                                    if t_gravity_hit:
+                                        t_gravity_hit = False
 
                                     if t_title_passive_type:
                                         if t_title_passive_type == "HLT":
