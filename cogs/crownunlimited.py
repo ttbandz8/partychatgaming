@@ -7203,7 +7203,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             electric_element = "ELECTRIC"
             wind_element = "WIND"
             spirit_element = "SPIRIT"
-            phsycic_element = "PHSYCIC"
+            psychic_element = "PSYCHIC"
             death_element = "DEATH"
             life_element = "LIFE"
             light_element = "LIGHT"
@@ -7513,18 +7513,18 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     t_bleed_hit = False
                                     bleed_dmg = 5 * turn_total
                                     o_health = o_health - bleed_dmg
-                                    previous_moves.append(f"(**{turn_total}**) 🩸 **{o_card}** shredded for **{bleed_dmg}** bleed dmg...")
+                                    previous_moves.append(f"(🩸 **{o_card}** shredded for **{bleed_dmg}** bleed dmg...")
 
                                 if t_burn_dmg > 3:
                                     o_health = o_health - t_burn_dmg
                                     previous_moves.append(f"🔥 **{o_card}** burned for **{round(t_burn_dmg)}** dmg...")
                                 if t_freeze_enh:
-                                    previous_moves.append(f"(**{turn_total}**) ❄️ **{o_card}** has been frozen for a turn...")
+                                    previous_moves.append(f"(❄️ **{o_card}** has been frozen for a turn...")
                                     turn_total = turn_total + 1
                                     turn = 1
                                 if t_poison_dmg:
                                     o_health = o_health - t_poison_dmg
-                                    previous_moves.append(f"(**{turn_total}**) 🧪 **{o_card}** poisoned for **{t_poison_dmg}** dmg...")
+                                    previous_moves.append(f"(🧪 **{o_card}** poisoned for **{t_poison_dmg}** dmg...")
                                 
                                 t_burn_dmg = round(t_burn_dmg / 2)
                                 o_freeze_enh = False
@@ -8732,7 +8732,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = t_health - dmg['DMG']
 
 
-                                                    elif dmg['ELEMENT'] == phsycic_element:
+                                                    elif dmg['ELEMENT'] == psychic_element:
                                                         t_defense = t_defense - (dmg['DMG'] * .08)
                                                         t_attack = t_attack - (dmg['DMG'] * .08)
                                                         t_health = t_health - dmg['DMG']
@@ -8747,7 +8747,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = t_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == poison_element:
-                                                        o_poison_dmg = o_poison_dmg + 8
+                                                        if o_poison_dmg <= 100:
+                                                            o_poison_dmg = o_poison_dmg + 8
                                                         t_health = t_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == ice_element:
@@ -8946,7 +8947,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 
                                                          #       await button_ctx.defer(ignore=True)
 
-                                                    elif tarm_barrier_active and dmg['ELEMENT'] != phsycic_element:
+                                                    elif tarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                         if tbarrier_count >1:
                                                             t_health = t_health 
                                                             embedVar = discord.Embed(title=f"{t_card} Activates **Barrier** 💠", description=f"{o_card}'s attack **Nullified**!\n **{tbarrier_count - 1} Barriers** remain!", colour=0xe91e63)
@@ -9047,7 +9048,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health - dmg['DMG']
 
 
-                                                        elif dmg['ELEMENT'] == phsycic_element:
+                                                        elif dmg['ELEMENT'] == psychic_element:
                                                             t_defense = t_defense - (dmg['DMG'] * .08)
                                                             t_attack = t_attack - (dmg['DMG'] * .08)
                                                             t_health = t_health - dmg['DMG']
@@ -9062,7 +9063,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == poison_element:
-                                                            o_poison_dmg = o_poison_dmg + 8
+                                                            if o_poison_dmg <= 100:
+                                                                o_poison_dmg = o_poison_dmg + 8
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == ice_element:
@@ -9175,17 +9177,17 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     o_bleed_hit = False
                                     bleed_dmg = 5 * turn_total
                                     t_health = t_health - bleed_dmg
-                                    previous_moves.append(f"(**{turn_total}**) 🩸 **{t_card}** shredded for **{bleed_dmg}** bleed dmg...")
+                                    previous_moves.append(f"(🩸 **{t_card}** shredded for **{bleed_dmg}** bleed dmg...")
                                 if o_burn_dmg > 3:
                                     t_health = t_health - o_burn_dmg
                                     previous_moves.append(f"🔥 **{t_card}** burned for **{round(o_burn_dmg)}** dmg...")
                                 if o_freeze_enh:
-                                    previous_moves.append(f"(**{turn_total}**) ❄️ **{t_card}** has been frozen for a turn...")
+                                    previous_moves.append(f"(❄️ **{t_card}** has been frozen for a turn...")
                                     turn_total = turn_total + 1
                                     turn = 0
                                 if o_poison_dmg:
                                     t_health = t_health - o_poison_dmg
-                                    previous_moves.append(f"(**{turn_total}**) 🧪 **{t_card}** poisoned for **{o_poison_dmg}** dmg...")
+                                    previous_moves.append(f"(🧪 **{t_card}** poisoned for **{o_poison_dmg}** dmg...")
 
                                 o_burn_dmg = round(o_burn_dmg / 2)
                                 t_freeze_enh = False
@@ -10256,7 +10258,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health + (dmg['DMG'] * .15)
                                                             o_health = o_health - dmg['DMG']
 
-                                                        elif dmg['ELEMENT'] == phsycic_element:
+                                                        elif dmg['ELEMENT'] == psychic_element:
                                                             o_defense = o_defense - (dmg['DMG'] * .08)
                                                             o_attack = o_attack - (dmg['DMG'] * .08)
                                                             o_health = o_health - dmg['DMG']
@@ -10271,7 +10273,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == poison_element:
-                                                            t_poison_dmg = t_poison_dmg + 8
+                                                            if t_poison_dmg <= 100:
+                                                                t_poison_dmg = t_poison_dmg + 8
                                                             o_health = o_health - dmg['DMG']
     
                                                         elif dmg['ELEMENT'] == ice_element:
@@ -10454,7 +10457,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                         previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                                     await button_ctx.defer(ignore=True)
 
-                                                        elif oarm_barrier_active and dmg['ELEMENT'] != phsycic_element:
+                                                        elif oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                             if obarrier_count >1:
                                                                 o_health = o_health 
                                                                 embedVar = discord.Embed(title=f"{o_card} Activates **Barrier** 💠", description=f"{t_card}'s attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!", colour=0xe91e63)
@@ -10548,7 +10551,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = t_health + (dmg['DMG'] * .15)
                                                                 o_health = o_health - dmg['DMG']
 
-                                                            elif dmg['ELEMENT'] == phsycic_element:
+                                                            elif dmg['ELEMENT'] == psychic_element:
                                                                 o_defense = o_defense - (dmg['DMG'] * .08)
                                                                 o_attack = o_attack - (dmg['DMG'] * .08)
                                                                 o_health = o_health - dmg['DMG']
@@ -10563,7 +10566,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_health = o_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == poison_element:
-                                                                t_poison_dmg = t_poison_dmg + 8
+                                                                if t_poison_dmg <= 100:
+                                                                    t_poison_dmg = t_poison_dmg + 8
                                                                 o_health = o_health - dmg['DMG']
         
                                                             elif dmg['ELEMENT'] == ice_element:
@@ -10726,7 +10730,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                         if t_used_resolve and not t_pet_used and mode != "RAID":
                                             aiMove = 6
-                                        elif tarm_barrier_active and dmg['ELEMENT'] != phsycic_element: #Ai Barrier Checks
+                                        elif tarm_barrier_active and dmg['ELEMENT'] != psychic_element: #Ai Barrier Checks
                                             if t_stamina >=20: #Stamina Check For Enhancer
                                                 aiMove = await ai_enhancer_moves(turn_total,t_used_focus,t_used_resolve,t_pet_used,t_stamina,
                                                                            t_enhancer['TYPE'],t_health,t_max_health,t_attack,
@@ -11383,7 +11387,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = t_health + (dmg['DMG'] * .15)
                                                         o_health = o_health - dmg['DMG']
 
-                                                    elif dmg['ELEMENT'] == phsycic_element:
+                                                    elif dmg['ELEMENT'] == psychic_element:
                                                         o_defense = o_defense - (dmg['DMG'] * .08)
                                                         o_attack = o_attack - (dmg['DMG'] * .08)
                                                         o_health = o_health - dmg['DMG']
@@ -11398,7 +11402,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_health = o_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == poison_element:
-                                                        t_poison_dmg = t_poison_dmg + 8
+                                                        if t_poison_dmg <= 100:
+                                                            t_poison_dmg = t_poison_dmg + 8
                                                         o_health = o_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == ice_element:
@@ -11567,7 +11572,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                     previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
 
-                                                    elif oarm_barrier_active and dmg['ELEMENT'] != phsycic_element:
+                                                    elif oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                         if obarrier_count >1:
                                                             o_health = o_health 
                                                             embedVar = discord.Embed(title=f"{o_card} Activates **Barrier** 💠", description=f"{t_card}'s attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!", colour=0xe91e63)
@@ -11655,7 +11660,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health + (dmg['DMG'] * .15)
                                                             o_health = o_health - dmg['DMG']
 
-                                                        elif dmg['ELEMENT'] == phsycic_element:
+                                                        elif dmg['ELEMENT'] == psychic_element:
                                                             o_defense = o_defense - (dmg['DMG'] * .08)
                                                             o_attack = o_attack - (dmg['DMG'] * .08)
                                                             o_health = o_health - dmg['DMG']
@@ -11670,7 +11675,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == poison_element:
-                                                            t_poison_dmg = t_poison_dmg + 8
+                                                            if t_poison_dmg <= 100:
+                                                                t_poison_dmg = t_poison_dmg + 8
                                                             o_health = o_health - dmg['DMG']
     
                                                         elif dmg['ELEMENT'] == ice_element:
@@ -11743,18 +11749,18 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     t_bleed_hit = False
                                     bleed_dmg = 5 * turn_total
                                     o_health = o_health - bleed_dmg
-                                    previous_moves.append(f"(**{turn_total}**) 🩸 **{o_card}** shredded for **{bleed_dmg}** bleed dmg...")
+                                    previous_moves.append(f"(🩸 **{o_card}** shredded for **{bleed_dmg}** bleed dmg...")
 
                                 if t_burn_dmg > 3:
                                     o_health = o_health - t_burn_dmg
                                     previous_moves.append(f"🔥 **{o_card}** burned for **{round(t_burn_dmg)}** dmg...")
                                 if t_freeze_enh:
-                                    previous_moves.append(f"(**{turn_total}**) ❄️ **{o_card}** has been frozen for a turn...")
+                                    previous_moves.append(f"(❄️ **{o_card}** has been frozen for a turn...")
                                     turn_total = turn_total + 1
                                     turn = 1
                                 if t_poison_dmg:
                                     o_health = o_health - t_poison_dmg
-                                    previous_moves.append(f"(**{turn_total}**) 🧪 **{o_card}** poisoned for **{t_poison_dmg}** dmg...")
+                                    previous_moves.append(f"(🧪 **{o_card}** poisoned for **{t_poison_dmg}** dmg...")
                                 t_burn_dmg = round(t_burn_dmg / 2)
                                 o_freeze_enh = False
 
@@ -12195,7 +12201,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         
                                         if o_used_resolve and not o_pet_used and o_stamina >= 30:
                                             aiMove = 6
-                                        elif oarm_barrier_active and dmg['ELEMENT'] != phsycic_element: #Ai Barrier Checks
+                                        elif oarm_barrier_active and dmg['ELEMENT'] != psychic_element: #Ai Barrier Checks
                                             if o_stamina >=20: #Stamina Check For Enhancer
                                                 aiMove = await ai_enhancer_moves(turn_total,o_used_focus,o_used_resolve,o_pet_used,o_stamina,
                                                                             o_enhancer['TYPE'],o_health,o_max_health,o_attack,
@@ -12929,7 +12935,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = t_health - dmg['DMG']
 
 
-                                                    elif dmg['ELEMENT'] == phsycic_element:
+                                                    elif dmg['ELEMENT'] == psychic_element:
                                                         t_defense = t_defense - (dmg['DMG'] * .08)
                                                         t_attack = t_attack - (dmg['DMG'] * .08)
                                                         t_health = t_health - dmg['DMG']
@@ -12944,7 +12950,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = t_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == poison_element:
-                                                        o_poison_dmg = o_poison_dmg + 8
+                                                        if o_poison_dmg <= 100:
+                                                            o_poison_dmg = o_poison_dmg + 8
                                                         t_health = t_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == ice_element:
@@ -13132,7 +13139,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                     previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
 
-                                                    elif tarm_barrier_active and dmg['ELEMENT'] != phsycic_element:
+                                                    elif tarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                         if tbarrier_count >1:
                                                             t_health = t_health 
                                                             embedVar = discord.Embed(title=f"{t_card} Activates **Barrier** 💠", description=f"{o_card}'s attack **Nullified**!\n **{tbarrier_count - 1} Barriers** remain!", colour=0xe91e63)
@@ -13223,7 +13230,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health - dmg['DMG']
 
 
-                                                        elif dmg['ELEMENT'] == phsycic_element:
+                                                        elif dmg['ELEMENT'] == psychic_element:
                                                             t_defense = t_defense - (dmg['DMG'] * .08)
                                                             t_attack = t_attack - (dmg['DMG'] * .08)
                                                             t_health = t_health - dmg['DMG']
@@ -13238,7 +13245,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == poison_element:
-                                                            o_poison_dmg = o_poison_dmg + 8
+                                                            if o_poison_dmg <= 100:
+                                                                o_poison_dmg = o_poison_dmg + 8
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == ice_element:
@@ -14487,7 +14495,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health - dmg['DMG']
 
 
-                                                        elif dmg['ELEMENT'] == phsycic_element:
+                                                        elif dmg['ELEMENT'] == psychic_element:
                                                             t_defense = t_defense - (dmg['DMG'] * .08)
                                                             t_attack = t_attack - (dmg['DMG'] * .08)
                                                             t_health = t_health - dmg['DMG']
@@ -14502,7 +14510,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == poison_element:
-                                                            o_poison_dmg = o_poison_dmg + 8
+                                                            if o_poison_dmg <= 100:
+                                                                o_poison_dmg = o_poison_dmg + 8
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == ice_element:
@@ -14700,7 +14709,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     if not botActive:
                                                                         await button_ctx.defer(ignore=True)
 
-                                                        elif tarm_barrier_active and dmg['ELEMENT'] != phsycic_element:
+                                                        elif tarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                             if tbarrier_count >1:
                                                                 t_health = t_health 
                                                                 embedVar = discord.Embed(title=f"{t_card} Activates **Barrier** 💠", description=f"{o_card}'s attack **Nullified**!\n **{tbarrier_count - 1} Barriers** remain!", colour=0xe91e63)
@@ -14799,7 +14808,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = t_health - dmg['DMG']
 
 
-                                                            elif dmg['ELEMENT'] == phsycic_element:
+                                                            elif dmg['ELEMENT'] == psychic_element:
                                                                 t_defense = t_defense - (dmg['DMG'] * .08)
                                                                 t_attack = t_attack - (dmg['DMG'] * .08)
                                                                 t_health = t_health - dmg['DMG']
@@ -14814,7 +14823,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = t_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == poison_element:
-                                                                o_poison_dmg = o_poison_dmg + 8
+                                                                if o_poison_dmg <= 100:
+                                                                    o_poison_dmg = o_poison_dmg + 8
                                                                 t_health = t_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == ice_element:
@@ -14926,12 +14936,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     o_bleed_hit = False
                                     bleed_dmg = 5 * turn_total
                                     t_health = t_health - bleed_dmg
-                                    previous_moves.append(f"(**{turn_total}**) 🩸 **{t_card}** shredded for **{bleed_dmg}** bleed dmg...")
+                                    previous_moves.append(f"(🩸 **{t_card}** shredded for **{bleed_dmg}** bleed dmg...")
                                 if o_burn_dmg > 3:
                                     t_health = t_health - o_burn_dmg
                                     previous_moves.append(f"🔥 **{t_card}** burned for **{round(o_burn_dmg)}** dmg...")
                                 if o_freeze_enh:
-                                    previous_moves.append(f"(**{turn_total}**) ❄️ **{t_card}** has been frozen for a turn...")
+                                    previous_moves.append(f"(❄️ **{t_card}** has been frozen for a turn...")
                                     turn_total = turn_total + 1
                                     if mode in co_op_modes:
                                         turn = 2
@@ -14939,7 +14949,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         turn = 0
                                 if o_poison_dmg:
                                     t_health = t_health - o_poison_dmg
-                                    previous_moves.append(f"(**{turn_total}**) 🧪 **{t_card}** poisoned for **{o_poison_dmg}** dmg...")
+                                    previous_moves.append(f"(🧪 **{t_card}** poisoned for **{o_poison_dmg}** dmg...")
 
                                 o_burn_dmg = round(o_burn_dmg / 2)
                                 t_freeze_enh = False
@@ -15377,7 +15387,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     
                                     if t_used_resolve and not t_pet_used and t_stamina >= 30:
                                         aiMove = 6
-                                    elif tarm_barrier_active and dmg['ELEMENT'] != phsycic_element: #Ai Barrier Checks
+                                    elif tarm_barrier_active and dmg['ELEMENT'] != psychic_element: #Ai Barrier Checks
                                         if t_stamina >=20: #Stamina Check For Enhancer
                                             aiMove = await ai_enhancer_moves(turn_total,t_used_focus,t_used_resolve,t_pet_used,t_stamina,
                                                                         t_enhancer['TYPE'],t_health,t_max_health,t_attack,
@@ -16421,7 +16431,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_health = t_health + (dmg['DMG'] * .15)
                                                     o_health = o_health - dmg['DMG']
 
-                                                elif dmg['ELEMENT'] == phsycic_element:
+                                                elif dmg['ELEMENT'] == psychic_element:
                                                     o_defense = o_defense - (dmg['DMG'] * .08)
                                                     o_attack = o_attack - (dmg['DMG'] * .08)
                                                     o_health = o_health - dmg['DMG']
@@ -16436,7 +16446,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     o_health = o_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == poison_element:
-                                                    t_poison_dmg = t_poison_dmg + 8
+                                                    if t_poison_dmg <= 100:
+                                                        t_poison_dmg = t_poison_dmg + 8
                                                     o_health = o_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == ice_element:
@@ -16610,7 +16621,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                     #await private_channel.send(embed=embedVar)
 
-                                                        elif carm_barrier_active and dmg['ELEMENT'] != phsycic_element:
+                                                        elif carm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                             if cbarrier_count >1:
                                                                 c_health = c_health 
                                                                 embedVar = discord.Embed(title=f"{c_card} Activates **Barrier** 💠", description=f"{t_card}'s attack **Nullified**!\n 💠{cbarrier_count - 1} **Barriers** remain!", colour=0xe91e63)
@@ -16713,7 +16724,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = t_health + (dmg['DMG'] * .15)
                                                                 c_health = c_health - dmg['DMG']
 
-                                                            elif dmg['ELEMENT'] == phsycic_element:
+                                                            elif dmg['ELEMENT'] == psychic_element:
                                                                 c_defense = c_defense - (dmg['DMG'] * .08)
                                                                 c_attack = c_attack - (dmg['DMG'] * .08)
                                                                 c_health = c_health - dmg['DMG']
@@ -16727,7 +16738,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 c_health = c_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == poison_element:
-                                                                t_poison_dmg = t_poison_dmg + 8
+                                                                if t_poison_dmg <= 100:
+                                                                    t_poison_dmg = t_poison_dmg + 8
                                                                 c_health = c_health - dmg['DMG']
                                                             
                                                             else:
@@ -16914,7 +16926,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                         previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
 
-                                                        elif oarm_barrier_active and dmg['ELEMENT'] != phsycic_element:
+                                                        elif oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                             if obarrier_count >1:
                                                                 o_health = o_health 
                                                                 embedVar = discord.Embed(title=f"{o_card} Activates **Barrier** 💠", description=f"{t_card}'s attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!", colour=0xe91e63)
@@ -17002,7 +17014,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = t_health + (dmg['DMG'] * .15)
                                                                 o_health = o_health - dmg['DMG']
 
-                                                            elif dmg['ELEMENT'] == phsycic_element:
+                                                            elif dmg['ELEMENT'] == psychic_element:
                                                                 o_defense = o_defense - (dmg['DMG'] * .08)
                                                                 o_attack = o_attack - (dmg['DMG'] * .08)
                                                                 o_health = o_health - dmg['DMG']
@@ -17017,7 +17029,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_health = o_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == poison_element:
-                                                                t_poison_dmg = t_poison_dmg + 8
+                                                                if t_poison_dmg <= 100:
+                                                                    t_poison_dmg = t_poison_dmg + 8
                                                                 o_health = o_health - dmg['DMG']
         
                                                             elif dmg['ELEMENT'] == ice_element:
@@ -17224,7 +17237,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                     previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
 
-                                                    elif oarm_barrier_active and dmg['ELEMENT'] != phsycic_element:
+                                                    elif oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                         if obarrier_count >1:
                                                             o_health = o_health 
                                                             embedVar = discord.Embed(title=f"{o_card} Activates **Barrier** 💠", description=f"{t_card}'s attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!", colour=0xe91e63)
@@ -17312,7 +17325,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health + (dmg['DMG'] * .15)
                                                             o_health = o_health - dmg['DMG']
 
-                                                        elif dmg['ELEMENT'] == phsycic_element:
+                                                        elif dmg['ELEMENT'] == psychic_element:
                                                             o_defense = o_defense - (dmg['DMG'] * .08)
                                                             o_attack = o_attack - (dmg['DMG'] * .08)
                                                             o_health = o_health - dmg['DMG']
@@ -17327,7 +17340,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == poison_element:
-                                                            t_poison_dmg = t_poison_dmg + 8
+                                                            if t_poison_dmg <= 100:
+                                                                t_poison_dmg = t_poison_dmg + 8
                                                             o_health = o_health - dmg['DMG']
     
                                                         elif dmg['ELEMENT'] == ice_element:
@@ -17401,18 +17415,18 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         t_bleed_hit = False
                                         bleed_dmg = 5 * turn_total
                                         c_health = c_health - bleed_dmg
-                                        previous_moves.append(f"(**{turn_total}**) 🩸 **{c_card}** shredded for **{bleed_dmg}** bleed dmg...")
+                                        previous_moves.append(f"(🩸 **{c_card}** shredded for **{bleed_dmg}** bleed dmg...")
 
                                     if t_burn_dmg > 3:
                                         c_health = c_health - t_burn_dmg
                                         previous_moves.append(f"🔥 **{c_card}** burned for **{round(t_burn_dmg)}** dmg...")
                                     if t_freeze_enh:
-                                        previous_moves.append(f"(**{turn_total}**) ❄️ **{c_card}** has been frozen for a turn...")
+                                        previous_moves.append(f"(❄️ **{c_card}** has been frozen for a turn...")
                                         turn_total = turn_total + 1
                                         turn = 3
                                     if t_poison_dmg:
                                         c_health = c_health - t_poison_dmg
-                                        previous_moves.append(f"(**{turn_total}**) 🧪 **{c_card}** poisoned for **{t_poison_dmg}** dmg...")
+                                        previous_moves.append(f"(🧪 **{c_card}** poisoned for **{t_poison_dmg}** dmg...")
 
                                     t_burn_dmg = round(t_burn_dmg / 2)
                                     c_freeze_enh = False
@@ -17767,7 +17781,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                             if c_used_resolve and not c_pet_used:
                                                 aiMove = 6
-                                            elif carm_barrier_active and dmg['ELEMENT'] != phsycic_element: #Ai Barrier Checks
+                                            elif carm_barrier_active and dmg['ELEMENT'] != psychic_element: #Ai Barrier Checks
                                                 if t_stamina >=20: #Stamina Check For Enhancer
                                                     aiMove = await ai_enhancer_moves(turn_total,c_used_focus,c_used_resolve,c_pet_used,c_stamina,
                                                                             c_enhancer['TYPE'],c_health,c_max_health,c_attack,
@@ -18762,7 +18776,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                         previous_moves.append(f"(**{turn_total}**) **{c_card}**'s 💠 Barrier Disabled!")
                                                                     #await private_channel.send(embed=embedVar)
 
-                                                        elif tarm_barrier_active and dmg['ELEMENT'] != phsycic_element and dmg['ELEMENT'] != phsycic_element:
+                                                        elif tarm_barrier_active and dmg['ELEMENT'] != psychic_element and dmg['ELEMENT'] != psychic_element:
                                                             if tbarrier_count >1:
                                                                 t_health = t_health 
                                                                 embedVar = discord.Embed(title=f"{t_card} Activates **Barrier** 💠", description=f"{c_card}'s attack **Nullified**!\n **{tbarrier_count - 1} Barriers** remain!", colour=0xe91e63)
@@ -18869,7 +18883,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 c_health = c_health + (dmg['DMG'] * .15)
                                                                 t_health = t_health - dmg['DMG']
 
-                                                            elif dmg['ELEMENT'] == phsycic_element:
+                                                            elif dmg['ELEMENT'] == psychic_element:
                                                                 t_defense = t_defense - (dmg['DMG'] * .08)
                                                                 t_attack = t_attack - (dmg['DMG'] * .08)
                                                                 t_health = t_health - dmg['DMG']
@@ -18884,7 +18898,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = t_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == poison_element:
-                                                                c_poison_dmg = c_poison_dmg + 8
+                                                                if c_poison_dmg <= 100:
+                                                                    c_poison_dmg = c_poison_dmg + 8
                                                                 t_health = t_health - dmg['DMG']
                                                             else:
                                                                 t_health = t_health - dmg['DMG']
@@ -19869,7 +19884,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 c_health = c_health + (dmg['DMG'] * .15)
                                                                 t_health = t_health - dmg['DMG']
 
-                                                            elif dmg['ELEMENT'] == phsycic_element:
+                                                            elif dmg['ELEMENT'] == psychic_element:
                                                                 t_defense = t_defense - (dmg['DMG'] * .08)
                                                                 t_attack = t_attack - (dmg['DMG'] * .08)
                                                                 t_health = t_health - dmg['DMG']
@@ -19884,7 +19899,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = t_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == poison_element:
-                                                                c_poison_dmg = c_poison_dmg + 8
+                                                                if c_poison_dmg <= 100:
+                                                                    c_poison_dmg = c_poison_dmg + 8
                                                                 t_health = t_health - dmg['DMG']
                                                             else:
                                                                 t_health = t_health - dmg['DMG']
@@ -20066,7 +20082,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                         #await private_channel.send(embed=embedVar)
                                                                         await button_ctx.defer(ignore=True)
 
-                                                            elif tarm_barrier_active and dmg['ELEMENT'] != phsycic_element and dmg['ELEMENT'] != phsycic_element:
+                                                            elif tarm_barrier_active and dmg['ELEMENT'] != psychic_element and dmg['ELEMENT'] != psychic_element:
                                                                 if tbarrier_count >1:
                                                                     t_health = t_health 
                                                                     embedVar = discord.Embed(title=f"{t_card} Activates **Barrier** 💠", description=f"{c_card}'s attack **Nullified**!\n **{tbarrier_count - 1} Barriers** remain!", colour=0xe91e63)
@@ -20177,7 +20193,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     c_health = c_health + (dmg['DMG'] * .15)
                                                                     t_health = t_health - dmg['DMG']
 
-                                                                elif dmg['ELEMENT'] == phsycic_element:
+                                                                elif dmg['ELEMENT'] == psychic_element:
                                                                     t_defense = t_defense - (dmg['DMG'] * .08)
                                                                     t_attack = t_attack - (dmg['DMG'] * .08)
                                                                     t_health = t_health - dmg['DMG']
@@ -20192,7 +20208,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     t_health = t_health - dmg['DMG']
 
                                                                 elif dmg['ELEMENT'] == poison_element:
-                                                                    c_poison_dmg = c_poison_dmg + 8
+                                                                    if c_poison_dmg <= 100:
+                                                                        c_poison_dmg = c_poison_dmg + 8
                                                                     t_health = t_health - dmg['DMG']
                                                                 else:
                                                                     t_health = t_health - dmg['DMG']
@@ -20287,18 +20304,18 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         c_bleed_hit = False
                                         bleed_dmg = 5 * turn_total
                                         t_health = t_health - bleed_dmg
-                                        previous_moves.append(f"(**{turn_total}**) 🩸 **{t_card}** shredded for **{bleed_dmg}** bleed dmg...")
+                                        previous_moves.append(f"(🩸 **{t_card}** shredded for **{bleed_dmg}** bleed dmg...")
 
                                     if c_burn_dmg > 3:
                                         t_health = t_health - c_burn_dmg
                                         previous_moves.append(f"🔥 **{t_card}** burned for **{round(c_burn_dmg)}** dmg...")
                                     if c_freeze_enh:
-                                        previous_moves.append(f"(**{turn_total}**) ❄️ **{t_card}** has been frozen for a turn...")
+                                        previous_moves.append(f"(❄️ **{t_card}** has been frozen for a turn...")
                                         turn_total = turn_total + 1
                                         turn = 0
                                     if c_poison_dmg:
                                         t_health = t_health - c_poison_dmg
-                                        previous_moves.append(f"(**{turn_total}**) 🧪 **{t_card}** poisoned for **{c_poison_dmg}** dmg...")
+                                        previous_moves.append(f"(🧪 **{t_card}** poisoned for **{c_poison_dmg}** dmg...")
 
                                     c_burn_dmg = round(c_burn_dmg / 2)
                                     t_freeze_enh = False
@@ -20649,7 +20666,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                         if t_used_resolve and not t_pet_used:
                                             aiMove = 6
-                                        elif tarm_barrier_active and dmg['ELEMENT'] != phsycic_element: #Ai Barrier Checks
+                                        elif tarm_barrier_active and dmg['ELEMENT'] != psychic_element: #Ai Barrier Checks
                                             if t_stamina >=20: #Stamina Check For Enhancer
                                                 aiMove = await ai_enhancer_moves(turn_total,t_used_focus,t_used_resolve,t_pet_used,t_stamina,
                                                                            t_enhancer['TYPE'],t_health,t_max_health,t_attack,
@@ -21558,7 +21575,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = t_health + (dmg['DMG'] * .15)
                                                         c_health = c_health - dmg['DMG']
 
-                                                    elif dmg['ELEMENT'] == phsycic_element:
+                                                    elif dmg['ELEMENT'] == psychic_element:
                                                         c_defense = c_defense - (dmg['DMG'] * .08)
                                                         c_attack = c_attack - (dmg['DMG'] * .08)
                                                         c_health = c_health - dmg['DMG']
@@ -21572,7 +21589,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         c_health = c_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == poison_element:
-                                                        t_poison_dmg = t_poison_dmg + 8
+                                                        if t_poison_dmg <= 100:
+                                                            t_poison_dmg = t_poison_dmg + 8
                                                         c_health = c_health - dmg['DMG']
                                                     
                                                     else:
@@ -21741,7 +21759,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                         previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                                     #await private_channel.send(embed=embedVar)
 
-                                                        elif oarm_barrier_active and dmg['ELEMENT'] != phsycic_element:
+                                                        elif oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                             if obarrier_count >1:
                                                                 o_health = o_health 
                                                                 embedVar = discord.Embed(title=f"{o_card} Activates **Barrier** 💠", description=f"{t_card}'s attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!", colour=0xe91e63)
@@ -21833,7 +21851,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = t_health + (dmg['DMG'] * .15)
                                                                 o_health = o_health - dmg['DMG']
 
-                                                            elif dmg['ELEMENT'] == phsycic_element:
+                                                            elif dmg['ELEMENT'] == psychic_element:
                                                                 o_defense = o_defense - (dmg['DMG'] * .08)
                                                                 o_attack = o_attack - (dmg['DMG'] * .08)
                                                                 o_health = o_health - dmg['DMG']
@@ -21848,7 +21866,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_health = o_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == poison_element:
-                                                                t_poison_dmg = t_poison_dmg + 8
+                                                                if t_poison_dmg <= 100:
+                                                                    t_poison_dmg = t_poison_dmg + 8
                                                                 o_health = o_health - dmg['DMG']
         
                                                             elif dmg['ELEMENT'] == ice_element:
@@ -22064,7 +22083,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                         previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                                     #await private_channel.send(embed=embedVar)
 
-                                                        elif carm_barrier_active and dmg['ELEMENT'] != phsycic_element:
+                                                        elif carm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                             if cbarrier_count >1:
                                                                 c_health = c_health 
                                                                 embedVar = discord.Embed(title=f"{c_card} Activates **Barrier** 💠", description=f"{t_card}'s attack **Nullified**!\n 💠{cbarrier_count - 1} **Barriers** remain!", colour=0xe91e63)
@@ -22171,7 +22190,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = t_health + (dmg['DMG'] * .15)
                                                                 c_health = c_health - dmg['DMG']
 
-                                                            elif dmg['ELEMENT'] == phsycic_element:
+                                                            elif dmg['ELEMENT'] == psychic_element:
                                                                 c_defense = c_defense - (dmg['DMG'] * .08)
                                                                 c_attack = c_attack - (dmg['DMG'] * .08)
                                                                 c_health = c_health - dmg['DMG']
@@ -22185,7 +22204,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 c_health = c_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == poison_element:
-                                                                t_poison_dmg = t_poison_dmg + 8
+                                                                if t_poison_dmg <= 100:
+                                                                    t_poison_dmg = t_poison_dmg + 8
                                                                 c_health = c_health - dmg['DMG']
                                                             
                                                             else:
