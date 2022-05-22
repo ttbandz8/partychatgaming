@@ -312,6 +312,10 @@ async def animevs(ctx):
    ☄️ Special Attack _uses 30 stamina_
    🏵️ Ultimate Attack _uses 80 stamina_
    
+   **Damage Type**
+   Attacks have bonus effects based on the ♨️Element Type
+   Use /help to find information on **Elements**
+   
    **Enhancer**
    Enhancers either boost your stats or inflict status effects on your opponent. Use **/enhancers** for full list of Enhancers and their effects.
    🦠 Enhancer _uses 20 stamina_
@@ -329,9 +333,10 @@ async def animevs(ctx):
    ✨ **Destiny Cards** - Earned via **Destinies**
    👹 **Boss Cards** - Exchange for **Boss Souls**
    
-   **Cards Have 6 Passive Elements** 
+   **Cards Have 7 Passive Elements** 
    Card Type
    Card Tier
+   Affinities
    1 Unique Passive
    1 Universe Trait
    Card Level
@@ -339,6 +344,14 @@ async def animevs(ctx):
    
    🀄 **Card Tier**
    Card Tier Determines Base Stats and Enhancer Types/Values.
+   
+   ♨️ **Affinities**
+   Affinities determine how you card reacts to **Damage types**
+   Weaknesses - Take more damage
+   Resistances - Take less damage
+   Immunities - Immune to damage
+   Repels - Reflects damage back
+   Absorb - Absorbs damage as Health
    
    🩸 **Unique Passive**
    Enhancers that take effect **at the beginning** of the battle.
@@ -366,11 +379,12 @@ async def animevs(ctx):
    
    🎗️ **Title Exlusivity**
    **Titles** apply enhancers at the **start** of your turn or during **Focus State**
-   Titles are only effective on cards from the same Universe or Unbound!
+   ⚠️ Titles are only effective on cards from the same Universe or Unbound!
    Buy **Titles** and **Arms** with :coin: or Earn them via **Drops**
    
    🦾 **Arm Durability**
    Arms are effective across the Multiverse, however they do break! Turning into **Gems**
+   ☢️ Arms from a different universe will break at a faster rate!
    Stock up on **Arms** and repair **Durability** in the **/trinketshop**
 
    👑 **Universe Buff** :Match Your Titles and Arms to your **Card Universe**.
@@ -452,7 +466,7 @@ async def animevs(ctx):
    7 - Duo
    8 - Crafting
    9 - Guilds, Families and Associations
-   10- Trading and Trinketshop
+   10- Trading
    20 - Gifting
    25 - Explore Mode
    40 - Dungeons
@@ -464,7 +478,7 @@ async def animevs(ctx):
    embedVar7 = discord.Embed(title= f"Single Player", description=textwrap.dedent(f"""\
    **Single Player**
    
-   👤 **Solo**/tales
+   👤 **Solo**/solo
    **Tales:** Single player adventures where you traverse through your favorite universes as characters from various worlds!
    **Dungeon:** Hard version of tales with better loot and better drop rates! (Unlocks after completing **Anime VS+ Tale**)
    **Boss:** End Game battles featuring Iconic Villians from Anime VS+ Universes. (Unlocks after completing **Anime VS+ Dungeon**)
@@ -493,7 +507,7 @@ async def animevs(ctx):
    **Assist** - Assist applies your enhancer to buff your **Companion**. *Damage dealing enahncers apply to enemy*
 
    🤼 **PVP**
-   **/battle @player:** Select your Build and Challenge any Anime VS+ Player to a quick match!
+   **/pvp @player:** Select your Build and Challenge any Anime VS+ Player to a quick match!
    
    🔮 **Anime VS+ Rifts**
    Anime VS+ Rifts are Co-Op Compatable and Helping other players in Co-Op **WILL NOT** close your open Rift!
@@ -504,8 +518,8 @@ async def animevs(ctx):
 
    embedVar9 = discord.Embed(title= f"Presets",description=textwrap.dedent(f"""\
    Save your favorite builds in your **Preset**
-   **/preset** to open the deck menu and select a preset with **1-3**
-   **/savepreset** to save your current build **1-3**
+   **/menu** tselect **View Preset** option, select a preset with **1-3**
+   *Select **Save Preset** to save a new Build!
    
    **Preset Builds**
    You can bring your preset builds into Duo Battles!
@@ -514,7 +528,7 @@ async def animevs(ctx):
 
    embedVar10 = discord.Embed(title= f"Economy",description=textwrap.dedent(f"""\
    **Shop**
-   Use **/shop** to open the **Shop**!
+   Use **/menu** to access the **Shop**!
    The shop sells Cards, Titles and Arms.
 
    **Trading**
@@ -525,24 +539,26 @@ async def animevs(ctx):
    **Resell**
    Sell Cards, Titles, and Arms back to the market for :coin:**Coins**.
    
-   **Crafting**
-   **/craft** will allow you to craft **Card Skins**, **Summons**, **Universe Hearts** and **Universe Souls**
+   **Crafting**b
+   **/menu** to **Start Crafting!** Craft **Card Skins**, **Summons**, and **Destinies**!
 
    **Dismantle**
    Dismantle Cards, Titles and Arms into :gem:**Gems**.
    
-   💟 **Universe Heart** - will allow you to level cards past 200.
-   🌹 **Universe Soul** - will allow you to keep card levels when trading/selling Cards.
+   **Universe Trinkets**
+   Craftable Boost that increase the limits of your cards levels!
+   💟 **Universe Heart** - will allow you to level cards past 200!
+   🌹 **Universe Soul** - Grants 2x XP for all cards in Universe!
    
-   **Trinket Shop**
-   **/trinketshop** to purchase Card Levels, Arm Durability and Gabe's Purse!
+   **Blacksmith**
+   **/menu** to purchase Card Levels, Arm Durability and **Storage**!
    
     👛 **Gabe's Purse** - will allow you to keep all items after a **Rebirth**
    
    **Currency**
    :coin: - Coins can be used to purchase Cards, Titles and Arms. You can use them to trade and sell items to other players!
    :gem: - When Arms break they turn into **Gems**, You can also dismantle items from your inventory into **Gems**! 
-   **Gems** are universe specific items that can be crafted into Skins, Trikets or **Universe Hearts**
+   **Gems** are universe specific items that can be crafted into Skins, Trinkets or **Destinies**
    
    """) ,colour=0x7289da)
    embedVar10.set_thumbnail(url=avatar)

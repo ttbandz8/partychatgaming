@@ -69,13 +69,15 @@ LEGEND = textwrap.dedent(f"""\
 """)
 
 ELEMENTS = textwrap.dedent(f"""\
+**♨️ Elements**    
+
 👊 Physical - Normal Damage
 
 🔥 Fire - Does 20% damage of previous attack over the next opponent turns, stacks
 
 ❄️ Ice - After 3 uses opponent freezes and loses 1 turn 
 
-💧 Water - increases all water attack dmg by 25 Flat 
+💧 Water - Increases all water attack dmg by 25 Flat 
 
 ⛰️ Earth - Cannot be Parried. Increases Def by 20% AP
 
@@ -93,17 +95,19 @@ ELEMENTS = textwrap.dedent(f"""\
 
 ♠️ Dark- Penetrates shields & drains 5 stamina 
 
-🧪 Poison - opponent takes additional 8 damage each turn stacking up to 100
+🧪 Poison - Opponent takes additional 8 damage each turn stacking up to 100
 
 🏹 Ranged - If ST > 80 deals 1.5x Damage
 
-💙 Spirit - Has higher chance of crit attack
+💙 Spirit - Has higher chance of Crit
 
 ⛓️ Recoil - Deals 25% damage back to you
 
 ⌛ Time - You Focus after attacking
 
 🩸 Bleed - After 5 Attacks deal 5x turn count damage to opponent
+
+🪐 Gravity - Disables Opponent Block
 
 [Join the Anime VS+ Support Server](https://discord.gg/2JkCqcN3hB)
 """)

@@ -122,7 +122,7 @@ class CrownUnlimited(commands.Cog):
 
             if player['LEVEL'] < 26:
                 return
-                # await message.channel.send(f"🔓 Unlock the Explore Mode by completing Floor 35 of the 🌑 Abyss! Use /abyss to enter the abyss.")
+                # await message.channel.send(f"🔓 Unlock the Explore Mode by completing Floor 35 of the 🌑 Abyss! Use **Abyss** in /solo to enter the abyss.")
                 # return
 
             if not player:
@@ -303,7 +303,7 @@ class CrownUnlimited(commands.Cog):
         try:
             player = db.queryUser({"DID": str(ctx.author.id)})
             if player['LEVEL'] < 25:             
-                await ctx.send(f"🔓 Unlock the Explore Mode by completing Floor 25 of the 🌑 Abyss! Use /abyss to enter the abyss.")
+                await ctx.send(f"🔓 Unlock the Explore Mode by completing Floor 25 of the 🌑 Abyss! Use **Abyss** in /solo to enter the abyss.")
                 return
             if not player["EXPLORE"]:
                 await ctx.send(f"Entering Explorer Mode :milky_way: ")
@@ -473,7 +473,7 @@ class CrownUnlimited(commands.Cog):
             cfam = ofam
             if sowner['DIFFICULTY'] != "EASY":
                 if sowner['LEVEL'] < 8:
-                    await ctx.send(f"🔓 Unlock **Duo** by completing **Floor 7** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
+                    await ctx.send(f"🔓 Unlock **Duo** by completing **Floor 7** of the 🌑 **Abyss**! Use **Abyss** in /solo to enter the abyss.")
                     return
             
             if sowner['DIFFICULTY'] == "EASY" and mode in D_modes or mode in B_MODES:
@@ -482,7 +482,7 @@ class CrownUnlimited(commands.Cog):
 
 
             if mode in D_modes and sowner['LEVEL'] < 41:
-                await ctx.send("🔓 Unlock **Duo Dungeons** by completing **Floor 40** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
+                await ctx.send("🔓 Unlock **Duo Dungeons** by completing **Floor 40** of the 🌑 **Abyss**! Use **Abyss** in /solo to enter the abyss.")
                 return
 
 
@@ -575,11 +575,11 @@ class CrownUnlimited(commands.Cog):
             companion = db.queryUser({'DID': str(user.id)})
             # if sowner['DIFFICULTY'] != "EASY":
                 # if sowner['LEVEL'] < 4:
-                #     await ctx.send(f"🔓 Unlock **Co-op** by completing **Floor 3** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
+                #     await ctx.send(f"🔓 Unlock **Co-op** by completing **Floor 3** of the 🌑 **Abyss**! Use **Abyss** in /solo to enter the abyss.")
                 #     return
                 
                 # elif companion['LEVEL'] < 4:
-                #     await ctx.send(f"🔓 {user.mention} Has not unlocked **Co-op**! Complete **Floor 3** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
+                #     await ctx.send(f"🔓 {user.mention} Has not unlocked **Co-op**! Complete **Floor 3** of the 🌑 **Abyss**! Use **Abyss** in /solo to enter the abyss.")
                 #     return
 
             if sowner['DIFFICULTY'] == "EASY" and mode in D_modes or mode in B_MODES:
@@ -588,19 +588,19 @@ class CrownUnlimited(commands.Cog):
 
 
             if mode in D_modes and sowner['LEVEL'] < 41:
-                await ctx.send("🔓 Unlock **Dungeons** by completing **Floor 40** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
+                await ctx.send("🔓 Unlock **Dungeons** by completing **Floor 40** of the 🌑 **Abyss**! Use **Abyss** in /solo to enter the abyss.")
                 return
 
             if mode in B_MODES and sowner['LEVEL'] < 61:
-                await ctx.send("🔓 Unlock **Boss Fights** by completing **Floor 60** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
+                await ctx.send("🔓 Unlock **Boss Fights** by completing **Floor 60** of the 🌑 **Abyss**! Use **Abyss** in /solo to enter the abyss.")
                 return
             
             if mode in D_modes and companion['LEVEL'] < 41:
-                await ctx.send(f"🔓 {user.mention} Has not unlocked **Dungeons**! Complete **Floor 40** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
+                await ctx.send(f"🔓 {user.mention} Has not unlocked **Dungeons**! Complete **Floor 40** of the 🌑 **Abyss**! Use **Abyss** in /solo to enter the abyss.")
                 return
 
             if mode in B_MODES and companion['LEVEL'] < 61:
-                await ctx.send(f"🔓 {user.mention} Has not unlocked **Boss Fights**! Complete **Floor 60** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
+                await ctx.send(f"🔓 {user.mention} Has not unlocked **Boss Fights**! Complete **Floor 60** of the 🌑 **Abyss**! Use **Abyss** in /solo to enter the abyss.")
                 return
 
             oteam = sowner['TEAM']
@@ -980,7 +980,7 @@ class CrownUnlimited(commands.Cog):
                 return
 
             if player['LEVEL'] < 7:
-                await ctx.send(f"🔓 Unlock **PVP** by completing **Floor 6** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
+                await ctx.send(f"🔓 Unlock **PVP** by completing **Floor 6** of the 🌑 **Abyss**! Use **Abyss** in /solo to enter the abyss.")
                 return
 
             association = player['GUILD']
@@ -1111,18 +1111,18 @@ class CrownUnlimited(commands.Cog):
             sowner = db.queryUser({'DID': str(ctx.author.id)})
             if sowner['DIFFICULTY'] != "EASY":
                 if sowner['LEVEL'] < 3:
-                    await ctx.send("🔓 Unlock **Tales** by completing **Floor 2** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
+                    await ctx.send("🔓 Unlock **Tales** by completing **Floor 2** of the 🌑 **Abyss**! Use **Abyss** in /solo to enter the abyss.")
                     return
             if sowner['DIFFICULTY'] == "EASY" and (mode in D_modes or mode in B_MODES):
                 await ctx.send("Dungeons and Boss fights unavailable on Easy Mode! Use /difficulty to change your difficulty setting.")
                 return
                
             if mode in D_modes and sowner['LEVEL'] < 41:
-                await ctx.send("🔓 Unlock **Dungeons** by completing **Floor 40** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
+                await ctx.send("🔓 Unlock **Dungeons** by completing **Floor 40** of the 🌑 **Abyss**! Use **Abyss** in /solo to enter the abyss.")
                 return
 
             if mode in B_MODES and sowner['LEVEL'] < 61:
-                await ctx.send("🔓 Unlock **Boss Fights** by completing **Floor 60** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
+                await ctx.send("🔓 Unlock **Boss Fights** by completing **Floor 60** of the 🌑 **Abyss**! Use **Abyss** in /solo to enter the abyss.")
                 return
 
 
@@ -1220,10 +1220,10 @@ class CrownUnlimited(commands.Cog):
             opponent = db.queryUser({'DID': str(player.id)})
 
             if sowner['LEVEL'] < 7:
-                await ctx.send(f"🔓 Unlock **PVP** by completing **Floor 6** of the 🌑 Abyss! Use /abyss to enter the abyss.")
+                await ctx.send(f"🔓 Unlock **PVP** by completing **Floor 6** of the 🌑 Abyss! Use **Abyss** in /solo to enter the abyss.")
                 return
             if opponent['LEVEL'] < 7:
-                await ctx.send(f"🔓 {player.mention} Has not unlocked **PVP**! Complete **Floor 6** of the 🌑 Abyss! Use /abyss to enter the abyss.")
+                await ctx.send(f"🔓 {player.mention} Has not unlocked **PVP**! Complete **Floor 6** of the 🌑 Abyss! Use **Abyss** in /solo to enter the abyss.")
                 return
 
             oteam = sowner['TEAM']
@@ -2753,13 +2753,13 @@ def showcard(d, arm, max_health, health, max_stamina, stamina, resolved, title, 
             super_font_size = 30
             ultimate_font_size = 30
             enhancer_font_size = 30
-            if len(list(d['NAME'])) >= 16 and not resolved:
+            if len(list(d['NAME'])) >= 15 and not resolved:
                 name_font_size = 45
-            if len(list(d['RNAME'])) >= 16 and resolved:
+            if len(list(d['RNAME'])) >= 15 and resolved:
                 name_font_size = 45
-            if len(list(d['NAME'])) >= 20 and not resolved:
+            if len(list(d['NAME'])) >= 18 and not resolved:
                 name_font_size = 36
-            if len(list(d['RNAME'])) >= 20 and resolved:
+            if len(list(d['RNAME'])) >= 18 and resolved:
                 name_font_size = 36
             
             
@@ -2881,7 +2881,10 @@ def showcard(d, arm, max_health, health, max_stamina, stamina, resolved, title, 
                 if turn_total > 0:
                     move_enhanced_ap = round(enh1 * turn_total)
                     if move_enhanced_ap >= 350:
-                        move_enhanced_ap = 350
+                        if move_enhanced_name == "BLAST":
+                            move_enhanced_ap = 350
+                        else:
+                            move_enhanced_ap = 300
                         turn_crit = True
                 else:
                     move_enhanced_ap = enh1
@@ -3547,7 +3550,7 @@ async def cardlist(self, ctx: SlashContext, universe: str):
     if len(all_cards) < 10:
         embedVar = discord.Embed(title=f"{universe} Card List", description="\n".join(all_cards), colour=0x7289da)
         embedVar.set_footer(
-            text=f"{total_cards} Total Cards\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔵 Destiny Line\n🟠 Unavailable\n⚪ Skin")
+            text=f"{total_cards} Total Cards\n🟢 Tale Drop\n🟣 Dungeon Drop\n🔵 Destiny Line\n🟠 Soul Exchange\n⚪ Skin")
         await ctx.send(embed=embedVar)
 
     embed_list = []
@@ -3556,7 +3559,7 @@ async def cardlist(self, ctx: SlashContext, universe: str):
             title=f":flower_playing_cards: {universe_data['TITLE']} Card List",
             description="\n".join(cards_broken_up[i]), colour=0x7289da)
         globals()['embedVar%s' % i].set_footer(
-            text=f"{total_cards} Total Cards\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔵 Destiny Line\n🟠 Unavailable\n⚪ Skin\n/viewcard 'Card Name' - View Card Details\n/destinies 'Universe Name' -View Destiny Lines")
+            text=f"{total_cards} Total Cards\n🟢 Tale Drop\n🟣 Dungeon Drop\n🔵 Destiny Line\n🟠 Soul Exchange\n⚪ Skin")
         embed_list.append(globals()['embedVar%s' % i])
 
     paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
@@ -3626,7 +3629,7 @@ async def titlelist(self, ctx: SlashContext, universe: str):
     if len(all_titles) < 10:
         embedVar = discord.Embed(title=f"{universe} Title List", description="\n".join(all_titles), colour=0x7289da)
         # embedVar.set_thumbnail(url={universe_data['PATH']})
-        embedVar.set_footer(text=f"{total_titles} Total Titles\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔴 Boss Drop")
+        embedVar.set_footer(text=f"{total_titles} Total Titles\n🟢 Tale Drop\n🟣 Dungeon Drop\n🔴 Boss Drop")
         await ctx.send(embed=embedVar)
 
     embed_list = []
@@ -3635,7 +3638,7 @@ async def titlelist(self, ctx: SlashContext, universe: str):
                                                     description="\n".join(titles_broken_up[i]), colour=0x7289da)
         # globals()['embedVar%s' % i].set_thumbnail(url={universe_data['PATH']})
         globals()['embedVar%s' % i].set_footer(
-            text=f"{total_titles} Total Titles\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔴 Boss Drop\n/viewtitle 'Title Name' - View Title Details")
+            text=f"{total_titles} Total Titles\n🟢 Tale Drop\n🟣 Dungeon Drop\n🔴 Boss Drop\n/viewtitle 'Title Name' - View Title Details")
         embed_list.append(globals()['embedVar%s' % i])
 
     paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
@@ -3714,7 +3717,7 @@ async def armlist(self, ctx: SlashContext, universe: str):
     # If it's not an array greater than 10, show paginationless embed
     if len(all_arms) < 10:
         embedVar = discord.Embed(title=f"{universe} Arms List", description="\n".join(all_arms), colour=0x7289da)
-        embedVar.set_footer(text=f"{total_arms} Total Arms\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔴 Boss Drop")
+        embedVar.set_footer(text=f"{total_arms} Total Arms\n🟢 Tale Drop\n🟣 Dungeon Drop\n🔴 Boss Drop")
         await ctx.send(embed=embedVar)
 
     embed_list = []
@@ -3722,7 +3725,7 @@ async def armlist(self, ctx: SlashContext, universe: str):
         globals()['embedVar%s' % i] = discord.Embed(title=f"🦾 {universe_data['TITLE']} Arms List",
                                                     description="\n".join(arms_broken_up[i]), colour=0x7289da)
         globals()['embedVar%s' % i].set_footer(
-            text=f"{total_arms} Total Arms\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔴 Boss Drop\n/viewarm 'Arm Name' - View Arm Details")
+            text=f"{total_arms} Total Arms\n🟢 Tale Drop\n🟣 Dungeon Drop\n🔴 Boss Drop")
         embed_list.append(globals()['embedVar%s' % i])
 
     paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
@@ -3847,7 +3850,7 @@ async def summonlist(self, ctx: SlashContext, universe: str):
     # If it's not an array greater than 10, show paginationless embed
     if len(all_pets) < 10:
         embedVar = discord.Embed(title=f"{universe} Summon List", description="\n".join(all_pets), colour=0x7289da)
-        embedVar.set_footer(text=f"{total_pets} Total Summons\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔴 Boss Drop")
+        embedVar.set_footer(text=f"{total_pets} Total Summons\n🟢 Tale Drop\n🟣 Dungeon Drop\n🔴 Boss Drop")
         await ctx.send(embed=embedVar)
 
     embed_list = []
@@ -3855,7 +3858,7 @@ async def summonlist(self, ctx: SlashContext, universe: str):
         globals()['embedVar%s' % i] = discord.Embed(title=f"🧬 {universe_data['TITLE']} Summon List",
                                                     description="\n".join(pets_broken_up[i]), colour=0x7289da)
         globals()['embedVar%s' % i].set_footer(
-            text=f"{total_pets} Total Summons\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔴 Boss Drop\n/viewsummon 'Summon Name' - View Summon Details")
+            text=f"{total_pets} Total Summons\n🟢 Tale Drop\n🟣 Dungeon Drop\n🔴 Boss Drop")
         embed_list.append(globals()['embedVar%s' % i])
 
     paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
@@ -6897,7 +6900,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             corruption_def_buff = 0
             corruption_ap_buff = 0
 
-            if universe and mode != "ABYSS":
+            if universe and mode != "ABYSS" and mode != "RAID":
                 if universe['CORRUPTED']:
                     corruption_hlt_buff = 150
                     corruption_atk_buff = 40
@@ -7227,6 +7230,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             o_basic_water_buff = 0
             o_special_water_buff = 0
             o_ultimate_water_buff = 0
+            o_gravity_hit =False
 
             t_burn_dmg = 0
             t_poison_dmg = 0
@@ -7240,6 +7244,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             t_basic_water_buff = 0
             t_special_water_buff = 0
             t_ultimate_water_buff = 0
+            t_gravity_hit=False
 
             c_burn_dmg = 0
             c_poison_dmg = 0
@@ -7253,6 +7258,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             c_basic_water_buff = 0
             c_special_water_buff = 0
             c_ultimate_water_buff = 0
+            c_gravity_hit =False
 
 
 
@@ -7977,14 +7983,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             )
                                         )
 
-
-                                        util_buttons.append(
-                                            manage_components.create_button(
-                                                style=ButtonStyle.grey,
-                                                label="Block 20",
-                                                custom_id="0"
+                                        if t_gravity_hit == False:
+                                            util_buttons.append(
+                                                manage_components.create_button(
+                                                    style=ButtonStyle.grey,
+                                                    label="Block 20",
+                                                    custom_id="0"
+                                                )
                                             )
-                                        )
 
                                     if o_used_focus and o_used_resolve and not o_pet_used and mode != "RAID":
                                         util_buttons.append(
@@ -8075,6 +8081,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 embedVar = discord.Embed(title=f":boom:Basic Attack!",
                                                                         description=f":boom:**Basic Attack** cost **10 ST(Stamina)** to deal decent Damage!",
                                                                         colour=0xe91e63)
+                                                embedVar.add_field(
+                                                    name=f"Your Basic Attack: {o_basic_emoji} {list(o_1.keys())[0]} inflicts {omove1_element}",
+                                                    value=f"**{omove1_element}** : *{element_mapping[omove1_element]}*")
                                                 embedVar.add_field(name=f"Combos!",
                                                                 value="Chain your :boom:**Basic Attack** with :microbe:**Enhancers** To Maximize Damage!")
                                                 embedVar.set_footer(
@@ -8098,6 +8107,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 embedVar = discord.Embed(title=f":comet:Special Attack!",
                                                                         description=f":comet:**Special Attack** cost **30 ST(Stamina)** to deal great Damage!",
                                                                         colour=0xe91e63)
+                                                embedVar.add_field(
+                                                    name=f"Your Special Attack: {o_super_emoji} {list(o_2.keys())[0]} inflicts {omove2_element}",
+                                                    value=f"**{omove2_element}** : *{element_mapping[omove2_element]}*")
                                                 embedVar.add_field(name=f"Strategy!",
                                                                 value=":comet:**Special Attacks** are the balance between **ST (Stamina)** cost and Damage Output when trying to build **Combos**!")
                                                 embedVar.set_footer(
@@ -8121,6 +8133,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 embedVar = discord.Embed(title=f":rosette:Ultimate Move!",
                                                                         description=f":rosette:**Ultimate Move** cost **80 ST(Stamina)** to deal incredible Damage!",
                                                                         colour=0xe91e63)
+                                                embedVar.add_field(
+                                                    name=f"Your Ultimate: {o_ultimate_emoji} {list(o_3.keys())[0]} inflicts {omove3_element}",
+                                                    value=f"**{omove3_element}** : *{element_mapping[omove3_element]}*")
                                                 embedVar.add_field(name=f"Ultimate GIF",
                                                                 value="Using your ultimate move also comes with a bonus GIF to deliver that final blow!\n*Enter performance mode to disable GIFs\n/performace*")
                                                 embedVar.set_footer(
@@ -8767,6 +8782,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_bleed_hit = True
                                                             o_bleed_counter = 0
                                                         t_health = t_health - dmg['DMG']
+                                                        
+                                                    elif dmg['ELEMENT'] == gravity_element:
+                                                        o_gravity_hit = True
+                                                        t_health = t_health - dmg['DMG']
                                                     
                                                     else:
                                                         t_health = t_health - dmg['DMG']
@@ -8901,7 +8920,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     o_stamina = o_stamina - int(dmg['STAMINA_USED'])
 
                                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
-                                                    if oarm_barrier_active:
+                                                    if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                         oarm_barrier_active=False
                                                         embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                         previous_moves.append(f"(**{turn_total}**) **{o_card}'s** **Barrier** Disabled!")
@@ -8916,7 +8935,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_naruto_heal_buff = t_naruto_heal_buff + t_stored_damage
                                                         t_health = t_health
                                                         embedVar = discord.Embed(title=f"{t_card}: Substitution Jutsu", description=f"{o_card} strikes a log", colour=0xe91e63)
-                                                        if oarm_barrier_active:
+                                                        if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                             oarm_barrier_active=False
                                                             embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                             previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
@@ -8933,7 +8952,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if tshield_value <=0:
                                                                 embedVar = discord.Embed(title=f"{t_card}'s' **Shield** Shattered!", description=f"{o_card} breaks the **Shield**!", colour=0xe91e63)
                                                                 previous_moves.append(f"(**{turn_total}**) 🌐**{t_card}**: Shield Shattered!")
-                                                                if oarm_barrier_active:
+                                                                if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                     oarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                     previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
@@ -8943,19 +8962,19 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             else:
                                                                 embedVar = discord.Embed(title=f"{t_card} Activates **Shield** 🌐", description=f"**{o_card}** strikes the Shield 🌐\n**{tshield_value} Shield** Left!", colour=0xe91e63)
                                                                 previous_moves.append(f"(**{turn_total}**) **{o_card}** strikes **{t_card}**'s Shield 🌐\n**{tshield_value} Shield** Left!")
-                                                                if oarm_barrier_active:
+                                                                if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                     oarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                     previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
                                                                 
                                                          #       await button_ctx.defer(ignore=True)
 
-                                                    elif tarm_barrier_active and dmg['ELEMENT'] != psychic_element:
+                                                    elif tarm_barrier_active:
                                                         if tbarrier_count >1:
                                                             t_health = t_health 
                                                             embedVar = discord.Embed(title=f"{t_card} Activates **Barrier** 💠", description=f"{o_card}'s attack **Nullified**!\n **{tbarrier_count - 1} Barriers** remain!", colour=0xe91e63)
                                                             previous_moves.append(f"(**{turn_total}**) **{t_card}** Activates Barrier 💠 {o_card}'s attack **Nullified**!\n **{tbarrier_count - 1} Barriers** remain!")
-                                                            if oarm_barrier_active:
+                                                            if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                 oarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                 previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
@@ -8966,7 +8985,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             embedVar = discord.Embed(title=f"{t_card}'s **Barrier** Broken!", description=f"{o_card} destroys the **Barrier**", colour=0xe91e63)
                                                             previous_moves.append(f"(**{turn_total}**) **{t_card}**'s Barrier Broken!")
                                                             tbarrier_count = tbarrier_count - 1
-                                                            if oarm_barrier_active:
+                                                            if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                 oarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                 previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
@@ -8983,7 +9002,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             tparry_count = tparry_count - 1
                                                             embedVar = discord.Embed(title=f"{t_card} Activates **Parry** 🔄", description=f"{o_card} takes {round(tparry_damage * .25)}! DMG\n **{tparry_count} Parries** to go!!", colour=0xe91e63)
                                                             previous_moves.append(f"(**{turn_total}**) **{t_card}** Activates Parry 🔄  {o_card} takes {round(tparry_damage * .25)}! DMG\n **{tparry_count} Parries** to go!!")
-                                                            if oarm_barrier_active:
+                                                            if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                 oarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                 previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
@@ -8998,7 +9017,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             embedVar = discord.Embed(title=f"{t_card} **Parry** Penetrated!!", description=f"{o_card} takes {round(tparry_damage * .25)}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                             previous_moves.append(f"(**{turn_total}**) **{t_card}** Parry Penetrated! **{o_card}** takes **{round(tparry_damage * .25)}**! DMG and breaks the **Parry**")
                                                             tparry_count = tparry_count - 1
-                                                            if oarm_barrier_active:
+                                                            if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                 oarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                 previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
@@ -9083,6 +9102,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_bleed_hit = True
                                                                 o_bleed_counter = 0
                                                             t_health = t_health - dmg['DMG']
+                                                            
+                                                        elif dmg['ELEMENT'] == gravity_element:
+                                                            o_gravity_hit = True
+                                                            t_health = t_health - dmg['DMG']
                                                         
                                                         else:
                                                             t_health = t_health - dmg['DMG']
@@ -9100,7 +9123,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 previous_moves.append(f"(**{turn_total}**) **{o_card}**: 💉 Siphoned **Full Health!**")
                                                             else:
                                                                 previous_moves.append(f"(**{turn_total}**) **{o_card}**: 💉 Siphoned **{round(siphon_damage)}** Health!")
-                                                        if oarm_barrier_active:
+                                                        if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                             oarm_barrier_active=False
                                                             embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                             previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
@@ -9110,7 +9133,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if t_universe == "Dragon Ball Z":
                                                                 embedVar = discord.Embed(title=f"{t_card}'s LAST STAND", description=f"{t_card} FINDS RESOLVE", colour=0xe91e63)
                                                                 embedVar.add_field(name=f"**{t_card}** Resolved and continues to fight", value="All stats & stamina increased")
-                                                                if oarm_barrier_active:
+                                                                if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                     oarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                     previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
@@ -9604,14 +9627,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 )
                                             )
 
-
-                                            util_buttons.append(
-                                                manage_components.create_button(
-                                                    style=ButtonStyle.grey,
-                                                    label="Block 20",
-                                                    custom_id="0"
+                                            if o_gravity_hit == False:
+                                                util_buttons.append(
+                                                    manage_components.create_button(
+                                                        style=ButtonStyle.grey,
+                                                        label="Block 20",
+                                                        custom_id="0"
+                                                    )
                                                 )
-                                            )
                                         if t_used_focus and t_used_resolve and not t_pet_used and mode != "RAID":
                                             util_buttons.append(
                                                 manage_components.create_button(
@@ -10295,6 +10318,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_bleed_hit = True
                                                                 t_bleed_counter = 0
                                                             o_health = o_health - dmg['DMG']
+                                                            
+                                                        elif dmg['ELEMENT'] == gravity_element:
+                                                            t_gravity_hit = True
+                                                            o_health = o_health - dmg['DMG']
                                                         
                                                         else:
                                                             o_health = o_health - dmg['DMG']
@@ -10415,7 +10442,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     elif dmg['DMG'] == 0:
                                                         t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                                        if tarm_barrier_active:
+                                                        if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                             tarm_barrier_active=False
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                             previous_moves.append(f"(**{turn_total}**) **{t_card}'s** **Barrier** Disabled!")
@@ -10429,7 +10456,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_naruto_heal_buff = o_naruto_heal_buff + o_stored_damage
                                                             o_health = o_health 
                                                             embedVar = discord.Embed(title=f"{o_card}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
-                                                            if tarm_barrier_active:
+                                                            if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                 previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
@@ -10446,7 +10473,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if oshield_value <=0:
                                                                     embedVar = discord.Embed(title=f"{o_card}'s' **Shield** Shattered!", description=f"{t_card} breaks the **Shield**!", colour=0xe91e63)
                                                                     previous_moves.append(f"(**{turn_total}**) 🌐**{o_card}**: Shield Shattered!")
-                                                                    if tarm_barrier_active:
+                                                                    if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                         tarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                         previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
@@ -10456,18 +10483,18 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 else:
                                                                     embedVar = discord.Embed(title=f"{o_card} Activates **Shield** 🌐", description=f"**{t_card}** strikes the Shield 🌐\n**{oshield_value} Shield** Left!", colour=0xe91e63)
                                                                     previous_moves.append(f"(**{turn_total}**) **{t_card}** strikes **{o_card}**'s Shield 🌐\n**{oshield_value} Shield** Left!")
-                                                                    if tarm_barrier_active:
+                                                                    if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                         tarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                         previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                                     await button_ctx.defer(ignore=True)
 
-                                                        elif oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
+                                                        elif oarm_barrier_active:
                                                             if obarrier_count >1:
                                                                 o_health = o_health 
                                                                 embedVar = discord.Embed(title=f"{o_card} Activates **Barrier** 💠", description=f"{t_card}'s attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!", colour=0xe91e63)
                                                                 previous_moves.append(f"(**{turn_total}**) **{o_card}** Activates Barrier 💠  **{t_card}'s** attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!")
-                                                                if tarm_barrier_active:
+                                                                if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                     previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
@@ -10477,7 +10504,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 embedVar = discord.Embed(title=f"{o_card}'s **Barrier** Broken!", description=f"{t_card} destroys the **Barrier**", colour=0xe91e63)
                                                                 previous_moves.append(f"(**{turn_total}**) **{o_card}**'s Barrier Broken!")
                                                                 obarrier_count = obarrier_count - 1
-                                                                if tarm_barrier_active:
+                                                                if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                     previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
@@ -10492,7 +10519,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 oparry_count = oparry_count - 1
                                                                 embedVar = discord.Embed(title=f"{o_card} Activates **Parry** 🔄", description=f"{t_card} takes {round(oparry_damage * .25)}! DMG\n **{oparry_count} Parries** to go!!", colour=0xe91e63)
                                                                 previous_moves.append(f"(**{turn_total}**) **{o_card}** Activates Parry 🔄 {t_card} takes {round(oparry_damage * .25)}! DMG\n **{oparry_count}  Parries** to go!!")
-                                                                if tarm_barrier_active:
+                                                                if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                     previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
@@ -10505,7 +10532,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 embedVar = discord.Embed(title=f"{o_card} **Parry** Penetrated!!", description=f"{t_card} takes {round(oparry_damage * .25)}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                                 previous_moves.append(f"(**{turn_total}**) **{o_card}** Parry Penetrated! **{t_card}** takes **{round(oparry_damage * .25)}**! DMG and breaks the **Parry**")
                                                                 oparry_count = oparry_count - 1
-                                                                if tarm_barrier_active:
+                                                                if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                     previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
@@ -10588,6 +10615,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     t_bleed_hit = True
                                                                     t_bleed_counter = 0
                                                                 o_health = o_health - dmg['DMG']
+                                                                
+                                                            elif dmg['ELEMENT'] == gravity_element:
+                                                                t_gravity_hit = True
+                                                                o_health = o_health - dmg['DMG']
                                                             
                                                             else:
                                                                 o_health = o_health - dmg['DMG']
@@ -10604,7 +10635,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 else:
                                                                     previous_moves.append(f"(**{turn_total}**) **{t_card}**: 💉 Siphoned **{round(siphon_damage)}** Health!")
                                                                 await button_ctx.defer(ignore=True)
-                                                            if tarm_barrier_active:
+                                                            if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                 previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
@@ -10614,7 +10645,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if o_universe == "Dragon Ball Z":
                                                                     embedVar = discord.Embed(title=f"{o_card}'s LAST STAND", description=f"{o_card} FINDS RESOLVE", colour=0xe91e63)
                                                                     embedVar.add_field(name=f"**{o_card}** Resolved and continues to fight", value="All stats & stamina increased")
-                                                                    if tarm_barrier_active:
+                                                                    if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                         tarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                         previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
@@ -10735,7 +10766,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                         if t_used_resolve and not t_pet_used and mode != "RAID":
                                             aiMove = 6
-                                        elif tarm_barrier_active and dmg['ELEMENT'] != psychic_element: #Ai Barrier Checks
+                                        elif t_enhancer['TYPE'] == "WAVE" and (turn_total % 10 == 0 or turn_total == 0 or turn_total == 1):
+                                            if t_stamina >=20:
+                                                aiMove =4
+                                        elif tarm_barrier_active: #Ai Barrier Checks
                                             if t_stamina >=20: #Stamina Check For Enhancer
                                                 aiMove = await ai_enhancer_moves(turn_total,t_used_focus,t_used_resolve,t_pet_used,t_stamina,
                                                                            t_enhancer['TYPE'],t_health,t_max_health,t_attack,
@@ -11424,6 +11458,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_bleed_hit = True
                                                             t_bleed_counter = 0
                                                         o_health = o_health - dmg['DMG']
+                                                        
+                                                    elif dmg['ELEMENT'] == gravity_element:
+                                                        t_gravity_hit = True
+                                                        o_health = o_health - dmg['DMG']
                                                     
                                                     else:
                                                         o_health = o_health - dmg['DMG']
@@ -11538,7 +11576,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                                     previous_moves.append(f"(**{turn_total}**) **{t_card}**: {dmg['MESSAGE']}")
-                                                    if tarm_barrier_active:
+                                                    if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                         tarm_barrier_active=False
                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                         previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
@@ -11553,7 +11591,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸: Substitution Jutsu")
                                                         if not o_used_resolve:
                                                             previous_moves.append(f"(**{turn_total}**) 🩸**{o_stored_damage}** Hasirama Cells stored. 🩸**{o_naruto_heal_buff}** total stored.")
-                                                        if tarm_barrier_active:
+                                                        if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                             tarm_barrier_active=False
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                             previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
@@ -11564,7 +11602,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if oshield_value <=0:
                                                                 embedVar = discord.Embed(title=f"{o_card}'s' **Shield** Shattered!", description=f"{t_card} breaks the **Shield**!", colour=0xe91e63)
                                                                 previous_moves.append(f"(**{turn_total}**) **{o_card}'s** 🌐 Shield Shattered!")
-                                                                if tarm_barrier_active:
+                                                                if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                     previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
@@ -11572,17 +11610,17 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             else:
                                                                 embedVar = discord.Embed(title=f"{o_card} Activates **Shield** 🌐", description=f"**{t_card}** strikes the Shield 🌐\n**{oshield_value} Shield** Left!", colour=0xe91e63)
                                                                 previous_moves.append(f"(**{turn_total}**) **{t_card}** strikes **{o_card}**'s Shield 🌐\n**{oshield_value} Shield** Left!")
-                                                                if tarm_barrier_active:
+                                                                if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                     previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
 
-                                                    elif oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
+                                                    elif oarm_barrier_active:
                                                         if obarrier_count >1:
                                                             o_health = o_health 
                                                             embedVar = discord.Embed(title=f"{o_card} Activates **Barrier** 💠", description=f"{t_card}'s attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!", colour=0xe91e63)
                                                             previous_moves.append(f"(**{turn_total}**) **{o_card}** Activates Barrier 💠 {t_card}'s attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!")
-                                                            if tarm_barrier_active:
+                                                            if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                 previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
@@ -11591,7 +11629,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             embedVar = discord.Embed(title=f"{o_card}'s **Barrier** Broken!", description=f"{t_card} destroys the **Barrier**", colour=0xe91e63)
                                                             obarrier_count = obarrier_count - 1
                                                             previous_moves.append(f"(**{turn_total}**) **{o_card}**'s Barrier Broken!")
-                                                            if tarm_barrier_active:
+                                                            if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                 previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
@@ -11604,7 +11642,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             oparry_count = oparry_count - 1
                                                             embedVar = discord.Embed(title=f"{o_card} Activates **Parry** 🔄", description=f"{t_card} takes {round(oparry_damage * .25)}! DMG\n **{oparry_count} Parries** to go!!", colour=0xe91e63)
                                                             previous_moves.append(f"(**{turn_total}**) **{o_card}** Activates Parry 🔄 {t_card} takes {round(oparry_damage * .25)}! DMG\n **{oparry_count}  Parries** to go!!")
-                                                            if tarm_barrier_active:
+                                                            if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                 previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
@@ -11616,7 +11654,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             oparry_count = oparry_count - 1
                                                             embedVar = discord.Embed(title=f"{o_card} **Parry** Penetrated!!", description=f"{t_card} takes {round(oparry_damage * .25)}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                             previous_moves.append(f"(**{turn_total}**) **{o_card}** Parry Penetrated! **{t_card}** takes **{round(oparry_damage * .25)}**! DMG and breaks the **Parry**")
-                                                            if tarm_barrier_active:
+                                                            if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                 previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
@@ -11697,6 +11735,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_bleed_hit = True
                                                                 t_bleed_counter = 0
                                                             o_health = o_health - dmg['DMG']
+                                                            
+                                                        elif dmg['ELEMENT'] == gravity_element:
+                                                            t_gravity_hit = True
+                                                            o_health = o_health - dmg['DMG']
                                                         
                                                         else:
                                                             o_health = o_health - dmg['DMG']
@@ -11711,7 +11753,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 previous_moves.append(f"(**{turn_total}**) **{t_card}**: 💉 Siphoned **Full Health!**")
                                                             else:
                                                                 previous_moves.append(f"(**{turn_total}**) **{t_card}**: 💉 Siphoned **{round(siphon_damage)}** Health!")    
-                                                        if tarm_barrier_active:
+                                                        if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                             tarm_barrier_active=False
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                             previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
@@ -11721,7 +11763,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 embedVar = discord.Embed(title=f"{o_card}'s LAST STAND", description=f"{o_card} FINDS RESOLVE", colour=0xe91e63)
                                                                 embedVar.add_field(name=f"**{o_card}** Resolved and continues to fight", value="All stats & stamina increased")
                                                                 previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Transformation: Last Stand!!!")
-                                                                if tarm_barrier_active:
+                                                                if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                     previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!") 
@@ -12207,7 +12249,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         
                                         if o_used_resolve and not o_pet_used and o_stamina >= 30:
                                             aiMove = 6
-                                        elif oarm_barrier_active and dmg['ELEMENT'] != psychic_element: #Ai Barrier Checks
+                                        elif t_enhancer['TYPE'] == "WAVE" and (turn_total % 10 == 0 or turn_total == 0 or turn_total == 1):
+                                            if t_stamina >=20:
+                                                aiMove =4
+                                        elif oarm_barrier_active: #Ai Barrier Checks
                                             if o_stamina >=20: #Stamina Check For Enhancer
                                                 aiMove = await ai_enhancer_moves(turn_total,o_used_focus,o_used_resolve,o_pet_used,o_stamina,
                                                                             o_enhancer['TYPE'],o_health,o_max_health,o_attack,
@@ -12973,6 +13018,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_bleed_hit = True
                                                             o_bleed_counter = 0
                                                         t_health = t_health - dmg['DMG']
+                                                        
+                                                    elif dmg['ELEMENT'] == gravity_element:
+                                                        o_gravity_hit = True
+                                                        t_health = t_health - dmg['DMG']
                                                     
                                                     else:
                                                         t_health = t_health - dmg['DMG']
@@ -13103,7 +13152,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     o_stamina = o_stamina - int(dmg['STAMINA_USED'])
 
                                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
-                                                    if oarm_barrier_active:
+                                                    if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                         oarm_barrier_active=False
                                                         embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                         previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
@@ -13116,7 +13165,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_naruto_heal_buff = t_naruto_heal_buff + t_stored_damage
                                                         t_health = t_health 
                                                         embedVar = discord.Embed(title=f"{t_card}: Substitution Jutsu", description=f"{o_card} strikes a log", colour=0xe91e63)
-                                                        if oarm_barrier_active:
+                                                        if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                             oarm_barrier_active=False
                                                             embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                             previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
@@ -13132,7 +13181,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if tshield_value <=0:
                                                                 embedVar = discord.Embed(title=f"{t_card}'s' **Shield** Shattered!", description=f"{o_card} breaks the **Shield**!", colour=0xe91e63)
                                                                 previous_moves.append(f"(**{turn_total}**) 🌐**{t_card}**: Shield Shattered!")
-                                                                if oarm_barrier_active:
+                                                                if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                     oarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                     previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
@@ -13140,17 +13189,17 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             else:
                                                                 embedVar = discord.Embed(title=f"{t_card} Activates **Shield** 🌐", description=f"**{o_card}** strikes the Shield 🌐\n**{tshield_value} Shield** Left!", colour=0xe91e63)
                                                                 previous_moves.append(f"(**{turn_total}**) **{o_card}** strikes **{t_card}**'s Shield 🌐\n**{tshield_value} Shield** Left!")
-                                                                if oarm_barrier_active:
+                                                                if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                     oarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                     previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
 
-                                                    elif tarm_barrier_active and dmg['ELEMENT'] != psychic_element:
+                                                    elif tarm_barrier_active:
                                                         if tbarrier_count >1:
                                                             t_health = t_health 
                                                             embedVar = discord.Embed(title=f"{t_card} Activates **Barrier** 💠", description=f"{o_card}'s attack **Nullified**!\n **{tbarrier_count - 1} Barriers** remain!", colour=0xe91e63)
                                                             previous_moves.append(f"(**{turn_total}**) **{t_card}** Activates Barrier 💠 {o_card}'s attack **Nullified**!\n **{tbarrier_count - 1} Barriers** remain!")
-                                                            if oarm_barrier_active:
+                                                            if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                 oarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                 previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
@@ -13159,7 +13208,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             embedVar = discord.Embed(title=f"{t_card}'s **Barrier** Broken!", description=f"{o_card} destroys the **Barrier**", colour=0xe91e63)
                                                             previous_moves.append(f"(**{turn_total}**) **{t_card}**'s Barrier Broken!")
                                                             tbarrier_count = tbarrier_count - 1
-                                                            if oarm_barrier_active:
+                                                            if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                 oarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                 previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
@@ -13173,7 +13222,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             tparry_count = tparry_count - 1
                                                             embedVar = discord.Embed(title=f"{t_card} Activates **Parry** 🔄", description=f"{o_card} takes {round(tparry_damage * .25)}! DMG\n **{tparry_count} Parries** to go!!", colour=0xe91e63)
                                                             previous_moves.append(f"(**{turn_total}**) **{t_card}** Activates Parry 🔄  {o_card} takes {round(tparry_damage * .25)}! DMG\n **{tparry_count} Parries** to go!!")
-                                                            if oarm_barrier_active:
+                                                            if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                 oarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                 previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
@@ -13186,7 +13235,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             embedVar = discord.Embed(title=f"{t_card} **Parry** Penetrated!!", description=f"{o_card} takes {round(tparry_damage * .25)}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                             previous_moves.append(f"(**{turn_total}**) **{t_card}** Parry Penetrated! **{o_card}** takes **{round(tparry_damage * .25)}**! DMG and breaks the **Parry**")
                                                             tparry_count = tparry_count - 1
-                                                            if oarm_barrier_active:
+                                                            if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                 oarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                 previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
@@ -13268,6 +13317,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_bleed_hit = True
                                                                 o_bleed_counter = 0
                                                             t_health = t_health - dmg['DMG']
+                                                            
+                                                        elif dmg['ELEMENT'] == gravity_element:
+                                                            o_gravity_hit = True
+                                                            t_health = t_health - dmg['DMG']
                                                         
                                                         else:
                                                             t_health = t_health - dmg['DMG']
@@ -13281,7 +13334,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 previous_moves.append(f"(**{turn_total}**) **{o_card}**: 💉 Siphoned **Full Health!**")
                                                             else:
                                                                 previous_moves.append(f"(**{turn_total}**) **{o_card}**: 💉 Siphoned **{round(siphon_damage)}** Health!")
-                                                        if oarm_barrier_active:
+                                                        if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                             oarm_barrier_active=False
                                                             embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                             previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
@@ -13290,7 +13343,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if t_universe == "Dragon Ball Z":
                                                                 embedVar = discord.Embed(title=f"{t_card}'s LAST STAND", description=f"{t_card} FINDS RESOLVE", colour=0xe91e63)
                                                                 embedVar.add_field(name=f"**{t_card}** Resolved and continues to fight", value="All stats & stamina increased")
-                                                                if oarm_barrier_active:
+                                                                if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                     oarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                     previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
@@ -13434,14 +13487,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 )
                                             )
 
-
-                                            util_buttons.append(
-                                                manage_components.create_button(
-                                                    style=ButtonStyle.grey,
-                                                    label="Block 20",
-                                                    custom_id="0"
+                                            if t_gravity_hit == False:
+                                                util_buttons.append(
+                                                    manage_components.create_button(
+                                                        style=ButtonStyle.grey,
+                                                        label="Block 20",
+                                                        custom_id="0"
+                                                    )
                                                 )
-                                            )
 
                                         if not randomized_battle and difficulty == "NORMAL" and mode != "ABYSS" or mode !="ABYSS":
                                                 util_buttons.append(             
@@ -14533,6 +14586,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_bleed_hit = True
                                                                 o_bleed_counter = 0
                                                             t_health = t_health - dmg['DMG']
+                                                            
+                                                        elif dmg['ELEMENT'] == gravity_element:
+                                                            o_gravity_hit = True
+                                                            t_health = t_health - dmg['DMG']
                                                         
                                                         else:
                                                             t_health = t_health - dmg['DMG']
@@ -14666,7 +14723,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_stamina = o_stamina - int(dmg['STAMINA_USED'])
 
                                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
-                                                        if oarm_barrier_active:
+                                                        if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                             oarm_barrier_active=False
                                                             embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                             previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
@@ -14680,7 +14737,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_naruto_heal_buff = t_naruto_heal_buff + t_stored_damage
                                                             t_health = t_health 
                                                             embedVar = discord.Embed(title=f"{t_card}: Substitution Jutsu", description=f"{o_card} strikes a log", colour=0xe91e63)
-                                                            if oarm_barrier_active:
+                                                            if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                 oarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                 previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
@@ -14698,7 +14755,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if tshield_value <=0:
                                                                     embedVar = discord.Embed(title=f"{t_card}'s' **Shield** Shattered!", description=f"{o_card} breaks the **Shield**!", colour=0xe91e63)
                                                                     previous_moves.append(f"(**{turn_total}**) 🌐**{t_card}**: Shield Shattered!")
-                                                                    if oarm_barrier_active:
+                                                                    if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                         oarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                         previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
@@ -14708,19 +14765,19 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 else:
                                                                     embedVar = discord.Embed(title=f"{t_card} Activates **Shield** 🌐", description=f"**{o_card}** strikes the Shield 🌐\n**{tshield_value} Shield** Left!", colour=0xe91e63)
                                                                     previous_moves.append(f"(**{turn_total}**) **{o_card}** strikes **{t_card}**'s Shield 🌐\n**{tshield_value} Shield** Left!")
-                                                                    if oarm_barrier_active:
+                                                                    if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                         oarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                         previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
                                                                     if not botActive:
                                                                         await button_ctx.defer(ignore=True)
 
-                                                        elif tarm_barrier_active and dmg['ELEMENT'] != psychic_element:
+                                                        elif tarm_barrier_active:
                                                             if tbarrier_count >1:
                                                                 t_health = t_health 
                                                                 embedVar = discord.Embed(title=f"{t_card} Activates **Barrier** 💠", description=f"{o_card}'s attack **Nullified**!\n **{tbarrier_count - 1} Barriers** remain!", colour=0xe91e63)
                                                                 previous_moves.append(f"(**{turn_total}**) **{t_card}** Activates Barrier 💠 {o_card}'s attack **Nullified**!\n **{tbarrier_count - 1} Barriers** remain!")
-                                                                if oarm_barrier_active:
+                                                                if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                     oarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                     previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
@@ -14731,7 +14788,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 embedVar = discord.Embed(title=f"{t_card}'s **Barrier** Broken!", description=f"{o_card} destroys the **Barrier**", colour=0xe91e63)
                                                                 previous_moves.append(f"(**{turn_total}**) **{t_card}**'s Barrier Broken!")
                                                                 tbarrier_count = tbarrier_count - 1
-                                                                if oarm_barrier_active:
+                                                                if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                     oarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                     previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
@@ -14747,7 +14804,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 tparry_count = tparry_count - 1
                                                                 embedVar = discord.Embed(title=f"{t_card} Activates **Parry** 🔄", description=f"{o_card} takes {round(tparry_damage * .25)}! DMG\n **{tparry_count} Parries** to go!!", colour=0xe91e63)
                                                                 previous_moves.append(f"(**{turn_total}**) **{t_card}** Activates Parry 🔄  {o_card} takes {round(tparry_damage * .25)}! DMG\n **{tparry_count} Parries** to go!!")
-                                                                if oarm_barrier_active:
+                                                                if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                     oarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                     previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
@@ -14762,7 +14819,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 embedVar = discord.Embed(title=f"{t_card} **Parry** Penetrated!!", description=f"{o_card} takes {round(tparry_damage * .25)}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                                 previous_moves.append(f"(**{turn_total}**) **{t_card}** Parry Penetrated! **{o_card}** takes **{round(tparry_damage * .25)}**! DMG and breaks the **Parry**")
                                                                 tparry_count = tparry_count - 1
-                                                                if oarm_barrier_active:
+                                                                if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                     oarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                     previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
@@ -14846,6 +14903,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     o_bleed_hit = True
                                                                     o_bleed_counter = 0
                                                                 t_health = t_health - dmg['DMG']
+                                                                
+                                                            elif dmg['ELEMENT'] == gravity_element:
+                                                                o_gravity_hit = True
+                                                                t_health = t_health - dmg['DMG']
                                                             
                                                             else:
                                                                 t_health = t_health - dmg['DMG']
@@ -14861,7 +14922,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 else:
                                                                     previous_moves.append(f"(**{turn_total}**) **{o_card}**: 💉 Siphoned **{round(siphon_damage)}** Health!")
                                                                 await button_ctx.defer(ignore=True)
-                                                            if oarm_barrier_active:
+                                                            if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                 oarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                 previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
@@ -14872,7 +14933,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if t_universe == "Dragon Ball Z":
                                                                     embedVar = discord.Embed(title=f"{t_card}'s LAST STAND", description=f"{t_card} FINDS RESOLVE", colour=0xe91e63)
                                                                     embedVar.add_field(name=f"**{t_card}** Resolved and continues to fight", value="All stats & stamina increased")
-                                                                    if oarm_barrier_active:
+                                                                    if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                         oarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                         previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
@@ -15395,7 +15456,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     
                                     if t_used_resolve and not t_pet_used and t_stamina >= 30:
                                         aiMove = 6
-                                    elif tarm_barrier_active and dmg['ELEMENT'] != psychic_element: #Ai Barrier Checks
+                                    elif t_enhancer['TYPE'] == "WAVE" and (turn_total % 10 == 0 or turn_total == 0 or turn_total == 1):
+                                        if t_stamina >=20:
+                                            aiMove =4
+                                    elif tarm_barrier_active: #Ai Barrier Checks
                                         if t_stamina >=20: #Stamina Check For Enhancer
                                             aiMove = await ai_enhancer_moves(turn_total,t_used_focus,t_used_resolve,t_pet_used,t_stamina,
                                                                         t_enhancer['TYPE'],t_health,t_max_health,t_attack,
@@ -16471,6 +16535,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_bleed_hit = True
                                                         t_bleed_counter = 0
                                                     o_health = o_health - dmg['DMG']
+                                                    
+                                                elif dmg['ELEMENT'] == gravity_element:
+                                                    t_gravity_hit = True
+                                                    o_health = o_health - dmg['DMG']
                                                 
                                                 else:
                                                     o_health = o_health - dmg['DMG']
@@ -16591,7 +16659,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         turn = turn_selector
                                                     elif dmg['DMG'] == 0:
                                                         t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-                                                        if tarm_barrier_active:
+                                                        if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                             tarm_barrier_active=False
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                             previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
@@ -16606,7 +16674,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             previous_moves.append(f"(**{turn_total}**) {c_card}: Substitution Jutsu")
                                                             if not c_used_resolve:
                                                                 previous_moves.append(f"(**{turn_total}**) 🩸**{c_stored_damage}** Hasirama Cells stored. 🩸**{c_naruto_heal_buff}** total stored.")
-                                                            if tarm_barrier_active:
+                                                            if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                 previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
@@ -16617,24 +16685,24 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if cshield_value <=0:
                                                                     embedVar = discord.Embed(title=f"{c_card}'s' **Shield** Shattered!", description=f"{t_card} breaks the **Shield**!", colour=0xe91e63)
                                                                     previous_moves.append(f"(**{turn_total}**) 🌐{c_card}'s Shield Shattered!")
-                                                                    if tarm_barrier_active:
+                                                                    if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                         tarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                         previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                                     carm_shield_active = False
                                                                 else:
                                                                     embedVar = discord.Embed(title=f"{c_card} Activates **Shield** 🌐", description=f"**{t_card}** strikes the Shield 🌐\n**{cshield_value} Shield** Left!", colour=0xe91e63)
-                                                                    if tarm_barrier_active:
+                                                                    if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                         tarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                     #await private_channel.send(embed=embedVar)
 
-                                                        elif carm_barrier_active and dmg['ELEMENT'] != psychic_element:
+                                                        elif carm_barrier_active:
                                                             if cbarrier_count >1:
                                                                 c_health = c_health 
                                                                 embedVar = discord.Embed(title=f"{c_card} Activates **Barrier** 💠", description=f"{t_card}'s attack **Nullified**!\n 💠{cbarrier_count - 1} **Barriers** remain!", colour=0xe91e63)
                                                                 previous_moves.append(f"(**{turn_total}**) {c_card} Activates Barrier 💠 {t_card}'s attack **Nullified**!\n💠 {cbarrier_count - 1} **Barriers** remain!")
-                                                                if tarm_barrier_active:
+                                                                if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                     previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
@@ -16643,7 +16711,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 embedVar = discord.Embed(title=f"{c_card}'s **Barrier** Broken!", description=f"{t_card} destroys the **Barrier**", colour=0xe91e63)
                                                                 cbarrier_count = cbarrier_count - 1
                                                                 previous_moves.append(f"(**{turn_total}**) {c_card}'s Barrier Broken!")
-                                                                if tarm_barrier_active:
+                                                                if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                     previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
@@ -16657,7 +16725,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 cparry_count = cparry_count - 1
                                                                 embedVar = discord.Embed(title=f"{c_card} Activates **Parry** 🔄", description=f"{t_card} takes {round(cparry_damage * .25)}! DMG\n **{cparry_count} Parries** to go!!", colour=0xe91e63)
                                                                 previous_moves.append(f"(**{turn_total}**) {c_card} Activates Parry 🔄")
-                                                                if tarm_barrier_active:
+                                                                if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                     previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
@@ -16670,7 +16738,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 embedVar = discord.Embed(title=f"{c_card} **Parry** Penetrated!!", description=f"{t_card} takes {round(cparry_damage * .25)}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                                 previous_moves.append(f"(**{turn_total}**) **{c_card}** Parry Penetrated! **{t_card}** takes **{round(cparry_damage * .25)}** ! DMG and breaks the **Parry**")
                                                                 cparry_count = cparry_count - 1
-                                                                if tarm_barrier_active:
+                                                                if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                     previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
@@ -16749,6 +16817,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if t_poison_dmg <= 100:
                                                                     t_poison_dmg = t_poison_dmg + 8
                                                                 c_health = c_health - dmg['DMG']
+                                                                
+                                                            elif dmg['ELEMENT'] == gravity_element:
+                                                                t_gravity_hit = True
+                                                                c_health = c_health - dmg['DMG']
                                                             
                                                             else:
                                                                 c_health = c_health - dmg['DMG']
@@ -16775,7 +16847,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     embedVar = discord.Embed(title=f"{c_card}'s LAST STAND", description=f"{c_card} FINDS RESOLVE", colour=0xe91e63)
                                                                     embedVar.add_field(name=f"{c_card} resolved and continues to fight", value="All stats & stamina increased")
                                                                     previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 Transformation: Last Stand!!!")
-                                                                    if tarm_barrier_active:
+                                                                    if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                         tarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                         previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
@@ -16901,7 +16973,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     elif dmg['DMG'] == 0:
                                                         t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                                         previous_moves.append(f"(**{turn_total}**) **{t_card}**: {dmg['MESSAGE']}")
-                                                        if tarm_barrier_active:
+                                                        if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                             tarm_barrier_active=False
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                             previous_moves.append(f"(**{turn_total}**) 🦠 **{t_card}**'s 💠 Barrier Disabled!")
@@ -16911,7 +16983,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if o_universe == "Naruto" and o_stamina < 10:
                                                             o_health = o_health
                                                             previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸: Substitution Jutsu")
-                                                            if tarm_barrier_active:
+                                                            if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                 previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
@@ -16921,7 +16993,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_health = o_health 
                                                                 if oshield_value <=0:
                                                                     previous_moves.append(f"(**{turn_total}**) **{o_card}'s** 🌐 Shield Shattered!")
-                                                                    if tarm_barrier_active:
+                                                                    if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                         tarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                         previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
@@ -16929,17 +17001,17 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 else:
                                                                     embedVar = discord.Embed(title=f"{o_card} Activates **Shield** 🌐", description=f"**{t_card}** strikes the Shield 🌐\n**{oshield_value} Shield** Left!", colour=0xe91e63)
                                                                     previous_moves.append(f"(**{turn_total}**) **{t_card}** strikes **{o_card}**'s Shield 🌐\n**{oshield_value} Shield** Left!")
-                                                                    if tarm_barrier_active:
+                                                                    if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                         tarm_barrier_active=False
                                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                         previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
 
-                                                        elif oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
+                                                        elif oarm_barrier_active:
                                                             if obarrier_count >1:
                                                                 o_health = o_health 
                                                                 embedVar = discord.Embed(title=f"{o_card} Activates **Barrier** 💠", description=f"{t_card}'s attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!", colour=0xe91e63)
                                                                 previous_moves.append(f"(**{turn_total}**) **{o_card}** Activates Barrier 💠 {t_card}'s attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!")
-                                                                if tarm_barrier_active:
+                                                                if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                     previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
@@ -16948,7 +17020,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 embedVar = discord.Embed(title=f"{o_card}'s **Barrier** Broken!", description=f"{t_card} destroys the **Barrier**", colour=0xe91e63)
                                                                 obarrier_count = obarrier_count - 1
                                                                 previous_moves.append(f"(**{turn_total}**) **{o_card}**'s Barrier Broken!")
-                                                                if tarm_barrier_active:
+                                                                if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                     previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
@@ -16961,7 +17033,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 oparry_count = oparry_count - 1
                                                                 embedVar = discord.Embed(title=f"{o_card} Activates **Parry** 🔄", description=f"{t_card} takes {round(oparry_damage * .25)}! DMG\n **{oparry_count} Parries** to go!!", colour=0xe91e63)
                                                                 previous_moves.append(f"(**{turn_total}**) **{o_card}** Activates Parry 🔄 {t_card} takes {round(oparry_damage * .25)}! DMG\n **{oparry_count}  Parries** to go!!")
-                                                                if tarm_barrier_active:
+                                                                if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                     previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
@@ -16973,7 +17045,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 embedVar = discord.Embed(title=f"{o_card} **Parry** Penetrated!!", description=f"{t_card} takes {round(oparry_damage * .25)}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                                 previous_moves.append(f"(**{turn_total}**) **{o_card}** Parry Penetrated! **{t_card}** takes **{round(oparry_damage * .25)}**! DMG and breaks the **Parry**")
                                                                 oparry_count = oparry_count - 1
-                                                                if tarm_barrier_active:
+                                                                if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                     tarm_barrier_active=False
                                                                     private_channel.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                     previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
@@ -17054,6 +17126,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     t_bleed_hit = True
                                                                     t_bleed_counter = 0
                                                                 o_health = o_health - dmg['DMG']
+                                                                
+                                                            elif dmg['ELEMENT'] == gravity_element:
+                                                                t_gravity_hit = True
+                                                                o_health = o_health - dmg['DMG']
                                                             
                                                             else:
                                                                 o_health = o_health - dmg['DMG']
@@ -17069,7 +17145,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     previous_moves.append(f"(**{turn_total}**) **{t_card}**: 💉 Siphoned **Full Health!**")
                                                                 else:
                                                                     previous_moves.append(f"(**{turn_total}**) **{t_card}**: 💉 Siphoned **{round(siphon_damage)}** Health!")
-                                                            if tarm_barrier_active:
+                                                            if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                 tarm_barrier_active=False
                                                                 private_channel.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                 previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
@@ -17079,7 +17155,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     embedVar = discord.Embed(title=f"{o_card}'s LAST STAND", description=f"{o_card} FINDS RESOLVE", colour=0xe91e63)
                                                                     private_channel.add_field(name=f"**{o_card}** Resolved and continues to fight", value="All stats & stamina increased")
                                                                     previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Transformation: Last Stand!!!")
-                                                                    if tarm_barrier_active:
+                                                                    if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                         tarm_barrier_active=False
                                                                         private_channel.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                         previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
@@ -17206,7 +17282,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 elif dmg['DMG'] == 0:
                                                     t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                                     previous_moves.append(f"(**{turn_total}**) **{t_card}**: {dmg['MESSAGE']}")
-                                                    if tarm_barrier_active:
+                                                    if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                         tarm_barrier_active=False
                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                         previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
@@ -17221,7 +17297,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸: Substitution Jutsu")
                                                         if not o_used_resolve:
                                                             previous_moves.append(f"(**{turn_total}**) 🩸**{o_stored_damage}** Hasirama Cells stored. 🩸**{o_naruto_heal_buff}** total stored.")
-                                                        if tarm_barrier_active:
+                                                        if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                             tarm_barrier_active=False
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                             previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
@@ -17232,7 +17308,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if oshield_value <=0:
                                                                 embedVar = discord.Embed(title=f"{o_card}'s' **Shield** Shattered!", description=f"{t_card} breaks the **Shield**!", colour=0xe91e63)
                                                                 previous_moves.append(f"(**{turn_total}**) **{o_card}'s** 🌐 Shield Shattered!")
-                                                                if tarm_barrier_active:
+                                                                if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                     previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
@@ -17240,17 +17316,17 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             else:
                                                                 embedVar = discord.Embed(title=f"{o_card} Activates **Shield** 🌐", description=f"**{t_card}** strikes the Shield 🌐\n**{oshield_value} Shield** Left!", colour=0xe91e63)
                                                                 previous_moves.append(f"(**{turn_total}**) **{t_card}** strikes **{o_card}**'s Shield 🌐\n**{oshield_value} Shield** Left!")
-                                                                if tarm_barrier_active: 
+                                                                if oarm_barrier_active and dmg['ELEMENT'] != psychic_element: 
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                     previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
 
-                                                    elif oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
+                                                    elif oarm_barrier_active:
                                                         if obarrier_count >1:
                                                             o_health = o_health 
                                                             embedVar = discord.Embed(title=f"{o_card} Activates **Barrier** 💠", description=f"{t_card}'s attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!", colour=0xe91e63)
                                                             previous_moves.append(f"(**{turn_total}**) **{o_card}** Activates Barrier 💠  {t_card}'s attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!")
-                                                            if tarm_barrier_active:
+                                                            if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                 previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
@@ -17259,7 +17335,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             embedVar = discord.Embed(title=f"{o_card}'s **Barrier** Broken!", description=f"{t_card} destroys the **Barrier**", colour=0xe91e63)
                                                             previous_moves.append(f"(**{turn_total}**) **{o_card}**'s Barrier Broken!")
                                                             obarrier_count = obarrier_count - 1
-                                                            if tarm_barrier_active:
+                                                            if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                 previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
@@ -17272,7 +17348,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             oparry_count = oparry_count - 1
                                                             embedVar = discord.Embed(title=f"{o_card} Activates **Parry** 🔄", description=f"{t_card} takes {round(oparry_damage * .25)}! DMG\n **{oparry_count} Parries** to go!!", colour=0xe91e63)
                                                             previous_moves.append(f"(**{turn_total}**) **{o_card}** Activates Parry 🔄 {t_card} takes {round(oparry_damage * .25)}! DMG\n **{oparry_count}  Parries** to go!!")
-                                                            if tarm_barrier_active:
+                                                            if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                 previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
@@ -17284,7 +17360,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             embedVar = discord.Embed(title=f"{o_card} **Parry** Penetrated!!", description=f"{t_card} takes {round(oparry_damage * .25)}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                             previous_moves.append(f"(**{turn_total}**) **{o_card}** Parry Penetrated! **{t_card}** takes **{round(oparry_damage * .25)}**! DMG and breaks the **Parry**")
                                                             oparry_count = oparry_count - 1
-                                                            if tarm_barrier_active:
+                                                            if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                 previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
@@ -17365,6 +17441,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_bleed_hit = True
                                                                 t_bleed_counter = 0
                                                             o_health = o_health - dmg['DMG']
+                                                            
+                                                        elif dmg['ELEMENT'] == gravity_element:
+                                                            t_gravity_hit = True
+                                                            o_health = o_health - dmg['DMG']
                                                         
                                                         else:
                                                             o_health = o_health - dmg['DMG']
@@ -17379,7 +17459,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 previous_moves.append(f"(**{turn_total}**) **{t_card}**: 💉 Siphoned **Full Health!**")
                                                             else:
                                                                 previous_moves.append(f"(**{turn_total}**) **{t_card}**: 💉 Siphoned **{round(siphon_damage)}** Health!")
-                                                        if tarm_barrier_active:
+                                                        if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                             tarm_barrier_active=False
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                             previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
@@ -17389,7 +17469,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 embedVar = discord.Embed(title=f"{o_card}'s LAST STAND", description=f"{o_card} FINDS RESOLVE", colour=0xe91e63)
                                                                 embedVar.add_field(name=f"**{o_card}** Resolved and continues to fight", value="All stats & stamina increased")
                                                                 previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Transformation: Last Stand!!!")
-                                                                if tarm_barrier_active:
+                                                                if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                     tarm_barrier_active=False
                                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                                     previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!") 
@@ -17790,7 +17870,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                             if c_used_resolve and not c_pet_used:
                                                 aiMove = 6
-                                            elif carm_barrier_active and dmg['ELEMENT'] != psychic_element: #Ai Barrier Checks
+                                            elif t_enhancer['TYPE'] == "WAVE" and (turn_total % 10 == 0 or turn_total == 0 or turn_total == 1):
+                                                if t_stamina >=20:
+                                                    aiMove =4
+                                            elif carm_barrier_active: #Ai Barrier Checks
                                                 if t_stamina >=20: #Stamina Check For Enhancer
                                                     aiMove = await ai_enhancer_moves(turn_total,c_used_focus,c_used_resolve,c_pet_used,c_stamina,
                                                                             c_enhancer['TYPE'],c_health,c_max_health,c_attack,
@@ -18785,7 +18868,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                         previous_moves.append(f"(**{turn_total}**) **{c_card}**'s 💠 Barrier Disabled!")
                                                                     #await private_channel.send(embed=embedVar)
 
-                                                        elif tarm_barrier_active and dmg['ELEMENT'] != psychic_element and dmg['ELEMENT'] != psychic_element:
+                                                        elif tarm_barrier_active and dmg['ELEMENT'] != psychic_element :
                                                             if tbarrier_count >1:
                                                                 t_health = t_health 
                                                                 embedVar = discord.Embed(title=f"{t_card} Activates **Barrier** 💠", description=f"{c_card}'s attack **Nullified**!\n **{tbarrier_count - 1} Barriers** remain!", colour=0xe91e63)
@@ -18909,6 +18992,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             elif dmg['ELEMENT'] == poison_element:
                                                                 if c_poison_dmg <= 100:
                                                                     c_poison_dmg = c_poison_dmg + 8
+                                                                t_health = t_health - dmg['DMG']
+                                                                
+                                                            elif dmg['ELEMENT'] == gravity_element:
+                                                                c_gravity_hit = True
                                                                 t_health = t_health - dmg['DMG']
                                                             else:
                                                                 t_health = t_health - dmg['DMG']
@@ -19068,14 +19155,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     )
                                                 )
 
-
-                                                util_buttons.append(
-                                                    manage_components.create_button(
-                                                        style=ButtonStyle.grey,
-                                                        label="Block 20",
-                                                        custom_id="0"
+                                                if t_gravity_hit == False:
+                                                    util_buttons.append(
+                                                        manage_components.create_button(
+                                                            style=ButtonStyle.grey,
+                                                            label="Block 20",
+                                                            custom_id="0"
+                                                        )
                                                     )
-                                                )
 
                                             coop_util_buttons = [
                                                 manage_components.create_button(
@@ -19911,6 +19998,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if c_poison_dmg <= 100:
                                                                     c_poison_dmg = c_poison_dmg + 8
                                                                 t_health = t_health - dmg['DMG']
+                                                                
+                                                            elif dmg['ELEMENT'] == gravity_element:
+                                                                c_gravity_hit = True
+                                                                t_health = t_health - dmg['DMG']
+                                                                
                                                             else:
                                                                 t_health = t_health - dmg['DMG']
 
@@ -20091,7 +20183,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                         #await private_channel.send(embed=embedVar)
                                                                         await button_ctx.defer(ignore=True)
 
-                                                            elif tarm_barrier_active and dmg['ELEMENT'] != psychic_element and dmg['ELEMENT'] != psychic_element:
+                                                            elif tarm_barrier_active and dmg['ELEMENT'] != psychic_element :
                                                                 if tbarrier_count >1:
                                                                     t_health = t_health 
                                                                     embedVar = discord.Embed(title=f"{t_card} Activates **Barrier** 💠", description=f"{c_card}'s attack **Nullified**!\n **{tbarrier_count - 1} Barriers** remain!", colour=0xe91e63)
@@ -20220,6 +20312,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     if c_poison_dmg <= 100:
                                                                         c_poison_dmg = c_poison_dmg + 8
                                                                     t_health = t_health - dmg['DMG']
+                                                                    
+                                                                elif dmg['ELEMENT'] == gravity_element:
+                                                                    c_gravity_hit = True
+                                                                    t_health = t_health - dmg['DMG']
+                                                            
                                                                 else:
                                                                     t_health = t_health - dmg['DMG']
 
@@ -20676,7 +20773,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                         if t_used_resolve and not t_pet_used:
                                             aiMove = 6
-                                        elif tarm_barrier_active and dmg['ELEMENT'] != psychic_element: #Ai Barrier Checks
+                                        elif t_enhancer['TYPE'] == "WAVE" and (turn_total % 10 == 0 or turn_total == 0 or turn_total == 1):
+                                            if t_stamina >=20:
+                                                aiMove =4
+                                        elif tarm_barrier_active: #Ai Barrier Checks
                                             if t_stamina >=20: #Stamina Check For Enhancer
                                                 aiMove = await ai_enhancer_moves(turn_total,t_used_focus,t_used_resolve,t_pet_used,t_stamina,
                                                                            t_enhancer['TYPE'],t_health,t_max_health,t_attack,
@@ -21602,6 +21702,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if t_poison_dmg <= 100:
                                                             t_poison_dmg = t_poison_dmg + 8
                                                         c_health = c_health - dmg['DMG']
+                                                        
+                                                    elif dmg['ELEMENT'] == gravity_element:
+                                                        t_gravity_hit = True
+                                                        c_health = c_health - dmg['DMG']
                                                     
                                                     else:
                                                         c_health = c_health - dmg['DMG']
@@ -21769,7 +21873,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                         previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                                     #await private_channel.send(embed=embedVar)
 
-                                                        elif oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
+                                                        elif oarm_barrier_active:
                                                             if obarrier_count >1:
                                                                 o_health = o_health 
                                                                 embedVar = discord.Embed(title=f"{o_card} Activates **Barrier** 💠", description=f"{t_card}'s attack **Nullified**!\n💠 {obarrier_count - 1} **Barriers** remain!", colour=0xe91e63)
@@ -21892,6 +21996,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if t_bleed_counter == 5:
                                                                     t_bleed_hit = True
                                                                     t_bleed_counter = 0
+                                                                o_health = o_health - dmg['DMG']
+                                                                
+                                                            elif dmg['ELEMENT'] == gravity_element:
+                                                                t_gravity_hit = True
                                                                 o_health = o_health - dmg['DMG']
                                                             
                                                             else:
@@ -22093,7 +22201,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                         previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                                     #await private_channel.send(embed=embedVar)
 
-                                                        elif carm_barrier_active and dmg['ELEMENT'] != psychic_element:
+                                                        elif carm_barrier_active:
                                                             if cbarrier_count >1:
                                                                 c_health = c_health 
                                                                 embedVar = discord.Embed(title=f"{c_card} Activates **Barrier** 💠", description=f"{t_card}'s attack **Nullified**!\n 💠{cbarrier_count - 1} **Barriers** remain!", colour=0xe91e63)
@@ -22216,6 +22324,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             elif dmg['ELEMENT'] == poison_element:
                                                                 if t_poison_dmg <= 100:
                                                                     t_poison_dmg = t_poison_dmg + 8
+                                                                c_health = c_health - dmg['DMG']
+                                                                
+                                                            elif dmg['ELEMENT'] == gravity_element:
+                                                                t_gravity_hit = True
                                                                 c_health = c_health - dmg['DMG']
                                                             
                                                             else:
@@ -22936,7 +23048,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     """),colour=0xe91e63)
 
                                     embedVar.set_author(name=f"{t_card} lost!")
-                                    embedVar.set_footer(text=f"Traverse the /abyss to unlock new game modes and features!")
+                                    embedVar.set_footer(text=f"Traverse the **Abyss** in /solo to unlock new game modes and features!")
                                     embedVar.add_field(
                                     name=f"Abyssal Rewards",
                                     value=f"{abyss_drop_message}")
@@ -23179,9 +23291,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             # await ctx.send(embed=embedVar)
                                             await battle_msg.delete(delay=2)
                                             await asyncio.sleep(2)
-                                            battle_msg = await private_channel.send(embed=embedVar)
+                                            
                                             embedVar.add_field(name="Conquerors Reward",
                                                         value=f"You were awarded :coin: 2,000,000 for completing the {selected_universe} Tale!")
+                                            battle_msg = await private_channel.send(embed=embedVar)
                                         if mode in co_op_modes and mode not in ai_co_op_modes:
                                             cuid = c_DID
                                             cuser = await self.bot.fetch_user(cuid)
@@ -24345,6 +24458,26 @@ title_enhancer_mapping = {'ATK': 'Increase Attack ',
 'BARRIER': 'Nullifies Incoming Attacks, until broken',
 'PARRY': 'Returns 25% Damage, until broken',
 'SIPHON': 'Heal for 10% DMG inflicted + AP'
+}
+element_mapping = {'PHYSICAL': 'Normal Damage ',
+'FIRE': 'Does 20% damage of previous attack over the next opponent turns, stacks ',
+'ICE': 'After 3 uses opponent freezes and loses 1 turn',
+'WATER': 'Increases all water attack dmg by 25 Flat',
+'EARTH': 'Cannot be Parried. Increases Def by 20% AP',
+'ELECTRIC': 'Add 7% to Shock damage, added to each attack',
+'WIND': 'Cannot Miss ',
+'PSYCHIC': ' Penetrates Barriers. Reduce opponent ATK & DEF by 8% AP ',
+'DEATH': 'Adds 7% opponent max health as damage',
+'LIFE': 'Heal for 15% AP',
+'LIGHT': 'Regain 50% Stamina Cost',
+'DARK': 'Penetrates shields & drains 5 stamina ',
+'POISON': 'Opponent takes additional 8 damage each turn stacking up to 100',
+'RANGED': 'If ST > 80 deals 1.5x Damage',
+'SPIRIT': 'Has higher chance of Crit',
+'RECOIL': 'Deals 25% damage back to you',
+'TIME': 'You Focus after attacking',
+'BLEED': 'After 5 Attacks deal 5x turn count damage to opponent',
+'GRAVITY': 'Disables Opponent Block'
 }
 passive_enhancer_suffix_mapping = {'ATK': '%',
 'DEF': '%',

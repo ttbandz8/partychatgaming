@@ -670,43 +670,61 @@ class Guild(commands.Cog):
                 
     @cog_ext.cog_slash(description="Knight your Association Shield! (Association Owner)", guild_ids=main.guild_ids)
     async def knight(self, ctx, blade: User):
-        a_registered_player = await crown_utilities.player_check(ctx)
-        if not a_registered_player:
-            return
+        try:
+            a_registered_player = await crown_utilities.player_check(ctx)
+            if not a_registered_player:
+                return
 
-        founder_profile = db.queryUser({'DID': str(ctx.author.id)})
-        shield_profile = db.queryUser({'DID' : str(blade.id)})
-        if not shield_profile:
-            await ctx.send(m.USER_NOT_REGISTERED)
-        shield_team_name = shield_profile['TEAM'].lower()
-        if shield_team_name == 'PCG':
-            await ctx.send(m.KNIGHT_NOT_TEAM, delete_after=3)
+            founder_profile = db.queryUser({'DID': str(ctx.author.id)})
+            shield_profile = db.queryUser({'DID' : str(blade.id)})
+            if not shield_profile:
+                await ctx.send(m.USER_NOT_REGISTERED)
+            shield_team_name = shield_profile['TEAM'].lower()
+            if shield_team_name == 'PCG':
+                await ctx.send(m.KNIGHT_NOT_TEAM, delete_after=3)
+                return
+            shield_team = db.queryTeam({'TEAM_NAME' : str(shield_team_name)})
+            if shield_team['GUILD'] != founder_profile['GUILD']:
+                await ctx.send(m.KNIGHT_NOT_TEAM, delete_after=3)
+                return
+            guildname = founder_profile['GUILD']
+            if founder_profile['GUILD'] == 'PCG':
+                await ctx.send(m.USER_NOT_IN_GUILD, delete_after=3)
+                return
+            guild_query = {'GNAME': str(guildname)}
+            guild = db.queryGuildAlt(guild_query)
+            guild_name = guild['GNAME']
+            
+            prev_id = guild['SDID']
+            prev_user = db.queryUser({'DID':prev_id})
+            prev_team = db.queryTeam({'TEAM_NAME':prev_user['TEAM'].lower()})
+            prev_team_exist = False
+            if prev_team:
+                prev_team_exist = True
+            new_query = {'FDID' : guild['FDID']}
+            f_profile = guild['FDID']
+            s_profile = guild['WDID']
+            if founder_profile['DID'] != f_profile and founder_profile['DID'] != s_profile:
+                await ctx.send(m.KNIGHT_GUILD_FOUNDER, delete_after=3)
+                return
+        except Exception as ex:
+            trace = []
+            tb = ex.__traceback__
+            while tb is not None:
+                trace.append({
+                    "filename": tb.tb_frame.f_code.co_filename,
+                    "name": tb.tb_frame.f_code.co_name,
+                    "lineno": tb.tb_lineno
+                })
+                tb = tb.tb_next
+            print(str({
+                'type': type(ex).__name__,
+                'message': str(ex),
+                'trace': trace
+            }))
+            await ctx.send(
+                "There's an issue with your commnads. Alert support.")
             return
-        shield_team = db.queryTeam({'TEAM_NAME' : str(shield_team_name)})
-        if shield_team['GUILD'] != founder_profile['GUILD']:
-            await ctx.send(m.KNIGHT_NOT_TEAM, delete_after=3)
-            return
-        guildname = founder_profile['GUILD']
-        if founder_profile['GUILD'] == 'PCG':
-            await ctx.send(m.USER_NOT_IN_GUILD, delete_after=3)
-            return
-        guild_query = {'GNAME': str(guildname)}
-        guild = db.queryGuildAlt(guild_query)
-        guild_name = guild['GNAME']
-        
-        prev_id = guild['SDID']
-        prev_user = db.queryUser({'DID':prev_id})
-        prev_team = db.queryTeam({'TEAM_NAME':prev_user['TEAM'].lower()})
-        prev_team_exist = False
-        if prev_team:
-            prev_team_exist = True
-        new_query = {'FDID' : guild['FDID']}
-        f_profile = guild['FDID']
-        s_profile = guild['WDID']
-        if founder_profile['DID'] != f_profile and founder_profile['DID'] != s_profile:
-            await ctx.send(m.KNIGHT_GUILD_FOUNDER, delete_after=3)
-            return
-    
     
     @cog_ext.cog_slash(description="Exile Guild from Association (Association Owner)", guild_ids=main.guild_ids)
     async def exile(self, ctx, owner: User):

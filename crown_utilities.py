@@ -234,9 +234,10 @@ def set_emoji(element):
         emoji = "🩸"
     if element == "RECOIL":
         emoji = "⛓️"
-
     if element == "TIME":
         emoji = "⌛"
+    if element == "GRAVITY":
+        emoji = "🪐"
         
 
     return emoji

@@ -1900,11 +1900,15 @@ async def craft_adjuster(self, player, vault, universe, price, item, skin_list):
                                 
                                 move1name = list(move1.keys())[0]
                                 move2name = list(move2.keys())[0]
-                                move3name = list(move2.keys())[0]
+                                move3name = list(move3.keys())[0]
                                 
                                 move1ap = list(move1.values())[0]
                                 move2ap = list(move2.values())[0]
                                 move3ap = list(move3.values())[0]
+                                
+                                basic_attack_emoji = crown_utilities.set_emoji(list(move1.values())[2])
+                                super_attack_emoji = crown_utilities.set_emoji(list(move2.values())[2])
+                                ultimate_attack_emoji = crown_utilities.set_emoji(list(move3.values())[2])
                                 
                                 enhmove = list(s_enhancer.keys())[0]
                                 enhap = list(s_enhancer.values())[0]
@@ -1932,9 +1936,9 @@ async def craft_adjuster(self, player, vault, universe, price, item, skin_list):
                                 :mahjong: {skins['TIER']}: 🃏 **{skins['SKIN_FOR']}** 
                                 :heart: **{skins['HLT']}** :dagger: **{skins['ATK']}** :shield: **{skins['DEF']}**
                                 
-                                💥 **{move1name}:** {move1ap}
-                                ☄️ **{move2name}:** {move2ap}
-                                🏵️ **{move3name}:** {move3ap}
+                                {basic_attack_emoji} **{move1name}:** {move1ap}
+                                {super_attack_emoji} **{move2name}:** {move2ap}
+                                {ultimate_attack_emoji} **{move3name}:** {move3ap}
                                 🦠 **{enhmove}:** {enh} {enhap}{enhancer_suffix_mapping[enh]}
 
                                 🩸 **{passive_name}:** {passive_type} {passive_num}{passive_enhancer_suffix_mapping[passive_type]}
@@ -2259,20 +2263,29 @@ async def build(self, ctx):
                 titled =False
                 titleicon="⚠️"
                 licon = "🔱"
+                armicon = "☢️"
                 if card_lvl == 200:
                     licon ="⚜️"
                 titlemessage = f"{titleicon} {title_name} ~ INEFFECTIVE"
+                armmessage = f'☢️ {arm_name}: {arm_passive_type} {arm_passive_value}{enhancer_suffix_mapping[arm_passive_type]} {durability}'
                 warningmessage = f"Use {o_show} or Unbound Titles on this card"
                 if o_title_universe == "Unbound":
                     titled =True
-                    titleicon = "🎗️"
-                    titlemessage = f"🎗️ {title_name}: {title_passive_type} {title_passive_value}{title_enhancer_suffix_mapping[title_passive_type]}"
+                    titleicon = "👑"
+                    titlemessage = f"👑 {title_name}: {title_passive_type} {title_passive_value}{title_enhancer_suffix_mapping[title_passive_type]}"
                     warningmessage= f""
                 elif o_title_universe == o_show:
                     titled =True
                     titleicon = "🎗️"
                     titlemessage = f"🎗️ {title_name}: {title_passive_type} {title_passive_value}{title_enhancer_suffix_mapping[title_passive_type]}"
                     warningmessage= f""
+                
+                if oarm_universe == "Unbound":
+                    armicon = "💪"
+                    armmessage = f'💪 {arm_name}: {arm_passive_type} {arm_passive_value}{enhancer_suffix_mapping[arm_passive_type]} {durability}'
+                elif oarm_universe == o_show:
+                    armicon = "🦾"
+                    armmessage = f'🦾 {arm_name}: {arm_passive_type} {arm_passive_value}{enhancer_suffix_mapping[arm_passive_type]} {durability}'
                 cardtitle = {'TITLE': title_name}
 
                 #<:PCG:769471288083218432>
@@ -2285,8 +2298,8 @@ async def build(self, ctx):
                     🏃 **{o_speed}**
 
                     **{titlemessage}**
-                    🦾 **{arm_name}: {arm_passive_type} {arm_passive_value}{enhancer_suffix_mapping[arm_passive_type]} {durability}**
-                    🧬 **{active_pet['NAME']}: {active_pet['TYPE']}: {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]} | Bond {bond} {bond_message} / Level {lvl} {lvl_message}**
+                    **{armmessage}**
+                    🧬 **{active_pet['NAME']}: {active_pet['TYPE']}: {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]}| Bond {bond} {bond_message} / Level {lvl} {lvl_message}**
                     🩸 **{passive_name}:** {passive_type} {passive_num}{passive_enhancer_suffix_mapping[passive_type]}                
                     
                     {move1_emoji} **{move1}:** {move1ap}
@@ -2315,8 +2328,8 @@ async def build(self, ctx):
                     embedVar.set_image(url="attachment://image.png")
                     embedVar.set_author(name=textwrap.dedent(f"""\
                     {titlemessage}
-                    🦾 {arm_name}: {arm_passive_type} {arm_passive_value}{enhancer_suffix_mapping[arm_passive_type]} {durability}
-                    🧬 {active_pet['NAME']}: {active_pet['TYPE']}: {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]} | Bond {bond} {bond_message} / Level {lvl} {lvl_message}
+                    {armmessage}
+                    🧬 {active_pet['NAME']}: {active_pet['TYPE']}: {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]}| Bond {bond} {bond_message} / Level {lvl} {lvl_message}
                     🩸 {passive_name}: {passive_type} {passive_num}{passive_enhancer_suffix_mapping[passive_type]}                
                     🏃 {o_speed}
                     """))
@@ -2804,8 +2817,8 @@ async def cards(self, ctx):
                         
                     elif button_ctx.custom_id == "Swap":
                         await button_ctx.defer(ignore=True)
-                        await ctx.send(f"{ctx.author.mention}, Which card number would you like to swap with in storage?")
 
+                        await ctx.send(f"{ctx.author.mention}, Which card number would you like to swap with in storage?")
                         def check(msg):
                             return msg.author == ctx.author
 
@@ -3888,7 +3901,7 @@ async def trinketshop(self, ctx):
    ]
    sell_buttons_action_row = manage_components.create_actionrow(*sell_buttons)
    util_sell_buttons_action_row = manage_components.create_actionrow(*util_sell_buttons)
-   embedVar = discord.Embed(title=f":tickets: | **Trinket Shop** - {icon}{'{:,}'.format(balance)} ", description=textwrap.dedent(f"""\
+   embedVar = discord.Embed(title=f"🔨 | **Blacksmith** - {icon}{'{:,}'.format(balance)} ", description=textwrap.dedent(f"""\
    Welcome {ctx.author.mention}!
    Purchase **Card XP** and **Arm Durability**!
    🎴 Card:  **{current_card}**
@@ -3956,7 +3969,7 @@ async def trinketshop(self, ctx):
          lvl = card_info['LVL']
          max_lvl = 200
          if lvl >= max_lvl:
-            await button_ctx.send(f"**{current_card}** is already at max Trinket level. You may level up in /tales, but you can no longer purchase levels for this card.", hidden=True)
+            await button_ctx.send(f"**{current_card}** is already at max Smithing level. You may level up in **battle**, but you can no longer purchase levels for this card.", hidden=True)
             await msg.edit(components=[])
             return
 
@@ -4013,15 +4026,20 @@ async def trinketshop(self, ctx):
          else:
             try:
                new_durability = current_durability + levels_gained
+               full_repair = False
                if new_durability > 100:
                   levels_gained = 100 - current_durability
+                  full_repair=True
                query = {'DID': str(ctx.author.id)}
                update_query = {'$inc': {'ARMS.$[type].' + 'DUR': levels_gained}}
                filter_query = [{'type.' + "ARM": str(current_arm)}]
                resp = db.updateVault(query, update_query, filter_query)
 
                await crown_utilities.curse(price, str(ctx.author.id))
-               await button_ctx.send(f"{current_arm}'s ⚒️ durability has increased by **{levels_gained}**!")
+               if full_repair:
+                    await button_ctx.send(f"{current_arm}'s ⚒️ durability has increased by **{levels_gained}**!\n*Maximum Durability Reached!*")
+               else:
+                    await button_ctx.send(f"{current_arm}'s ⚒️ durability has increased by **{levels_gained}**!")
                await msg.edit(components=[])
                return
             except:
