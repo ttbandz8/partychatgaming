@@ -2420,7 +2420,7 @@ def damage_cal(opponent_affinity, move_type, move_element, universe, card, abili
             standard_hit = 19  # Standard Damage
             high_hit = 20  # Crit Hit
             hit_roll = round(random.randint(2, 21))
-            print(f"HIT ROLL: {str(hit_roll)}")
+            # print(f"HIT ROLL: {str(hit_roll)}")
             if move_element == "SPIRIT" and hit_roll > 3:
                 hit_roll = hit_roll + 5
 
@@ -2846,16 +2846,16 @@ def showcard(d, arm, max_health, health, max_stamina, stamina, resolved, title, 
             super_attack_emoji = crown_utilities.set_emoji(list(move2.values())[2])
             ultimate_attack_emoji = crown_utilities.set_emoji(list(move3.values())[2])
 
-            move1_ap = ap1
-            move2_ap = ap2
-            move3_ap = ap3
+            move1_ap = round(ap1)
+            move2_ap = round(ap2)
+            move3_ap = round(ap3)
             if arm != "none":
                 if arm_passive_type == 'BASIC':
-                    move1_ap = arm_passive_value
+                    move1_ap = round(arm_passive_value)
                 if arm_passive_type == 'SPECIAL':
-                    move2_ap = arm_passive_value
+                    move2_ap = round(arm_passive_value)
                 if arm_passive_type == 'ULTIMATE':
-                    move3_ap = arm_passive_value
+                    move3_ap = round(arm_passive_value)
 
             move1_text = f"{basic_attack_emoji} {list(move1.keys())[0]}: {move1_ap} {ebasic}"
             move2_text = f"{super_attack_emoji} {list(move2.keys())[0]}: {move2_ap} {especial}"
@@ -7515,9 +7515,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     o_health = o_health - bleed_dmg
                                     previous_moves.append(f"(**{turn_total}**) 🩸 **{o_card}** shredded for **{bleed_dmg}** bleed dmg...")
 
-                                if t_burn_dmg:
+                                if t_burn_dmg > 3:
                                     o_health = o_health - t_burn_dmg
-                                    previous_moves.append(f"(**{turn_total}**) 🔥 **{o_card}** burned for **{t_burn_dmg}** dmg...")
+                                    previous_moves.append(f"🔥 **{o_card}** burned for **{round(t_burn_dmg)}** dmg...")
                                 if t_freeze_enh:
                                     previous_moves.append(f"(**{turn_total}**) ❄️ **{o_card}** has been frozen for a turn...")
                                     turn_total = turn_total + 1
@@ -7526,7 +7526,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     o_health = o_health - t_poison_dmg
                                     previous_moves.append(f"(**{turn_total}**) 🧪 **{o_card}** poisoned for **{t_poison_dmg}** dmg...")
                                 
-                                o_burn_dmg = 0
+                                t_burn_dmg = round(t_burn_dmg / 2)
                                 o_freeze_enh = False
                                                     
                                 if o_title_passive_type:
@@ -8738,7 +8738,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = t_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == fire_element:
-                                                        o_burn_dmg = round(dmg['DMG'] * .30)
+                                                        o_burn_dmg = round(dmg['DMG'] * .20)
                                                         t_health = t_health - dmg['DMG']
 
 
@@ -9053,7 +9053,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == fire_element:
-                                                            o_burn_dmg = round(dmg['DMG'] * .30)
+                                                            o_burn_dmg = round(dmg['DMG'] * .20)
                                                             t_health = t_health - dmg['DMG']
 
 
@@ -9176,9 +9176,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     bleed_dmg = 5 * turn_total
                                     t_health = t_health - bleed_dmg
                                     previous_moves.append(f"(**{turn_total}**) 🩸 **{t_card}** shredded for **{bleed_dmg}** bleed dmg...")
-                                if o_burn_dmg:
+                                if o_burn_dmg > 3:
                                     t_health = t_health - o_burn_dmg
-                                    previous_moves.append(f"(**{turn_total}**) 🔥 **{t_card}** burned for **{o_burn_dmg}** dmg...")
+                                    previous_moves.append(f"🔥 **{t_card}** burned for **{round(o_burn_dmg)}** dmg...")
                                 if o_freeze_enh:
                                     previous_moves.append(f"(**{turn_total}**) ❄️ **{t_card}** has been frozen for a turn...")
                                     turn_total = turn_total + 1
@@ -9187,7 +9187,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     t_health = t_health - o_poison_dmg
                                     previous_moves.append(f"(**{turn_total}**) 🧪 **{t_card}** poisoned for **{o_poison_dmg}** dmg...")
 
-                                t_burn_dmg = 0
+                                o_burn_dmg = round(o_burn_dmg / 2)
                                 t_freeze_enh = False
 
                                 if t_title_passive_type:
@@ -10262,7 +10262,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == fire_element:
-                                                            t_burn_dmg = round(dmg['DMG'] * .30)
+                                                            t_burn_dmg = round(dmg['DMG'] * .20)
                                                             o_health = o_health - dmg['DMG']
 
 
@@ -10554,7 +10554,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_health = o_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == fire_element:
-                                                                t_burn_dmg = round(dmg['DMG'] * .30)
+                                                                t_burn_dmg = round(dmg['DMG'] * .20)
                                                                 o_health = o_health - dmg['DMG']
 
 
@@ -11389,7 +11389,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_health = o_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == fire_element:
-                                                        t_burn_dmg = round(dmg['DMG'] * .30)
+                                                        t_burn_dmg = round(dmg['DMG'] * .20)
                                                         o_health = o_health - dmg['DMG']
 
 
@@ -11661,7 +11661,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == fire_element:
-                                                            t_burn_dmg = round(dmg['DMG'] * .30)
+                                                            t_burn_dmg = round(dmg['DMG'] * .20)
                                                             o_health = o_health - dmg['DMG']
 
 
@@ -11745,10 +11745,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     o_health = o_health - bleed_dmg
                                     previous_moves.append(f"(**{turn_total}**) 🩸 **{o_card}** shredded for **{bleed_dmg}** bleed dmg...")
 
-
-                                if t_burn_dmg:
+                                if t_burn_dmg > 3:
                                     o_health = o_health - t_burn_dmg
-                                    previous_moves.append(f"(**{turn_total}**) 🔥 **{o_card}** burned for **{t_burn_dmg}** dmg...")
+                                    previous_moves.append(f"🔥 **{o_card}** burned for **{round(t_burn_dmg)}** dmg...")
                                 if t_freeze_enh:
                                     previous_moves.append(f"(**{turn_total}**) ❄️ **{o_card}** has been frozen for a turn...")
                                     turn_total = turn_total + 1
@@ -11756,7 +11755,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 if t_poison_dmg:
                                     o_health = o_health - t_poison_dmg
                                     previous_moves.append(f"(**{turn_total}**) 🧪 **{o_card}** poisoned for **{t_poison_dmg}** dmg...")
-                                o_burn_dmg = 0
+                                t_burn_dmg = round(t_burn_dmg / 2)
                                 o_freeze_enh = False
 
                                 # if previous_moves:
@@ -12936,7 +12935,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = t_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == fire_element:
-                                                        o_burn_dmg = round(dmg['DMG'] * .30)
+                                                        o_burn_dmg = round(dmg['DMG'] * .20)
                                                         t_health = t_health - dmg['DMG']
 
 
@@ -13230,7 +13229,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == fire_element:
-                                                            o_burn_dmg = round(dmg['DMG'] * .30)
+                                                            o_burn_dmg = round(dmg['DMG'] * .20)
                                                             t_health = t_health - dmg['DMG']
 
 
@@ -14494,7 +14493,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == fire_element:
-                                                            o_burn_dmg = round(dmg['DMG'] * .30)
+                                                            o_burn_dmg = round(dmg['DMG'] * .20)
                                                             t_health = t_health - dmg['DMG']
 
 
@@ -14806,7 +14805,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = t_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == fire_element:
-                                                                o_burn_dmg = round(dmg['DMG'] * .30)
+                                                                o_burn_dmg = round(dmg['DMG'] * .20)
                                                                 t_health = t_health - dmg['DMG']
 
 
@@ -14928,9 +14927,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     bleed_dmg = 5 * turn_total
                                     t_health = t_health - bleed_dmg
                                     previous_moves.append(f"(**{turn_total}**) 🩸 **{t_card}** shredded for **{bleed_dmg}** bleed dmg...")
-                                if o_burn_dmg:
+                                if o_burn_dmg > 3:
                                     t_health = t_health - o_burn_dmg
-                                    previous_moves.append(f"(**{turn_total}**) 🔥 **{t_card}** burned for **{t_burn_dmg}** dmg...")
+                                    previous_moves.append(f"🔥 **{t_card}** burned for **{round(o_burn_dmg)}** dmg...")
                                 if o_freeze_enh:
                                     previous_moves.append(f"(**{turn_total}**) ❄️ **{t_card}** has been frozen for a turn...")
                                     turn_total = turn_total + 1
@@ -14942,7 +14941,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     t_health = t_health - o_poison_dmg
                                     previous_moves.append(f"(**{turn_total}**) 🧪 **{t_card}** poisoned for **{o_poison_dmg}** dmg...")
 
-                                t_burn_dmg = 0
+                                o_burn_dmg = round(o_burn_dmg / 2)
                                 t_freeze_enh = False
 
                                 if t_title_passive_type:
@@ -16428,7 +16427,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     o_health = o_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == fire_element:
-                                                    t_burn_dmg = round(dmg['DMG'] * .30)
+                                                    t_burn_dmg = round(dmg['DMG'] * .20)
                                                     o_health = o_health - dmg['DMG']
 
 
@@ -16720,7 +16719,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 c_health = c_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == fire_element:
-                                                                t_burn_dmg = round(dmg['DMG'] * .30)
+                                                                t_burn_dmg = round(dmg['DMG'] * .20)
                                                                 c_health = c_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == electric_element:
@@ -17009,7 +17008,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_health = o_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == fire_element:
-                                                                t_burn_dmg = round(dmg['DMG'] * .30)
+                                                                t_burn_dmg = round(dmg['DMG'] * .20)
                                                                 o_health = o_health - dmg['DMG']
 
 
@@ -17319,7 +17318,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == fire_element:
-                                                            t_burn_dmg = round(dmg['DMG'] * .30)
+                                                            t_burn_dmg = round(dmg['DMG'] * .20)
                                                             o_health = o_health - dmg['DMG']
 
 
@@ -17404,9 +17403,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         c_health = c_health - bleed_dmg
                                         previous_moves.append(f"(**{turn_total}**) 🩸 **{c_card}** shredded for **{bleed_dmg}** bleed dmg...")
 
-                                    if t_burn_dmg:
+                                    if t_burn_dmg > 3:
                                         c_health = c_health - t_burn_dmg
-                                        previous_moves.append(f"(**{turn_total}**) 🔥 **{c_card}** burned for **{t_burn_dmg}** dmg...")
+                                        previous_moves.append(f"🔥 **{c_card}** burned for **{round(t_burn_dmg)}** dmg...")
                                     if t_freeze_enh:
                                         previous_moves.append(f"(**{turn_total}**) ❄️ **{c_card}** has been frozen for a turn...")
                                         turn_total = turn_total + 1
@@ -17415,7 +17414,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         c_health = c_health - t_poison_dmg
                                         previous_moves.append(f"(**{turn_total}**) 🧪 **{c_card}** poisoned for **{t_poison_dmg}** dmg...")
 
-                                    c_burn_dmg = 0
+                                    t_burn_dmg = round(t_burn_dmg / 2)
                                     c_freeze_enh = False
 
                                     if c_title_passive_type:
@@ -18876,7 +18875,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = t_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == fire_element:
-                                                                c_burn_dmg = dmg['DMG'] * .25
+                                                                c_burn_dmg = round(dmg['DMG'] * .20)
                                                                 t_health = t_health - dmg['DMG']
 
 
@@ -19876,7 +19875,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = t_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == fire_element:
-                                                                c_burn_dmg = dmg['DMG'] * .25
+                                                                c_burn_dmg = round(dmg['DMG'] * .20)
                                                                 t_health = t_health - dmg['DMG']
 
 
@@ -20184,7 +20183,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     t_health = t_health - dmg['DMG']
 
                                                                 elif dmg['ELEMENT'] == fire_element:
-                                                                    c_burn_dmg = dmg['DMG'] * .25
+                                                                    c_burn_dmg = round(dmg['DMG'] * .20)
                                                                     t_health = t_health - dmg['DMG']
 
 
@@ -20290,9 +20289,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         t_health = t_health - bleed_dmg
                                         previous_moves.append(f"(**{turn_total}**) 🩸 **{t_card}** shredded for **{bleed_dmg}** bleed dmg...")
 
-                                    if c_burn_dmg:
+                                    if c_burn_dmg > 3:
                                         t_health = t_health - c_burn_dmg
-                                        previous_moves.append(f"(**{turn_total}**) 🔥 **{t_card}** burned for **{c_burn_dmg}** dmg...")
+                                        previous_moves.append(f"🔥 **{t_card}** burned for **{round(c_burn_dmg)}** dmg...")
                                     if c_freeze_enh:
                                         previous_moves.append(f"(**{turn_total}**) ❄️ **{t_card}** has been frozen for a turn...")
                                         turn_total = turn_total + 1
@@ -20301,7 +20300,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         t_health = t_health - c_poison_dmg
                                         previous_moves.append(f"(**{turn_total}**) 🧪 **{t_card}** poisoned for **{c_poison_dmg}** dmg...")
 
-                                    t_burn_dmg = 0
+                                    c_burn_dmg = round(c_burn_dmg / 2)
                                     t_freeze_enh = False
 
                                     if t_title_passive_type:
@@ -21565,7 +21564,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         c_health = c_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == fire_element:
-                                                        t_burn_dmg = round(dmg['DMG'] * .30)
+                                                        t_burn_dmg = round(dmg['DMG'] * .20)
                                                         c_health = c_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == electric_element:
@@ -21840,7 +21839,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_health = o_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == fire_element:
-                                                                t_burn_dmg = round(dmg['DMG'] * .30)
+                                                                t_burn_dmg = round(dmg['DMG'] * .20)
                                                                 o_health = o_health - dmg['DMG']
 
 
@@ -22178,7 +22177,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 c_health = c_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == fire_element:
-                                                                t_burn_dmg = round(dmg['DMG'] * .30)
+                                                                t_burn_dmg = round(dmg['DMG'] * .20)
                                                                 c_health = c_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == electric_element:

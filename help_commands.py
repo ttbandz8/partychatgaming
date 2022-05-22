@@ -71,7 +71,7 @@ LEGEND = textwrap.dedent(f"""\
 ELEMENTS = textwrap.dedent(f"""\
 👊 Physical - Normal Damage
 
-🔥 Fire - Does 30% damage of previous attack on next opponent turn 
+🔥 Fire - Does 20% damage of previous attack over the next opponent turns, stacks
 
 ❄️ Ice - After 3 uses opponent freezes and loses 1 turn 
 
