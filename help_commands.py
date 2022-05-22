@@ -71,13 +71,13 @@ LEGEND = textwrap.dedent(f"""\
 ELEMENTS = textwrap.dedent(f"""\
 👊 Physical - Normal Damage
 
-<a:Fire:777975890172837898> Fire - Does 30% damage of previous attack on next opponent turn 
+🔥 Fire - Does 30% damage of previous attack on next opponent turn 
 
 ❄️ Ice - After 3 uses opponent freezes and loses 1 turn 
 
 💧 Water - increases all water attack dmg by 25 Flat 
 
-⛰️ Earth - Cannot be Parried. Increases Def by 20% AP
+🌱 Earth - Cannot be Parried. Increases Def by 20% AP
 
 ⚡️ Electric- Add 5% to Shock damage, added to each attack
 
@@ -93,7 +93,7 @@ ELEMENTS = textwrap.dedent(f"""\
 
 ♠️ Dark- Penetrates shields & drains 5 stamina 
 
-<:ToxicMushroom:977583817466470410> Poison - opponent takes additional 8 damage each turn stacking up to 100
+🧪 Poison - opponent takes additional 8 damage each turn stacking up to 100
 
 🏹 Ranged - If ST > 80 deals 1.3x Damage
 
@@ -103,7 +103,7 @@ ELEMENTS = textwrap.dedent(f"""\
 
 ⌛ Time - You Focus after attacking
 
-<:bloody_dark:977581034851930142> Bleed - After 10 Attacks deal 10x turn count damage to opponent
+🩸 Bleed - After 5 Attacks deal 5x turn count damage to opponent
 
 [Join the Anime VS+ Support Server](https://discord.gg/2JkCqcN3hB)
 """)

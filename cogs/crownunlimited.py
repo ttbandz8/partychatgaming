@@ -7224,6 +7224,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             o_psychic_debuff = 0
             o_bleed_counter = 0
             o_bleed_hit = False
+            o_basic_water_buff = 0
+            o_special_water_buff = 0
+            o_ultimate_water_buff = 0
 
             t_burn_dmg = 0
             t_poison_dmg = 0
@@ -7234,6 +7237,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             t_psychic_debuff = 0
             t_bleed_counter = 0
             t_bleed_hit = False
+            t_basic_water_buff = 0
+            t_special_water_buff = 0
+            t_ultimate_water_buff = 0
 
             c_burn_dmg = 0
             c_poison_dmg = 0
@@ -7244,6 +7250,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             c_psychic_debuff = 0
             c_bleed_counter = 0
             c_bleed_hit = False
+            c_basic_water_buff = 0
+            c_special_water_buff = 0
+            c_ultimate_water_buff = 0
+
 
 
             if o_universe == "Solo Leveling":
@@ -7358,9 +7368,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
             start_tales_buttons_action_row = manage_components.create_actionrow(*start_tales_buttons)
 
-            tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff + t_shock_buff + t_water_buff
-            tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff + t_shock_buff + t_water_buff
-            tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff + t_shock_buff
+            tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff + t_shock_buff + t_basic_water_buff
+            tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff + t_shock_buff + t_special_water_buff
+            tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff + t_shock_buff + t_ultimate_water_buff
             tenh1 = list(t_enhancer.values())[0]
             tenh_name = list(t_enhancer.values())[2]
             
@@ -7501,7 +7511,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             if turn == 0:
                                 if t_bleed_hit:
                                     t_bleed_hit = False
-                                    bleed_dmg = 10 * turn_total
+                                    bleed_dmg = 5 * turn_total
                                     o_health = o_health - bleed_dmg
                                     previous_moves.append(f"(**{turn_total}**) 🩸 **{o_card}** shredded for **{bleed_dmg}** bleed dmg...")
 
@@ -7860,9 +7870,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         turn = 0
                                 else:
                                     # Ap Levels
-                                    ap1 = list(o_1.values())[0] + ocard_lvl_ap_buff + o_shock_buff + o_water_buff
-                                    ap2 = list(o_2.values())[0] + ocard_lvl_ap_buff + o_shock_buff + o_water_buff
-                                    ap3 = list(o_3.values())[0] + ocard_lvl_ap_buff + demon_slayer_buff + o_shock_buff
+                                    ap1 = list(o_1.values())[0] + ocard_lvl_ap_buff + o_shock_buff + o_basic_water_buff
+                                    ap2 = list(o_2.values())[0] + ocard_lvl_ap_buff + o_shock_buff + o_special_water_buff
+                                    ap3 = list(o_3.values())[0] + ocard_lvl_ap_buff + demon_slayer_buff + o_shock_buff + o_ultimate_water_buff
                                     enh1 = list(o_enhancer.values())[0]
                                     enh_name = list(o_enhancer.values())[2]
                                     pet_enh_name = list(opet_move.values())[2]
@@ -8684,6 +8694,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = t_health + dmg['DMG']
                                                     elif dmg['ELEMENT'] == water_element:
                                                         o_water_buff = o_water_buff + 25
+                                                        previous_moves.append(f"**{o_card}** dealt 💧 **{o_water_buff}** additional water dmg")
                                                         t_health = t_health - (dmg['DMG'] + o_water_buff)
                                                     else:
                                                         t_health = t_health - dmg['DMG']
@@ -8720,9 +8731,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_burn_dmg = round(dmg['DMG'] * .30)
 
 
-                                                    if dmg['ELEMENT'] == water_element:
-                                                        o_water_buff = o_water_buff + 25
-
                                                     if dmg['ELEMENT'] == electric_element:
                                                         o_shock_buff = o_shock_buff +  (dmg['DMG'] * .05)
 
@@ -8737,7 +8745,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                     if dmg['ELEMENT'] == bleed_element:
                                                         o_bleed_counter = o_bleed_counter + 1
-                                                        if o_bleed_counter == 10:
+                                                        if o_bleed_counter == 5:
                                                             o_bleed_hit = True
                                                             o_bleed_counter = 0
 
@@ -8984,6 +8992,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health + dmg['DMG']
                                                         elif dmg['ELEMENT'] == water_element:
                                                             o_water_buff = o_water_buff + 25
+                                                            previous_moves.append(f"**{o_card}** dealt 💧 **{o_water_buff}** additional water dmg")
                                                             t_health = t_health - (dmg['DMG'] + o_water_buff)
                                                         else:
                                                             t_health = t_health - dmg['DMG']
@@ -9018,9 +9027,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if dmg['ELEMENT'] == fire_element:
                                                             o_burn_dmg = round(dmg['DMG'] * .30)
 
-                                                        if dmg['ELEMENT'] == water_element:
-                                                            o_water_buff = o_water_buff + 25
-
                                                         if dmg['ELEMENT'] == electric_element:
                                                             o_shock_buff = o_shock_buff +  (dmg['DMG'] * .05)
 
@@ -9035,7 +9041,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                         if dmg['ELEMENT'] == bleed_element:
                                                             o_bleed_counter = o_bleed_counter + 1
-                                                            if o_bleed_counter == 10:
+                                                            if o_bleed_counter == 5:
                                                                 o_bleed_hit = True
                                                                 o_bleed_counter = 0
 
@@ -9131,7 +9137,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             elif turn == 1:
                                 if o_bleed_hit:
                                     o_bleed_hit = False
-                                    bleed_dmg = 10 * turn_total
+                                    bleed_dmg = 5 * turn_total
                                     t_health = t_health - bleed_dmg
                                     previous_moves.append(f"(**{turn_total}**) 🩸 **{t_card}** shredded for **{bleed_dmg}** bleed dmg...")
                                 if o_burn_dmg:
@@ -9448,9 +9454,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     # Check If Playing Bot
                                     if botActive != True and raidActive == False:
                                         # PlayUser
-                                        tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff + t_shock_buff + t_water_buff
-                                        tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff + t_shock_buff + t_water_buff
-                                        tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff + t_shock_buff
+                                        tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff + t_shock_buff + t_basic_water_buff
+                                        tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff + t_shock_buff + t_special_water_buff
+                                        tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff + t_shock_buff + t_ultimate_water_buff
                                         tenh1 = list(t_enhancer.values())[0]
                                         tenh_name = list(t_enhancer.values())[2]
                                         tpet_enh_name = list(tpet_move.values())[2]
@@ -10177,6 +10183,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health + dmg['DMG']
                                                         elif dmg['ELEMENT'] == water_element:
                                                             t_water_buff = t_water_buff + 25
+                                                            previous_moves.append(f"**{t_card}** dealt 💧 **{t_water_buff}** additional water dmg")
                                                             o_health = o_health - (dmg['DMG'] + t_water_buff)
                                                         else:
                                                             o_health = o_health - dmg['DMG']
@@ -10212,9 +10219,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_burn_dmg = round(dmg['DMG'] * .30)
 
 
-                                                        if dmg['ELEMENT'] == water_element:
-                                                            t_water_buff = t_water_buff + 25
-
                                                         if dmg['ELEMENT'] == electric_element:
                                                             t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
 
@@ -10229,7 +10233,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                         if dmg['ELEMENT'] == bleed_element:
                                                             t_bleed_counter = t_bleed_counter + 1
-                                                            if t_bleed_counter == 10:
+                                                            if t_bleed_counter == 5:
                                                                 t_bleed_hit = True
                                                                 t_bleed_counter = 0
 
@@ -10455,6 +10459,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_health = o_health + int(dmg['DMG'])
                                                             elif dmg['ELEMENT'] == water_element:
                                                                 t_water_buff = t_water_buff + 25
+                                                                previous_moves.append(f"**{t_card}** dealt 💧 **{t_water_buff}** additional water dmg")
                                                                 o_health = o_health - (dmg['DMG'] + t_water_buff)
                                                             else:
                                                                 o_health = o_health - dmg['DMG']
@@ -10471,7 +10476,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                             if dmg['ELEMENT'] == bleed_element:
                                                                 t_bleed_counter = t_bleed_counter + 1
-                                                                if t_bleed_counter == 10:
+                                                                if t_bleed_counter == 5:
                                                                     t_bleed_hit = True
                                                                     t_bleed_counter = 0
 
@@ -10495,9 +10500,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if dmg['ELEMENT'] == fire_element:
                                                                 t_burn_dmg = round(dmg['DMG'] * .30)
 
-
-                                                            if dmg['ELEMENT'] == water_element:
-                                                                t_water_buff = t_water_buff + 25
 
                                                             if dmg['ELEMENT'] == electric_element:
                                                                 t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
@@ -10593,9 +10595,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     # Play Bot
                                     else:
                                         # UNIVERSE CARD
-                                        tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff + t_shock_buff + t_water_buff
-                                        tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff + t_shock_buff + t_water_buff
-                                        tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff + t_shock_buff
+                                        tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff + t_shock_buff + t_basic_water_buff
+                                        tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff + t_shock_buff + t_special_water_buff
+                                        tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff + t_shock_buff + t_ultimate_water_buff
                                         tenh1 = list(t_enhancer.values())[0]
                                         tenh_name = list(t_enhancer.values())[2]
                                         tpet_enh_name = list(tpet_move.values())[2]
@@ -11273,6 +11275,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_health = o_health + dmg['DMG']
                                                     elif dmg['ELEMENT'] == water_element:
                                                         t_water_buff = t_water_buff + 25
+                                                        previous_moves.append(f"**{t_card}** dealt 💧 **{t_water_buff}** additional water dmg")
                                                         o_health = o_health - (dmg['DMG'] + t_water_buff)
                                                     else:
                                                         o_health = o_health - dmg['DMG']
@@ -11282,7 +11285,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                     if dmg['ELEMENT'] == bleed_element:
                                                         t_bleed_counter = t_bleed_counter + 1
-                                                        if t_bleed_counter == 10:
+                                                        if t_bleed_counter == 5:
                                                             t_bleed_hit = True
                                                             t_bleed_counter = 0
 
@@ -11312,9 +11315,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     if dmg['ELEMENT'] == fire_element:
                                                         t_burn_dmg = round(dmg['DMG'] * .30)
 
-
-                                                    if dmg['ELEMENT'] == water_element:
-                                                        t_water_buff = t_water_buff + 25
 
                                                     if dmg['ELEMENT'] == electric_element:
                                                         t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
@@ -11521,6 +11521,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health + int(dmg['DMG'])
                                                         elif dmg['ELEMENT'] == water_element:
                                                             t_water_buff = t_water_buff + 25
+                                                            previous_moves.append(f"**{t_card}** dealt 💧 **{t_water_buff}** additional water dmg")
                                                             o_health = o_health - (dmg['DMG'] + t_water_buff)
                                                         else:
                                                             o_health = o_health - dmg['DMG']
@@ -11536,7 +11537,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                         if dmg['ELEMENT'] == bleed_element:
                                                             t_bleed_counter = t_bleed_counter + 1
-                                                            if t_bleed_counter == 10:
+                                                            if t_bleed_counter == 5:
                                                                 t_bleed_hit = True
                                                                 t_bleed_counter = 0
 
@@ -11568,9 +11569,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if dmg['ELEMENT'] == fire_element:
                                                             t_burn_dmg = round(dmg['DMG'] * .30)
 
-
-                                                        if dmg['ELEMENT'] == water_element:
-                                                            t_water_buff = t_water_buff + 25
 
                                                         if dmg['ELEMENT'] == electric_element:
                                                             t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
@@ -11629,7 +11627,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             if turn == 0:
                                 if t_bleed_hit:
                                     t_bleed_hit = False
-                                    bleed_dmg = 10 * turn_total
+                                    bleed_dmg = 5 * turn_total
                                     o_health = o_health - bleed_dmg
                                     previous_moves.append(f"(**{turn_total}**) 🩸 **{o_card}** shredded for **{bleed_dmg}** bleed dmg...")
 
@@ -12012,9 +12010,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 else:
                                     if mode in AUTO_BATTLE_modes:
                                         # UNIVERSE CARD
-                                        ap1 = list(o_1.values())[0] + ocard_lvl_ap_buff + o_shock_buff + o_water_buff
-                                        ap2 = list(o_2.values())[0] + ocard_lvl_ap_buff + o_shock_buff + o_water_buff
-                                        ap3 = list(o_3.values())[0] + ocard_lvl_ap_buff + demon_slayer_buff + o_shock_buff
+                                        ap1 = list(o_1.values())[0] + ocard_lvl_ap_buff + o_shock_buff + o_basic_water_buff
+                                        ap2 = list(o_2.values())[0] + ocard_lvl_ap_buff + o_shock_buff + o_special_water_buff
+                                        ap3 = list(o_3.values())[0] + ocard_lvl_ap_buff + demon_slayer_buff + o_shock_buff + o_ultimate_water_buff
                                         enh1 = list(o_enhancer.values())[0]
                                         enh_name = list(o_enhancer.values())[2]
                                         pet_enh_name = list(opet_move.values())[2]
@@ -12780,6 +12778,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = t_health + dmg['DMG']
                                                     elif dmg['ELEMENT'] == water_element:
                                                         o_water_buff = o_water_buff + 25
+                                                        previous_moves.append(f"**{o_card}** dealt :droplet: **{o_water_buff}** additional water dmg")
                                                         t_health = t_health - (dmg['DMG'] + o_water_buff)
                                                     else:
                                                         t_health = t_health - dmg['DMG']
@@ -12792,7 +12791,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                     if dmg['ELEMENT'] == bleed_element:
                                                         o_bleed_counter = o_bleed_counter + 1
-                                                        if o_bleed_counter == 10:
+                                                        if o_bleed_counter == 5:
                                                             o_bleed_hit = True
                                                             o_bleed_counter = 0
 
@@ -12819,9 +12818,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     if dmg['ELEMENT'] == fire_element:
                                                         o_burn_dmg = round(dmg['DMG'] * .30)
 
-
-                                                    if dmg['ELEMENT'] == water_element:
-                                                        o_water_buff = o_water_buff + 25
 
                                                     if dmg['ELEMENT'] == electric_element:
                                                         o_shock_buff = o_shock_buff +  (dmg['DMG'] * .05)
@@ -13057,6 +13053,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health + int(dmg['DMG'])
                                                         elif dmg['ELEMENT'] == water_element:
                                                             o_water_buff = o_water_buff + 25
+                                                            previous_moves.append(f"**{o_card}** dealt :droplet: **{o_water_buff}** additional water dmg")
                                                             t_health = t_health - (dmg['DMG'] + o_water_buff)
                                                         else:
                                                             t_health = t_health - dmg['DMG']
@@ -13072,7 +13069,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                         if dmg['ELEMENT'] == bleed_element:
                                                             o_bleed_counter = o_bleed_counter + 1
-                                                            if o_bleed_counter == 10:
+                                                            if o_bleed_counter == 5:
                                                                 o_bleed_hit= True
                                                                 o_bleed_counter = 0
 
@@ -13101,9 +13098,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                         if dmg['ELEMENT'] == fire_element:
                                                             o_burn_dmg = round(dmg['DMG'] * .30)
-
-                                                        if dmg['ELEMENT'] == water_element:
-                                                            o_water_buff = o_water_buff + 25
 
                                                         if dmg['ELEMENT'] == electric_element:
                                                             o_shock_buff = o_shock_buff +  (dmg['DMG'] * .05)
@@ -13156,9 +13150,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 turn = 0
                                     else:
                                         # UNIVERSE CARD
-                                        ap1 = list(o_1.values())[0] + ocard_lvl_ap_buff + o_shock_buff + o_water_buff
-                                        ap2 = list(o_2.values())[0] + ocard_lvl_ap_buff + o_shock_buff + o_water_buff
-                                        ap3 = list(o_3.values())[0] + ocard_lvl_ap_buff + demon_slayer_buff + o_shock_buff
+                                        ap1 = list(o_1.values())[0] + ocard_lvl_ap_buff + o_shock_buff + o_basic_water_buff
+                                        ap2 = list(o_2.values())[0] + ocard_lvl_ap_buff + o_shock_buff + o_special_water_buff
+                                        ap3 = list(o_3.values())[0] + ocard_lvl_ap_buff + demon_slayer_buff + o_shock_buff + o_ultimate_water_buff
                                         enh1 = list(o_enhancer.values())[0]
                                         enh_name = list(o_enhancer.values())[2]
                                         pet_enh_name = list(opet_move.values())[2]
@@ -14303,6 +14297,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health + dmg['DMG']
                                                         elif dmg['ELEMENT'] == water_element:
                                                             o_water_buff = o_water_buff + 25
+                                                            previous_moves.append(f"**{o_card}** dealt :droplet: **{o_water_buff}** additional water dmg")
                                                             t_health = t_health - (dmg['DMG'] + o_water_buff)
                                                         else:
                                                             t_health = t_health - dmg['DMG']
@@ -14315,7 +14310,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                         if dmg['ELEMENT'] == bleed_element:
                                                             o_bleed_counter = o_bleed_counter + 1
-                                                            if o_bleed_counter == 10:
+                                                            if o_bleed_counter == 5:
                                                                 o_bleed_hit= True
                                                                 o_bleed_counter = 0
 
@@ -14342,9 +14337,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if dmg['ELEMENT'] == fire_element:
                                                             o_burn_dmg = round(dmg['DMG'] * .30)
 
-
-                                                        if dmg['ELEMENT'] == water_element:
-                                                            o_water_buff = o_water_buff + 25
 
                                                         if dmg['ELEMENT'] == electric_element:
                                                             o_shock_buff = o_shock_buff +  (dmg['DMG'] * .05)
@@ -14598,6 +14590,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = t_health + int(dmg['DMG'])
                                                             elif dmg['ELEMENT'] == water_element:
                                                                 o_water_buff = o_water_buff + 25
+                                                                previous_moves.append(f"**{o_card}** dealt :droplet: **{o_water_buff}** additional water dmg")
                                                                 t_health = t_health - (dmg['DMG'] + o_water_buff)
                                                             else:
                                                                 t_health = t_health - dmg['DMG']
@@ -14616,7 +14609,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                             if dmg['ELEMENT'] == bleed_element:
                                                                 o_bleed_counter = o_bleed_counter + 1
-                                                                if o_bleed_counter == 10:
+                                                                if o_bleed_counter == 5:
                                                                     o_bleed_hit= True
                                                                     o_bleed_counter = 0
 
@@ -14642,9 +14635,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                             if dmg['ELEMENT'] == fire_element:
                                                                 o_burn_dmg = round(dmg['DMG'] * .30)
-
-                                                            if dmg['ELEMENT'] == water_element:
-                                                                o_water_buff = o_water_buff + 25
 
                                                             if dmg['ELEMENT'] == electric_element:
                                                                 o_shock_buff = o_shock_buff +  (dmg['DMG'] * .05)
@@ -14742,7 +14732,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             elif turn == 1:
                                 if o_bleed_hit:
                                     o_bleed_hit = False
-                                    bleed_dmg = 10 * turn_total
+                                    bleed_dmg = 5 * turn_total
                                     t_health = t_health - bleed_dmg
                                     previous_moves.append(f"(**{turn_total}**) 🩸 **{t_card}** shredded for **{bleed_dmg}** bleed dmg...")
                                 if o_burn_dmg:
@@ -15127,9 +15117,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     else:
                                         turn_selector = 0
                                     if mode not in AUTO_BATTLE_modes:
-                                        tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff + corruption_ap_buff + t_shock_buff
-                                        tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff + corruption_ap_buff + t_shock_buff
-                                        tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff + corruption_ap_buff + t_shock_buff
+                                        tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff + corruption_ap_buff + t_shock_buff + t_basic_water_buff
+                                        tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff + corruption_ap_buff + t_shock_buff + t_special_water_buff
+                                        tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff + corruption_ap_buff + t_shock_buff + t_ultimate_water_buff
                                         tenh1 = list(t_enhancer.values())[0]
                                         tenh_name = list(t_enhancer.values())[2]
                                         tpet_enh_name = list(tpet_move.values())[2]
@@ -16202,6 +16192,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     o_health = o_health + dmg['DMG']
                                                 elif dmg['ELEMENT'] == water_element:
                                                     t_water_buff = t_water_buff + 25
+                                                    previous_moves.append(f"**{t_card}** dealt :droplet: **{t_water_buff}** additional water dmg")
                                                     o_health = o_health - (dmg['DMG'] + t_water_buff)
                                                 else:
                                                     o_health = o_health - dmg['DMG']
@@ -16214,7 +16205,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                 if dmg['ELEMENT'] == bleed_element:
                                                     t_bleed_counter = t_bleed_counter + 1
-                                                    if t_bleed_counter == 10:
+                                                    if t_bleed_counter == 5:
                                                         t_bleed_hit = True
                                                         t_bleed_counter = 0
 
@@ -16247,8 +16238,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 if dmg['ELEMENT'] == fire_element:
                                                     t_burn_dmg = round(dmg['DMG'] * .30)
 
-                                                if dmg['ELEMENT'] == water_element:
-                                                    t_water_buff = t_water_buff + 25
 
                                                 if dmg['ELEMENT'] == electric_element:
                                                     t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
@@ -16462,6 +16451,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 c_health = c_health + int(dmg['DMG'])
                                                             elif dmg['ELEMENT'] == water_element:
                                                                 t_water_buff = t_water_buff + 25
+                                                                previous_moves.append(f"**{t_card}** dealt :droplet: **{t_water_buff}** additional water dmg")
                                                                 c_health = c_health - (dmg['DMG'] + t_water_buff)
                                                             else:
                                                                 c_health = c_health - dmg['DMG']
@@ -16477,7 +16467,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                             if dmg['ELEMENT'] == bleed_element:
                                                                 t_bleed_counter = t_bleed_counter + 1
-                                                                if t_bleed_counter == 10:
+                                                                if t_bleed_counter == 5:
                                                                     t_bleed_hit = True
                                                                     t_bleed_counter = 0
 
@@ -16507,9 +16497,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if dmg['ELEMENT'] == fire_element:
                                                                 t_burn_dmg = round(dmg['DMG'] * .30)
 
-
-                                                            if dmg['ELEMENT'] == water_element:
-                                                                t_water_buff = t_water_buff + 25
 
                                                             if dmg['ELEMENT'] == electric_element:
                                                                 t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
@@ -16750,6 +16737,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_health = o_health + int(dmg['DMG'])
                                                             elif dmg['ELEMENT'] == water_element:
                                                                 t_water_buff = t_water_buff + 25
+                                                                previous_moves.append(f"**{t_card}** dealt :droplet: **{t_water_buff}** additional water dmg")
                                                                 o_health = o_health - (dmg['DMG'] + t_water_buff)
                                                             else:
                                                                 o_health = o_health - dmg['DMG']
@@ -16765,7 +16753,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                             if dmg['ELEMENT'] == bleed_element:
                                                                 t_bleed_counter = t_bleed_counter + 1
-                                                                if t_bleed_counter == 10:
+                                                                if t_bleed_counter == 5:
                                                                     t_bleed_hit = True
                                                                     t_bleed_counter = 0
 
@@ -16794,9 +16782,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                             if dmg['ELEMENT'] == fire_element:
                                                                 t_burn_dmg = round(dmg['DMG'] * .30)
-
-                                                            if dmg['ELEMENT'] == water_element:
-                                                                t_water_buff = t_water_buff + 25
 
                                                             if dmg['ELEMENT'] == electric_element:
                                                                 t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
@@ -17041,6 +17026,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health + int(dmg['DMG'])
                                                         elif dmg['ELEMENT'] == water_element:
                                                             t_water_buff = t_water_buff + 25
+                                                            previous_moves.append(f"**{t_card}** dealt :droplet: **{t_water_buff}** additional water dmg")
                                                             o_health = o_health - (dmg['DMG'] + t_water_buff)
                                                         else:
                                                             o_health = o_health - dmg['DMG']
@@ -17056,7 +17042,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                         if dmg['ELEMENT'] == bleed_element:
                                                             t_bleed_counter = t_bleed_counter + 1
-                                                            if t_bleed_counter == 10:
+                                                            if t_bleed_counter == 5:
                                                                 t_bleed_hit = True
                                                                 t_bleed_counter = 0
 
@@ -17086,9 +17072,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                         if dmg['ELEMENT'] == fire_element:
                                                             t_burn_dmg = round(dmg['DMG'] * .30)
-
-                                                        if dmg['ELEMENT'] == water_element:
-                                                            t_water_buff = t_water_buff + 25
 
                                                         if dmg['ELEMENT'] == electric_element:
                                                             t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
@@ -17148,7 +17131,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 if turn == 2:
                                     if t_bleed_hit:
                                         t_bleed_hit = False
-                                        bleed_dmg = 10 * turn_total
+                                        bleed_dmg = 5 * turn_total
                                         c_health = c_health - bleed_dmg
                                         previous_moves.append(f"(**{turn_total}**) 🩸 **{c_card}** shredded for **{bleed_dmg}** bleed dmg...")
 
@@ -17456,9 +17439,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     else:
                                         if mode in ai_co_op_modes:
                                             # UNIVERSE CARD
-                                            cap1 = list(c_1.values())[0] + ccard_lvl_ap_buff + c_shock_buff + c_water_buff
-                                            cap2 = list(c_2.values())[0] + ccard_lvl_ap_buff + c_shock_buff + c_water_buff
-                                            cap3 = list(c_3.values())[0] + ccard_lvl_ap_buff + cdemon_slayer_buff + c_shock_buff
+                                            cap1 = list(c_1.values())[0] + ccard_lvl_ap_buff + c_shock_buff + c_basic_water_buff
+                                            cap2 = list(c_2.values())[0] + ccard_lvl_ap_buff + c_shock_buff + c_special_water_buff
+                                            cap3 = list(c_3.values())[0] + ccard_lvl_ap_buff + cdemon_slayer_buff + c_shock_buff + c_ultimate_water_buff
                                             cenh1 = list(c_enhancer.values())[0]
                                             cenh_name = list(c_enhancer.values())[2]
                                             cpet_enh_name = list(cpet_move.values())[2]
@@ -18568,6 +18551,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = t_health + int(dmg['DMG'])
                                                             elif dmg['ELEMENT'] == water_element:
                                                                 c_water_buff = c_water_buff + 25
+                                                                previous_moves.append(f"**{c_card}** dealt :droplet: **{c_water_buff}** additional water dmg")
                                                                 t_health = t_health - (dmg['DMG'] + c_water_buff)
                                                             else:
                                                                 t_health = t_health - dmg['DMG']
@@ -18584,7 +18568,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                             if dmg['ELEMENT'] == bleed_element:
                                                                 c_bleed_counter = c_bleed_counter + 1
-                                                                if c_bleed_counter == 10:
+                                                                if c_bleed_counter == 5:
                                                                     c_bleed_hit = True
                                                                     c_bleed_counter = 0
 
@@ -18615,9 +18599,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if dmg['ELEMENT'] == fire_element:
                                                                 c_burn_dmg = dmg['DMG'] * .25
 
-
-                                                            if dmg['ELEMENT'] == water_element:
-                                                                c_water_buff = c_water_buff + 25
 
                                                             if dmg['ELEMENT'] == electric_element:
                                                                 c_shock_buff = c_shock_buff +  (dmg['DMG'] * .05)
@@ -18677,9 +18658,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     previous_moves.append(f"(**{turn_total}**) **{c_card}** not enough Stamina to use this move") 
                                                     turn = 2
                                         else:
-                                            cap1 = list(c_1.values())[0] + ccard_lvl_ap_buff + c_shock_buff + c_water_buff
-                                            cap2 = list(c_2.values())[0] + ccard_lvl_ap_buff + c_shock_buff + c_water_buff
-                                            cap3 = list(c_3.values())[0] + ccard_lvl_ap_buff + cdemon_slayer_buff + c_shock_buff
+                                            cap1 = list(c_1.values())[0] + ccard_lvl_ap_buff + c_shock_buff + c_basic_water_buff
+                                            cap2 = list(c_2.values())[0] + ccard_lvl_ap_buff + c_shock_buff + c_special_water_buff
+                                            cap3 = list(c_3.values())[0] + ccard_lvl_ap_buff + cdemon_slayer_buff + c_shock_buff + c_ultimate_water_buff
                                             cenh1 = list(c_enhancer.values())[0]
                                             cenh_name = list(c_enhancer.values())[2]
                                             cpet_enh_name = list(cpet_move.values())[2]
@@ -18819,9 +18800,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             util_action_row = manage_components.create_actionrow(*util_buttons)
                                             coop_util_action_row = manage_components.create_actionrow(*coop_util_buttons)
 
-                                            cap1 = list(c_1.values())[0] + ccard_lvl_ap_buff + c_shock_buff + c_water_buff
-                                            cap2 = list(c_2.values())[0] + ccard_lvl_ap_buff + c_shock_buff + c_water_buff
-                                            cap3 = list(c_3.values())[0] + ccard_lvl_ap_buff + cdemon_slayer_buff + c_shock_buff
+                                            cap1 = list(c_1.values())[0] + ccard_lvl_ap_buff + c_shock_buff + c_basic_water_buff
+                                            cap2 = list(c_2.values())[0] + ccard_lvl_ap_buff + c_shock_buff + c_special_water_buff
+                                            cap3 = list(c_3.values())[0] + ccard_lvl_ap_buff + cdemon_slayer_buff + c_shock_buff + c_ultimate_water_buff
                                             cenh1 = list(c_enhancer.values())[0]
                                             cenh_name = list(c_enhancer.values())[2]
                                             cpet_enh_name = list(cpet_move.values())[2]
@@ -19554,7 +19535,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             elif dmg['ABSORB']:
                                                                 t_health = t_health + dmg['DMG']
                                                             elif dmg['ELEMENT'] == water_element:
-                                                                c_water_buff = c_water_buff + 25
+                                                                if cmove1_element == water_element:
+                                                                    c_basic_water_buff = c_basic_water_buff + 25
+                                                                if cmove2_element == water_element:
+                                                                    c_special_water_buff = c_special_water_buff + 25
+                                                                if cmove3_element == water_element:
+                                                                    c_ultimate_water_buff = c_ultimate_water_buff + 25
                                                                 t_health = t_health - (dmg['DMG'] + c_water_buff)
                                                             else:
                                                                 t_health = t_health - dmg['DMG']
@@ -19570,10 +19556,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                             if dmg['ELEMENT'] == bleed_element:
                                                                 c_bleed_counter = c_bleed_counter + 1
-                                                                if c_bleed_counter == 10:
+                                                                if c_bleed_counter == 5:
                                                                     c_bleed_hit = True
                                                                     c_bleed_counter = 0
-
 
                                                             if dmg['ELEMENT'] == recoil_element:
                                                                 c_health = c_health - (dmg['DMG'] * .25)
@@ -19601,9 +19586,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if dmg['ELEMENT'] == fire_element:
                                                                 c_burn_dmg = dmg['DMG'] * .25
 
-
-                                                            if dmg['ELEMENT'] == water_element:
-                                                                c_water_buff = c_water_buff + 25
 
                                                             if dmg['ELEMENT'] == electric_element:
                                                                 c_shock_buff = c_shock_buff +  (dmg['DMG'] * .05)
@@ -19849,6 +19831,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     t_health = t_health + int(dmg['DMG'])
                                                                 elif dmg['ELEMENT'] == water_element:
                                                                     c_water_buff = c_water_buff + 25
+                                                                    previous_moves.append(f"**{c_card}** dealt :droplet: **{c_water_buff}** additional water dmg")
                                                                     t_health = t_health - (dmg['DMG'] + c_water_buff)
                                                                 else:
                                                                     t_health = t_health - dmg['DMG']
@@ -19864,7 +19847,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                                 if dmg['ELEMENT'] == bleed_element:
                                                                     c_bleed_counter = c_bleed_counter + 1
-                                                                    if c_bleed_counter == 10:
+                                                                    if c_bleed_counter == 5:
                                                                         c_bleed_hit = True
                                                                         c_bleed_counter = 0
 
@@ -19896,9 +19879,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 if dmg['ELEMENT'] == fire_element:
                                                                     c_burn_dmg = dmg['DMG'] * .25
 
-
-                                                                if dmg['ELEMENT'] == water_element:
-                                                                    c_water_buff = c_water_buff + 25
 
                                                                 if dmg['ELEMENT'] == electric_element:
                                                                     c_shock_buff = c_shock_buff +  (dmg['DMG'] * .05)
@@ -19994,7 +19974,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 elif turn == 3:
                                     if c_bleed_hit:
                                         c_bleed_hit = False
-                                        bleed_dmg = 10 * turn_total
+                                        bleed_dmg = 5 * turn_total
                                         t_health = t_health - bleed_dmg
                                         previous_moves.append(f"(**{turn_total}**) 🩸 **{t_card}** shredded for **{bleed_dmg}** bleed dmg...")
 
@@ -20296,9 +20276,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             turn = 3
                                     else:
                                         # UNIVERSE CARD
-                                        tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff + corruption_ap_buff + t_shock_buff
-                                        tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff + corruption_ap_buff + t_shock_buff
-                                        tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff + corruption_ap_buff + t_shock_buff
+                                        tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff + corruption_ap_buff + t_shock_buff + t_basic_water_buff
+                                        tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff + corruption_ap_buff + t_shock_buff + t_special_water_buff
+                                        tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff + corruption_ap_buff + t_shock_buff + t_ultimate_water_buff
                                         tenh1 = list(t_enhancer.values())[0]
                                         tenh_name = list(t_enhancer.values())[2]
                                         tpet_enh_name = list(tpet_move.values())[2]
@@ -21217,6 +21197,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         c_health = c_health + dmg['DMG']
                                                     elif dmg['ELEMENT'] == water_element:
                                                         t_water_buff = t_water_buff + 25
+                                                        previous_moves.append(f"**{t_card}** dealt :droplet: **{t_water_buff}** additional water dmg")
                                                         c_health = c_health - (dmg['DMG'] + t_water_buff)
                                                     else:
                                                         c_health = c_health - dmg['DMG']
@@ -21232,7 +21213,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                     if dmg['ELEMENT'] == bleed_element:
                                                         t_bleed_counter = t_bleed_counter + 1
-                                                        if t_bleed_counter == 10:
+                                                        if t_bleed_counter == 5:
                                                             t_bleed_hit = True
                                                             t_bleed_counter = 0
 
@@ -21261,9 +21242,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                     if dmg['ELEMENT'] == fire_element:
                                                         t_burn_dmg = round(dmg['DMG'] * .30)
-
-                                                    if dmg['ELEMENT'] == water_element:
-                                                        t_water_buff = t_water_buff + 25
 
                                                     if dmg['ELEMENT'] == electric_element:
                                                         t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
@@ -21489,6 +21467,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_health = o_health + int(dmg['DMG'])
                                                             elif dmg['ELEMENT'] == water_element:
                                                                 t_water_buff = t_water_buff + 25
+                                                                previous_moves.append(f"**{t_card}** dealt :droplet: **{t_water_buff}** additional water dmg")
                                                                 o_health = o_health - (dmg['DMG'] + t_water_buff)
                                                             else:
                                                                 o_health = o_health - dmg['DMG']
@@ -21505,7 +21484,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                             if dmg['ELEMENT'] == bleed_element:
                                                                 t_bleed_counter = t_bleed_counter + 1
-                                                                if t_bleed_counter == 10:
+                                                                if t_bleed_counter == 5:
                                                                     t_bleed_hit = True
                                                                     t_bleed_counter = 0
 
@@ -21535,9 +21514,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                             if dmg['ELEMENT'] == fire_element:
                                                                 t_burn_dmg = round(dmg['DMG'] * .30)
-
-                                                            if dmg['ELEMENT'] == water_element:
-                                                                t_water_buff = t_water_buff + 25
 
                                                             if dmg['ELEMENT'] == electric_element:
                                                                 t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
@@ -21798,6 +21774,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 c_health = c_health + int(dmg['DMG'])
                                                             elif dmg['ELEMENT'] == water_element:
                                                                 t_water_buff = t_water_buff + 25
+                                                                previous_moves.append(f"**{t_card}** dealt :droplet: **{t_water_buff}** additional water dmg")
                                                                 c_health = c_health - (dmg['DMG'] + t_water_buff)
                                                             else:
                                                                 c_health = c_health - dmg['DMG']
@@ -21814,7 +21791,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                             if dmg['ELEMENT'] == bleed_element:
                                                                 t_bleed_counter = t_bleed_counter + 1
-                                                                if t_bleed_counter == 10:
+                                                                if t_bleed_counter == 5:
                                                                     t_bleed_hit = True
                                                                     t_bleed_counter = 0
 
@@ -21846,9 +21823,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                             if dmg['ELEMENT'] == ice_element:
                                                                 t_freeze_enh = True
-
-                                                            if dmg['ELEMENT'] == water_element:
-                                                                t_water_buff = t_water_buff + 25
 
                                                             if dmg['ELEMENT'] == electric_element:
                                                                 t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
