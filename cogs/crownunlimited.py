@@ -2429,10 +2429,10 @@ def damage_cal(opponent_affinity, move_type, move_element, universe, card, abili
                 true_dmg = round(true_dmg * 1.4)
 
             if hit_roll < miss_hit:
-                if universe == 'Crown Rift Slayers':
-                    true_dmg = round(true_dmg * 2)
-                    message = f'🩸{move_emoji} Feint Attack! {move} Critically Hits for **{true_dmg}**!! :boom: '
-                elif is_wind_element:
+                # if universe == 'Crown Rift Slayers':
+                #     true_dmg = round(true_dmg * 2)
+                #     message = f'🩸{move_emoji} Feint Attack! {move} Critically Hits for **{true_dmg}**!! :boom: '
+                if is_wind_element:
                     true_dmg = round(true_dmg)
                     message = f'🌪️ Wind Attack! {move} hits for **{true_dmg}**!'       
                 else:
@@ -8711,11 +8711,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = t_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == death_element:
-                                                        t_max_health = t_max_health - (dmg['DMG'] * .05)
+                                                        t_max_health = t_max_health - (dmg['DMG'] * .07)
                                                         t_health = t_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == light_element:
-                                                        o_stamina = o_stamina + (dmg['STAMINA_USED'] / 2)
+                                                        o_stamina = round(o_stamina + (dmg['STAMINA_USED'] / 2))
                                                         t_health = t_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == dark_element:
@@ -8738,12 +8738,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = t_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == fire_element:
-                                                        o_burn_dmg = round(dmg['DMG'] * .20)
+                                                        o_burn_dmg = o_burn_dmg + round(dmg['DMG'] * .20)
                                                         t_health = t_health - dmg['DMG']
 
 
                                                     elif dmg['ELEMENT'] == electric_element:
-                                                        o_shock_buff = o_shock_buff +  (dmg['DMG'] * .05)
+                                                        o_shock_buff = o_shock_buff +  (dmg['DMG'] * .07)
                                                         t_health = t_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == poison_element:
@@ -9026,11 +9026,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == death_element:
-                                                            t_max_health = t_max_health - (dmg['DMG'] * .05)
+                                                            t_max_health = t_max_health - (dmg['DMG'] * .07)
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == light_element:
-                                                            o_stamina = o_stamina + (dmg['STAMINA_USED'] / 2)
+                                                            o_stamina = round(o_stamina + (dmg['STAMINA_USED'] / 2))
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == dark_element:
@@ -9053,12 +9053,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == fire_element:
-                                                            o_burn_dmg = round(dmg['DMG'] * .20)
+                                                            o_burn_dmg = o_burn_dmg + round(dmg['DMG'] * .20)
                                                             t_health = t_health - dmg['DMG']
 
 
                                                         elif dmg['ELEMENT'] == electric_element:
-                                                            o_shock_buff = o_shock_buff +  (dmg['DMG'] * .05)
+                                                            o_shock_buff = o_shock_buff +  (dmg['DMG'] * .07)
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == poison_element:
@@ -10240,11 +10240,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
 
                                                         elif dmg['ELEMENT'] == death_element:
-                                                            o_max_health = o_max_health - (dmg['DMG'] * .05)
+                                                            o_max_health = o_max_health - (dmg['DMG'] * .07)
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == light_element:
-                                                            t_stamina = t_stamina + (dmg['STAMINA_USED'] / 2)
+                                                            t_stamina = round(t_stamina + (dmg['STAMINA_USED'] / 2))
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == dark_element:
@@ -10262,12 +10262,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == fire_element:
-                                                            t_burn_dmg = round(dmg['DMG'] * .20)
+                                                            t_burn_dmg = t_burn_dmg + round(dmg['DMG'] * .20)
                                                             o_health = o_health - dmg['DMG']
 
 
                                                         elif dmg['ELEMENT'] == electric_element:
-                                                            t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
+                                                            t_shock_buff = t_shock_buff +  (dmg['DMG'] * .07)
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == poison_element:
@@ -10532,11 +10532,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
 
                                                             elif dmg['ELEMENT'] == death_element:
-                                                                o_max_health = o_max_health - (dmg['DMG'] * .05)
+                                                                o_max_health = o_max_health - (dmg['DMG'] * .07)
                                                                 o_health = o_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == light_element:
-                                                                t_stamina = t_stamina + (dmg['STAMINA_USED'] / 2)
+                                                                t_stamina = round(t_stamina + (dmg['STAMINA_USED'] / 2))
                                                                 o_health = o_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == dark_element:
@@ -10554,12 +10554,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_health = o_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == fire_element:
-                                                                t_burn_dmg = round(dmg['DMG'] * .20)
+                                                                t_burn_dmg = t_burn_dmg + round(dmg['DMG'] * .20)
                                                                 o_health = o_health - dmg['DMG']
 
 
                                                             elif dmg['ELEMENT'] == electric_element:
-                                                                t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
+                                                                t_shock_buff = t_shock_buff +  (dmg['DMG'] * .07)
                                                                 o_health = o_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == poison_element:
@@ -11367,11 +11367,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
 
                                                     elif dmg['ELEMENT'] == death_element:
-                                                        o_max_health = o_max_health - (dmg['DMG'] * .05)
+                                                        o_max_health = o_max_health - (dmg['DMG'] * .07)
                                                         o_health = o_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == light_element:
-                                                        t_stamina = t_stamina + (dmg['STAMINA_USED'] / 2)
+                                                        t_stamina = round(t_stamina + (dmg['STAMINA_USED'] / 2))
                                                         o_health = o_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == dark_element:
@@ -11389,12 +11389,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_health = o_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == fire_element:
-                                                        t_burn_dmg = round(dmg['DMG'] * .20)
+                                                        t_burn_dmg = t_burn_dmg + round(dmg['DMG'] * .20)
                                                         o_health = o_health - dmg['DMG']
 
 
                                                     elif dmg['ELEMENT'] == electric_element:
-                                                        t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
+                                                        t_shock_buff = t_shock_buff +  (dmg['DMG'] * .07)
                                                         o_health = o_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == poison_element:
@@ -11639,11 +11639,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
 
                                                         elif dmg['ELEMENT'] == death_element:
-                                                            o_max_health = o_max_health - (dmg['DMG'] * .05)
+                                                            o_max_health = o_max_health - (dmg['DMG'] * .07)
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == light_element:
-                                                            t_stamina = t_stamina + (dmg['STAMINA_USED'] / 2)
+                                                            t_stamina = round(t_stamina + (dmg['STAMINA_USED'] / 2))
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == dark_element:
@@ -11661,12 +11661,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == fire_element:
-                                                            t_burn_dmg = round(dmg['DMG'] * .20)
+                                                            t_burn_dmg = t_burn_dmg + round(dmg['DMG'] * .20)
                                                             o_health = o_health - dmg['DMG']
 
 
                                                         elif dmg['ELEMENT'] == electric_element:
-                                                            t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
+                                                            t_shock_buff = t_shock_buff +  (dmg['DMG'] * .07)
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == poison_element:
@@ -12908,11 +12908,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = t_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == death_element:
-                                                        t_max_health = t_max_health - (dmg['DMG'] * .05)
+                                                        t_max_health = t_max_health - (dmg['DMG'] * .07)
                                                         t_health = t_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == light_element:
-                                                        o_stamina = o_stamina + (dmg['STAMINA_USED'] / 2)
+                                                        o_stamina = round(o_stamina + (dmg['STAMINA_USED'] / 2))
                                                         t_health = t_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == dark_element:
@@ -12935,12 +12935,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = t_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == fire_element:
-                                                        o_burn_dmg = round(dmg['DMG'] * .20)
+                                                        o_burn_dmg = o_burn_dmg + round(dmg['DMG'] * .20)
                                                         t_health = t_health - dmg['DMG']
 
 
                                                     elif dmg['ELEMENT'] == electric_element:
-                                                        o_shock_buff = o_shock_buff +  (dmg['DMG'] * .05)
+                                                        o_shock_buff = o_shock_buff +  (dmg['DMG'] * .07)
                                                         t_health = t_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == poison_element:
@@ -13202,11 +13202,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == death_element:
-                                                            t_max_health = t_max_health - (dmg['DMG'] * .05)
+                                                            t_max_health = t_max_health - (dmg['DMG'] * .07)
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == light_element:
-                                                            o_stamina = o_stamina + (dmg['STAMINA_USED'] / 2)
+                                                            o_stamina = round(o_stamina + (dmg['STAMINA_USED'] / 2))
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == dark_element:
@@ -13229,12 +13229,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == fire_element:
-                                                            o_burn_dmg = round(dmg['DMG'] * .20)
+                                                            o_burn_dmg = o_burn_dmg + round(dmg['DMG'] * .20)
                                                             t_health = t_health - dmg['DMG']
 
 
                                                         elif dmg['ELEMENT'] == electric_element:
-                                                            o_shock_buff = o_shock_buff +  (dmg['DMG'] * .05)
+                                                            o_shock_buff = o_shock_buff +  (dmg['DMG'] * .07)
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == poison_element:
@@ -14466,11 +14466,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == death_element:
-                                                            t_max_health = t_max_health - (dmg['DMG'] * .05)
+                                                            t_max_health = t_max_health - (dmg['DMG'] * .07)
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == light_element:
-                                                            o_stamina = o_stamina + (dmg['STAMINA_USED'] / 2)
+                                                            o_stamina = round(o_stamina + (dmg['STAMINA_USED'] / 2))
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == dark_element:
@@ -14493,12 +14493,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == fire_element:
-                                                            o_burn_dmg = round(dmg['DMG'] * .20)
+                                                            o_burn_dmg = o_burn_dmg + round(dmg['DMG'] * .20)
                                                             t_health = t_health - dmg['DMG']
 
 
                                                         elif dmg['ELEMENT'] == electric_element:
-                                                            o_shock_buff = o_shock_buff +  (dmg['DMG'] * .05)
+                                                            o_shock_buff = o_shock_buff +  (dmg['DMG'] * .07)
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == poison_element:
@@ -14778,11 +14778,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = t_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == death_element:
-                                                                t_max_health = t_max_health - (dmg['DMG'] * .05)
+                                                                t_max_health = t_max_health - (dmg['DMG'] * .07)
                                                                 t_health = t_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == light_element:
-                                                                o_stamina = o_stamina + (dmg['STAMINA_USED'] / 2)
+                                                                o_stamina = round(o_stamina + (dmg['STAMINA_USED'] / 2))
                                                                 t_health = t_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == dark_element:
@@ -14805,12 +14805,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = t_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == fire_element:
-                                                                o_burn_dmg = round(dmg['DMG'] * .20)
+                                                                o_burn_dmg = o_burn_dmg + round(dmg['DMG'] * .20)
                                                                 t_health = t_health - dmg['DMG']
 
 
                                                             elif dmg['ELEMENT'] == electric_element:
-                                                                o_shock_buff = o_shock_buff +  (dmg['DMG'] * .05)
+                                                                o_shock_buff = o_shock_buff +  (dmg['DMG'] * .07)
                                                                 t_health = t_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == poison_element:
@@ -16405,11 +16405,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
 
                                                 elif dmg['ELEMENT'] == death_element:
-                                                    o_max_health = o_max_health - (dmg['DMG'] * .05)
+                                                    o_max_health = o_max_health - (dmg['DMG'] * .07)
                                                     o_health = o_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == light_element:
-                                                    t_stamina = t_stamina + (dmg['STAMINA_USED'] / 2)
+                                                    t_stamina = round(t_stamina + (dmg['STAMINA_USED'] / 2))
                                                     o_health = o_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == dark_element:
@@ -16427,12 +16427,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     o_health = o_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == fire_element:
-                                                    t_burn_dmg = round(dmg['DMG'] * .20)
+                                                    t_burn_dmg = t_burn_dmg + round(dmg['DMG'] * .20)
                                                     o_health = o_health - dmg['DMG']
 
 
                                                 elif dmg['ELEMENT'] == electric_element:
-                                                    t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
+                                                    t_shock_buff = t_shock_buff +  (dmg['DMG'] * .07)
                                                     o_health = o_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == poison_element:
@@ -16697,11 +16697,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 c_health = c_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == death_element:
-                                                                c_max_health = c_max_health - (dmg['DMG'] * .05)
+                                                                c_max_health = c_max_health - (dmg['DMG'] * .07)
                                                                 c_health = c_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == light_element:
-                                                                t_stamina = t_stamina + (dmg['STAMINA_USED'] / 2)
+                                                                t_stamina = round(t_stamina + (dmg['STAMINA_USED'] / 2))
                                                                 c_health = c_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == dark_element:
@@ -16719,11 +16719,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 c_health = c_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == fire_element:
-                                                                t_burn_dmg = round(dmg['DMG'] * .20)
+                                                                t_burn_dmg = t_burn_dmg + round(dmg['DMG'] * .20)
                                                                 c_health = c_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == electric_element:
-                                                                t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
+                                                                t_shock_buff = t_shock_buff +  (dmg['DMG'] * .07)
                                                                 c_health = c_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == poison_element:
@@ -16986,11 +16986,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
 
                                                             elif dmg['ELEMENT'] == death_element:
-                                                                o_max_health = o_max_health - (dmg['DMG'] * .05)
+                                                                o_max_health = o_max_health - (dmg['DMG'] * .07)
                                                                 o_health = o_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == light_element:
-                                                                t_stamina = t_stamina + (dmg['STAMINA_USED'] / 2)
+                                                                t_stamina = round(t_stamina + (dmg['STAMINA_USED'] / 2))
                                                                 o_health = o_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == dark_element:
@@ -17008,12 +17008,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_health = o_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == fire_element:
-                                                                t_burn_dmg = round(dmg['DMG'] * .20)
+                                                                t_burn_dmg = t_burn_dmg + round(dmg['DMG'] * .20)
                                                                 o_health = o_health - dmg['DMG']
 
 
                                                             elif dmg['ELEMENT'] == electric_element:
-                                                                t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
+                                                                t_shock_buff = t_shock_buff +  (dmg['DMG'] * .07)
                                                                 o_health = o_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == poison_element:
@@ -17296,11 +17296,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
 
                                                         elif dmg['ELEMENT'] == death_element:
-                                                            o_max_health = o_max_health - (dmg['DMG'] * .05)
+                                                            o_max_health = o_max_health - (dmg['DMG'] * .07)
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == light_element:
-                                                            t_stamina = t_stamina + (dmg['STAMINA_USED'] / 2)
+                                                            t_stamina = round(t_stamina + (dmg['STAMINA_USED'] / 2))
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == dark_element:
@@ -17318,12 +17318,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == fire_element:
-                                                            t_burn_dmg = round(dmg['DMG'] * .20)
+                                                            t_burn_dmg = t_burn_dmg + round(dmg['DMG'] * .20)
                                                             o_health = o_health - dmg['DMG']
 
 
                                                         elif dmg['ELEMENT'] == electric_element:
-                                                            t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
+                                                            t_shock_buff = t_shock_buff +  (dmg['DMG'] * .07)
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == poison_element:
@@ -18853,11 +18853,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = t_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == death_element:
-                                                                t_max_health = t_max_health - (dmg['DMG'] * .05)
+                                                                t_max_health = t_max_health - (dmg['DMG'] * .07)
                                                                 t_health = t_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == light_element:
-                                                                o_stamina = o_stamina + (dmg['STAMINA_USED'] / 2)
+                                                                c_stamina = round(c_stamina + (dmg['STAMINA_USED'] / 2))
                                                                 t_health = t_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == dark_element:
@@ -18875,12 +18875,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = t_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == fire_element:
-                                                                c_burn_dmg = round(dmg['DMG'] * .20)
+                                                                c_burn_dmg = c_burn_dmg + round(dmg['DMG'] * .20)
                                                                 t_health = t_health - dmg['DMG']
 
 
                                                             elif dmg['ELEMENT'] == electric_element:
-                                                                c_shock_buff = c_shock_buff +  (dmg['DMG'] * .05)
+                                                                c_shock_buff = c_shock_buff +  (dmg['DMG'] * .07)
                                                                 t_health = t_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == poison_element:
@@ -19853,11 +19853,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = t_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == death_element:
-                                                                t_max_health = t_max_health - (dmg['DMG'] * .05)
+                                                                t_max_health = t_max_health - (dmg['DMG'] * .07)
                                                                 t_health = t_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == light_element:
-                                                                o_stamina = o_stamina + (dmg['STAMINA_USED'] / 2)
+                                                                c_stamina = round(c_stamina + (dmg['STAMINA_USED'] / 2))
                                                                 t_health = t_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == dark_element:
@@ -19875,12 +19875,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = t_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == fire_element:
-                                                                c_burn_dmg = round(dmg['DMG'] * .20)
+                                                                c_burn_dmg = c_burn_dmg + round(dmg['DMG'] * .20)
                                                                 t_health = t_health - dmg['DMG']
 
 
                                                             elif dmg['ELEMENT'] == electric_element:
-                                                                c_shock_buff = c_shock_buff +  (dmg['DMG'] * .05)
+                                                                c_shock_buff = c_shock_buff +  (dmg['DMG'] * .07)
                                                                 t_health = t_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == poison_element:
@@ -20161,11 +20161,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     t_health = t_health - dmg['DMG']
 
                                                                 elif dmg['ELEMENT'] == death_element:
-                                                                    t_max_health = t_max_health - (dmg['DMG'] * .05)
+                                                                    t_max_health = t_max_health - (dmg['DMG'] * .07)
                                                                     t_health = t_health - dmg['DMG']
 
                                                                 elif dmg['ELEMENT'] == light_element:
-                                                                    o_stamina = o_stamina + (dmg['STAMINA_USED'] / 2)
+                                                                    c_stamina = round(c_stamina + (dmg['STAMINA_USED'] / 2))
                                                                     t_health = t_health - dmg['DMG']
 
                                                                 elif dmg['ELEMENT'] == dark_element:
@@ -20183,12 +20183,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     t_health = t_health - dmg['DMG']
 
                                                                 elif dmg['ELEMENT'] == fire_element:
-                                                                    c_burn_dmg = round(dmg['DMG'] * .20)
+                                                                    c_burn_dmg = c_burn_dmg + round(dmg['DMG'] * .20)
                                                                     t_health = t_health - dmg['DMG']
 
 
                                                                 elif dmg['ELEMENT'] == electric_element:
-                                                                    c_shock_buff = c_shock_buff +  (dmg['DMG'] * .05)
+                                                                    c_shock_buff = c_shock_buff +  (dmg['DMG'] * .07)
                                                                     t_health = t_health - dmg['DMG']
 
                                                                 elif dmg['ELEMENT'] == poison_element:
@@ -21542,11 +21542,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         c_health = c_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == death_element:
-                                                        c_max_health = c_max_health - (dmg['DMG'] * .05)
+                                                        c_max_health = c_max_health - (dmg['DMG'] * .07)
                                                         c_health = c_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == light_element:
-                                                        t_stamina = t_stamina + (dmg['STAMINA_USED'] / 2)
+                                                        t_stamina = round(t_stamina + (dmg['STAMINA_USED'] / 2))
                                                         c_health = c_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == dark_element:
@@ -21564,11 +21564,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         c_health = c_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == fire_element:
-                                                        t_burn_dmg = round(dmg['DMG'] * .20)
+                                                        t_burn_dmg = t_burn_dmg + round(dmg['DMG'] * .20)
                                                         c_health = c_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == electric_element:
-                                                        t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
+                                                        t_shock_buff = t_shock_buff +  (dmg['DMG'] * .07)
                                                         c_health = c_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == poison_element:
@@ -21817,11 +21817,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
 
                                                             elif dmg['ELEMENT'] == death_element:
-                                                                o_max_health = o_max_health - (dmg['DMG'] * .05)
+                                                                o_max_health = o_max_health - (dmg['DMG'] * .07)
                                                                 o_health = o_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == light_element:
-                                                                t_stamina = t_stamina + (dmg['STAMINA_USED'] / 2)
+                                                                t_stamina = round(t_stamina + (dmg['STAMINA_USED'] / 2))
                                                                 o_health = o_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == dark_element:
@@ -21839,12 +21839,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_health = o_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == fire_element:
-                                                                t_burn_dmg = round(dmg['DMG'] * .20)
+                                                                t_burn_dmg = t_burn_dmg + round(dmg['DMG'] * .20)
                                                                 o_health = o_health - dmg['DMG']
 
 
                                                             elif dmg['ELEMENT'] == electric_element:
-                                                                t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
+                                                                t_shock_buff = t_shock_buff +  (dmg['DMG'] * .07)
                                                                 o_health = o_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == poison_element:
@@ -22155,11 +22155,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 c_health = c_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == death_element:
-                                                                c_max_health = c_max_health - (dmg['DMG'] * .05)
+                                                                c_max_health = c_max_health - (dmg['DMG'] * .07)
                                                                 c_health = c_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == light_element:
-                                                                t_stamina = t_stamina + (dmg['STAMINA_USED'] / 2)
+                                                                t_stamina = round(t_stamina + (dmg['STAMINA_USED'] / 2))
                                                                 c_health = c_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == dark_element:
@@ -22177,11 +22177,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 c_health = c_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == fire_element:
-                                                                t_burn_dmg = round(dmg['DMG'] * .20)
+                                                                t_burn_dmg = t_burn_dmg + round(dmg['DMG'] * .20)
                                                                 c_health = c_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == electric_element:
-                                                                t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
+                                                                t_shock_buff = t_shock_buff +  (dmg['DMG'] * .07)
                                                                 c_health = c_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == poison_element:
