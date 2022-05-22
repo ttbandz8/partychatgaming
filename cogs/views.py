@@ -56,7 +56,7 @@ class Views(commands.Cog):
         # Do not Check Tourney wins
         if card_name in vault['CARDS']:
             response = db.updateUserNoFilter(user_query, {'$set': {'CARD': str(card_name)}})
-            await ctx.send(response)
+            await ctx.send(f"**{card_name}** has been equipped.")
         else:
             await ctx.send(m.USER_DOESNT_HAVE_THE_CARD, hidden=True)
 

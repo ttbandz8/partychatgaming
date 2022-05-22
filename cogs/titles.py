@@ -51,14 +51,14 @@ class Titles(commands.Cog):
 
             if title_name in vault['TITLES']:
                 response = db.updateUserNoFilter(user_query, {'$set': {'TITLE': title_name}})
-                await ctx.send(response)
+                await ctx.send(f"**{title_name}** has been equipped.")
             else:
                 await ctx.send(m.USER_DOESNT_HAVE_THE_Title, hidden=True)
         else:
 
             if title_name in vault['TITLES']:
                 response = db.updateUserNoFilter(user_query, {'$set': {'TITLE': str(title_name)}})
-                await ctx.send(response)
+                await ctx.send(f"**{title_name}** has been equipped.")
             else:
                 await ctx.send(m.USER_DOESNT_HAVE_THE_Title, hidden=True)
 

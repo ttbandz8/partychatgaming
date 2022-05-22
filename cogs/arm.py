@@ -46,7 +46,7 @@ class Arm(commands.Cog):
                     if arm_name in arm['ARM']:
                         response = db.updateUserNoFilter(user_query, {'$set': {'ARM': str(arm_name)}})
                         owned = True
-                        await ctx.send(response)
+                        await ctx.send(f"**{arm_name}** has been equipped.")
                 if not owned:
                     await ctx.send(m.USER_DOESNT_HAVE_THE_ARM, hidden=True)
                     return
