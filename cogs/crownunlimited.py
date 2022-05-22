@@ -8693,62 +8693,79 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     elif dmg['ABSORB']:
                                                         t_health = t_health + dmg['DMG']
                                                     elif dmg['ELEMENT'] == water_element:
-                                                        o_water_buff = o_water_buff + 25
-                                                        previous_moves.append(f"**{o_card}** dealt 💧 **{o_water_buff}** additional water dmg")
-                                                        t_health = t_health - (dmg['DMG'] + o_water_buff)
-                                                    else:
+                                                        if omove1_element == water_element:
+                                                            o_basic_water_buff = o_basic_water_buff + 25
+                                                        if omove2_element == water_element:
+                                                            o_special_water_buff = o_special_water_buff + 25
+                                                        if omove3_element == water_element:
+                                                            o_ultimate_water_buff = o_ultimate_water_buff + 25
+                                                        t_health = t_health - dmg['DMG']
+                                                        
+
+                                                    elif dmg['ELEMENT'] == time_element:
+                                                        o_stamina = 0
+                                                        t_health = t_health - dmg['DMG']
+
+                                                    elif dmg['ELEMENT'] == earth_element:
+                                                        o_defense = o_defense + (dmg['DMG'] * .20)
+                                                        t_health = t_health - dmg['DMG']
+
+                                                    elif dmg['ELEMENT'] == death_element:
+                                                        t_max_health = t_max_health - (dmg['DMG'] * .05)
+                                                        t_health = t_health - dmg['DMG']
+
+                                                    elif dmg['ELEMENT'] == light_element:
+                                                        o_stamina = o_stamina + (dmg['STAMINA_USED'] / 2)
+                                                        t_health = t_health - dmg['DMG']
+
+                                                    elif dmg['ELEMENT'] == dark_element:
+                                                        o_stamina = o_stamina + 5
+                                                        t_stamina = t_stamina - 5
+                                                        t_health = t_health - dmg['DMG']
+
+                                                    elif dmg['ELEMENT'] == life_element:
+                                                        o_health = o_health + (dmg['DMG'] * .15)
+                                                        t_health = t_health - dmg['DMG']
+
+                                                    elif dmg['ELEMENT'] == recoil_element:
+                                                        o_health = o_health - (dmg['DMG'] * .25)
                                                         t_health = t_health - dmg['DMG']
 
 
-                                                    if dmg['ELEMENT'] == time_element:
-                                                        o_stamina = 0
-
-                                                    if dmg['ELEMENT'] == earth_element:
-                                                        o_defense = o_defense + (dmg['DMG'] * .20)
-
-                                                    if dmg['ELEMENT'] == death_element:
-                                                        t_max_health = t_max_health - (dmg['DMG'] * .05)
-
-                                                    if dmg['ELEMENT'] == light_element:
-                                                        o_stamina = o_stamina + (dmg['STAMINA_USED'] / 2)
-
-                                                    if dmg['ELEMENT'] == dark_element:
-                                                        o_stamina = o_stamina + 5
-                                                        t_stamina = t_stamina - 5
-
-                                                    if dmg['ELEMENT'] == life_element:
-                                                        o_health = o_health + (dmg['DMG'] * .15)
-
-                                                    if dmg['ELEMENT'] == recoil_element:
-                                                        o_health = o_health - (dmg['DMG'] * .25)
-
-
-                                                    if dmg['ELEMENT'] == phsycic_element:
+                                                    elif dmg['ELEMENT'] == phsycic_element:
                                                         t_defense = t_defense - (dmg['DMG'] * .08)
                                                         t_attack = t_attack - (dmg['DMG'] * .08)
+                                                        t_health = t_health - dmg['DMG']
 
-                                                    if dmg['ELEMENT'] == fire_element:
+                                                    elif dmg['ELEMENT'] == fire_element:
                                                         o_burn_dmg = round(dmg['DMG'] * .30)
+                                                        t_health = t_health - dmg['DMG']
 
 
-                                                    if dmg['ELEMENT'] == electric_element:
+                                                    elif dmg['ELEMENT'] == electric_element:
                                                         o_shock_buff = o_shock_buff +  (dmg['DMG'] * .05)
+                                                        t_health = t_health - dmg['DMG']
 
-                                                    if dmg['ELEMENT'] == poison_element:
+                                                    elif dmg['ELEMENT'] == poison_element:
                                                         o_poison_dmg = o_poison_dmg + 8
+                                                        t_health = t_health - dmg['DMG']
 
-                                                    if dmg['ELEMENT'] == ice_element:
+                                                    elif dmg['ELEMENT'] == ice_element:
                                                         o_ice_counter = o_ice_counter + 1
                                                         if o_ice_counter == 3:
                                                             o_freeze_enh = True
                                                             o_ice_counter = 0
+                                                        t_health = t_health - dmg['DMG']
 
-                                                    if dmg['ELEMENT'] == bleed_element:
+                                                    elif dmg['ELEMENT'] == bleed_element:
                                                         o_bleed_counter = o_bleed_counter + 1
                                                         if o_bleed_counter == 5:
                                                             o_bleed_hit = True
                                                             o_bleed_counter = 0
-
+                                                        t_health = t_health - dmg['DMG']
+                                                    
+                                                    else:
+                                                        t_health = t_health - dmg['DMG']
 
 
                                                 o_stamina = o_stamina - 20
@@ -8991,60 +9008,79 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         elif dmg['ABSORB']:
                                                             t_health = t_health + dmg['DMG']
                                                         elif dmg['ELEMENT'] == water_element:
-                                                            o_water_buff = o_water_buff + 25
-                                                            previous_moves.append(f"**{o_card}** dealt 💧 **{o_water_buff}** additional water dmg")
-                                                            t_health = t_health - (dmg['DMG'] + o_water_buff)
-                                                        else:
+                                                            if omove1_element == water_element:
+                                                                o_basic_water_buff = o_basic_water_buff + 25
+                                                            if omove2_element == water_element:
+                                                                o_special_water_buff = o_special_water_buff + 25
+                                                            if omove3_element == water_element:
+                                                                o_ultimate_water_buff = o_ultimate_water_buff + 25
+                                                            t_health = t_health - dmg['DMG']
+                                                            
+
+                                                        elif dmg['ELEMENT'] == time_element:
+                                                            o_stamina = 0
                                                             t_health = t_health - dmg['DMG']
 
-                                                        if dmg['ELEMENT'] == earth_element:
+                                                        elif dmg['ELEMENT'] == earth_element:
                                                             o_defense = o_defense + (dmg['DMG'] * .20)
+                                                            t_health = t_health - dmg['DMG']
 
-                                                        if dmg['ELEMENT'] == recoil_element:
-                                                            o_health = o_health - (dmg['DMG'] * .25)
-
-                                                        if dmg['ELEMENT'] == time_element:
-                                                            o_stamina = 0
-
-
-                                                        if dmg['ELEMENT'] == death_element:
+                                                        elif dmg['ELEMENT'] == death_element:
                                                             t_max_health = t_max_health - (dmg['DMG'] * .05)
+                                                            t_health = t_health - dmg['DMG']
 
-                                                        if dmg['ELEMENT'] == light_element:
+                                                        elif dmg['ELEMENT'] == light_element:
                                                             o_stamina = o_stamina + (dmg['STAMINA_USED'] / 2)
+                                                            t_health = t_health - dmg['DMG']
 
-                                                        if dmg['ELEMENT'] == dark_element:
+                                                        elif dmg['ELEMENT'] == dark_element:
                                                             o_stamina = o_stamina + 5
                                                             t_stamina = t_stamina - 5
+                                                            t_health = t_health - dmg['DMG']
 
-                                                        if dmg['ELEMENT'] == life_element:
+                                                        elif dmg['ELEMENT'] == life_element:
                                                             o_health = o_health + (dmg['DMG'] * .15)
+                                                            t_health = t_health - dmg['DMG']
 
-                                                        if dmg['ELEMENT'] == phsycic_element:
+                                                        elif dmg['ELEMENT'] == recoil_element:
+                                                            o_health = o_health - (dmg['DMG'] * .25)
+                                                            t_health = t_health - dmg['DMG']
+
+
+                                                        elif dmg['ELEMENT'] == phsycic_element:
                                                             t_defense = t_defense - (dmg['DMG'] * .08)
                                                             t_attack = t_attack - (dmg['DMG'] * .08)
+                                                            t_health = t_health - dmg['DMG']
 
-                                                        if dmg['ELEMENT'] == fire_element:
+                                                        elif dmg['ELEMENT'] == fire_element:
                                                             o_burn_dmg = round(dmg['DMG'] * .30)
+                                                            t_health = t_health - dmg['DMG']
 
-                                                        if dmg['ELEMENT'] == electric_element:
+
+                                                        elif dmg['ELEMENT'] == electric_element:
                                                             o_shock_buff = o_shock_buff +  (dmg['DMG'] * .05)
+                                                            t_health = t_health - dmg['DMG']
 
-                                                        if dmg['ELEMENT'] == poison_element:
+                                                        elif dmg['ELEMENT'] == poison_element:
                                                             o_poison_dmg = o_poison_dmg + 8
-                                                        
-                                                        if dmg['ELEMENT'] == ice_element:
+                                                            t_health = t_health - dmg['DMG']
+
+                                                        elif dmg['ELEMENT'] == ice_element:
                                                             o_ice_counter = o_ice_counter + 1
                                                             if o_ice_counter == 3:
                                                                 o_freeze_enh = True
                                                                 o_ice_counter = 0
+                                                            t_health = t_health - dmg['DMG']
 
-                                                        if dmg['ELEMENT'] == bleed_element:
+                                                        elif dmg['ELEMENT'] == bleed_element:
                                                             o_bleed_counter = o_bleed_counter + 1
                                                             if o_bleed_counter == 5:
                                                                 o_bleed_hit = True
                                                                 o_bleed_counter = 0
-
+                                                            t_health = t_health - dmg['DMG']
+                                                        
+                                                        else:
+                                                            t_health = t_health - dmg['DMG']
 
 
 
@@ -10182,62 +10218,78 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         elif dmg['ABSORB']:
                                                             o_health = o_health + dmg['DMG']
                                                         elif dmg['ELEMENT'] == water_element:
-                                                            t_water_buff = t_water_buff + 25
-                                                            previous_moves.append(f"**{t_card}** dealt 💧 **{t_water_buff}** additional water dmg")
+                                                            if tmove1_element == water_element:
+                                                                t_basic_water_buff = t_basic_water_buff + 25
+                                                            if tmove2_element == water_element:
+                                                                t_special_water_buff = t_special_water_buff + 25
+                                                            if tmove3_element == water_element:
+                                                                t_ultimate_water_buff = t_ultimate_water_buff + 25
                                                             o_health = o_health - (dmg['DMG'] + t_water_buff)
-                                                        else:
+
+                                                        elif dmg['ELEMENT'] == earth_element:
+                                                            t_defense = t_defense + (dmg['DMG'] * .20)
                                                             o_health = o_health - dmg['DMG']
 
-                                                        if dmg['ELEMENT'] == earth_element:
-                                                            t_defense = t_defense + (dmg['DMG'] * .20)
-
-                                                        if dmg['ELEMENT'] == recoil_element:
+                                                        elif dmg['ELEMENT'] == recoil_element:
                                                             t_health = t_health - (dmg['DMG'] * .25)
+                                                            o_health = o_health - dmg['DMG']
 
-                                                        if dmg['ELEMENT'] == time_element:
+                                                        elif dmg['ELEMENT'] == time_element:
                                                             t_stamina = 0
+                                                            o_health = o_health - dmg['DMG']
 
 
-                                                        if dmg['ELEMENT'] == death_element:
+                                                        elif dmg['ELEMENT'] == death_element:
                                                             o_max_health = o_max_health - (dmg['DMG'] * .05)
+                                                            o_health = o_health - dmg['DMG']
 
-                                                        if dmg['ELEMENT'] == light_element:
+                                                        elif dmg['ELEMENT'] == light_element:
                                                             t_stamina = t_stamina + (dmg['STAMINA_USED'] / 2)
+                                                            o_health = o_health - dmg['DMG']
 
-                                                        if dmg['ELEMENT'] == dark_element:
+                                                        elif dmg['ELEMENT'] == dark_element:
                                                             t_stamina = t_stamina + 5
                                                             o_stamina = o_stamina - 5
+                                                            o_health = o_health - dmg['DMG']
 
-                                                        if dmg['ELEMENT'] == life_element:
+                                                        elif dmg['ELEMENT'] == life_element:
                                                             t_health = t_health + (dmg['DMG'] * .15)
+                                                            o_health = o_health - dmg['DMG']
 
-                                                        if dmg['ELEMENT'] == phsycic_element:
+                                                        elif dmg['ELEMENT'] == phsycic_element:
                                                             o_defense = o_defense - (dmg['DMG'] * .08)
                                                             o_attack = o_attack - (dmg['DMG'] * .08)
+                                                            o_health = o_health - dmg['DMG']
 
-                                                        if dmg['ELEMENT'] == fire_element:
+                                                        elif dmg['ELEMENT'] == fire_element:
                                                             t_burn_dmg = round(dmg['DMG'] * .30)
+                                                            o_health = o_health - dmg['DMG']
 
 
-                                                        if dmg['ELEMENT'] == electric_element:
+                                                        elif dmg['ELEMENT'] == electric_element:
                                                             t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
+                                                            o_health = o_health - dmg['DMG']
 
-                                                        if dmg['ELEMENT'] == poison_element:
+                                                        elif dmg['ELEMENT'] == poison_element:
                                                             t_poison_dmg = t_poison_dmg + 8
+                                                            o_health = o_health - dmg['DMG']
     
-                                                        if dmg['ELEMENT'] == ice_element:
+                                                        elif dmg['ELEMENT'] == ice_element:
                                                             t_ice_counter = t_ice_counter + 1
                                                             if t_ice_counter == 3:
                                                                 t_freeze_enh = True
                                                                 t_ice_counter = 0
+                                                            o_health = o_health - dmg['DMG']
 
-                                                        if dmg['ELEMENT'] == bleed_element:
+                                                        elif dmg['ELEMENT'] == bleed_element:
                                                             t_bleed_counter = t_bleed_counter + 1
                                                             if t_bleed_counter == 5:
                                                                 t_bleed_hit = True
                                                                 t_bleed_counter = 0
-
-
+                                                            o_health = o_health - dmg['DMG']
+                                                        
+                                                        else:
+                                                            o_health = o_health - dmg['DMG']
                                                         
                                                     t_stamina = t_stamina - 20
                                                     t_block_used = True
@@ -10458,60 +10510,79 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             elif dmg['ABSORB']:
                                                                 o_health = o_health + int(dmg['DMG'])
                                                             elif dmg['ELEMENT'] == water_element:
-                                                                t_water_buff = t_water_buff + 25
-                                                                previous_moves.append(f"**{t_card}** dealt 💧 **{t_water_buff}** additional water dmg")
+                                                                if tmove1_element == water_element:
+                                                                    t_basic_water_buff = t_basic_water_buff + 25
+                                                                if tmove2_element == water_element:
+                                                                    t_special_water_buff = t_special_water_buff + 25
+                                                                if tmove3_element == water_element:
+                                                                    t_ultimate_water_buff = t_ultimate_water_buff + 25
                                                                 o_health = o_health - (dmg['DMG'] + t_water_buff)
-                                                            else:
+
+                                                            elif dmg['ELEMENT'] == earth_element:
+                                                                t_defense = t_defense + (dmg['DMG'] * .20)
                                                                 o_health = o_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == earth_element:
-                                                                t_defense = t_defense + (dmg['DMG'] * .20)
-
-                                                            if dmg['ELEMENT'] == recoil_element:
+                                                            elif dmg['ELEMENT'] == recoil_element:
                                                                 t_health = t_health - (dmg['DMG'] * .25)
+                                                                o_health = o_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == time_element:
+                                                            elif dmg['ELEMENT'] == time_element:
                                                                 t_stamina = 0
+                                                                o_health = o_health - dmg['DMG']
 
 
-                                                            if dmg['ELEMENT'] == bleed_element:
-                                                                t_bleed_counter = t_bleed_counter + 1
-                                                                if t_bleed_counter == 5:
-                                                                    t_bleed_hit = True
-                                                                    t_bleed_counter = 0
-
-                                                            if dmg['ELEMENT'] == death_element:
+                                                            elif dmg['ELEMENT'] == death_element:
                                                                 o_max_health = o_max_health - (dmg['DMG'] * .05)
+                                                                o_health = o_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == light_element:
+                                                            elif dmg['ELEMENT'] == light_element:
                                                                 t_stamina = t_stamina + (dmg['STAMINA_USED'] / 2)
+                                                                o_health = o_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == dark_element:
+                                                            elif dmg['ELEMENT'] == dark_element:
                                                                 t_stamina = t_stamina + 5
                                                                 o_stamina = o_stamina - 5
+                                                                o_health = o_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == life_element:
+                                                            elif dmg['ELEMENT'] == life_element:
                                                                 t_health = t_health + (dmg['DMG'] * .15)
+                                                                o_health = o_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == phsycic_element:
+                                                            elif dmg['ELEMENT'] == phsycic_element:
                                                                 o_defense = o_defense - (dmg['DMG'] * .08)
                                                                 o_attack = o_attack - (dmg['DMG'] * .08)
+                                                                o_health = o_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == fire_element:
+                                                            elif dmg['ELEMENT'] == fire_element:
                                                                 t_burn_dmg = round(dmg['DMG'] * .30)
+                                                                o_health = o_health - dmg['DMG']
 
 
-                                                            if dmg['ELEMENT'] == electric_element:
+                                                            elif dmg['ELEMENT'] == electric_element:
                                                                 t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
+                                                                o_health = o_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == poison_element:
+                                                            elif dmg['ELEMENT'] == poison_element:
                                                                 t_poison_dmg = t_poison_dmg + 8
-
-                                                            if dmg['ELEMENT'] == ice_element:
+                                                                o_health = o_health - dmg['DMG']
+        
+                                                            elif dmg['ELEMENT'] == ice_element:
                                                                 t_ice_counter = t_ice_counter + 1
                                                                 if t_ice_counter == 3:
                                                                     t_freeze_enh = True
                                                                     t_ice_counter = 0
+                                                                o_health = o_health - dmg['DMG']
+
+                                                            elif dmg['ELEMENT'] == bleed_element:
+                                                                t_bleed_counter = t_bleed_counter + 1
+                                                                if t_bleed_counter == 5:
+                                                                    t_bleed_hit = True
+                                                                    t_bleed_counter = 0
+                                                                o_health = o_health - dmg['DMG']
+                                                            
+                                                            else:
+                                                                o_health = o_health - dmg['DMG']
+
 
                                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                                             previous_moves.append(f"(**{turn_total}**) **{t_card}**: {dmg['MESSAGE']}")
@@ -11274,53 +11345,79 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     elif dmg['ABSORB']:
                                                         o_health = o_health + dmg['DMG']
                                                     elif dmg['ELEMENT'] == water_element:
-                                                        t_water_buff = t_water_buff + 25
-                                                        previous_moves.append(f"**{t_card}** dealt 💧 **{t_water_buff}** additional water dmg")
+                                                        if tmove1_element == water_element:
+                                                            t_basic_water_buff = t_basic_water_buff + 25
+                                                        if tmove2_element == water_element:
+                                                            t_special_water_buff = t_special_water_buff + 25
+                                                        if tmove3_element == water_element:
+                                                            t_ultimate_water_buff = t_ultimate_water_buff + 25
                                                         o_health = o_health - (dmg['DMG'] + t_water_buff)
-                                                    else:
+
+                                                    elif dmg['ELEMENT'] == earth_element:
+                                                        t_defense = t_defense + (dmg['DMG'] * .20)
                                                         o_health = o_health - dmg['DMG']
 
-                                                    if dmg['ELEMENT'] == time_element:
-                                                        t_stamina = 0
+                                                    elif dmg['ELEMENT'] == recoil_element:
+                                                        t_health = t_health - (dmg['DMG'] * .25)
+                                                        o_health = o_health - dmg['DMG']
 
-                                                    if dmg['ELEMENT'] == bleed_element:
+                                                    elif dmg['ELEMENT'] == time_element:
+                                                        t_stamina = 0
+                                                        o_health = o_health - dmg['DMG']
+
+
+                                                    elif dmg['ELEMENT'] == death_element:
+                                                        o_max_health = o_max_health - (dmg['DMG'] * .05)
+                                                        o_health = o_health - dmg['DMG']
+
+                                                    elif dmg['ELEMENT'] == light_element:
+                                                        t_stamina = t_stamina + (dmg['STAMINA_USED'] / 2)
+                                                        o_health = o_health - dmg['DMG']
+
+                                                    elif dmg['ELEMENT'] == dark_element:
+                                                        t_stamina = t_stamina + 5
+                                                        o_stamina = o_stamina - 5
+                                                        o_health = o_health - dmg['DMG']
+
+                                                    elif dmg['ELEMENT'] == life_element:
+                                                        t_health = t_health + (dmg['DMG'] * .15)
+                                                        o_health = o_health - dmg['DMG']
+
+                                                    elif dmg['ELEMENT'] == phsycic_element:
+                                                        o_defense = o_defense - (dmg['DMG'] * .08)
+                                                        o_attack = o_attack - (dmg['DMG'] * .08)
+                                                        o_health = o_health - dmg['DMG']
+
+                                                    elif dmg['ELEMENT'] == fire_element:
+                                                        t_burn_dmg = round(dmg['DMG'] * .30)
+                                                        o_health = o_health - dmg['DMG']
+
+
+                                                    elif dmg['ELEMENT'] == electric_element:
+                                                        t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
+                                                        o_health = o_health - dmg['DMG']
+
+                                                    elif dmg['ELEMENT'] == poison_element:
+                                                        t_poison_dmg = t_poison_dmg + 8
+                                                        o_health = o_health - dmg['DMG']
+
+                                                    elif dmg['ELEMENT'] == ice_element:
+                                                        t_ice_counter = t_ice_counter + 1
+                                                        if t_ice_counter == 3:
+                                                            t_freeze_enh = True
+                                                            t_ice_counter = 0
+                                                        o_health = o_health - dmg['DMG']
+
+                                                    elif dmg['ELEMENT'] == bleed_element:
                                                         t_bleed_counter = t_bleed_counter + 1
                                                         if t_bleed_counter == 5:
                                                             t_bleed_hit = True
                                                             t_bleed_counter = 0
+                                                        o_health = o_health - dmg['DMG']
+                                                    
+                                                    else:
+                                                        o_health = o_health - dmg['DMG']
 
-                                                    if dmg['ELEMENT'] == recoil_element:
-                                                        t_health = t_health - (dmg['DMG'] * .25)
-
-                                                    if dmg['ELEMENT'] == earth_element:
-                                                        t_defense = t_defense + (dmg['DMG'] * .20)
-
-                                                    if dmg['ELEMENT'] == death_element:
-                                                        o_max_health = o_max_health - (dmg['DMG'] * .05)
-
-                                                    if dmg['ELEMENT'] == light_element:
-                                                        t_stamina = t_stamina + (dmg['STAMINA_USED'] / 2)
-
-                                                    if dmg['ELEMENT'] == dark_element:
-                                                        t_stamina = t_stamina + 5
-                                                        o_stamina = o_stamina - 5
-
-                                                    if dmg['ELEMENT'] == life_element:
-                                                        t_health = t_health + (dmg['DMG'] * .15)
-
-                                                    if dmg['ELEMENT'] == phsycic_element:
-                                                        o_defense = o_defense - (dmg['DMG'] * .08)
-                                                        o_attack = o_attack - (dmg['DMG'] * .08)
-
-                                                    if dmg['ELEMENT'] == fire_element:
-                                                        t_burn_dmg = round(dmg['DMG'] * .30)
-
-
-                                                    if dmg['ELEMENT'] == electric_element:
-                                                        t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
-
-                                                    if dmg['ELEMENT'] == poison_element:
-                                                        t_poison_dmg = t_poison_dmg + 8
 
 
 
@@ -11520,61 +11617,78 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         elif dmg['ABSORB']:
                                                             o_health = o_health + int(dmg['DMG'])
                                                         elif dmg['ELEMENT'] == water_element:
-                                                            t_water_buff = t_water_buff + 25
-                                                            previous_moves.append(f"**{t_card}** dealt 💧 **{t_water_buff}** additional water dmg")
+                                                            if tmove1_element == water_element:
+                                                                t_basic_water_buff = t_basic_water_buff + 25
+                                                            if tmove2_element == water_element:
+                                                                t_special_water_buff = t_special_water_buff + 25
+                                                            if tmove3_element == water_element:
+                                                                t_ultimate_water_buff = t_ultimate_water_buff + 25
                                                             o_health = o_health - (dmg['DMG'] + t_water_buff)
-                                                        else:
+
+                                                        elif dmg['ELEMENT'] == earth_element:
+                                                            t_defense = t_defense + (dmg['DMG'] * .20)
                                                             o_health = o_health - dmg['DMG']
 
-                                                        if dmg['ELEMENT'] == ice_element:
+                                                        elif dmg['ELEMENT'] == recoil_element:
+                                                            t_health = t_health - (dmg['DMG'] * .25)
+                                                            o_health = o_health - dmg['DMG']
+
+                                                        elif dmg['ELEMENT'] == time_element:
+                                                            t_stamina = 0
+                                                            o_health = o_health - dmg['DMG']
+
+
+                                                        elif dmg['ELEMENT'] == death_element:
+                                                            o_max_health = o_max_health - (dmg['DMG'] * .05)
+                                                            o_health = o_health - dmg['DMG']
+
+                                                        elif dmg['ELEMENT'] == light_element:
+                                                            t_stamina = t_stamina + (dmg['STAMINA_USED'] / 2)
+                                                            o_health = o_health - dmg['DMG']
+
+                                                        elif dmg['ELEMENT'] == dark_element:
+                                                            t_stamina = t_stamina + 5
+                                                            o_stamina = o_stamina - 5
+                                                            o_health = o_health - dmg['DMG']
+
+                                                        elif dmg['ELEMENT'] == life_element:
+                                                            t_health = t_health + (dmg['DMG'] * .15)
+                                                            o_health = o_health - dmg['DMG']
+
+                                                        elif dmg['ELEMENT'] == phsycic_element:
+                                                            o_defense = o_defense - (dmg['DMG'] * .08)
+                                                            o_attack = o_attack - (dmg['DMG'] * .08)
+                                                            o_health = o_health - dmg['DMG']
+
+                                                        elif dmg['ELEMENT'] == fire_element:
+                                                            t_burn_dmg = round(dmg['DMG'] * .30)
+                                                            o_health = o_health - dmg['DMG']
+
+
+                                                        elif dmg['ELEMENT'] == electric_element:
+                                                            t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
+                                                            o_health = o_health - dmg['DMG']
+
+                                                        elif dmg['ELEMENT'] == poison_element:
+                                                            t_poison_dmg = t_poison_dmg + 8
+                                                            o_health = o_health - dmg['DMG']
+    
+                                                        elif dmg['ELEMENT'] == ice_element:
                                                             t_ice_counter = t_ice_counter + 1
                                                             if t_ice_counter == 3:
                                                                 t_freeze_enh = True
                                                                 t_ice_counter = 0
+                                                            o_health = o_health - dmg['DMG']
 
-                                                        if dmg['ELEMENT'] == time_element:
-                                                            t_stamina = 0
-
-                                                        if dmg['ELEMENT'] == bleed_element:
+                                                        elif dmg['ELEMENT'] == bleed_element:
                                                             t_bleed_counter = t_bleed_counter + 1
                                                             if t_bleed_counter == 5:
                                                                 t_bleed_hit = True
                                                                 t_bleed_counter = 0
-
-
-                                                        if dmg['ELEMENT'] == recoil_element:
-                                                            t_health = t_health - (dmg['DMG'] * .25)
-
-                                                        if dmg['ELEMENT'] == earth_element:
-                                                            t_defense = t_defense + (dmg['DMG'] * .20)
-
-                                                        if dmg['ELEMENT'] == death_element:
-                                                            o_max_health = o_max_health - (dmg['DMG'] * .05)
-
-                                                        if dmg['ELEMENT'] == light_element:
-                                                            t_stamina = t_stamina + (dmg['STAMINA_USED'] / 2)
-
-                                                        if dmg['ELEMENT'] == dark_element:
-                                                            t_stamina = t_stamina + 5
-                                                            o_stamina = o_stamina - 5
-
-                                                        if dmg['ELEMENT'] == life_element:
-                                                            t_health = t_health + (dmg['DMG'] * .15)
-
-                                                        if dmg['ELEMENT'] == phsycic_element:
-                                                            o_defense = o_defense - (dmg['DMG'] * .08)
-                                                            o_attack = o_attack - (dmg['DMG'] * .08)
-
-
-                                                        if dmg['ELEMENT'] == fire_element:
-                                                            t_burn_dmg = round(dmg['DMG'] * .30)
-
-
-                                                        if dmg['ELEMENT'] == electric_element:
-                                                            t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
-
-                                                        if dmg['ELEMENT'] == poison_element:
-                                                            t_poison_dmg = t_poison_dmg + 8
+                                                            o_health = o_health - dmg['DMG']
+                                                        
+                                                        else:
+                                                            o_health = o_health - dmg['DMG']
 
                                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)  
                                                         previous_moves.append(f"(**{turn_total}**) **{t_card}**: {dmg['MESSAGE']}")  
@@ -12777,60 +12891,79 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     elif dmg['ABSORB']:
                                                         t_health = t_health + dmg['DMG']
                                                     elif dmg['ELEMENT'] == water_element:
-                                                        o_water_buff = o_water_buff + 25
-                                                        previous_moves.append(f"**{o_card}** dealt :droplet: **{o_water_buff}** additional water dmg")
-                                                        t_health = t_health - (dmg['DMG'] + o_water_buff)
-                                                    else:
+                                                        if omove1_element == water_element:
+                                                            o_basic_water_buff = o_basic_water_buff + 25
+                                                        if omove2_element == water_element:
+                                                            o_special_water_buff = o_special_water_buff + 25
+                                                        if omove3_element == water_element:
+                                                            o_ultimate_water_buff = o_ultimate_water_buff + 25
+                                                        t_health = t_health - dmg['DMG']
+                                                        
+
+                                                    elif dmg['ELEMENT'] == time_element:
+                                                        o_stamina = 0
                                                         t_health = t_health - dmg['DMG']
 
-                                                    if dmg['ELEMENT'] == recoil_element:
-                                                        o_health = o_health - (dmg['DMG'] * .25)
-
-                                                    if dmg['ELEMENT'] == time_element:
-                                                        o_stamina = 0
-
-                                                    if dmg['ELEMENT'] == bleed_element:
-                                                        o_bleed_counter = o_bleed_counter + 1
-                                                        if o_bleed_counter == 5:
-                                                            o_bleed_hit = True
-                                                            o_bleed_counter = 0
-
-                                                    if dmg['ELEMENT'] == earth_element:
+                                                    elif dmg['ELEMENT'] == earth_element:
                                                         o_defense = o_defense + (dmg['DMG'] * .20)
+                                                        t_health = t_health - dmg['DMG']
 
-                                                    if dmg['ELEMENT'] == death_element:
+                                                    elif dmg['ELEMENT'] == death_element:
                                                         t_max_health = t_max_health - (dmg['DMG'] * .05)
+                                                        t_health = t_health - dmg['DMG']
 
-                                                    if dmg['ELEMENT'] == light_element:
+                                                    elif dmg['ELEMENT'] == light_element:
                                                         o_stamina = o_stamina + (dmg['STAMINA_USED'] / 2)
+                                                        t_health = t_health - dmg['DMG']
 
-                                                    if dmg['ELEMENT'] == dark_element:
+                                                    elif dmg['ELEMENT'] == dark_element:
                                                         o_stamina = o_stamina + 5
                                                         t_stamina = t_stamina - 5
+                                                        t_health = t_health - dmg['DMG']
 
-                                                    if dmg['ELEMENT'] == life_element:
+                                                    elif dmg['ELEMENT'] == life_element:
                                                         o_health = o_health + (dmg['DMG'] * .15)
+                                                        t_health = t_health - dmg['DMG']
 
-                                                    if dmg['ELEMENT'] == phsycic_element:
+                                                    elif dmg['ELEMENT'] == recoil_element:
+                                                        o_health = o_health - (dmg['DMG'] * .25)
+                                                        t_health = t_health - dmg['DMG']
+
+
+                                                    elif dmg['ELEMENT'] == phsycic_element:
                                                         t_defense = t_defense - (dmg['DMG'] * .08)
                                                         t_attack = t_attack - (dmg['DMG'] * .08)
+                                                        t_health = t_health - dmg['DMG']
 
-                                                    if dmg['ELEMENT'] == fire_element:
+                                                    elif dmg['ELEMENT'] == fire_element:
                                                         o_burn_dmg = round(dmg['DMG'] * .30)
+                                                        t_health = t_health - dmg['DMG']
 
 
-                                                    if dmg['ELEMENT'] == electric_element:
+                                                    elif dmg['ELEMENT'] == electric_element:
                                                         o_shock_buff = o_shock_buff +  (dmg['DMG'] * .05)
+                                                        t_health = t_health - dmg['DMG']
 
-                                                    if dmg['ELEMENT'] == poison_element:
+                                                    elif dmg['ELEMENT'] == poison_element:
                                                         o_poison_dmg = o_poison_dmg + 8
+                                                        t_health = t_health - dmg['DMG']
 
-                                                    if dmg['ELEMENT'] == ice_element:
+                                                    elif dmg['ELEMENT'] == ice_element:
                                                         o_ice_counter = o_ice_counter + 1
                                                         if o_ice_counter == 3:
                                                             o_freeze_enh = True
                                                             o_ice_counter = 0
+                                                        t_health = t_health - dmg['DMG']
 
+                                                    elif dmg['ELEMENT'] == bleed_element:
+                                                        o_bleed_counter = o_bleed_counter + 1
+                                                        if o_bleed_counter == 5:
+                                                            o_bleed_hit = True
+                                                            o_bleed_counter = 0
+                                                        t_health = t_health - dmg['DMG']
+                                                    
+                                                    else:
+                                                        t_health = t_health - dmg['DMG']
 
                                                 if mode in co_op_modes:
                                                     block_message = f"**{o_card}**: Defended 🛡️ **{c_card}**"
@@ -13052,59 +13185,79 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         elif dmg['ABSORB']:
                                                             t_health = t_health + int(dmg['DMG'])
                                                         elif dmg['ELEMENT'] == water_element:
-                                                            o_water_buff = o_water_buff + 25
-                                                            previous_moves.append(f"**{o_card}** dealt :droplet: **{o_water_buff}** additional water dmg")
-                                                            t_health = t_health - (dmg['DMG'] + o_water_buff)
-                                                        else:
+                                                            if omove1_element == water_element:
+                                                                o_basic_water_buff = o_basic_water_buff + 25
+                                                            if omove2_element == water_element:
+                                                                o_special_water_buff = o_special_water_buff + 25
+                                                            if omove3_element == water_element:
+                                                                o_ultimate_water_buff = o_ultimate_water_buff + 25
+                                                            t_health = t_health - dmg['DMG']
+                                                            
+
+                                                        elif dmg['ELEMENT'] == time_element:
+                                                            o_stamina = 0
                                                             t_health = t_health - dmg['DMG']
 
-                                                        if dmg['ELEMENT'] == ice_element:
+                                                        elif dmg['ELEMENT'] == earth_element:
+                                                            o_defense = o_defense + (dmg['DMG'] * .20)
+                                                            t_health = t_health - dmg['DMG']
+
+                                                        elif dmg['ELEMENT'] == death_element:
+                                                            t_max_health = t_max_health - (dmg['DMG'] * .05)
+                                                            t_health = t_health - dmg['DMG']
+
+                                                        elif dmg['ELEMENT'] == light_element:
+                                                            o_stamina = o_stamina + (dmg['STAMINA_USED'] / 2)
+                                                            t_health = t_health - dmg['DMG']
+
+                                                        elif dmg['ELEMENT'] == dark_element:
+                                                            o_stamina = o_stamina + 5
+                                                            t_stamina = t_stamina - 5
+                                                            t_health = t_health - dmg['DMG']
+
+                                                        elif dmg['ELEMENT'] == life_element:
+                                                            o_health = o_health + (dmg['DMG'] * .15)
+                                                            t_health = t_health - dmg['DMG']
+
+                                                        elif dmg['ELEMENT'] == recoil_element:
+                                                            o_health = o_health - (dmg['DMG'] * .25)
+                                                            t_health = t_health - dmg['DMG']
+
+
+                                                        elif dmg['ELEMENT'] == phsycic_element:
+                                                            t_defense = t_defense - (dmg['DMG'] * .08)
+                                                            t_attack = t_attack - (dmg['DMG'] * .08)
+                                                            t_health = t_health - dmg['DMG']
+
+                                                        elif dmg['ELEMENT'] == fire_element:
+                                                            o_burn_dmg = round(dmg['DMG'] * .30)
+                                                            t_health = t_health - dmg['DMG']
+
+
+                                                        elif dmg['ELEMENT'] == electric_element:
+                                                            o_shock_buff = o_shock_buff +  (dmg['DMG'] * .05)
+                                                            t_health = t_health - dmg['DMG']
+
+                                                        elif dmg['ELEMENT'] == poison_element:
+                                                            o_poison_dmg = o_poison_dmg + 8
+                                                            t_health = t_health - dmg['DMG']
+
+                                                        elif dmg['ELEMENT'] == ice_element:
                                                             o_ice_counter = o_ice_counter + 1
                                                             if o_ice_counter == 3:
                                                                 o_freeze_enh = True
                                                                 o_ice_counter = 0
+                                                            t_health = t_health - dmg['DMG']
 
-                                                        if dmg['ELEMENT'] == time_element:
-                                                            o_stamina = 0
-
-                                                        if dmg['ELEMENT'] == bleed_element:
+                                                        elif dmg['ELEMENT'] == bleed_element:
                                                             o_bleed_counter = o_bleed_counter + 1
                                                             if o_bleed_counter == 5:
-                                                                o_bleed_hit= True
+                                                                o_bleed_hit = True
                                                                 o_bleed_counter = 0
-
-                                                        if dmg['ELEMENT'] == recoil_element:
-                                                            o_health = o_health - (dmg['DMG'] * .25)
-
-                                                        if dmg['ELEMENT'] == earth_element:
-                                                            o_defense = o_defense + (dmg['DMG'] * .20)
-
-                                                        if dmg['ELEMENT'] == death_element:
-                                                            t_max_health = t_max_health - (dmg['DMG'] * .05)
-
-                                                        if dmg['ELEMENT'] == light_element:
-                                                            o_stamina = o_stamina + (dmg['STAMINA_USED'] / 2)
-
-                                                        if dmg['ELEMENT'] == dark_element:
-                                                            o_stamina = o_stamina + 5
-                                                            t_stamina = t_stamina - 5
-
-                                                        if dmg['ELEMENT'] == life_element:
-                                                            o_health = o_health + (dmg['DMG'] * .15)
-
-                                                        if dmg['ELEMENT'] == phsycic_element:
-                                                            t_defense = t_defense - (dmg['DMG'] * .08)
-                                                            t_attack = t_attack - (dmg['DMG'] * .08)
-
-                                                        if dmg['ELEMENT'] == fire_element:
-                                                            o_burn_dmg = round(dmg['DMG'] * .30)
-
-                                                        if dmg['ELEMENT'] == electric_element:
-                                                            o_shock_buff = o_shock_buff +  (dmg['DMG'] * .05)
-
-                                                        if dmg['ELEMENT'] == poison_element:
-                                                            o_poison_dmg = o_poison_dmg + 8
-
+                                                            t_health = t_health - dmg['DMG']
+                                                        
+                                                        else:
+                                                            t_health = t_health - dmg['DMG']
                                                         previous_moves.append(f"(**{turn_total}**) **{o_card}**: {dmg['MESSAGE']}")
                                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
                                                         if oarm_siphon_active:
@@ -14296,60 +14449,79 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         elif dmg['ABSORB']:
                                                             t_health = t_health + dmg['DMG']
                                                         elif dmg['ELEMENT'] == water_element:
-                                                            o_water_buff = o_water_buff + 25
-                                                            previous_moves.append(f"**{o_card}** dealt :droplet: **{o_water_buff}** additional water dmg")
-                                                            t_health = t_health - (dmg['DMG'] + o_water_buff)
-                                                        else:
+                                                            if omove1_element == water_element:
+                                                                o_basic_water_buff = o_basic_water_buff + 25
+                                                            if omove2_element == water_element:
+                                                                o_special_water_buff = o_special_water_buff + 25
+                                                            if omove3_element == water_element:
+                                                                o_ultimate_water_buff = o_ultimate_water_buff + 25
+                                                            t_health = t_health - dmg['DMG']
+                                                            
+
+                                                        elif dmg['ELEMENT'] == time_element:
+                                                            o_stamina = 0
                                                             t_health = t_health - dmg['DMG']
 
-                                                        if dmg['ELEMENT'] == recoil_element:
-                                                            o_health = o_health - (dmg['DMG'] * .25)
-
-                                                        if dmg['ELEMENT'] == time_element:
-                                                            o_stamina = 0
-
-                                                        if dmg['ELEMENT'] == bleed_element:
-                                                            o_bleed_counter = o_bleed_counter + 1
-                                                            if o_bleed_counter == 5:
-                                                                o_bleed_hit= True
-                                                                o_bleed_counter = 0
-
-                                                        if dmg['ELEMENT'] == earth_element:
+                                                        elif dmg['ELEMENT'] == earth_element:
                                                             o_defense = o_defense + (dmg['DMG'] * .20)
+                                                            t_health = t_health - dmg['DMG']
 
-                                                        if dmg['ELEMENT'] == death_element:
+                                                        elif dmg['ELEMENT'] == death_element:
                                                             t_max_health = t_max_health - (dmg['DMG'] * .05)
+                                                            t_health = t_health - dmg['DMG']
 
-                                                        if dmg['ELEMENT'] == light_element:
+                                                        elif dmg['ELEMENT'] == light_element:
                                                             o_stamina = o_stamina + (dmg['STAMINA_USED'] / 2)
+                                                            t_health = t_health - dmg['DMG']
 
-                                                        if dmg['ELEMENT'] == dark_element:
+                                                        elif dmg['ELEMENT'] == dark_element:
                                                             o_stamina = o_stamina + 5
                                                             t_stamina = t_stamina - 5
+                                                            t_health = t_health - dmg['DMG']
 
-                                                        if dmg['ELEMENT'] == life_element:
+                                                        elif dmg['ELEMENT'] == life_element:
                                                             o_health = o_health + (dmg['DMG'] * .15)
+                                                            t_health = t_health - dmg['DMG']
 
-                                                        if dmg['ELEMENT'] == phsycic_element:
+                                                        elif dmg['ELEMENT'] == recoil_element:
+                                                            o_health = o_health - (dmg['DMG'] * .25)
+                                                            t_health = t_health - dmg['DMG']
+
+
+                                                        elif dmg['ELEMENT'] == phsycic_element:
                                                             t_defense = t_defense - (dmg['DMG'] * .08)
                                                             t_attack = t_attack - (dmg['DMG'] * .08)
+                                                            t_health = t_health - dmg['DMG']
 
-                                                        if dmg['ELEMENT'] == fire_element:
+                                                        elif dmg['ELEMENT'] == fire_element:
                                                             o_burn_dmg = round(dmg['DMG'] * .30)
+                                                            t_health = t_health - dmg['DMG']
 
 
-                                                        if dmg['ELEMENT'] == electric_element:
+                                                        elif dmg['ELEMENT'] == electric_element:
                                                             o_shock_buff = o_shock_buff +  (dmg['DMG'] * .05)
+                                                            t_health = t_health - dmg['DMG']
 
-                                                        if dmg['ELEMENT'] == poison_element:
+                                                        elif dmg['ELEMENT'] == poison_element:
                                                             o_poison_dmg = o_poison_dmg + 8
+                                                            t_health = t_health - dmg['DMG']
 
-                                                        if dmg['ELEMENT'] == ice_element:
+                                                        elif dmg['ELEMENT'] == ice_element:
                                                             o_ice_counter = o_ice_counter + 1
                                                             if o_ice_counter == 3:
                                                                 o_freeze_enh = True
                                                                 o_ice_counter = 0
+                                                            t_health = t_health - dmg['DMG']
 
+                                                        elif dmg['ELEMENT'] == bleed_element:
+                                                            o_bleed_counter = o_bleed_counter + 1
+                                                            if o_bleed_counter == 5:
+                                                                o_bleed_hit = True
+                                                                o_bleed_counter = 0
+                                                            t_health = t_health - dmg['DMG']
+                                                        
+                                                        else:
+                                                            t_health = t_health - dmg['DMG']
 
                                                     if mode in co_op_modes:
                                                         block_message = f"**{o_card}**: Defended 🛡️ **{c_card}**"
@@ -14589,58 +14761,79 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             elif dmg['ABSORB']:
                                                                 t_health = t_health + int(dmg['DMG'])
                                                             elif dmg['ELEMENT'] == water_element:
-                                                                o_water_buff = o_water_buff + 25
-                                                                previous_moves.append(f"**{o_card}** dealt :droplet: **{o_water_buff}** additional water dmg")
-                                                                t_health = t_health - (dmg['DMG'] + o_water_buff)
-                                                            else:
+                                                                if omove1_element == water_element:
+                                                                    o_basic_water_buff = o_basic_water_buff + 25
+                                                                if omove2_element == water_element:
+                                                                    o_special_water_buff = o_special_water_buff + 25
+                                                                if omove3_element == water_element:
+                                                                    o_ultimate_water_buff = o_ultimate_water_buff + 25
+                                                                t_health = t_health - dmg['DMG']
+                                                                
+
+                                                            elif dmg['ELEMENT'] == time_element:
+                                                                o_stamina = 0
+                                                                t_health = t_health - dmg['DMG']
+
+                                                            elif dmg['ELEMENT'] == earth_element:
+                                                                o_defense = o_defense + (dmg['DMG'] * .20)
+                                                                t_health = t_health - dmg['DMG']
+
+                                                            elif dmg['ELEMENT'] == death_element:
+                                                                t_max_health = t_max_health - (dmg['DMG'] * .05)
+                                                                t_health = t_health - dmg['DMG']
+
+                                                            elif dmg['ELEMENT'] == light_element:
+                                                                o_stamina = o_stamina + (dmg['STAMINA_USED'] / 2)
+                                                                t_health = t_health - dmg['DMG']
+
+                                                            elif dmg['ELEMENT'] == dark_element:
+                                                                o_stamina = o_stamina + 5
+                                                                t_stamina = t_stamina - 5
+                                                                t_health = t_health - dmg['DMG']
+
+                                                            elif dmg['ELEMENT'] == life_element:
+                                                                o_health = o_health + (dmg['DMG'] * .15)
+                                                                t_health = t_health - dmg['DMG']
+
+                                                            elif dmg['ELEMENT'] == recoil_element:
+                                                                o_health = o_health - (dmg['DMG'] * .25)
                                                                 t_health = t_health - dmg['DMG']
 
 
-                                                            if dmg['ELEMENT'] == ice_element:
+                                                            elif dmg['ELEMENT'] == phsycic_element:
+                                                                t_defense = t_defense - (dmg['DMG'] * .08)
+                                                                t_attack = t_attack - (dmg['DMG'] * .08)
+                                                                t_health = t_health - dmg['DMG']
+
+                                                            elif dmg['ELEMENT'] == fire_element:
+                                                                o_burn_dmg = round(dmg['DMG'] * .30)
+                                                                t_health = t_health - dmg['DMG']
+
+
+                                                            elif dmg['ELEMENT'] == electric_element:
+                                                                o_shock_buff = o_shock_buff +  (dmg['DMG'] * .05)
+                                                                t_health = t_health - dmg['DMG']
+
+                                                            elif dmg['ELEMENT'] == poison_element:
+                                                                o_poison_dmg = o_poison_dmg + 8
+                                                                t_health = t_health - dmg['DMG']
+
+                                                            elif dmg['ELEMENT'] == ice_element:
                                                                 o_ice_counter = o_ice_counter + 1
                                                                 if o_ice_counter == 3:
                                                                     o_freeze_enh = True
                                                                     o_ice_counter = 0
-                                                            if dmg['ELEMENT'] == recoil_element:
-                                                                o_health = o_health - (dmg['DMG'] * .25)
+                                                                t_health = t_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == time_element:
-                                                                o_stamina = 0
-
-                                                            if dmg['ELEMENT'] == bleed_element:
+                                                            elif dmg['ELEMENT'] == bleed_element:
                                                                 o_bleed_counter = o_bleed_counter + 1
                                                                 if o_bleed_counter == 5:
-                                                                    o_bleed_hit= True
+                                                                    o_bleed_hit = True
                                                                     o_bleed_counter = 0
-
-                                                            if dmg['ELEMENT'] == earth_element:
-                                                                o_defense = o_defense + (dmg['DMG'] * .20)
-
-                                                            if dmg['ELEMENT'] == death_element:
-                                                                t_max_health = t_max_health - (dmg['DMG'] * .05)
-
-                                                            if dmg['ELEMENT'] == light_element:
-                                                                o_stamina = o_stamina + (dmg['STAMINA_USED'] / 2)
-
-                                                            if dmg['ELEMENT'] == dark_element:
-                                                                o_stamina = o_stamina + 5
-                                                                t_stamina = t_stamina - 5
-
-                                                            if dmg['ELEMENT'] == life_element:
-                                                                o_health = o_health + (dmg['DMG'] * .15)
-
-                                                            if dmg['ELEMENT'] == phsycic_element:
-                                                                t_defense = t_defense - (dmg['DMG'] * .08)
-                                                                t_attack = t_attack - (dmg['DMG'] * .08)
-
-                                                            if dmg['ELEMENT'] == fire_element:
-                                                                o_burn_dmg = round(dmg['DMG'] * .30)
-
-                                                            if dmg['ELEMENT'] == electric_element:
-                                                                o_shock_buff = o_shock_buff +  (dmg['DMG'] * .05)
-
-                                                            if dmg['ELEMENT'] == poison_element:
-                                                                o_poison_dmg = o_poison_dmg + 8
+                                                                t_health = t_health - dmg['DMG']
+                                                            
+                                                            else:
+                                                                t_health = t_health - dmg['DMG']
 
                                                             previous_moves.append(f"(**{turn_total}**) **{o_card}**: {dmg['MESSAGE']}")
                                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
@@ -16191,59 +16384,79 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 elif dmg['ABSORB']:
                                                     o_health = o_health + dmg['DMG']
                                                 elif dmg['ELEMENT'] == water_element:
-                                                    t_water_buff = t_water_buff + 25
-                                                    previous_moves.append(f"**{t_card}** dealt :droplet: **{t_water_buff}** additional water dmg")
+                                                    if tmove1_element == water_element:
+                                                        t_basic_water_buff = t_basic_water_buff + 25
+                                                    if tmove2_element == water_element:
+                                                        t_special_water_buff = t_special_water_buff + 25
+                                                    if tmove3_element == water_element:
+                                                        t_ultimate_water_buff = t_ultimate_water_buff + 25
                                                     o_health = o_health - (dmg['DMG'] + t_water_buff)
-                                                else:
+
+                                                elif dmg['ELEMENT'] == earth_element:
+                                                    t_defense = t_defense + (dmg['DMG'] * .20)
                                                     o_health = o_health - dmg['DMG']
-                                                
-                                                if dmg['ELEMENT'] == ice_element:
+
+                                                elif dmg['ELEMENT'] == recoil_element:
+                                                    t_health = t_health - (dmg['DMG'] * .25)
+                                                    o_health = o_health - dmg['DMG']
+
+                                                elif dmg['ELEMENT'] == time_element:
+                                                    t_stamina = 0
+                                                    o_health = o_health - dmg['DMG']
+
+
+                                                elif dmg['ELEMENT'] == death_element:
+                                                    o_max_health = o_max_health - (dmg['DMG'] * .05)
+                                                    o_health = o_health - dmg['DMG']
+
+                                                elif dmg['ELEMENT'] == light_element:
+                                                    t_stamina = t_stamina + (dmg['STAMINA_USED'] / 2)
+                                                    o_health = o_health - dmg['DMG']
+
+                                                elif dmg['ELEMENT'] == dark_element:
+                                                    t_stamina = t_stamina + 5
+                                                    o_stamina = o_stamina - 5
+                                                    o_health = o_health - dmg['DMG']
+
+                                                elif dmg['ELEMENT'] == life_element:
+                                                    t_health = t_health + (dmg['DMG'] * .15)
+                                                    o_health = o_health - dmg['DMG']
+
+                                                elif dmg['ELEMENT'] == phsycic_element:
+                                                    o_defense = o_defense - (dmg['DMG'] * .08)
+                                                    o_attack = o_attack - (dmg['DMG'] * .08)
+                                                    o_health = o_health - dmg['DMG']
+
+                                                elif dmg['ELEMENT'] == fire_element:
+                                                    t_burn_dmg = round(dmg['DMG'] * .30)
+                                                    o_health = o_health - dmg['DMG']
+
+
+                                                elif dmg['ELEMENT'] == electric_element:
+                                                    t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
+                                                    o_health = o_health - dmg['DMG']
+
+                                                elif dmg['ELEMENT'] == poison_element:
+                                                    t_poison_dmg = t_poison_dmg + 8
+                                                    o_health = o_health - dmg['DMG']
+
+                                                elif dmg['ELEMENT'] == ice_element:
                                                     t_ice_counter = t_ice_counter + 1
                                                     if t_ice_counter == 3:
                                                         t_freeze_enh = True
                                                         t_ice_counter = 0
+                                                    o_health = o_health - dmg['DMG']
 
-                                                if dmg['ELEMENT'] == bleed_element:
+                                                elif dmg['ELEMENT'] == bleed_element:
                                                     t_bleed_counter = t_bleed_counter + 1
                                                     if t_bleed_counter == 5:
                                                         t_bleed_hit = True
                                                         t_bleed_counter = 0
+                                                    o_health = o_health - dmg['DMG']
+                                                
+                                                else:
+                                                    o_health = o_health - dmg['DMG']
 
-                                                if dmg['ELEMENT'] == time_element:
-                                                    t_stamina = 0
-
-                                                if dmg['ELEMENT'] == recoil_element:
-                                                    t_health = t_health - (dmg['DMG'] * .25)
-
-                                                if dmg['ELEMENT'] == earth_element:
-                                                    t_defense = t_defense + (dmg['DMG'] * .20)
-
-                                                if dmg['ELEMENT'] == death_element:
-                                                    o_max_health = o_max_health - (dmg['DMG'] * .05)
-
-                                                if dmg['ELEMENT'] == light_element:
-                                                    t_stamina = t_stamina + (dmg['STAMINA_USED'] / 2)
-
-                                                if dmg['ELEMENT'] == dark_element:
-                                                    t_stamina = t_stamina + 5
-                                                    o_stamina = o_stamina - 5
-
-                                                if dmg['ELEMENT'] == life_element:
-                                                    t_health = t_health + (dmg['DMG'] * .15)
-
-                                                if dmg['ELEMENT'] == phsycic_element:
-                                                    o_defense = o_defense - (dmg['DMG'] * .08)
-                                                    o_attack = o_attack - (dmg['DMG'] * .08)
-
-                                                if dmg['ELEMENT'] == fire_element:
-                                                    t_burn_dmg = round(dmg['DMG'] * .30)
-
-
-                                                if dmg['ELEMENT'] == electric_element:
-                                                    t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
-
-                                                if dmg['ELEMENT'] == poison_element:
-                                                    t_poison_dmg = t_poison_dmg + 8
 
                                             t_stamina = t_stamina - 20
                                             t_block_used = True
@@ -16450,60 +16663,76 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             elif dmg['ABSORB']:
                                                                 c_health = c_health + int(dmg['DMG'])
                                                             elif dmg['ELEMENT'] == water_element:
-                                                                t_water_buff = t_water_buff + 25
-                                                                previous_moves.append(f"**{t_card}** dealt :droplet: **{t_water_buff}** additional water dmg")
-                                                                c_health = c_health - (dmg['DMG'] + t_water_buff)
-                                                            else:
+                                                                if tmove1_element == water_element:
+                                                                    t_basic_water_buff = t_basic_water_buff + 25
+                                                                if tmove2_element == water_element:
+                                                                    t_special_water_buff = t_special_water_buff + 25
+                                                                if tmove3_element == water_element:
+                                                                    t_ultimate_water_buff = t_ultimate_water_buff + 25
                                                                 c_health = c_health - dmg['DMG']
-                                                            
-                                                            if dmg['ELEMENT'] == ice_element:
+
+                                                            elif dmg['ELEMENT'] == ice_element:
                                                                 t_ice_counter = t_ice_counter + 1
                                                                 if t_ice_counter == 3:
                                                                     t_freeze_enh = True
                                                                     t_ice_counter = 0
+                                                                c_health = c_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == time_element:
+                                                            elif dmg['ELEMENT'] == time_element:
                                                                 t_stamina = 0
+                                                                c_health = c_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == bleed_element:
+                                                            elif dmg['ELEMENT'] == bleed_element:
                                                                 t_bleed_counter = t_bleed_counter + 1
                                                                 if t_bleed_counter == 5:
                                                                     t_bleed_hit = True
                                                                     t_bleed_counter = 0
+                                                                c_health = c_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == recoil_element:
+                                                            elif dmg['ELEMENT'] == recoil_element:
                                                                 t_health = t_health - (dmg['DMG'] * .25)
+                                                                c_health = c_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == earth_element:
+                                                            elif dmg['ELEMENT'] == earth_element:
                                                                 t_defense = t_defense + (dmg['DMG'] * .20)
+                                                                c_health = c_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == death_element:
+                                                            elif dmg['ELEMENT'] == death_element:
                                                                 c_max_health = c_max_health - (dmg['DMG'] * .05)
+                                                                c_health = c_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == light_element:
+                                                            elif dmg['ELEMENT'] == light_element:
                                                                 t_stamina = t_stamina + (dmg['STAMINA_USED'] / 2)
+                                                                c_health = c_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == dark_element:
+                                                            elif dmg['ELEMENT'] == dark_element:
                                                                 t_stamina = t_stamina + 5
                                                                 c_stamina = c_stamina - 5
+                                                                c_health = c_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == life_element:
+                                                            elif dmg['ELEMENT'] == life_element:
                                                                 t_health = t_health + (dmg['DMG'] * .15)
+                                                                c_health = c_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == phsycic_element:
+                                                            elif dmg['ELEMENT'] == phsycic_element:
                                                                 c_defense = c_defense - (dmg['DMG'] * .08)
                                                                 c_attack = c_attack - (dmg['DMG'] * .08)
+                                                                c_health = c_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == fire_element:
+                                                            elif dmg['ELEMENT'] == fire_element:
                                                                 t_burn_dmg = round(dmg['DMG'] * .30)
+                                                                c_health = c_health - dmg['DMG']
 
-
-                                                            if dmg['ELEMENT'] == electric_element:
+                                                            elif dmg['ELEMENT'] == electric_element:
                                                                 t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
+                                                                c_health = c_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == poison_element:
+                                                            elif dmg['ELEMENT'] == poison_element:
                                                                 t_poison_dmg = t_poison_dmg + 8
-
+                                                                c_health = c_health - dmg['DMG']
+                                                            
+                                                            else:
+                                                                c_health = c_health - dmg['DMG']
 
                                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                                             previous_moves.append(f"(**{turn_total}**) **{t_card}**: {dmg['MESSAGE']}")
@@ -16736,58 +16965,79 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             elif dmg['ABSORB']:
                                                                 o_health = o_health + int(dmg['DMG'])
                                                             elif dmg['ELEMENT'] == water_element:
-                                                                t_water_buff = t_water_buff + 25
-                                                                previous_moves.append(f"**{t_card}** dealt :droplet: **{t_water_buff}** additional water dmg")
+                                                                if tmove1_element == water_element:
+                                                                    t_basic_water_buff = t_basic_water_buff + 25
+                                                                if tmove2_element == water_element:
+                                                                    t_special_water_buff = t_special_water_buff + 25
+                                                                if tmove3_element == water_element:
+                                                                    t_ultimate_water_buff = t_ultimate_water_buff + 25
                                                                 o_health = o_health - (dmg['DMG'] + t_water_buff)
-                                                            else:
+
+                                                            elif dmg['ELEMENT'] == earth_element:
+                                                                t_defense = t_defense + (dmg['DMG'] * .20)
                                                                 o_health = o_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == ice_element:
+                                                            elif dmg['ELEMENT'] == recoil_element:
+                                                                t_health = t_health - (dmg['DMG'] * .25)
+                                                                o_health = o_health - dmg['DMG']
+
+                                                            elif dmg['ELEMENT'] == time_element:
+                                                                t_stamina = 0
+                                                                o_health = o_health - dmg['DMG']
+
+
+                                                            elif dmg['ELEMENT'] == death_element:
+                                                                o_max_health = o_max_health - (dmg['DMG'] * .05)
+                                                                o_health = o_health - dmg['DMG']
+
+                                                            elif dmg['ELEMENT'] == light_element:
+                                                                t_stamina = t_stamina + (dmg['STAMINA_USED'] / 2)
+                                                                o_health = o_health - dmg['DMG']
+
+                                                            elif dmg['ELEMENT'] == dark_element:
+                                                                t_stamina = t_stamina + 5
+                                                                o_stamina = o_stamina - 5
+                                                                o_health = o_health - dmg['DMG']
+
+                                                            elif dmg['ELEMENT'] == life_element:
+                                                                t_health = t_health + (dmg['DMG'] * .15)
+                                                                o_health = o_health - dmg['DMG']
+
+                                                            elif dmg['ELEMENT'] == phsycic_element:
+                                                                o_defense = o_defense - (dmg['DMG'] * .08)
+                                                                o_attack = o_attack - (dmg['DMG'] * .08)
+                                                                o_health = o_health - dmg['DMG']
+
+                                                            elif dmg['ELEMENT'] == fire_element:
+                                                                t_burn_dmg = round(dmg['DMG'] * .30)
+                                                                o_health = o_health - dmg['DMG']
+
+
+                                                            elif dmg['ELEMENT'] == electric_element:
+                                                                t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
+                                                                o_health = o_health - dmg['DMG']
+
+                                                            elif dmg['ELEMENT'] == poison_element:
+                                                                t_poison_dmg = t_poison_dmg + 8
+                                                                o_health = o_health - dmg['DMG']
+        
+                                                            elif dmg['ELEMENT'] == ice_element:
                                                                 t_ice_counter = t_ice_counter + 1
                                                                 if t_ice_counter == 3:
                                                                     t_freeze_enh = True
                                                                     t_ice_counter = 0
+                                                                o_health = o_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == time_element:
-                                                                t_stamina = 0
-
-                                                            if dmg['ELEMENT'] == bleed_element:
+                                                            elif dmg['ELEMENT'] == bleed_element:
                                                                 t_bleed_counter = t_bleed_counter + 1
                                                                 if t_bleed_counter == 5:
                                                                     t_bleed_hit = True
                                                                     t_bleed_counter = 0
+                                                                o_health = o_health - dmg['DMG']
+                                                            
+                                                            else:
+                                                                o_health = o_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == recoil_element:
-                                                                t_health = t_health - (dmg['DMG'] * .25)
-
-                                                            if dmg['ELEMENT'] == earth_element:
-                                                                t_defense = t_defense + (dmg['DMG'] * .20)
-
-                                                            if dmg['ELEMENT'] == death_element:
-                                                                o_max_health = o_max_health - (dmg['DMG'] * .05)
-
-                                                            if dmg['ELEMENT'] == light_element:
-                                                                t_stamina = t_stamina + (dmg['STAMINA_USED'] / 2)
-
-                                                            if dmg['ELEMENT'] == dark_element:
-                                                                t_stamina = t_stamina + 5
-                                                                o_stamina = o_stamina - 5
-
-                                                            if dmg['ELEMENT'] == life_element:
-                                                                t_health = t_health + (dmg['DMG'] * .15)
-
-                                                            if dmg['ELEMENT'] == phsycic_element:
-                                                                o_defense = o_defense - (dmg['DMG'] * .08)
-                                                                o_attack = o_attack - (dmg['DMG'] * .08)
-
-                                                            if dmg['ELEMENT'] == fire_element:
-                                                                t_burn_dmg = round(dmg['DMG'] * .30)
-
-                                                            if dmg['ELEMENT'] == electric_element:
-                                                                t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
-
-                                                            if dmg['ELEMENT'] == poison_element:
-                                                                t_poison_dmg = t_poison_dmg + 8
 
                                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                                             previous_moves.append(f"(**{turn_total}**) **{t_card}**: {dmg['MESSAGE']}")
@@ -17025,59 +17275,78 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         elif dmg['ABSORB']:
                                                             o_health = o_health + int(dmg['DMG'])
                                                         elif dmg['ELEMENT'] == water_element:
-                                                            t_water_buff = t_water_buff + 25
-                                                            previous_moves.append(f"**{t_card}** dealt :droplet: **{t_water_buff}** additional water dmg")
+                                                            if tmove1_element == water_element:
+                                                                t_basic_water_buff = t_basic_water_buff + 25
+                                                            if tmove2_element == water_element:
+                                                                t_special_water_buff = t_special_water_buff + 25
+                                                            if tmove3_element == water_element:
+                                                                t_ultimate_water_buff = t_ultimate_water_buff + 25
                                                             o_health = o_health - (dmg['DMG'] + t_water_buff)
-                                                        else:
+
+                                                        elif dmg['ELEMENT'] == earth_element:
+                                                            t_defense = t_defense + (dmg['DMG'] * .20)
                                                             o_health = o_health - dmg['DMG']
 
-                                                        if dmg['ELEMENT'] == ice_element:
+                                                        elif dmg['ELEMENT'] == recoil_element:
+                                                            t_health = t_health - (dmg['DMG'] * .25)
+                                                            o_health = o_health - dmg['DMG']
+
+                                                        elif dmg['ELEMENT'] == time_element:
+                                                            t_stamina = 0
+                                                            o_health = o_health - dmg['DMG']
+
+
+                                                        elif dmg['ELEMENT'] == death_element:
+                                                            o_max_health = o_max_health - (dmg['DMG'] * .05)
+                                                            o_health = o_health - dmg['DMG']
+
+                                                        elif dmg['ELEMENT'] == light_element:
+                                                            t_stamina = t_stamina + (dmg['STAMINA_USED'] / 2)
+                                                            o_health = o_health - dmg['DMG']
+
+                                                        elif dmg['ELEMENT'] == dark_element:
+                                                            t_stamina = t_stamina + 5
+                                                            o_stamina = o_stamina - 5
+                                                            o_health = o_health - dmg['DMG']
+
+                                                        elif dmg['ELEMENT'] == life_element:
+                                                            t_health = t_health + (dmg['DMG'] * .15)
+                                                            o_health = o_health - dmg['DMG']
+
+                                                        elif dmg['ELEMENT'] == phsycic_element:
+                                                            o_defense = o_defense - (dmg['DMG'] * .08)
+                                                            o_attack = o_attack - (dmg['DMG'] * .08)
+                                                            o_health = o_health - dmg['DMG']
+
+                                                        elif dmg['ELEMENT'] == fire_element:
+                                                            t_burn_dmg = round(dmg['DMG'] * .30)
+                                                            o_health = o_health - dmg['DMG']
+
+
+                                                        elif dmg['ELEMENT'] == electric_element:
+                                                            t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
+                                                            o_health = o_health - dmg['DMG']
+
+                                                        elif dmg['ELEMENT'] == poison_element:
+                                                            t_poison_dmg = t_poison_dmg + 8
+                                                            o_health = o_health - dmg['DMG']
+    
+                                                        elif dmg['ELEMENT'] == ice_element:
                                                             t_ice_counter = t_ice_counter + 1
                                                             if t_ice_counter == 3:
                                                                 t_freeze_enh = True
                                                                 t_ice_counter = 0
+                                                            o_health = o_health - dmg['DMG']
 
-                                                        if dmg['ELEMENT'] == time_element:
-                                                            t_stamina = 0
-
-                                                        if dmg['ELEMENT'] == bleed_element:
+                                                        elif dmg['ELEMENT'] == bleed_element:
                                                             t_bleed_counter = t_bleed_counter + 1
                                                             if t_bleed_counter == 5:
                                                                 t_bleed_hit = True
                                                                 t_bleed_counter = 0
-
-                                                        if dmg['ELEMENT'] == recoil_element:
-                                                            t_health = t_health - (dmg['DMG'] * .25)
-
-                                                        if dmg['ELEMENT'] == earth_element:
-                                                            t_defense = t_defense + (dmg['DMG'] * .20)
-
-                                                        if dmg['ELEMENT'] == death_element:
-                                                            o_max_health = o_max_health - (dmg['DMG'] * .05)
-
-                                                        if dmg['ELEMENT'] == light_element:
-                                                            t_stamina = t_stamina + (dmg['STAMINA_USED'] / 2)
-
-                                                        if dmg['ELEMENT'] == dark_element:
-                                                            t_stamina = t_stamina + 5
-                                                            o_stamina = o_stamina - 5
-
-                                                        if dmg['ELEMENT'] == life_element:
-                                                            t_health = t_health + (dmg['DMG'] * .15)
-
-                                                        if dmg['ELEMENT'] == phsycic_element:
-                                                            o_defense = o_defense - (dmg['DMG'] * .08)
-                                                            o_attack = o_attack - (dmg['DMG'] * .08)
-
-
-                                                        if dmg['ELEMENT'] == fire_element:
-                                                            t_burn_dmg = round(dmg['DMG'] * .30)
-
-                                                        if dmg['ELEMENT'] == electric_element:
-                                                            t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
-
-                                                        if dmg['ELEMENT'] == poison_element:
-                                                            t_poison_dmg = t_poison_dmg + 8
+                                                            o_health = o_health - dmg['DMG']
+                                                        
+                                                        else:
+                                                            o_health = o_health - dmg['DMG']
 
 
                                                         previous_moves.append(f"(**{turn_total}**) **{t_card}**: {dmg['MESSAGE']}")
@@ -18550,61 +18819,76 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             elif dmg['ABSORB']:
                                                                 t_health = t_health + int(dmg['DMG'])
                                                             elif dmg['ELEMENT'] == water_element:
-                                                                c_water_buff = c_water_buff + 25
-                                                                previous_moves.append(f"**{c_card}** dealt :droplet: **{c_water_buff}** additional water dmg")
-                                                                t_health = t_health - (dmg['DMG'] + c_water_buff)
-                                                            else:
+                                                                if cmove1_element == water_element:
+                                                                    c_basic_water_buff = c_basic_water_buff + 25
+                                                                if cmove2_element == water_element:
+                                                                    c_special_water_buff = c_special_water_buff + 25
+                                                                if cmove3_element == water_element:
+                                                                    c_ultimate_water_buff = c_ultimate_water_buff + 25
                                                                 t_health = t_health - dmg['DMG']
 
-
-                                                            if dmg['ELEMENT'] == ice_element:
+                                                            elif dmg['ELEMENT'] == ice_element:
                                                                 c_ice_counter = c_ice_counter + 1
                                                                 if c_ice_counter == 3:
                                                                     c_freeze_enh = True
                                                                     c_ice_counter = 0
+                                                                t_health = t_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == time_element:
+                                                            elif dmg['ELEMENT'] == time_element:
                                                                 c_stamina = 0
+                                                                t_health = t_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == bleed_element:
+                                                            elif dmg['ELEMENT'] == bleed_element:
                                                                 c_bleed_counter = c_bleed_counter + 1
                                                                 if c_bleed_counter == 5:
                                                                     c_bleed_hit = True
                                                                     c_bleed_counter = 0
+                                                                t_health = t_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == recoil_element:
+                                                            elif dmg['ELEMENT'] == recoil_element:
                                                                 c_health = c_health - (dmg['DMG'] * .25)
+                                                                t_health = t_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == earth_element:
+                                                            elif dmg['ELEMENT'] == earth_element:
                                                                 c_defense = c_defense + (dmg['DMG'] * .20)
+                                                                t_health = t_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == death_element:
+                                                            elif dmg['ELEMENT'] == death_element:
                                                                 t_max_health = t_max_health - (dmg['DMG'] * .05)
+                                                                t_health = t_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == light_element:
+                                                            elif dmg['ELEMENT'] == light_element:
                                                                 o_stamina = o_stamina + (dmg['STAMINA_USED'] / 2)
+                                                                t_health = t_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == dark_element:
+                                                            elif dmg['ELEMENT'] == dark_element:
                                                                 c_stamina = c_stamina + 5
                                                                 t_stamina = t_stamina - 5
+                                                                t_health = t_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == life_element:
+                                                            elif dmg['ELEMENT'] == life_element:
                                                                 c_health = c_health + (dmg['DMG'] * .15)
+                                                                t_health = t_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == phsycic_element:
+                                                            elif dmg['ELEMENT'] == phsycic_element:
                                                                 t_defense = t_defense - (dmg['DMG'] * .08)
                                                                 t_attack = t_attack - (dmg['DMG'] * .08)
+                                                                t_health = t_health - dmg['DMG']
 
-
-                                                            if dmg['ELEMENT'] == fire_element:
+                                                            elif dmg['ELEMENT'] == fire_element:
                                                                 c_burn_dmg = dmg['DMG'] * .25
+                                                                t_health = t_health - dmg['DMG']
 
 
-                                                            if dmg['ELEMENT'] == electric_element:
+                                                            elif dmg['ELEMENT'] == electric_element:
                                                                 c_shock_buff = c_shock_buff +  (dmg['DMG'] * .05)
+                                                                t_health = t_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == poison_element:
+                                                            elif dmg['ELEMENT'] == poison_element:
                                                                 c_poison_dmg = c_poison_dmg + 8
+                                                                t_health = t_health - dmg['DMG']
+                                                            else:
+                                                                t_health = t_health - dmg['DMG']
 
                                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_c)
                                                             previous_moves.append(f"(**{turn_total}**) **{c_card}**: {dmg['MESSAGE']}")
@@ -19541,57 +19825,70 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     c_special_water_buff = c_special_water_buff + 25
                                                                 if cmove3_element == water_element:
                                                                     c_ultimate_water_buff = c_ultimate_water_buff + 25
-                                                                t_health = t_health - (dmg['DMG'] + c_water_buff)
-                                                            else:
                                                                 t_health = t_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == ice_element:
+                                                            elif dmg['ELEMENT'] == ice_element:
                                                                 c_ice_counter = c_ice_counter + 1
                                                                 if c_ice_counter == 3:
                                                                     c_freeze_enh = True
                                                                     c_ice_counter = 0
+                                                                t_health = t_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == time_element:
+                                                            elif dmg['ELEMENT'] == time_element:
                                                                 c_stamina = 0
+                                                                t_health = t_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == bleed_element:
+                                                            elif dmg['ELEMENT'] == bleed_element:
                                                                 c_bleed_counter = c_bleed_counter + 1
                                                                 if c_bleed_counter == 5:
                                                                     c_bleed_hit = True
                                                                     c_bleed_counter = 0
+                                                                t_health = t_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == recoil_element:
+                                                            elif dmg['ELEMENT'] == recoil_element:
                                                                 c_health = c_health - (dmg['DMG'] * .25)
+                                                                t_health = t_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == earth_element:
+                                                            elif dmg['ELEMENT'] == earth_element:
                                                                 c_defense = c_defense + (dmg['DMG'] * .20)
+                                                                t_health = t_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == death_element:
+                                                            elif dmg['ELEMENT'] == death_element:
                                                                 t_max_health = t_max_health - (dmg['DMG'] * .05)
+                                                                t_health = t_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == light_element:
+                                                            elif dmg['ELEMENT'] == light_element:
                                                                 o_stamina = o_stamina + (dmg['STAMINA_USED'] / 2)
+                                                                t_health = t_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == dark_element:
+                                                            elif dmg['ELEMENT'] == dark_element:
                                                                 c_stamina = c_stamina + 5
                                                                 t_stamina = t_stamina - 5
+                                                                t_health = t_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == life_element:
+                                                            elif dmg['ELEMENT'] == life_element:
                                                                 c_health = c_health + (dmg['DMG'] * .15)
+                                                                t_health = t_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == phsycic_element:
+                                                            elif dmg['ELEMENT'] == phsycic_element:
                                                                 t_defense = t_defense - (dmg['DMG'] * .08)
                                                                 t_attack = t_attack - (dmg['DMG'] * .08)
+                                                                t_health = t_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == fire_element:
+                                                            elif dmg['ELEMENT'] == fire_element:
                                                                 c_burn_dmg = dmg['DMG'] * .25
+                                                                t_health = t_health - dmg['DMG']
 
 
-                                                            if dmg['ELEMENT'] == electric_element:
+                                                            elif dmg['ELEMENT'] == electric_element:
                                                                 c_shock_buff = c_shock_buff +  (dmg['DMG'] * .05)
+                                                                t_health = t_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == poison_element:
+                                                            elif dmg['ELEMENT'] == poison_element:
                                                                 c_poison_dmg = c_poison_dmg + 8
+                                                                t_health = t_health - dmg['DMG']
+                                                            else:
+                                                                t_health = t_health - dmg['DMG']
 
                                                         c_block_used = True
                                                         c_stamina = c_stamina - 20
@@ -19830,61 +20127,76 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 elif dmg['ABSORB']:
                                                                     t_health = t_health + int(dmg['DMG'])
                                                                 elif dmg['ELEMENT'] == water_element:
-                                                                    c_water_buff = c_water_buff + 25
-                                                                    previous_moves.append(f"**{c_card}** dealt :droplet: **{c_water_buff}** additional water dmg")
-                                                                    t_health = t_health - (dmg['DMG'] + c_water_buff)
-                                                                else:
+                                                                    if cmove1_element == water_element:
+                                                                        c_basic_water_buff = c_basic_water_buff + 25
+                                                                    if cmove2_element == water_element:
+                                                                        c_special_water_buff = c_special_water_buff + 25
+                                                                    if cmove3_element == water_element:
+                                                                        c_ultimate_water_buff = c_ultimate_water_buff + 25
                                                                     t_health = t_health - dmg['DMG']
 
-                                                                if dmg['ELEMENT'] == ice_element:
+                                                                elif dmg['ELEMENT'] == ice_element:
                                                                     c_ice_counter = c_ice_counter + 1
                                                                     if c_ice_counter == 3:
                                                                         c_freeze_enh = True
                                                                         c_ice_counter = 0
+                                                                    t_health = t_health - dmg['DMG']
 
-                                                                if dmg['ELEMENT'] == time_element:
+                                                                elif dmg['ELEMENT'] == time_element:
                                                                     c_stamina = 0
+                                                                    t_health = t_health - dmg['DMG']
 
-                                                                if dmg['ELEMENT'] == bleed_element:
+                                                                elif dmg['ELEMENT'] == bleed_element:
                                                                     c_bleed_counter = c_bleed_counter + 1
                                                                     if c_bleed_counter == 5:
                                                                         c_bleed_hit = True
                                                                         c_bleed_counter = 0
+                                                                    t_health = t_health - dmg['DMG']
 
-
-                                                                if dmg['ELEMENT'] == recoil_element:
+                                                                elif dmg['ELEMENT'] == recoil_element:
                                                                     c_health = c_health - (dmg['DMG'] * .25)
+                                                                    t_health = t_health - dmg['DMG']
 
-                                                                if dmg['ELEMENT'] == earth_element:
+                                                                elif dmg['ELEMENT'] == earth_element:
                                                                     c_defense = c_defense + (dmg['DMG'] * .20)
+                                                                    t_health = t_health - dmg['DMG']
 
-                                                                if dmg['ELEMENT'] == death_element:
+                                                                elif dmg['ELEMENT'] == death_element:
                                                                     t_max_health = t_max_health - (dmg['DMG'] * .05)
+                                                                    t_health = t_health - dmg['DMG']
 
-                                                                if dmg['ELEMENT'] == light_element:
+                                                                elif dmg['ELEMENT'] == light_element:
                                                                     o_stamina = o_stamina + (dmg['STAMINA_USED'] / 2)
+                                                                    t_health = t_health - dmg['DMG']
 
-                                                                if dmg['ELEMENT'] == dark_element:
+                                                                elif dmg['ELEMENT'] == dark_element:
                                                                     c_stamina = c_stamina + 5
                                                                     t_stamina = t_stamina - 5
+                                                                    t_health = t_health - dmg['DMG']
 
-                                                                if dmg['ELEMENT'] == life_element:
+                                                                elif dmg['ELEMENT'] == life_element:
                                                                     c_health = c_health + (dmg['DMG'] * .15)
+                                                                    t_health = t_health - dmg['DMG']
 
-                                                                if dmg['ELEMENT'] == phsycic_element:
+                                                                elif dmg['ELEMENT'] == phsycic_element:
                                                                     t_defense = t_defense - (dmg['DMG'] * .08)
                                                                     t_attack = t_attack - (dmg['DMG'] * .08)
+                                                                    t_health = t_health - dmg['DMG']
 
-
-                                                                if dmg['ELEMENT'] == fire_element:
+                                                                elif dmg['ELEMENT'] == fire_element:
                                                                     c_burn_dmg = dmg['DMG'] * .25
+                                                                    t_health = t_health - dmg['DMG']
 
 
-                                                                if dmg['ELEMENT'] == electric_element:
+                                                                elif dmg['ELEMENT'] == electric_element:
                                                                     c_shock_buff = c_shock_buff +  (dmg['DMG'] * .05)
+                                                                    t_health = t_health - dmg['DMG']
 
-                                                                if dmg['ELEMENT'] == poison_element:
+                                                                elif dmg['ELEMENT'] == poison_element:
                                                                     c_poison_dmg = c_poison_dmg + 8
+                                                                    t_health = t_health - dmg['DMG']
+                                                                else:
+                                                                    t_health = t_health - dmg['DMG']
 
 
                                                                 embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=0xe91e63)
@@ -21196,58 +21508,76 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     elif dmg['ABSORB']:
                                                         c_health = c_health + dmg['DMG']
                                                     elif dmg['ELEMENT'] == water_element:
-                                                        t_water_buff = t_water_buff + 25
-                                                        previous_moves.append(f"**{t_card}** dealt :droplet: **{t_water_buff}** additional water dmg")
-                                                        c_health = c_health - (dmg['DMG'] + t_water_buff)
-                                                    else:
+                                                        if tmove1_element == water_element:
+                                                            t_basic_water_buff = t_basic_water_buff + 25
+                                                        if tmove2_element == water_element:
+                                                            t_special_water_buff = t_special_water_buff + 25
+                                                        if tmove3_element == water_element:
+                                                            t_ultimate_water_buff = t_ultimate_water_buff + 25
                                                         c_health = c_health - dmg['DMG']
 
-                                                    if dmg['ELEMENT'] == ice_element:
+                                                    elif dmg['ELEMENT'] == ice_element:
                                                         t_ice_counter = t_ice_counter + 1
                                                         if t_ice_counter == 3:
                                                             t_freeze_enh = True
                                                             t_ice_counter = 0
+                                                        c_health = c_health - dmg['DMG']
 
-                                                    if dmg['ELEMENT'] == time_element:
+                                                    elif dmg['ELEMENT'] == time_element:
                                                         t_stamina = 0
+                                                        c_health = c_health - dmg['DMG']
 
-                                                    if dmg['ELEMENT'] == bleed_element:
+                                                    elif dmg['ELEMENT'] == bleed_element:
                                                         t_bleed_counter = t_bleed_counter + 1
                                                         if t_bleed_counter == 5:
                                                             t_bleed_hit = True
                                                             t_bleed_counter = 0
+                                                        c_health = c_health - dmg['DMG']
 
-                                                    if dmg['ELEMENT'] == recoil_element:
+                                                    elif dmg['ELEMENT'] == recoil_element:
                                                         t_health = t_health - (dmg['DMG'] * .25)
+                                                        c_health = c_health - dmg['DMG']
 
-                                                    if dmg['ELEMENT'] == earth_element:
+                                                    elif dmg['ELEMENT'] == earth_element:
                                                         t_defense = t_defense + (dmg['DMG'] * .20)
+                                                        c_health = c_health - dmg['DMG']
 
-                                                    if dmg['ELEMENT'] == death_element:
+                                                    elif dmg['ELEMENT'] == death_element:
                                                         c_max_health = c_max_health - (dmg['DMG'] * .05)
+                                                        c_health = c_health - dmg['DMG']
 
-                                                    if dmg['ELEMENT'] == light_element:
+                                                    elif dmg['ELEMENT'] == light_element:
                                                         t_stamina = t_stamina + (dmg['STAMINA_USED'] / 2)
+                                                        c_health = c_health - dmg['DMG']
 
-                                                    if dmg['ELEMENT'] == dark_element:
+                                                    elif dmg['ELEMENT'] == dark_element:
                                                         t_stamina = t_stamina + 5
                                                         c_stamina = c_stamina - 5
+                                                        c_health = c_health - dmg['DMG']
 
-                                                    if dmg['ELEMENT'] == life_element:
+                                                    elif dmg['ELEMENT'] == life_element:
                                                         t_health = t_health + (dmg['DMG'] * .15)
+                                                        c_health = c_health - dmg['DMG']
 
-                                                    if dmg['ELEMENT'] == phsycic_element:
+                                                    elif dmg['ELEMENT'] == phsycic_element:
                                                         c_defense = c_defense - (dmg['DMG'] * .08)
                                                         c_attack = c_attack - (dmg['DMG'] * .08)
+                                                        c_health = c_health - dmg['DMG']
 
-                                                    if dmg['ELEMENT'] == fire_element:
+                                                    elif dmg['ELEMENT'] == fire_element:
                                                         t_burn_dmg = round(dmg['DMG'] * .30)
+                                                        c_health = c_health - dmg['DMG']
 
-                                                    if dmg['ELEMENT'] == electric_element:
+                                                    elif dmg['ELEMENT'] == electric_element:
                                                         t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
+                                                        c_health = c_health - dmg['DMG']
 
-                                                    if dmg['ELEMENT'] == poison_element:
+                                                    elif dmg['ELEMENT'] == poison_element:
                                                         t_poison_dmg = t_poison_dmg + 8
+                                                        c_health = c_health - dmg['DMG']
+                                                    
+                                                    else:
+                                                        c_health = c_health - dmg['DMG']
 
                                                 t_stamina = t_stamina - 20
                                                 t_block_used = True
@@ -21466,60 +21796,78 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             elif dmg['ABSORB']:
                                                                 o_health = o_health + int(dmg['DMG'])
                                                             elif dmg['ELEMENT'] == water_element:
-                                                                t_water_buff = t_water_buff + 25
-                                                                previous_moves.append(f"**{t_card}** dealt :droplet: **{t_water_buff}** additional water dmg")
+                                                                if tmove1_element == water_element:
+                                                                    t_basic_water_buff = t_basic_water_buff + 25
+                                                                if tmove2_element == water_element:
+                                                                    t_special_water_buff = t_special_water_buff + 25
+                                                                if tmove3_element == water_element:
+                                                                    t_ultimate_water_buff = t_ultimate_water_buff + 25
                                                                 o_health = o_health - (dmg['DMG'] + t_water_buff)
-                                                            else:
+
+                                                            elif dmg['ELEMENT'] == earth_element:
+                                                                t_defense = t_defense + (dmg['DMG'] * .20)
+                                                                o_health = o_health - dmg['DMG']
+
+                                                            elif dmg['ELEMENT'] == recoil_element:
+                                                                t_health = t_health - (dmg['DMG'] * .25)
+                                                                o_health = o_health - dmg['DMG']
+
+                                                            elif dmg['ELEMENT'] == time_element:
+                                                                t_stamina = 0
                                                                 o_health = o_health - dmg['DMG']
 
 
-                                                            if dmg['ELEMENT'] == ice_element:
+                                                            elif dmg['ELEMENT'] == death_element:
+                                                                o_max_health = o_max_health - (dmg['DMG'] * .05)
+                                                                o_health = o_health - dmg['DMG']
+
+                                                            elif dmg['ELEMENT'] == light_element:
+                                                                t_stamina = t_stamina + (dmg['STAMINA_USED'] / 2)
+                                                                o_health = o_health - dmg['DMG']
+
+                                                            elif dmg['ELEMENT'] == dark_element:
+                                                                t_stamina = t_stamina + 5
+                                                                o_stamina = o_stamina - 5
+                                                                o_health = o_health - dmg['DMG']
+
+                                                            elif dmg['ELEMENT'] == life_element:
+                                                                t_health = t_health + (dmg['DMG'] * .15)
+                                                                o_health = o_health - dmg['DMG']
+
+                                                            elif dmg['ELEMENT'] == phsycic_element:
+                                                                o_defense = o_defense - (dmg['DMG'] * .08)
+                                                                o_attack = o_attack - (dmg['DMG'] * .08)
+                                                                o_health = o_health - dmg['DMG']
+
+                                                            elif dmg['ELEMENT'] == fire_element:
+                                                                t_burn_dmg = round(dmg['DMG'] * .30)
+                                                                o_health = o_health - dmg['DMG']
+
+
+                                                            elif dmg['ELEMENT'] == electric_element:
+                                                                t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
+                                                                o_health = o_health - dmg['DMG']
+
+                                                            elif dmg['ELEMENT'] == poison_element:
+                                                                t_poison_dmg = t_poison_dmg + 8
+                                                                o_health = o_health - dmg['DMG']
+        
+                                                            elif dmg['ELEMENT'] == ice_element:
                                                                 t_ice_counter = t_ice_counter + 1
                                                                 if t_ice_counter == 3:
                                                                     t_freeze_enh = True
                                                                     t_ice_counter = 0
+                                                                o_health = o_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == time_element:
-                                                                t_stamina = 0
-
-                                                            if dmg['ELEMENT'] == bleed_element:
+                                                            elif dmg['ELEMENT'] == bleed_element:
                                                                 t_bleed_counter = t_bleed_counter + 1
                                                                 if t_bleed_counter == 5:
                                                                     t_bleed_hit = True
                                                                     t_bleed_counter = 0
-
-                                                            if dmg['ELEMENT'] == recoil_element:
-                                                                t_health = t_health - (dmg['DMG'] * .25)
-
-                                                            if dmg['ELEMENT'] == earth_element:
-                                                                t_defense = t_defense + (dmg['DMG'] * .20)
-
-                                                            if dmg['ELEMENT'] == death_element:
-                                                                o_max_health = o_max_health - (dmg['DMG'] * .05)
-
-                                                            if dmg['ELEMENT'] == light_element:
-                                                                t_stamina = t_stamina + (dmg['STAMINA_USED'] / 2)
-
-                                                            if dmg['ELEMENT'] == dark_element:
-                                                                t_stamina = t_stamina + 5
-                                                                o_stamina = o_stamina - 5
-
-                                                            if dmg['ELEMENT'] == life_element:
-                                                                t_health = t_health + (dmg['DMG'] * .15)
-
-                                                            if dmg['ELEMENT'] == phsycic_element:
-                                                                o_defense = o_defense - (dmg['DMG'] * .08)
-                                                                o_attack = o_attack - (dmg['DMG'] * .08)
-
-
-                                                            if dmg['ELEMENT'] == fire_element:
-                                                                t_burn_dmg = round(dmg['DMG'] * .30)
-
-                                                            if dmg['ELEMENT'] == electric_element:
-                                                                t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
-
-                                                            if dmg['ELEMENT'] == poison_element:
-                                                                t_poison_dmg = t_poison_dmg + 8
+                                                                o_health = o_health - dmg['DMG']
+                                                            
+                                                            else:
+                                                                o_health = o_health - dmg['DMG']
 
 
                                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
@@ -21773,62 +22121,76 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             elif dmg['ABSORB']:
                                                                 c_health = c_health + int(dmg['DMG'])
                                                             elif dmg['ELEMENT'] == water_element:
-                                                                t_water_buff = t_water_buff + 25
-                                                                previous_moves.append(f"**{t_card}** dealt :droplet: **{t_water_buff}** additional water dmg")
-                                                                c_health = c_health - (dmg['DMG'] + t_water_buff)
-                                                            else:
+                                                                if tmove1_element == water_element:
+                                                                    t_basic_water_buff = t_basic_water_buff + 25
+                                                                if tmove2_element == water_element:
+                                                                    t_special_water_buff = t_special_water_buff + 25
+                                                                if tmove3_element == water_element:
+                                                                    t_ultimate_water_buff = t_ultimate_water_buff + 25
                                                                 c_health = c_health - dmg['DMG']
 
-
-                                                            if dmg['ELEMENT'] == ice_element:
+                                                            elif dmg['ELEMENT'] == ice_element:
                                                                 t_ice_counter = t_ice_counter + 1
                                                                 if t_ice_counter == 3:
                                                                     t_freeze_enh = True
                                                                     t_ice_counter = 0
+                                                                c_health = c_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == time_element:
+                                                            elif dmg['ELEMENT'] == time_element:
                                                                 t_stamina = 0
+                                                                c_health = c_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == bleed_element:
+                                                            elif dmg['ELEMENT'] == bleed_element:
                                                                 t_bleed_counter = t_bleed_counter + 1
                                                                 if t_bleed_counter == 5:
                                                                     t_bleed_hit = True
                                                                     t_bleed_counter = 0
+                                                                c_health = c_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == recoil_element:
+                                                            elif dmg['ELEMENT'] == recoil_element:
                                                                 t_health = t_health - (dmg['DMG'] * .25)
+                                                                c_health = c_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == earth_element:
+                                                            elif dmg['ELEMENT'] == earth_element:
                                                                 t_defense = t_defense + (dmg['DMG'] * .20)
+                                                                c_health = c_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == death_element:
+                                                            elif dmg['ELEMENT'] == death_element:
                                                                 c_max_health = c_max_health - (dmg['DMG'] * .05)
+                                                                c_health = c_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == light_element:
+                                                            elif dmg['ELEMENT'] == light_element:
                                                                 t_stamina = t_stamina + (dmg['STAMINA_USED'] / 2)
+                                                                c_health = c_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == dark_element:
+                                                            elif dmg['ELEMENT'] == dark_element:
                                                                 t_stamina = t_stamina + 5
                                                                 c_stamina = c_stamina - 5
+                                                                c_health = c_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == life_element:
+                                                            elif dmg['ELEMENT'] == life_element:
                                                                 t_health = t_health + (dmg['DMG'] * .15)
+                                                                c_health = c_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == phsycic_element:
+                                                            elif dmg['ELEMENT'] == phsycic_element:
                                                                 c_defense = c_defense - (dmg['DMG'] * .08)
                                                                 c_attack = c_attack - (dmg['DMG'] * .08)
+                                                                c_health = c_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == fire_element:
+                                                            elif dmg['ELEMENT'] == fire_element:
                                                                 t_burn_dmg = round(dmg['DMG'] * .30)
+                                                                c_health = c_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == ice_element:
-                                                                t_freeze_enh = True
-
-                                                            if dmg['ELEMENT'] == electric_element:
+                                                            elif dmg['ELEMENT'] == electric_element:
                                                                 t_shock_buff = t_shock_buff +  (dmg['DMG'] * .05)
+                                                                c_health = c_health - dmg['DMG']
 
-                                                            if dmg['ELEMENT'] == poison_element:
+                                                            elif dmg['ELEMENT'] == poison_element:
                                                                 t_poison_dmg = t_poison_dmg + 8
+                                                                c_health = c_health - dmg['DMG']
+                                                            
+                                                            else:
+                                                                c_health = c_health - dmg['DMG']
 
 
 
