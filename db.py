@@ -42,8 +42,11 @@ trade_col = db['TRADE']
 server_col = db['SERVER']
 arena_col = db['ARENA']
 codes_col = db['CODES']
+scenario_col = db['SCENARIO']
 
 acceptable = [1, 2, 3, 4]
+arm_exclude_list = ['BASIC', 'SPECIAL', 'ULTIMATE']
+arm_moves_only = ['BASIC', 'SPECIAL', 'ULTIMATE']
 
 
 '''Check if Collection Exists'''
@@ -99,6 +102,16 @@ def createMenu(menu):
     except Exception as e:
         return e
 
+
+def queryScenario(scenario):
+    try:
+        data = scenario_col.find_one(scenario)
+        if data:
+            return data
+        else:
+            return False
+    except Exception as e:
+        return e
 
 #########################################################################
 ''' SERVER '''
@@ -1161,20 +1174,22 @@ def queryArm(query):
     else:
         return data
 
+
+
 def queryDropArms(args):
-    data = arm_col.find({'UNIVERSE': args, 'EXCLUSIVE': False, 'AVAILABLE': True})
+    data = arm_col.find({'UNIVERSE': args, 'EXCLUSIVE': False, 'AVAILABLE': True, 'TYPE': {'$nin': arm_exclude_list}})
     return data 
 
 def queryExclusiveDropArms(args):
-    data = arm_col.find({'UNIVERSE': args, 'EXCLUSIVE': True, 'AVAILABLE': True})
+    data = arm_col.find({'UNIVERSE': args, 'EXCLUSIVE': True, 'AVAILABLE': True, 'TYPE': {'$nin': arm_exclude_list}})
     return data 
 
 def queryTournamentArms():
-    data = arm_col.find({'TOURNAMENT_REQUIREMENTS': {'$gt': 0}, 'AVAILABLE': True})
+    data = arm_col.find({'TOURNAMENT_REQUIREMENTS': {'$gt': 0}, 'AVAILABLE': True, 'TYPE': {'$nin': arm_exclude_list}})
     return data
 
 def queryShopArms():
-    data = arm_col.find({'EXCLUSIVE': False, 'AVAILABLE': True})
+    data = arm_col.find({'EXCLUSIVE': False, 'AVAILABLE': True, 'TYPE': {'$nin': arm_exclude_list}})
     return data 
 
 ''' HALL '''

@@ -47,6 +47,7 @@ class USER():
     VOTED: bool = field(default_factory=lambda: False)
     USED_CODES: list[str] = field(default_factory=lambda: [""])
     BATTLE_HISTORY: int = field(default_factory=lambda: 6)
+    SCENARIO_HISTORY: list[str] = field(default_factory=lambda: [""])
     
 @dataclass(frozen=True, order=True)
 class CODES():
@@ -358,7 +359,16 @@ class UNIVERSE():
     CORRUPTED: bool = field(default_factory=lambda: False)
     CORRUPTION_LEVEL: int = field(default_factory=lambda: 0)  
 
-
+@dataclass(frozen=True, order=True)
+class SCENARIO():
+    TITLE: str = field(default_factory=lambda: '')
+    ENEMY_LEVEL: int = field(default_factory=lambda: 0)
+    ENEMIES: list[str] = field(default_factory=lambda: [''])
+    EASY_DROPS: list[str] = field(default_factory=lambda: [''])
+    NORMAL_DROPS: list[str] = field(default_factory=lambda: [''])
+    HARD_DROPS: list[str] = field(default_factory=lambda: [''])
+    UNIVERSE: str = field(default_factory=lambda: '')
+    AVAILABLE: bool = field(default_factory=lambda: True)
 
 @dataclass(frozen=True, order=True)
 class BOSS():
@@ -547,3 +557,7 @@ def newHall(hall):
 def newTrade(trade):
     tr = TRADE(**trade)
     return asdict(tr)
+
+def newScenario(scenario):
+    sc = SCENARIO(**scenario)
+    return asdict(sc)
