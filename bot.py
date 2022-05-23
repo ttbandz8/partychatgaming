@@ -313,7 +313,7 @@ async def animevs(ctx):
    🏵️ Ultimate Attack _uses 80 stamina_
    
    **Damage Type**
-   Attacks have bonus effects based on the ♨️Element Type
+   Attacks have bonus effects based on the 🔅Element Type
    Use /help to find information on **Elements**
    
    **Enhancer**
@@ -345,7 +345,7 @@ async def animevs(ctx):
    🀄 **Card Tier**
    Card Tier Determines Base Stats and Enhancer Types/Values.
    
-   ♨️ **Affinities**
+   🔅 **Affinities**
    Affinities determine how you card reacts to **Damage types**
    Weaknesses - Take more damage
    Resistances - Take less damage

@@ -263,6 +263,8 @@ def check_affinities(player, card, basic_element, super_element, ultimate_elemen
         "SUPER": "",
         "ULTIMATE": ""
     }
+    
+
 
     if basic_element in weaknesses:
         affinities['BASIC'] = "WEAKNESS"
