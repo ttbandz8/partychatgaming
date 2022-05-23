@@ -268,7 +268,7 @@ async def enhancers(ctx):
             return
 
 
-@slash.slash(name="Anime VS+", description="Anime VS+ Manual", guild_ids=guild_ids)
+@slash.slash(description="Anime VS+ Manual", guild_ids=guild_ids)
 async def animevs(ctx):
    avatar="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png"
 
