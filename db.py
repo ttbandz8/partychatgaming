@@ -113,6 +113,15 @@ def queryScenario(scenario):
     except Exception as e:
         return e
 
+def queryAllScenariosByUniverse(universe):
+    try:
+        data = scenario_col.find({'UNIVERSE': universe})
+        if data:
+            return data
+        else:
+            return False
+    except Exception as e:
+        return e
 #########################################################################
 ''' SERVER '''
 def createServer(server):

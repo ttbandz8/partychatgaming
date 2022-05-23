@@ -362,6 +362,7 @@ class UNIVERSE():
 @dataclass(frozen=True, order=True)
 class SCENARIO():
     TITLE: str = field(default_factory=lambda: '')
+    IMAGE: str = field(default_factory=lambda: '')
     ENEMY_LEVEL: int = field(default_factory=lambda: 0)
     ENEMIES: list[str] = field(default_factory=lambda: [''])
     EASY_DROPS: list[str] = field(default_factory=lambda: [''])

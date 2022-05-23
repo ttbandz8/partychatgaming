@@ -1077,7 +1077,7 @@ class CrownUnlimited(commands.Cog):
                                     value="Abyss"
                                 ),
                                 create_choice(
-                                    name="⚔️ Tales",
+                                    name="⚔️ Tales & Scenario Battles!",
                                     value="Tales"
                                 ),
                                 create_choice(
@@ -2455,9 +2455,9 @@ def damage_cal(opponent_affinity, move_type, move_element, universe, card, abili
                     true_dmg = round(true_dmg * 2)
                     message = f"{move_emoji} {move} used! Critically Hits for **{true_dmg}**!! :boom: "
 
-            if move_stamina == 80:
-                # message = f"{special_description}\n" + message
-                message = message
+            # if move_stamina == 80:
+            #     # message = f"{special_description}\n" + message
+            #     message = message
             if opponent_affinity[move_type] == "WEAKNESS" and not (hit_roll <= miss_hit):
                 true_dmg = round(true_dmg * 1.3)
                 message = f"Opponent is weak to **{move_emoji} {move_element.lower()}**! Strong hit for **{true_dmg}**!"
@@ -3482,16 +3482,91 @@ async def abyss(self, ctx: SlashContext):
         return
 
 
-async def scenario(self, ctx: SlashContext):
-    await ctx.defer()
+async def scenario(self, ctx: SlashContext, universe: str):
     a_registered_player = await crown_utilities.player_check(ctx)
     if not a_registered_player:
         return
 
     mode = "SCENARIO"
-
     try:
-        await ctx.send("Scenario Button Clicked!", view=main.SelectView())
+        scenarios = db.queryAllScenariosByUniverse(universe)
+        sowner = db.queryUser({'DID': str(ctx.author.id)})
+        oteam = sowner['TEAM']
+        ofam = sowner['FAMILY']
+        oguild = "PCG"
+
+        difficulty = sowner['DIFFICULTY']
+        easy = 'EASY'
+        normal = 'NORMAL'
+        hard = 'HARD'
+
+        embed_list = []
+
+        for scenario in scenarios:
+            if scenario['AVAILABLE']:
+                title = scenario['TITLE']
+                enemies = scenario['ENEMIES']
+                number_of_fights = len(enemies)
+                enemy_level = scenario['ENEMY_LEVEL']
+                universe = scenario['UNIVERSE']
+                scenario_image = scenario['IMAGE']
+                reward_list = []
+                if difficulty == easy:
+                    rewards = scenario['EASY_DROPS']
+                if difficulty == normal:
+                    rewards = scenario['NORMAL_DROPS']
+                if difficulty == hard:
+                    rewards = scenario['HARD_DROPS']
+
+                for reward in rewards:
+                    arm = db.queryArm({"ARM": reward})
+                    arm_name = arm['ARM']
+                    element_emoji = crown_utilities.set_emoji(arm['ELEMENT'])
+                    arm_passive = arm['ABILITIES'][0]
+                    arm_passive_type = list(arm_passive.keys())[0]
+                    arm_passive_value = list(arm_passive.values())[0]
+                    reward_list.append(f"{element_emoji} {arm_passive_type.title()} **{arm_name}** Attack: **{arm_passive_value}** dmg")
+    
+                reward_message = "\n".join(reward_list)
+                embedVar = discord.Embed(title= f"{title}", description=textwrap.dedent(f"""
+                📽️ **{universe} Scenario Battle!**
+                🔱 **Enemy Level:** {enemy_level}
+                :crossed_swords: {str(number_of_fights)}
+                """), 
+                colour=0x7289da)
+                embedVar.add_field(name="__**Potential Rewards**__", value=f"{reward_message}")
+                embedVar.set_image(url=scenario_image)
+                # embedVar.set_footer(text=f"")
+                embed_list.append(embedVar)
+
+        if not embed_list:
+            await ctx.send(f"There are currently no Scenario battles available in **{universe}**.")
+
+        buttons = [
+            manage_components.create_button(style=3, label="Start This Scenario Battle!", custom_id="start"),
+        ]
+        custom_action_row = manage_components.create_actionrow(*buttons)
+
+
+        async def custom_function(self, button_ctx):
+            if button_ctx.author == ctx.author:
+                selected_scenario = str(button_ctx.origin_message.embeds[0].title)
+                if button_ctx.custom_id == "start":
+                    await button_ctx.defer(ignore=True)
+                    scenario = db.queryScenario({'TITLE':selected_scenario})
+                    level = scenario['ENEMY_LEVEL']
+                    await battle_commands(self, ctx, mode, scenario, None, None, oguild, None, None, sowner, oteam, ofam, 0, None, None, None, level, None, None, None, None)
+                    
+                    self.stop = True
+            else:
+                await ctx.send("This is not your prompt! Shoo! Go Away!")
+
+
+        await Paginator(bot=self.bot, ctx=ctx, useQuitButton=True, pages=embed_list, timeout=60, customActionRow=[
+            custom_action_row,
+            custom_function,
+        ]).run()
+
     except Exception as ex:
         trace = []
         tb = ex.__traceback__
@@ -3951,7 +4026,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         hall_def = hall['DEFENSE']
         fee = hall['FEE']
 
-    if mode == "ABYSS":
+    if mode == "SCENARIO":
+        scenario_universe_data = db.queryUniverse({'TITLE': universe['UNIVERSE']})
+
+    if mode == "ABYSS" or mode == "SCENARIO":
         opponent_scaling = abyss_scaling
         opponent_health_scaling = 25
         enemy_arm = "ARM"
@@ -4310,6 +4388,11 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         else:
             if mode in B_modes:
                 tarm = db.queryArm({'ARM': enemy_arm})
+            elif mode == "SCENARIO":
+                    enemy_arm = "UARM"
+                    if abyss_scaling > 200:
+                        enemy_arm = "DARM"
+                    tarm = db.queryArm({'ARM': scenario_universe_data[enemy_arm]})
             else:
                 tarm = db.queryArm({'ARM': universe[enemy_arm]})
 
@@ -4324,6 +4407,11 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 tpet = db.queryPet({'PET': universe['UPET']})
             elif mode in raid_modes:
                 tpet = db.queryPet({'PET': tpet['NAME']})
+            elif mode == "SCENARIO":
+                enemy_pet = "UPET"
+                if abyss_scaling > 200:
+                    enemy_pet = "DPET"
+                tpet = db.queryPet({'PET': scenario_universe_data[enemy_pet]})
             else:
                 tpet = db.queryPet({'PET': universe['PET']})
             tpet_passive = tpet['ABILITIES'][0]
@@ -4358,7 +4446,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                     tcard_lvl_ap_buff = 116 + ap_buff_from_difficulty
                     tcard_lvl_attack_defense_buff = 175
                     tcard_lvl_hlt_buff = 438
-                elif mode == "ABYSS":
+                elif mode == "ABYSS" or mode == "SCENARIO":
                     tpet_lvl = 3
                     tpet_bond = 2
                     tcard_lvl = abyss_scaling
@@ -6379,8 +6467,8 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                         universe_embed_list.append(embedVar)
 
         buttons = [
-            manage_components.create_button(style=3, label="Start", custom_id="start"),
-            manage_components.create_button(style=1, label="View Scenario Battles!", custom_id="scenario"),
+            manage_components.create_button(style=3, label="Start Tales!", custom_id="start"),
+            manage_components.create_button(style=1, label="View Available Scenario Battles!", custom_id="scenario"),
         ]
         custom_action_row = manage_components.create_actionrow(*buttons)
 
@@ -6392,13 +6480,15 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
         async def custom_function(self, button_ctx):
             if button_ctx.author == ctx.author:
                 if button_ctx.custom_id == "scenario":
-                    await scenario(self, ctx)
-                    self.stop = True
-                else:
                     await button_ctx.defer(ignore=True)
-                    selected_universe = custom_function
-                    custom_function.selected_universe = str(button_ctx.origin_message.embeds[0].title)
+                    universe = str(button_ctx.origin_message.embeds[0].title)
+                    await scenario(self, ctx, universe)
                     self.stop = True
+                    return                
+                await button_ctx.defer(ignore=True)
+                selected_universe = custom_function
+                custom_function.selected_universe = str(button_ctx.origin_message.embeds[0].title)
+                self.stop = True
             else:
                 await ctx.send("This is not your button.", hidden=True)
 
@@ -6720,7 +6810,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
         m_gametime = starttime[14:16]
         s_gametime = starttime[17:19]
 
-        if mode not in B_modes and not randomized_battle and mode not in PVP_MODES and mode not in D_modes and mode not in RAID_MODES and mode != "ABYSS" and mode != "RAID":
+        if mode not in B_modes and not randomized_battle and mode not in PVP_MODES and mode not in D_modes and mode not in RAID_MODES and mode != "ABYSS" and mode != "RAID" and mode != "SCENARIO":
             legends = [x for x in universe['CROWN_TALES']]
             total_legends = len(legends)
             # currentopponent = 0
@@ -6732,11 +6822,23 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             ttitle = db.queryTitle({'TITLE': universe['TITLE']})
             abyss_scaling = deckNumber
 
-        if mode not in B_modes and not randomized_battle and mode not in PVP_MODES and mode not in D_modes and mode != "ABYSS" and mode != "RAID":
+        if mode == "SCENARIO":
+            legends = [x for x in universe['ENEMIES']]
+            scenario_universe_data = db.queryUniverse({'TITLE': universe['UNIVERSE']})
+            total_legends = len(legends)      
+            t = db.queryCard({'NAME': legends[currentopponent]})
+            enemy_title = "UTITLE"
+            if deckNumber > 200:
+                enemy_title = "DTITLE"
+            ttitle = db.queryTitle({'TITLE': scenario_universe_data[enemy_title]})
+            abyss_scaling = deckNumber
+
+
+        if mode not in B_modes and not randomized_battle and mode not in PVP_MODES and mode not in D_modes and mode != "ABYSS" and mode != "RAID" and mode != "SCENARIO":
             legends = [x for x in universe['CROWN_TALES']]
             total_legends = len(legends)
             # currentopponent = 0
-        if mode not in B_modes and not randomized_battle and mode not in PVP_MODES and mode in D_modes and mode != "ABYSS" and mode != "RAID":
+        if mode not in B_modes and not randomized_battle and mode not in PVP_MODES and mode in D_modes and mode != "ABYSS" and mode != "RAID" and mode != "SCENARIO":
             legends = [x for x in universe['DUNGEONS']]
             total_legends = len(legends)
             # currentopponent = 0
@@ -6801,6 +6903,15 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                     abyss_scaling = deckNumber
                     t = db.queryCard({'NAME': legends[currentopponent]})
                     ttitle = db.queryTitle({'TITLE': universe['TITLE']})
+
+                if mode == "SCENARIO":
+                    abyss_scaling = deckNumber
+                    t = db.queryCard({'NAME': legends[currentopponent]})
+                    enemy_title = "UTITLE"
+                    if deckNumber > 200:
+                        enemy_title = "DTITLE"
+                    ttitle = db.queryTitle({'TITLE': scenario_universe_data[enemy_title]})
+
 
             if mode in ai_co_op_modes:
                 activeDeck = vault['DECK'][deckNumber]
@@ -6937,7 +7048,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             corruption_def_buff = 0
             corruption_ap_buff = 0
 
-            if universe and mode != "ABYSS" and mode != "RAID":
+            if universe and mode != "ABYSS" and mode != "RAID" and mode != "SCENARIO":
                 if universe['CORRUPTED']:
                     corruption_hlt_buff = 150
                     corruption_atk_buff = 40
@@ -7405,7 +7516,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             
             original_mode = mode
 
-            if tutorial ==False and mode not in PVP_MODES and mode not in RAID_MODES and mode not in B_modes and mode != "ABYSS":
+            if tutorial ==False and mode not in PVP_MODES and mode not in RAID_MODES and mode not in B_modes and mode != "ABYSS" and mode != "SCENARIO":
                 if currentopponent > 0 and not randomized_battle and mode not in PVP_MODES and mode not in B_modes:
                     if difficulty != "EASY":
                         start_tales_buttons.append(
@@ -13553,7 +13664,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     )
                                                 )
 
-                                        if not randomized_battle and difficulty == "NORMAL" and mode != "ABYSS" or mode !="ABYSS":
+                                        if not randomized_battle and difficulty == "NORMAL" and mode != "ABYSS" or mode !="ABYSS" and mode != "SCENARIO":
                                                 util_buttons.append(             
                                                     manage_components.create_button(
                                                     style=ButtonStyle.red,
@@ -15025,7 +15136,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     turn = 0
                                                     await button_ctx.defer(ignore=True)
                                         except asyncio.TimeoutError:
-                                            if mode != "ABYSS":
+                                            if mode != "ABYSS" and mode != "SCENARIO":
                                                 await save_spot(self, ctx, universe, mode, currentopponent)
                                                 await ctx.author.send(f"{ctx.author.mention} your game timed out. Your channel has been closed but your spot in the tales has been saved where you last left off.")
                                                 await ctx.send(f"{ctx.author.mention} your game timed out. Your channel has been closed but your spot in the tales has been saved where you last left off.")
@@ -22938,7 +23049,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                         else:
                             corrupted_message = ""
-                            if mode != "ABYSS" and mode not in RAID_MODES and mode not in PVP_MODES and difficulty != "EASY":
+                            if mode != "ABYSS" and mode != "SCENARIO" and mode not in RAID_MODES and mode not in PVP_MODES and difficulty != "EASY":
                                 if universe['CORRUPTED']:
                                     corrupted_message = await crown_utilities.corrupted_universe_handler(ctx, selected_universe, difficulty)
                                     if not corrupted_message:
@@ -23069,6 +23180,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                 # await discord.TextChannel.delete(private_channel, reason=None)
                                 continued = False
+                            
                             if mode == "ABYSS":
                                 if currentopponent != (total_legends):
                                     embedVar = discord.Embed(title=f"VICTORY\n**{o_card} says**\n{o_win_description}\nThe game lasted {turn_total} rounds.",description=textwrap.dedent(f"""
@@ -23123,6 +23235,44 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     if abyss_message['NEW_UNLOCK']:
                                         await ctx.author.send(abyss_message['MESSAGE'])
                                         await ctx.send(f"{ctx.author.mention} {abyss_message['MESSAGE']}")
+ 
+                                    battle_msg = await private_channel.send(embed=embedVar)
+
+                                    continued = False
+
+                            if mode == "SCENARIO":
+                                if currentopponent != (total_legends):
+                                    uid = o_DID
+                                    ouser = await self.bot.fetch_user(uid)
+                                    cardlogger = await crown_utilities.cardlevel(o_card, ouser.id, "Tales", universe['UNIVERSE'])
+
+                                    embedVar = discord.Embed(title=f"VICTORY\n**{o_card} says**\n{o_win_description}\nThe game lasted {turn_total} rounds.",description=textwrap.dedent(f"""
+                                    {previous_moves_into_embed}
+                                    
+                                    """),colour=0x1abc9c)
+
+                                    embedVar.set_author(name=f"{t_card} lost!")
+                                    
+
+                                    await battle_msg.delete(delay=2)
+                                    await asyncio.sleep(2)
+                                    battle_msg = await private_channel.send(embed=embedVar)
+                                    currentopponent = currentopponent + 1
+                                    continued = True
+                                if currentopponent == (total_legends):
+                                    uid = o_DID
+                                    ouser = await self.bot.fetch_user(uid)
+                                    response = await scenario_drop(self, ctx, universe, difficulty)
+                                    bless_amount = 50000
+                                    await crown_utilities.bless(bless_amount, ctx.author.id)
+                                    embedVar = discord.Embed(title=f"Scenario Battle Cleared!\n**{o_card} says**\n{o_win_description}\nThe game lasted {turn_total} rounds.",description=textwrap.dedent(f"""
+                                    Good luck on your next adventure!
+                                    """),colour=0xe91e63)
+
+                                    embedVar.set_author(name=f"{t_card} lost!")
+                                    embedVar.add_field(
+                                    name=f"Scenario Reward",
+                                    value=f"{response}")
  
                                     battle_msg = await private_channel.send(embed=embedVar)
 
@@ -23683,6 +23833,76 @@ async def movecrest(universe, guild):
         universe_guild = db.updateUniverse({'TITLE': universe_name}, {'$set': {'GUILD': guild_name}})
     else:
         print("Association not found: Crest")
+
+
+async def scenario_drop(self, ctx, scenario, difficulty):
+    try:
+        vault_query = {'DID': str(ctx.author.id)}
+        vault = db.queryVault(vault_query)
+        # player_info = db.queryUser({'DID': str(vault['DID'])})
+
+
+        owned_arms = []
+        for arm in vault['ARMS']:
+            owned_arms.append(arm['ARM'])
+
+        easy = 'EASY'
+        normal = 'NORMAL'
+        hard = 'HARD'
+        rewards = []
+        rewarded = ""
+        if difficulty == easy:
+            rewards = scenario['EASY_DROPS']
+        if difficulty == normal:
+            rewards = scenario['NORMAL_DROPS']
+        if difficulty == hard:
+            rewards = scenario['HARD_DROPS']
+
+        if len(rewards) > 1:
+            num_of_potential_rewards = len(rewards)
+            selection = round(random.randint(0, num_of_potential_rewards))
+            rewarded = rewards[selection]
+        else:
+            rewarded = rewards[0]
+
+        arm = db.queryArm({"ARM": rewarded})
+        arm_name = arm['ARM']
+        element_emoji = crown_utilities.set_emoji(arm['ELEMENT'])
+        arm_passive = arm['ABILITIES'][0]
+        arm_passive_type = list(arm_passive.keys())[0]
+        arm_passive_value = list(arm_passive.values())[0]
+        reward = f"{element_emoji} {arm_passive_type.title()} **{arm_name}** Attack: **{arm_passive_value}** dmg"
+
+        if len(vault['ARMS']) >= 25:
+            await crown_utilities.bless(10000, ctx.author.id)
+            return f"You're maxed out on Arms! You earned :coin: 10,000 instead!"
+        if rewarded in owned_arms:
+            await crown_utilities.bless(10000, ctx.author.id)
+            return f"You already own **{rewarded}**! You earn :coin: **10000**."
+        else:
+            response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'ARMS': {'ARM': rewarded, 'DUR': 100}}})
+            return f"You earned _Arm:_ **{reward}** with ⚒️**{str(100)} Durability**!"
+
+
+    except Exception as ex:
+        trace = []
+        tb = ex.__traceback__
+        while tb is not None:
+            trace.append({
+                "filename": tb.tb_frame.f_code.co_filename,
+                "name": tb.tb_frame.f_code.co_name,
+                "lineno": tb.tb_lineno
+            })
+            tb = tb.tb_next
+        print(str({
+            'type': type(ex).__name__,
+            'message': str(ex),
+            'trace': trace
+        }))
+
+    
+
+    
 
 
 async def drops(self,player, universe, matchcount):
