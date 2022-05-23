@@ -69,7 +69,7 @@ LEGEND = textwrap.dedent(f"""\
 """)
 
 ELEMENTS = textwrap.dedent(f"""\
-**♨️ Elements**    
+**🔅 Elements**    
 
 👊 Physical - Normal Damage
 

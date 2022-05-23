@@ -2419,7 +2419,7 @@ def damage_cal(opponent_affinity, move_type, move_element, universe, card, abili
             med_hit = 13  # Medium Damage
             standard_hit = 19  # Standard Damage
             high_hit = 20  # Crit Hit
-            hit_roll = round(random.randint(2, 21))
+            hit_roll = round(random.randint(1, 21))
             # print(f"HIT ROLL: {str(hit_roll)}")
             if move_element == "SPIRIT" and hit_roll > 3:
                 hit_roll = hit_roll + 5
@@ -2458,23 +2458,22 @@ def damage_cal(opponent_affinity, move_type, move_element, universe, card, abili
             if move_stamina == 80:
                 # message = f"{special_description}\n" + message
                 message = message
-
             if opponent_affinity[move_type] == "WEAKNESS" and not (hit_roll <= miss_hit):
                 true_dmg = round(true_dmg * 1.3)
-                message = f"Opponent is weak to **{move_element.lower()}**! Strong hit for **{true_dmg}**!"
+                message = f"Opponent is weak to **{move_emoji} {move_element.lower()}**! Strong hit for **{true_dmg}**!"
             if opponent_affinity[move_type] == "RESISTANT" and not (hit_roll <= miss_hit):
                 true_dmg = round(true_dmg * .50)
-                message = f"Opponent is resistant to **{move_element.lower()}**.. Weak hit for **{true_dmg}**!"
+                message = f"Opponent is resistant to **{move_emoji} {move_element.lower()}**.. Weak hit for **{true_dmg}**!"
 
             if opponent_affinity[move_type] == "IMMUNE" and not (hit_roll <= miss_hit):
                 true_dmg = 0
-                message = f"Opponent is immune to **{move_element.lower()}**.. **0** dmg dealt!"
+                message = f"Opponent is immune to **{move_emoji} {move_element.lower()}**.. **0** dmg dealt!"
 
             if opponent_affinity[move_type] == "REPELS" and not (hit_roll <= miss_hit):
-                message = f"Opponent repels **{move_element.lower()}** for **{true_dmg}** dmg!"
+                message = f"Opponent repels **{move_emoji} {move_element.lower()}** for **{true_dmg}** dmg!"
                 does_repel = True
             if opponent_affinity[move_type] == "ABSORBS" and not (hit_roll <= miss_hit):
-                message = f"Opponent absorbs **{move_element.lower()}** for **{true_dmg}** dmg!"
+                message = f"Opponent absorbs **{move_emoji} {move_element.lower()}** for **{true_dmg}** dmg!"
                 does_absorb = True
 
             response = {"DMG": true_dmg, "MESSAGE": message, "STAMINA_USED": move_stamina,
@@ -4566,17 +4565,17 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                     t_defense = t_defense - int((c_card_passive / 100) * t_defense)
             elif c_card_passive_type == 'GAMBLE':
                 if mode in B_modes:
-                    c_health = o_card_passive
+                    c_health = c_card_passive
                     o_health = c_card_passive
-                    t_health = o_card_passive * 3
+                    t_health = c_card_passive * 3
                 elif mode in D_modes:
-                    c_health = o_card_passive
+                    c_health = c_card_passive
                     o_health = c_card_passive
-                    t_health = o_card_passive * 2
+                    t_health = c_card_passive * 2
                 else:
-                    c_health = o_card_passive
+                    c_health = c_card_passive
                     o_health = c_card_passive
-                    t_health = o_card_passive
+                    t_health = c_card_passive
 
                     # Title Passive
             c_title_passive_type = list(c_title_passive.keys())[0]
@@ -5813,7 +5812,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 'c_card': c_card,
                 'ccard_lvl': ccard_lvl,
                 'c_card_path': c_card_path,
-                'carm': carm_name,
+                'carm': carm,
                 'carm_name': carm_name,
                 'carm_passive_type' : carm_passive_type,
                 'carm_passive_value' : carm_passive_value,
@@ -6018,7 +6017,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 'c_card': c_card,
                 'ccard_lvl': ccard_lvl,
                 'c_card_path': c_card_path,
-                'carm': carm_name,
+                'carm': carm,
                 'carm_name': carm_name,
                 'carm_passive_type' : carm_passive_type,
                 'carm_passive_value' : carm_passive_value,
@@ -7178,6 +7177,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                     temp_tarm_parry_active = stats['tarm_parry_active']
                     temp_tparry_count = stats['tparry_count']
                     c_swapped = False
+                if t_universe == "Solo Leveling":
+                    temp_carm_shield_active = stats['carm_shield_active']
+                    temp_cshield_value = stats['cshield_value']
+                    temp_carm_barrier_active = stats['carm_barrier_active']
+                    temp_cbarrier_count = stats['cbarrier_count']
+                    temp_carm_parry_active = stats['carm_parry_active']
+                    temp_cparry_count = stats['cparry_count']
+                    t_swapped = False
 
             # Turn iterator
             o_focus_count = 0
@@ -7438,6 +7445,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 embedVar = discord.Embed(title=f"✅ Confirm Co-Op Battle! ({currentopponent + 1}/{total_legends})", description=f"{ctx.author.mention}\n**{o_card}** & **{c_card}** VS **{t_card}**")
                 embedVar.set_image(url="attachment://image.png")
                 embedVar.add_field(name="__Your Affinities__", value=f"{o_affinity_message}")
+                embedVar.add_field(name="__Companion Affinities__", value=f"{c_affinity_message}")
                 embedVar.add_field(name="__Opponent Affinities__", value=f"{t_affinity_message}")
                 embedVar.set_thumbnail(url=ctx.author.avatar_url)
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card)
@@ -7446,6 +7454,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 embedVar = discord.Embed(title=f"✅ Confirm Duo Battle! ({currentopponent + 1}/{total_legends})", description=f"{ctx.author.mention}\n**{o_card}** & **{c_card}** VS **{t_card}**")
                 embedVar.set_image(url="attachment://image.png")
                 embedVar.add_field(name="__Your Affinities__", value=f"{o_affinity_message}")
+                embedVar.add_field(name="__Companion Affinities__", value=f"{c_affinity_message}")
                 embedVar.add_field(name="__Opponent Affinities__", value=f"{t_affinity_message}")
                 embedVar.set_thumbnail(url=ctx.author.avatar_url)
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card) 
@@ -7462,7 +7471,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 embedVar = discord.Embed(title=f"✅ Boss Fight!", description=f"{ctx.author.mention}\n**{o_card}** & **{c_card}** VS **{t_card}**")
                 embedVar.set_image(url="attachment://image.png")
                 embedVar.add_field(name="__Your Affinities__", value=f"{o_affinity_message}")
-                embedVar.add_field(name="__Opponent Affinities__", value=f"{t_affinity_message}")
+                embedVar.add_field(name="__Companion Affinities__", value=f"{c_affinity_message}")
+                embedVar.add_field(name="__Boss Affinities__", value=f"{t_affinity_message}")
                 embedVar.set_thumbnail(url=ctx.author.avatar_url)
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card)
 
@@ -14251,7 +14261,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             elif mode in co_op_modes:
                                                 if button_ctx.custom_id == "7":
                                                     o_enhancer_used = True
-                                                    dmg = damage_cal(t_opponent_affinities, basic_attack_name, omove1_element, o_universe, o_card, o_enhancer, o_attack, o_defense,
+                                                    dmg = damage_cal(t_for_c_opponent_affinities, basic_attack_name, omove1_element, o_universe, o_card, o_enhancer, o_attack, o_defense,
                                                                     c_defense, o_stamina, o_enhancer_used, o_health, c_health,
                                                                     c_stamina, o_max_health, c_attack,
                                                                     o_special_move_description, turn_total, ocard_lvl_ap_buff, None)
@@ -14363,7 +14373,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         turn = 0
                                                 elif button_ctx.custom_id == "8":
                                                     c_enhancer_used = True
-                                                    dmg = damage_cal(t_opponent_affinities, basic_attack_name, cmove1_element, c_universe, c_card, c_enhancer, c_attack, c_defense,
+                                                    dmg = damage_cal(t_for_c_opponent_affinities, basic_attack_name, cmove1_element, c_universe, c_card, c_enhancer, c_attack, c_defense,
                                                                     o_defense, c_stamina, c_enhancer_used, c_health, o_health,
                                                                     o_stamina, c_max_health, o_attack,
                                                                     c_special_move_description, turn_total, ccard_lvl_ap_buff, None)
@@ -18101,29 +18111,29 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 return
                                             if aiMove == 1:
                                                 if c_universe == "Souls" and c_used_resolve:
-                                                    dmg = damage_cal(t_opponent_affinities, special_attack_name, cmove2_element, c_universe, c_card, c_2, c_attack, c_defense, t_defense,
+                                                    dmg = damage_cal(t_for_c_opponent_affinities, special_attack_name, cmove2_element, c_universe, c_card, c_2, c_attack, c_defense, t_defense,
                                                                 c_stamina, c_enhancer_used, c_health, t_health, t_stamina,
                                                                 c_max_health, t_attack, c_special_move_description, turn_total,
                                                                 ccard_lvl_ap_buff, c_1)
                                                 else:
-                                                    dmg = damage_cal(t_opponent_affinities, basic_attack_name, cmove1_element, c_universe, c_card, c_1, c_attack, c_defense, t_defense,
+                                                    dmg = damage_cal(t_for_c_opponent_affinities, basic_attack_name, cmove1_element, c_universe, c_card, c_1, c_attack, c_defense, t_defense,
                                                                     c_stamina, c_enhancer_used, c_health, t_health, t_stamina,
                                                                     c_max_health, t_attack, c_special_move_description, turn_total,
                                                                     ccard_lvl_ap_buff, None)
                                             elif aiMove == 2:
                                                 if c_universe == "Souls" and c_used_resolve:
-                                                    dmg = damage_cal(t_opponent_affinities, ultimate_attack_name, cmove3_element, c_universe, c_card, c_3, c_attack, c_defense, t_defense,
+                                                    dmg = damage_cal(t_for_c_opponent_affinities, ultimate_attack_name, cmove3_element, c_universe, c_card, c_3, c_attack, c_defense, t_defense,
                                                                 c_stamina, c_enhancer_used, c_health, t_health, t_stamina,
                                                                 c_max_health, t_attack, c_special_move_description, turn_total,
                                                                 ccard_lvl_ap_buff, c_2)
                                                 else:
-                                                    dmg = damage_cal(t_opponent_affinities, special_attack_name, cmove2_element, c_universe, c_card, c_2, c_attack, c_defense, t_defense,
+                                                    dmg = damage_cal(t_for_c_opponent_affinities, special_attack_name, cmove2_element, c_universe, c_card, c_2, c_attack, c_defense, t_defense,
                                                                     c_stamina, c_enhancer_used, c_health, t_health, t_stamina,
                                                                     c_max_health, t_attack, c_special_move_description, turn_total,
                                                                     ccard_lvl_ap_buff, None)
                                             elif aiMove == 3:
 
-                                                dmg = damage_cal(t_opponent_affinities, ultimate_attack_name, cmove3_element, c_universe, c_card, c_3, c_attack, c_defense, t_defense,
+                                                dmg = damage_cal(t_for_c_opponent_affinities, ultimate_attack_name, cmove3_element, c_universe, c_card, c_3, c_attack, c_defense, t_defense,
                                                                 c_stamina, c_enhancer_used, c_health, t_health, t_stamina,
                                                                 c_max_health, t_attack, c_special_move_description, turn_total,
                                                                 ccard_lvl_ap_buff, None)
@@ -18135,7 +18145,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             elif aiMove == 4:
                                                 c_enhancer_used = True
 
-                                                dmg = damage_cal(t_opponent_affinities, basic_attack_name, cmove1_element, c_universe, c_card, c_enhancer, c_attack, c_defense, t_defense,
+                                                dmg = damage_cal(t_for_c_opponent_affinities, basic_attack_name, cmove1_element, c_universe, c_card, c_enhancer, c_attack, c_defense, t_defense,
                                                                 c_stamina, c_enhancer_used, c_health, t_health, t_stamina,
                                                                 c_max_health, t_attack, c_special_move_description, turn_total,
                                                                 ccard_lvl_ap_buff, None)
@@ -18356,7 +18366,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         c_attack = round(c_attack + c_resolve_attack)
                                                         c_defense = round(c_defense - c_resolve_defense)
 
-                                                        dmg = damage_cal(t_opponent_affinities, ultimate_attack_name, cmove3_element, c_universe, c_card, c_3, c_attack, c_defense,
+                                                        dmg = damage_cal(t_for_c_opponent_affinities, ultimate_attack_name, cmove3_element, c_universe, c_card, c_3, c_attack, c_defense,
                                                                         t_defense, c_stamina, c_enhancer_used, c_health,
                                                                         t_health, t_stamina, c_max_health, t_attack,
                                                                         c_special_move_description, turn_total,
@@ -18460,7 +18470,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 # Resolve Check and Calculation
                                                 if c_used_resolve and c_used_focus and not c_pet_used:
                                                     c_enhancer_used = True
-                                                    dmg = damage_cal(t_opponent_affinities, basic_attack_name, cmove1_element, c_universe, c_card, cpet_move, c_attack, c_defense,
+                                                    dmg = damage_cal(t_for_c_opponent_affinities, basic_attack_name, cmove1_element, c_universe, c_card, cpet_move, c_attack, c_defense,
                                                                     t_defense, c_stamina, c_enhancer_used, c_health, t_health,
                                                                     t_stamina, c_max_health, t_attack,
                                                                     c_special_move_description, turn_total, ccard_lvl_ap_buff, None)
@@ -18554,7 +18564,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                         #c_stamina = c_stamina - int(dmg['STAMINA_USED'])
                                                         if c_universe == "Persona":
-                                                            petdmg = damage_cal(t_opponent_affinities, basic_attack_name, cmove1_element, c_universe, c_card, c_1, c_attack, c_defense,
+                                                            petdmg = damage_cal(t_for_c_opponent_affinities, basic_attack_name, cmove1_element, c_universe, c_card, c_1, c_attack, c_defense,
                                                                                 t_defense, c_stamina, c_enhancer_used, c_health,
                                                                                 t_health, t_stamina, c_max_health, t_attack,
                                                                                 c_special_move_description, turn_total,
@@ -18603,7 +18613,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     previous_moves.append(f"(**{turn_total}**) {c_card} Could not summon 🧬 **{cpet_name}**. Needs rest")
                                             elif aiMove == 8:
                                                 c_enhancer_used = True
-                                                dmg = damage_cal(t_opponent_affinities, basic_attack_name, cmove1_element, c_universe, c_card, c_enhancer, c_attack, c_defense, o_defense,
+                                                dmg = damage_cal(t_for_c_opponent_affinities, basic_attack_name, cmove1_element, c_universe, c_card, c_enhancer, c_attack, c_defense, o_defense,
                                                                 c_stamina, c_enhancer_used, c_health, o_health, o_stamina,
                                                                 c_max_health, o_attack, c_special_move_description, turn_total,
                                                                 ccard_lvl_ap_buff, None)
@@ -19025,7 +19035,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     previous_moves.append(f"(**{turn_total}**) **{c_card}**: 💉 Siphoned **Full Health!**")
                                                                 else:
                                                                     previous_moves.append(f"(**{turn_total}**) **{c_card}**: 💉 Siphoned **{round(siphon_damage)}** Health!")
-                                                                await button_ctx.defer(ignore=True)
+                                                                if mode not in ai_co_op_modes:
+                                                                    await button_ctx.defer(ignore=True)
                                                             if carm_barrier_active:
                                                                 carm_barrier_active=False
                                                                 embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -19286,29 +19297,29 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     #return
                                                 if button_ctx.custom_id == "1":
                                                     if c_universe == "Souls" and c_used_resolve:
-                                                        dmg = damage_cal(t_opponent_affinities, special_attack_name, cmove2_element, c_universe, c_card, c_2, c_attack, c_defense, t_defense,
+                                                        dmg = damage_cal(t_for_c_opponent_affinities, special_attack_name, cmove2_element, c_universe, c_card, c_2, c_attack, c_defense, t_defense,
                                                                     c_stamina, c_enhancer_used, c_health, t_health, t_stamina,
                                                                     c_max_health, t_attack, c_special_move_description, turn_total,
                                                                     ccard_lvl_ap_buff, c_1)
                                                     else:
-                                                        dmg = damage_cal(t_opponent_affinities, basic_attack_name, cmove1_element, c_universe, c_card, c_1, c_attack, c_defense, t_defense,
+                                                        dmg = damage_cal(t_for_c_opponent_affinities, basic_attack_name, cmove1_element, c_universe, c_card, c_1, c_attack, c_defense, t_defense,
                                                                         c_stamina, c_enhancer_used, c_health, t_health, t_stamina,
                                                                         c_max_health, t_attack, c_special_move_description,
                                                                         turn_total, ccard_lvl_ap_buff, None)
                                                 elif button_ctx.custom_id == "2":
                                                     if c_universe == "Souls" and c_used_resolve:
-                                                        dmg = damage_cal(t_opponent_affinities, ultimate_attack_name, cmove3_element, c_universe, c_card, c_3, c_attack, c_defense, t_defense,
+                                                        dmg = damage_cal(t_for_c_opponent_affinities, ultimate_attack_name, cmove3_element, c_universe, c_card, c_3, c_attack, c_defense, t_defense,
                                                                     c_stamina, c_enhancer_used, c_health, t_health, t_stamina,
                                                                     c_max_health, t_attack, c_special_move_description, turn_total,
                                                                     ccard_lvl_ap_buff, c_2)
                                                     else:
-                                                        dmg = damage_cal(t_opponent_affinities, special_attack_name, cmove2_element, c_universe, c_card, c_2, c_attack, c_defense, t_defense,
+                                                        dmg = damage_cal(t_for_c_opponent_affinities, special_attack_name, cmove2_element, c_universe, c_card, c_2, c_attack, c_defense, t_defense,
                                                                         c_stamina, c_enhancer_used, c_health, t_health, t_stamina,
                                                                         c_max_health, t_attack, c_special_move_description,
                                                                         turn_total, ccard_lvl_ap_buff, None)
                                                 elif button_ctx.custom_id == "3":
 
-                                                    dmg = damage_cal(t_opponent_affinities, ultimate_attack_name, cmove3_element, c_universe, c_card, c_3, c_attack, c_defense, t_defense,
+                                                    dmg = damage_cal(t_for_c_opponent_affinities, ultimate_attack_name, cmove3_element, c_universe, c_card, c_3, c_attack, c_defense, t_defense,
                                                                     c_stamina, c_enhancer_used, c_health, t_health, t_stamina,
                                                                     c_max_health, t_attack, c_special_move_description,
                                                                     turn_total, ccard_lvl_ap_buff, None)
@@ -19320,7 +19331,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 elif button_ctx.custom_id == "4":
                                                     c_enhancer_used = True
 
-                                                    dmg = damage_cal(t_opponent_affinities, basic_attack_name, cmove1_element, c_universe, c_card, c_enhancer, c_attack, c_defense,
+                                                    dmg = damage_cal(t_for_c_opponent_affinities, basic_attack_name, cmove1_element, c_universe, c_card, c_enhancer, c_attack, c_defense,
                                                                     t_defense, c_stamina, c_enhancer_used, c_health, t_health,
                                                                     t_stamina, c_max_health, t_attack,
                                                                     c_special_move_description, turn_total, ccard_lvl_ap_buff, None)
@@ -19544,7 +19555,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             c_attack = round(c_attack + c_resolve_attack)
                                                             c_defense = round(c_defense - c_resolve_defense)
 
-                                                            dmg = damage_cal(t_opponent_affinities, ultimate_attack_name, cmove3_element, c_universe, c_card, c_3, c_attack, c_defense,
+                                                            dmg = damage_cal(t_for_c_opponent_affinities, ultimate_attack_name, cmove3_element, c_universe, c_card, c_3, c_attack, c_defense,
                                                                             t_defense, c_stamina, c_enhancer_used, c_health,
                                                                             t_health, t_stamina, c_max_health, t_attack,
                                                                             c_special_move_description, turn_total,
@@ -19653,7 +19664,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     # Resolve Check and Calculation
                                                     if c_used_resolve and c_used_focus and not c_pet_used:
                                                         c_enhancer_used = True
-                                                        dmg = damage_cal(t_opponent_affinities, basic_attack_name, cmove1_element, c_universe, c_card, cpet_move, c_attack, c_defense,
+                                                        dmg = damage_cal(t_for_c_opponent_affinities, basic_attack_name, cmove1_element, c_universe, c_card, cpet_move, c_attack, c_defense,
                                                                         t_defense, c_stamina, c_enhancer_used, c_health,
                                                                         t_health, t_stamina, c_max_health, t_attack,
                                                                         c_special_move_description, turn_total,
@@ -19748,7 +19759,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                             #c_stamina = c_stamina - int(dmg['STAMINA_USED'])
                                                             if c_universe == "Persona":
-                                                                petdmg = damage_cal(t_opponent_affinities, basic_attack_name, cmove1_element, c_universe, c_card, c_1, c_attack,
+                                                                petdmg = damage_cal(t_for_c_opponent_affinities, basic_attack_name, cmove1_element, c_universe, c_card, c_1, c_attack,
                                                                                     c_defense, t_defense, c_stamina,
                                                                                     c_enhancer_used, c_health, t_health,
                                                                                     t_stamina, c_max_health, t_attack,
@@ -19802,7 +19813,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         await button_ctx.defer(ignore=True)
                                                 elif button_ctx.custom_id == "7":
                                                     c_enhancer_used = True
-                                                    dmg = damage_cal(t_opponent_affinities, basic_attack_name, cmove1_element, c_universe, c_card, c_enhancer, c_attack, c_defense,
+                                                    dmg = damage_cal(t_for_c_opponent_affinities, basic_attack_name, cmove1_element, c_universe, c_card, c_enhancer, c_attack, c_defense,
                                                                     o_defense, c_stamina, c_enhancer_used, c_health, o_health,
                                                                     o_stamina, c_max_health, o_attack,
                                                                     c_special_move_description, turn_total, ccard_lvl_ap_buff, None)
@@ -19934,7 +19945,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             c_health = c_health + 100
 
                                                         if c_universe == "Bleach":
-                                                            dmg = damage_cal(t_opponent_affinities, basic_attack_name, cmove1_element, c_universe, c_card, c_1, c_attack, c_defense, t_defense,
+                                                            dmg = damage_cal(t_for_c_opponent_affinities, basic_attack_name, cmove1_element, c_universe, c_card, c_1, c_attack, c_defense, t_defense,
                                                                         c_stamina, c_enhancer_used, c_health, t_health, t_stamina,
                                                                         c_max_health, t_attack, c_special_move_description,
                                                                         turn_total, ccard_lvl_ap_buff, None)
@@ -23342,7 +23353,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                     'message': str(ex),
                     'trace': trace
                 }))
-                await battle_ping_message.delete()
+                if mode not in ai_co_op_modes:
+                    await battle_ping_message.delete()
                 await battle_msg.delete()
                 guild = self.bot.get_guild(main.guild_id)
                 channel = guild.get_channel(main.guild_channel)
@@ -24484,7 +24496,7 @@ element_mapping = {'PHYSICAL': 'Normal Damage ',
 'EARTH': 'Cannot be Parried. Increases Def by 20% AP',
 'ELECTRIC': 'Add 7% to Shock damage, added to each attack',
 'WIND': 'Cannot Miss ',
-'PSYCHIC': ' Penetrates Barriers. Reduce opponent ATK & DEF by 8% AP ',
+'PSYCHIC': 'Penetrates Barriers. Reduce opponent ATK & DEF by 8% AP ',
 'DEATH': 'Adds 7% opponent max health as damage',
 'LIFE': 'Heal for 15% AP',
 'LIGHT': 'Regain 50% Stamina Cost',
