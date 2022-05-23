@@ -1077,7 +1077,7 @@ class CrownUnlimited(commands.Cog):
                                     value="Abyss"
                                 ),
                                 create_choice(
-                                    name="⚔️ Tale Run!",
+                                    name="⚔️ Tales",
                                     value="Tales"
                                 ),
                                 create_choice(
@@ -1102,6 +1102,7 @@ class CrownUnlimited(commands.Cog):
         if mode == "Tutorial":
             await tutorial(self, ctx)
             return
+        
         U_modes = ['ATales', 'Tales', 'CTales', 'DTales', 'tales']
         D_modes = ['CDungeon', 'DDungeon', 'Dungeon', 'ADungeon', 'dungeon']
         B_MODES = ['Boss', 'CBoss', 'boss']
@@ -1465,7 +1466,6 @@ class CrownUnlimited(commands.Cog):
                 manage_components.create_button(style=2, label="✨ Destinies", custom_id="destinies")
             ]
             custom_action_row = manage_components.create_actionrow(*buttons)
-
 
             async def custom_function(self, button_ctx):
                 universe_name = str(button_ctx.origin_message.embeds[0].title)
@@ -3481,6 +3481,32 @@ async def abyss(self, ctx: SlashContext):
         await channel.send(f"'PLAYER': **{str(ctx.author)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
         return
 
+
+async def scenario(self, ctx: SlashContext):
+    await ctx.defer()
+    a_registered_player = await crown_utilities.player_check(ctx)
+    if not a_registered_player:
+        return
+
+    mode = "SCENARIO"
+
+    try:
+        await ctx.send("Scenario Button Clicked!", view=main.SelectView())
+    except Exception as ex:
+        trace = []
+        tb = ex.__traceback__
+        while tb is not None:
+            trace.append({
+                "filename": tb.tb_frame.f_code.co_filename,
+                "name": tb.tb_frame.f_code.co_name,
+                "lineno": tb.tb_lineno
+            })
+            tb = tb.tb_next
+        print(str({
+            'type': type(ex).__name__,
+            'message': str(ex),
+            'trace': trace
+        }))
 
 async def cardlist(self, ctx: SlashContext, universe: str):
     a_registered_player = await crown_utilities.player_check(ctx)
@@ -6136,7 +6162,7 @@ async def enemy_approached(self, message, channel, player, selected_mode, univer
 
 
 async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode: str, user: None):
-    U_modes = ['ATales', 'Tales', 'CTales', 'DTales']
+    U_modes = ['ATales', 'Tales', 'CTales', 'DTales', 'SCENARIO']
     AUTO_BATTLE_modes = ['ATales', 'ADungeon']
     D_modes = ['CDungeon', 'DDungeon', 'Dungeon', 'ADungeon']
     B_modes = ['Boss', 'CBoss']
@@ -6352,20 +6378,32 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                         embedVar.set_thumbnail(url=ctx.author.avatar_url)
                         universe_embed_list.append(embedVar)
 
-        custom_button = manage_components.create_button(style=3, label="Start")
+        buttons = [
+            manage_components.create_button(style=3, label="Start", custom_id="start"),
+            manage_components.create_button(style=1, label="View Scenario Battles!", custom_id="scenario"),
+        ]
+        custom_action_row = manage_components.create_actionrow(*buttons)
+
+
+        # custom_button = manage_components.create_button(style=3, label="Start")
+        # custom_button = manage_components.create_button(style=3, label="View Scenario Battles!")
         
 
         async def custom_function(self, button_ctx):
             if button_ctx.author == ctx.author:
-                await button_ctx.defer(ignore=True)
-                selected_universe = custom_function
-                custom_function.selected_universe = str(button_ctx.origin_message.embeds[0].title)
-                self.stop = True
+                if button_ctx.custom_id == "scenario":
+                    await scenario(self, ctx)
+                    self.stop = True
+                else:
+                    await button_ctx.defer(ignore=True)
+                    selected_universe = custom_function
+                    custom_function.selected_universe = str(button_ctx.origin_message.embeds[0].title)
+                    self.stop = True
             else:
                 await ctx.send("This is not your button.", hidden=True)
 
-        await Paginator(bot=self.bot, ctx=ctx, useQuitButton=True, deleteAfterTimeout=True, pages=universe_embed_list, timeout=60, customButton=[
-            custom_button,
+        await Paginator(bot=self.bot, ctx=ctx, useQuitButton=True, deleteAfterTimeout=True, pages=universe_embed_list, timeout=60, customActionRow=[
+            custom_action_row,
             custom_function,
         ]).run()
         
