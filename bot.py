@@ -1731,16 +1731,31 @@ async def donate(ctx, amount, guild = None):
 
       vault = db.queryVault({'DID': str(ctx.author.id)})
       balance = vault['BALANCE']
+      gem_list = vault['GEMS']
       query = {'TEAM_NAME': str(dteam)}
       team_data = db.queryTeam(query)
       team_display_name = team_data['TEAM_DISPLAY_NAME']
+      gem_bless = 0
       if team_data:
          if balance <= int(amount):
             await ctx.send("You do not have that amount to donate.")
          else:
             await crown_utilities.blessteam(int(amount), dteam)
             await crown_utilities.curse(int(amount), ctx.author.id)
-            await ctx.send(f":coin:{amount} has been gifted to **{team_display_name}**.")
+            
+            gem_bless = round(int(amount) * .10)
+            if gem_list:
+               for universe in gem_list:
+                  update_query = {
+                     '$inc': {'GEMS.$[type].' + "GEMS": gem_bless}
+                  }
+                  filter_query = [{'type.' + "UNIVERSE": universe['UNIVERSE']}]
+                  res = db.updateVault(query, update_query, filter_query)
+               await ctx.send(f"**:coin:{amount}** has been gifted to **{team_display_name}**.\nYou earned **:gem:{gem_bless}** gems! *All Universes* ")
+            else:
+               await ctx.send(f"**:coin:{amount}** has been gifted to **{team_display_name}**.\n**Dismantle** *Items to earn Gems in return for Donations!*")
+               
+            
             return
       else:
          await ctx.send(f"Guild: {dteam} does not exist")
@@ -1775,7 +1790,7 @@ async def invest(ctx, amount):
       else:
          await crown_utilities.blessfamily_Alt(int(amount), user['FAMILY'])
          await crown_utilities.curse(int(amount), ctx.author.id)
-         await ctx.send(f":coin:{amount} invested into **{user['NAME']}'s Family**.")
+         await ctx.send(f"**:coin:{amount}** invested into **{user['NAME']}'s Family**.")
          return
    else:
       await ctx.send(f"Family does not exist")
@@ -1788,6 +1803,7 @@ async def pay(ctx, player: User, amount):
       user = db.queryUser({'DID': str(ctx.author.id)})
       team = db.queryTeam({'TEAM_NAME': user['TEAM'].lower()})
       access = False
+      tax = round(.07 * int(amount))
 
       if user['TEAM'] == 'PCG':
          await ctx.send("You are not a part of a guild.")
@@ -1816,14 +1832,24 @@ async def pay(ctx, player: User, amount):
       elif int(amount) >= 150000:
          icon = ":dollar:"
 
+      taxicon = ":coin:"
+      if int(amount) >= 500000:
+         taxicon = ":money_with_wings:"
+      elif int(amount) >=300000:
+         taxicon = ":moneybag:"
+      elif int(amount) >= 150000:
+         taxicon = ":dollar:"
 
       balance = team['BANK']
-      if balance <= int(amount):
-         await ctx.send("Your guild does not have that amount to pay.")
+      payment = int(amount) + int(tax)
+      different = 0 
+      if balance <= payment:
+         difference = round(abs(balance - payment))
+         await ctx.send(f"Your Guild does not have **{icon}{'{:,}'.format(int(payment))}**\n*Taxes & Fees:* **{taxicon}{'{:,}'.format(int(difference))}**")
       else:
          await crown_utilities.bless(int(amount), player.id)
          await crown_utilities.curseteam(int(amount), team['TEAM_NAME'])
-         await ctx.send(f"{icon} **{'{:,}'.format(int(amount))}** has been paid to {player.mention}.")
+         await ctx.send(f"{icon} **{'{:,}'.format(int(amount))}** has been paid to {player.mention}.\n*Taxes & Fees:* **{taxicon}{'{:,}'.format(int(tax))}**")
          transaction_message = f"{str(ctx.author)} paid {str(player)} {'{:,}'.format(int(amount))}."
          team_query = {'TEAM_NAME': team['TEAM_NAME']}
          new_value_query = {
