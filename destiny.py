@@ -282,7 +282,7 @@ destiny = [
     {
         "NAME": "Eternal Lovers",
         "WINS": 0,
-        "REQUIRED": 10,
+        "REQUIRED": 50,
         "DEFEAT": "Founding Titan",
         "USE_CARDS": ["Mikasa"],
         "EARN": "Founding Titan",
@@ -382,7 +382,7 @@ destiny = [
     {
         "NAME": "I Am Your Father",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 50,
         "DEFEAT": "Meliodas",
         "USE_CARDS": ["Demon King"],
         "EARN": "Demon King Meliodas",
@@ -512,7 +512,7 @@ destiny = [
     {
         "NAME": "Gotta Catch 'Em All: Articuno",
         "WINS": 0,
-        "REQUIRED": 15,
+        "REQUIRED": 35,
         "DEFEAT": "Articuno",
         "USE_CARDS": ["Ash Ketchum"],
         "EARN": "Articuno",
@@ -522,7 +522,7 @@ destiny = [
     {
         "NAME": "Gotta Catch 'Em All: Moltres",
         "WINS": 0,
-        "REQUIRED": 15,
+        "REQUIRED": 35,
         "DEFEAT": "Moltres",
         "USE_CARDS": ["Ash Ketchum"],
         "EARN": "Moltres",
@@ -532,7 +532,7 @@ destiny = [
     {
         "NAME": "Gotta Catch 'Em All: Zapdos",
         "WINS": 0,
-        "REQUIRED": 15,
+        "REQUIRED": 35,
         "DEFEAT": "Zapdos",
         "USE_CARDS": ["Ash Ketchum"],
         "EARN": "Zapdos",
@@ -542,7 +542,7 @@ destiny = [
     {
         "NAME": "Gotta Catch 'Em All: Ho-Oh",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 50,
         "DEFEAT": "Ho-Oh",
         "USE_CARDS": ["Ash Ketchum"],
         "EARN": "Ho-Oh",
@@ -802,7 +802,7 @@ destiny = [
     {
         "NAME": "Battle Of The Undead Kings",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 50,
         "DEFEAT": "Viego",
         "USE_CARDS": ["Azir"],
         "EARN": "Viego",
@@ -1122,7 +1122,7 @@ destiny = [
     {
         "NAME": "Gotta Catch 'Em All: Lugia",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 50,
         "DEFEAT": "Lugia",
         "USE_CARDS": ["Ash Ketchum"],
         "EARN": "Lugia",
@@ -1272,7 +1272,7 @@ destiny = [
     {
         "NAME": "Expand The Land",
         "WINS": 0,
-        "REQUIRED": 10,
+        "REQUIRED": 40,
         "DEFEAT": "Groudon",
         "USE_CARDS": ["Team Magma"],
         "EARN": "Groudon",
@@ -1282,7 +1282,7 @@ destiny = [
     {
         "NAME": "Unleash The Sea",
         "WINS": 0,
-        "REQUIRED": 10,
+        "REQUIRED": 40,
         "DEFEAT": "Kyogre",
         "USE_CARDS": ["Team Aqua"],
         "EARN": "Kyogre",
@@ -1292,7 +1292,7 @@ destiny = [
     {
         "NAME": "Team Rocket Strikes Again",
         "WINS": 0,
-        "REQUIRED": 15,
+        "REQUIRED": 45,
         "DEFEAT": "Rayquaza",
         "USE_CARDS": ["Team Rocket"],
         "EARN": "Rayquaza",
@@ -1302,7 +1302,7 @@ destiny = [
     {
         "NAME": "Defend The Planet",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 50,
         "DEFEAT": "Deoxys Normal Forme",
         "USE_CARDS": ["Rayquaza"],
         "EARN": "Deoxys Normal Forme",
@@ -1312,7 +1312,7 @@ destiny = [
     {
         "NAME": "Shapeshifter: Attack Forme",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 50,
         "DEFEAT": "Deoxys Attack Forme",
         "USE_CARDS": ["Deoxys Normal Forme"],
         "EARN": "Deoxys Attack Forme",
@@ -2302,7 +2302,7 @@ destiny = [
     {
         "NAME": "For Makima",
         "WINS": 0,
-        "REQUIRED": 15,
+        "REQUIRED": 35,
         "DEFEAT": "Gun Devil",
         "USE_CARDS": ["Denji"],
         "EARN": "Full Devil Denji", 
@@ -2312,7 +2312,7 @@ destiny = [
     {
         "NAME": "The End",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 50,
         "DEFEAT": "Makima",
         "USE_CARDS": ["Full Devil Denji"],
         "EARN": "Makima", 
@@ -2452,7 +2452,7 @@ destiny = [
     {
         "NAME": "Childhood Trama",
         "WINS": 0,
-        "REQUIRED": 20,
+        "REQUIRED": 35,
         "DEFEAT": "Gun Devil",
         "USE_CARDS": ["Aki"],
         "EARN": "Gun Devil", 
@@ -3033,7 +3033,7 @@ destiny = [
     {
         "NAME": "Protect The Boy",
         "WINS": 0,
-        "REQUIRED": 10,
+        "REQUIRED": 50,
         "DEFEAT": "Minato Arisato",
         "USE_CARDS": ["Aigis"],
         "EARN": "Minato Arisato", 
@@ -3083,7 +3083,7 @@ destiny = [
     {
         "NAME": "We will Always Be",
         "WINS": 0,
-        "REQUIRED": 20,
+        "REQUIRED": 30,
         "DEFEAT": "Yu Narukami",
         "USE_CARDS": ["Yukiko Amagi"],
         "EARN": "Yu Narukami", 
@@ -3093,7 +3093,7 @@ destiny = [
     {
         "NAME": "Ahjin",
         "WINS": 0,
-        "REQUIRED": 15,
+        "REQUIRED": 50,
         "DEFEAT": "Jin Woo",
         "USE_CARDS": ["Yoo Jinho"],
         "EARN": "Jin Woo", 
@@ -3103,7 +3103,7 @@ destiny = [
     {
         "NAME": "The Shadow Vs The Dragon",
         "WINS": 0,
-        "REQUIRED": 10,
+        "REQUIRED": 50,
         "DEFEAT": "Antares",
         "USE_CARDS": ["Jin Woo"],
         "EARN": "Antares", 
@@ -3113,7 +3113,7 @@ destiny = [
     {
         "NAME": "The Grand Marshal",
         "WINS": 0,
-        "REQUIRED": 5,
+        "REQUIRED": 15,
         "DEFEAT": "Bellion",
         "USE_CARDS": ["Jin Woo"],
         "EARN": "Bellion", 

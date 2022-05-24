@@ -6484,11 +6484,12 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                     universe = str(button_ctx.origin_message.embeds[0].title)
                     await scenario(self, ctx, universe)
                     self.stop = True
-                    return                
-                await button_ctx.defer(ignore=True)
-                selected_universe = custom_function
-                custom_function.selected_universe = str(button_ctx.origin_message.embeds[0].title)
-                self.stop = True
+                    return
+                elif button_ctx.custom_id == "start":                
+                    await button_ctx.defer(ignore=True)
+                    selected_universe = custom_function
+                    custom_function.selected_universe = str(button_ctx.origin_message.embeds[0].title)
+                    self.stop = True
             else:
                 await ctx.send("This is not your button.", hidden=True)
 
@@ -6563,10 +6564,6 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                 'message': str(ex),
                 'trace': trace
             }))
-            guild = self.bot.get_guild(main.guild_id)
-            channel = guild.get_channel(main.guild_channel)
-            await channel.send(f"'PLAYER': **{str(ctx.author)}**, 'GUILD': **{str(ctx.author.guild)}**,  TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
-            return
 
     if mode in D_modes:
         completed_dungeons = sowner['DUNGEONS']
@@ -6678,10 +6675,6 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                 'message': str(ex),
                 'trace': trace
             }))
-            guild = self.bot.get_guild(main.guild_id)
-            channel = guild.get_channel(main.guild_channel)
-            await channel.send(f"'PLAYER': **{str(ctx.author)}**, 'GUILD': **{str(ctx.author.guild)}**,  TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
-            return
 
     if mode in B_modes:
         completed_crown_tales = sowner['CROWN_TALES']
