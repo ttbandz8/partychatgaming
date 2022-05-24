@@ -4027,9 +4027,11 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         fee = hall['FEE']
 
     if mode == "SCENARIO":
+        opponent_scaling = 15
+        opponent_health_scaling = 20
         scenario_universe_data = db.queryUniverse({'TITLE': universe['UNIVERSE']})
 
-    if mode == "ABYSS" or mode == "SCENARIO":
+    if mode == "ABYSS":
         opponent_scaling = abyss_scaling
         opponent_health_scaling = 25
         enemy_arm = "ARM"
