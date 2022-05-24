@@ -1186,19 +1186,19 @@ def queryArm(query):
 
 
 def queryDropArms(args):
-    data = arm_col.find({'UNIVERSE': args, 'EXCLUSIVE': False, 'AVAILABLE': True, 'TYPE': {'$nin': arm_exclude_list}})
+    data = arm_col.find({'UNIVERSE': args, 'EXCLUSIVE': False, 'AVAILABLE': True})
     return data 
 
 def queryExclusiveDropArms(args):
-    data = arm_col.find({'UNIVERSE': args, 'EXCLUSIVE': True, 'AVAILABLE': True, 'TYPE': {'$nin': arm_exclude_list}})
+    data = arm_col.find({'UNIVERSE': args, 'EXCLUSIVE': True, 'AVAILABLE': True})
     return data 
 
 def queryTournamentArms():
-    data = arm_col.find({'TOURNAMENT_REQUIREMENTS': {'$gt': 0}, 'AVAILABLE': True, 'TYPE': {'$nin': arm_exclude_list}})
+    data = arm_col.find({'TOURNAMENT_REQUIREMENTS': {'$gt': 0}, 'AVAILABLE': True})
     return data
 
 def queryShopArms():
-    data = arm_col.find({'EXCLUSIVE': False, 'AVAILABLE': True, 'TYPE': {'$nin': arm_exclude_list}})
+    data = arm_col.find({'EXCLUSIVE': False, 'AVAILABLE': True})
     return data 
 
 ''' HALL '''
