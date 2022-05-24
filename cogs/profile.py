@@ -1335,8 +1335,7 @@ async def shop(self, ctx):
                         await button_ctx.send("Insufficent funds.")
                         self.stop = True
                         return
-                    arm_exclude_list = ['BASIC', 'SPECIAL', 'ULTIMATE']
-                    list_of_arms = [x for x in db.queryAllArmsBasedOnUniverses({'UNIVERSE': str(universe), 'TYPE': {'$nin': arm_exclude_list}}) if not x['EXCLUSIVE'] and x['AVAILABLE']]
+                    list_of_arms = [x for x in db.queryAllArmsBasedOnUniverses({'UNIVERSE': str(universe)}) if not x['EXCLUSIVE'] and x['AVAILABLE']]
                     if not list_of_arms:
                         await button_ctx.send("There are no arms available for purchase in this range.")
                         self.stop = True
