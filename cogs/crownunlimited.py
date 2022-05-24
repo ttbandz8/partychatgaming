@@ -2422,7 +2422,7 @@ def damage_cal(opponent_affinity, move_type, move_element, universe, card, abili
             hit_roll = round(random.randint(1, 21))
             # print(f"HIT ROLL: {str(hit_roll)}")
             if move_element == "SPIRIT" and hit_roll > 3:
-                hit_roll = hit_roll + 5
+                hit_roll = hit_roll + 3
 
 
             if ranged_attack:
