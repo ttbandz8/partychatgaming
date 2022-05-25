@@ -23847,11 +23847,11 @@ async def scenario_drop(self, ctx, scenario, difficulty):
         rewards = []
         rewarded = ""
         if difficulty == easy:
-            rewards = scenario['EASY_DROPS']
+            rewards = scenario[easy]
         if difficulty == normal:
-            rewards = scenario['NORMAL_DROPS']
+            rewards = scenario[normal]
         if difficulty == hard:
-            rewards = scenario['HARD_DROPS']
+            rewards = scenario[hard]
 
         if len(rewards) > 1:
             num_of_potential_rewards = len(rewards)
@@ -23871,9 +23871,9 @@ async def scenario_drop(self, ctx, scenario, difficulty):
         if len(vault['ARMS']) >= 25:
             await crown_utilities.bless(10000, ctx.author.id)
             return f"You're maxed out on Arms! You earned :coin: 10,000 instead!"
-        if rewarded in owned_arms:
+        elif rewarded in owned_arms:
             await crown_utilities.bless(10000, ctx.author.id)
-            return f"You already own **{rewarded}**! You earn :coin: **10000**."
+            return f"You already own **{reward}**! You earn :coin: **10000**."
         else:
             response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'ARMS': {'ARM': rewarded, 'DUR': 100}}})
             return f"You earned _Arm:_ **{reward}** with ⚒️**{str(100)} Durability**!"
