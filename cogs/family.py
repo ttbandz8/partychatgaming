@@ -45,10 +45,10 @@ class Family(commands.Cog):
             head_profile = db.queryUser({'DID': str(ctx.author.id)})
             partner_profile = db.queryUser({'DID': str(player.id)})
             if head_profile['LEVEL'] < 11:
-                await ctx.send(f"🔓 {ctx.author.mention} Unlock Family by completing Floor 10 of the 🌑 Abyss! Use /abyss to enter the abyss.")
+                await ctx.send(f"🔓 {ctx.author.mention} Unlock Family by completing Floor 10 of the 🌑 Abyss! Use /solo to enter the abyss.")
                 return
             if partner_profile['LEVEL'] < 11:
-                await ctx.send(f"🔓 {player.mention} Unlock Family by completing Floor 10 of the 🌑 Abyss! Use /abyss to enter the abyss.")
+                await ctx.send(f"🔓 {player.mention} Unlock Family by completing Floor 10 of the 🌑 Abyss! Use /solo to enter the abyss.")
                 return
 
             if head_profile['DISNAME'] == partner_profile['DISNAME']:

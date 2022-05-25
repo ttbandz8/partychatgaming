@@ -38,7 +38,7 @@ class Boss(commands.Cog):
             
             
             if userinfo['LEVEL'] < 101:
-                await ctx.send(f"🔓 Unlock **Soul Exchange** by completing **Floor 100** of the 🌑 Abyss! Use /abyss to enter the abyss.")
+                await ctx.send(f"🔓 Unlock **Soul Exchange** by completing **Floor 100** of the 🌑 Abyss! Use /solo to enter the abyss.")
                 return
             
             await ctx.send(f"{ctx.author.mention} :japanese_ogre: **Soul Exchange** will reset your 🌑 Abyss level! ")

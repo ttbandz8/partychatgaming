@@ -41,7 +41,7 @@ class Teams(commands.Cog):
 
         user = db.queryUser({'DID': str(ctx.author.id)})
         if user['LEVEL'] < 4:
-            await ctx.send(f"🔓 Unlock Guilds by completing Floor 3 of the 🌑 Abyss! Use /abyss to enter the abyss.")
+            await ctx.send(f"🔓 Unlock Guilds by completing Floor 3 of the 🌑 Abyss! Use /solo to enter the abyss.")
             return
         team_name = guild.lower()
         team_display_name = guild
@@ -110,7 +110,7 @@ class Teams(commands.Cog):
         owner_profile = db.queryUser({'DID': str(ctx.author.id)})
         team_profile = db.queryTeam({'TEAM_NAME': owner_profile['TEAM'].lower()})
         if owner_profile['LEVEL'] < 4:
-            await ctx.send(f"🔓 Unlock Guilds by completing Floor 3 of the 🌑 Abyss! Use /abyss to enter the abyss.")
+            await ctx.send(f"🔓 Unlock Guilds by completing Floor 3 of the 🌑 Abyss! Use /solo to enter the abyss.")
             return
 
 
@@ -122,7 +122,7 @@ class Teams(commands.Cog):
 
                 member_profile = db.queryUser({'DID': str(player.id)})
                 if member_profile['LEVEL'] < 4:
-                    await ctx.send(f"🔓 {player.mention} has not unlocked Guilds!. Complete Floor 3 of the 🌑 Abyss! Use /abyss to enter the abyss.")
+                    await ctx.send(f"🔓 {player.mention} has not unlocked Guilds!. Complete Floor 3 of the 🌑 Abyss! Use /solo to enter the abyss.")
                     return
 
                 # If user is part of a team you cannot add them to your team
@@ -187,7 +187,7 @@ class Teams(commands.Cog):
             if owner_profile['DISNAME'] == team_profile['OWNER'] or owner_profile['DISNAME'] in team_profile['OFFICERS'] or owner_profile['DISNAME'] in team_profile['CAPTAINS'] :
                 member_profile = db.queryUser({'DID': str(ctx.author.id)})
                 if member_profile['LEVEL'] < 4:
-                    await ctx.send(f"🔓 Unlock Guilds by completing Floor 3 of the 🌑 Abyss! Use /abyss to enter the abyss.")
+                    await ctx.send(f"🔓 Unlock Guilds by completing Floor 3 of the 🌑 Abyss! Use /solo to enter the abyss.")
                     return
 
                 # If user is part of a team you cannot add them to your team

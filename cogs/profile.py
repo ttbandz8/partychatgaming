@@ -1564,7 +1564,7 @@ class Profile(commands.Cog):
                     """), 
                     colour=0x7289da)
                     embedVar.set_thumbnail(url=avatar)
-                    embedVar.set_footer(text=f"")
+                    embedVar.set_footer(text=f"{footer}")
                     embed_list.append(embedVar)
                 
                 buttons = [
@@ -1957,7 +1957,7 @@ class Profile(commands.Cog):
         user_query = {'DID': str(ctx.author.id)}
         user = db.queryUser(user_query)
         #    if user['LEVEL'] < 11:
-        #       await ctx.send(f"🔓 Unlock the Trinket Shop by completing Floor 10 of the 🌑 Abyss! Use /abyss to enter the abyss.")
+        #       await ctx.send(f"🔓 Unlock the Trinket Shop by completing Floor 10 of the 🌑 Abyss! Use /solo to enter the abyss.")
         #       return
         patron_flag = user['PATRON']
         current_arm = user['ARM']
@@ -2770,7 +2770,7 @@ class Profile(commands.Cog):
                             
 
                             if sowner['LEVEL'] < 4:
-                                await button_ctx.send("🔓 Unlock **Tales** by completing **Floor 3** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
+                                await button_ctx.send("🔓 Unlock **Tales** by completing **Floor 3** of the 🌑 **Abyss**! Use /solo to enter the abyss.")
                                 self.stop = True
                                 return
 
@@ -3181,7 +3181,7 @@ class Profile(commands.Cog):
             storage_allowed_amount = user['STORAGE_TYPE'] * 15
 
             if user['LEVEL'] < 1:
-                await ctx.send("🔓 Unlock the Shop by completing Floor 0 of the 🌑 Abyss! Use /abyss to enter the abyss.")
+                await ctx.send("🔓 Unlock the Shop by completing Floor 0 of the 🌑 Abyss! Use /solo to enter the abyss.")
                 return
 
             completed_tales = user['CROWN_TALES']
@@ -3487,7 +3487,7 @@ class Profile(commands.Cog):
             destiny_alert_message = f"No Skins or Destinies available for {card_info['NAME']}"
             destiny_alert = False
             if user['LEVEL'] < 9:
-                await ctx.send("🔓 Unlock Crafting by completeing Floor 8 of the 🌑 Abyss! Use /abyss to enter the abyss.")
+                await ctx.send("🔓 Unlock Crafting by completeing Floor 8 of the 🌑 Abyss! Use /solo to enter the abyss.")
                 return
 
             
@@ -5811,7 +5811,7 @@ async def menublacksmith(self, ctx):
     user_query = {'DID': str(ctx.author.id)}
     user = db.queryUser(user_query)
     #    if user['LEVEL'] < 11:
-    #       await ctx.send(f"🔓 Unlock the Trinket Shop by completing Floor 10 of the 🌑 Abyss! Use /abyss to enter the abyss.")
+    #       await ctx.send(f"🔓 Unlock the Trinket Shop by completing Floor 10 of the 🌑 Abyss! Use /solo to enter the abyss.")
     #       return
     patron_flag = user['PATRON']
     current_arm = user['ARM']
@@ -6621,7 +6621,7 @@ async def menuquests(self, ctx):
                         
 
                         if sowner['LEVEL'] < 4:
-                            await button_ctx.send("🔓 Unlock **Tales** by completing **Floor 3** of the 🌑 **Abyss**! Use /abyss to enter the abyss.")
+                            await button_ctx.send("🔓 Unlock **Tales** by completing **Floor 3** of the 🌑 **Abyss**! Use /solo to enter the abyss.")
                             self.stop = True
                             return
 
@@ -7028,7 +7028,7 @@ async def menushop(self, ctx):
         storage_allowed_amount = user['STORAGE_TYPE'] * 15
 
         if user['LEVEL'] < 1:
-            await ctx.send("🔓 Unlock the Shop by completing Floor 0 of the 🌑 Abyss! Use /abyss to enter the abyss.")
+            await ctx.send("🔓 Unlock the Shop by completing Floor 0 of the 🌑 Abyss! Use /solo to enter the abyss.")
             return
 
         completed_tales = user['CROWN_TALES']
@@ -7333,7 +7333,7 @@ async def menucraft(self, ctx):
         destiny_alert_message = f"No Skins or Destinies available for {card_info['NAME']}"
         destiny_alert = False
         if user['LEVEL'] < 9:
-            await ctx.send("🔓 Unlock Crafting by completeing Floor 8 of the 🌑 Abyss! Use /abyss to enter the abyss.")
+            await ctx.send("🔓 Unlock Crafting by completeing Floor 8 of the 🌑 Abyss! Use /solo to enter the abyss.")
             return
 
         

@@ -385,7 +385,7 @@ async def animevs(ctx):
    🦾 **Arm Durability**
    Arms are effective across the Multiverse, however they do break! Turning into **Gems**
    ☢️ Arms from a different universe will break at a faster rate!
-   Stock up on **Arms** and repair **Durability** in the **/trinketshop**
+   Stock up on **Arms** and repair **Durability** in the **/blacksmith**
 
    👑 **Universe Buff** :Match Your Titles and Arms to your **Card Universe**.
    **Buff**: **Base Stats** + 100 **HLT** , 20 **ATK** & 20 **DEF**.
@@ -444,7 +444,7 @@ async def animevs(ctx):
    - No Destinies, Dungeons, Bosses, Drops, Raids or Abyss
    
    **Normal** *Play Anime VS+ the Intended Way*
-   - Traverse the **/abyss** to earn levels and unlock modes
+   - Traverse the **/solo** to earn levels and unlock modes
    - Standard drop rates for items in game modes
    - Rebirth for increase in base stats and drop rates
    
@@ -1687,7 +1687,7 @@ async def gift(ctx, player: User, amount: int):
    vault = db.queryVault({'DID': str(ctx.author.id)})
    user_data = db.queryUser({'DID': str(ctx.author.id)})
    if user_data['LEVEL'] < 21:
-      await ctx.send(f"🔓 Unlock Gifting by completing Floor 20 of the 🌑 Abyss! Use /abyss to enter the abyss.")
+      await ctx.send(f"🔓 Unlock Gifting by completing Floor 20 of the 🌑 Abyss! Use /solo to enter the abyss.")
       return
 
    balance = vault['BALANCE']

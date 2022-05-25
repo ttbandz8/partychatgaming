@@ -853,7 +853,7 @@ async def apply(self, ctx, owner: User):
         if owner_profile['DISNAME'] == team_profile['OWNER']:
             member_profile = db.queryUser({'DID': str(ctx.author.id)})
             if member_profile['LEVEL'] < 4:
-                await ctx.send(f"🔓 Unlock Guilds by completing Floor 3 of the 🌑 Abyss! Use /abyss to enter the abyss.")
+                await ctx.send(f"🔓 Unlock Guilds by completing Floor 3 of the 🌑 Abyss! Use /solo to enter the abyss.")
                 return
 
             # If user is part of a team you cannot add them to your team

@@ -450,75 +450,96 @@ async def viewtitle(self, ctx, title: str):
 async def viewarm(self, ctx, arm: str):
     arm_name = arm
     arm = db.queryArm({'ARM': {"$regex": f"^{str(arm_name)}$", "$options": "i"}})
-    if arm:
-        element_available = ['BASIC', 'SPECIAL', 'ULTIMATE']
-        arm_arm = arm['ARM']
-        arm_show = arm['UNIVERSE']
-        arm_price = arm['PRICE']
-        exclusive = arm['EXCLUSIVE']
-        element = arm['ELEMENT']
-        if element:
-            element_name = element.title()
-            element = crown_utilities.set_emoji(element)
+    try:
+        if arm:
+            element_available = ['BASIC', 'SPECIAL', 'ULTIMATE']
+            arm_arm = arm['ARM']
+            arm_show = arm['UNIVERSE']
+            arm_price = arm['PRICE']
+            exclusive = arm['EXCLUSIVE']
+            element = arm['ELEMENT']
+            if element:
+                element_name = element.title()
+                element = crown_utilities.set_emoji(element)
 
-        if arm_show != 'Unbound':
-            arm_show_img = db.queryUniverse({'TITLE': arm_show})['PATH']
-        arm_passive = arm['ABILITIES'][0]
-            # Arm Passive
-        o_arm_passive_type = list(arm_passive.keys())[0]
-        o_arm_passive_value = list(arm_passive.values())[0]
+            if arm_show != 'Unbound':
+                arm_show_img = db.queryUniverse({'TITLE': arm_show})['PATH']
+            arm_passive = arm['ABILITIES'][0]
+                # Arm Passive
+            o_arm_passive_type = list(arm_passive.keys())[0]
+            o_arm_passive_value = list(arm_passive.values())[0]
 
-        message=""
-        
-        price_message ="" 
-        if exclusive:
-            price_message = "_Priceless_"
+            message=""
+            
+            price_message ="" 
+            if exclusive:
+                price_message = "_Priceless_"
+            else:
+                price_message = f"_Shop & Drop_"
+
+            if o_arm_passive_type == 'BASIC':
+                typetext = 'Basic'
+                message=f"{arm_arm} is a basic attack arm"
+            elif o_arm_passive_type == 'SPECIAL':
+                typetext = 'Special'
+                message=f"{arm_arm} is a special attack arm"
+            elif o_arm_passive_type == 'ULTIMATE':
+                typetext = 'Ultimate'
+                message=f"{arm_arm} is an ultimate attack arm"
+            elif o_arm_passive_type == 'ULTIMAX':
+                typetext = 'Ultimax'
+                message=f"{arm_arm} is a ULTIMAX arm"
+            elif o_arm_passive_type == 'SHIELD':
+                typetext = 'Shield'
+                message=f"{arm_arm} is a SHIELD arm"
+            elif o_arm_passive_type == 'BARRIER':
+                typetext = 'Barrier'
+                message=f"{arm_arm} is an BARRIER arm"
+            elif o_arm_passive_type == 'PARRY':
+                typetext = 'Parry'
+                message=f"{arm_arm} is a PARRY arm"
+            elif o_arm_passive_type == 'MANA':
+                typetext = 'Mana'
+                message=f"{arm_arm} is a MANA arm"
+            elif o_arm_passive_type == 'SIPHON':
+                typetext = 'Siphon'
+                message=f"{arm_arm} is a SIPHON arm"
+
+
+
+
+            embedVar = discord.Embed(title=f"{Crest_dict[arm_show]} {arm_arm}\n{price_message}".format(self), colour=000000)
+            if arm_show != "Unbound":
+                embedVar.set_thumbnail(url=arm_show_img)
+            if o_arm_passive_type in element_available:
+                # embedVar.add_field(name=f"Arm Move Element", value=f"{element}", inline=False)
+                embedVar.add_field(name=f"{typetext} {element_name} Attack", value=f"{element} **{arm_arm}**: **{o_arm_passive_value}**", inline=False)
+                embedVar.set_footer(text=f"The new {typetext} attack will reflect on your card when equipped")
+
+            else:
+                embedVar.add_field(name=f"Unique Passive", value=f"Increases {typetext} by **{o_arm_passive_value}**", inline=False)
+                embedVar.set_footer(text=f"{o_arm_passive_type}: {enhancer_mapping[o_arm_passive_type]}")
+
+            await ctx.send(embed=embedVar)
+
         else:
-            price_message = f"_Shop & Drop_"
-
-        if o_arm_passive_type == 'BASIC':
-            typetext = 'Basic'
-            message=f"{arm_arm} is a basic attack arm"
-        elif o_arm_passive_type == 'SPECIAL':
-            typetext = 'Special'
-            message=f"{arm_arm} is a special attack arm"
-        elif o_arm_passive_type == 'ULTIMATE':
-            typetext = 'Ultimate'
-            message=f"{arm_arm} is an ultimate attack arm"
-        elif o_arm_passive_type == 'ULTIMAX':
-            typetext = 'Ultimax'
-            message=f"{arm_arm} is a ULTIMAX arm"
-        elif o_arm_passive_type == 'SHIELD':
-            typetext = 'Shield'
-            message=f"{arm_arm} is a SHIELD arm"
-        elif o_arm_passive_type == 'BARRIER':
-            typetext = 'Barrier'
-            message=f"{arm_arm} is an BARRIER arm"
-        elif o_arm_passive_type == 'PARRY':
-            typetext = 'Parry'
-            message=f"{arm_arm} is a PARRY arm"
-        elif o_arm_passive_type == 'MANA':
-            typetext = 'Mana'
-            message=f"{arm_arm} is a MANA arm"
-
-
-
-        embedVar = discord.Embed(title=f"{Crest_dict[arm_show]} {arm_arm}\n{price_message}".format(self), colour=000000)
-        if arm_show != "Unbound":
-            embedVar.set_thumbnail(url=arm_show_img)
-        if o_arm_passive_type in element_available:
-            # embedVar.add_field(name=f"Arm Move Element", value=f"{element}", inline=False)
-            embedVar.add_field(name=f"{typetext} {element_name} Attack", value=f"{element} **{arm_arm}**: **{o_arm_passive_value}**", inline=False)
-            embedVar.set_footer(text=f"The new {typetext} attack will reflect on your card when equipped")
-
-        else:
-            embedVar.add_field(name=f"Unique Passive", value=f"Increases {typetext} by **{o_arm_passive_value}**", inline=False)
-            embedVar.set_footer(text=f"{o_arm_passive_type}: {enhancer_mapping[o_arm_passive_type]}")
-
-        await ctx.send(embed=embedVar)
-
-    else:
-        await ctx.send(m.ARM_DOESNT_EXIST, hidden=True)
+            await ctx.send(m.ARM_DOESNT_EXIST, hidden=True)
+    except Exception as ex:
+        trace = []
+        tb = ex.__traceback__
+        while tb is not None:
+            trace.append({
+                "filename": tb.tb_frame.f_code.co_filename,
+                "name": tb.tb_frame.f_code.co_name,
+                "lineno": tb.tb_lineno
+            })
+            tb = tb.tb_next
+        print(str({
+            'type': type(ex).__name__,
+            'message': str(ex),
+            'trace': trace
+        }))
+        return
 
 
 async def viewsummon(self, ctx, summon: str):
