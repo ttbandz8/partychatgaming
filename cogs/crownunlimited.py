@@ -23847,11 +23847,11 @@ async def scenario_drop(self, ctx, scenario, difficulty):
         rewards = []
         rewarded = ""
 
-        if difficulty == easy:
+        if difficulty == "EASY":
             rewards = scenario[easy]
-        if difficulty == normal:
+        if difficulty == "NORMAL":
             rewards = scenario[normal]
-        if difficulty == hard:
+        if difficulty == "HARD":
             rewards = scenario[hard]
 
         if len(rewards) > 1:
