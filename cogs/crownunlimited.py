@@ -2953,9 +2953,9 @@ def showcard(d, arm, max_health, health, max_stamina, stamina, resolved, title, 
             
 
             if health == max_health:
-                health_bar = f"{max_health}"
+                health_bar = f"{round(max_health)}"
             else:
-                health_bar = f"{health}/{max_health}"
+                health_bar = f"{round(health)}/{round(max_health)}"
 
             # Character & Title Name
             if not resolved:
@@ -23841,11 +23841,12 @@ async def scenario_drop(self, ctx, scenario, difficulty):
         for arm in vault['ARMS']:
             owned_arms.append(arm['ARM'])
 
-        easy = 'EASY'
-        normal = 'NORMAL'
-        hard = 'HARD'
+        easy = "EASY_DROPS"
+        normal = "NORMAL_DROPS"
+        hard = "HARD_DROPS"
         rewards = []
         rewarded = ""
+
         if difficulty == easy:
             rewards = scenario[easy]
         if difficulty == normal:
@@ -23877,8 +23878,6 @@ async def scenario_drop(self, ctx, scenario, difficulty):
         else:
             response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'ARMS': {'ARM': rewarded, 'DUR': 100}}})
             return f"You earned _Arm:_ **{reward}** with ⚒️**{str(100)} Durability**!"
-
-
     except Exception as ex:
         trace = []
         tb = ex.__traceback__
