@@ -7673,10 +7673,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     t_bleed_hit = False
                                     bleed_dmg = 5 * turn_total
                                     o_health = o_health - bleed_dmg
+                                    if o_health <= 0:
+                                        continue
                                     previous_moves.append(f"🩸 **{o_card}** shredded for **{round(bleed_dmg)}** bleed dmg...")
 
                                 if t_burn_dmg > 3:
                                     o_health = o_health - t_burn_dmg
+                                    if o_health <= 0:
+                                        continue
                                     previous_moves.append(f"🔥 **{o_card}** burned for **{round(t_burn_dmg)}** dmg...")
                                 
                                 if t_freeze_enh:
@@ -7687,6 +7691,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                 if t_poison_dmg:
                                     o_health = o_health - t_poison_dmg
+                                    if o_health <= 0:
+                                        continue
+
                                     previous_moves.append(f"🧪 **{o_card}** poisoned for **{t_poison_dmg}** dmg...")
                                 
                                 if o_gravity_hit:
@@ -9361,9 +9368,15 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     bleed_dmg = 5 * turn_total
                                     t_health = t_health - bleed_dmg
                                     previous_moves.append(f"🩸 **{t_card}** shredded for **{round(bleed_dmg)}** bleed dmg...")
+                                    if t_health <= 0:
+                                        continue
+
                                 if o_burn_dmg > 3:
                                     t_health = t_health - o_burn_dmg
                                     previous_moves.append(f"🔥 **{t_card}** burned for **{round(o_burn_dmg)}** dmg...")
+                                    if t_health <= 0:
+                                        continue
+
                                 if o_freeze_enh:
                                     previous_moves.append(f"❄️ **{t_card}** has been frozen for a turn...")
                                     turn_total = turn_total + 1
@@ -9373,6 +9386,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 if o_poison_dmg:
                                     t_health = t_health - o_poison_dmg
                                     previous_moves.append(f"🧪 **{t_card}** poisoned for **{o_poison_dmg}** dmg...")
+                                    if t_health <= 0:
+                                        continue
 
                                 if t_gravity_hit:
                                     t_gravity_hit = False
@@ -11956,10 +11971,16 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     t_bleed_hit = False
                                     bleed_dmg = 5 * turn_total
                                     o_health = o_health - bleed_dmg
+                                    if o_health <= 0:
+                                        continue
+
                                     previous_moves.append(f"🩸 **{o_card}** shredded for **{round(bleed_dmg)}** bleed dmg...")
 
                                 if t_burn_dmg > 3:
                                     o_health = o_health - t_burn_dmg
+                                    if o_health <= 0:
+                                        continue
+
                                     previous_moves.append(f"🔥 **{o_card}** burned for **{round(t_burn_dmg)}** dmg...")
                                 if t_freeze_enh:
                                     previous_moves.append(f"❄️ **{o_card}** has been frozen for a turn...")
@@ -11968,6 +11989,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     continue
                                 if t_poison_dmg:
                                     o_health = o_health - t_poison_dmg
+                                    if o_health <= 0:
+                                        continue
+
                                     previous_moves.append(f"🧪 **{o_card}** poisoned for **{t_poison_dmg}** dmg...")
                                     
                                 if o_gravity_hit:
@@ -15167,9 +15191,15 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     bleed_dmg = 5 * turn_total
                                     t_health = t_health - bleed_dmg
                                     previous_moves.append(f"🩸 **{t_card}** shredded for **{round(bleed_dmg)}** bleed dmg...")
+                                    if t_health <= 0:
+                                        continue
+
                                 if o_burn_dmg > 3:
                                     t_health = t_health - o_burn_dmg
                                     previous_moves.append(f"🔥 **{t_card}** burned for **{round(o_burn_dmg)}** dmg...")
+                                    if t_health <= 0:
+                                        continue
+
                                 if o_freeze_enh:
                                     previous_moves.append(f"❄️ **{t_card}** has been frozen for a turn...")
                                     turn_total = turn_total + 1
@@ -15182,6 +15212,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 if o_poison_dmg:
                                     t_health = t_health - o_poison_dmg
                                     previous_moves.append(f"🧪 **{t_card}** poisoned for **{o_poison_dmg}** dmg...")
+                                    if t_health <= 0:
+                                        continue
+
 
                                 if t_gravity_hit:
                                     t_gravity_hit = False
@@ -17670,10 +17703,15 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         bleed_dmg = 5 * turn_total
                                         c_health = c_health - bleed_dmg
                                         previous_moves.append(f"🩸 **{c_card}** shredded for **{round(bleed_dmg)}** bleed dmg...")
+                                        if c_health <= 0:
+                                            continue
 
                                     if t_burn_dmg > 3:
                                         c_health = c_health - t_burn_dmg
                                         previous_moves.append(f"🔥 **{c_card}** burned for **{round(t_burn_dmg)}** dmg...")
+                                        if c_health <= 0:
+                                            continue
+
                                     if t_freeze_enh:
                                         previous_moves.append(f"❄️ **{c_card}** has been frozen for a turn...")
                                         turn_total = turn_total + 1
@@ -17682,6 +17720,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     if t_poison_dmg:
                                         c_health = c_health - t_poison_dmg
                                         previous_moves.append(f"🧪 **{c_card}** poisoned for **{t_poison_dmg}** dmg...")
+                                        if c_health <= 0:
+                                            continue
+
 
                                     if c_gravity_hit:
                                         c_gravity_hit = False
@@ -20581,10 +20622,15 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         bleed_dmg = 5 * turn_total
                                         t_health = t_health - bleed_dmg
                                         previous_moves.append(f"🩸 **{t_card}** shredded for **{round(bleed_dmg)}** bleed dmg...")
+                                        if t_health <= 0:
+                                            continue
 
                                     if c_burn_dmg > 3:
                                         t_health = t_health - c_burn_dmg
                                         previous_moves.append(f"🔥 **{t_card}** burned for **{round(c_burn_dmg)}** dmg...")
+                                        if t_health <= 0:
+                                            continue
+
                                     if c_freeze_enh:
                                         previous_moves.append(f"❄️ **{t_card}** has been frozen for a turn...")
                                         turn_total = turn_total + 1
@@ -20593,6 +20639,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     if c_poison_dmg:
                                         t_health = t_health - c_poison_dmg
                                         previous_moves.append(f"🧪 **{t_card}** poisoned for **{c_poison_dmg}** dmg...")
+                                        if t_health <= 0:
+                                            continue
 
                                     c_burn_dmg = round(c_burn_dmg / 2)
                                     t_freeze_enh = False
