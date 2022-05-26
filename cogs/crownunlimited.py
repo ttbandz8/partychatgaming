@@ -2776,12 +2776,12 @@ def showcard(d, arm, max_health, health, max_stamina, stamina, resolved, title, 
             card_message = f"{card_passive_type.title()} {card_tier * .5}"
 
 
-            if title_len >= 18:
-                title_font_size = 10
-            if title_len >= 20:
-                title_font_size = 10
-            if title_len >= 25:
-                title_font_size = 10
+            # if title_len >= 18:
+            #     title_font_size = 10
+            # if title_len >= 20:
+            #     title_font_size = 10
+            # if title_len >= 25:
+            #     title_font_size = 10
                 
             #Moveset Emojis
                 
