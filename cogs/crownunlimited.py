@@ -2453,7 +2453,7 @@ def damage_cal(opponent_affinity, move_type, move_element, universe, card, abili
                     message = f"🩸{move_emoji} Blood Awakeking! {move} Mortally Wounds for **{true_dmg}**!! :boom: "
                 else:
                     true_dmg = round(true_dmg * 2)
-                    message = f"{move_emoji} {move} used! Critically Hits for **{true_dmg}**!! :boom: "
+                    message = f"{move_emoji} {move} used! Critically Hits for **{true_dmg}**!! :boom:"
 
             # if move_stamina == 80:
             #     # message = f"{special_description}\n" + message
