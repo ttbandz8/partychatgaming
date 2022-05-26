@@ -20587,7 +20587,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         #await button_ctx.send(embed=embedVar)
                                                         previous_moves.append(f"(**{turn_total}**) **{c_card}** not enough Stamina to use this move") 
                                                         turn = 2
-                                                        await button_ctx.defer(ignore=True)
+                                                        # await button_ctx.defer(ignore=True)
                                             except asyncio.TimeoutError:
                                                 await save_spot(self, ctx, universe, mode, currentopponent)
                                                 await ctx.author.send(f"{ctx.author.mention} your game timed out. Your channel has been closed but your spot in the tales has been saved where you last left off.")
