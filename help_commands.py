@@ -82,13 +82,13 @@ ELEMENTS = textwrap.dedent(f"""\
 
 ⛰️ Earth - Cannot be Parried. Increases Def by 20% AP
 
-⚡️ Electric- Add 7% to Shock damage, added to each attack
+⚡️ Electric- Add 10% to Shock damage, added to each attack
 
 🌪️ Wind - Cannot Miss 
 
 🔮 Psychic - Penetrates Barriers. Reduce opponent ATK & DEF by 8% AP 
 
-☠️ Death - Adds 7% opponent max health as damage
+☠️ Death - Adds 10% opponent max health as damage
 
 ❤️‍🔥 Life - Heal for 15% AP 
 
