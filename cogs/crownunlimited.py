@@ -7312,7 +7312,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
             # if randomized_battle:
             #     private_channel = ctx.author
-            battle_ping_message = await private_channel.send(f"{ctx.author.mention} {user2.mention}")
+            battle_ping_message = await private_channel.send(f"{ctx.author.mention}")
             if mode not in PVP_MODES and mode not in B_modes and mode != "ABYSS" and mode not in RAID_MODES and mode not in co_op_modes:
                 embedVar = discord.Embed(title=f"✅ Confirm Start! ({currentopponent + 1}/{total_legends})", description=f"**{o_card}** 🆚 **{t_card}**")
                 embedVar.add_field(name="__Your Affinities__", value=f"{o_affinity_message}")
