@@ -2746,20 +2746,23 @@ def showcard(d, arm, max_health, health, max_stamina, stamina, resolved, title, 
             # Font Size Adjustments
             # Name not go over Card
             card_tier = d['TIER']
-            name_font_size = 62
+            name_font_size = 60
             title_font_size = 35
             basic_font_size = 30
             super_font_size = 30
             ultimate_font_size = 30
             enhancer_font_size = 30
+            title_size = (600, 65)
             if len(list(d['NAME'])) >= 15 and not resolved:
                 name_font_size = 45
             if len(list(d['RNAME'])) >= 15 and resolved:
                 name_font_size = 45
             if len(list(d['NAME'])) >= 18 and not resolved:
-                name_font_size = 36
+                name_font_size = 40
+                title_size = (600, 80)
             if len(list(d['RNAME'])) >= 18 and resolved:
-                name_font_size = 36
+                name_font_size = 40
+                title_size = (600, 80)
             
             
             title_len = int(len(list(title['TITLE'])))
@@ -2978,14 +2981,14 @@ def showcard(d, arm, max_health, health, max_stamina, stamina, resolved, title, 
 
             # Character & Title Name
             if not resolved:
-                draw.text((600, 65), d['NAME'], (255, 255, 255), font=header, stroke_width=1, stroke_fill=(0, 0, 0),
+                draw.text(title_size, d['NAME'], (255, 255, 255), font=header, stroke_width=1, stroke_fill=(0, 0, 0),
                           align="left")
             if resolved:
                 if d['RNAME'] != "":
-                    draw.text((600, 65), d['RNAME'], (255, 255, 255), font=header, stroke_width=1, stroke_fill=(0, 0, 0),
+                    draw.text(title_size, d['RNAME'], (255, 255, 255), font=header, stroke_width=1, stroke_fill=(0, 0, 0),
                             align="left")
                 else:
-                    draw.text((600, 65), d['NAME'], (255, 255, 255), font=header, stroke_width=1, stroke_fill=(0, 0, 0),
+                    draw.text(title_size, d['NAME'], (255, 255, 255), font=header, stroke_width=1, stroke_fill=(0, 0, 0),
                             align="left")
 
             # draw.text((602, 150), title['TITLE'], (255, 255, 255), font=h, stroke_width=1, stroke_fill=(0, 0, 0),
