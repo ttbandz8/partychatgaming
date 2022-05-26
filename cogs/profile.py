@@ -330,6 +330,9 @@ class Profile(commands.Cog):
                     arm_name = arm['ARM']
                     arm_passive = arm['ABILITIES'][0]
                     arm_passive_type = list(arm_passive.keys())[0]
+                    arm_moves_type_list = ['BASIC', 'SPECIAL', 'ULTIMATE']
+                    if arm_passive_type in arm_moves_type_list:
+                        arm_element = arm['ELEMENT']
                     arm_passive_value = list(arm_passive.values())[0]
                     title_name= title['TITLE']
                     title_passive = title['ABILITIES'][0]
@@ -381,6 +384,50 @@ class Profile(commands.Cog):
                     passive_num = list(o_passive.values())[0]
                     passive_type = list(o_passive.values())[1]
 
+               
+                    if passive_type:
+                        value_for_passive = card_tier * .5
+                        flat_for_passive = round(10 * (card_tier * .5))
+                        stam_for_passive = 5 * (card_tier * .5)
+                        if passive_type == "HLT":
+                            passive_num = value_for_passive
+                        if passive_type == "LIFE":
+                            passive_num = value_for_passive
+                        if passive_type == "ATK":
+                            passive_num = flat_for_passive
+                        if passive_type == "DEF":
+                            passive_num = flat_for_passive
+                        if passive_type == "STAM":
+                            passive_num = stam_for_passive
+                        if passive_type == "DRAIN":
+                            passive_num = stam_for_passive
+                        if passive_type == "FLOG":
+                            passive_num = value_for_passive
+                        if passive_type == "WITHER":
+                            passive_num = value_for_passive
+                        if passive_type == "RAGE":
+                            passive_num = value_for_passive
+                        if passive_type == "BRACE":
+                            passive_num = value_for_passive
+                        if passive_type == "BZRK":
+                            passive_num = value_for_passive
+                        if passive_type == "CRYSTAL":
+                            passive_num = value_for_passive
+                        if passive_type == "FEAR":
+                            passive_num = flat_for_passive
+                        if passive_type == "GROWTH":
+                            passive_num = flat_for_passive
+                        if passive_type == "SLOW":
+                            passive_num = "1"
+                        if passive_type == "HASTE":
+                            passive_num = "1"
+                        if passive_type == "STANCE":
+                            passive_num = flat_for_passive
+                        if passive_type == "CONFUSE":
+                            passive_num = flat_for_passive
+                        if passive_type == "BLINK":
+                            passive_num = stam_for_passive
+
                     atk_buff = ""
                     def_buff = ""
                     hlt_buff = ""
@@ -402,29 +449,48 @@ class Profile(commands.Cog):
                     titled =False
                     titleicon="⚠️"
                     licon = "🔱"
-                    armicon = "☢️"
+                    armicon = "⚠️"
                     if card_lvl == 200:
                         licon ="⚜️"
                     titlemessage = f"{titleicon} {title_name} ~ INEFFECTIVE"
-                    armmessage = f'☢️ {arm_name}: {arm_passive_type} {arm_passive_value}{enhancer_suffix_mapping[arm_passive_type]} {durability}'
+                    if arm_passive_type in arm_moves_type_list:
+                        arm_emoji = crown_utilities.set_emoji(arm_element)
+                        if performance_mode:
+                            armmessage = f'☢️ {arm_name}: {arm_emoji} {arm_passive_type.title()} Attack: {arm_passive_value} | {durability}'
+                        else:
+                            armmessage = f'☢️ {arm_name}'
                     warningmessage = f"Use {o_show} or Unbound Titles on this card"
                     if o_title_universe == "Unbound":
                         titled =True
                         titleicon = "👑"
-                        titlemessage = f"👑 {title_name}: {title_passive_type} {title_passive_value}{title_enhancer_suffix_mapping[title_passive_type]}"
+                        if performance_mode:
+                            titlemessage = f"👑 {title_name}: {title_passive_type} {title_passive_value}{title_enhancer_suffix_mapping[title_passive_type]}"
+                        else:
+                            titlemessage = f"👑 {title_name}" 
                         warningmessage= f""
                     elif o_title_universe == o_show:
                         titled =True
                         titleicon = "🎗️"
-                        titlemessage = f"🎗️ {title_name}: {title_passive_type} {title_passive_value}{title_enhancer_suffix_mapping[title_passive_type]}"
+                        if performance_mode:
+                            titlemessage = f"🎗️ {title_name}: {title_passive_type} {title_passive_value}{title_enhancer_suffix_mapping[title_passive_type]}"
+                        else:
+                            titlemessage = f"🎗️ {title_name}"
                         warningmessage= f""
                     
                     if oarm_universe == "Unbound":
                         armicon = "💪"
-                        armmessage = f'💪 {arm_name}: {arm_passive_type} {arm_passive_value}{enhancer_suffix_mapping[arm_passive_type]} {durability}'
+                        if performance_mode:
+                            armmessage = f'💪 {arm_name}: {arm_passive_type} {arm_passive_value}{enhancer_suffix_mapping[arm_passive_type]} {durability}'
+                        else:
+                            armmessage = f'💪 {arm_name}'
+
                     elif oarm_universe == o_show:
                         armicon = "🦾"
-                        armmessage = f'🦾 {arm_name}: {arm_passive_type} {arm_passive_value}{enhancer_suffix_mapping[arm_passive_type]} {durability}'
+                        if performance_mode:
+                            armmessage = f'🦾 {arm_name}: {arm_passive_type} {arm_passive_value}{enhancer_suffix_mapping[arm_passive_type]} {durability}'
+                        else:
+                            armmessage = f'🦾 {arm_name}: {durability}'
+
                     cardtitle = {'TITLE': title_name}
 
                     #<:PCG:769471288083218432>
@@ -438,7 +504,9 @@ class Profile(commands.Cog):
 
                         **{titlemessage}**
                         **{armmessage}**
-                        🧬 **{active_pet['NAME']}: {active_pet['TYPE']}: {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]}| Bond {bond} {bond_message} / Level {lvl} {lvl_message}**
+                        🧬 **{active_pet['NAME']}: {active_pet['TYPE']}: {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]}
+                        🧬 Bond {bond} {bond_message} & Level {lvl} {lvl_message}
+
                         🩸 **{passive_name}:** {passive_type} {passive_num}{passive_enhancer_suffix_mapping[passive_type]}                
                         
                         {move1_emoji} **{move1}:** {move1ap}
@@ -460,16 +528,17 @@ class Profile(commands.Cog):
                         return
                     
                     else:
-                        card_file = showcard(card, arm, o_max_health, o_health, o_max_stamina, o_stamina, resolved, cardtitle, focused, o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, card_lvl, None)
+                        card_file = showcard(card, arm, o_max_health, o_health, o_max_stamina, o_stamina, resolved, title, focused, o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, card_lvl, None)
 
                         embedVar = discord.Embed(title=f"".format(self), colour=000000)
                         embedVar.add_field(name="__Affinities__", value=f"{affinity_message}")
                         embedVar.set_image(url="attachment://image.png")
                         embedVar.set_author(name=textwrap.dedent(f"""\
+                        🧬 {active_pet['NAME']}: {active_pet['TYPE'].title()}: {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]} 
+                        🧬 Bond {bond} {bond_message} & Level {lvl} {lvl_message}
                         {titlemessage}
                         {armmessage}
-                        🧬 {active_pet['NAME']}: {active_pet['TYPE']}: {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]}| Bond {bond} {bond_message} / Level {lvl} {lvl_message}
-                        🩸 {passive_name}: {passive_type} {passive_num}{passive_enhancer_suffix_mapping[passive_type]}                
+                        🩸 {passive_name}      
                         🏃 {o_speed}
                         """))
                         embedVar.set_thumbnail(url=ctx.author.avatar_url)
@@ -631,6 +700,49 @@ class Profile(commands.Cog):
                     passive_name = list(o_passive.keys())[0]
                     passive_num = list(o_passive.values())[0]
                     passive_type = list(o_passive.values())[1]
+               
+                    if passive_type:
+                        value_for_passive = resp['TIER'] * .5
+                        flat_for_passive = round(10 * (resp['TIER'] * .5))
+                        stam_for_passive = 5 * (resp['TIER'] * .5)
+                        if passive_type == "HLT":
+                            passive_num = value_for_passive
+                        if passive_type == "LIFE":
+                            passive_num = value_for_passive
+                        if passive_type == "ATK":
+                            passive_num = flat_for_passive
+                        if passive_type == "DEF":
+                            passive_num = flat_for_passive
+                        if passive_type == "STAM":
+                            passive_num = stam_for_passive
+                        if passive_type == "DRAIN":
+                            passive_num = stam_for_passive
+                        if passive_type == "FLOG":
+                            passive_num = value_for_passive
+                        if passive_type == "WITHER":
+                            passive_num = value_for_passive
+                        if passive_type == "RAGE":
+                            passive_num = value_for_passive
+                        if passive_type == "BRACE":
+                            passive_num = value_for_passive
+                        if passive_type == "BZRK":
+                            passive_num = value_for_passive
+                        if passive_type == "CRYSTAL":
+                            passive_num = value_for_passive
+                        if passive_type == "FEAR":
+                            passive_num = flat_for_passive
+                        if passive_type == "GROWTH":
+                            passive_num = flat_for_passive
+                        if passive_type == "SLOW":
+                            passive_num = "1"
+                        if passive_type == "HASTE":
+                            passive_num = "1"
+                        if passive_type == "STANCE":
+                            passive_num = flat_for_passive
+                        if passive_type == "CONFUSE":
+                            passive_num = flat_for_passive
+                        if passive_type == "BLINK":
+                            passive_num = stam_for_passive
 
                     traits = ut.traits
                     mytrait = {}
@@ -655,7 +767,7 @@ class Profile(commands.Cog):
                     {move3_emoji} **{move3}:** {move3ap}
                     🦠 **{move4}:** {move4enh} {move4ap}{enhancer_suffix_mapping[move4enh]}
 
-                    🩸 **{passive_name}:** {passive_type} {passive_num}{passive_enhancer_suffix_mapping[passive_type]}
+                    🩸 **{passive_name}:** {passive_type.title()} {passive_num}{passive_enhancer_suffix_mapping[passive_type]}
                     ♾️ {traitmessage}
                     """), colour=0x7289da)
                     embedVar.add_field(name="__Affinities__", value=f"{affinity_message}")
@@ -3914,7 +4026,52 @@ async def craft_adjuster(self, player, vault, universe, price, item, skin_list):
                                 passive_name = list(s_passive.keys())[0]
                                 passive_num = list(s_passive.values())[0]
                                 passive_type = list(s_passive.values())[1]
-                                
+    
+               
+                                if passive_type:
+                                    value_for_passive = skins['TIER'] * .5
+                                    flat_for_passive = 10 * (skins['TIER'] * .5)
+                                    stam_for_passive = 5 * (skins['TIER'] * .5)
+                                    if passive_type == "HLT":
+                                        passive_num = value_for_passive
+                                    if passive_type == "LIFE":
+                                        passive_num = value_for_passive
+                                    if passive_type == "ATK":
+                                        passive_num = flat_for_passive
+                                    if passive_type == "DEF":
+                                        passive_num = flat_for_passive
+                                    if passive_type == "STAM":
+                                        passive_num = stam_for_passive
+                                    if passive_type == "DRAIN":
+                                        passive_num = stam_for_passive
+                                    if passive_type == "FLOG":
+                                        passive_num = value_for_passive
+                                    if passive_type == "WITHER":
+                                        passive_num = value_for_passive
+                                    if passive_type == "RAGE":
+                                        passive_num = value_for_passive
+                                    if passive_type == "BRACE":
+                                        passive_num = value_for_passive
+                                    if passive_type == "BZRK":
+                                        passive_num = value_for_passive
+                                    if passive_type == "CRYSTAL":
+                                        passive_num = value_for_passive
+                                    if passive_type == "FEAR":
+                                        passive_num = flat_for_passive
+                                    if passive_type == "GROWTH":
+                                        passive_num = flat_for_passive
+                                    if passive_type == "SLOW":
+                                        passive_num = "1"
+                                    if passive_type == "HASTE":
+                                        passive_num = "1"
+                                    if passive_type == "STANCE":
+                                        passive_num = flat_for_passive
+                                    if passive_type == "CONFUSE":
+                                        passive_num = flat_for_passive
+                                    if passive_type == "BLINK":
+                                        passive_num = stam_for_passive
+
+
                                 traits = ut.traits
                                 mytrait = {}
                                 traitmessage = ''
@@ -4241,6 +4398,50 @@ async def menubuild(self, ctx):
                 passive_num = list(o_passive.values())[0]
                 passive_type = list(o_passive.values())[1]
 
+               
+                if passive_type:
+                    value_for_passive = card_tier * .5
+                    flat_for_passive = round(10 * (card_tier * .5))
+                    stam_for_passive = 5 * (card_tier * .5)
+                    if passive_type == "HLT":
+                        passive_num = value_for_passive
+                    if passive_type == "LIFE":
+                        passive_num = value_for_passive
+                    if passive_type == "ATK":
+                        passive_num = flat_for_passive
+                    if passive_type == "DEF":
+                        passive_num = flat_for_passive
+                    if passive_type == "STAM":
+                        passive_num = stam_for_passive
+                    if passive_type == "DRAIN":
+                        passive_num = stam_for_passive
+                    if passive_type == "FLOG":
+                        passive_num = value_for_passive
+                    if passive_type == "WITHER":
+                        passive_num = value_for_passive
+                    if passive_type == "RAGE":
+                        passive_num = value_for_passive
+                    if passive_type == "BRACE":
+                        passive_num = value_for_passive
+                    if passive_type == "BZRK":
+                        passive_num = value_for_passive
+                    if passive_type == "CRYSTAL":
+                        passive_num = value_for_passive
+                    if passive_type == "FEAR":
+                        passive_num = flat_for_passive
+                    if passive_type == "GROWTH":
+                        passive_num = flat_for_passive
+                    if passive_type == "SLOW":
+                        passive_num = "1"
+                    if passive_type == "HASTE":
+                        passive_num = "1"
+                    if passive_type == "STANCE":
+                        passive_num = flat_for_passive
+                    if passive_type == "CONFUSE":
+                        passive_num = flat_for_passive
+                    if passive_type == "BLINK":
+                        passive_num = stam_for_passive
+
                 atk_buff = ""
                 def_buff = ""
                 hlt_buff = ""
@@ -4320,7 +4521,7 @@ async def menubuild(self, ctx):
                     return
                 
                 else:
-                    card_file = showcard(card, arm, o_max_health, o_health, o_max_stamina, o_stamina, resolved, cardtitle, focused, o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, card_lvl, None)
+                    card_file = showcard(card, arm, o_max_health, o_health, o_max_stamina, o_stamina, resolved, title, focused, o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, card_lvl, None)
 
                     embedVar = discord.Embed(title=f"".format(self), colour=000000)
                     embedVar.add_field(name="__Affinities__", value=f"{affinity_message}")
@@ -4490,6 +4691,52 @@ async def menucards(self, ctx):
                 passive_name = list(o_passive.keys())[0]
                 passive_num = list(o_passive.values())[0]
                 passive_type = list(o_passive.values())[1]
+
+               
+                if passive_type:
+                    value_for_passive = resp['TIER'] * .5
+                    flat_for_passive = round(10 * (resp['TIER'] * .5))
+                    stam_for_passive = 5 * (resp['TIER'] * .5)
+                    if passive_type == "HLT":
+                        passive_num = value_for_passive
+                    if passive_type == "LIFE":
+                        passive_num = value_for_passive
+                    if passive_type == "ATK":
+                        passive_num = flat_for_passive
+                    if passive_type == "DEF":
+                        passive_num = flat_for_passive
+                    if passive_type == "STAM":
+                        passive_num = stam_for_passive
+                    if passive_type == "DRAIN":
+                        passive_num = stam_for_passive
+                    if passive_type == "FLOG":
+                        passive_num = value_for_passive
+                    if passive_type == "WITHER":
+                        passive_num = value_for_passive
+                    if passive_type == "RAGE":
+                        passive_num = value_for_passive
+                    if passive_type == "BRACE":
+                        passive_num = value_for_passive
+                    if passive_type == "BZRK":
+                        passive_num = value_for_passive
+                    if passive_type == "CRYSTAL":
+                        passive_num = value_for_passive
+                    if passive_type == "FEAR":
+                        passive_num = flat_for_passive
+                    if passive_type == "GROWTH":
+                        passive_num = flat_for_passive
+                    if passive_type == "SLOW":
+                        passive_num = "1"
+                    if passive_type == "HASTE":
+                        passive_num = "1"
+                    if passive_type == "STANCE":
+                        passive_num = flat_for_passive
+                    if passive_type == "CONFUSE":
+                        passive_num = flat_for_passive
+                    if passive_type == "BLINK":
+                        passive_num = stam_for_passive
+
+
 
                 traits = ut.traits
                 mytrait = {}
@@ -5420,7 +5667,7 @@ async def menuarms(self, ctx):
                 """), 
                 colour=0x7289da)
                 embedVar.set_thumbnail(url=avatar)
-                embedVar.set_footer(text=f"")
+                embedVar.set_footer(text=f"{footer}")
                 embed_list.append(embedVar)
             
             buttons = [

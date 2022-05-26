@@ -231,7 +231,7 @@ def set_emoji(element):
     if element == "SPIRIT":
         emoji = "🧿"
     if element == "BLEED":
-        emoji = "🩸"
+        emoji = "🅱️"
     if element == "RECOIL":
         emoji = "⛓️"
     if element == "TIME":

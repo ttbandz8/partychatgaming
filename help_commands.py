@@ -54,9 +54,10 @@ LEGEND = textwrap.dedent(f"""\
 🌀 / ⚡ - **Card Stamina** (ST)
 🗡️ - **Attack (ATK)** Blue Crystal 🟦
 🛡️ - **Defense (DEF)** Red Crystal 🟥
-🩸 - Card Passive *Enhancers applied at the start of the battle*
+🩸 - Card Passive *Card Passive enhancers are applied each turn, passively.*
 
 **Accessories & Summons**
+⚠️ - Your title or arm does not match your universe
 🎗️ - **Title accessory**  *Title enhancers are applied each turn, passively.*
 🦾 - **Arm accessory** *Arm enhancers are applied passively throughout the duration of battle.*
 🧬 - **Summon!** *Summons use Active Enhancers that are available during battle after you Resolve*
@@ -105,7 +106,7 @@ ELEMENTS = textwrap.dedent(f"""\
 
 ⌛ Time - You Focus after attacking
 
-🩸 Bleed - After 5 Attacks deal 5x turn count damage to opponent
+🅱️ Bleed - After 5 Attacks deal 5x turn count damage to opponent
 
 🪐 Gravity - Disables Opponent Block
 

@@ -52,7 +52,7 @@ class CrownUnlimited(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print('Anime VS+ Cog is ready!')
+        print('Anime 🆚+ Cog is ready!')
 
     async def cog_check(self, ctx):
         return await main.validate_user(ctx)
@@ -1195,7 +1195,7 @@ class CrownUnlimited(commands.Cog):
             if ctx.author.id == player.id:
                 await ctx.send("You cannot PVP against yourself.", hidden=True)
                 return
-            await ctx.send(":crown: Building PVP Match...", delete_after=10)
+            await ctx.send("🆚 Building PVP Match...", delete_after=10)
             private_channel = ctx
             starttime = time.asctime()
             h_gametime = starttime[11:13]
@@ -1627,7 +1627,7 @@ async def tutorial(self, ctx: SlashContext):
             return
 
 
-        await ctx.send(":crown: Building Tutorial Match...", delete_after=10)
+        await ctx.send("🆚 Building Tutorial Match...", delete_after=10)
         private_channel = ctx
         starttime = time.asctime()
         h_gametime = starttime[11:13]
@@ -2745,9 +2745,9 @@ def showcard(d, arm, max_health, health, max_stamina, stamina, resolved, title, 
 
             # Font Size Adjustments
             # Name not go over Card
-            
+            card_tier = d['TIER']
             name_font_size = 62
-            title_font_size = 37
+            title_font_size = 35
             basic_font_size = 30
             super_font_size = 30
             ultimate_font_size = 30
@@ -2763,13 +2763,25 @@ def showcard(d, arm, max_health, health, max_stamina, stamina, resolved, title, 
             
             
             title_len = int(len(list(title['TITLE'])))
-            
+            title_message = f"{title['TITLE']}"
+            if 'ABILITIES' in title:
+                title_passive = title['ABILITIES'][0]
+                title_passive_type = list(title_passive.keys())[0]
+                title_passive_value = list(title_passive.values())[0]
+                title_message = f"{title_passive_type.title()} {title_passive_value}"
+
+            # Card Passive
+            passive = d['PASS'][0]
+            card_passive_type = list(passive.values())[1]
+            card_message = f"{card_passive_type.title()} {card_tier * .5}"
+
+
             if title_len >= 18:
-                title_font_size = 34
+                title_font_size = 10
             if title_len >= 20:
-                title_font_size = 30
+                title_font_size = 10
             if title_len >= 25:
-                title_font_size = 28
+                title_font_size = 10
                 
             #Moveset Emojis
                 
@@ -2832,12 +2844,16 @@ def showcard(d, arm, max_health, health, max_stamina, stamina, resolved, title, 
                 arm_element = arm['ELEMENT']
                 arm_passive_type = list(arm_passive.keys())[0]
                 arm_passive_value = list(arm_passive.values())[0]
+                arm_message = f"{arm_passive_type.title()} {arm_passive_value}"
                 if arm_passive_type == 'BASIC':
                     move1 = {arm_name: arm_passive_value, "STAM": 10, "ELEMENT": arm_element}
+                    arm_message = "Ability"
                 elif arm_passive_type == 'SPECIAL':
                     move2 = {arm_name: arm_passive_value, "STAM": 30, "ELEMENT": arm_element}
+                    arm_message = "Ability"
                 elif arm_passive_type == 'ULTIMATE':
                     move3 = {arm_name: arm_passive_value, "STAM": 80, "ELEMENT": arm_element}
+                    arm_message = "Ability"
 
                 
             
@@ -2855,6 +2871,8 @@ def showcard(d, arm, max_health, health, max_stamina, stamina, resolved, title, 
                     move2_ap = round(arm_passive_value)
                 if arm_passive_type == 'ULTIMATE':
                     move3_ap = round(arm_passive_value)
+
+                
 
             move1_text = f"{basic_attack_emoji} {list(move1.keys())[0]}: {move1_ap} {ebasic}"
             move2_text = f"{super_attack_emoji} {list(move2.keys())[0]}: {move2_ap} {especial}"
@@ -2935,6 +2953,7 @@ def showcard(d, arm, max_health, health, max_stamina, stamina, resolved, title, 
 
             header = ImageFont.truetype("YesevaOne-Regular.ttf", name_font_size)
             title_font = ImageFont.truetype("YesevaOne-Regular.ttf", title_font_size)
+            passive_font = ImageFont.truetype("YesevaOne-Regular.ttf", 35)
             s = ImageFont.truetype("Roboto-Bold.ttf", 22)
             h = ImageFont.truetype("YesevaOne-Regular.ttf", 37)
             m = ImageFont.truetype("Roboto-Bold.ttf", 25)
@@ -2959,14 +2978,14 @@ def showcard(d, arm, max_health, health, max_stamina, stamina, resolved, title, 
 
             # Character & Title Name
             if not resolved:
-                draw.text((600, 80), d['NAME'], (255, 255, 255), font=header, stroke_width=1, stroke_fill=(0, 0, 0),
+                draw.text((600, 65), d['NAME'], (255, 255, 255), font=header, stroke_width=1, stroke_fill=(0, 0, 0),
                           align="left")
             if resolved:
                 if d['RNAME'] != "":
-                    draw.text((600, 80), d['RNAME'], (255, 255, 255), font=header, stroke_width=1, stroke_fill=(0, 0, 0),
+                    draw.text((600, 65), d['RNAME'], (255, 255, 255), font=header, stroke_width=1, stroke_fill=(0, 0, 0),
                             align="left")
                 else:
-                    draw.text((600, 80), d['NAME'], (255, 255, 255), font=header, stroke_width=1, stroke_fill=(0, 0, 0),
+                    draw.text((600, 65), d['NAME'], (255, 255, 255), font=header, stroke_width=1, stroke_fill=(0, 0, 0),
                             align="left")
 
             # draw.text((602, 150), title['TITLE'], (255, 255, 255), font=h, stroke_width=1, stroke_fill=(0, 0, 0),
@@ -3014,8 +3033,17 @@ def showcard(d, arm, max_health, health, max_stamina, stamina, resolved, title, 
             
             # attack_stat = f"🗡️{round(attack)}"
             # defense_stat = f"🛡️{round(defense)}"
+            if 'ABILITIES' in title:
+                title_suffix = enhancer_suffix_mapping[title_passive_type]
+                title_message_on_card = f"🎗️ {title_message}{title_suffix}  🦾 {arm_message}"
+            else:
+                title_message_on_card = f"🎗️ None 🦾 None"
+            card_suffix = enhancer_suffix_mapping[card_passive_type]
+            speed = d['SPD']
             with Pilmoji(im) as pilmoji:
-                pilmoji.text((602, 150), f"🎗️ {title['TITLE']}", (255, 255, 255), font=title_font, stroke_width=1, stroke_fill=(0, 0, 0),
+                pilmoji.text((602, 138), f"{title_message_on_card}", (255, 255, 255), font=title_font, stroke_width=1, stroke_fill=(0, 0, 0),
+                      align="left")
+                pilmoji.text((602, 180), f"🩸 {card_message}{card_suffix} 🏃 {speed}", (255, 255, 255), font=passive_font, stroke_width=1, stroke_fill=(0, 0, 0),
                       align="left")
                 pilmoji.text((600, 250), move1_text.strip(), (255, 255, 255), font=moveset_font_1, stroke_width=2,
                              stroke_fill=(0, 0, 0))
@@ -4606,93 +4634,6 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             c_card_passive_type = list(c_passive.values())[1]
             c_card_passive = list(c_passive.values())[0]
 
-            if c_card_passive_type == 'ATK':
-                c_attack = c_attack + int((c_card_passive / 100) * c_attack)
-            elif c_card_passive_type == 'DEF':
-                c_defense = c_defense + int((c_card_passive / 100) * c_defense)
-            elif c_card_passive_type == 'STAM':
-                c_stamina = c_stamina + int(c_card_passive)
-            elif c_card_passive_type == 'HLT':
-                c_max_health = c_max_health + int(c_card_passive)
-                c_health = c_health + int(c_card_passive)
-            elif c_card_passive_type == 'LIFE':
-                if mode in B_modes:
-                    c_max_health = c_max_health + int((c_card_passive / 200) * t_health)
-                else:
-                    c_max_health = c_max_health + int((c_card_passive / 100) * t_health)
-            elif c_card_passive_type == 'DRAIN':
-                t_stamina = t_stamina - int(c_card_passive)
-                c_stamina = c_stamina + int(c_card_passive)
-            elif c_card_passive_type == 'FLOG':
-                c_attack = c_attack + int((c_card_passive / 100) * t_attack)
-                t_attack = t_attack - int((c_card_passive / 100) * t_attack)
-            elif c_card_passive_type == 'WITHER':
-                c_defense = c_defense + int((c_card_passive / 100) * t_defense)
-                t_defense = t_defense - int((c_card_passive / 100) * t_defense)
-            elif c_card_passive_type == 'RAGE':
-                c_attack = c_attack + int(((c_card_passive / 100) * c_defense))
-                c_defense = c_defense - int(((c_card_passive / 100) * c_attack))
-            elif c_card_passive_type == 'BRACE':
-                c_defense = c_defense + int(((c_card_passive / 100) * c_attack))
-                c_attack = c_attack - int(((c_card_passive / 100) * c_defense))
-            elif c_card_passive_type == 'BZRK':
-                c_attack = c_attack + int(((c_card_passive / 100) * c_health))
-                c_health = c_health - int(((c_card_passive / 100) * c_health))
-            elif c_card_passive_type == 'CRYSTAL':
-                c_defense = c_defense + int(((c_card_passive / 100) * c_health))
-                c_health = c_health - int(((c_card_passive / 100) * c_health))
-            elif c_card_passive_type == 'GROWTH':
-                c_attack = c_attack + int(((c_card_passive / 100) * c_attack))
-                c_defense = c_defense + int(((c_card_passive / 100) * c_defense))
-                c_max_health = c_max_health - int(((c_card_passive / 100) * c_max_health))
-                # c_health = c_health - int(((c_card_passive / 100) * c_max_health))
-            elif c_card_passive_type == 'STANCE':
-                tempattack = c_attack + c_card_passive
-                c_attack = c_defense + c_card_passive
-                c_defense = tempattack
-            elif c_card_passive_type == 'CONFUSE':
-                tempattack = t_attack - c_card_passive
-                t_attack = t_defense - c_card_passive
-                t_defense = tempattack
-            elif c_card_passive_type == 'BLINK':
-                c_stamina = c_stamina - c_card_passive
-                t_stamina = t_stamina + c_card_passive
-            elif c_card_passive_type == 'SLOW':
-                tempstam = t_stamina + o_card_passive
-                c_stamina = c_stamina - (2 * c_card_passive)
-                t_stamina = c_stamina
-                o_stamina = tempstam
-            elif c_card_passive_type == 'HASTE':
-                tempstam = t_stamina - c_card_passive
-                c_stamina = c_stamina + (2 * c_card_passive)
-                t_stamina = c_stamina
-                c_stamina = tempstam
-            elif c_card_passive_type == 'SOULCHAIN':
-                c_stamina = c_card_passive
-                t_stamina = c_card_passive
-            elif c_card_passive_type == 'FEAR':
-                if c_universe == "Chainsawman":
-                    c_max_health = c_max_health - int((c_card_passive / 150) * c_max_health)
-                    t_attack = t_attack - int((c_card_passive / 100) * t_attack)
-                    t_defense = t_defense - int((c_card_passive / 100) * t_defense)
-                else:
-                    c_max_health = c_max_health - int((c_card_passive / 100) * c_max_health)
-                    t_attack = t_attack - int((c_card_passive / 100) * t_attack)
-                    t_defense = t_defense - int((c_card_passive / 100) * t_defense)
-            elif c_card_passive_type == 'GAMBLE':
-                if mode in B_modes:
-                    c_health = c_card_passive
-                    o_health = c_card_passive
-                    t_health = c_card_passive * 3
-                elif mode in D_modes:
-                    c_health = c_card_passive
-                    o_health = c_card_passive
-                    t_health = c_card_passive * 2
-                else:
-                    c_health = c_card_passive
-                    o_health = c_card_passive
-                    t_health = c_card_passive
-
                     # Title Passive
             c_title_passive_type = list(c_title_passive.keys())[0]
             c_title_passive_value = list(c_title_passive.values())[0]
@@ -4784,92 +4725,6 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         # Player 1 Card Passive
         o_card_passive_type = list(o_passive.values())[1]
         o_card_passive = list(o_passive.values())[0]
-
-        if o_card_passive_type == 'ATK':
-            o_attack = o_attack + int((o_card_passive / 100) * o_attack)
-        elif o_card_passive_type == 'DEF':
-            o_defense = o_defense + int((o_card_passive / 100) * o_defense)
-        elif o_card_passive_type == 'STAM':
-            o_stamina = o_stamina + int(o_card_passive)
-        elif o_card_passive_type == 'HLT':
-            o_max_health = o_max_health + int(o_card_passive)
-            o_health = o_health + int(o_card_passive)
-        elif o_card_passive_type == 'LIFE':
-            if mode in B_modes:
-                o_max_health = o_max_health + int((o_card_passive / 200) * t_health)
-            else:
-                o_max_health = o_max_health + int((o_card_passive / 100) * t_health)
-        elif o_card_passive_type == 'DRAIN':
-            o_stamina = o_stamina + int(o_card_passive)
-            t_stamina = t_stamina - int(o_card_passive)
-        elif o_card_passive_type == 'FLOG':
-            o_attack = o_attack + int((o_card_passive / 100) * t_attack)
-            t_attack = t_attack - int((o_card_passive / 100) * t_attack)
-        elif o_card_passive_type == 'WITHER':
-            o_defense = o_defense + int((o_card_passive / 100) * t_defense)
-            t_defense = t_defense - int((o_card_passive / 100) * t_defense)
-        elif o_card_passive_type == 'RAGE':
-            o_attack = o_attack + int(((o_card_passive / 100) * o_defense))
-            o_defense = o_defense - int(((o_card_passive / 100) * o_attack))
-        elif o_card_passive_type == 'BRACE':
-            o_defense = o_defense + int(((o_card_passive / 100) * o_attack))
-            o_attack = o_attack - int(((o_card_passive / 100) * o_defense))
-        elif o_card_passive_type == 'BZRK':
-            o_attack = o_attack + int(((o_card_passive / 100) * o_health))
-            o_health = o_health - int(((o_card_passive / 100) * o_health))
-        elif o_card_passive_type == 'CRYSTAL':
-            o_defense = o_defense + int(((o_card_passive / 100) * o_health))
-            o_health = o_health - int(((o_card_passive / 100) * o_health))
-        elif o_card_passive_type == 'GROWTH':
-            o_attack = o_attack + int(((o_card_passive / 100) * o_attack))
-            o_defense = o_defense + int(((o_card_passive / 100) * o_defense))
-            o_max_health = o_max_health - int(((o_card_passive / 100) * o_max_health))
-            # o_health = o_health - int(((o_card_passive / 100) * o_max_health))
-        elif o_card_passive_type == 'STANCE':
-            tempattack = o_attack + o_card_passive
-            o_attack = o_defense + o_card_passive
-            o_defense = tempattack
-        elif o_card_passive_type == 'CONFUSE':
-            tempattack = t_attack - o_card_passive
-            t_attack = t_defense - o_card_passive
-            t_defense = tempattack
-        elif o_card_passive_type == 'BLINK':
-            o_stamina = o_stamina - o_card_passive
-            t_stamina = t_stamina + o_card_passive
-        elif o_card_passive_type == 'SLOW':
-            tempstam = t_stamina + o_card_passive
-            o_stamina = o_stamina - (2 * o_card_passive)
-            t_stamina = o_stamina
-            o_stamina = tempstam
-        elif o_card_passive_type == 'HASTE':
-            tempstam = t_stamina - o_card_passive
-            o_stamina = o_stamina + (2 * o_card_passive)
-            t_stamina = o_stamina
-            o_stamina = tempstam
-        elif o_card_passive_type == 'SOULCHAIN':
-            o_stamina = o_card_passive
-            t_stamina = o_card_passive
-        elif o_card_passive_type == 'FEAR':
-            if o_universe == "Chainsawman":
-                o_max_health = o_max_health - int((o_card_passive / 150) * o_max_health)
-                t_attack = t_attack - int((o_card_passive / 100) * t_attack)
-                t_defense = t_defense - int((o_card_passive / 100) * t_defense)
-            else:
-                o_max_health = o_max_health - int((o_card_passive / 100) * o_max_health)
-                t_attack = t_attack - int((o_card_passive / 100) * t_attack)
-                t_defense = t_defense - int((o_card_passive / 100) * t_defense)
-        elif o_card_passive_type == 'GAMBLE':
-            if mode in B_modes:
-                o_health = o_card_passive
-                t_health = o_card_passive * 3
-            elif mode in D_modes:
-                o_health = o_card_passive
-                t_health = o_card_passive * 2
-            else:
-                o_health = o_card_passive
-                t_health = o_card_passive
-            if companion:
-                c_health = o_card_passive
 
                 # Title Passive
         o_title_passive_type = list(o_title_passive.keys())[0]
@@ -4973,106 +4828,6 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         t_card_passive_type = list(t_passive.values())[1]
         t_card_passive = list(t_passive.values())[0]
 
-        if t_card_passive_type == 'ATK':
-            t_attack = t_attack + int((t_card_passive / 100) * t_attack)
-        elif t_card_passive_type == 'DEF':
-            t_defense = t_defense + int((t_card_passive / 100) * t_defense)
-        elif t_card_passive_type == 'STAM':
-            t_stamina = t_stamina + int(t_card_passive)
-        elif t_card_passive_type == 'HLT':
-            t_max_health = t_max_health + int(t_card_passive)
-            t_health = t_health + int(t_card_passive)
-        elif t_card_passive_type == 'LIFE':
-            if mode in B_modes:
-                t_max_health = t_max_health + int((t_card_passive / 200) * o_health)
-            else:
-                t_max_health = t_max_health + int((t_card_passive / 100) * o_health)
-        elif t_card_passive_type == 'DRAIN':
-            if companion:
-                c_stamina = c_stamina - int(t_card_passive)
-            o_stamina = o_stamina - int(t_card_passive)
-            t_stamina = t_stamina + int(t_card_passive)
-        elif t_card_passive_type == 'FLOG':
-            t_attack = t_attack + int((t_card_passive / 100) * o_attack)
-            o_attack = o_attack - int((t_card_passive / 100) * o_attack)
-            if companion:
-                c_attack = c_attack - int((t_card_passive / 100) * c_attack)
-        elif t_card_passive_type == 'WITHER':
-            t_defense = t_defense + int((t_card_passive / 100) * o_defense)
-            o_defense = o_defense - int((t_card_passive / 100) * o_defense)
-            if companion:
-                c_defense = c_defense - int((t_card_passive / 100) * c_defense)
-        elif t_card_passive_type == 'RAGE':
-            t_attack = t_attack + int((t_card_passive / 100) * t_defense)
-            t_defense = t_defense - int((t_card_passive / 100) * t_attack)
-        elif t_card_passive_type == 'BRACE':
-            t_defense = t_defense + int((t_card_passive / 100) * t_attack)
-            t_attack = t_attack - int((t_card_passive / 100) * t_defense)
-        elif t_card_passive_type == 'BZRK':
-            t_attack = t_attack + int(((t_card_passive / 100) * t_health))
-            t_health = t_health - int(((t_card_passive / 100) * t_health))
-        elif t_card_passive_type == 'CRYSTAL':
-            t_defense = t_defense + int((t_card_passive / 100) * t_health)
-            t_health = t_health - int((t_card_passive / 100) * t_health)
-        elif t_card_passive_type == 'GROWTH':
-            t_attack = t_attack + int((t_card_passive / 100) * t_attack)
-            t_defense = t_defense + int((t_card_passive / 100) * t_defense)
-            t_max_health = t_max_health - int(((t_card_passive / 100) * t_max_health))
-            # t_health = t_health - int(((t_card_passive / 100) * t_health))
-        elif t_card_passive_type == 'STANCE':
-            tempattack = t_attack + t_card_passive
-            t_attack = t_defense + t_card_passive
-            t_defense = tempattack
-        elif t_card_passive_type == 'CONFUSE':
-            tempattack = o_attack - t_card_passive
-            o_attack = o_defense - t_card_passive
-            o_defense = tempattack
-        elif t_card_passive_type == 'BLINK':
-            t_stamina = t_stamina - t_card_passive
-            o_stamina = o_stamina + t_card_passive
-        elif t_card_passive_type == 'SLOW':
-            tempstam = o_stamina + t_card_passive
-            t_stamina = t_stamina - (2 * t_card_passive)
-            o_stamina = t_stamina
-            t_stamina = tempstam
-        elif t_card_passive_type == 'HASTE':
-            tempstam = o_stamina - t_card_passive
-            t_stamina = t_stamina + (2 * t_card_passive)
-            o_stamina = t_stamina
-            t_stamina = tempstam
-        elif t_card_passive_type == 'SOULCHAIN':
-            t_stamina = t_card_passive
-            o_stamina = t_card_passive
-            if companion:
-                c_stamina = t_card_passive
-        elif t_card_passive_type == 'FEAR':
-            if t_universe == "Chainsawman":
-                t_max_health = t_max_health - int((t_card_passive / 150) * t_max_health)
-                o_attack = o_attack - int((t_card_passive / 100) * o_attack)
-                o_defense = o_defense - int((t_card_passive / 100) * o_defense)
-                if companion:
-                    c_attack = c_attack - int((t_card_passive / 100 * c_attack))
-                    c_defense = c_defense - int((t_card_passive / 100 * c_defense))
-            else:
-                t_max_health = t_max_health - int((t_card_passive / 100) * t_max_health)
-                o_attack = o_attack - int((t_card_passive / 100) * o_attack)
-                o_defense = o_defense - int((t_card_passive / 100) * o_defense)
-                if companion:
-                    c_attack = c_attack - int((t_card_passive / 100 * c_attack))
-                    c_defense = c_defense - int((t_card_passive / 100 * c_defense))
-        elif t_card_passive_type == 'GAMBLE':
-            if mode in B_modes:
-                o_health = t_card_passive
-                t_health = t_card_passive * 3
-            elif mode in D_modes:
-                o_health = t_card_passive
-                t_health = t_card_passive * 2
-            else:
-                o_health = t_card_passive
-                t_health = t_card_passive
-            if companion:
-                c_health = t_card_passive
-
         # Title Passive
         t_title_passive_type = list(t_title_passive.keys())[0]
         t_title_passive_value = list(t_title_passive.values())[0]
@@ -5110,20 +4865,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             tarm_siphon_active = True
             tsiphon_value = tarm_passive_value
         
-
-        if o['UNIVERSE'] == "Demon Slayer" and t_max_health >= o['HLT'] and o_card_passive_type != "GAMBLE" and o_title_passive_type != "GAMBLE" and t_card_passive_type != "GAMBLE" and t_title_passive_type != "GAMBLE":  # Demon Slayer Universal Trait
-            o_max_health = t_max_health
-            o_health = t_max_health
-
-        if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT'] and o_card_passive_type != "GAMBLE" and o_title_passive_type != "GAMBLE" and t_card_passive_type != "GAMBLE" and t_title_passive_type != "GAMBLE":  # Demon Slayer Universal Trait
-            t_max_health = o_max_health
-            t_health = o_max_health
-
         if companion:
-            if c['UNIVERSE'] == "Demon Slayer" and t_max_health >= c['HLT'] and o_card_passive_type != "GAMBLE" and o_title_passive_type != "GAMBLE" and t_card_passive_type != "GAMBLE" and t_title_passive_type != "GAMBLE" and c_card_passive_type != "GAMBLE" and c_title_passive_type != "GAMBLE":  # Demon Slayer Universal Trait
-                c_max_health = t_max_health
-                c_health = t_max_health
-
             if (carm_universe == c_universe) and (c_title_universe == c_universe):
                 c_attack = c_attack + 20
                 c_defense = c_defense + 20
@@ -5193,6 +4935,8 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         STATS = {
             'o_full_card_info': o,
             't_full_card_info': t,
+            'o_card_passive_type': o_card_passive_type,
+            't_card_passive_type': t_card_passive_type,
             'omove1_element': omove1_element,
             'omove2_element': omove2_element,
             'omove3_element': omove3_element,
@@ -5330,6 +5074,8 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
 
         if mode in pvp_modes:
             STATS = {
+                'o_card_passive_type': o_card_passive_type,
+                't_card_passive_type': t_card_passive_type,
                 'o_full_card_info': o,
                 't_full_card_info': t,
                 'omove1_element': omove1_element,
@@ -5472,6 +5218,8 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             }
         if mode == "RAID":
             STATS = {
+                'o_card_passive_type': o_card_passive_type,
+                't_card_passive_type': t_card_passive_type,
                 'o_full_card_info': o,
                 't_full_card_info': t,
                 'omove1_element': omove1_element,
@@ -5614,6 +5362,8 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             }
         if mode == "Boss":
             STATS = {
+                'o_card_passive_type': o_card_passive_type,
+                't_card_passive_type': t_card_passive_type,
                 'o_full_card_info': o,
                 't_full_card_info': t,
                 'omove1_element': omove1_element,
@@ -5766,6 +5516,9 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
 
         if mode == "CBoss":
             STATS = {
+                'o_card_passive_type': o_card_passive_type,
+                't_card_passive_type': t_card_passive_type,
+                'c_card_passive_type': c_card_passive_type,
                 'o_full_card_info': o,
                 'c_full_card_info': c,
                 't_full_card_info': t,
@@ -5988,6 +5741,9 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
 
         if mode in co_op_modes and mode != "CBoss":
             STATS = {
+                'o_card_passive_type': o_card_passive_type,
+                't_card_passive_type': t_card_passive_type,
+                'c_card_passive_type': c_card_passive_type,
                 'o_full_card_info': o,
                 'c_full_card_info': c,
                 't_full_card_info': t,
@@ -6772,7 +6528,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                 'message': str(ex),
                 'trace': trace
             }))
-            embedVar = discord.Embed(title=f"Unable to start boss fight. Seek support in the Anime VS+ support server https://discord.gg/cqP4M92", delete_after=30, colour=0xe91e63)
+            embedVar = discord.Embed(title=f"Unable to start boss fight. Seek support in the Anime 🆚+ support server https://discord.gg/cqP4M92", delete_after=30, colour=0xe91e63)
             await ctx.send(embed=embedVar)
             guild = self.bot.get_guild(main.guild_id)
             channel = guild.get_channel(main.guild_channel)
@@ -6960,6 +6716,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                  None, None, None, None, None, None, None, None)
             auto_battle = True
             difficulty = sowner['DIFFICULTY']
+            o_card_passive_type = stats['o_card_passive_type']
             battle_history_message_amount = sowner['BATTLE_HISTORY']
             o_full_card_info = stats['o_full_card_info']
             o_affinity_message = crown_utilities.set_affinities(o_full_card_info)
@@ -7037,6 +6794,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             o_block_used = stats['o_block_used']
             o_defend_used = stats['o_defend_used']
             o_final_stand = stats['o_final_stand']
+            o_card_tier = o_full_card_info['TIER']
 
             corruption_hlt_buff = 0
             corruption_atk_buff = 0
@@ -7069,7 +6827,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 t_basic_emoji = crown_utilities.set_emoji(tmove1_element)
                 t_super_emoji = crown_utilities.set_emoji(tmove2_element)
                 t_ultimate_emoji = crown_utilities.set_emoji(tmove3_element)
-
+                t_card_passive_type = stats['t_card_passive_type']
                 t_title_passive_value = stats['t_title_passive_value']
                 tpet_lvl = stats['tpet_lvl']
                 tpet_bond = stats['tpet_bond']
@@ -7134,7 +6892,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 t_block_used = stats['t_block_used']
                 t_defend_used = stats['t_defend_used']
                 t_final_stand = stats['t_final_stand']
+                t_card_tier = t_full_card_info['TIER']
             else:
+                t_card_passive_type = stats['t_card_passive_type']
                 tmove1_element = stats['tmove1_element']
                 tmove2_element = stats['tmove2_element']
                 tmove3_element = stats['tmove3_element']
@@ -7149,6 +6909,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 t_card = stats['t_card']
                 t_full_card_info = stats['t_full_card_info']
                 t_affinity_message = crown_utilities.set_affinities(t_full_card_info)
+                t_card_tier = t_full_card_info['TIER']
                 tcard_lvl = stats['tcard_lvl']
                 tcard_lvl_ap_buff = stats['tcard_lvl_ap_buff']
                 tarm = stats['tarm']
@@ -7238,6 +6999,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 c_max_health = 0
 
             if mode in co_op_modes:
+                c_card_passive_type = stats['c_card_passive_type']
                 c_full_card_info = stats['c_full_card_info']
                 c_affinity_message = crown_utilities.set_affinities(c_full_card_info)
                 cmove1_element = stats['cmove1_element']
@@ -7313,6 +7075,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 c_defend_used = stats['c_defend_used']
                 c_final_stand = stats['c_final_stand']
                 c_focus_count = 0
+                c_card_tier = c_full_card_info['TIER']
                 if c_universe == "Solo Leveling":
                     temp_tarm_shield_active = stats['tarm_shield_active']
                     temp_tshield_value = stats['tshield_value']
@@ -7546,16 +7309,16 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
             # if randomized_battle:
             #     private_channel = ctx.author
-            battle_ping_message = await private_channel.send(f"{ctx.author.mention}")
+            battle_ping_message = await private_channel.send(f"{ctx.author.mention} {user2.mention}")
             if mode not in PVP_MODES and mode not in B_modes and mode != "ABYSS" and mode not in RAID_MODES and mode not in co_op_modes:
-                embedVar = discord.Embed(title=f"✅ Confirm Start! ({currentopponent + 1}/{total_legends})", description=f"**{o_card}** VS **{t_card}**")
+                embedVar = discord.Embed(title=f"✅ Confirm Start! ({currentopponent + 1}/{total_legends})", description=f"**{o_card}** 🆚 **{t_card}**")
                 embedVar.add_field(name="__Your Affinities__", value=f"{o_affinity_message}")
                 embedVar.add_field(name="__Opponent Affinities__", value=f"{t_affinity_message}")
                 embedVar.set_image(url="attachment://image.png")
                 embedVar.set_thumbnail(url=ctx.author.avatar_url)
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card)
             if mode == "ABYSS":
-                embedVar = discord.Embed(title=f"🌑 Abyss Floor {universe['FLOOR']}\n✨ Confirm Start!  ({currentopponent + 1}/{total_legends})", description=f"**{o_card}** VS **{t_card}**")
+                embedVar = discord.Embed(title=f"🌑 Abyss Floor {universe['FLOOR']}\n✨ Confirm Start!  ({currentopponent + 1}/{total_legends})", description=f"**{o_card}** 🆚 **{t_card}**")
                 embedVar.add_field(name="__Your Affinities__", value=f"{o_affinity_message}")
                 embedVar.add_field(name="__Opponent Affinities__", value=f"{t_affinity_message}")
                 embedVar.set_image(url="attachment://image.png")
@@ -7563,7 +7326,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card)
             
             if mode in PVP_MODES and tutorial:
-                embedVar = discord.Embed(title=f"✅ Click Start Match to Begin the Tutorial!", description=f"You : **{o_card}** VS **{t_card}**")
+                embedVar = discord.Embed(title=f"✅ Click Start Match to Begin the Tutorial!", description=f"You : **{o_card}** 🆚 **{t_card}**")
                 embedVar.set_image(url="attachment://image.png")
                 embedVar.add_field(name="__Your Affinities__", value=f"{o_affinity_message}")
                 embedVar.add_field(name="__Opponent Affinities__", value=f"{t_affinity_message}")
@@ -7571,14 +7334,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card)
                 
             elif mode in PVP_MODES and tutorial == False:
-                embedVar = discord.Embed(title=f"✅ Confirm PVP Battle!", description=f"{user2.mention}\n**{o_card}** VS **{t_card}**")
+                embedVar = discord.Embed(title=f"✅ Confirm PVP Battle!", description=f"{user2.mention}\n**{o_card}** 🆚 **{t_card}**")
                 embedVar.set_thumbnail(url=ctx.author.avatar_url)
                 embedVar.add_field(name="__Your Affinities__", value=f"{o_affinity_message}")
                 embedVar.add_field(name="__Opponent Affinities__", value=f"{t_affinity_message}")
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row])      
                 
             elif mode in RAID_MODES:
-                embedVar = discord.Embed(title=f"✅ Confirm Raid Battle!", description=f"{ctx.author.mention}\n**{o_card}** VS **{t_card}**")
+                embedVar = discord.Embed(title=f"✅ Confirm Raid Battle!", description=f"{ctx.author.mention}\n**{o_card}** 🆚 **{t_card}**")
                 embedVar.set_image(url="attachment://image.png")
                 embedVar.add_field(name="__Your Affinities__", value=f"{o_affinity_message}")
                 embedVar.add_field(name="__Opponent Affinities__", value=f"{t_affinity_message}")
@@ -7586,7 +7349,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card)
             
             if mode in co_op_modes and mode not in ai_co_op_modes and mode not in B_modes:
-                embedVar = discord.Embed(title=f"✅ Confirm Co-Op Battle! ({currentopponent + 1}/{total_legends})", description=f"{ctx.author.mention}\n**{o_card}** & **{c_card}** VS **{t_card}**")
+                embedVar = discord.Embed(title=f"✅ Confirm Co-Op Battle! ({currentopponent + 1}/{total_legends})", description=f"{ctx.author.mention}\n**{o_card}** & **{c_card}** 🆚 **{t_card}**")
                 embedVar.set_image(url="attachment://image.png")
                 embedVar.add_field(name="__Your Affinities__", value=f"{o_affinity_message}")
                 embedVar.add_field(name="__Companion Affinities__", value=f"{c_affinity_message}")
@@ -7595,7 +7358,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card)
                 
             if mode in ai_co_op_modes:
-                embedVar = discord.Embed(title=f"✅ Confirm Duo Battle! ({currentopponent + 1}/{total_legends})", description=f"{ctx.author.mention}\n**{o_card}** & **{c_card}** VS **{t_card}**")
+                embedVar = discord.Embed(title=f"✅ Confirm Duo Battle! ({currentopponent + 1}/{total_legends})", description=f"{ctx.author.mention}\n**{o_card}** & **{c_card}** 🆚 **{t_card}**")
                 embedVar.set_image(url="attachment://image.png")
                 embedVar.add_field(name="__Your Affinities__", value=f"{o_affinity_message}")
                 embedVar.add_field(name="__Companion Affinities__", value=f"{c_affinity_message}")
@@ -7604,7 +7367,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card) 
                 
             if mode in B_modes and mode not in co_op_modes:
-                embedVar = discord.Embed(title=f"✅ Boss Fight!", description=f"{ctx.author.mention}\n**{o_card}** VS **{t_card}**")
+                embedVar = discord.Embed(title=f"✅ Boss Fight!", description=f"{ctx.author.mention}\n**{o_card}** 🆚 **{t_card}**")
                 embedVar.set_image(url="attachment://image.png")
                 embedVar.add_field(name="__Your Affinities__", value=f"{o_affinity_message}")
                 embedVar.add_field(name="__Opponent Affinities__", value=f"{t_affinity_message}")
@@ -7612,7 +7375,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 battle_msg = await private_channel.send(embed=embedVar, components=[start_tales_buttons_action_row], file=player_2_card)
                 
             if mode in B_modes and mode in co_op_modes:
-                embedVar = discord.Embed(title=f"✅ Boss Fight!", description=f"{ctx.author.mention}\n**{o_card}** & **{c_card}** VS **{t_card}**")
+                embedVar = discord.Embed(title=f"✅ Boss Fight!", description=f"{ctx.author.mention}\n**{o_card}** & **{c_card}** 🆚 **{t_card}**")
                 embedVar.set_image(url="attachment://image.png")
                 embedVar.add_field(name="__Your Affinities__", value=f"{o_affinity_message}")
                 embedVar.add_field(name="__Companion Affinities__", value=f"{c_affinity_message}")
@@ -7755,6 +7518,70 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     if o_title_passive_type == "BLINK":
                                         o_stamina = o_stamina - o_title_passive_value
                                         t_stamina = t_stamina + o_title_passive_value
+                                if o_card_passive_type:
+                                    o_value_for_passive = o_card_tier * .5
+                                    o_flat_for_passive = 10 * (o_card_tier * .5)
+                                    o_stam_for_passive = 5 * (o_card_tier * .5)
+                                    if o_card_passive_type == "HLT":
+                                        o_health = round(round(o_health + ((o_value_for_passive / 100) * o_health)))
+                                    if o_card_passive_type == "LIFE":
+                                        if o_max_health != o_health:
+                                            t_health = round(t_health - ((o_value_for_passive / 100) * t_health))
+                                            o_health = round(o_health + ((o_value_for_passive / 100) * t_health))
+                                    if o_card_passive_type == "ATK":
+                                        o_attack = o_attack + o_flat_for_passive
+                                    if o_card_passive_type == "DEF":
+                                        o_defense = o_defense + o_flat_for_passive
+                                    if o_card_passive_type == "STAM":
+                                        if o_stamina > 15:
+                                            o_stamina = o_stamina + o_stam_for_passive
+                                    if o_card_passive_type == "DRAIN":
+                                        if o_stamina > 15:
+                                            t_stamina = t_stamina - o_stam_for_passive
+                                            o_stamina = o_stamina + o_stam_for_passive
+                                    if o_card_passive_type == "FLOG":
+                                        t_attack = round(t_attack - ((o_value_for_passive / 100) * t_attack))
+                                        o_attack = round(o_attack + ((o_value_for_passive / 100) * t_attack))
+                                    if o_card_passive_type == "WITHER":
+                                        t_defense = round(t_defense - ((o_value_for_passive / 100) * t_defense))
+                                        o_defense = round(o_defense + ((o_value_for_passive / 100) * t_defense))
+                                    if o_card_passive_type == "RAGE":
+                                        o_defense = round(o_defense - ((o_value_for_passive / 100) * o_defense))
+                                        o_attack = round(o_attack + ((o_value_for_passive / 100) * o_defense))
+                                    if o_card_passive_type == "BRACE":
+                                        o_defense = round(o_defense + ((o_value_for_passive / 100) * o_attack))
+                                        o_attack = round(o_attack - ((o_value_for_passive / 100) * o_attack))
+                                    if o_card_passive_type == "BZRK":
+                                        o_health = round(o_health - ((o_value_for_passive / 100) * o_health))
+                                        o_attack = round(o_attack + ((o_value_for_passive / 100) * o_health))
+                                    if o_card_passive_type == "CRYSTAL":
+                                        o_health = round(o_health - ((o_value_for_passive / 100) * o_health))
+                                        o_defense = round(o_defense + ((o_value_for_passive / 100) * o_health))
+                                    if o_card_passive_type == "FEAR":
+                                        o_health = o_health - o_flat_for_passive
+                                        t_defense = t_defense - (o_flat_for_passive / 2)
+                                        t_attack = t_attack - (o_flat_for_passive / 2)
+                                    if o_card_passive_type == "GROWTH":
+                                        o_health = o_health - o_flat_for_passive
+                                        o_defense = o_defense + (o_flat_for_passive / 2)
+                                        o_attack = o_attack + (o_flat_for_passive / 2)
+                                    if o_card_passive_type == "SLOW":
+                                        if turn_total != 0:
+                                            turn_total = turn_total - 1
+                                    if o_card_passive_type == "HASTE":
+                                        turn_total = turn_total + 1
+                                    if o_card_passive_type == "STANCE":
+                                        tempattack = o_attack + o_flat_for_passive
+                                        o_attack = o_defense
+                                        o_defense = tempattack
+                                    if o_card_passive_type == "CONFUSE":
+                                        tempattack = t_attack - o_flat_for_passive
+                                        t_attack = t_defense
+                                        t_defense = tempattack
+                                    if o_card_passive_type == "BLINK":
+                                        o_stamina = o_stamina - o_stam_for_passive
+                                        t_stamina = t_stamina + o_stam_for_passive
+
 
                                 if o_block_used == True:
                                     o_block_used = False
@@ -7785,7 +7612,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 # Tutorial Instructions
                                 if turn_total == 0:
                                     if botActive:
-                                        embedVar = discord.Embed(title=f"Welcome to **Anime VS+**!",
+                                        embedVar = discord.Embed(title=f"Welcome to **Anime 🆚+**!",
                                                                 description=f"Follow the instructions to learn how to play the Game!",
                                                                 colour=0xe91e63)
                                         embedVar.add_field(name="**How do I play?**",
@@ -7809,16 +7636,16 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         await private_channel.send(embed=embedVar)
                                         await asyncio.sleep(2)
                                         embedVar2 = discord.Embed(
-                                            title=f"**{o_card}**  VS **{t_card}** Shield Defense has begun!",
+                                            title=f"**{o_card}**  🆚 **{t_card}** Shield Defense has begun!",
                                             description=f"{o_card} Says:\n{o_greeting_description}", colour=0xe91e63)
                                         await private_channel.send(embed=embedVar2)
                                     else:
                                         # await ctx.send(f"{user1.mention}{user2.mention}")
                                         embedVar = discord.Embed(
-                                            title=f"**{o_card}** & {opet_name} VS **{t_card}** & {tpet_name} Ranked Battle has begun!",
+                                            title=f"**{o_card}** & {opet_name} 🆚 **{t_card}** & {tpet_name} Ranked Battle has begun!",
                                             description=f"{o_card} Says:\n{o_greeting_description}", colour=0xe91e63)
                                         
-                                        previous_moves.append(f"(**{turn_total}**) **{o_card}** & {opet_name} VS **{t_card}** & {tpet_name} Ranked Battle has begun!")
+                                        previous_moves.append(f"(**{turn_total}**) **{o_card}** & {opet_name} 🆚 **{t_card}** & {tpet_name} Ranked Battle has begun!")
                                 if o_health <= (o_max_health * .25):
                                     embed_color_o = 0xe74c3c
                                     if o_chainsaw == True:
@@ -9440,7 +9267,69 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     if t_title_passive_type == "BLINK":
                                         o_stamina = o_stamina + t_title_passive_value
                                         t_stamina = t_stamina - t_title_passive_value
-
+                                if t_card_passive_type:
+                                    t_value_for_passive = t_card_tier * .5
+                                    t_flao_for_passive = 10 * (t_card_tier * .5)
+                                    t_stam_for_passive = 5 * (t_card_tier * .5)
+                                    if t_card_passive_type == "HLT":
+                                        t_health = round(round(t_health + ((t_value_for_passive / 100) * t_health)))
+                                    if t_card_passive_type == "LIFE":
+                                        if t_mao_health != t_health:
+                                            o_health = round(o_health - ((t_value_for_passive / 100) * o_health))
+                                            t_health = round(t_health + ((t_value_for_passive / 100) * o_health))
+                                    if t_card_passive_type == "ATK":
+                                        t_attack = t_attack + t_flao_for_passive
+                                    if t_card_passive_type == "DEF":
+                                        t_defense = t_defense + t_flao_for_passive
+                                    if t_card_passive_type == "STAM":
+                                        if t_stamina > 15:
+                                            t_stamina = t_stamina + t_stam_for_passive
+                                    if t_card_passive_type == "DRAIN":
+                                        if t_stamina > 15:
+                                            o_stamina = o_stamina - t_stam_for_passive
+                                            t_stamina = t_stamina + t_stam_for_passive
+                                    if t_card_passive_type == "FLOG":
+                                        o_attack = round(o_attack - ((t_value_for_passive / 100) * o_attack))
+                                        t_attack = round(t_attack + ((t_value_for_passive / 100) * o_attack))
+                                    if t_card_passive_type == "WITHER":
+                                        o_defense = round(o_defense - ((t_value_for_passive / 100) * o_defense))
+                                        t_defense = round(t_defense + ((t_value_for_passive / 100) * o_defense))
+                                    if t_card_passive_type == "RAGE":
+                                        t_defense = round(t_defense - ((t_value_for_passive / 100) * t_defense))
+                                        t_attack = round(t_attack + ((t_value_for_passive / 100) * t_defense))
+                                    if t_card_passive_type == "BRACE":
+                                        t_defense = round(t_defense + ((t_value_for_passive / 100) * t_attack))
+                                        t_attack = round(t_attack - ((t_value_for_passive / 100) * t_attack))
+                                    if t_card_passive_type == "BZRK":
+                                        t_health = round(t_health - ((t_value_for_passive / 100) * t_health))
+                                        t_attack = round(t_attack + ((t_value_for_passive / 100) * t_health))
+                                    if t_card_passive_type == "CRYSTAL":
+                                        t_health = round(t_health - ((t_value_for_passive / 100) * t_health))
+                                        t_defense = round(t_defense + ((t_value_for_passive / 100) * t_health))
+                                    if t_card_passive_type == "FEAR":
+                                        t_health = t_health - t_flao_for_passive
+                                        o_defense = o_defense - (t_flao_for_passive / 2)
+                                        o_attack = o_attack - (t_flao_for_passive / 2)
+                                    if t_card_passive_type == "GROWTH":
+                                        t_health = t_health - t_flao_for_passive
+                                        t_defense = t_defense + (t_flao_for_passive / 2)
+                                        t_attack = t_attack + (t_flao_for_passive / 2)
+                                    if t_card_passive_type == "SLOW":
+                                        if turn_total != 0:
+                                            turn_total = turn_total - 1
+                                    if t_card_passive_type == "HASTE":
+                                        turn_total = turn_total + 1
+                                    if t_card_passive_type == "STANCE":
+                                        tempattack = t_attack + t_flao_for_passive
+                                        t_attack = t_defense
+                                        t_defense = tempattack
+                                    if t_card_passive_type == "CONFUSE":
+                                        tempattack = o_attack - t_flao_for_passive
+                                        o_attack = o_defense
+                                        o_defense = tempattack
+                                    if t_card_passive_type == "BLINK":
+                                        t_stamina = t_stamina - t_stam_for_passive
+                                        o_stamina = o_stamina + t_stam_for_passive
                                 if o_universe == "Death Note" and turn_total == 0:
                                     embedVar = discord.Embed(title=f"{o_card} Scheduled Death 📓",
                                                             description=f"**{o_card} says**\nYou will die in 50  turns...",
@@ -9467,7 +9356,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     t_health = t_max_health
                                 if turn_total == 0:
                                     if botActive:
-                                        embedVar = discord.Embed(title=f"Welcome to **Anime VS+**!",
+                                        embedVar = discord.Embed(title=f"Welcome to **Anime 🆚+**!",
                                                                 description=f"Follow the instructions to learn how to play the Game!",
                                                                 colour=0xe91e63)
                                         embedVar.add_field(name="**How do I play?**",
@@ -9489,7 +9378,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         await private_channel.send(embed=embedVar)
                                         await asyncio.sleep(2)
                                         embedVar2 = discord.Embed(
-                                            title=f"**{o_card}**  VS **{t_card}** Shield Defense has begun!",
+                                            title=f"**{o_card}**  🆚 **{t_card}** Shield Defense has begun!",
                                             description=f"{o_card} Says:\n{o_greeting_description}", colour=0xe91e63)
                                         await private_channel.send(embed=embedVar2)
                                     else:
@@ -12043,6 +11932,69 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     if o_title_passive_type == "BLINK":
                                         o_stamina = o_stamina - o_title_passive_value
                                         t_stamina = t_stamina + o_title_passive_value
+                                if o_card_passive_type:
+                                    o_value_for_passive = o_card_tier * .5
+                                    o_flat_for_passive = 10 * (o_card_tier * .5)
+                                    o_stam_for_passive = 5 * (o_card_tier * .5)
+                                    if o_card_passive_type == "HLT":
+                                        o_health = round(round(o_health + ((o_value_for_passive / 100) * o_health)))
+                                    if o_card_passive_type == "LIFE":
+                                        if o_max_health != o_health:
+                                            t_health = round(t_health - ((o_value_for_passive / 100) * t_health))
+                                            o_health = round(o_health + ((o_value_for_passive / 100) * t_health))
+                                    if o_card_passive_type == "ATK":
+                                        o_attack = o_attack + o_flat_for_passive
+                                    if o_card_passive_type == "DEF":
+                                        o_defense = o_defense + o_flat_for_passive
+                                    if o_card_passive_type == "STAM":
+                                        if o_stamina > 15:
+                                            o_stamina = o_stamina + o_stam_for_passive
+                                    if o_card_passive_type == "DRAIN":
+                                        if o_stamina > 15:
+                                            t_stamina = t_stamina - o_stam_for_passive
+                                            o_stamina = o_stamina + o_stam_for_passive
+                                    if o_card_passive_type == "FLOG":
+                                        t_attack = round(t_attack - ((o_value_for_passive / 100) * t_attack))
+                                        o_attack = round(o_attack + ((o_value_for_passive / 100) * t_attack))
+                                    if o_card_passive_type == "WITHER":
+                                        t_defense = round(t_defense - ((o_value_for_passive / 100) * t_defense))
+                                        o_defense = round(o_defense + ((o_value_for_passive / 100) * t_defense))
+                                    if o_card_passive_type == "RAGE":
+                                        o_defense = round(o_defense - ((o_value_for_passive / 100) * o_defense))
+                                        o_attack = round(o_attack + ((o_value_for_passive / 100) * o_defense))
+                                    if o_card_passive_type == "BRACE":
+                                        o_defense = round(o_defense + ((o_value_for_passive / 100) * o_attack))
+                                        o_attack = round(o_attack - ((o_value_for_passive / 100) * o_attack))
+                                    if o_card_passive_type == "BZRK":
+                                        o_health = round(o_health - ((o_value_for_passive / 100) * o_health))
+                                        o_attack = round(o_attack + ((o_value_for_passive / 100) * o_health))
+                                    if o_card_passive_type == "CRYSTAL":
+                                        o_health = round(o_health - ((o_value_for_passive / 100) * o_health))
+                                        o_defense = round(o_defense + ((o_value_for_passive / 100) * o_health))
+                                    if o_card_passive_type == "FEAR":
+                                        o_health = o_health - o_flat_for_passive
+                                        t_defense = t_defense - (o_flat_for_passive / 2)
+                                        t_attack = t_attack - (o_flat_for_passive / 2)
+                                    if o_card_passive_type == "GROWTH":
+                                        o_health = o_health - o_flat_for_passive
+                                        o_defense = o_defense + (o_flat_for_passive / 2)
+                                        o_attack = o_attack + (o_flat_for_passive / 2)
+                                    if o_card_passive_type == "SLOW":
+                                        if turn_total != 0:
+                                            turn_total = turn_total - 1
+                                    if o_card_passive_type == "HASTE":
+                                        turn_total = turn_total + 1
+                                    if o_card_passive_type == "STANCE":
+                                        tempattack = o_attack + o_flat_for_passive
+                                        o_attack = o_defense
+                                        o_defense = tempattack
+                                    if o_card_passive_type == "CONFUSE":
+                                        tempattack = t_attack - o_flat_for_passive
+                                        t_attack = t_defense
+                                        t_defense = tempattack
+                                    if o_card_passive_type == "BLINK":
+                                        o_stamina = o_stamina - o_stam_for_passive
+                                        t_stamina = t_stamina + o_stam_for_passive
 
                                 if o_block_used == True:
                                     o_defense = int(o_defense / 2)
@@ -12100,23 +12052,23 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         # await asyncio.sleep(2)
                                     elif mode in co_op_modes and mode not in B_modes:
                                         embedVar = discord.Embed(
-                                            title=f"**{o_card}** & **{c_card}** VS **{t_card}** has begun! {lineup}\n{t_universe} {mode} Battle",
+                                            title=f"**{o_card}** & **{c_card}** 🆚 **{t_card}** has begun! {lineup}\n{t_universe} {mode} Battle",
                                             description=f"`{o_card} Says:`\n{o_greeting_description}", colour=0xe91e63)
-                                        title = f"**{o_card}** & **{c_card}** VS **{t_card}** has begun! {lineup}\n{t_universe} {mode} Battle"
+                                        title = f"**{o_card}** & **{c_card}** 🆚 **{t_card}** has begun! {lineup}\n{t_universe} {mode} Battle"
                                     elif mode in AUTO_BATTLE_modes:
                                         embedVar = discord.Embed(
-                                            title=f"**{o_card}** VS **{t_card}** has begun! {lineup}\n{t_universe} {mode} Battle\nThe Result of this Automated Battle will be reported soon.",
+                                            title=f"**{o_card}** 🆚 **{t_card}** has begun! {lineup}\n{t_universe} {mode} Battle\nThe Result of this Automated Battle will be reported soon.",
                                             colour=0xe91e63)
                                     elif randomized_battle:
                                         embedVar = discord.Embed(
-                                            title=f"**{o_card}** VS **{t_card}** has begun!\n{t_universe} {mode} Battle",
+                                            title=f"**{o_card}** 🆚 **{t_card}** has begun!\n{t_universe} {mode} Battle",
                                             description=f"`{o_card} Says:`\n{o_greeting_description}", colour=0xe91e63)
-                                        title = f"**{o_card}** VS **{t_card}** has begun!\n{t_universe} {mode} Battle"
+                                        title = f"**{o_card}** 🆚 **{t_card}** has begun!\n{t_universe} {mode} Battle"
                                     else:
                                         embedVar = discord.Embed(
-                                            title=f"**{o_card}** VS **{t_card}** has begun!\n{lineup}\n{t_universe} {mode} Battle",
+                                            title=f"**{o_card}** 🆚 **{t_card}** has begun!\n{lineup}\n{t_universe} {mode} Battle",
                                             description=f"`{o_card} Says:`\n{o_greeting_description}", colour=0xe91e63)
-                                        title = f"**{o_card}** VS **{t_card}** has begun!\n{lineup}\n{t_universe} {mode} Battle"
+                                        title = f"**{o_card}** 🆚 **{t_card}** has begun!\n{lineup}\n{t_universe} {mode} Battle"
 
                                     
 
@@ -15249,7 +15201,69 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     if t_title_passive_type == "BLINK":
                                         o_stamina = o_stamina + t_title_passive_value
                                         t_stamina = t_stamina - t_title_passive_value
-
+                                if t_card_passive_type:
+                                    t_value_for_passive = t_card_tier * .5
+                                    t_flao_for_passive = 10 * (t_card_tier * .5)
+                                    t_stam_for_passive = 5 * (t_card_tier * .5)
+                                    if t_card_passive_type == "HLT":
+                                        t_health = round(round(t_health + ((t_value_for_passive / 100) * t_health)))
+                                    if t_card_passive_type == "LIFE":
+                                        if t_mao_health != t_health:
+                                            o_health = round(o_health - ((t_value_for_passive / 100) * o_health))
+                                            t_health = round(t_health + ((t_value_for_passive / 100) * o_health))
+                                    if t_card_passive_type == "ATK":
+                                        t_attack = t_attack + t_flao_for_passive
+                                    if t_card_passive_type == "DEF":
+                                        t_defense = t_defense + t_flao_for_passive
+                                    if t_card_passive_type == "STAM":
+                                        if t_stamina > 15:
+                                            t_stamina = t_stamina + t_stam_for_passive
+                                    if t_card_passive_type == "DRAIN":
+                                        if t_stamina > 15:
+                                            o_stamina = o_stamina - t_stam_for_passive
+                                            t_stamina = t_stamina + t_stam_for_passive
+                                    if t_card_passive_type == "FLOG":
+                                        o_attack = round(o_attack - ((t_value_for_passive / 100) * o_attack))
+                                        t_attack = round(t_attack + ((t_value_for_passive / 100) * o_attack))
+                                    if t_card_passive_type == "WITHER":
+                                        o_defense = round(o_defense - ((t_value_for_passive / 100) * o_defense))
+                                        t_defense = round(t_defense + ((t_value_for_passive / 100) * o_defense))
+                                    if t_card_passive_type == "RAGE":
+                                        t_defense = round(t_defense - ((t_value_for_passive / 100) * t_defense))
+                                        t_attack = round(t_attack + ((t_value_for_passive / 100) * t_defense))
+                                    if t_card_passive_type == "BRACE":
+                                        t_defense = round(t_defense + ((t_value_for_passive / 100) * t_attack))
+                                        t_attack = round(t_attack - ((t_value_for_passive / 100) * t_attack))
+                                    if t_card_passive_type == "BZRK":
+                                        t_health = round(t_health - ((t_value_for_passive / 100) * t_health))
+                                        t_attack = round(t_attack + ((t_value_for_passive / 100) * t_health))
+                                    if t_card_passive_type == "CRYSTAL":
+                                        t_health = round(t_health - ((t_value_for_passive / 100) * t_health))
+                                        t_defense = round(t_defense + ((t_value_for_passive / 100) * t_health))
+                                    if t_card_passive_type == "FEAR":
+                                        t_health = t_health - t_flao_for_passive
+                                        o_defense = o_defense - (t_flao_for_passive / 2)
+                                        o_attack = o_attack - (t_flao_for_passive / 2)
+                                    if t_card_passive_type == "GROWTH":
+                                        t_health = t_health - t_flao_for_passive
+                                        t_defense = t_defense + (t_flao_for_passive / 2)
+                                        t_attack = t_attack + (t_flao_for_passive / 2)
+                                    if t_card_passive_type == "SLOW":
+                                        if turn_total != 0:
+                                            turn_total = turn_total - 1
+                                    if t_card_passive_type == "HASTE":
+                                        turn_total = turn_total + 1
+                                    if t_card_passive_type == "STANCE":
+                                        tempattack = t_attack + t_flao_for_passive
+                                        t_attack = t_defense
+                                        t_defense = tempattack
+                                    if t_card_passive_type == "CONFUSE":
+                                        tempattack = o_attack - t_flao_for_passive
+                                        o_attack = o_defense
+                                        o_defense = tempattack
+                                    if t_card_passive_type == "BLINK":
+                                        t_stamina = t_stamina - t_stam_for_passive
+                                        o_stamina = o_stamina + t_stam_for_passive
 
                                 # if previous_moves:
                                 #     previous_moves_len = len(previous_moves)
@@ -17749,9 +17763,71 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         if c_title_passive_type == "BLINK":
                                             c_stamina = c_stamina + c_title_passive_value
                                             t_stamina = t_stamina - c_title_passive_value
-
-
-                                                           
+                 
+                                    if t_card_passive_type:
+                                        t_value_for_passive = t_card_tier * .5
+                                        t_flat_for_passive = 10 * (t_card_tier * .5)
+                                        t_stam_for_passive = 5 * (t_card_tier * .5)
+                                        if t_card_passive_type == "HLT":
+                                            t_health = round(round(t_health + ((t_value_for_passive / 100) * t_health)))
+                                        if t_card_passive_type == "LIFE":
+                                            if t_mac_health != t_health:
+                                                c_health = round(c_health - ((t_value_for_passive / 100) * c_health))
+                                                t_health = round(t_health + ((t_value_for_passive / 100) * c_health))
+                                        if t_card_passive_type == "ATK":
+                                            t_attack = t_attack + t_flat_for_passive
+                                        if t_card_passive_type == "DEF":
+                                            t_defense = t_defense + t_flat_for_passive
+                                        if t_card_passive_type == "STAM":
+                                            if t_stamina > 15:
+                                                t_stamina = t_stamina + t_stam_for_passive
+                                        if t_card_passive_type == "DRAIN":
+                                            if t_stamina > 15:
+                                                c_stamina = c_stamina - t_stam_for_passive
+                                                t_stamina = t_stamina + t_stam_for_passive
+                                        if t_card_passive_type == "FLOG":
+                                            c_attack = round(c_attack - ((t_value_for_passive / 100) * c_attack))
+                                            t_attack = round(t_attack + ((t_value_for_passive / 100) * c_attack))
+                                        if t_card_passive_type == "WITHER":
+                                            c_defense = round(c_defense - ((t_value_for_passive / 100) * c_defense))
+                                            t_defense = round(t_defense + ((t_value_for_passive / 100) * c_defense))
+                                        if t_card_passive_type == "RAGE":
+                                            t_defense = round(t_defense - ((t_value_for_passive / 100) * t_defense))
+                                            t_attack = round(t_attack + ((t_value_for_passive / 100) * t_defense))
+                                        if t_card_passive_type == "BRACE":
+                                            t_defense = round(t_defense + ((t_value_for_passive / 100) * t_attack))
+                                            t_attack = round(t_attack - ((t_value_for_passive / 100) * t_attack))
+                                        if t_card_passive_type == "BZRK":
+                                            t_health = round(t_health - ((t_value_for_passive / 100) * t_health))
+                                            t_attack = round(t_attack + ((t_value_for_passive / 100) * t_health))
+                                        if t_card_passive_type == "CRYSTAL":
+                                            t_health = round(t_health - ((t_value_for_passive / 100) * t_health))
+                                            t_defense = round(t_defense + ((t_value_for_passive / 100) * t_health))
+                                        if t_card_passive_type == "FEAR":
+                                            t_health = t_health - t_flat_for_passive
+                                            c_defense = c_defense - (t_flat_for_passive / 2)
+                                            c_attack = c_attack - (t_flat_for_passive / 2)
+                                        if t_card_passive_type == "GROWTH":
+                                            t_health = t_health - t_flat_for_passive
+                                            t_defense = t_defense + (t_flat_for_passive / 2)
+                                            t_attack = t_attack + (t_flat_for_passive / 2)
+                                        if t_card_passive_type == "SLOW":
+                                            if turn_total != 0:
+                                                turn_total = turn_total - 1
+                                        if t_card_passive_type == "HASTE":
+                                            turn_total = turn_total + 1
+                                        if t_card_passive_type == "STANCE":
+                                            tempattack = t_attack + t_flat_for_passive
+                                            t_attack = t_defense
+                                            t_defense = tempattack
+                                        if t_card_passive_type == "CONFUSE":
+                                            tempattack = c_attack - t_flat_for_passive
+                                            c_attack = c_defense
+                                            c_defense = tempattack
+                                        if t_card_passive_type == "BLINK":
+                                            t_stamina = t_stamina - t_stam_for_passive
+                                            c_stamina = c_stamina + t_stam_for_passive
+                          
                                     # await asyncio.sleep(2)
                                     if c_block_used == True:
                                         c_defense = int(c_defense / 2)
@@ -20660,7 +20736,71 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         if t_title_passive_type == "BLINK":
                                             c_stamina = c_stamina + t_title_passive_value
                                             t_stamina = t_stamina - t_title_passive_value
-                                                    
+
+                                    if c_card_passive_type:
+                                        c_value_for_passive = c_card_tier * .5
+                                        c_flat_for_passive = 10 * (c_card_tier * .5)
+                                        c_stam_for_passive = 5 * (c_card_tier * .5)
+                                        if c_card_passive_type == "HLT":
+                                            c_health = round(round(c_health + ((c_value_for_passive / 100) * c_health)))
+                                        if c_card_passive_type == "LIFE":
+                                            if c_mat_health != c_health:
+                                                t_health = round(t_health - ((c_value_for_passive / 100) * t_health))
+                                                c_health = round(c_health + ((c_value_for_passive / 100) * t_health))
+                                        if c_card_passive_type == "ATK":
+                                            c_attack = c_attack + c_flat_for_passive
+                                        if c_card_passive_type == "DEF":
+                                            c_defense = c_defense + c_flat_for_passive
+                                        if c_card_passive_type == "STAM":
+                                            if c_stamina > 15:
+                                                c_stamina = c_stamina + c_stam_for_passive
+                                        if c_card_passive_type == "DRAIN":
+                                            if c_stamina > 15:
+                                                t_stamina = t_stamina - c_stam_for_passive
+                                                c_stamina = c_stamina + c_stam_for_passive
+                                        if c_card_passive_type == "FLOG":
+                                            t_attack = round(t_attack - ((c_value_for_passive / 100) * t_attack))
+                                            c_attack = round(c_attack + ((c_value_for_passive / 100) * t_attack))
+                                        if c_card_passive_type == "WITHER":
+                                            t_defense = round(t_defense - ((c_value_for_passive / 100) * t_defense))
+                                            c_defense = round(c_defense + ((c_value_for_passive / 100) * t_defense))
+                                        if c_card_passive_type == "RAGE":
+                                            c_defense = round(c_defense - ((c_value_for_passive / 100) * c_defense))
+                                            c_attack = round(c_attack + ((c_value_for_passive / 100) * c_defense))
+                                        if c_card_passive_type == "BRACE":
+                                            c_defense = round(c_defense + ((c_value_for_passive / 100) * c_attack))
+                                            c_attack = round(c_attack - ((c_value_for_passive / 100) * c_attack))
+                                        if c_card_passive_type == "BZRK":
+                                            c_health = round(c_health - ((c_value_for_passive / 100) * c_health))
+                                            c_attack = round(c_attack + ((c_value_for_passive / 100) * c_health))
+                                        if c_card_passive_type == "CRYSTAL":
+                                            c_health = round(c_health - ((c_value_for_passive / 100) * c_health))
+                                            c_defense = round(c_defense + ((c_value_for_passive / 100) * c_health))
+                                        if c_card_passive_type == "FEAR":
+                                            c_health = c_health - c_flat_for_passive
+                                            t_defense = t_defense - (c_flat_for_passive / 2)
+                                            t_attack = t_attack - (c_flat_for_passive / 2)
+                                        if c_card_passive_type == "GROWTH":
+                                            c_health = c_health - c_flat_for_passive
+                                            c_defense = c_defense + (c_flat_for_passive / 2)
+                                            c_attack = c_attack + (c_flat_for_passive / 2)
+                                        if c_card_passive_type == "SLOW":
+                                            if turn_total != 0:
+                                                turn_total = turn_total - 1
+                                        if c_card_passive_type == "HASTE":
+                                            turn_total = turn_total + 1
+                                        if c_card_passive_type == "STANCE":
+                                            tempattack = c_attack + c_flat_for_passive
+                                            c_attack = c_defense
+                                            c_defense = tempattack
+                                        if c_card_passive_type == "CONFUSE":
+                                            tempattack = t_attack - c_flat_for_passive
+                                            t_attack = t_defense
+                                            t_defense = tempattack
+                                        if c_card_passive_type == "BLINK":
+                                            c_stamina = c_stamina - c_stam_for_passive
+                                            t_stamina = t_stamina + c_stam_for_passive
+
                                     # await asyncio.sleep(2)
                                     if t_block_used == True:
                                         t_block_used = False
@@ -23374,7 +23514,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                 if currentopponent != (total_legends):
                                     if mode not in co_op_modes:
-                                        embedVar = discord.Embed(title=f":crown: VICTORY\nThe game lasted {turn_total} rounds.\n\n{drop_response}\n{corrupted_message}",description=textwrap.dedent(f"""
+                                        embedVar = discord.Embed(title=f"🎊 VICTORY\nThe game lasted {turn_total} rounds.\n\n{drop_response}\n{corrupted_message}",description=textwrap.dedent(f"""
                                         {previous_moves_into_embed}
                                         
                                         """),colour=0x1abc9c)
@@ -23399,7 +23539,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             embedVar.add_field(name="**Destiny Progress**",
                                                 value=f"{destinylogger}")
                                     elif mode in ai_co_op_modes:
-                                        embedVar = discord.Embed(title=f":crown: DUO VICTORY\nThe game lasted {turn_total} rounds.\n\n{drop_response}\n{corrupted_message}",description=textwrap.dedent(f"""
+                                        embedVar = discord.Embed(title=f"🎊 DUO VICTORY\nThe game lasted {turn_total} rounds.\n\n{drop_response}\n{corrupted_message}",description=textwrap.dedent(f"""
                                         {previous_moves_into_embed}
                                         
                                         """),colour=0x1abc9c)
@@ -23473,7 +23613,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         continued = False
                                         # await discord.TextChannel.delete(private_channel, reason=None)
                                     elif mode in U_modes:
-                                        embedVar = discord.Embed(title=f":crown: UNIVERSE CONQUERED",
+                                        embedVar = discord.Embed(title=f"🎊 UNIVERSE CONQUERED",
                                                                 description=f"**{selected_universe}** has been conquered\n\n{drop_response}\n{corrupted_message}",
                                                                 colour=0xe91e63)
                                         if questlogger:
@@ -24761,10 +24901,10 @@ element_mapping = {'PHYSICAL': 'Normal Damage ',
 'BLEED': 'After 5 Attacks deal 5x turn count damage to opponent',
 'GRAVITY': 'Disables Opponent Block'
 }
-passive_enhancer_suffix_mapping = {'ATK': '%',
-'DEF': '%',
+passive_enhancer_suffix_mapping = {'ATK': ' Flat',
+'DEF': ' Flat',
 'STAM': ' Flat',
-'HLT': ' Flat',
+'HLT': ' %',
 'LIFE': '%',
 'DRAIN': ' Flat',
 'FLOG': '%',
