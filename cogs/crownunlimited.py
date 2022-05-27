@@ -23727,8 +23727,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                     'message': str(ex),
                     'trace': trace
                 }))
-                if mode not in ai_co_op_modes:
-                    await battle_ping_message.delete()
+                # if mode not in ai_co_op_modes:
+                #     await battle_ping_message.delete()
                 await battle_msg.delete()
                 guild = self.bot.get_guild(main.guild_id)
                 channel = guild.get_channel(main.guild_channel)
