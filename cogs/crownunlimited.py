@@ -9292,7 +9292,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     if t_card_passive_type == "HLT":
                                         t_health = round(round(t_health + ((t_value_for_passive / 100) * t_health)))
                                     if t_card_passive_type == "LIFE":
-                                        if t_mao_health != t_health:
+                                        if t_max_health != t_health:
                                             o_health = round(o_health - ((t_value_for_passive / 100) * o_health))
                                             t_health = round(t_health + ((t_value_for_passive / 100) * o_health))
                                     if t_card_passive_type == "ATK":
@@ -15244,7 +15244,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     if t_card_passive_type == "HLT":
                                         t_health = round(round(t_health + ((t_value_for_passive / 100) * t_health)))
                                     if t_card_passive_type == "LIFE":
-                                        if t_mao_health != t_health:
+                                        if t_max_health != t_health:
                                             o_health = round(o_health - ((t_value_for_passive / 100) * o_health))
                                             t_health = round(t_health + ((t_value_for_passive / 100) * o_health))
                                     if t_card_passive_type == "ATK":
