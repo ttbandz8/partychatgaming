@@ -7437,7 +7437,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             if turn == 0:
                                 if t_bleed_hit:
                                     t_bleed_hit = False
-                                    bleed_dmg = 5 * turn_total
+                                    bleed_dmg = 4 * turn_total
                                     o_health = o_health - bleed_dmg
                                     if o_health <= 0:
                                         continue
@@ -9195,7 +9195,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             elif turn == 1:
                                 if o_bleed_hit:
                                     o_bleed_hit = False
-                                    bleed_dmg = 5 * turn_total
+                                    bleed_dmg = 4 * turn_total
                                     t_health = t_health - bleed_dmg
                                     previous_moves.append(f"🩸 **{t_card}** shredded for **{round(bleed_dmg)}** bleed dmg...")
                                     if t_health <= 0:
@@ -11861,7 +11861,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             if turn == 0:
                                 if t_bleed_hit:
                                     t_bleed_hit = False
-                                    bleed_dmg = 5 * turn_total
+                                    bleed_dmg = 4 * turn_total
                                     o_health = o_health - bleed_dmg
                                     if o_health <= 0:
                                         continue
@@ -15143,7 +15143,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             elif turn == 1:
                                 if o_bleed_hit:
                                     o_bleed_hit = False
-                                    bleed_dmg = 5 * turn_total
+                                    bleed_dmg = 4 * turn_total
                                     t_health = t_health - bleed_dmg
                                     previous_moves.append(f"🩸 **{t_card}** shredded for **{round(bleed_dmg)}** bleed dmg...")
                                     if t_health <= 0:
@@ -17717,7 +17717,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 if turn == 2:
                                     if t_bleed_hit:
                                         t_bleed_hit = False
-                                        bleed_dmg = 5 * turn_total
+                                        bleed_dmg = 4 * turn_total
                                         c_health = c_health - bleed_dmg
                                         previous_moves.append(f"🩸 **{c_card}** shredded for **{round(bleed_dmg)}** bleed dmg...")
                                         if c_health <= 0:
@@ -20698,7 +20698,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 elif turn == 3:
                                     if c_bleed_hit:
                                         c_bleed_hit = False
-                                        bleed_dmg = 5 * turn_total
+                                        bleed_dmg = 4 * turn_total
                                         t_health = t_health - bleed_dmg
                                         previous_moves.append(f"🩸 **{t_card}** shredded for **{round(bleed_dmg)}** bleed dmg...")
                                         if t_health <= 0:

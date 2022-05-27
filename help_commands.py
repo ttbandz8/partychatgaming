@@ -106,7 +106,7 @@ ELEMENTS = textwrap.dedent(f"""\
 
 ⌛ Time - You Focus after attacking
 
-🅱️ Bleed - After 5 Attacks deal 5x turn count damage to opponent
+🅱️ Bleed - After 4 Attacks deal 5x turn count damage to opponent
 
 🪐 Gravity - Disables Opponent Block
 
