@@ -8270,7 +8270,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                             description=f"**{o_card} says**\n{o_resolve_description}",
                                                                             colour=0xe91e63)
                                                     previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Resolved: Hashirama Cells heal you for **{o_naruto_heal_buff}**")
-                                                    await button_ctx.defer(ignore=True)
+                                                    # await button_ctx.defer(ignore=True)
                                                     turn_total = turn_total + 1
                                                     turn = 1
 
@@ -8909,7 +8909,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     turn_total = turn_total + 1
                                                     turn = 1
                                                     
-                                                    await button_ctx.defer(ignore=True)
+                                                    # await button_ctx.defer(ignore=True)
                                                 elif dmg['DMG'] == 0:
                                                     o_stamina = o_stamina - int(dmg['STAMINA_USED'])
 
@@ -9150,7 +9150,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_stamina = o_stamina - dmg['STAMINA_USED']
                                                         turn_total = turn_total + 1
                                                         turn = 1
-                                                    await button_ctx.defer(ignore=True)    
+                                                    # await button_ctx.defer(ignore=True)    
                                             else:
                                                 previous_moves.append(f"(**{turn_total}**) **{o_card}**: Not enough Stamina to use this ability.")
                                                 # embedVar = discord.Embed(title=emessage,
@@ -23164,7 +23164,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     {previous_moves_into_embed}
                                                                     
                                                                     """), colour=0xe91e63)
-                                    embedVar.set_author(name=f"{t_card} says\n{t_lose_description}")
+                                    # embedVar.set_author(name=f"{t_card} says\n{t_lose_description}")
                                     if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
                                         embedVar.set_footer(text=f"Battle Time: {gameClock[2]} Seconds.")
                                     elif int(gameClock[0]) == 0:
@@ -23192,7 +23192,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     {previous_moves_into_embed}
                                     
                                     """),colour=0xe91e63)
-                                    embedVar.set_author(name=f"{t_card} says\n{t_lose_description}")
+                                    # embedVar.set_author(name=f"{t_card} says\n{t_lose_description}")
                                     if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
                                         embedVar.set_footer(text=f"Battle Time: {gameClock[2]} Seconds.")
                                     elif int(gameClock[0]) == 0:
