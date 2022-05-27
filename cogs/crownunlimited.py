@@ -14747,7 +14747,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     embedVar = discord.Embed(title=f"{block_message}", colour=0xe91e63)
 
                                                     previous_moves.append(f"(**{turn_total}**) {block_message}")
-                                                    await button_ctx.defer(ignore=True)
+                                                    # await button_ctx.defer(ignore=True)
                                                     turn_total = turn_total + 1
                                                     turn = 1
                                                 else:
