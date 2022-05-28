@@ -8210,7 +8210,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     embedVar.add_field(name=f"Transformation: Plus Ultra",
                                                                     value="You do not lose a turn after you Resolve.")
                                                     previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Resolved: PLUS ULTRA!")
-                                                    await button_ctx.defer(ignore=True)
+                                                    # await button_ctx.defer(ignore=True)
                                                     turn_total = turn_total + 1
                                                     turn = 0
 
@@ -8241,7 +8241,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                             description=f"**{o_card} says**\n{o_resolve_description}",
                                                                             colour=0xe91e63)
                                                     previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Resolved: Total Concentration Breathing!")
-                                                    await button_ctx.defer(ignore=True)
+                                                    # await button_ctx.defer(ignore=True)
                                                     turn_total = turn_total + 1
                                                     turn = 1
 
@@ -8333,7 +8333,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     embedVar.add_field(name=f"Transformation: Bankai",
                                                                     value="Gain double Attack on Resolve.")
                                                     previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Resolved: Bankai!")
-                                                    await button_ctx.defer(ignore=True)
+                                                    # await button_ctx.defer(ignore=True)
                                                     turn_total = turn_total + 1
                                                     turn = 1
                                                 
@@ -8371,7 +8371,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     embedVar.add_field(name=f"Transformation: Ascension",
                                                                     value="On Resolve Refill Health.")
                                                     
-                                                    await button_ctx.defer(ignore=True)
+                                                    # await button_ctx.defer(ignore=True)
                                                     turn_total = turn_total + 1
                                                     turn = 1
                                                 
@@ -8405,7 +8405,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     embedVar.add_field(name=f"Transformation: Command Seal",
                                                                     value="On Resolve, Strike with Ultimate, then Focus.")
                                                     previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Resolved: Command Seal!")
-                                                    await button_ctx.defer(ignore=True)
+                                                    # await button_ctx.defer(ignore=True)
                                                     # o_stamina = 0
                                                     o_used_resolve = True
                                                     o_pet_used = False
@@ -8446,7 +8446,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Resolved: Mega Evolution!! Gained **300** HP!")
                                                     else:
                                                         previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Resolved: Evolution!")
-                                                    await button_ctx.defer(ignore=True)
+                                                    # await button_ctx.defer(ignore=True)
                                                     turn_total = turn_total + 1
                                                     turn = 1
                                                 else:  # Standard Resolve
@@ -8476,10 +8476,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         embedVar.add_field(name=f"Nexus Destroyed",
                                                                         value=f"**{o_card}** dealt **{(60 * (o_focus_count + t_focus_count))}** damage.")
                                                         previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Resolved: Pentakill! Dealing {(60 * (o_focus_count + t_focus_count))} damage.")
-                                                        await button_ctx.defer(ignore=True)
+                                                        # await button_ctx.defer(ignore=True)
                                                     elif o_universe == "Souls":
                                                         previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Phase 2: Enhanced Moveset!")
-                                                        await button_ctx.defer(ignore=True)
+                                                        # await button_ctx.defer(ignore=True)
                                                     else:
                                                         embedVar = discord.Embed(title=f"{o_card} STRENGTHENED RESOLVE :zap:",
                                                                                 description=f"**{o_card} says**\n{o_resolve_description}",
@@ -8487,7 +8487,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         embedVar.add_field(name=f"Transformation",
                                                                         value="All stats & stamina greatly increased")
                                                         previous_moves.append(f"(**{turn_total}**) ⚡ **{o_card}** Resolved!")
-                                                        await button_ctx.defer(ignore=True)
+                                                        # await button_ctx.defer(ignore=True)
                                                     turn_total = turn_total + 1
                                                     turn = 1
                                             else:
@@ -8496,7 +8496,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                         description=f"Entering `Resolved State` sacrifices a turn to power up even greater and regain `Stamina`!",
                                                                         colour=0xe91e63)
                                                 previous_moves.append(f"(**{turn_total}**) **{o_card}** cannot resolve")
-                                                await button_ctx.defer(ignore=True)
+                                                # await button_ctx.defer(ignore=True)
                                                 turn = 0
                                         
                                         elif button_ctx.custom_id == "6" and mode != "RAID":
@@ -8653,7 +8653,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             battle_msg = await private_channel.send(embed=embedVar, file=summon_file)
                                                             await asyncio.sleep(2)
                                                             await battle_msg.delete(delay=None)
-                                                        await button_ctx.defer(ignore=True)
+                                                        # await button_ctx.defer(ignore=True)
                                                         
                                                     turn = 0
                                                 else:
@@ -12084,7 +12084,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         title = f"**{o_card}** & **{c_card}** 🆚 **{t_card}** has begun! {lineup}\n{t_universe} {mode} Battle"
                                     elif mode in AUTO_BATTLE_modes:
                                         embedVar = discord.Embed(
-                                            title=f"**{o_card}** 🆚 **{t_card}** has begun! {lineup}\n{t_universe} {mode} Battle\nThe Result of this Automated Battle will be reported soon.",
+                                            title=f"**{o_card}** 🆚 **{t_card}** has begun!\n{t_universe} {mode} Battle\nThe Result of this Automated Battle will be reported soon.",
                                             colour=0xe91e63)
                                     elif randomized_battle:
                                         embedVar = discord.Embed(
