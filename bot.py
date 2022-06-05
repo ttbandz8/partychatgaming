@@ -1510,6 +1510,12 @@ async def on_slash_command_error(ctx, ex):
 
 
 @bot.event
+async def on_message(message):
+    if bot.user.mentioned_in(message):
+        await message.channel.send("Hello 👋. **Anime VS+** uses / Slash commands! Use `/register` to get started or `/help` for additional assistance. Cheers!")
+
+
+@bot.event
 async def on_command_error(ctx, error):
     if isinstance(error, discord.HTTPException):
       guild = bot.get_guild(guild_id)
