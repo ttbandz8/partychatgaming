@@ -211,6 +211,51 @@ async def viewcard(self, ctx, card: str):
             passive_num = list(o_passive.values())[0]
             passive_type = list(o_passive.values())[1]
 
+        
+            if passive_type:
+                value_for_passive = o_tier * .5
+                flat_for_passive = round(10 * (o_tier * .5))
+                stam_for_passive = 5 * (o_tier * .5)
+                if passive_type == "HLT":
+                    passive_num = value_for_passive
+                if passive_type == "LIFE":
+                    passive_num = value_for_passive
+                if passive_type == "ATK":
+                    passive_num = flat_for_passive
+                if passive_type == "DEF":
+                    passive_num = flat_for_passive
+                if passive_type == "STAM":
+                    passive_num = stam_for_passive
+                if passive_type == "DRAIN":
+                    passive_num = stam_for_passive
+                if passive_type == "FLOG":
+                    passive_num = value_for_passive
+                if passive_type == "WITHER":
+                    passive_num = value_for_passive
+                if passive_type == "RAGE":
+                    passive_num = value_for_passive
+                if passive_type == "BRACE":
+                    passive_num = value_for_passive
+                if passive_type == "BZRK":
+                    passive_num = value_for_passive
+                if passive_type == "CRYSTAL":
+                    passive_num = value_for_passive
+                if passive_type == "FEAR":
+                    passive_num = flat_for_passive
+                if passive_type == "GROWTH":
+                    passive_num = flat_for_passive
+                if passive_type == "SLOW":
+                    passive_num = "1"
+                if passive_type == "HASTE":
+                    passive_num = "1"
+                if passive_type == "STANCE":
+                    passive_num = flat_for_passive
+                if passive_type == "CONFUSE":
+                    passive_num = flat_for_passive
+                if passive_type == "BLINK":
+                    passive_num = stam_for_passive
+
+
             o_1 = o_moveset[0]
             o_2 = o_moveset[1]
             o_3 = o_moveset[2]

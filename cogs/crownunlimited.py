@@ -2776,7 +2776,51 @@ def showcard(d, arm, max_health, health, max_stamina, stamina, resolved, title, 
             # Card Passive
             passive = d['PASS'][0]
             card_passive_type = list(passive.values())[1]
-            card_message = f"{card_passive_type.title()} {card_tier * .5}"
+            passive_num = 0
+            if card_passive_type:
+                value_for_passive = d['TIER'] * .5
+                flat_for_passive = round(10 * (d['TIER'] * .5))
+                stam_for_passive = 5 * (d['TIER'] * .5)
+                if card_passive_type == "HLT":
+                    passive_num = value_for_passive
+                if card_passive_type == "LIFE":
+                    passive_num = value_for_passive
+                if card_passive_type == "ATK":
+                    passive_num = flat_for_passive
+                if card_passive_type == "DEF":
+                    passive_num = flat_for_passive
+                if card_passive_type == "STAM":
+                    passive_num = stam_for_passive
+                if card_passive_type == "DRAIN":
+                    passive_num = stam_for_passive
+                if card_passive_type == "FLOG":
+                    passive_num = value_for_passive
+                if card_passive_type == "WITHER":
+                    passive_num = value_for_passive
+                if card_passive_type == "RAGE":
+                    passive_num = value_for_passive
+                if card_passive_type == "BRACE":
+                    passive_num = value_for_passive
+                if card_passive_type == "BZRK":
+                    passive_num = value_for_passive
+                if card_passive_type == "CRYSTAL":
+                    passive_num = value_for_passive
+                if card_passive_type == "FEAR":
+                    passive_num = flat_for_passive
+                if card_passive_type == "GROWTH":
+                    passive_num = flat_for_passive
+                if card_passive_type == "SLOW":
+                    passive_num = "1"
+                if card_passive_type == "HASTE":
+                    passive_num = "1"
+                if card_passive_type == "STANCE":
+                    passive_num = flat_for_passive
+                if card_passive_type == "CONFUSE":
+                    passive_num = flat_for_passive
+                if card_passive_type == "BLINK":
+                    passive_num = stam_for_passive
+
+            card_message = f"{card_passive_type.title()} {passive_num}"
 
 
             # if title_len >= 18:
@@ -3041,7 +3085,7 @@ def showcard(d, arm, max_health, health, max_stamina, stamina, resolved, title, 
                 title_message_on_card = f"🎗️ {title_message}{title_suffix}  🦾 {arm_message}"
             else:
                 title_message_on_card = f"🎗️ None 🦾 None"
-            card_suffix = enhancer_suffix_mapping[card_passive_type]
+            card_suffix = passive_enhancer_suffix_mapping[card_passive_type]
             speed = d['SPD']
             with Pilmoji(im) as pilmoji:
                 pilmoji.text((602, 138), f"{title_message_on_card}", (255, 255, 255), font=title_font, stroke_width=1, stroke_fill=(0, 0, 0),

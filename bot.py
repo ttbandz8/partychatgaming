@@ -1747,6 +1747,7 @@ async def donate(ctx, amount, guild = None):
             gem_bless = round(int(amount) * .10)
             if gem_list:
                for universe in gem_list:
+                  query = {"DID": str(ctx.author.id)}
                   update_query = {
                      '$inc': {'GEMS.$[type].' + "GEMS": gem_bless}
                   }
