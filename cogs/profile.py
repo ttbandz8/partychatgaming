@@ -452,7 +452,8 @@ class Profile(commands.Cog):
                     armicon = "⚠️"
                     if card_lvl == 200:
                         licon ="⚜️"
-                    titlemessage = f"{titleicon} {title_name} ~ INEFFECTIVE"
+                    titlemessage = f"{titleicon} ⚠️ {title_name} ~ INEFFECTIVE"
+                    armmessage = f"🦾 ⚠️ {arm_name}: {durability}"
                     if arm_passive_type in arm_moves_type_list:
                         arm_emoji = crown_utilities.set_emoji(arm_element)
                         if performance_mode:
@@ -490,6 +491,7 @@ class Profile(commands.Cog):
                             armmessage = f'🦾 {arm_name}: {arm_passive_type} {arm_passive_value}{enhancer_suffix_mapping[arm_passive_type]} {durability}'
                         else:
                             armmessage = f'🦾 {arm_name}: {durability}'
+                        
 
                     cardtitle = {'TITLE': title_name}
 
