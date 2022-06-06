@@ -7265,6 +7265,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             tutorial_resolve = False
             tutorial_summon = False
             tutorial_focus= False
+            o_ap_buff = 0
+            t_ap_buff = 0
+            c_ap_buff = 0
 
             if mode == "RAID":
                 raidActive = True
@@ -7342,9 +7345,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
             start_tales_buttons_action_row = manage_components.create_actionrow(*start_tales_buttons)
 
-            tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff + t_shock_buff + t_basic_water_buff
-            tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff + t_shock_buff + t_special_water_buff
-            tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff + t_shock_buff + t_ultimate_water_buff
+            tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff + t_shock_buff + t_basic_water_buff + t_ap_buff
+            tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff + t_shock_buff + t_special_water_buff + t_ap_buff
+            tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff + t_shock_buff + t_ultimate_water_buff + t_ap_buff
             tenh1 = list(t_enhancer.values())[0]
             tenh_name = list(t_enhancer.values())[2]
             
@@ -7482,7 +7485,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 previous_moves = previous_moves[-battle_history_message_amount:]
                             
                             previous_moves_into_embed = "\n\n".join(previous_moves)
-                    
+
+                        if o_ap_buff > 200:
+                            o_ap_buff = 200
+                        if t_ap_buff > 200:
+                            t_ap_buff = 200
+
                         if turn == 0:
                             if t_bleed_hit:
                                 t_bleed_hit = False
@@ -7550,9 +7558,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     o_defense = round(o_defense + ((o_title_passive_value / 100) * t_defense))
                                 if o_title_passive_type == "RAGE":
                                     o_defense = round(o_defense - ((o_title_passive_value / 100) * o_defense))
-                                    o_attack = round(o_attack + ((o_title_passive_value / 100) * o_defense))
+                                    o_ap_buff = round(o_ap_buff + ((o_title_passive_value / 100) * o_defense))
                                 if o_title_passive_type == "BRACE":
-                                    o_defense = round(o_defense + ((o_title_passive_value / 100) * o_attack))
+                                    o_ap_buff = round(o_ap_buff + ((o_title_passive_value / 100) * o_attack))
                                     o_attack = round(o_attack - ((o_title_passive_value / 100) * o_attack))
                                 if o_title_passive_type == "BZRK":
                                     o_health = round(o_health - ((o_title_passive_value / 100) * o_health))
@@ -7613,9 +7621,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     o_defense = round(o_defense + ((o_value_for_passive / 100) * t_defense))
                                 if o_card_passive_type == "RAGE":
                                     o_defense = round(o_defense - ((o_value_for_passive / 100) * o_defense))
-                                    o_attack = round(o_attack + ((o_value_for_passive / 100) * o_defense))
+                                    o_ap_buff = round(o_ap_buff + ((o_value_for_passive / 100) * o_defense))
                                 if o_card_passive_type == "BRACE":
-                                    o_defense = round(o_defense + ((o_value_for_passive / 100) * o_attack))
+                                    o_ap_buff  = round(o_ap_buff + ((o_value_for_passive / 100) * o_attack))
                                     o_attack = round(o_attack - ((o_value_for_passive / 100) * o_attack))
                                 if o_card_passive_type == "BZRK":
                                     o_health = round(o_health - ((o_value_for_passive / 100) * o_health))
@@ -7941,9 +7949,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             else:
                                 if mode in AUTO_BATTLE_modes:
                                     # UNIVERSE CARD
-                                    ap1 = list(o_1.values())[0] + ocard_lvl_ap_buff + o_shock_buff + o_basic_water_buff
-                                    ap2 = list(o_2.values())[0] + ocard_lvl_ap_buff + o_shock_buff + o_special_water_buff
-                                    ap3 = list(o_3.values())[0] + ocard_lvl_ap_buff + demon_slayer_buff + o_shock_buff + o_ultimate_water_buff
+                                    ap1 = list(o_1.values())[0] + ocard_lvl_ap_buff + o_shock_buff + o_basic_water_buff + o_ap_buff
+                                    ap2 = list(o_2.values())[0] + ocard_lvl_ap_buff + o_shock_buff + o_special_water_buff + o_ap_buff
+                                    ap3 = list(o_3.values())[0] + ocard_lvl_ap_buff + demon_slayer_buff + o_shock_buff + o_ultimate_water_buff + o_ap_buff
                                     enh1 = list(o_enhancer.values())[0]
                                     enh_name = list(o_enhancer.values())[2]
                                     pet_enh_name = list(opet_move.values())[2]
@@ -8595,9 +8603,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_defense = round(t_defense - dmg['DMG'])
                                                 elif opet_type == 'RAGE':
                                                     o_defense = round(o_defense - dmg['DMG'])
-                                                    o_attack = round(o_attack + dmg['DMG'])
+                                                    o_ap_buff = round(o_ap_buff + dmg['DMG'])
                                                 elif opet_type == 'BRACE':
-                                                    o_defense = round(o_defense + dmg['DMG'])
+                                                    o_ap_buff = round(o_ap_buff + dmg['DMG'])
                                                     o_attack = round(o_attack - dmg['DMG'])
                                                 elif opet_type == 'BZRK':
                                                     o_health = round(o_health - dmg['DMG'])
@@ -8834,9 +8842,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_defense = round(t_defense - dmg['DMG'])
                                                 elif enh_type == 'RAGE':
                                                     o_defense = round(o_defense - dmg['DMG'])
-                                                    o_attack = round(o_attack + dmg['DMG'])
+                                                    o_ap_buff = round(o_ap_buff + dmg['DMG'])
                                                 elif enh_type == 'BRACE':
-                                                    o_defense = round(o_defense + dmg['DMG'])
+                                                    o_ap_buff = round(o_ap_buff + dmg['DMG'])
                                                     o_attack = round(o_attack - dmg['DMG'])
                                                 elif enh_type == 'BZRK':
                                                     o_health = round(o_health - dmg['DMG'])
@@ -9133,9 +9141,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             turn = 0
                                 else:
                                     # UNIVERSE CARD
-                                    ap1 = list(o_1.values())[0] + ocard_lvl_ap_buff + o_shock_buff + o_basic_water_buff
-                                    ap2 = list(o_2.values())[0] + ocard_lvl_ap_buff + o_shock_buff + o_special_water_buff
-                                    ap3 = list(o_3.values())[0] + ocard_lvl_ap_buff + demon_slayer_buff + o_shock_buff + o_ultimate_water_buff
+                                    ap1 = list(o_1.values())[0] + ocard_lvl_ap_buff + o_shock_buff + o_basic_water_buff + o_ap_buff
+                                    ap2 = list(o_2.values())[0] + ocard_lvl_ap_buff + o_shock_buff + o_special_water_buff + o_ap_buff
+                                    ap3 = list(o_3.values())[0] + ocard_lvl_ap_buff + demon_slayer_buff + o_shock_buff + o_ultimate_water_buff + o_ap_buff
                                     enh1 = list(o_enhancer.values())[0]
                                     enh_name = list(o_enhancer.values())[2]
                                     pet_enh_name = list(opet_move.values())[2]
@@ -9878,9 +9886,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_defense = round(t_defense - dmg['DMG'])
                                                     elif opet_type == 'RAGE':
                                                         o_defense = round(o_defense - dmg['DMG'])
-                                                        o_attack = round(o_attack + dmg['DMG'])
+                                                        o_ap_buff = round(o_ap_buff + dmg['DMG'])
                                                     elif opet_type == 'BRACE':
-                                                        o_defense = round(o_defense + dmg['DMG'])
+                                                        o_ap_buff = round(o_ap_buff + dmg['DMG'])
                                                         o_attack = round(o_attack - dmg['DMG'])
                                                     elif opet_type == 'BZRK':
                                                         o_health = round(o_health - dmg['DMG'])
@@ -10036,9 +10044,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_defense = round(o_defense - dmg['DMG'])
                                                     elif comp_enh == 'RAGE':
                                                         c_defense = round(c_defense - dmg['DMG'])
-                                                        c_attack = round(c_attack + dmg['DMG'])
+                                                        c_ap_buff = round(c_ap_buff + dmg['DMG'])
                                                     elif comp_enh == 'BRACE':
-                                                        c_defense = round(c_defense + dmg['DMG'])
+                                                        c_ap_buff = round(c_ap_buff + dmg['DMG'])
                                                         c_attack = round(c_attack - dmg['DMG'])
                                                     elif comp_enh == 'BZRK':
                                                         c_health = round(c_health - dmg['DMG'])
@@ -10148,9 +10156,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_defense = round(t_defense - dmg['DMG'])
                                                     elif cenh_type == 'RAGE':
                                                         o_defense = round(o_defense - dmg['DMG'])
-                                                        o_attack = round(o_attack + dmg['DMG'])
+                                                        o_ap_buff = round(o_ap_buff + dmg['DMG'])
                                                     elif cenh_type == 'BRACE':
-                                                        o_defense = round(o_defense + dmg['DMG'])
+                                                        o_ap_buff = round(o_ap_buff + dmg['DMG'])
                                                         o_attack = round(o_attack - dmg['DMG'])
                                                     elif cenh_type == 'BZRK':
                                                         o_health = round(o_health - dmg['DMG'])
@@ -10405,9 +10413,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_defense = round(t_defense - dmg['DMG'])
                                                     elif enh_type == 'RAGE':
                                                         o_defense = round(o_defense - dmg['DMG'])
-                                                        o_attack = round(o_attack + dmg['DMG'])
+                                                        o_ap_buff = round(o_ap_buff + dmg['DMG'])
                                                     elif enh_type == 'BRACE':
-                                                        o_defense = round(o_defense + dmg['DMG'])
+                                                        o_ap_buff = round(o_ap_buff + dmg['DMG'])
                                                         o_attack = round(o_attack - dmg['DMG'])
                                                     elif enh_type == 'BZRK':
                                                         o_health = round(o_health - dmg['DMG'])
@@ -10825,9 +10833,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     o_defense = round(o_defense - ((t_title_passive_value / 100) * o_defense))
                                 if t_title_passive_type == "RAGE":
                                     t_defense = round(t_defense - ((t_title_passive_value / 100) * t_defense))
-                                    t_attack = round(t_attack + ((t_title_passive_value / 100) * t_defense))
+                                    t_ap_buff = round(t_ap_buff + ((t_title_passive_value / 100) * t_defense))
                                 if t_title_passive_type == "BRACE":
-                                    t_defense = round(t_defense + ((t_title_passive_value / 100) * t_attack))
+                                    t_ap_buff = round(t_ap_buff + ((t_title_passive_value / 100) * t_attack))
                                     t_attack = round(t_attack - ((t_title_passive_value / 100) * t_attack))
                                 if t_title_passive_type == "BZRK":
                                     t_health = round(t_health - ((t_title_passive_value / 100) * t_health))
@@ -10888,9 +10896,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     t_defense = round(t_defense + ((t_value_for_passive / 100) * o_defense))
                                 if t_card_passive_type == "RAGE":
                                     t_defense = round(t_defense - ((t_value_for_passive / 100) * t_defense))
-                                    t_attack = round(t_attack + ((t_value_for_passive / 100) * t_defense))
+                                    t_ap_buff = round(t_ap_buff + ((t_value_for_passive / 100) * t_defense))
                                 if t_card_passive_type == "BRACE":
-                                    t_defense = round(t_defense + ((t_value_for_passive / 100) * t_attack))
+                                    t_ap_buff = round(t_ap_buff + ((t_value_for_passive / 100) * t_attack))
                                     t_attack = round(t_attack - ((t_value_for_passive / 100) * t_attack))
                                 if t_card_passive_type == "BZRK":
                                     t_health = round(t_health - ((t_value_for_passive / 100) * t_health))
@@ -11229,9 +11237,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     # Check If Playing Bot
                                     if botActive != True and raidActive == False:
                                         # PlayUser
-                                        tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff + t_shock_buff + t_basic_water_buff
-                                        tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff + t_shock_buff + t_special_water_buff
-                                        tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff + t_shock_buff + t_ultimate_water_buff
+                                        tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff + t_shock_buff + t_basic_water_buff + t_ap_buff
+                                        tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff + t_shock_buff + t_special_water_buff + t_ap_buff
+                                        tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff + t_shock_buff + t_ultimate_water_buff + t_ap_buff
                                         tenh1 = list(t_enhancer.values())[0]
                                         tenh_name = list(t_enhancer.values())[2]
                                         tpet_enh_name = list(tpet_move.values())[2]
@@ -11816,9 +11824,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_defense = round(o_defense - dmg['DMG'])
                                                         elif tpet_type == 'RAGE':
                                                             t_defense = round(t_defense - dmg['DMG'])
-                                                            t_attack = round(t_attack + dmg['DMG'])
+                                                            t_ap_buff = round(t_ap_buff + dmg['DMG'])
                                                         elif tpet_type == 'BRACE':
-                                                            t_defense = round(t_defense + dmg['DMG'])
+                                                            t_ap_buff = round(t_ap_buff + dmg['DMG'])
                                                             t_attack = round(t_attack - dmg['DMG'])
                                                         elif tpet_type == 'BZRK':
                                                             t_health = round(t_health - dmg['DMG'])
@@ -12078,9 +12086,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_defense = round(o_defense - dmg['DMG'])
                                                         elif enh_type == 'RAGE':
                                                             t_defense = round(t_defense - dmg['DMG'])
-                                                            t_attack = round(t_attack + dmg['DMG'])
+                                                            t_ap_buff = round(t_ap_buff + dmg['DMG'])
                                                         elif enh_type == 'BRACE':
-                                                            t_defense = round(t_defense + dmg['DMG'])
+                                                            t_ap_buff = round(t_ap_buff + dmg['DMG'])
                                                             t_attack = round(t_attack - dmg['DMG'])
                                                         elif enh_type == 'BZRK':
                                                             t_health = round(t_health - dmg['DMG'])
@@ -12414,9 +12422,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     # Play Bot
                                     else:
                                         # UNIVERSE CARD
-                                        tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff + t_shock_buff + t_basic_water_buff
-                                        tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff + t_shock_buff + t_special_water_buff
-                                        tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff + t_shock_buff + t_ultimate_water_buff
+                                        tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff + t_shock_buff + t_basic_water_buff + t_ap_buff
+                                        tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff + t_shock_buff + t_special_water_buff + t_ap_buff
+                                        tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff + t_shock_buff + t_ultimate_water_buff + t_ap_buff
                                         tenh1 = list(t_enhancer.values())[0]
                                         tenh_name = list(t_enhancer.values())[2]
                                         tpet_enh_name = list(tpet_move.values())[2]
@@ -12956,9 +12964,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_defense = round(o_defense - dmg['DMG'])
                                                     elif tpet_type == 'RAGE':
                                                         t_defense = round(t_defense - dmg['DMG'])
-                                                        t_attack = round(t_attack + dmg['DMG'])
+                                                        t_ap_buff = round(t_ap_buff + dmg['DMG'])
                                                     elif tpet_type == 'BRACE':
-                                                        t_defense = round(t_defense + dmg['DMG'])
+                                                        t_ap_buff = round(t_ap_buff + dmg['DMG'])
                                                         t_attack = round(t_attack - dmg['DMG'])
                                                     elif tpet_type == 'BZRK':
                                                         t_health = round(t_health - dmg['DMG'])
@@ -13212,9 +13220,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_defense = round(o_defense - dmg['DMG'])
                                                     elif enh_type == 'RAGE':
                                                         t_defense = round(t_defense - dmg['DMG'])
-                                                        t_attack = round(t_attack + dmg['DMG'])
+                                                        t_ap_buff = round(t_ap_buff + dmg['DMG'])
                                                     elif enh_type == 'BRACE':
-                                                        t_defense = round(t_defense + dmg['DMG'])
+                                                        t_ap_buff = round(t_ap_buff + dmg['DMG'])
                                                         t_attack = round(t_attack - dmg['DMG'])
                                                     elif enh_type == 'BZRK':
                                                         t_health = round(t_health - dmg['DMG'])
@@ -13503,9 +13511,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         embedVar.set_thumbnail(url=ctx.author.avatar_url)
                                         await battle_msg.edit(embed=embedVar, components=[])
                                     if mode not in AUTO_BATTLE_modes:
-                                        tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff + corruption_ap_buff + t_shock_buff + t_basic_water_buff
-                                        tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff + corruption_ap_buff + t_shock_buff + t_special_water_buff
-                                        tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff + corruption_ap_buff + t_shock_buff + t_ultimate_water_buff
+                                        tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff + corruption_ap_buff + t_shock_buff + t_basic_water_buff + t_ap_buff
+                                        tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff + corruption_ap_buff + t_shock_buff + t_special_water_buff + t_ap_buff
+                                        tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff + corruption_ap_buff + t_shock_buff + t_ultimate_water_buff + t_ap_buff
                                         tenh1 = list(t_enhancer.values())[0]
                                         tenh_name = list(t_enhancer.values())[2]
                                         tpet_enh_name = list(tpet_move.values())[2]
@@ -14117,9 +14125,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             c_defense = round(c_defense - dmg['DMG'])
                                                         elif tpet_type == 'RAGE':
                                                             t_defense = round(t_defense - dmg['DMG'])
-                                                            t_attack = round(t_attack + dmg['DMG'])
+                                                            t_ap_buff = round(t_ap_buff + dmg['DMG'])
                                                         elif tpet_type == 'BRACE':
-                                                            t_defense = round(t_defense + dmg['DMG'])
+                                                            t_ap_buff = round(t_ap_buff + dmg['DMG'])
                                                             t_attack = round(t_attack - dmg['DMG'])
                                                         elif tpet_type == 'BZRK':
                                                             t_health = round(t_health - dmg['DMG'])
@@ -14273,9 +14281,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_defense = round(o_defense - dmg['DMG'])
                                                         elif tpet_type == 'RAGE':
                                                             t_defense = round(t_defense - dmg['DMG'])
-                                                            t_attack = round(t_attack + dmg['DMG'])
+                                                            t_ap_buff = round(t_ap_buff + dmg['DMG'])
                                                         elif tpet_type == 'BRACE':
-                                                            t_defense = round(t_defense + dmg['DMG'])
+                                                            t_ap_buff = round(t_ap_buff + dmg['DMG'])
                                                             t_attack = round(t_attack - dmg['DMG'])
                                                         elif tpet_type == 'BZRK':
                                                             t_health = round(t_health - dmg['DMG'])
@@ -14431,9 +14439,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_defense = round(o_defense - dmg['DMG'])
                                                     elif tpet_type == 'RAGE':
                                                         t_defense = round(t_defense - dmg['DMG'])
-                                                        t_attack = round(t_attack + dmg['DMG'])
+                                                        t_ap_buff = round(t_ap_buff + dmg['DMG'])
                                                     elif tpet_type == 'BRACE':
-                                                        t_defense = round(t_defense + dmg['DMG'])
+                                                        t_ap_buff = round(t_ap_buff + dmg['DMG'])
                                                         t_attack = round(t_attack - dmg['DMG'])
                                                     elif tpet_type == 'BZRK':
                                                         t_health = round(t_health - dmg['DMG'])
@@ -14693,9 +14701,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             c_defense = round(t_defense - dmg['DMG'])
                                                         elif enh_type == 'RAGE':
                                                             t_defense = round(t_defense - dmg['DMG'])
-                                                            t_attack = round(t_attack + dmg['DMG'])
+                                                            t_ap_buff = round(t_ap_buff + dmg['DMG'])
                                                         elif enh_type == 'BRACE':
-                                                            t_defense = round(t_defense + dmg['DMG'])
+                                                            t_ap_buff = round(t_ap_buff + dmg['DMG'])
                                                             t_attack = round(t_attack - dmg['DMG'])
                                                         elif enh_type == 'BZRK':
                                                             t_health = round(t_health - dmg['DMG'])
@@ -15007,9 +15015,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_defense = round(o_defense - dmg['DMG'])
                                                         elif enh_type == 'RAGE':
                                                             t_defense = round(t_defense - dmg['DMG'])
-                                                            t_attack = round(t_attack + dmg['DMG'])
+                                                            t_ap_buff = round(t_ap_buff + dmg['DMG'])
                                                         elif enh_type == 'BRACE':
-                                                            t_defense = round(t_defense + dmg['DMG'])
+                                                            t_ap_buff = round(t_ap_buff + dmg['DMG'])
                                                             t_attack = round(t_attack - dmg['DMG'])
                                                         elif enh_type == 'BZRK':
                                                             t_health = round(t_health - dmg['DMG'])
@@ -15316,9 +15324,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_defense = round(o_defense - dmg['DMG'])
                                                     elif enh_type == 'RAGE':
                                                         t_defense = round(t_defense - dmg['DMG'])
-                                                        t_attack = round(t_attack + dmg['DMG'])
+                                                        t_ap_buff = round(t_ap_buff + dmg['DMG'])
                                                     elif enh_type == 'BRACE':
-                                                        t_defense = round(t_defense + dmg['DMG'])
+                                                        t_ap_buff = round(t_ap_buff + dmg['DMG'])
                                                         t_attack = round(t_attack - dmg['DMG'])
                                                     elif enh_type == 'BZRK':
                                                         t_health = round(t_health - dmg['DMG'])
@@ -15608,6 +15616,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
 
                         elif mode in co_op_modes and turn != (0 or 1):
+                            if c_ap_buff > 200:
+                                c_ap_buff = 200
+
                             # Companion Turn Start
                             if turn == 2:
                                 if t_bleed_hit:
@@ -15668,9 +15679,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         c_defense = round(c_defense + ((c_title_passive_value / 100) * t_defense))
                                     if c_title_passive_type == "RAGE":
                                         c_defense = round(c_defense - ((c_title_passive_value / 100) * c_defense))
-                                        c_attack = round(c_attack + ((c_title_passive_value / 100) * c_defense))
+                                        c_ap_buff = round(c_ap_buff + ((c_title_passive_value / 100) * c_defense))
                                     if c_title_passive_type == "BRACE":
-                                        c_defense = round(c_defense + ((c_title_passive_value / 100) * c_attack))
+                                        c_ap_buff = round(c_ap_buff + ((c_title_passive_value / 100) * c_attack))
                                         c_attack = round(c_attack - ((c_title_passive_value / 100) * c_attack))
                                     if c_title_passive_type == "BZRK":
                                         c_health = round(c_health - ((c_title_passive_value / 100) * c_health))
@@ -15732,9 +15743,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         t_defense = round(t_defense + ((t_value_for_passive / 100) * c_defense))
                                     if t_card_passive_type == "RAGE":
                                         t_defense = round(t_defense - ((t_value_for_passive / 100) * t_defense))
-                                        t_attack = round(t_attack + ((t_value_for_passive / 100) * t_defense))
+                                        c_ap_buff = round(c_ap_buff + ((t_value_for_passive / 100) * t_defense))
                                     if t_card_passive_type == "BRACE":
-                                        t_defense = round(t_defense + ((t_value_for_passive / 100) * t_attack))
+                                        c_ap_buff = round(c_ap_buff + ((t_value_for_passive / 100) * t_attack))
                                         t_attack = round(t_attack - ((t_value_for_passive / 100) * t_attack))
                                     if t_card_passive_type == "BZRK":
                                         t_health = round(t_health - ((t_value_for_passive / 100) * t_health))
@@ -15994,9 +16005,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 else:
                                     if mode in ai_co_op_modes:
                                         # UNIVERSE CARD
-                                        cap1 = list(c_1.values())[0] + ccard_lvl_ap_buff + c_shock_buff + c_basic_water_buff
-                                        cap2 = list(c_2.values())[0] + ccard_lvl_ap_buff + c_shock_buff + c_special_water_buff
-                                        cap3 = list(c_3.values())[0] + ccard_lvl_ap_buff + cdemon_slayer_buff + c_shock_buff + c_ultimate_water_buff
+                                        cap1 = list(c_1.values())[0] + ccard_lvl_ap_buff + c_shock_buff + c_basic_water_buff + c_ap_buff
+                                        cap2 = list(c_2.values())[0] + ccard_lvl_ap_buff + c_shock_buff + c_special_water_buff + c_ap_buff
+                                        cap3 = list(c_3.values())[0] + ccard_lvl_ap_buff + cdemon_slayer_buff + c_shock_buff + c_ultimate_water_buff + c_ap_buff
                                         cenh1 = list(c_enhancer.values())[0]
                                         cenh_name = list(c_enhancer.values())[2]
                                         cpet_enh_name = list(cpet_move.values())[2]
@@ -16660,9 +16671,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_defense = round(t_defense - dmg['DMG'])
                                                     elif cpet_type == 'RAGE':
                                                         c_defense = round(c_defense - dmg['DMG'])
-                                                        c_attack = round(c_attack + dmg['DMG'])
+                                                        c_ap_buff = round(c_ap_buff + dmg['DMG'])
                                                     elif cpet_type == 'BRACE':
-                                                        c_defense = round(c_defense + dmg['DMG'])
+                                                        c_ap_buff = round(c_ap_buff + dmg['DMG'])
                                                         c_attack = round(c_attack - dmg['DMG'])
                                                     elif cpet_type == 'BZRK':
                                                         c_health = round(c_health - dmg['DMG'])
@@ -16802,9 +16813,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_defense = round(t_defense - dmg['DMG'])
                                                 elif cenh_type == 'RAGE':
                                                     o_defense = round(o_defense - dmg['DMG'])
-                                                    o_attack = round(o_attack + dmg['DMG'])
+                                                    o_ap_buff = round(o_ap_buff + dmg['DMG'])
                                                 elif cenh_type == 'BRACE':
-                                                    o_defense = round(o_defense + dmg['DMG'])
+                                                    o_ap_buff = round(o_ap_buff + dmg['DMG'])
                                                     o_attack = round(o_attack - dmg['DMG'])
                                                 elif cenh_type == 'BZRK':
                                                     o_health = round(o_health - dmg['DMG'])
@@ -16927,9 +16938,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_defense = round(t_defense - dmg['DMG'])
                                                     elif enh_type == 'RAGE':
                                                         c_defense = round(c_defense - dmg['DMG'])
-                                                        c_attack = round(c_attack + dmg['DMG'])
+                                                        c_ap_buff = round(c_ap_buff + dmg['DMG'])
                                                     elif enh_type == 'BRACE':
-                                                        c_defense = round(c_defense + dmg['DMG'])
+                                                        c_ap_buff = round(c_ap_buff + dmg['DMG'])
                                                         c_attack = round(c_attack - dmg['DMG'])
                                                     elif enh_type == 'BZRK':
                                                         c_health = round(c_health - dmg['DMG'])
@@ -17237,9 +17248,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 previous_moves.append(f"(**{turn_total}**) **{c_card}** not enough Stamina to use this move") 
                                                 turn = 2
                                     else:
-                                        cap1 = list(c_1.values())[0] + ccard_lvl_ap_buff + c_shock_buff + c_basic_water_buff
-                                        cap2 = list(c_2.values())[0] + ccard_lvl_ap_buff + c_shock_buff + c_special_water_buff
-                                        cap3 = list(c_3.values())[0] + ccard_lvl_ap_buff + cdemon_slayer_buff + c_shock_buff + c_ultimate_water_buff
+                                        cap1 = list(c_1.values())[0] + ccard_lvl_ap_buff + c_shock_buff + c_basic_water_buff + c_ap_buff
+                                        cap2 = list(c_2.values())[0] + ccard_lvl_ap_buff + c_shock_buff + c_special_water_buff + c_ap_buff
+                                        cap3 = list(c_3.values())[0] + ccard_lvl_ap_buff + cdemon_slayer_buff + c_shock_buff + c_ultimate_water_buff + c_ap_buff
                                         cenh1 = list(c_enhancer.values())[0]
                                         cenh_name = list(c_enhancer.values())[2]
                                         cpet_enh_name = list(cpet_move.values())[2]
@@ -17379,9 +17390,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         util_action_row = manage_components.create_actionrow(*util_buttons)
                                         coop_util_action_row = manage_components.create_actionrow(*coop_util_buttons)
 
-                                        cap1 = list(c_1.values())[0] + ccard_lvl_ap_buff + c_shock_buff + c_basic_water_buff
-                                        cap2 = list(c_2.values())[0] + ccard_lvl_ap_buff + c_shock_buff + c_special_water_buff
-                                        cap3 = list(c_3.values())[0] + ccard_lvl_ap_buff + cdemon_slayer_buff + c_shock_buff + c_ultimate_water_buff
+                                        cap1 = list(c_1.values())[0] + ccard_lvl_ap_buff + c_shock_buff + c_basic_water_buff + c_ap_buff
+                                        cap2 = list(c_2.values())[0] + ccard_lvl_ap_buff + c_shock_buff + c_special_water_buff + c_ap_buff
+                                        cap3 = list(c_3.values())[0] + ccard_lvl_ap_buff + cdemon_slayer_buff + c_shock_buff + c_ultimate_water_buff + c_ap_buff
                                         cenh1 = list(c_enhancer.values())[0]
                                         cenh_name = list(c_enhancer.values())[2]
                                         cpet_enh_name = list(cpet_move.values())[2]
@@ -17855,9 +17866,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_defense = round(t_defense - dmg['DMG'])
                                                         elif cpet_type == 'RAGE':
                                                             c_defense = round(c_defense - dmg['DMG'])
-                                                            c_attack = round(c_attack + dmg['DMG'])
+                                                            c_ap_buff = round(c_ap_buff + dmg['DMG'])
                                                         elif cpet_type == 'BRACE':
-                                                            c_defense = round(c_defense + dmg['DMG'])
+                                                            c_ap_buff = round(c_ap_buff + dmg['DMG'])
                                                             c_attack = round(c_attack - dmg['DMG'])
                                                         elif cpet_type == 'BZRK':
                                                             c_health = round(c_health - dmg['DMG'])
@@ -18002,9 +18013,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_defense = round(t_defense - dmg['DMG'])
                                                     elif cenh_type == 'RAGE':
                                                         o_defense = round(o_defense - dmg['DMG'])
-                                                        o_attack = round(o_attack + dmg['DMG'])
+                                                        o_ap_buff = round(o_ap_buff + dmg['DMG'])
                                                     elif cenh_type == 'BRACE':
-                                                        o_defense = round(o_defense + dmg['DMG'])
+                                                        o_ap_buff = round(o_ap_buff + dmg['DMG'])
                                                         o_attack = round(o_attack - dmg['DMG'])
                                                     elif cenh_type == 'BZRK':
                                                         o_health = round(o_health - dmg['DMG'])
@@ -18237,9 +18248,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_defense = round(t_defense - dmg['DMG'])
                                                         elif enh_type == 'RAGE':
                                                             c_defense = round(c_defense - dmg['DMG'])
-                                                            c_attack = round(c_attack + dmg['DMG'])
+                                                            c_ap_buff = round(c_ap_buff + dmg['DMG'])
                                                         elif enh_type == 'BRACE':
-                                                            c_defense = round(c_defense + dmg['DMG'])
+                                                            c_ap_buff = round(c_ap_buff + dmg['DMG'])
                                                             c_attack = round(c_attack - dmg['DMG'])
                                                         elif enh_type == 'BZRK':
                                                             c_health = round(c_health - dmg['DMG'])
@@ -18648,9 +18659,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         c_defense = c_defense - ((t_title_passive_value / 100) * c_defense)
                                     if t_title_passive_type == "RAGE":
                                         t_defense = round(t_defense - ((t_title_passive_value / 100) * t_defense))
-                                        t_attack = round(t_attack + ((t_title_passive_value / 100) * t_defense))
+                                        t_ap_buff = round(t_ap_buff + ((t_title_passive_value / 100) * t_defense))
                                     if t_title_passive_type == "BRACE":
-                                        t_defense = round(t_defense + ((t_title_passive_value / 100) * t_attack))
+                                        t_ap_buff = round(t_ap_buff + ((t_title_passive_value / 100) * t_attack))
                                         t_attack = round(t_attack - ((t_title_passive_value / 100) * t_attack))
                                     if t_title_passive_type == "BZRK":
                                         t_health = round(t_health - ((t_title_passive_value / 100) * t_health))
@@ -18712,9 +18723,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         c_defense = round(c_defense + ((c_value_for_passive / 100) * t_defense))
                                     if c_card_passive_type == "RAGE":
                                         c_defense = round(c_defense - ((c_value_for_passive / 100) * c_defense))
-                                        c_attack = round(c_attack + ((c_value_for_passive / 100) * c_defense))
+                                        t_ap_buff = round(t_ap_buff + ((c_value_for_passive / 100) * c_defense))
                                     if c_card_passive_type == "BRACE":
-                                        c_defense = round(c_defense + ((c_value_for_passive / 100) * c_attack))
+                                        t_ap_buff = round(t_ap_buff + ((c_value_for_passive / 100) * c_attack))
                                         c_attack = round(c_attack - ((c_value_for_passive / 100) * c_attack))
                                     if c_card_passive_type == "BZRK":
                                         c_health = round(c_health - ((c_value_for_passive / 100) * c_health))
@@ -18970,9 +18981,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         turn = 3
                                 else:
                                     # UNIVERSE CARD
-                                    tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff + corruption_ap_buff + t_shock_buff + t_basic_water_buff
-                                    tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff + corruption_ap_buff + t_shock_buff + t_special_water_buff
-                                    tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff + corruption_ap_buff + t_shock_buff + t_ultimate_water_buff
+                                    tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff + corruption_ap_buff + t_shock_buff + t_basic_water_buff + t_ap_buff
+                                    tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff + corruption_ap_buff + t_shock_buff + t_special_water_buff + t_ap_buff
+                                    tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff + tdemon_slayer_buff + corruption_ap_buff + t_shock_buff + t_ultimate_water_buff + t_ap_buff
                                     tenh1 = list(t_enhancer.values())[0]
                                     tenh_name = list(t_enhancer.values())[2]
                                     tpet_enh_name = list(tpet_move.values())[2]
@@ -19611,9 +19622,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_defense = round(o_defense - dmg['DMG'])
                                                     elif tpet_type == 'RAGE':
                                                         t_defense = round(t_defense - dmg['DMG'])
-                                                        t_attack = round(t_attack + dmg['DMG'])
+                                                        t_ap_buff = round(t_ap_buff + dmg['DMG'])
                                                     elif tpet_type == 'BRACE':
-                                                        t_defense = round(t_defense + dmg['DMG'])
+                                                        t_ap_buff = round(t_ap_buff + dmg['DMG'])
                                                         t_attack = round(t_attack - dmg['DMG'])
                                                     elif tpet_type == 'BZRK':
                                                         t_health = round(t_health - dmg['DMG'])
@@ -19754,9 +19765,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         c_defense = round(c_defense - dmg['DMG'])
                                                     elif tpet_type == 'RAGE':
                                                         t_defense = round(t_defense - dmg['DMG'])
-                                                        t_attack = round(t_attack + dmg['DMG'])
+                                                        t_ap_buff = round(t_ap_buff + dmg['DMG'])
                                                     elif tpet_type == 'BRACE':
-                                                        t_defense = round(t_defense + dmg['DMG'])
+                                                        t_ap_buff = round(t_ap_buff + dmg['DMG'])
                                                         t_attack = round(t_attack - dmg['DMG'])
                                                     elif tpet_type == 'BZRK':
                                                         t_health = round(t_health - dmg['DMG'])
@@ -20008,9 +20019,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_defense = round(o_defense - dmg['DMG'])
                                                     elif enh_type == 'RAGE':
                                                         t_defense = round(t_defense - dmg['DMG'])
-                                                        t_attack = round(t_attack + dmg['DMG'])
+                                                        t_ap_buff = round(t_ap_buff + dmg['DMG'])
                                                     elif enh_type == 'BRACE':
-                                                        t_defense = round(t_defense + dmg['DMG'])
+                                                        t_ap_buff = round(t_ap_buff + dmg['DMG'])
                                                         t_attack = round(t_attack - dmg['DMG'])
                                                     elif enh_type == 'BZRK':
                                                         t_health = round(t_health - dmg['DMG'])
@@ -20337,9 +20348,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         c_defense = round(t_defense - dmg['DMG'])
                                                     elif enh_type == 'RAGE':
                                                         t_defense = round(t_defense - dmg['DMG'])
-                                                        t_attack = round(t_attack + dmg['DMG'])
+                                                        t_ap_buff = round(t_ap_buff + dmg['DMG'])
                                                     elif enh_type == 'BRACE':
-                                                        t_defense = round(t_defense + dmg['DMG'])
+                                                        t_ap_buff = round(t_ap_buff + dmg['DMG'])
                                                         t_attack = round(t_attack - dmg['DMG'])
                                                     elif enh_type == 'BZRK':
                                                         t_health = round(t_health - dmg['DMG'])

@@ -201,7 +201,7 @@ async def enhancers(ctx):
 
       embedVar3 = discord.Embed(title= f"Enhancer Type: Sacrifice",colour=0x7289da)
       embedVar3.set_thumbnail(url=avatar)
-      embedVar3.add_field(name="`SACRIFICE`", value="**RAGE** - Decrease Your Defense by AP %, Increase Your Attack by Amount of Decreased Defense\n\n**BRACE** - Decrease Your Attack by AP %, Increase Your Defense By Amount of Decreased Attack\n\n**BZRK** - Decrease Your Current Health by AP %,  Increase Your Attack by Amount of Decreased Health\n\n**CRYSTAL** - Decrease Your Health by AP %, Increase Your Defense by Amount of Decreased Health\n\n")
+      embedVar3.add_field(name="`SACRIFICE`", value="**RAGE** - Decrease Your Defense by AP %, Increase All Moves AP by Amount of Decreased Defense\n\n**BRACE** - Decrease Your Attack by AP %, Increase All Moves AP By Amount of Decreased Attack\n\n**BZRK** - Decrease Your Current Health by AP %,  Increase Your Attack by Amount of Decreased Health\n\n**CRYSTAL** - Decrease Your Health by AP %, Increase Your Defense by Amount of Decreased Health\n\n")
       embedVar3.set_footer(text=f"/animevs - Anime VS+ Manual\n/help - Bot Help")
 
       embedVar4 = discord.Embed(title= f"Enhancer Type: Conversion",colour=0x7289da)
