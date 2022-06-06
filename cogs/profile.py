@@ -530,7 +530,7 @@ class Profile(commands.Cog):
                         return
                     
                     else:
-                        card_file = showcard(card, arm, o_max_health, o_health, o_max_stamina, o_stamina, resolved, title, focused, o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, card_lvl, None)
+                        card_file = showcard("non-battle", card, arm, o_max_health, o_health, o_max_stamina, o_stamina, resolved, title, focused, o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, card_lvl, None)
 
                         embedVar = discord.Embed(title=f"".format(self), colour=000000)
                         embedVar.add_field(name="__Affinities__", value=f"{affinity_message}")
@@ -4087,7 +4087,7 @@ async def craft_adjuster(self, player, vault, universe, price, item, skin_list):
                                 if mytrait:
                                     traitmessage = f"**{mytrait['EFFECT']}:** {mytrait['TRAIT']}"
                                     
-                                skin_stats = showcard(skins, "none", skins['HLT'],skins['HLT'], skins['STAM'],skins['STAM'], False, base_title, False, skins['ATK'], skins['DEF'], 0, move1ap, move2ap, move3ap, enhap, enh, 0, None )
+                                skin_stats = showcard("non-battle", skins, "none", skins['HLT'],skins['HLT'], skins['STAM'],skins['STAM'], False, base_title, False, skins['ATK'], skins['DEF'], 0, move1ap, move2ap, move3ap, enhap, enh, 0, None )
                                 embedVar = discord.Embed(title= f"{skins['NAME']}", description=textwrap.dedent(f"""
                                 :mahjong: {skins['TIER']}: 🃏 **{skins['SKIN_FOR']}** 
                                 :heart: **{skins['HLT']}** :dagger: **{skins['ATK']}** :shield: **{skins['DEF']}**
@@ -4523,7 +4523,7 @@ async def menubuild(self, ctx):
                     return
                 
                 else:
-                    card_file = showcard(card, arm, o_max_health, o_health, o_max_stamina, o_stamina, resolved, title, focused, o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, card_lvl, None)
+                    card_file = showcard("non-battle", card, arm, o_max_health, o_health, o_max_stamina, o_stamina, resolved, title, focused, o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, card_lvl, None)
 
                     embedVar = discord.Embed(title=f"".format(self), colour=000000)
                     embedVar.add_field(name="__Affinities__", value=f"{affinity_message}")

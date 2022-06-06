@@ -334,7 +334,7 @@ async def viewcard(self, ctx, card: str):
                 await ctx.send(embed=embedVar)
 
             else:
-                card_file = showcard(card, "none", o_max_health, o_health, o_max_stamina, o_stamina, resolved, title, focused,
+                card_file = showcard("non-battle", card, "none", o_max_health, o_health, o_max_stamina, o_stamina, resolved, title, focused,
                                     o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, 0, None)
 
                 embedVar = discord.Embed(title=f"", colour=000000)
