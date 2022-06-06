@@ -1811,7 +1811,7 @@ async def pay(ctx, player: User, amount):
       user = db.queryUser({'DID': str(ctx.author.id)})
       team = db.queryTeam({'TEAM_NAME': user['TEAM'].lower()})
       access = False
-      tax = round(.07 * int(amount))
+      tax = round(.20 * int(amount))
 
       if user['TEAM'] == 'PCG':
          await ctx.send("You are not a part of a guild.")
