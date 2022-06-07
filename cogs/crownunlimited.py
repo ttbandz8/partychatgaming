@@ -2962,6 +2962,9 @@ def showcard(mode, d, arm, max_health, health, max_stamina, stamina, resolved, t
                 move_enhanced_text = f"🎇 {list(move_enhanced.keys())[0]}: {move_enhanced_name} {move_enhanced_ap}{enhancer_suffix_mapping[enhname]}"
             elif enhname in Turn_Enhancer_Check and (turn_total % 10 == 0 or turn_total == 0):
                 move_enhanced_text = f"🎇 {list(move_enhanced.keys())[0]}: {move_enhanced_name} {move_enhanced_ap}{enhancer_suffix_mapping[enhname]}"
+            else:
+                move_enhanced_text = f"🎇 {list(move_enhanced.keys())[0]}: {move_enhanced_name} {move_enhanced_ap}{enhancer_suffix_mapping[enhname]}"
+
 
             #Moveset Length
             
