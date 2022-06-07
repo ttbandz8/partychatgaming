@@ -265,16 +265,19 @@ async def viewcard(self, ctx, card: str):
             move1 = list(o_1.keys())[0]
             move1ap = list(o_1.values())[0]
             move1_stamina = list(o_1.values())[1]
+            move1_emoji = crown_utilities.set_emoji(move1_element)
 
             # Move 2
             move2 = list(o_2.keys())[0]
             move2ap = list(o_2.values())[0]
             move2_stamina = list(o_2.values())[1]
+            move2_emoji = crown_utilities.set_emoji(move2_element)
 
             # Move 3
             move3 = list(o_3.keys())[0]
             move3ap = list(o_3.values())[0]
             move3_stamina = list(o_3.values())[1]
+            move3_emoji = crown_utilities.set_emoji(move3_element)
 
             # Move Enhancer
             move4 = list(o_enhancer.keys())[0]
@@ -322,9 +325,9 @@ async def viewcard(self, ctx, card: str):
 
                 🩸 {passive_name}: {passive_type} {passive_num}{passive_enhancer_suffix_mapping[passive_type]}                
 
-                💥 {move1}: {move1ap}
-                ☄️ {move2}: {move2ap}
-                🏵️ {move3}: {move3ap}
+                {move1_emoji} {move1}: {move1ap}
+                {move2_emoji} {move2}: {move2ap}
+                {move3_emoji} {move3}: {move3ap}
                 🦠 {move4}: {move4enh} {move4ap} {passive_enhancer_suffix_mapping[move4enh]}   
 
                 ♾️ {traitmessage}

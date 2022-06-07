@@ -224,8 +224,8 @@ class Trade(commands.Cog):
                             return
                         if button_ctx.custom_id == "no":
                             await button_ctx.send("Trade **Cancelled**")                
-                            await main.bless(trade_check['MCOIN'], str(ctx.author.id))
-                            await main.bless(trade_check['BCOIN'], str(buyer_info['DID']))
+                            await crown_utilities.bless(trade_check['MCOIN'], str(ctx.author.id))
+                            await crown_utilities.bless(trade_check['BCOIN'], str(buyer_info['DID']))
                             resp = db.deleteTrade(trade_check)
                             self.stop = True
                             return
@@ -368,10 +368,10 @@ class Trade(commands.Cog):
                                     db.updateVaultNoFilter({'DID': str(buyer_info['DID'])},{'$pull':{'PETS': {'NAME': str(s)}}})
                                     db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$addToSet':{'PETS': pet_info }})
                                     
-                                await main.curse(m_fees, str(ctx.author.id))
-                                await main.curse(b_fees, str(buyer_info['DID']))
-                                await main.bless(b_coins, str(ctx.author.id))
-                                await main.bless(m_coins, str(buyer_info['DID']))
+                                await crown_utilities.curse(m_fees, str(ctx.author.id))
+                                await crown_utilities.curse(b_fees, str(buyer_info['DID']))
+                                await crown_utilities.bless(b_coins, str(ctx.author.id))
+                                await crown_utilities.bless(m_coins, str(buyer_info['DID']))
                                 
                                 micon = '⚪'
                                 if m_coin_diff > 0:
@@ -496,8 +496,8 @@ class Trade(commands.Cog):
                                 self.stop = True
                             if button_ctx.custom_id == "no":
                                 await button_ctx.send("Trade **Cancelled**")
-                                await main.bless(trade_check2['MCOIN'], str(trade_check2['MERCHANT']))
-                                await main.bless(trade_check2['BCOIN'], str(trade_check2['BUYER']))
+                                await crown_utilities.bless(trade_check2['MCOIN'], str(trade_check2['MERCHANT']))
+                                await crown_utilities.bless(trade_check2['BCOIN'], str(trade_check2['BUYER']))
                                 resp = db.deleteTrade(trade_check2)
                         except Exception as ex:
                             trace = []
@@ -605,7 +605,7 @@ class Trade(commands.Cog):
                     bank = vault['BALANCE']
                     if mode == 'add':
                         if bank >= coins:
-                            await main.curse(coins, ctx.author)
+                            await crown_utilities.curse(coins, ctx.author)
                             if mvalidation ==True:
                                 trade_query = {'MDID' : str(ctx.author.id), 'BDID': str(mtrade['BDID']), 'OPEN' : True}
                                 update_query = {"$inc" : {'MCOIN': int(coins)}}
@@ -627,7 +627,7 @@ class Trade(commands.Cog):
                             trade_coins =btrade['BCOIN']
                         if trade_coins >= receipt:
                             refund = receipt
-                            await main.bless(refund, ctx.author)
+                            await crown_utilities.bless(refund, ctx.author)
                             if mvalidation:
                                 write_off = 0 - refund
                                 trade_query = {'MDID' : str(ctx.author.id), 'BDID' : str(mtrade['BDID']), 'OPEN' : True}
