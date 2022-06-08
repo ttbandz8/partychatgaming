@@ -265,18 +265,21 @@ async def viewcard(self, ctx, card: str):
             move1 = list(o_1.keys())[0]
             move1ap = list(o_1.values())[0]
             move1_stamina = list(o_1.values())[1]
+            move1_element = list(o_1.values())[2]
             move1_emoji = crown_utilities.set_emoji(move1_element)
 
             # Move 2
             move2 = list(o_2.keys())[0]
             move2ap = list(o_2.values())[0]
             move2_stamina = list(o_2.values())[1]
+            move2_element = list(o_2.values())[2]
             move2_emoji = crown_utilities.set_emoji(move2_element)
 
             # Move 3
             move3 = list(o_3.keys())[0]
             move3ap = list(o_3.values())[0]
             move3_stamina = list(o_3.values())[1]
+            move3_element = list(o_3.values())[2]
             move3_emoji = crown_utilities.set_emoji(move3_element)
 
             # Move Enhancer

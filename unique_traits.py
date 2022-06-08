@@ -80,9 +80,9 @@ traits = [{
     'EFFECT': 'Feint Attack',
     'TRAIT': 'If you miss, Crit!'
 },{
-    'NAME': 'Crown Rift Awakening',
-    'EFFECT': 'Blood Awakening',
-    'TRAIT': 'Your Critical Hits do 4x Damage.'
+    'NAME': 'One Piece',
+    'EFFECT': 'OTW',
+    'TRAIT': 'Trait coming soon..'
 },{
     'NAME': 'Crown Rift Madness',
     'EFFECT': 'Madness',
