@@ -74,41 +74,41 @@ ELEMENTS = textwrap.dedent(f"""\
 
 👊 Physical - Normal Damage
 
-🔥 Fire - Does 20% damage of previous attack over the next opponent turns, stacks
+🔥 Fire - Does 25% damage of previous attack over the next opponent turns, stacks
 
 ❄️ Ice - After 3 uses opponent freezes and loses 1 turn 
 
 💧 Water - Increases all water attack dmg by 25 Flat 
 
-⛰️ Earth - Cannot be Parried. Increases Def by 20% AP
+⛰️ Earth - Cannot be Parried. Increases Def by 25% AP
 
-⚡️ Electric- Add 10% to Shock damage, added to each attack
+⚡️ Electric- Add 15% to Shock damage, added to each attack
 
-🌪️ Wind - Cannot Miss 
+🌪️ Wind - Cannot Miss, only Hits
 
 🔮 Psychic - Penetrates Barriers. Reduce opponent ATK & DEF by 8% AP 
 
-☠️ Death - Adds 10% opponent max health as damage
+☠️ Death - Adds 15% opponent max health as damage
 
 ❤️‍🔥 Life - Heal for 15% AP 
 
 🌕 Light - Regain 50% Stamina Cost
 
-♠️ Dark- Penetrates shields & drains 5 stamina 
+♠️ Dark- Penetrates shields & drains 10 stamina 
 
-🧪 Poison - Opponent takes additional 8 damage each turn stacking up to 100
+🧪 Poison - Opponent takes additional 10 damage each turn stacking up to 150
 
-🏹 Ranged - If ST > 80 deals 1.5x Damage
+🏹 Ranged - Deals 1.5x Damage
 
 💙 Spirit - Has higher chance of Crit
 
-⛓️ Recoil - Deals 25% damage back to you
+♻️ Recoil - Deals 25% damage back to you while dealing more damage to opponent
 
-⌛ Time - You Focus after attacking
+⌛ Time - You Focus after attacking, blocking for a turn in the process
 
 🅱️ Bleed - After 4 Attacks deal 5x turn count damage to opponent
 
-🪐 Gravity - Disables Opponent Block
+🪐 Gravity - Disables Opponent Block and Reduce opponent DEF by 15% AP
 
 [Join the Anime VS+ Support Server](https://discord.gg/2JkCqcN3hB)
 """)
