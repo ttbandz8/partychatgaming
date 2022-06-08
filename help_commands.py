@@ -84,7 +84,7 @@ ELEMENTS = textwrap.dedent(f"""\
 
 ⚡️ Electric- Add 15% to Shock damage, added to each attack
 
-🌪️ Wind - Cannot Miss, only Hits
+🌪️ Wind - Cannot Miss
 
 🔮 Psychic - Penetrates Barriers. Reduce opponent ATK & DEF by 8% AP 
 
