@@ -8751,7 +8751,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_health = t_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == death_element:
-                                                    t_max_health = t_max_health - (dmg['DMG'] * .15)
+                                                    t_max_health = t_max_health - (dmg['DMG'] * .20)
                                                     t_health = t_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == light_element:
@@ -8765,7 +8765,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_health = t_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == life_element:
-                                                    o_health = o_health + (dmg['DMG'] * .15)
+                                                    o_health = o_health + (dmg['DMG'] * .20)
                                                     t_health = t_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == recoil_element:
@@ -9059,7 +9059,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = t_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == death_element:
-                                                        t_max_health = t_max_health - (dmg['DMG'] * .15)
+                                                        t_max_health = t_max_health - (dmg['DMG'] * .20)
                                                         t_health = t_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == light_element:
@@ -9073,7 +9073,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = t_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == life_element:
-                                                        o_health = o_health + (dmg['DMG'] * .15)
+                                                        o_health = o_health + (dmg['DMG'] * .20)
                                                         t_health = t_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == recoil_element:
@@ -10339,7 +10339,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = t_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == death_element:
-                                                        t_max_health = t_max_health - (dmg['DMG'] * .15)
+                                                        t_max_health = t_max_health - (dmg['DMG'] * .20)
                                                         t_health = t_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == light_element:
@@ -10353,7 +10353,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = t_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == life_element:
-                                                        o_health = o_health + (dmg['DMG'] * .15)
+                                                        o_health = o_health + (dmg['DMG'] * .20)
                                                         t_health = t_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == recoil_element:
@@ -10664,7 +10664,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == death_element:
-                                                            t_max_health = t_max_health - (dmg['DMG'] * .15)
+                                                            t_max_health = t_max_health - (dmg['DMG'] * .20)
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == light_element:
@@ -10678,7 +10678,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == life_element:
-                                                            o_health = o_health + (dmg['DMG'] * .15)
+                                                            o_health = o_health + (dmg['DMG'] * .20)
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == recoil_element:
@@ -12035,7 +12035,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
 
                                                         elif dmg['ELEMENT'] == death_element:
-                                                            o_max_health = o_max_health - (dmg['DMG'] * .15)
+                                                            o_max_health = o_max_health - (dmg['DMG'] * .20)
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == light_element:
@@ -12049,7 +12049,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == life_element:
-                                                            t_health = t_health + (dmg['DMG'] * .15)
+                                                            t_health = t_health + (dmg['DMG'] * .20)
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == psychic_element:
@@ -12342,7 +12342,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
 
                                                             elif dmg['ELEMENT'] == death_element:
-                                                                o_max_health = o_max_health - (dmg['DMG'] * .15)
+                                                                o_max_health = o_max_health - (dmg['DMG'] * .20)
                                                                 o_health = o_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == light_element:
@@ -12356,7 +12356,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_health = o_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == life_element:
-                                                                t_health = t_health + (dmg['DMG'] * .15)
+                                                                t_health = t_health + (dmg['DMG'] * .20)
                                                                 o_health = o_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == psychic_element:
@@ -13190,7 +13190,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
 
                                                     elif dmg['ELEMENT'] == death_element:
-                                                        o_max_health = o_max_health - (dmg['DMG'] * .15)
+                                                        o_max_health = o_max_health - (dmg['DMG'] * .20)
                                                         o_health = o_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == light_element:
@@ -13204,7 +13204,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_health = o_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == life_element:
-                                                        t_health = t_health + (dmg['DMG'] * .15)
+                                                        t_health = t_health + (dmg['DMG'] * .20)
                                                         o_health = o_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == psychic_element:
@@ -13477,7 +13477,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
 
                                                         elif dmg['ELEMENT'] == death_element:
-                                                            o_max_health = o_max_health - (dmg['DMG'] * .15)
+                                                            o_max_health = o_max_health - (dmg['DMG'] * .20)
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == light_element:
@@ -13491,7 +13491,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == life_element:
-                                                            t_health = t_health + (dmg['DMG'] * .15)
+                                                            t_health = t_health + (dmg['DMG'] * .20)
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == psychic_element:
@@ -14686,7 +14686,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
 
                                                 elif dmg['ELEMENT'] == death_element:
-                                                    o_max_health = o_max_health - (dmg['DMG'] * .15)
+                                                    o_max_health = o_max_health - (dmg['DMG'] * .20)
                                                     o_health = o_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == light_element:
@@ -14700,7 +14700,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     o_health = o_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == life_element:
-                                                    t_health = t_health + (dmg['DMG'] * .15)
+                                                    t_health = t_health + (dmg['DMG'] * .20)
                                                     o_health = o_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == psychic_element:
@@ -14993,7 +14993,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 c_health = c_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == death_element:
-                                                                c_max_health = c_max_health - (dmg['DMG'] * .15)
+                                                                c_max_health = c_max_health - (dmg['DMG'] * .20)
                                                                 c_health = c_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == light_element:
@@ -15007,7 +15007,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 c_health = c_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == life_element:
-                                                                t_health = t_health + (dmg['DMG'] * .15)
+                                                                t_health = t_health + (dmg['DMG'] * .20)
                                                                 c_health = c_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == psychic_element:
@@ -15297,7 +15297,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
 
                                                             elif dmg['ELEMENT'] == death_element:
-                                                                o_max_health = o_max_health - (dmg['DMG'] * .15)
+                                                                o_max_health = o_max_health - (dmg['DMG'] * .20)
                                                                 o_health = o_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == light_element:
@@ -15311,7 +15311,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_health = o_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == life_element:
-                                                                t_health = t_health + (dmg['DMG'] * .15)
+                                                                t_health = t_health + (dmg['DMG'] * .20)
                                                                 o_health = o_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == psychic_element:
@@ -15622,7 +15622,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
 
                                                         elif dmg['ELEMENT'] == death_element:
-                                                            o_max_health = o_max_health - (dmg['DMG'] * .15)
+                                                            o_max_health = o_max_health - (dmg['DMG'] * .20)
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == light_element:
@@ -15636,7 +15636,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == life_element:
-                                                            t_health = t_health + (dmg['DMG'] * .15)
+                                                            t_health = t_health + (dmg['DMG'] * .20)
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == psychic_element:
@@ -17278,7 +17278,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == death_element:
-                                                            t_max_health = t_max_health - (dmg['DMG'] * .15)
+                                                            t_max_health = t_max_health - (dmg['DMG'] * .20)
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == light_element:
@@ -17292,7 +17292,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == life_element:
-                                                            c_health = c_health + (dmg['DMG'] * .15)
+                                                            c_health = c_health + (dmg['DMG'] * .20)
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == psychic_element:
@@ -18293,7 +18293,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == death_element:
-                                                            t_max_health = t_max_health - (dmg['DMG'] * .15)
+                                                            t_max_health = t_max_health - (dmg['DMG'] * .20)
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == light_element:
@@ -18307,7 +18307,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == life_element:
-                                                            c_health = c_health + (dmg['DMG'] * .15)
+                                                            c_health = c_health + (dmg['DMG'] * .20)
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == psychic_element:
@@ -18617,7 +18617,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = t_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == death_element:
-                                                                t_max_health = t_max_health - (dmg['DMG'] * .15)
+                                                                t_max_health = t_max_health - (dmg['DMG'] * .20)
                                                                 t_health = t_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == light_element:
@@ -18631,7 +18631,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = t_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == life_element:
-                                                                c_health = c_health + (dmg['DMG'] * .15)
+                                                                c_health = c_health + (dmg['DMG'] * .20)
                                                                 t_health = t_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == psychic_element:
@@ -20089,7 +20089,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     c_health = c_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == death_element:
-                                                    c_max_health = c_max_health - (dmg['DMG'] * .15)
+                                                    c_max_health = c_max_health - (dmg['DMG'] * .20)
                                                     c_health = c_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == light_element:
@@ -20103,7 +20103,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     c_health = c_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == life_element:
-                                                    t_health = t_health + (dmg['DMG'] * .15)
+                                                    t_health = t_health + (dmg['DMG'] * .20)
                                                     c_health = c_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == psychic_element:
@@ -20379,7 +20379,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
 
                                                         elif dmg['ELEMENT'] == death_element:
-                                                            o_max_health = o_max_health - (dmg['DMG'] * .15)
+                                                            o_max_health = o_max_health - (dmg['DMG'] * .20)
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == light_element:
@@ -20393,7 +20393,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == life_element:
-                                                            t_health = t_health + (dmg['DMG'] * .15)
+                                                            t_health = t_health + (dmg['DMG'] * .20)
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == psychic_element:
@@ -20731,7 +20731,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             c_health = c_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == death_element:
-                                                            c_max_health = c_max_health - (dmg['DMG'] * .15)
+                                                            c_max_health = c_max_health - (dmg['DMG'] * .20)
                                                             c_health = c_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == light_element:
@@ -20745,7 +20745,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             c_health = c_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == life_element:
-                                                            t_health = t_health + (dmg['DMG'] * .15)
+                                                            t_health = t_health + (dmg['DMG'] * .20)
                                                             c_health = c_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == psychic_element:

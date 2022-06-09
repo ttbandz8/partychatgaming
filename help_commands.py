@@ -88,9 +88,9 @@ ELEMENTS = textwrap.dedent(f"""\
 
 🔮 Psychic - Penetrates Barriers. Reduce opponent ATK & DEF by 8% AP 
 
-☠️ Death - Adds 15% opponent max health as damage
+☠️ Death - Adds 20% opponent max health as damage
 
-❤️‍🔥 Life - Heal for 15% AP 
+❤️‍🔥 Life - Heal for 20% AP 
 
 🌕 Light - Regain 50% Stamina Cost, Increases Atk by 20% of dmg
 
