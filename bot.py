@@ -1811,7 +1811,7 @@ async def pay(ctx, player: User, amount):
       user = db.queryUser({'DID': str(ctx.author.id)})
       team = db.queryTeam({'TEAM_NAME': user['TEAM'].lower()})
       access = False
-      tax = round(.20 * int(amount))
+      tax = round(.25 * int(amount))
 
       if user['TEAM'] == 'PCG':
          await ctx.send("You are not a part of a guild.")
@@ -1849,14 +1849,14 @@ async def pay(ctx, player: User, amount):
          taxicon = ":dollar:"
 
       balance = team['BANK']
-      payment = int(amount) + int(tax)
+      payment = round(int(amount) + int(tax))
       different = 0 
       if balance <= payment:
          difference = round(abs(balance - payment))
          await ctx.send(f"Your Guild does not have **{icon}{'{:,}'.format(int(payment))}**\n*Taxes & Fees:* **{taxicon}{'{:,}'.format(int(difference))}**")
       else:
          await crown_utilities.bless(int(amount), player.id)
-         await crown_utilities.curseteam(int(amount), team['TEAM_NAME'])
+         await crown_utilities.curseteam(int(payment), team['TEAM_NAME'])
          await ctx.send(f"{icon} **{'{:,}'.format(int(amount))}** has been paid to {player.mention}.\n*Taxes & Fees:* **{taxicon}{'{:,}'.format(int(tax))}**")
          transaction_message = f"{str(ctx.author)} paid {str(player)} {'{:,}'.format(int(amount))}."
          team_query = {'TEAM_NAME': team['TEAM_NAME']}

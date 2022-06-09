@@ -2223,8 +2223,8 @@ def damage_cal(opponent_affinity, move_type, move_element, universe, card, abili
                 enhanced = ap
             else:
                 enhanced = round(ap * turn)
-                if enhanced >= 350:
-                    enhanced = 350
+                if enhanced >= 200:
+                    enhanced = 200
         elif enh_type == 'CREATION':
             if turn == 0:
                 enhanced = ap
@@ -10540,7 +10540,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     previous_moves.append(f"(**{turn_total}**) **{o_card}**: {dmg['MESSAGE']}")
                                                     turn_total = turn_total + 1
                                                     turn = 1
-                                                    await button_ctx.defer(ignore=True)
+                                                    # await button_ctx.defer(ignore=True)
                                                 else:
                                                     if t_universe == "Naruto" and t_stamina < 10:
                                                         t_stored_damage = round(dmg['DMG'])
@@ -10737,7 +10737,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 previous_moves.append(f"(**{turn_total}**) **{o_card}**: 💉 Siphoned **Full Health!**")
                                                             else:
                                                                 previous_moves.append(f"(**{turn_total}**) **{o_card}**: 💉 Siphoned **{round(siphon_damage)}** Health!")
-                                                            await button_ctx.defer(ignore=True)
+                                                            # await button_ctx.defer(ignore=True)
                                                         if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                             oarm_barrier_active=False
                                                             embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
