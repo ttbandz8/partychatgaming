@@ -8734,7 +8734,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     
 
                                                 elif dmg['ELEMENT'] == time_element:
-                                                    o_stamina = 0
+                                                    if o_stamina <= 80:
+                                                        o_stamina = 0
                                                     o_block_used = True
                                                     o_defense = round(o_defense * 2)
                                                     previous_moves.append(f"**{o_card}** Blocked 🛡️")
@@ -9039,7 +9040,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         
 
                                                     elif dmg['ELEMENT'] == time_element:
-                                                        o_stamina = 0
+                                                        if o_stamina <= 80:
+                                                            o_stamina = 0
                                                         o_block_used = True
                                                         o_defense = round(o_defense * 2)
                                                         previous_moves.append(f"**{o_card}** Blocked 🛡️")
@@ -10318,7 +10320,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         
 
                                                     elif dmg['ELEMENT'] == time_element:
-                                                        o_stamina = 0
+                                                        if o_stamina <= 80:
+                                                            o_stamina = 0
                                                         o_block_used = True
                                                         o_defense = round(o_defense * 2)
                                                         previous_moves.append(f"**{o_card}** Blocked 🛡️")
@@ -10641,7 +10644,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             
 
                                                         elif dmg['ELEMENT'] == time_element:
-                                                            o_stamina = 0
+                                                            if o_stamina <= 80:
+                                                                o_stamina = 0
                                                             o_block_used = True
                                                             o_defense = round(o_defense * 2)
                                                             previous_moves.append(f"**{o_card}** Blocked 🛡️")
@@ -12013,7 +12017,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == time_element:
-                                                            t_stamina = 0
+                                                            if t_stamina <= 80:
+                                                                t_stamina = 0
                                                             t_block_used = True
                                                             t_defense = round(t_defense * 2)
                                                             previous_moves.append(f"**{t_card}** Blocked 🛡️")
@@ -12317,7 +12322,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_health = o_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == time_element:
-                                                                t_stamina = 0
+                                                                if t_stamina <= 80:
+                                                                    t_stamina = 0
                                                                 t_block_used = True
                                                                 t_defense = round(t_defense * 2)
                                                                 previous_moves.append(f"**{t_card}** Blocked 🛡️")
@@ -13164,7 +13170,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_health = o_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == time_element:
-                                                        t_stamina = 0
+                                                        if t_stamina <= 80:
+                                                            t_stamina = 0
                                                         t_block_used = True
                                                         t_defense = round(t_defense * 2)
                                                         previous_moves.append(f"**{t_card}** Blocked 🛡️")
@@ -13448,7 +13455,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == time_element:
-                                                            t_stamina = 0
+                                                            if t_stamina <= 80:
+                                                                t_stamina = 0
                                                             t_block_used = True
                                                             t_defense = round(t_defense * 2)
                                                             previous_moves.append(f"**{t_card}** Blocked 🛡️")
@@ -14655,7 +14663,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     o_health = o_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == time_element:
-                                                    t_stamina = 0
+                                                    if t_stamina <= 80:
+                                                        t_stamina = 0
                                                     t_block_used = True
                                                     t_defense = round(t_defense * 2)
                                                     previous_moves.append(f"**{t_card}** Blocked 🛡️")
@@ -14946,7 +14955,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 c_health = c_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == time_element:
-                                                                t_stamina = 0
+                                                                if t_stamina <= 80:
+                                                                    t_stamina = 0
                                                                 t_block_used = True
                                                                 t_defense = round(t_defense * 2)
                                                                 previous_moves.append(f"**{t_card}** Blocked 🛡️")
@@ -15262,7 +15272,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_health = o_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == time_element:
-                                                                t_stamina = 0
+                                                                if t_stamina <= 80:
+                                                                    t_stamina = 0
                                                                 t_block_used = True
                                                                 t_defense = round(t_defense * 2)
                                                                 previous_moves.append(f"**{t_card}** Blocked 🛡️")
@@ -15585,7 +15596,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == time_element:
-                                                            t_stamina = 0
+                                                            if t_stamina <= 80:
+                                                                t_stamina = 0
                                                             t_block_used = True
                                                             t_defense = round(t_defense * 2)
                                                             previous_moves.append(f"**{t_card}** Blocked 🛡️")
@@ -15805,7 +15817,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     if t_card_passive_type == "HLT":
                                         t_health = round(round(t_health + ((t_value_for_passive / 100) * t_health)))
                                     if t_card_passive_type == "LIFE":
-                                        if t_mac_health != t_health:
+                                        if t_max_health != t_health:
                                             c_health = round(c_health - ((t_value_for_passive / 100) * c_health))
                                             t_health = round(t_health + ((t_value_for_passive / 100) * c_health))
                                     if t_card_passive_type == "ATK":
@@ -17225,7 +17237,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == time_element:
-                                                            c_stamina = 0
+                                                            if c_stamina <= 80:
+                                                                c_stamina = 0
                                                             c_block_used = True
                                                             c_defense = round(c_defense * 2)
                                                             previous_moves.append(f"**{c_card}** Blocked 🛡️")
@@ -18239,7 +18252,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == time_element:
-                                                            c_stamina = 0
+                                                            if c_stamina <= 80:
+                                                                c_stamina = 0
                                                             c_block_used = True
                                                             c_defense = round(c_defense * 2)
                                                             previous_moves.append(f"**{c_card}** Blocked 🛡️")
@@ -18560,7 +18574,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = t_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == time_element:
-                                                                c_stamina = 0
+                                                                if c_stamina <= 80:
+                                                                    c_stamina = 0
                                                                 c_block_used = True
                                                                 c_defense = round(c_defense * 2)
                                                                 previous_moves.append(f"**{c_card}** Blocked 🛡️")
@@ -20030,7 +20045,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     c_health = c_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == time_element:
-                                                    t_stamina = 0
+                                                    if t_stamina <= 80:
+                                                        t_stamina = 0
                                                     t_block_used = True
                                                     t_defense = round(t_defense * 2)
                                                     previous_moves.append(f"**{t_card}** Blocked 🛡️")
@@ -20332,7 +20348,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == time_element:
-                                                            t_stamina = 0
+                                                            if t_stamina <= 80:
+                                                                t_stamina = 0
                                                             t_block_used = True
                                                             t_defense = round(t_defense * 2)
                                                             previous_moves.append(f"**{t_card}** Blocked 🛡️")
@@ -20669,7 +20686,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             c_health = c_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == time_element:
-                                                            t_stamina = 0
+                                                            if t_stamina <= 80:
+                                                                t_stamina = 0
                                                             t_block_used = True
                                                             t_defense = round(t_defense * 2)
                                                             previous_moves.append(f"**{t_card}** Blocked 🛡️")

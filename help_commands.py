@@ -104,7 +104,7 @@ ELEMENTS = textwrap.dedent(f"""\
 
 ♻️ Recoil - Deals 25% damage back to you while dealing more damage to opponent
 
-⌛ Time - You Focus after attacking, blocking for a turn in the process
+⌛ Time - You Focus after attacking if your stamina is less than 80, blocking for a turn in the process
 
 🅱️ Bleed - After 4 Attacks deal 5x turn count damage to opponent
 
