@@ -84,7 +84,7 @@ ELEMENTS = textwrap.dedent(f"""\
 
 ⚡️ Electric- Add 15% to Shock damage, added to each attack
 
-🌪️ Wind - Cannot Miss
+🌪️ Wind - Cannot Miss, boosts all wind damage by 10% of damage dealt
 
 🔮 Psychic - Penetrates Barriers. Reduce opponent ATK & DEF by 8% AP 
 
@@ -92,7 +92,7 @@ ELEMENTS = textwrap.dedent(f"""\
 
 ❤️‍🔥 Life - Heal for 15% AP 
 
-🌕 Light - Regain 50% Stamina Cost
+🌕 Light - Regain 50% Stamina Cost, Increases Atk by 20% of dmg
 
 ♠️ Dark- Penetrates shields & drains 10 stamina 
 

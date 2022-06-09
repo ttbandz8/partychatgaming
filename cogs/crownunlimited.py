@@ -2403,6 +2403,7 @@ def damage_cal(opponent_affinity, move_type, move_element, universe, card, abili
             ranged_attack = False
             low = dmg - (dmg * .10)
             high = dmg + (dmg * .10)
+            wind_buff = 0
 
             move_emoji = crown_utilities.set_emoji(move_element)
             if move_element == "WIND":
@@ -2457,8 +2458,12 @@ def damage_cal(opponent_affinity, move_type, move_element, universe, card, abili
             else:
                 message = f"{move_emoji} {move} used! Dealt **{true_dmg}** dmg!"
 
-            if move_element == "RECOIL":
+            if move_element == "RECOIL" and hit_roll > miss_hit:
                 true_dmg = round(true_dmg + 200)
+
+            if is_wind_element and hit_roll > miss_hit:
+                wind_buff = round(wind_buff + round(true_dmg * .10))
+                true_dmg = round(true_dmg + wind_buff)
 
             # if move_stamina == 80:
             #     # message = f"{special_description}\n" + message
@@ -8751,6 +8756,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                 elif dmg['ELEMENT'] == light_element:
                                                     o_stamina = round(o_stamina + (dmg['STAMINA_USED'] / 2))
+                                                    o_attack = o_attack + (dmg['DMG'] * .20)
                                                     t_health = t_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == dark_element:
@@ -9058,6 +9064,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                     elif dmg['ELEMENT'] == light_element:
                                                         o_stamina = round(o_stamina + (dmg['STAMINA_USED'] / 2))
+                                                        o_attack = o_attack + (dmg['DMG'] * .20)
                                                         t_health = t_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == dark_element:
@@ -10337,6 +10344,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                     elif dmg['ELEMENT'] == light_element:
                                                         o_stamina = round(o_stamina + (dmg['STAMINA_USED'] / 2))
+                                                        o_attack = o_attack + (dmg['DMG'] * .20)
                                                         t_health = t_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == dark_element:
@@ -10661,6 +10669,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                         elif dmg['ELEMENT'] == light_element:
                                                             o_stamina = round(o_stamina + (dmg['STAMINA_USED'] / 2))
+                                                            o_attack = o_attack + (dmg['DMG'] * .20)
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == dark_element:
@@ -12031,6 +12040,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                         elif dmg['ELEMENT'] == light_element:
                                                             t_stamina = round(t_stamina + (dmg['STAMINA_USED'] / 2))
+                                                            t_attack = t_attack + (dmg['DMG'] * .20)
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == dark_element:
@@ -12337,6 +12347,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                             elif dmg['ELEMENT'] == light_element:
                                                                 t_stamina = round(t_stamina + (dmg['STAMINA_USED'] / 2))
+                                                                t_attack = t_attack + (dmg['DMG'] * .20)
                                                                 o_health = o_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == dark_element:
@@ -13184,6 +13195,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                     elif dmg['ELEMENT'] == light_element:
                                                         t_stamina = round(t_stamina + (dmg['STAMINA_USED'] / 2))
+                                                        t_attack = t_attack + (dmg['DMG'] * .20)
                                                         o_health = o_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == dark_element:
@@ -13470,6 +13482,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                         elif dmg['ELEMENT'] == light_element:
                                                             t_stamina = round(t_stamina + (dmg['STAMINA_USED'] / 2))
+                                                            t_attack = t_attack + (dmg['DMG'] * .20)
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == dark_element:
@@ -14678,6 +14691,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                 elif dmg['ELEMENT'] == light_element:
                                                     t_stamina = round(t_stamina + (dmg['STAMINA_USED'] / 2))
+                                                    t_attack = t_attack + (dmg['DMG'] * .20)
                                                     o_health = o_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == dark_element:
@@ -14984,6 +14998,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                             elif dmg['ELEMENT'] == light_element:
                                                                 t_stamina = round(t_stamina + (dmg['STAMINA_USED'] / 2))
+                                                                t_attack = t_attack + (dmg['DMG'] * .20)
                                                                 c_health = c_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == dark_element:
@@ -15287,6 +15302,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                             elif dmg['ELEMENT'] == light_element:
                                                                 t_stamina = round(t_stamina + (dmg['STAMINA_USED'] / 2))
+                                                                t_attack = t_attack + (dmg['DMG'] * .20)
                                                                 o_health = o_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == dark_element:
@@ -15611,6 +15627,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                         elif dmg['ELEMENT'] == light_element:
                                                             t_stamina = round(t_stamina + (dmg['STAMINA_USED'] / 2))
+                                                            t_attack = t_attack + (dmg['DMG'] * .20)
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == dark_element:
@@ -17266,6 +17283,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                         elif dmg['ELEMENT'] == light_element:
                                                             c_stamina = round(c_stamina + (dmg['STAMINA_USED'] / 2))
+                                                            c_attack = c_attack + (dmg['DMG'] * .20)
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == dark_element:
@@ -18280,6 +18298,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                         elif dmg['ELEMENT'] == light_element:
                                                             c_stamina = round(c_stamina + (dmg['STAMINA_USED'] / 2))
+                                                            c_attack = c_attack + (dmg['DMG'] * .20)
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == dark_element:
@@ -18603,6 +18622,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                             elif dmg['ELEMENT'] == light_element:
                                                                 c_stamina = round(c_stamina + (dmg['STAMINA_USED'] / 2))
+                                                                c_attack = c_attack + (dmg['DMG'] * .20)
                                                                 t_health = t_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == dark_element:
@@ -20074,6 +20094,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                 elif dmg['ELEMENT'] == light_element:
                                                     t_stamina = round(t_stamina + (dmg['STAMINA_USED'] / 2))
+                                                    t_attack = t_attack + (dmg['DMG'] * .20)
                                                     c_health = c_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == dark_element:
@@ -20363,6 +20384,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                         elif dmg['ELEMENT'] == light_element:
                                                             t_stamina = round(t_stamina + (dmg['STAMINA_USED'] / 2))
+                                                            t_attack = t_attack + (dmg['DMG'] * .20)
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == dark_element:
@@ -20714,6 +20736,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                         elif dmg['ELEMENT'] == light_element:
                                                             t_stamina = round(t_stamina + (dmg['STAMINA_USED'] / 2))
+                                                            t_attack = t_attack + (dmg['DMG'] * .20)
                                                             c_health = c_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == dark_element:
