@@ -4086,20 +4086,20 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
     difficulty = sowner['DIFFICULTY']
 
     if difficulty == "EASY":
-        health_debuff_from_difficulty = 400
+        health_debuff_from_difficulty = 500
         stat_debuff_from_difficulty = 150
 
     if difficulty == "HARD":
         health_buff_from_difficulty = 1500
-        stat_buff_from_difficulty = 300
-        ap_buff_from_difficulty = 100
+        stat_buff_from_difficulty = 50
+        ap_buff_from_difficulty = 50
         if mode in D_modes:
             health_buff_from_difficulty = 3000
-            stat_buff_from_difficulty = 200
-            ap_buff_from_difficulty = 180
+            stat_buff_from_difficulty = 50
+            ap_buff_from_difficulty = 100
         if mode in B_modes:
-            health_buff_from_difficulty = 3000
-            ap_buff_from_difficulty = 250
+            health_buff_from_difficulty = 7000
+            ap_buff_from_difficulty = 100
             stat_buff_from_difficulty = 0
 
 
@@ -4570,13 +4570,13 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             t_gif = t['GIF']
             t_card_path = t['PATH']
             t_rcard_path = t['RPATH']
-            t_health = t['HLT'] + (10 * currentopponent) + opponent_health_scaling + tcard_lvl_hlt_buff  + health_buff_from_difficulty - health_debuff_from_difficulty
+            t_health = t['HLT'] + (15 * currentopponent) + opponent_health_scaling + tcard_lvl_hlt_buff  + health_buff_from_difficulty - health_debuff_from_difficulty
             t_max_health = t_health
             t_stamina = t['STAM']
             t_max_stamina = t['STAM']
             t_moveset = t['MOVESET']
             t_attack = t['ATK'] + (10 * currentopponent) + opponent_scaling + tcard_lvl_attack_defense_buff  + stat_buff_from_difficulty - stat_debuff_from_difficulty
-            t_defense = t['DEF'] + (10 * currentopponent) + opponent_scaling + tcard_lvl_attack_defense_buff  + stat_buff_from_difficulty - stat_debuff_from_difficulty
+            t_defense = t['DEF'] + (20 * currentopponent) + opponent_scaling + tcard_lvl_attack_defense_buff  + stat_buff_from_difficulty - stat_debuff_from_difficulty
             t_type = t['TYPE']
 
             t_passive = t['PASS'][0]
@@ -6872,10 +6872,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                     corruption_def_buff = 40
                     corruption_ap_buff = 35
                     if difficulty == "HARD":
-                        corruption_hlt_buff = 600
-                        corruption_atk_buff = 80
-                        corruption_def_buff = 120
-                        corruption_ap_buff = 65
+                        corruption_hlt_buff = 1500
+                        corruption_atk_buff = 40
+                        corruption_def_buff = 60
+                        corruption_ap_buff = 40
 
 
             if mode in PVP_MODES or mode in RAID_MODES:
@@ -21531,8 +21531,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 bank_amount = 100000
                                 fam_amount = 50000
                                 if difficulty == "HARD":
-                                    bank_amount = 500000
-                                    fam_amount = 250000
+                                    bank_amount = 1500000
+                                    fam_amount = 1000000
 
 
                                 if mode == "CBoss":
@@ -21725,15 +21725,15 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 gameClock = getTime(int(h_gametime), int(m_gametime), int(s_gametime), h_playtime, m_playtime,
                                                     s_playtime)
 
-                                bank_amount = 2000
-                                fam_amount = 1000
+                                bank_amount = 5000
+                                fam_amount = 2000
                                 if mode in D_modes:
-                                    bank_amount = 8000
-                                    fam_amount = 3000
+                                    bank_amount = 20000
+                                    fam_amount = 5000
 
                                 if difficulty == "HARD":
-                                    bank_amount = 20000
-                                    fam_amount = 10000
+                                    bank_amount = 100000
+                                    fam_amount = 50000
 
                                 if difficulty == "EASY":
                                     bank_amount = 500

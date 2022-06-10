@@ -94,16 +94,20 @@ bot.remove_command("help")
                             required=True,
                             choices=[
                                 create_choice(
+                                    name="⚔️ How to Play?",
+                                    value="play",
+                                ),
+                                create_choice(
                                     name="❓ What do these emoji's mean?",
                                     value="legend",
                                 ),
                                 create_choice(
-                                    name="🔅 What are elements?",
-                                    value="elements",
+                                    name="🦠 What are enhancers?",
+                                    value="enhancers",
                                 ),
                                 create_choice(
-                                    name="⚔️ How to Play?",
-                                    value="play",
+                                    name="🔅 What are elements?",
+                                    value="elements",
                                 ),
                                 create_choice(
                                     name="👑 Your Cards, Accessories, Quests, Destinies, Shop, Blacksmith, Trade, Gift, Analysis, Codes",
@@ -117,6 +121,11 @@ bot.remove_command("help")
                                     name="👥 Family, Guild, Association",
                                     value="teams",
                                 ),
+                                create_choice(
+                                    name="📔 Read the Anime VS+ Manual",
+                                    value="manual",
+                                ),
+
                             ]
                         )
                     ]
@@ -164,7 +173,16 @@ async def help(ctx: SlashContext, selection):
       embedVar = discord.Embed(title= f"Gang up and play!", description=h.BOT_COMMANDS, colour=0x7289da)
       embedVar.set_thumbnail(url=avatar)
       embedVar.set_footer(text=f"/animevs - Anime VS+ Manual")
+      await ctx.send(embed=embedVar)
+      return
 
+   if selection == "enhancers":
+      await enhancers(ctx)
+      return
+      
+   if selection == "manual":
+      await animevs(ctx)
+      return
 
 async def validate_user(ctx):
    query = {'DID': str(ctx.author.id)}
@@ -184,7 +202,7 @@ async def on_ready():
         print(server.name)
 
 
-@slash.slash(name="Enhancers", description="List of Enhancers", guild_ids=guild_ids)
+# @slash.slash(name="Enhancers", description="List of Enhancers", guild_ids=guild_ids)
 async def enhancers(ctx):
    avatar="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png"
 
@@ -192,57 +210,57 @@ async def enhancers(ctx):
       embedVar1 = discord.Embed(title= f"Enhancer Type: Boosts",colour=0x7289da)
       embedVar1.set_thumbnail(url=avatar)
       embedVar1.add_field(name="`BOOSTS`", value="**ATK**\n**Title, Arm, Card Passive Effect:** Increase Attack by Flat AP value.\n**Card Active Enhancer Effect:** Increase Attack By AP %.\n\n**DEF**\n**Title, Arm, Card Passive Effect:** Increase Defense by Flat AP value.\n**Card Active Enhancer Effect:** Increase Defense By AP %.\n\n**HLT**\n**Title, Arm, Card Passive Effect:** Increase Health by Flat AP value.\n**Card Active Enhancer Effect:** Increase Health By Flat AP + 16% of Current Health.\n\n**STAM** - Increase Stamina by Flat AP\n\n")
-      embedVar1.set_footer(text=f"/animevs - Anime VS+ Manual\n/help - Bot Help")
+      embedVar1.set_footer(text=f"/help - Bot Help")
 
       embedVar2 = discord.Embed(title= f"Enhancer Type: Steals",colour=0x7289da)
       embedVar2.set_thumbnail(url=avatar)
       embedVar2.add_field(name="`STEALS`", value="**FLOG**- Steal Opponent Attack and Add it to Your Attack by AP %\n\n**WITHER**- Steal Opponent Defense and Add it to Your Defense by AP %\n\n**LIFE**\n**Title, Arm, Card Passive Effect:** Steal Opponent Health and Add it to your Max Health by AP %\n**Card Active Enhancer Effect:** Steal Opponent Health and Add it to your Current Health by Flat AP + 9% of Opponent Current Health. \n\n**DRAIN** - Steal Opponent Stamina and Add it to your Stamina by Flat AP\n\n")
-      embedVar2.set_footer(text=f"/animevs - Anime VS+ Manual\n/help - Bot Help")
+      embedVar2.set_footer(text=f"/help - Bot Help")
 
       embedVar3 = discord.Embed(title= f"Enhancer Type: Sacrifice",colour=0x7289da)
       embedVar3.set_thumbnail(url=avatar)
       embedVar3.add_field(name="`SACRIFICE`", value="**RAGE** - Decrease Your Defense by AP %, Increase All Moves AP by Amount of Decreased Defense\n\n**BRACE** - Decrease Your Attack by AP %, Increase All Moves AP By Amount of Decreased Attack\n\n**BZRK** - Decrease Your Current Health by AP %,  Increase Your Attack by Amount of Decreased Health\n\n**CRYSTAL** - Decrease Your Health by AP %, Increase Your Defense by Amount of Decreased Health\n\n")
-      embedVar3.set_footer(text=f"/animevs - Anime VS+ Manual\n/help - Bot Help")
+      embedVar3.set_footer(text=f"/help - Bot Help")
 
       embedVar4 = discord.Embed(title= f"Enhancer Type: Conversion",colour=0x7289da)
       embedVar4.set_thumbnail(url=avatar)
       embedVar4.add_field(name="`CONVERSION`", value="**STANCE** - Swap Your Attack and Defense, Increase Your Defense By Flat AP\n\n**CONFUSE** - Swap Opponenet Attack and Defense, Decrease Opponent Defense by Flat AP\n\n")
-      embedVar4.set_footer(text=f"/animevs - Anime VS+ Manual\n/help - Bot Help")
+      embedVar4.set_footer(text=f"/help - Bot Help")
 
       embedVar5 = discord.Embed(title= f"Enhancer Type: Time Manipulation",colour=0x7289da)
       embedVar5.set_thumbnail(url=avatar)
       embedVar5.add_field(name="`TIME MANIPULATION`", value="**BLINK**  - Decrease Your Stamina by Flat AP, Increase Opponent Stamina by Flat AP\n\n**SLOW** - Increase Opponent Stamina, Decrease Your Stamina then Swap Stamina with Opponent\n\n**HASTE** - Increase your Stamina, Decrease Opponent Stamina then Swap Stamina with Opponent\n\n")
-      embedVar5.set_footer(text=f"/animevs - Anime VS+ Manual\n/help - Bot Help")
+      embedVar5.set_footer(text=f"/help - Bot Help")
 
       embedVar6 = discord.Embed(title= f"Enhancer Type: Control",colour=0x7289da)
       embedVar6.set_thumbnail(url=avatar)
       embedVar6.add_field(name="`CONTROL`", value="**SOULCHAIN** - You and Your Opponent's Stamina Equal Flat AP\n\n**GAMBLE** - You and Your Opponent's Health Equal Flat AP\n\n")
-      embedVar6.set_footer(text=f"/animevs - Anime VS+ Manual\n/help - Bot Help")
+      embedVar6.set_footer(text=f"/help - Bot Help")
 
       embedVar7 = discord.Embed(title= f"Enhancer Type: Fortitude",colour=0x7289da)
       embedVar7.set_thumbnail(url=avatar)
-      embedVar7.add_field(name="`FORTITUDE`", value="**GROWTH**- Decrease Your Max Health by AP %, Increase Your Attack and Defense by AP %\n\n**FEAR** - Decrease Your Max Health by AP %, Decrease Opponent Attack and Defense by AP %\n\n")
-      embedVar7.set_footer(text=f"/animevs - Anime VS+ Manual\n/help - Bot Help")
+      embedVar7.add_field(name="`FORTITUDE`", value="**GROWTH**- Decrease Your Max Health by 10%, Increase Your Attack, Defense and all Moves AP by GROWTH AP\n\n**FEAR** - Decrease Your Max Health by 10%, Decrease Opponent Attack, Defense, and all moves AP by FEAR AP\n\n")
+      embedVar7.set_footer(text=f"/help - Bot Help")
 
       embedVar8 = discord.Embed(title= f"Enhancer Type: Damage",colour=0x7289da)
       embedVar8.set_thumbnail(url=avatar)
       embedVar8.add_field(name="`DAMAGE`", value="**WAVE** - Deal Flat AP Damage to Opponent. AP Decreases each turn (Can Crit). *If used on turn that is divisible by 10 you will deal 75% AP Damage.*\n\n**BLAST** - Deal Flat AP Damage to Opponent. AP Increases each turn.\n\n")
-      embedVar8.set_footer(text=f"/animevs - Anime VS+ Manual\n/help - Bot Help")
+      embedVar8.set_footer(text=f"/help - Bot Help")
 
       embedVar9 = discord.Embed(title= f"Enhancer Type: Divinity",colour=0x7289da)
       embedVar9.set_thumbnail(url=avatar)
       embedVar9.add_field(name="`DIVINITY`", value="**CREATION** - Increase Max Health by Flat AP. AP Decreases each turn (Can Crit). *If used on turn that is divisible by 10 you will heal Health & Max Health for 75% AP.*\n\n**DESTRUCTION** - Decrease Your Opponent Max Health by Flat AP (only opponent on PET use). AP Increases each turn.\n\n")
-      embedVar9.set_footer(text=f"/animevs - Anime VS+ Manual\n/help - Bot Help")
+      embedVar9.set_footer(text=f"/help - Bot Help")
       
       embedVar10 = discord.Embed(title= f"Arm Enhancer Type: Offensive",colour=0x7289da)
       embedVar10.set_thumbnail(url=avatar)
       embedVar10.add_field(name="`OFFENSE`", value="**BASIC** - Increase 💥 Basic Attack Ability Power by Value \n\n**SPECIAL** - Increase ☄️ Special Attack Ability Power by Value \n\n**ULTIMATE** - Increase 🏵️ Ultimate Attack Ability Power by Value \n\n**ULTIMAX** - Increase **ALL** Attack Move Ability Power by Value \n\n**MANA** - Increase 🦠 Enhancer Ability Power by Percentage \n\n💉 **SIPHON** - Heal for 10% DMG + AP\n\n")
-      embedVar10.set_footer(text=f"/animevs - Anime VS+ Manual\n/help - Bot Help")
+      embedVar10.set_footer(text=f"/help - Bot Help")
       
       embedVar11 = discord.Embed(title= f"Arm Enhancer Type: Defensive",colour=0x7289da)
       embedVar11.set_thumbnail(url=avatar)
       embedVar11.add_field(name="`DEFENSE`", value="🌐 **SHIELD**- Grant Damage absorbing Shield until destroyed \n\n💠 **BARRIER** - Blocks all Attack Damage until player Attacks or is Destoyed (Enhancers Exempt)\n\n🔄 **PARRY** - Reflects 25% Damage back to Attacker\n\n")
-      embedVar11.set_footer(text=f"/animevs - Anime VS+ Manual\n/help - Bot Help")
+      embedVar11.set_footer(text=f"/help - Bot Help")
       
 
       embeds = [embedVar1, embedVar2, embedVar3, embedVar4, embedVar5, embedVar6, embedVar7, embedVar8, embedVar9, embedVar10, embedVar11]
@@ -268,7 +286,7 @@ async def enhancers(ctx):
             return
 
 
-@slash.slash(description="Anime VS+ Manual", guild_ids=guild_ids)
+# @slash.slash(description="Anime VS+ Manual", guild_ids=guild_ids)
 async def animevs(ctx):
    avatar="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png"
 
@@ -972,11 +990,8 @@ async def register(ctx):
                      **Step 3:** Use /solo and select **tutorial** to learn how to play through battle!
 
                      **The /help command is your ❤️ Friend!**
-                     Use the help command dropdown to learn more about Anime VS+!
+                     Use the help command dropdown to learn more about Anime VS+ and how to play!
 
-                     If you need additional help! ⬇️
-                     **/animevs** - Read Game Manual
-                     **/enhancers** - Enhancer Help Menu
                      **/difficulty** - Change difficulty setting! **You start on easy mode**
 
                      [Join the Anime VS+ Support Server](https://discord.gg/2JkCqcN3hB)
