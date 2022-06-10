@@ -244,6 +244,10 @@ async def viewcard(self, ctx, card: str):
                     passive_num = flat_for_passive
                 if passive_type == "GROWTH":
                     passive_num = flat_for_passive
+                if passive_type == "CREATION":
+                    passive_num = value_for_passive
+                if passive_type == "DESTRUCTION":
+                    passive_num = value_for_passive
                 if passive_type == "SLOW":
                     passive_num = "1"
                 if passive_type == "HASTE":

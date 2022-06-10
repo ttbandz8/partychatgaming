@@ -417,6 +417,10 @@ class Profile(commands.Cog):
                             passive_num = flat_for_passive
                         if passive_type == "GROWTH":
                             passive_num = flat_for_passive
+                        if passive_type == "CREATION":
+                            passive_num = value_for_passive
+                        if passive_type == "DESTRUCTION":
+                            passive_num = value_for_passive
                         if passive_type == "SLOW":
                             passive_num = "1"
                         if passive_type == "HASTE":
@@ -735,6 +739,10 @@ class Profile(commands.Cog):
                             passive_num = flat_for_passive
                         if passive_type == "GROWTH":
                             passive_num = flat_for_passive
+                        if passive_type == "CREATION":
+                            passive_num = value_for_passive
+                        if passive_type == "DESTRUCTION":
+                            passive_num = value_for_passive
                         if passive_type == "SLOW":
                             passive_num = "1"
                         if passive_type == "HASTE":
@@ -4062,6 +4070,10 @@ async def craft_adjuster(self, player, vault, universe, price, item, skin_list):
                                         passive_num = flat_for_passive
                                     if passive_type == "GROWTH":
                                         passive_num = flat_for_passive
+                                    if passive_type == "CREATION":
+                                        passive_num = value_for_passive
+                                    if passive_type == "DESTRUCTION":
+                                        passive_num = value_for_passive
                                     if passive_type == "SLOW":
                                         passive_num = "1"
                                     if passive_type == "HASTE":
@@ -4433,6 +4445,10 @@ async def menubuild(self, ctx):
                         passive_num = flat_for_passive
                     if passive_type == "GROWTH":
                         passive_num = flat_for_passive
+                    if passive_type == "CREATION":
+                        passive_num = value_for_passive
+                    if passive_type == "DESTRUCTION":
+                        passive_num = value_for_passive
                     if passive_type == "SLOW":
                         passive_num = "1"
                     if passive_type == "HASTE":
@@ -4727,6 +4743,10 @@ async def menucards(self, ctx):
                         passive_num = flat_for_passive
                     if passive_type == "GROWTH":
                         passive_num = flat_for_passive
+                    if passive_type == "CREATION":
+                        passive_num = value_for_passive
+                    if passive_type == "DESTRUCTION":
+                        passive_num = value_for_passive
                     if passive_type == "SLOW":
                         passive_num = "1"
                     if passive_type == "HASTE":

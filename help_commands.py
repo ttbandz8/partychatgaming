@@ -84,7 +84,7 @@ ELEMENTS = textwrap.dedent(f"""\
 
 ⚡️ Electric- Add 15% to Shock damage, added to each attack
 
-🌪️ Wind - Cannot Miss, boosts all wind damage by 10% of damage dealt
+🌪️ Wind - Cannot Miss, boosts all wind damage by 15% of damage dealt
 
 🔮 Psychic - Penetrates Barriers. Reduce opponent ATK & DEF by 8% AP 
 
@@ -98,7 +98,7 @@ ELEMENTS = textwrap.dedent(f"""\
 
 🧪 Poison - Opponent takes additional 10 damage each turn stacking up to 150
 
-🏹 Ranged - Deals 1.5x Damage
+🏹 Ranged - Deals 1.7x Damage if stamina greater than 50
 
 💙 Spirit - Has higher chance of Crit
 
