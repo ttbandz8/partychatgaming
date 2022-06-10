@@ -8437,15 +8437,16 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     (.30 * o_defense) * (o_resolve / (.50 * o_defense)))
 
                                                 o_stamina = o_stamina + o_resolve
-                                                o_health = o_max_health
                                                 o_attack = round(o_attack + o_resolve_attack)
                                                 o_defense = round(o_defense - o_resolve_defense)
                                                 o_used_resolve = True
                                                 o_pet_used = False
 
                                                 if t_gow_resolve:
+                                                    o_health = o_max_health
                                                     previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Ascension!")
                                                 elif not o_gow_resolve:
+                                                    o_health = round(o_max_health / 2)
                                                     o_used_resolve = False
                                                     o_gow_resolve = True
                                                     o_defense = 125
@@ -8728,21 +8729,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     
                                     if aiMove == 0:
                                         block_message = ""
-                                        if o_universe == "Persona":
-                                            if mode in co_op_modes:
-                                                block_message = f"**Confidant Block!*** 🩸: **{o_card}**: Defended 🛡️ **{c_card}**"
-                                                o_defend_used = True
-                                            else:
-                                                block_message = f"**Confidant Block!*** 🩸: **{o_card}** Blocked 🛡️"
-                                                o_block_used = True
-                                            o_defense = round(o_defense * 2)
-
-                                            previous_moves.append(f"(**{turn_total}**) {block_message}")
-                                            turn_total = turn_total + 1
-                                            turn = 1
-
-                                        elif o_stamina >= 20:
-
+                                        if o_stamina >= 20:
                                             if o_universe == "Attack On Titan":
                                                 previous_moves.append(f"(**{turn_total}**) **Rally** 🩸 ! **{o_card}** Increased Max Health ❤️")
                                                 o_max_health = round(o_max_health + 100)
@@ -9739,15 +9726,16 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         (.30 * o_defense) * (o_resolve / (.50 * o_defense)))
 
                                                     o_stamina = o_stamina + o_resolve
-                                                    o_health = o_max_health
                                                     o_attack = round(o_attack + o_resolve_attack)
                                                     o_defense = round(o_defense - o_resolve_defense)
                                                     o_used_resolve = True
                                                     o_pet_used = False
 
                                                     if t_gow_resolve:
+                                                        o_health = o_max_health
                                                         previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Ascension!")
                                                     elif not o_gow_resolve:
+                                                        o_health = round(o_max_health / 2)
                                                         o_used_resolve = False
                                                         o_gow_resolve = True
                                                         o_defense = 125
@@ -10330,22 +10318,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                         if button_ctx.custom_id == "0":
                                             block_message = ""
-                                            if o_universe == "Persona":
-                                                if mode in co_op_modes:
-                                                    block_message = f"**Confidant Block!*** 🩸: **{o_card}**: Defended 🛡️ **{c_card}**"
-                                                    o_defend_used = True
-                                                else:
-                                                    block_message = f"**Confidant Block!*** 🩸: **{o_card}** Blocked 🛡️"
-                                                    o_block_used = True
-                                                o_defense = round(o_defense * 2)
-                                                embedVar = discord.Embed(title=f"{block_message}", colour=0xe91e63)
-
-                                                previous_moves.append(f"(**{turn_total}**) {block_message}")
-                                                await button_ctx.defer(ignore=True)
-                                                turn_total = turn_total + 1
-                                                turn = 1
-
-                                            elif o_stamina >= 20:
+                                            if o_stamina >= 20:
 
                                                 if o_universe == "Attack On Titan":
                                                     previous_moves.append(f"(**{turn_total}**) **Rally** 🩸 ! **{o_card}** Increased Max Health ❤️")
@@ -11751,15 +11724,16 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             (.30 * t_defense) * (t_resolve / (.50 * t_defense)))
 
                                                         t_stamina = t_stamina + t_resolve
-                                                        t_health = t_max_health
                                                         t_attack = round(t_attack + t_resolve_attack)
                                                         t_defense = round(t_defense - t_resolve_defense)
                                                         t_used_resolve = True
                                                         t_pet_used = False
 
                                                         if t_gow_resolve:
+                                                            t_health = t_max_health
                                                             previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Ascension!")
                                                         elif not t_gow_resolve:
+                                                            t_health = round(t_max_health / 2)
                                                             t_used_resolve = False
                                                             t_gow_resolve = True
                                                             t_defense = 125
@@ -12048,15 +12022,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     await button_ctx.defer(ignore=True)
                                                     turn = 1
                                             elif button_ctx.custom_id == "0":
-                                                if t_universe == "Persona":
-                                                    block_message = f"**Confidant Block!*** 🩸: **{t_card}** Blocked 🛡️"
-                                                    t_block_used = True
-                                                    t_defense = round(t_defense * 2)
-                                                    previous_moves.append(block_message)
-                                                    await button_ctx.defer(ignore=True)
-                                                    turn_total = turn_total + 1
-                                                    turn = 0
-
                                                 if t_stamina >= 20:
                                                     if t_universe == "Attack On Titan":
                                                         previous_moves.append(f"(**{turn_total}**) **Rally** 🩸 ! **{t_card}** Increased Max Health ❤️")
@@ -12929,14 +12894,15 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         (.30 * t_defense) * (t_resolve / (.50 * t_defense)))
 
                                                     t_stamina = t_stamina + t_resolve
-                                                    t_health = t_max_health
                                                     t_attack = round(t_attack + t_resolve_attack)
                                                     t_defense = round(t_defense - t_resolve_defense)
                                                     t_used_resolve = True
 
                                                     if t_gow_resolve:
+                                                        t_health = t_max_health
                                                         previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Ascension!")
                                                     elif not t_gow_resolve:
+                                                        t_health = round(t_max_health / 2)
                                                         t_used_resolve = False
                                                         t_gow_resolve = True
                                                         t_defense = 125
@@ -13213,17 +13179,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 previous_moves.append(f"(**{turn_total}**) {t_card} Could not summon 🧬 **{tpet_name}**. Needs rest")
                                                 turn = 1
                                         elif int(aiMove) == 7:
-                                            if t_universe == "Persona":
-                                                block_message = f"**Confidant Block!*** 🩸: **{t_card}** Blocked 🛡️"
-                                                t_block_used = True
-                                                t_defense = round(t_defense * 2)
-
-                                                previous_moves.append(block_message)
-                                                await button_ctx.defer(ignore=True)
-                                                turn_total = turn_total + 1
-                                                turn = 0
-
-
                                             if t_stamina >= 20:
                                                 if t_universe == "Attack On Titan":
                                                     previous_moves.append(f"(**{turn_total}**) **Rally** 🩸 ! **{t_card}** Increased Max Health ❤️")
@@ -14118,15 +14073,16 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
 
                                                 t_stamina = t_stamina + t_resolve
-                                                t_health = t_max_health
                                                 t_attack = round(t_attack + t_resolve_attack)
                                                 t_defense = round(t_defense - t_resolve_defense)
                                                 t_used_resolve = True
                                                 t_pet_used = False
 
                                                 if t_gow_resolve:
+                                                    t_health = t_max_health
                                                     previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Ascension!")
                                                 elif not t_gow_resolve:
+                                                    t_health = round(t_max_health / 2)
                                                     t_used_resolve = False
                                                     t_gow_resolve = True
                                                     t_defense = 125
@@ -14725,16 +14681,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         else:
                                             previous_moves.append(f"(**{turn_total}**) {t_card} Could not summon 🧬 **{tpet_name}**. Needs rest")
                                     elif int(aiMove) == 7:
-                                        if t_universe == "Persona":
-                                            block_message = f"**Confidant Block!*** 🩸: **{t_card}** Blocked 🛡️"
-                                            t_block_used = True
-                                            t_defense = round(t_defense * 2)
-
-                                            previous_moves.append(block_message)
-                                            # await button_ctx.defer(ignore=True)
-                                            turn_total = turn_total + 1
-                                            turn = 0
-
                                         if t_stamina >= 20:
                                             if t_universe == "Attack On Titan":
                                                 previous_moves.append(f"(**{turn_total}**) **Rally** 🩸 ! **{t_card}** Increased Max Health ❤️")
@@ -16722,7 +16668,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         (.30 * c_defense) * (c_resolve / (.50 * c_defense)))
 
                                                     c_stamina = c_stamina + c_resolve
-                                                    c_health = c_max_health
                                                     c_attack = round(c_attack + c_resolve_attack)
                                                     c_defense = round(c_defense - c_resolve_defense)
                                                     c_used_resolve = True
@@ -16730,8 +16675,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                     
                                                     if c_gow_resolve:
+                                                        c_health = c_max_health
                                                         previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 Resolved: Ascension!")
                                                     elif not c_gow_resolve:
+                                                        c_health = round(c_max_health / 2)
                                                         c_used_resolve = False
                                                         c_gow_resolve = True
                                                         c_defense = 125
@@ -17947,15 +17894,16 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             (.30 * c_defense) * (c_resolve / (.50 * c_defense)))
 
                                                         c_stamina = c_stamina + c_resolve
-                                                        c_health = c_max_health
                                                         c_attack = round(c_attack + c_resolve_attack)
                                                         c_defense = round(c_defense - c_resolve_defense)
                                                         c_used_resolve = True
                                                         c_pet_used = False
 
                                                         if c_gow_resolve:
+                                                            c_health = c_max_health
                                                             previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 Resolved: Ascension!")
                                                         elif not c_gow_resolve:
+                                                            c_health = round(c_max_health / 2)
                                                             c_used_resolve = False
                                                             c_gow_resolve = True
                                                             c_defense = 125
@@ -18368,20 +18316,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     turn = 2
                                                     await button_ctx.defer(ignore=True)
                                             elif button_ctx.custom_id == "0":
-                                                if c_universe == "Persona":
-                                                    block_message = f"**Confidant Block!*** 🩸: **{c_card}** Blocked 🛡️"
-                                                    c_block_used = True
-                                                    c_defense = round(c_defense * 2)
-                                                    embedVar = discord.Embed(
-                                                        title=f"**{c_card}** Defended 🛡️ {o_card}",
-                                                        colour=0xe91e63)
-
-                                                    #await button_ctx.send(embed=embedVar)
-                                                    previous_moves.append(block_message)
-                                                    turn_total = turn_total + 1
-                                                    turn = 3
-                                                    await button_ctx.defer(ignore=True)
-
                                                 if c_stamina >= 20:
                                                     if c_universe == "Attack On Titan":
                                                         previous_moves.append(f"(**{turn_total}**) **Rally** 🩸 ! **{c_card}** Increased Max Health ❤️")
@@ -19738,26 +19672,20 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     (.30 * t_defense) * (t_resolve / (.50 * t_defense)))
 
                                                 t_stamina = t_stamina + t_resolve
-                                                t_health = t_max_health
                                                 t_attack = round(t_attack + t_resolve_attack)
                                                 t_defense = round(t_defense - t_resolve_defense)
                                                 t_used_resolve = True
                                                 t_pet_used = False
                                                 if t_gow_resolve:
+                                                    t_health = t_max_health
                                                     previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Ascension!")
                                                 elif not t_gow_resolve:
+                                                    t_health = round(t_max_health / 2)
                                                     t_used_resolve = False
                                                     t_gow_resolve = True
                                                     t_defense = 125
                                                     previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Crushed Blood Orb: Health Refill")
 
-                                                embedVar = discord.Embed(title=f"{t_card} STRENGTHENED RESOLVE :zap:",
-                                                                        description=f"**{t_card} says**\n{t_resolve_description}",
-                                                                        colour=0xe91e63)
-                                                embedVar.add_field(name=f"Transformation: Ascension",
-                                                                value="On Resolve Refill Health.")
-                                                
-                                                #await private_channel.send(embed=embedVar)
                                                 turn_total = turn_total + 1
                                                 turn = 0
                                             elif t_universe == "Fate":  # Fate Trait
@@ -20191,17 +20119,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     previous_moves.append(f"(**{turn_total}**) {t_card} Could not summon 🧬 **{tpet_name}**. Needs rest")
                                                     turn = 3
                                     elif int(aiMove) == 7:
-                                        if t_universe == "Persona":
-                                            block_message = f"**Confidant Block!*** 🩸: **{t_card}** Blocked 🛡️"
-                                            t_block_used = True
-                                            t_defense = round(t_defense * 2)
-
-                                            previous_moves.append(block_message)
-                                            await button_ctx.defer(ignore=True)
-                                            turn_total = turn_total + 1
-                                            turn = 0
-
-
                                         if t_stamina >= 20:
                                             if t_universe == "Attack On Titan":
                                                 previous_moves.append(f"(**{turn_total}**) **Rally** 🩸 ! **{t_card}** Increased Max Health ❤️")

@@ -45,7 +45,7 @@ traits = [{
 },{
     'NAME': 'God Of War',
     'EFFECT': 'Ascension',
-    'TRAIT': 'On Resolve Refill Health. You can Resolve twice.'
+    'TRAIT': '1st Resolve heal half of max health, 2nd heal full max health. You can Resolve twice.'
 },{
     'NAME': '7ds',
     'EFFECT': 'Power Of Friendship',
@@ -72,8 +72,8 @@ traits = [{
     'TRAIT': 'When you die, Resolve with 75% ATK + DEF as Health. Saiyan Spirit! On focus, heal for opponent Stamina amount + turn count.'
 },{
     'NAME': 'Persona',
-    'EFFECT': 'Summoner, Confidant Block',
-    'TRAIT': 'Summon deals Damage equal to your :boom: attack, in addition to their status effect. Using your summon will disable opponents summon. Blocks cost no Stamina.'
+    'EFFECT': 'Summon Persona!',
+    'TRAIT': 'Summon deals Damage equal to your Basic attack, in addition to their status effect, disabling opponents summon. '
 },
 {
     'NAME': 'Crown Rift Slayers',
