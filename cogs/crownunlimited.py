@@ -15885,7 +15885,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     if c_card_passive_type == "DESTRUCTION":
                                         t_max_health = round(round(t_max_health - ((c_value_for_passive / 100) * t_max_health)))
                                     if c_card_passive_type == "LIFE":
-                                        if c_mat_health != c_health:
+                                        if c_max_health != c_health:
                                             t_health = round(t_health - ((c_value_for_passive / 100) * t_health))
                                             c_health = round(c_health + ((c_value_for_passive / 100) * t_health))
                                     if c_card_passive_type == "ATK":
