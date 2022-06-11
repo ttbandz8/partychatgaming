@@ -2270,9 +2270,9 @@ def damage_cal(opponent_affinity, move_type, move_element, universe, card, abili
             elif enh_type == 'WITHER':
                 message = f'{move} used! Stealing {enhanced} Defense'
             elif enh_type == 'RAGE':
-                message = f'{move} used! Sacrificing {enhanced} Defense, Increasing Attack by {enhanced}'
+                message = f'{move} used! Sacrificing {enhanced} Defense, Increasing AP by {enhanced}'
             elif enh_type == 'BRACE':
-                message = f'{move} used! Sacrificing {enhanced} Attack, Increasing Defense by {enhanced}'
+                message = f'{move} used! Sacrificing {enhanced} Attack, Increasing AP by {enhanced}'
             elif enh_type == 'BZRK':
                 message = f'{move} used! Sacrificing {enhanced} Health, Increasing Attack by {enhanced}'
             elif enh_type == 'CRYSTAL':
@@ -2288,7 +2288,7 @@ def damage_cal(opponent_affinity, move_type, move_element, universe, card, abili
                     enhanced =100
                 message = f'{move} used! Destroying {round(enhanced)} Max Health'
             elif enh_type == 'GROWTH':
-                message = f'{move} used! Sacrificing {round(enhanced)} Max Health to Increase Attack and Defense by {round(enhanced * .5)}'
+                message = f'{move} used! Sacrificing 10% Max Health to Increase Attack, Defense and AP by {round(enhanced)}'
             elif enh_type == 'STANCE':
                 message = f'{move} used! Swapping Attack and Defense, Increasing Defense to {enhanced}'
             elif enh_type == 'CONFUSE':
@@ -2299,7 +2299,7 @@ def damage_cal(opponent_affinity, move_type, move_element, universe, card, abili
                 else:
                     message = f'{move} used! Healing for {enhanced}!'
             elif enh_type == 'FEAR':
-                message = f'{move} used! Sacrificing {round(enhanced)} Max Health to Decrease Opponent Attack and Defense by {round(enhanced * .5)}'
+                message = f'{move} used! Sacrificing 10% Max Health to Decrease Opponent Attack, Defense and AP by {round(enhanced)}'
             elif enh_type == 'SOULCHAIN':
                 message = f'{move} used! Synchronizing Stamina to {enhanced}'
             elif enh_type == 'GAMBLE':
@@ -2325,9 +2325,9 @@ def damage_cal(opponent_affinity, move_type, move_element, universe, card, abili
             elif enh_type == 'WITHER':
                 message = f'{move} used! Stealing **{enhanced} Defense**'
             elif enh_type == 'RAGE':
-                message = f'{move} used! Sacrificing **{enhanced} Defense**, Increasing **Attack** by **{enhanced}**'
+                message = f'{move} used! Sacrificing **{enhanced} Defense**, Increasing **AP** by **{enhanced}**'
             elif enh_type == 'BRACE':
-                message = f'{move} used! Sacrificing **{enhanced} Attack**, Increasing **Defense** by **{enhanced}**'
+                message = f'{move} used! Sacrificing **{enhanced} Attack**, Increasing **AP** by **{enhanced}**'
             elif enh_type == 'BZRK':
                 message = f'{move} used! Sacrificing **{enhanced} Health**, Increasing **Attack** by **{enhanced}**'
             elif enh_type == 'CRYSTAL':
@@ -2339,7 +2339,7 @@ def damage_cal(opponent_affinity, move_type, move_element, universe, card, abili
             elif enh_type == 'DESTRUCTION':
                 message = f'{move} used! Destroying **{round(enhanced)} Max Health**'
             elif enh_type == 'GROWTH':
-                message = f'{move} used! Sacrificing **{round(enhanced)} Max Health** to Increase **Attack and Defense** by **{round(enhanced * .5)}**'
+                message = f'{move} used! Sacrificing **10% Max Health** to Increase **Attack, Defense and AP** by **{round(enhanced)}**'
             elif enh_type == 'STANCE':
                 message = f'{move} used! Swapping **Attack and Defense**, Increasing **Defense** to **{enhanced}**'
             elif enh_type == 'CONFUSE':
@@ -2347,7 +2347,7 @@ def damage_cal(opponent_affinity, move_type, move_element, universe, card, abili
             elif enh_type == 'HLT':
                 message = f'{move} used! **Healing** for **{enhanced}**!'
             elif enh_type == 'FEAR':
-                message = f'{move} used! Sacrificing **{round(enhanced)} Max Health** to Decrease **Opponent Attack and Defense** by **{round(enhanced * .5)}**'
+                message = f'{move} used! Sacrificing **10% Max Health** to Decrease **Opponent Attack, Defense and AP** by **{round(enhanced)}**'
             elif enh_type == 'SOULCHAIN':
                 message = f'{move} used! **Synchronizing Stamina** to **{enhanced}**'
             elif enh_type == 'GAMBLE':
@@ -2610,7 +2610,7 @@ def abyss_level_up_message(did, floor, card, title, arm):
             new_unlock = True
             
         if floor == 10:
-            message = "🎊 Congratulations! 🎊 You unlocked **Trading and Blacksmith**. Use the **/trade** command to Trade Cards, Titles and Arms with other players!\nUse the **/blacksmith** command to purchase Level Ups, Arm Durability Increases and more!"
+            message = "🎊 Congratulations! 🎊 You unlocked **Trading**. Use the **/trade** command to Trade Cards, Titles and Arms with other players!"
             new_unlock = True
 
         if floor == 6:
@@ -7733,6 +7733,20 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                             # Tutorial Instructions
                             if turn_total == 0:
+                                # Tutorial Instructions
+                                if turn_total == 0:
+                                    if botActive:
+                                        embedVar = discord.Embed(title=f"Welcome to **Anime VS+**!",
+                                                                description=f"Follow the instructions to learn how to play the Game!",
+                                                                colour=0xe91e63)
+                                        embedVar.add_field(name="**How do I play?**",
+                                                        value="The point of the game is to win **Battles**!\n**To do this**, you need to select moves outmanuevering your opponent to **secure the win**!\n\n**Select a move** to get started.\nWhen your :cyclone:**ST (Stamina)** depletes to **0** your Card will **Heal** and enter **Focus State** !")
+                                        embedVar.add_field(name="**Moveset**",
+                                                            value=f"{o_basic_emoji} - Basic Attack *costs 10 :cyclone:*\n{o_super_emoji} - Special Attack *costs 30 :cyclone:*\n{o_ultimate_emoji} - Ultimate Move *costs 80 :cyclone:*\n:microbe: - Enhancer *costs 20 :cyclone:*\n🛡️ - Block *costs 20 :cyclone:*")
+                                        embedVar.set_footer(
+                                            text="Focus State : When card deplete to 0 stamina, they focus to Heal they also gain ATK and DEF ")
+                                        await private_channel.send(embed=embedVar)
+                                        await asyncio.sleep(2)
                                 if mode in B_modes:
                                     embedVar = discord.Embed(title=f"**{t_card}** Boss of `{t_universe}`",
                                                             description=f"*{t_description}*", colour=0xe91e63)
@@ -7794,6 +7808,19 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 embed_color_o = 0x2ecc71
 
                             if o_stamina < 10:
+                                if botActive and tutorial_focus ==False:
+                                    tutorial_focus = True
+                                    embedVar = discord.Embed(title=f"You've entered :cyclone:**Focus State**!",
+                                                            description=f"Entering :cyclone:**Focus State** sacrifices a turn to **Heal** and regain **ST (Stamina)**!",
+                                                            colour=0xe91e63)
+                                    embedVar.add_field(name=":cyclone:**Focusing**",
+                                                    value="Increase **ATK** (🟦) and **DEF** (🟥)!")
+                                    embedVar.add_field(name="⚡**Resolve Transformation**",
+                                                    value="⚡Resolve and 🧬Summon aid into battle!")
+                                    embedVar.set_footer(
+                                        text="Pay attention to your oppononets ST(Stamina). If they are entering Focus State, you will have the ability to strike twice!")
+                                    await ctx.send(embed=embedVar)
+                                    await asyncio.sleep(2)
                                 o_pet_used = False
                                 o_focus_count = o_focus_count + 1
                                 if mode in B_modes:
@@ -7864,6 +7891,20 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                 # Resolve Check and Calculation
                                 if not o_used_resolve and o_used_focus and o_universe == "Digimon":  # Digimon Universal Trait
+                                    if botActive and tutorial_resolve==False:
+                                        tutorial_resolve = True
+                                        embedVar = discord.Embed(title=f"⚡**Resolve Transformation**!",
+                                                                description=f"**Heal**, Boost **ATK**, and gain the ability to 🧬**Summon**!",
+                                                                colour=0xe91e63)
+                                        embedVar.add_field(name=f"Trade Offs!",
+                                                        value="Sacrifice **DEF** and **Focusing** will not increase **ATK** or **DEF**")
+                                        embedVar.add_field(name=f"🧬 Summons",
+                                                        value=f"🧬**Summons** will use their :microbe:**Enhancers** to assist you in battle! You're summon: 🧬 **{opet_name}**")
+                                        embedVar.set_footer(
+                                            text=f"You can only enter ⚡Resolve once per match! Use the Heal Wisely!!!")
+                                        await button_ctx.send(embed=embedVar)
+                                        await asyncio.sleep(2)
+
                                     embedVar = discord.Embed(title=f"{o_card} STRENGTHENED RESOLVE :zap:",
                                                             description=f"**{o_card} says**\n{o_resolve_description}",
                                                             colour=0xe91e63)
@@ -9270,7 +9311,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     util_buttons = [
                                         manage_components.create_button(
                                             style=ButtonStyle.grey,
-                                            label="Quit | /ff",
+                                            label="Quit",
                                             custom_id="q"
                                         ),
                                     ]
@@ -9314,8 +9355,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         if t_gravity_hit == False:
                                             util_buttons.append(
                                                 manage_components.create_button(
-                                                    style=ButtonStyle.grey,
-                                                    label="Block 20",
+                                                    style=ButtonStyle.blue,
+                                                    label="🛡️ Block 20",
                                                     custom_id="0"
                                                 )
                                             )
@@ -9333,17 +9374,17 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         coop_util_buttons = [
                                             manage_components.create_button(
                                                 style=ButtonStyle.blue,
-                                                label="Assist Companion 20",
+                                                label="🦠 Assist Companion 20",
                                                 custom_id="7"
                                             ),
                                             manage_components.create_button(
                                                 style=ButtonStyle.blue,
-                                                label="Request Assistance",
+                                                label="🦠 Request Assistance",
                                                 custom_id="8"
                                             ),
                                             manage_components.create_button(
                                                 style=ButtonStyle.blue,
-                                                label="Request Block",
+                                                label="🛡️ Request Block",
                                                 custom_id="9"
                                             ),
                                         ]
@@ -9493,6 +9534,20 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             #return
                                         
                                         if button_ctx.custom_id == "1":
+                                            if botActive and tutorial_basic == False:
+                                                tutorial_basic =True
+                                                embedVar = discord.Embed(title=f":boom:Basic Attack!",
+                                                                        description=f":boom:**Basic Attack** cost **10 ST(Stamina)** to deal decent Damage!",
+                                                                        colour=0xe91e63)
+                                                embedVar.add_field(
+                                                    name=f"Your Basic Attack: {o_basic_emoji} {list(o_1.keys())[0]} inflicts {omove1_element}",
+                                                    value=f"**{omove1_element}** : *{element_mapping[omove1_element]}*")
+                                                embedVar.add_field(name=f"Combos!",
+                                                                value="Chain your :boom:**Basic Attack** with :microbe:**Enhancers** To Maximize Damage!")
+                                                embedVar.set_footer(
+                                                    text=f"Basic Attacks are great when you are low on stamina. Enter Focus State to Replenish!")
+                                                await button_ctx.send(embed=embedVar)
+                                                await asyncio.sleep(2)
                                             if o_universe == "Souls" and o_used_resolve:
                                                 dmg = damage_cal(t_opponent_affinities, special_attack_name, omove2_element, o_universe, o_card, o_2, o_attack, o_defense, t_defense, o_stamina,
                                                                 o_enhancer_used, o_health, t_health, t_stamina, o_max_health,
@@ -9504,6 +9559,20 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_max_health, t_attack, o_special_move_description, turn_total,
                                                                 ocard_lvl_ap_buff, None)
                                         elif button_ctx.custom_id == "2":
+                                            if botActive and tutorial_special==False:
+                                                tutorial_special = True
+                                                embedVar = discord.Embed(title=f":comet:Special Attack!",
+                                                                        description=f":comet:**Special Attack** cost **30 ST(Stamina)** to deal great Damage!",
+                                                                        colour=0xe91e63)
+                                                embedVar.add_field(
+                                                    name=f"Your Special Attack: {o_super_emoji} {list(o_2.keys())[0]} inflicts {omove2_element}",
+                                                    value=f"**{omove2_element}** : *{element_mapping[omove2_element]}*")
+                                                embedVar.add_field(name=f"Strategy!",
+                                                                value=":comet:**Special Attacks** are the balance between **ST (Stamina)** cost and Damage Output when trying to build **Combos**!")
+                                                embedVar.set_footer(
+                                                    text=f"Special Attacks are great when you need to control the Focus game! Use Them to Maximize your Focus and build stronger Combos!")
+                                                await button_ctx.send(embed=embedVar)
+                                                await asyncio.sleep(2)
                                             if o_universe == "Souls" and o_used_resolve:
                                                 dmg = damage_cal(t_opponent_affinities, ultimate_attack_name, omove3_element, o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_stamina,
                                                                 o_enhancer_used, o_health, t_health, t_stamina, o_max_health,
@@ -9515,7 +9584,20 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_max_health, t_attack, o_special_move_description, turn_total,
                                                                 ocard_lvl_ap_buff, None)
                                         elif button_ctx.custom_id == "3":
-
+                                            if botActive and tutorial_ultimate==False:
+                                                tutorial_ultimate=True
+                                                embedVar = discord.Embed(title=f":rosette:Ultimate Move!",
+                                                                        description=f":rosette:**Ultimate Move** cost **80 ST(Stamina)** to deal incredible Damage!",
+                                                                        colour=0xe91e63)
+                                                embedVar.add_field(
+                                                    name=f"Your Ultimate: {o_ultimate_emoji} {list(o_3.keys())[0]} inflicts {omove3_element}",
+                                                    value=f"**{omove3_element}** : *{element_mapping[omove3_element]}*")
+                                                embedVar.add_field(name=f"Ultimate GIF",
+                                                                value="Using your ultimate move also comes with a bonus GIF to deliver that final blow!\n*Enter performance mode to disable GIFs\n/performace*")
+                                                embedVar.set_footer(
+                                                    text=f"Ultimate moves will consume most of your ST(Stamina) for Incredible Damage! Use Them Wisely!")
+                                                await button_ctx.send(embed=embedVar)
+                                                await asyncio.sleep(2)
                                             dmg = damage_cal(t_opponent_affinities, ultimate_attack_name, omove3_element, o_universe, o_card, o_3, o_attack, o_defense, t_defense,
                                                             o_stamina, o_enhancer_used, o_health, t_health, t_stamina,
                                                             o_max_health, t_attack, o_special_move_description, turn_total,
@@ -9528,6 +9610,18 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 
                                                 await asyncio.sleep(2)
                                         elif button_ctx.custom_id == "4":
+                                            if botActive and tutorial_enhancer==False:
+                                                tutorial_enhancer = True
+                                                embedVar = discord.Embed(title=f":microbe:Enhancers!",
+                                                                        description=f":microbe:**Enhancers** cost **20 ST(Stamina)** to Boost your Card or Debuff Your Opponent!",
+                                                                        colour=0xe91e63)
+                                                embedVar.add_field(
+                                                    name=f"Your Enhancer::microbe: {omove_enhanced_text} is a {list(o_enhancer.values())[2]}",
+                                                    value=f"**{list(o_enhancer.values())[2]}** : *{enhancer_mapping[list(o_enhancer.values())[2]]}*")
+                                                embedVar.set_footer(
+                                                    text=f"Use /enhancers to view a full list of Enhancers! Look for the {list(o_enhancer.values())[2]} Enhancer")
+                                                await button_ctx.send(embed=embedVar)
+                                                await asyncio.sleep(2)
                                             o_enhancer_used = True
 
                                             dmg = damage_cal(t_opponent_affinities, basic_attack_name, omove1_element, o_universe, o_card, o_enhancer, o_attack, o_defense, t_defense,
@@ -9538,6 +9632,19 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         elif button_ctx.custom_id == "5":
                                             # Resolve Check and Calculation
                                             if not o_used_resolve and o_used_focus:
+                                                if botActive and tutorial_resolve == False:
+                                                    tutorial_resolve = True
+                                                    embedVar = discord.Embed(title=f"⚡**Resolve Transformation**!",
+                                                                            description=f"**Heal**, Boost **ATK**, and gain the ability to 🧬**Summon**!",
+                                                                            colour=0xe91e63)
+                                                    embedVar.add_field(name=f"Trade Offs!",
+                                                                    value="Sacrifice **DEF** and **Focusing** will not increase **ATK** or **DEF**")
+                                                    embedVar.add_field(name=f"🧬 Summons",
+                                                                    value=f"🧬**Summons** will use their :microbe:**Enhancers** to assist you in battle! You're summon: 🧬 **{opet_name}**")
+                                                    embedVar.set_footer(
+                                                        text=f"You can only enter ⚡Resolve once per match! Use the Heal Wisely!!!")
+                                                    await button_ctx.send(embed=embedVar)
+                                                    await asyncio.sleep(2)
                                                 if o_universe == "My Hero Academia":  # My Hero Trait
                                                     # fortitude or luck is based on health
                                                     fortitude = 0.0
@@ -9907,6 +10014,17 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         elif button_ctx.custom_id == "6":
                                             # Resolve Check and Calculation
                                             if o_used_resolve and o_used_focus and not o_pet_used:
+                                                if botActive and tutorial_summon == False:
+                                                    tutorial_summon = True
+                                                    embedVar = discord.Embed(title=f"{o_card} Summoned 🧬 **{opet_name}**",colour=0xe91e63)
+                                                    embedVar.add_field(name=f"🧬**Summon Enhancers**!",
+                                                                    value="You can use 🧬**Summons** once per Focus without losing a turn!")
+                                                    embedVar.add_field(name=f"Resting",
+                                                                    value="🧬**Summons** need to rest after using their ability! **Focus** to Replenish your 🧬**Summon**")
+                                                    embedVar.set_footer(
+                                                        text=f"🧬Summons will Level Up and build Bond as you win battles! Train up your 🧬summons to perform better in the field!")
+                                                    await button_ctx.send(embed=embedVar)
+                                                    await asyncio.sleep(2)
                                                 o_enhancer_used = True
                                                 dmg = damage_cal(t_opponent_affinities, basic_attack_name, omove1_element, o_universe, o_card, opet_move, o_attack, o_defense,
                                                                 t_defense, o_stamina, o_enhancer_used, o_health, t_health,
@@ -10317,6 +10435,19 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     turn = 0
 
                                         if button_ctx.custom_id == "0":
+                                            if botActive and tutorial_block==False:
+                                                tutorial_block=True
+                                                embedVar = discord.Embed(title=f"🛡️Blocking!",
+                                                                        description=f"🛡️**Blocking** cost **20 ST(Stamina)** to Double your **DEF** until your next turn!",
+                                                                        colour=0xe91e63)
+                                                embedVar.add_field(name=f"**Engagements**",
+                                                                value="You will take less DMG when your **DEF** is greater than your opponenents **ATK**")
+                                                embedVar.add_field(name=f"**Engagement Insight**",
+                                                                value="❕: %50-%75 of AP\n💢: %75-%110 AP\n‼️: %90-%120 AP")
+                                                embedVar.set_footer(
+                                                    text=f"Use 🛡️Block strategically to defend against your opponents strongest abilities!")
+                                                await button_ctx.send(embed=embedVar)
+                                                await asyncio.sleep(2)
                                             block_message = ""
                                             if o_stamina >= 20:
 
@@ -10806,9 +10937,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 await button_ctx.defer(ignore=True)
                                     except asyncio.TimeoutError:
                                         if mode != "ABYSS" and mode != "SCENARIO":
-                                            await save_spot(self, ctx, universe, mode, currentopponent)
-                                            await ctx.author.send(f"{ctx.author.mention} your game timed out. Your channel has been closed but your spot in the tales has been saved where you last left off.")
-                                            await ctx.send(f"{ctx.author.mention} your game timed out. Your channel has been closed but your spot in the tales has been saved where you last left off.")
+                                            if not botActive:
+                                                await save_spot(self, ctx, universe, mode, currentopponent)
+                                                await ctx.author.send(f"{ctx.author.mention} your game timed out. Your channel has been closed but your spot in the tales has been saved where you last left off.")
+                                                await ctx.send(f"{ctx.author.mention} your game timed out. Your channel has been closed but your spot in the tales has been saved where you last left off.")
+                                            else:
+                                                await ctx.author.send(f"{ctx.author.mention} your game timed out. Your channel has been closed, restart the tutorial with **/solo**.")
+                                                await ctx.send(f"{ctx.author.mention} your game timed out. Your channel has been closed , restart the tutorial with **/solo**.")
                                         else:
                                             await ctx.author.send(f"{ctx.author.mention} your game timed out. Your channel has been closed and your Abyss Floor was Reset.") #Findme
                                             await ctx.send(f"{ctx.author.mention} your game timed out. Your channel has been closed and your Abyss Floor was Reset.")
@@ -11383,7 +11518,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         util_buttons = [
                                             manage_components.create_button(
                                                 style=ButtonStyle.grey,
-                                                label="Quit | /ff",
+                                                label="Quit",
                                                 custom_id="q"
                                             ),
                                         ]
@@ -11427,8 +11562,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             if o_gravity_hit == False:
                                                 util_buttons.append(
                                                     manage_components.create_button(
-                                                        style=ButtonStyle.grey,
-                                                        label="Block 20",
+                                                        style=ButtonStyle.blue,
+                                                        label="🛡️ Block 20",
                                                         custom_id="0"
                                                     )
                                                 )
@@ -17514,7 +17649,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         util_buttons = [
                                             manage_components.create_button(
                                                 style=ButtonStyle.grey,
-                                                label="Quit | /ff",
+                                                label="Quit",
                                                 custom_id="q"
                                             ),
                                         ]
@@ -17558,8 +17693,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             if t_gravity_hit == False:
                                                 util_buttons.append(
                                                     manage_components.create_button(
-                                                        style=ButtonStyle.grey,
-                                                        label="Block 20",
+                                                        style=ButtonStyle.blue,
+                                                        label="🛡️ Block 20",
                                                         custom_id="0"
                                                     )
                                                 )
@@ -17567,7 +17702,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         coop_util_buttons = [
                                             manage_components.create_button(
                                                 style=ButtonStyle.blue,
-                                                label="Assist Companion 20",
+                                                label="🦠 Assist Companion 20",
                                                 custom_id="7"
                                             )
                                         ]
@@ -18800,6 +18935,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     turn = 2
                                                     # await button_ctx.defer(ignore=True)
                                         except asyncio.TimeoutError:
+                                            
                                             await save_spot(self, ctx, universe, mode, currentopponent)
                                             await ctx.author.send(f"{ctx.author.mention} your game timed out. Your channel has been closed but your spot in the tales has been saved where you last left off.")
                                             await ctx.send(f"{ctx.author.mention} your game timed out. Your channel has been closed but your spot in the tales has been saved where you last left off.")
@@ -21572,7 +21708,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     **7** - *Duo*
                                     **8** - *Crafting*
                                     **9** - *Guilds, Families, Associations*
-                                    **10**- *Trading and Blacksmith*
+                                    **10**- *Trading*
                                     **20** - *Gifting*
                                     **25** - *Explore Mode*
                                     **40** - *Dungeons*
@@ -21586,13 +21722,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     if floor in floor_list:
                                         embedVar.add_field(
                                         name=f"Abyssal Unlock",
-                                        value=f"{abyss_message['message']}")
+                                        value=f"{abyss_message['MESSAGE']}")
                                     embedVar.add_field(
                                     name=f"Abyssal Rewards",
                                     value=f"{abyss_drop_message}")
-
-                                    if abyss_message['NEW_UNLOCK']:
-                                        await ctx.send(f"{ctx.author.mention} {abyss_message['MESSAGE']}")
  
                                     battle_msg = await private_channel.send(embed=embedVar)
 
@@ -23042,17 +23175,17 @@ enhancer_mapping = {'ATK': 'Increase Attack %',
 'DRAIN': 'Drain Stamina from Opponent',
 'FLOG': 'Steal Attack from Opponent',
 'WITHER': 'Steal Defense from Opponent',
-'RAGE': 'Lose Defense, Increase Attack',
-'BRACE': 'Lose Attack, Increase Defense',
+'RAGE': 'Lose Defense, Increase AP',
+'BRACE': 'Lose Attack, Increase AP',
 'BZRK': 'Lose Health, Increase Attack',
 'CRYSTAL': 'Lose Health, Increase Defense',
-'GROWTH': 'Lose Health, Increase Attack & Defense',
+'GROWTH': 'Lose 10% Max Health, Increase Attack, Defense and AP',
 'STANCE': 'Swap your Attack & Defense, Increase Defense',
 'CONFUSE': 'Swap Opponent Attack & Defense, Decrease Opponent Defense',
 'BLINK': 'Decrease your  Stamina, Increase Target Stamina',
 'SLOW': 'Increase Opponent Stamina, Decrease Your Stamina then Swap Stamina with Opponent',
 'HASTE': 'Increase your Stamina, Decrease Opponent Stamina then Swap Stamina with Opponent',
-'FEAR': 'Decrease your Health, Decrease Opponent Attack and Defense',
+'FEAR': 'Lose 10% Max Health, Decrease Opponent Attack, Defense and AP',
 'SOULCHAIN': 'You and Your Opponent Stamina Link',
 'GAMBLE': 'You and Your Opponent Health Link',
 'WAVE': 'Deal Damage, Decreases over time',
@@ -23077,17 +23210,17 @@ title_enhancer_mapping = {'ATK': 'Increase Attack ',
 'DRAIN': 'Drain Stamina from Opponent',
 'FLOG': 'Steal Attack from Opponent',
 'WITHER': 'Steal Defense from Opponent',
-'RAGE': 'Lose Defense, Increase Attack',
-'BRACE': 'Lose Attack, Increase Defense',
+'RAGE': 'Lose Defense, Increase AP',
+'BRACE': 'Lose Attack, Increase AP',
 'BZRK': 'Lose Health, Increase Attack',
 'CRYSTAL': 'Lose Health, Increase Defense',
-'GROWTH': 'Lose Health, Increase Attack & Defense',
+'GROWTH': 'Lose 5% Max Health, Increase Attack, Defense and AP',
 'STANCE': 'Swap your Attack & Defense, Increase Defense',
 'CONFUSE': 'Swap Opponent Attack & Defense, Decrease Opponent Defense',
 'BLINK': 'Decrease your Stamina, Increase Target Stamina',
 'SLOW': 'Decrease Turn Count by 1',
 'HASTE': 'Increase Turn Count By 1',
-'FEAR': 'Decrease your Health, Decrease Opponent Attack and Defense',
+'FEAR': 'Lose 5% MAx Health, Decrease Opponent Attack, Defense and AP',
 'SOULCHAIN': 'Both players stamina regen equals AP',
 'GAMBLE': 'Focusing players health regen equals to AP',
 'WAVE': 'Deal Damage, Decreases over time',
@@ -23105,24 +23238,24 @@ title_enhancer_mapping = {'ATK': 'Increase Attack ',
 'SIPHON': 'Heal for 10% DMG inflicted + AP'
 }
 element_mapping = {'PHYSICAL': 'Normal Damage ',
-'FIRE': 'Does 20% damage of previous attack over the next opponent turns, stacks ',
+'FIRE': 'Does 25% damage of previous attack over the next opponent turns, stacks ',
 'ICE': 'After 3 uses opponent freezes and loses 1 turn',
-'WATER': 'Increases all water attack dmg by 25 Flat',
-'EARTH': 'Cannot be Parried. Increases Def by 20% AP',
-'ELECTRIC': 'Add 7% to Shock damage, added to each attack',
-'WIND': 'Cannot Miss ',
+'WATER': 'Increases all water attack dmg by 35 Flat',
+'EARTH': 'Cannot be Parried. Increases Def by 50% AP',
+'ELECTRIC': 'Add 15% to Shock damage, added to each attack',
+'WIND': 'Cannot Miss, boost all wind damage by 15% DMG',
 'PSYCHIC': 'Penetrates Barriers. Reduce opponent ATK & DEF by 8% AP ',
-'DEATH': 'Adds 7% opponent max health as damage',
-'LIFE': 'Heal for 15% AP',
-'LIGHT': 'Regain 50% Stamina Cost',
-'DARK': 'Penetrates shields & drains 5 stamina ',
-'POISON': 'Opponent takes additional 8 damage each turn stacking up to 100',
-'RANGED': 'If ST > 80 deals 1.5x Damage',
+'DEATH': 'Adds 20% opponent max health as damage',
+'LIFE': 'Heal for 20% AP',
+'LIGHT': 'Regain 50% Stamina Cost, Increase ATK by 20% DMG',
+'DARK': 'Penetrates shields & drains 10 stamina ',
+'POISON': 'Opponent takes additional 10 damage each turn stacking up to 150',
+'RANGED': 'If ST > 50 deals 1.7x Damage',
 'SPIRIT': 'Has higher chance of Crit',
 'RECOIL': 'Deals 25% damage back to you',
-'TIME': 'You Focus after attacking',
+'TIME': 'IF ST < 80 you Focus after attacking, You Block during your Focus',
 'BLEED': 'After 5 Attacks deal 5x turn count damage to opponent',
-'GRAVITY': 'Disables Opponent Block'
+'GRAVITY': 'Disables Opponent Block, Reduce Opponent DEF by 15% AP'
 }
 passive_enhancer_suffix_mapping = {'ATK': ' Flat',
 'DEF': ' Flat',
@@ -23136,13 +23269,13 @@ passive_enhancer_suffix_mapping = {'ATK': ' Flat',
 'BRACE': '%',
 'BZRK': '%',
 'CRYSTAL': '%',
-'GROWTH': 'Flat',
+'GROWTH': ' Flat',
 'STANCE': ' Flat',
 'CONFUSE': ' Flat',
 'BLINK': ' Flat',
 'SLOW': ' Flat',
 'HASTE': ' Flat',
-'FEAR': 'Flat',
+'FEAR': ' Flat',
 'SOULCHAIN': ' Flat',
 'GAMBLE': ' Flat',
 'WAVE': ' Flat',
@@ -23171,13 +23304,13 @@ enhancer_suffix_mapping = {'ATK': '%',
 'BRACE': '%',
 'BZRK': '%',
 'CRYSTAL': '%',
-'GROWTH': 'Flat',
+'GROWTH': ' Flat',
 'STANCE': ' Flat',
 'CONFUSE': ' Flat',
 'BLINK': ' Flat',
 'SLOW': ' Flat',
 'HASTE': ' Flat',
-'FEAR': 'Flat',
+'FEAR': ' Flat',
 'SOULCHAIN': ' Flat',
 'GAMBLE': ' Flat',
 'WAVE': ' Flat',
@@ -23206,13 +23339,13 @@ title_enhancer_suffix_mapping = {'ATK': ' Flat',
 'BRACE': '%',
 'BZRK': '%',
 'CRYSTAL': '%',
-'GROWTH': 'Flat',
+'GROWTH': ' Flat',
 'STANCE': ' Flat',
 'CONFUSE': ' Flat',
 'BLINK': ' Flat',
 'SLOW': ' Turn',
 'HASTE': ' Turn',
-'FEAR': 'Flat',
+'FEAR': ' Flat',
 'SOULCHAIN': ' Flat',
 'GAMBLE': ' Flat',
 'WAVE': ' Flat',
