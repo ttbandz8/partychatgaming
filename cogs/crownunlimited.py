@@ -2594,7 +2594,7 @@ def abyss_level_up_message(did, floor, card, title, arm):
             new_unlock = True
         
         if floor == 2:
-            message = "🎊 Congratulations! 🎊 You unlocked **Tales!**. Use the **/tales** command to battle through Universes to earn Cards, Titles, Arms, Summons, and Money!"
+            message = "🎊 Congratulations! 🎊 You unlocked **Tales! and Scenarios!**. Use the **/solo** command to battle through Universes to earn Cards, Titles, Arms, Summons, and Money!"
             new_unlock = True
 
         if floor == 8:
@@ -2614,7 +2614,7 @@ def abyss_level_up_message(did, floor, card, title, arm):
             new_unlock = True
 
         if floor == 6:
-            message = "🎊 Congratulations! 🎊 You unlocked **PVP**. \nUse the /**battle** command to PVP against other players!"
+            message = "🎊 Congratulations! 🎊 You unlocked **PVP**. \nUse the /**pvp** command to PVP against other players!"
             new_unlock = True
 
         if floor == 20:
@@ -2634,7 +2634,7 @@ def abyss_level_up_message(did, floor, card, title, arm):
             new_unlock = True
 
         if floor == 40:
-            message = "🎊 Congratulations! 🎊 You unlocked **Dungeons**. Use the **/tales** command and select Dungeons to battle through the Hard Mode of Universes to earn super rare Cards, Titles, and Arms!"
+            message = "🎊 Congratulations! 🎊 You unlocked **Dungeons**. Use the **/solo** command and select Dungeons to battle through the Hard Mode of Universes to earn super rare Cards, Titles, and Arms!"
             new_unlock = True
             
         if floor == 7:
@@ -2642,7 +2642,7 @@ def abyss_level_up_message(did, floor, card, title, arm):
             new_unlock = True
 
         if floor == 60:
-            message = "🎊 Congratulations! 🎊 You unlocked **Bosses**. Use the **/tales** command and select Boss to battle Universe Bosses too earn ultra rare Cards, Titles, and Arms!"
+            message = "🎊 Congratulations! 🎊 You unlocked **Bosses**. Use the **/solo** command and select Boss to battle Universe Bosses too earn ultra rare Cards, Titles, and Arms!"
             new_unlock = True
             
         if floor == 100:
@@ -8442,14 +8442,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 o_used_resolve = True
                                                 o_pet_used = False
 
-                                                if t_gow_resolve:
+                                                if o_gow_resolve:
                                                     o_health = o_max_health
                                                     previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Ascension!")
                                                 elif not o_gow_resolve:
-                                                    o_health = round(o_max_health / 2)
+                                                    o_health = round(o_health + (o_max_health / 2))
                                                     o_used_resolve = False
                                                     o_gow_resolve = True
-                                                    o_defense = 125
+                                                    
                                                     previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Crushed Blood Orb: Health Refill")
                                                 
 
@@ -9731,14 +9731,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     o_used_resolve = True
                                                     o_pet_used = False
 
-                                                    if t_gow_resolve:
+                                                    if o_gow_resolve:
                                                         o_health = o_max_health
                                                         previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Ascension!")
                                                     elif not o_gow_resolve:
-                                                        o_health = round(o_max_health / 2)
+                                                        o_health = round(o_health + (o_max_health / 2))
                                                         o_used_resolve = False
                                                         o_gow_resolve = True
-                                                        o_defense = 125
+                                                        
                                                         previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Crushed Blood Orb: Health Refill")
                                                     
 
@@ -11733,10 +11733,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_max_health
                                                             previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Ascension!")
                                                         elif not t_gow_resolve:
-                                                            t_health = round(t_max_health / 2)
+                                                            t_health = round(t_health + (t_max_health / 2))
                                                             t_used_resolve = False
                                                             t_gow_resolve = True
-                                                            t_defense = 125
+                                                            
                                                             previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Crushed Blood Orb: Health Refill")
                                                         
 
@@ -12902,10 +12902,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = t_max_health
                                                         previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Ascension!")
                                                     elif not t_gow_resolve:
-                                                        t_health = round(t_max_health / 2)
+                                                        t_health = round(t_health + (t_max_health / 2))
                                                         t_used_resolve = False
                                                         t_gow_resolve = True
-                                                        t_defense = 125
+                                                        
                                                         previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Crushed Blood Orb: Health Refill")
                                                     
 
@@ -14082,10 +14082,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_health = t_max_health
                                                     previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Ascension!")
                                                 elif not t_gow_resolve:
-                                                    t_health = round(t_max_health / 2)
+                                                    t_health = round(t_health + (t_max_health / 2))
                                                     t_used_resolve = False
                                                     t_gow_resolve = True
-                                                    t_defense = 125
+                                                    
                                                     previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Crushed Blood Orb: Health Refill")
                                                 
                                                     
@@ -16678,10 +16678,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         c_health = c_max_health
                                                         previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 Resolved: Ascension!")
                                                     elif not c_gow_resolve:
-                                                        c_health = round(c_max_health / 2)
+                                                        c_health = round(c_health + (c_max_health / 2))
                                                         c_used_resolve = False
                                                         c_gow_resolve = True
-                                                        c_defense = 125
+                                                        
                                                         previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 Crushed Blood Orb: Health Refill")
                                                     
 
@@ -17903,10 +17903,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             c_health = c_max_health
                                                             previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 Resolved: Ascension!")
                                                         elif not c_gow_resolve:
-                                                            c_health = round(c_max_health / 2)
+                                                            c_health = round(c_health + (c_max_health / 2))
                                                             c_used_resolve = False
                                                             c_gow_resolve = True
-                                                            c_defense = 125
+                                                            
                                                             previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 Crushed Blood Orb: Health Refill")
                                                         
 
@@ -19680,10 +19680,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_health = t_max_health
                                                     previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Ascension!")
                                                 elif not t_gow_resolve:
-                                                    t_health = round(t_max_health / 2)
+                                                    t_health = round(t_health + (t_max_health / 2))
                                                     t_used_resolve = False
                                                     t_gow_resolve = True
-                                                    t_defense = 125
+                                                    
                                                     previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Crushed Blood Orb: Health Refill")
 
                                                 turn_total = turn_total + 1
@@ -21582,12 +21582,16 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                     embedVar.set_author(name=f"{t_card} lost!")
                                     embedVar.set_footer(text=f"Traverse the **Abyss** in /solo to unlock new game modes and features!")
+                                    floor_list = [0,2,3,6,7,8,9,10,20,25,40,60,100]
+                                    if floor in floor_list:
+                                        embedVar.add_field(
+                                        name=f"Abyssal Unlock",
+                                        value=f"{abyss_message['message']}")
                                     embedVar.add_field(
                                     name=f"Abyssal Rewards",
                                     value=f"{abyss_drop_message}")
 
                                     if abyss_message['NEW_UNLOCK']:
-                                        await ctx.author.send(abyss_message['MESSAGE'])
                                         await ctx.send(f"{ctx.author.mention} {abyss_message['MESSAGE']}")
  
                                     battle_msg = await private_channel.send(embed=embedVar)
