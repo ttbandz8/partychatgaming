@@ -652,11 +652,11 @@ async def viewsummon(self, ctx, summon: str):
                 message=f"{pet_pet} is a WITHER Summon"
                 value=f"{o_pet_passive_name}: Steals {o_pet_passive_value}{enhancer_suffix_mapping[o_pet_passive_type]} {typetext}"
             elif o_pet_passive_type == 'RAGE':
-                typetext = f"Defense to gain {o_pet_passive_value}{enhancer_suffix_mapping[o_pet_passive_type]} Attack"
+                typetext = f"Defense to gain {o_pet_passive_value}{enhancer_suffix_mapping[o_pet_passive_type]} AP"
                 message=f"{pet_pet} is a RAGE Summon"
                 value=f"{o_pet_passive_name}: Sacrifice {o_pet_passive_value}{enhancer_suffix_mapping[o_pet_passive_type]} {typetext}"
             elif o_pet_passive_type == 'BRACE':    
-                typetext = f"Attack to gain {o_pet_passive_value}{enhancer_suffix_mapping[o_pet_passive_type]} Defense"        
+                typetext = f"Attack to gain {o_pet_passive_value}{enhancer_suffix_mapping[o_pet_passive_type]} AP"        
                 message=f"{pet_pet} is a BRACE Summon"
                 value=f"{o_pet_passive_name}: Sacrifice {o_pet_passive_value}{enhancer_suffix_mapping[o_pet_passive_type]} {typetext}"
             elif o_pet_passive_type == 'BZRK':    
@@ -668,9 +668,9 @@ async def viewsummon(self, ctx, summon: str):
                 message=f"{pet_pet} is a CRYSTAL Summon"
                 value=f"{o_pet_passive_name}: Sacrifice {o_pet_passive_value}{enhancer_suffix_mapping[o_pet_passive_type]} {typetext}"
             elif o_pet_passive_type == 'GROWTH':    
-                typetext = f"Max Health to gain {round(o_pet_passive_value * .5)}{enhancer_suffix_mapping[o_pet_passive_type]} Attack and Defense"      
+                typetext = f"Max Health to gain {round(o_pet_passive_value * .5)}{enhancer_suffix_mapping[o_pet_passive_type]} Attack, Defense, and AP"      
                 message=f"{pet_pet} is a GROWTH Summon"
-                value=f"{o_pet_passive_name}: Sacrifice {o_pet_passive_value}{enhancer_suffix_mapping[o_pet_passive_type]} {typetext}"
+                value=f"{o_pet_passive_name}: Sacrifice 10% {typetext}"
             elif o_pet_passive_type == 'STANCE':
                 typetext = "Attack and Defense, Increase"
                 message=f"{pet_pet} is a STANCE Summon"
@@ -696,9 +696,9 @@ async def viewsummon(self, ctx, summon: str):
                 message=f"{pet_pet} is a SOULCHAIN Summon"
                 value=f"{o_pet_passive_name}: Set both players {typetext} equal to {o_pet_passive_value}"
             elif o_pet_passive_type == 'FEAR':
-                typetext = f"Max Health to reduce {round(o_pet_passive_value * .5)}{enhancer_suffix_mapping[o_pet_passive_type]} Opponent Attack and Defense"
+                typetext = f"Max Health to reduce {round(o_pet_passive_value * .5)}{enhancer_suffix_mapping[o_pet_passive_type]} Opponent Attack, Defense, and AP"
                 message=f"{pet_pet} is a FEAR Summon"
-                value=f"{o_pet_passive_name}: Sacrifice {o_pet_passive_value}{enhancer_suffix_mapping[o_pet_passive_type]} {typetext}"
+                value=f"{o_pet_passive_name}: Sacrifice 10% {typetext}"
             elif o_pet_passive_type == 'GAMBLE':
                 typetext = "Health"
                 message=f"{pet_pet} is a GAMBLE Summon"
