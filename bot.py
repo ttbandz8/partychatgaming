@@ -380,7 +380,7 @@ async def animevs(ctx):
    
    🎇 **Card Level**
    As you battle your card will level up, increasing Stats and Ability Power 
-   Cards Start at **Level 0** and Max out at **Level 500**
+   Cards Start at **Level 0** and Max out at **Level 999**
 
    ✨ **Destinies**
    Card Specific Quest that earn **Destiny Cards**
