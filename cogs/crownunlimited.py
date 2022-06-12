@@ -23414,7 +23414,7 @@ Crest_dict = {'Unbound': ':ideograph_advantage:',
               'Crown Rift Slayers': ':sa:',
               'Crown Rift Madness': ':m:',
               'Persona': ':o:',
-              'YuYu Hakusho': '☸️'
+              'YuYu Hakusho': ':wheel_of_dharma:'
               }
 take_chances_messages = ['You lost immediately.', 'You got smoked!', 'You fainted before the fight even started.',
                          'That... was just sad. You got dropped with ease.', 'Too bad, so sad. You took the L.',
