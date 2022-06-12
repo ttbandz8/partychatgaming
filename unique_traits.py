@@ -87,4 +87,8 @@ traits = [{
     'NAME': 'Crown Rift Madness',
     'EFFECT': 'Madness',
     'TRAIT': 'Do not lose turn on Focus, but also do not Heal.'
+},{
+    'NAME': 'YuYu Hakusho',
+    'EFFECT': 'Spirit Energy',
+    'TRAIT': 'Stamina + Turn Count added to each attack'
 }]

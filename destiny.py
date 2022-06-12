@@ -3319,6 +3319,36 @@ destiny = [
         "EARN": "Witch Queen",
         "COMPLETED": False,
         "UNIVERSE": "Black Clover"
+    },
+    {
+        "NAME": "Hiei and Mukuro",
+        "WINS": 0,
+        "REQUIRED": 50,
+        "DEFEAT": "Mukuro",
+        "USE_CARDS": ["Hiei"],
+        "EARN": "Mukuro",
+        "COMPLETED": False,
+        "UNIVERSE": "YuYu Hakusho"
+    },
+    {
+        "NAME": "Yomi and Kurama",
+        "WINS": 0,
+        "REQUIRED": 50,
+        "DEFEAT": "Yomi",
+        "USE_CARDS": ["Kurama"],
+        "EARN": "Yomi",
+        "COMPLETED": False,
+        "UNIVERSE": "YuYu Hakusho"
+    },
+    {
+        "NAME": "Raizen and Yusuke",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Raizen",
+        "USE_CARDS": ["Yusuke"],
+        "EARN": "Raizen",
+        "COMPLETED": False,
+        "UNIVERSE": "YuYu Hakusho"
     }
 
 ]
