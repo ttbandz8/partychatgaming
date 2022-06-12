@@ -7735,12 +7735,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             if turn_total == 0:
                                 # Tutorial Instructions
                                 if turn_total == 0:
-                                    if botActive:
+                                    if tutorial:
                                         embedVar = discord.Embed(title=f"Welcome to **Anime VS+**!",
                                                                 description=f"Follow the instructions to learn how to play the Game!",
                                                                 colour=0xe91e63)
-                                        embedVar.add_field(name="**How do I play?**",
-                                                        value="The point of the game is to win **Battles**!\n**To do this**, you need to select moves outmanuevering your opponent to **secure the win**!\n\n**Select a move** to get started.\nWhen your :cyclone:**ST (Stamina)** depletes to **0** your Card will **Heal** and enter **Focus State** !")
                                         embedVar.add_field(name="**Moveset**",
                                                             value=f"{o_basic_emoji} - Basic Attack *costs 10 :cyclone:*\n{o_super_emoji} - Special Attack *costs 30 :cyclone:*\n{o_ultimate_emoji} - Ultimate Move *costs 80 :cyclone:*\n:microbe: - Enhancer *costs 20 :cyclone:*\n🛡️ - Block *costs 20 :cyclone:*")
                                         embedVar.set_footer(
@@ -7808,7 +7806,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 embed_color_o = 0x2ecc71
 
                             if o_stamina < 10:
-                                if botActive and tutorial_focus ==False:
+                                if tutorial and tutorial_focus ==False:
                                     tutorial_focus = True
                                     embedVar = discord.Embed(title=f"You've entered :cyclone:**Focus State**!",
                                                             description=f"Entering :cyclone:**Focus State** sacrifices a turn to **Heal** and regain **ST (Stamina)**!",
@@ -7891,7 +7889,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                 # Resolve Check and Calculation
                                 if not o_used_resolve and o_used_focus and o_universe == "Digimon":  # Digimon Universal Trait
-                                    if botActive and tutorial_resolve==False:
+                                    if tutorial and tutorial_resolve==False:
                                         tutorial_resolve = True
                                         embedVar = discord.Embed(title=f"⚡**Resolve Transformation**!",
                                                                 description=f"**Heal**, Boost **ATK**, and gain the ability to 🧬**Summon**!",
@@ -9361,7 +9359,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 )
                                             )
 
-                                    if not randomized_battle and difficulty == "NORMAL" and mode != "ABYSS" or mode !="ABYSS" and mode != "SCENARIO":
+                                    if not randomized_battle and difficulty == "NORMAL" and mode != "ABYSS" or mode !="ABYSS" and mode != "SCENARIO" and not tutorial:
                                             util_buttons.append(             
                                                 manage_components.create_button(
                                                 style=ButtonStyle.red,
@@ -9370,7 +9368,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             )
                                         )
 
-                                    if mode in ai_co_op_modes:
+                                    if mode in ai_co_op_modes and o_stamina>=20:
                                         coop_util_buttons = [
                                             manage_components.create_button(
                                                 style=ButtonStyle.blue,
@@ -9389,7 +9387,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             ),
                                         ]
                                     
-                                    elif mode in co_op_modes and mode not in ai_co_op_modes:
+                                    elif mode in co_op_modes and mode not in ai_co_op_modes and o_stamina>=20:
                                         coop_util_buttons = [
                                             manage_components.create_button(
                                                 style=ButtonStyle.blue,
@@ -9534,7 +9532,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             #return
                                         
                                         if button_ctx.custom_id == "1":
-                                            if botActive and tutorial_basic == False:
+                                            if tutorial and tutorial_basic == False:
                                                 tutorial_basic =True
                                                 embedVar = discord.Embed(title=f":boom:Basic Attack!",
                                                                         description=f":boom:**Basic Attack** cost **10 ST(Stamina)** to deal decent Damage!",
@@ -9559,7 +9557,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_max_health, t_attack, o_special_move_description, turn_total,
                                                                 ocard_lvl_ap_buff, None)
                                         elif button_ctx.custom_id == "2":
-                                            if botActive and tutorial_special==False:
+                                            if tutorial and tutorial_special==False:
                                                 tutorial_special = True
                                                 embedVar = discord.Embed(title=f":comet:Special Attack!",
                                                                         description=f":comet:**Special Attack** cost **30 ST(Stamina)** to deal great Damage!",
@@ -9584,7 +9582,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_max_health, t_attack, o_special_move_description, turn_total,
                                                                 ocard_lvl_ap_buff, None)
                                         elif button_ctx.custom_id == "3":
-                                            if botActive and tutorial_ultimate==False:
+                                            if tutorial and tutorial_ultimate==False:
                                                 tutorial_ultimate=True
                                                 embedVar = discord.Embed(title=f":rosette:Ultimate Move!",
                                                                         description=f":rosette:**Ultimate Move** cost **80 ST(Stamina)** to deal incredible Damage!",
@@ -9610,7 +9608,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 
                                                 await asyncio.sleep(2)
                                         elif button_ctx.custom_id == "4":
-                                            if botActive and tutorial_enhancer==False:
+                                            if tutorial and tutorial_enhancer==False:
                                                 tutorial_enhancer = True
                                                 embedVar = discord.Embed(title=f":microbe:Enhancers!",
                                                                         description=f":microbe:**Enhancers** cost **20 ST(Stamina)** to Boost your Card or Debuff Your Opponent!",
@@ -9632,7 +9630,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         elif button_ctx.custom_id == "5":
                                             # Resolve Check and Calculation
                                             if not o_used_resolve and o_used_focus:
-                                                if botActive and tutorial_resolve == False:
+                                                if tutorial and tutorial_resolve == False:
                                                     tutorial_resolve = True
                                                     embedVar = discord.Embed(title=f"⚡**Resolve Transformation**!",
                                                                             description=f"**Heal**, Boost **ATK**, and gain the ability to 🧬**Summon**!",
@@ -10014,7 +10012,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         elif button_ctx.custom_id == "6":
                                             # Resolve Check and Calculation
                                             if o_used_resolve and o_used_focus and not o_pet_used:
-                                                if botActive and tutorial_summon == False:
+                                                if tutorial and tutorial_summon == False:
                                                     tutorial_summon = True
                                                     embedVar = discord.Embed(title=f"{o_card} Summoned 🧬 **{opet_name}**",colour=0xe91e63)
                                                     embedVar.add_field(name=f"🧬**Summon Enhancers**!",
@@ -10435,7 +10433,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     turn = 0
 
                                         if button_ctx.custom_id == "0":
-                                            if botActive and tutorial_block==False:
+                                            if tutorial and tutorial_block==False:
                                                 tutorial_block=True
                                                 embedVar = discord.Embed(title=f"🛡️Blocking!",
                                                                         description=f"🛡️**Blocking** cost **20 ST(Stamina)** to Double your **DEF** until your next turn!",
@@ -17699,13 +17697,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     )
                                                 )
 
-                                        coop_util_buttons = [
-                                            manage_components.create_button(
-                                                style=ButtonStyle.blue,
-                                                label="🦠 Assist Companion 20",
-                                                custom_id="7"
-                                            )
-                                        ]
+                                        if c_stamina>=20:
+                                            coop_util_buttons = [
+                                                manage_components.create_button(
+                                                    style=ButtonStyle.blue,
+                                                    label="🦠 Assist Companion 20",
+                                                    custom_id="7"
+                                                )
+                                            ]
 
                                         if c_used_focus and c_used_resolve and not c_pet_used:
                                             util_buttons.append(

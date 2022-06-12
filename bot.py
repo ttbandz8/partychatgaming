@@ -843,7 +843,7 @@ async def register(ctx):
                {traitmessage}
                """))
                embedVar.set_image(url=uni['PATH'])
-               embedVar.set_footer(text="You can earn or purchase items from other universes after Abyss Floor 3")
+               embedVar.set_footer(text="You can earn or purchase items after Abyss floor 0")
                universe_embed_list.append(embedVar)
                
          buttons = [
@@ -891,7 +891,7 @@ async def register(ctx):
                         selected_titles.append(selection)
                         title = list_of_titles[selection]
                         response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'TITLES': str(title['TITLE'])}})
-                        title_message.append(f"You collected :reminder_ribbon: **{title['TITLE']}**.")
+                        title_message.append(f"**{title['TITLE']}**!")
                         #await button_ctx.send(f"You collected :reminder_ribbon: **{title['TITLE']}**.")
                         count = count + 1
                      
@@ -909,7 +909,7 @@ async def register(ctx):
                         selected_arms.append(selection)
                         arm = list_of_arms[selection]['ARM']
                         db.updateVaultNoFilter(vault_query,{'$addToSet':{'ARMS': {'ARM': str(arm), 'DUR': 75}}})        
-                        arm_message.append(f"You collected :mechanical_arm: **{arm}**.")                   
+                        arm_message.append(f"**{arm}**!")                   
                         #await button_ctx.send(f"You collected :mechanical_arm: **{arm}**.")
                         count = count + 1
                         
@@ -935,13 +935,13 @@ async def register(ctx):
                         cresponse = db.updateVaultNoFilter(vault_query, {'$addToSet': {'CARDS': str(card_name)}})
                         cardname_list = []
                         if cresponse:
-                           if card_name not in owned_card_levels_list:
+                           if card_name not in cardname_list:
                               update_query = {'$addToSet': {
                                     'CARD_LEVELS': {'CARD': str(card_name), 'LVL': 0, 'TIER': int(tier),
                                                    'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
                               r = db.updateVaultNoFilter(vault_query, update_query)
                            cardname_list.append(card_name)
-                           card_message.append(f"You collected 🎴 **{card_name}**!")
+                           card_message.append(f"**{card_name}**!")
                            #await button_ctx.send(f"You collected 🎴 **{card_name}**!")
 
                            # Add Destiny
@@ -951,7 +951,7 @@ async def register(ctx):
                                  db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
                                  has_destiny=True
                                  if counter > 0:
-                                    destiny_message.append(f"✨**{destiny['NAME']}** : Earn 🎴 **{destiny['EARN']}**.!")
+                                    destiny_message.append(f"**{destiny['NAME']}** : Earn 🎴 **{destiny['EARN']}**.!")
                                     counter = counter - 1
                                     # await button_ctx.send(
                                     #    f"✨**{destiny['NAME']}** addes to **/destinylist**.", hidden=True)
@@ -960,45 +960,54 @@ async def register(ctx):
                      arm_drop_message_into_embded = "\n".join(arm_message)
                      card_drop_message_into_embded = "\n".join(card_message)
                      destiny_drop_message_into_embded = "\n".join(destiny_message)
-                     embedVar = discord.Embed(title=f":crown: Create your **Build!**",description=textwrap.dedent(f"""
-                     *Nice Choice {ctx.author.mention}!*
-                     Create a build with your **Starting Items**
-                     Use **/difficulty** to change your difficulty settings
-                     By default, you start on Easy mode
+                     embedVar = discord.Embed(title=f"**Welcome to Anime VS+**!",description=textwrap.dedent(f"""
+                     *Welcome {ctx.author.mention}!*
                      
+                     **Let's get started playing the game!**
+                     **Step 1:**/menu to select  **🎴Cards**, **:reminder_ribbon:Titles**, and **:mechanical_arm:Arms**!
+                     
+                     **Step 2:** Create a /build with **{universe} Items**
+                     
+                     **Step 3:** Use /solo and select **:sos: The Tutorial**!
+                     
+                     **The /help command is your ❤️ Friend!**
+                     Use the help command dropdown to learn how to play Anime VS+!
+         
                      """),colour=0x1abc9c)
-                     embedVar.add_field(name=f"🎴 **Cards** */menu to open your Cards*", value=f"{card_drop_message_into_embded}", inline=True)
-                     embedVar.add_field(name=f":reminder_ribbon: **Titles** */menu to open your Titles*", value=f"{title_drop_message_into_embded}", inline=True)
-                     embedVar.add_field(name=f":mechanical_arm: **Arms** */menu to open your Arms*", value=f"{arm_drop_message_into_embded}", inline=True)
+                     embedVar.add_field(name=f"🎴 My Cards", value=f"{card_drop_message_into_embded}", inline=True)
+                     embedVar.add_field(name=f":reminder_ribbon: My Titles", value=f"{title_drop_message_into_embded}", inline=True)
+                     embedVar.add_field(name=f":mechanical_arm: My Arms", value=f"{arm_drop_message_into_embded}", inline=True)
                      if has_destiny:
-                        embedVar.add_field(name=f"✨ **Destinies** */menu to open your Destinies*", value=f"{destiny_drop_message_into_embded}", inline=False)
+                        embedVar.add_field(name=f"✨ **Destinies** */menu to view Destinies*", value=f"{destiny_drop_message_into_embded}", inline=False)
+                     embedVar.add_field(name=f":sos: Support!", value=f"[Join the Anime VS+ Support Server](https://discord.gg/2JkCqcN3hB)", inline=False)
                      embedVar.set_author(name=f"Registration Complete!", icon_url=user_info['AVATAR'])
-                     embedVar.set_footer(text="Use /tutorial to start the tutorial match!",
+                     embedVar.set_footer(text="📜Use /daily for Daily Reward and Quest\n/difficulty - Change difficulty setting!",
                                  icon_url="https://cdn.discordapp.com/emojis/877233426770583563.gif?v=1")
                      #await button_ctx.send(f"Nice choice {ctx.author.mention}!\n\nCreate your first **Build**!\n**/cards** Select your 🎴  Card\n**/titles** Select your 🎗️ Title\n**/arms** Select your 🦾  Arm\n\nOnce you're done, run **/tutorial** to begin the **Tutorial Battle**! ⚔️")
                      await button_ctx.send(embed=embedVar)
+                     await ctx.author.send(embed=embedVar)
                      await asyncio.sleep(3)
 
-                     embedVar = discord.Embed(title=f"**Welcome to Anime VS+**!", description=textwrap.dedent(f"""
-                     Welcome 🆕 {ctx.author.mention}!                                                                                           
+                     # embedVar = discord.Embed(title=f"**Welcome to Anime VS+**!", description=textwrap.dedent(f"""
+                     # Welcome 🆕 {ctx.author.mention}!                                                                                           
                      
-                     Congrats on selecting your starting universe! **Now what?**
+                     # Congrats on selecting your starting universe! **Now what?**
 
-                     **Let's get started playing the game!**
-                     **Step 1:** Use the /daily command right now for your daily reward!
-                     **Step 2:** Use /menu to open your list of cards, titles, and arms and equip a card you just got!
-                     **Step 3:** Use /solo and select **tutorial** to learn how to play through battle!
+                     # **Let's get started playing the game!**
+                     # **Step 1:** Use the /daily command right now for your daily reward!
+                     # **Step 2:** Use /menu to open your list of **Cards**, **Titles**, and **Arms** and equip a card you just got!
+                     # **Step 3:** Use /solo and select **tutorial** to learn how to play through battle!
 
-                     **The /help command is your ❤️ Friend!**
-                     Use the help command dropdown to learn more about Anime VS+ and how to play!
+                     # **The /help command is your ❤️ Friend!**
+                     # Use the help command dropdown to learn how to play Anime VS+!
 
-                     **/difficulty** - Change difficulty setting! **You start on easy mode**
+                     # **/difficulty** - Change difficulty setting! **You start on easy mode**
 
-                     [Join the Anime VS+ Support Server](https://discord.gg/2JkCqcN3hB)
-                     """), colour=0xe91e63)
-                     embedVar.set_footer(text="Changing your Discord Account Name or Numbers will break your Anime VS+ Account.")
-                     await ctx.author.send(embed=embedVar)
-                     await ctx.send(embed=embedVar)
+                     # [Join the Anime VS+ Support Server](https://discord.gg/2JkCqcN3hB)
+                     # """), colour=0xe91e63)
+                     # embedVar.set_footer(text="Changing your Discord Account Name or Numbers will break your Anime VS+ Account.")
+                     # await ctx.author.send(embed=embedVar)
+                     # await ctx.send(embed=embedVar)
 
                      self.stop = True
             except Exception as ex:
@@ -1383,7 +1392,7 @@ async def rebirth(ctx):
                                           selected_titles.append(selection)
                                           title = list_of_titles[selection]
                                           response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'TITLES': str(title['TITLE'])}})
-                                          await button_ctx.send(f"You collected :reminder_ribbon: **{title['TITLE']}**.")
+                                          await button_ctx.send(f":reminder_ribbon: **{title['TITLE']}**.")
                                           count = count + 1
                                        
                                        
@@ -1400,7 +1409,7 @@ async def rebirth(ctx):
                                           selected_arms.append(selection)
                                           arm = list_of_arms[selection]['ARM']
                                           db.updateVaultNoFilter(vault_query,{'$addToSet':{'ARMS': {'ARM': str(arm), 'DUR': 75}}})                           
-                                          await button_ctx.send(f"You collected :mechanical_arm: **{arm}**.")
+                                          await button_ctx.send(f":mechanical_arm: **{arm}**.")
                                           count = count + 1
                                           
                                        list_of_cards = [x for x in db.queryAllCardsBasedOnUniverse({'UNIVERSE': str(universe), 'TIER': {'$in': acceptable}}) if not x['EXCLUSIVE'] and not x['HAS_COLLECTION'] and x['AVAILABLE'] and x['NAME'] not in current_cards]
@@ -1426,7 +1435,7 @@ async def rebirth(ctx):
                                                                      'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
                                                 r = db.updateVaultNoFilter(vault_query, update_query)
 
-                                             await button_ctx.send(f"You collected 🎴 **{card_name}**!")
+                                             await button_ctx.send(f"🎴 **{card_name}**!")
 
                                              # Add Destiny
                                              for destiny in d.destiny:
