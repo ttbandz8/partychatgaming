@@ -2012,6 +2012,8 @@ def starting_position(o, t):
 
 def damage_cal(opponent_affinity, move_type, move_element, universe, card, ability, attack, defense, op_defense, stamina, enhancer, health, op_health, op_stamina,
                maxhealth, op_attack, special_description, turn, ap_buff, other):
+
+
     if op_defense <= 0:
         op_defense = 25
     if attack <= 0:
@@ -2464,6 +2466,12 @@ def damage_cal(opponent_affinity, move_type, move_element, universe, card, abili
             # if move_stamina == 80:
             #     # message = f"{special_description}\n" + message
             #     message = message
+
+            if universe == "YuYu Hakusho":
+                additional_dmg = stamina + turn
+                true_dmg = round(true_dmg + additional_dmg)
+
+
             if opponent_affinity[move_type] == "WEAKNESS" and not (hit_roll <= miss_hit):
                 true_dmg = round(true_dmg * 1.6)
                 message = f"Opponent is weak to **{move_emoji} {move_element.lower()}**! Strong hit for **{true_dmg}**!"
