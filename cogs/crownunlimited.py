@@ -7625,7 +7625,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     t_defense = tempattack
                                 if o_title_passive_type == "BLINK":
                                     o_stamina = o_stamina - o_title_passive_value
-                                    t_stamina = t_stamina + o_title_passive_value
+                                    if t_stamina >=10:
+                                        t_stamina = t_stamina + o_title_passive_value
                             if o_card_passive_type:
                                 o_value_for_passive = o_card_tier * .5
                                 o_flat_for_passive = 10 * (o_card_tier * .5)
@@ -11126,7 +11127,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     o_attack = o_defense
                                     o_defense = tempattack
                                 if t_title_passive_type == "BLINK":
-                                    o_stamina = o_stamina + t_title_passive_value
+                                    if o_stamina >=10:
+                                        o_stamina = o_stamina + t_title_passive_value
                                     t_stamina = t_stamina - t_title_passive_value
                             if t_card_passive_type:
                                 t_value_for_passive = t_card_tier * .5
@@ -16125,7 +16127,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         t_defense = tempattack
                                     if c_title_passive_type == "BLINK":
                                         c_stamina = c_stamina + c_title_passive_value
-                                        t_stamina = t_stamina - c_title_passive_value
+                                        if t_stamina >=10:
+                                            t_stamina = t_stamina - c_title_passive_value
 
                                 if c_card_passive_type:
                                     c_value_for_passive = c_card_tier * .5
@@ -19191,7 +19194,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         c_attack = c_defense
                                         c_defense = tempattack
                                     if t_title_passive_type == "BLINK":
-                                        c_stamina = c_stamina + t_title_passive_value
+                                        if c_stamina > =10:
+                                            c_stamina = c_stamina + t_title_passive_value
                                         t_stamina = t_stamina - t_title_passive_value
 
                                 if t_card_passive_type:
