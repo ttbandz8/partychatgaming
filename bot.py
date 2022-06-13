@@ -3350,7 +3350,9 @@ Crest_dict = {'Unbound': ':ideograph_advantage:',
               'Crown Rift Awakening': ':u7a7a:',
               'Crown Rift Slayers': ':sa:',
               'Crown Rift Madness': ':m:',
-              'Persona': ':o:'}
+              'Persona': ':o:',
+              'YuYu Hakusho': ':wheel_of_dharma:'
+              }
 
 
 if config('ENV') == "production":
