@@ -5925,6 +5925,8 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 't_1': t_1,
                 't_2': t_2,
                 't_3': t_3,
+                'tarm_passive_type' : tarm_passive_type,
+                'tarm_passive_value' : tarm_passive_value,
                 'tarm_shield_active': tarm_shield_active,
                 'tshield_value': tshield_value,
                 'tarm_barrier_active': tarm_barrier_active,
@@ -19194,7 +19196,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         c_attack = c_defense
                                         c_defense = tempattack
                                     if t_title_passive_type == "BLINK":
-                                        if c_stamina > =10:
+                                        if c_stamina >= 10:
                                             c_stamina = c_stamina + t_title_passive_value
                                         t_stamina = t_stamina - t_title_passive_value
 
