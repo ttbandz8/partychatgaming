@@ -19194,7 +19194,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         c_attack = c_defense
                                         c_defense = tempattack
                                     if t_title_passive_type == "BLINK":
-                                        if c_stamina > =10:
+                                        if c_stamina >= 10:
                                             c_stamina = c_stamina + t_title_passive_value
                                         t_stamina = t_stamina - t_title_passive_value
 
