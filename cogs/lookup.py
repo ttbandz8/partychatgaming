@@ -290,6 +290,7 @@ class Lookup(commands.Cog):
                 user = db.queryUser({'DID': str(ctx.author.id)})
 
                 owner = team['OWNER']
+                shielding = team['SHIELDING']
                 owner_data = db.queryUser({'DISNAME': owner})
                 owner_object = await self.bot.fetch_user(owner_data['DID'])
                 officers = team['OFFICERS']
@@ -367,6 +368,11 @@ class Lookup(commands.Cog):
                     guild_buff_message = "No Guild Buff Available"
                 
                 association = team['GUILD']
+                
+                association_msg = f"{association}"
+                
+                if shielding:
+                    association_msg= f":shield: {association}"
 
                 tournament_wins = team['TOURNAMENT_WINS']
                 wins = team['WINS']
@@ -409,7 +415,7 @@ class Lookup(commands.Cog):
                 {member_count}
 
                 **Association**
-                {association}
+                {association_msg}
 
                 **Guild Buff**
                 {guild_buff_message}

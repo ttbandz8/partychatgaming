@@ -2210,7 +2210,7 @@ async def buffshop(ctx, player, team):
       level_buff_cost = round(level_buff_cost * .60)
       stat_buff_cost = round(stat_buff_cost * .60)
       auto_buff_cost = round(auto_buff_cost * .60)
-      shield_message = "Association Shield Discount 30%"
+      shield_message = f":flags: **{association} Shield Discount** 30%"
    sell_buttons = [
          manage_components.create_button(
             style=ButtonStyle.green,
