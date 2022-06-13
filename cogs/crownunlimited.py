@@ -6986,6 +6986,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 tcard_lvl_ap_buff = stats['tcard_lvl_ap_buff']
                 tarm = stats['tarm']
                 tarm_name = stats['tarm_name']
+                tarm_passive_type = stats['tarm_passive_type']
+                tarm_passive_value = stats['tarm_passive_value']
                 # if mode in D_modes:
                 #     tcard_lvl = tcard_lvl
                 #     tcard_lvl_ap_buff = 100
@@ -7692,7 +7694,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     t_defense = tempattack
                                 if o_card_passive_type == "BLINK":
                                     o_stamina = o_stamina - o_stam_for_passive
-                                    t_stamina = t_stamina + o_stam_for_passive
+                                    if t_stamina >=10:
+                                        t_stamina = t_stamina + o_stam_for_passive
 
                             if o_block_used == True:
                                 o_defense = int(o_defense / 2)
@@ -8051,6 +8054,44 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_used_resolve, otitle, o_used_focus, o_attack, o_defense,
                                                                 turn_total, ap1, ap2, ap3, enh1, enh_name, ocard_lvl, t_defense)
                                     
+                                    
+                                    if o_used_resolve:
+                                        pet_msg_on_resolve = f"🧬 {enhancer_mapping[pet_enh_name]}"
+                                    tarm_message = ""
+                                    if tarm_barrier_active:
+                                        tarm_message = f"💠{tbarrier_count}"
+                                    elif tarm_shield_active:
+                                        tarm_message = f"🌐{tshield_value}"
+                                    elif tarm_parry_active:
+                                        tarm_message = f"🔄{tparry_count}"
+                                    elif tarm_passive_type == "SIPHON":
+                                        tarm_message = f"💉{tarm_passive_value}"
+                                    oarm_message = ""
+                                    if oarm_passive_type == "BARRIER":
+                                        if oarm_barrier_active:
+                                            oarm_passive_value = f"{obarrier_count}"
+                                            oarm_message = f"💠{obarrier_count}"
+                                        else:
+                                            oarm_passive_value = 0
+                                            oarm_message = ""
+                                    elif oarm_passive_type == "SHIELD":
+                                        if oarm_shield_active:
+                                            oarm_passive_value = f"{oshield_value}"
+                                            oarm_message = f"🌐{oshield_value}"
+                                        else:
+                                            oarm_passive_value = 0
+                                            oarm_message = ""
+                                            
+                                    elif oarm_passive_type == "PARRY":
+                                        if oarm_parry_active:
+                                            oarm_passive_value = f"{oparry_count}"
+                                            oarm_message = f"🔄{oparry_count}"
+                                        else:
+                                            oarm_passive_value = 0
+                                            oarm_message = ""
+                                    elif oarm_passive_type == "SIPHON":
+                                        oarm_message = f"💉{oarm_passive_value}"
+                                            
                                     embedVar = discord.Embed(title=f"➡️ **Current Turn** {turn_total}", description=textwrap.dedent(f"""\
                                     {previous_moves_into_embed}
                                     
@@ -8062,7 +8103,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     # embedVar.set_image(url="attachment://image.png")
                                     embedVar.set_thumbnail(url=ctx.author.avatar_url)
                                     embedVar.set_footer(
-                                        text=f"{t_card}: ❤️{round(t_health)} 🌀{round(t_stamina)} 🗡️{round(t_attack)}/🛡️{round(t_defense)}\n{o_card}: ❤️{round(o_health)} 🌀{round(o_stamina)} 🗡️{round(o_attack)}/🛡️{round(o_defense)}",
+                                        text=f"{t_card}: ❤️{round(t_health)} 🌀{round(t_stamina)} 🗡️{round(t_attack)}/🛡️{round(t_defense)} {tarm_message}\n{o_card}: ❤️{round(o_health)} 🌀{round(o_stamina)} 🗡️{round(o_attack)}/🛡️{round(o_defense)} {oarm_message}",
                                         icon_url="https://cdn.discordapp.com/emojis/789290881654980659.gif?v=1")
                                     await battle_msg.edit(embed=embedVar, components=[])
                                     # await asyncio.sleep(2)
@@ -9030,6 +9071,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     if not t_used_resolve:
                                                         previous_moves.append(f"(**{turn_total}**) 🩸**{t_stored_damage}** Hasirama Cells stored. 🩸**{t_naruto_heal_buff}** total stored.")
                                                 elif tarm_shield_active and dmg['ELEMENT'] != dark_element:
+                                                    
+                                                    if dmg['ELEMENT'] == poison_element: #Poison Update
+                                                        if o_poison_dmg <= 150:
+                                                            o_poison_dmg = o_poison_dmg + 10
+                                                        
 
                                                     if tshield_value > 0:
                                                         tshield_value = tshield_value - dmg['DMG']
@@ -9461,6 +9507,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         tarm_message = f"🌐{tshield_value}"
                                     elif tarm_parry_active:
                                         tarm_message = f"🔄{tparry_count}"
+                                    elif tarm_passive_type == "SIPHON":
+                                        tarm_message = f"💉{tarm_passive_value}"
                                     if oarm_passive_type == "BARRIER":
                                         if oarm_barrier_active:
                                             oarm_passive_value = f"{obarrier_count}"
@@ -9476,6 +9524,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             oarm_passive_value = f"{oparry_count}"
                                         else:
                                             oarm_passive_value = 0
+                                            
                                     embedVar = discord.Embed(title=f"", description=textwrap.dedent(f"""\
                                     {previous_moves_into_embed}
                                     
@@ -10716,6 +10765,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if not botActive:
                                                             await button_ctx.defer(ignore=True)
                                                     elif tarm_shield_active and dmg['ELEMENT'] != dark_element:
+                                                        
+                                                        if dmg['ELEMENT'] == poison_element: #Poison Update
+                                                            if o_poison_dmg <= 150:
+                                                                o_poison_dmg = o_poison_dmg + 10
+                                                           
 
                                                         if tshield_value > 0:
                                                             tshield_value = tshield_value - dmg['DMG']
@@ -11142,7 +11196,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     o_defense = tempattack
                                 if t_card_passive_type == "BLINK":
                                     t_stamina = t_stamina - t_stam_for_passive
-                                    o_stamina = o_stamina + t_stam_for_passive
+                                    if o_stamina >=10:
+                                        o_stamina = o_stamina + t_stam_for_passive
 
                             # if previous_moves:
                             #     previous_moves_len = len(previous_moves)
@@ -11429,13 +11484,48 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             tparry_count = temp_oparry_count
                                             previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 **ARISE!** *{oarm_name}* is now yours")
                                             t_swapped = True
+                                            
+                                tarm_message = ""
+                                if tarm_barrier_active:
+                                    tarm_message = f"💠{tbarrier_count}"
+                                elif tarm_shield_active:
+                                    tarm_message = f"🌐{tshield_value}"
+                                elif tarm_parry_active:
+                                    tarm_message = f"🔄{tparry_count}"
+                                elif tarm_passive_type == "SIPHON":
+                                    tarm_message = f"💉{tarm_passive_value}"
+                                oarm_message = ""
+                                if oarm_passive_type == "BARRIER":
+                                    if oarm_barrier_active:
+                                        oarm_passive_value = f"{obarrier_count}"
+                                        oarm_message = f"💠{obarrier_count}"
+                                    else:
+                                        oarm_passive_value = 0
+                                        oarm_message = ""
+                                elif oarm_passive_type == "SHIELD":
+                                    if oarm_shield_active:
+                                        oarm_passive_value = f"{oshield_value}"
+                                        oarm_message = f"🌐{oshield_value}"
+                                    else:
+                                        oarm_passive_value = 0
+                                        oarm_message = ""
+                                        
+                                elif oarm_passive_type == "PARRY":
+                                    if oarm_parry_active:
+                                        oarm_passive_value = f"{oparry_count}"
+                                        oarm_message = f"🔄{oparry_count}"
+                                    else:
+                                        oarm_passive_value = 0
+                                        oarm_message = ""
+                                elif oarm_passive_type == "SIPHON":
+                                    oarm_message = f"💉{oarm_passive_value}"
                                                                 
                                 embedVar = discord.Embed(title=f"➡️ **Opponent Turn** {turn_total}", description=textwrap.dedent(f"""\
                                 {previous_moves_into_embed}
                                 
                                 """), color=0xe74c3c)
                                 embedVar.set_footer(
-                                    text=f"{t_card}: ❤️{round(t_health)} 🌀{round(t_stamina)} 🗡️{round(t_attack)}/🛡️{round(t_defense)}\n{o_card}: ❤️{round(o_health)} 🌀{round(o_stamina)} 🗡️{round(o_attack)}/🛡️{round(o_defense)}",
+                                    text=f"{t_card}: ❤️{round(t_health)} 🌀{round(t_stamina)} 🗡️{round(t_attack)}/🛡️{round(t_defense)} {tarm_message}\n{o_card}: ❤️{round(o_health)} 🌀{round(o_stamina)} 🗡️{round(o_attack)}/🛡️{round(o_defense)} {oarm_message}",
                                     icon_url="https://cdn.discordapp.com/emojis/789290881654980659.gif?v=1")
 
 
@@ -11602,6 +11692,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             oarm_message = f"🌐{oshield_value}"
                                         elif oarm_parry_active:
                                             oarm_message = f"🔄{oparry_count}"
+                                        elif oarm_passive_type == "SIPHON":
+                                            oarm_message = f"💉{oarm_passive_value}"
                                         if tarm_passive_type == "BARRIER":
                                             if tarm_barrier_active:
                                                 tarm_passive_value = f"{tbarrier_count}"
@@ -12410,6 +12502,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             await button_ctx.defer(ignore=True)
 
                                                         elif oarm_shield_active and dmg['ELEMENT'] != dark_element:
+                                                            if dmg['ELEMENT'] == poison_element: #Poison Update
+                                                                if t_poison_dmg <= 150:
+                                                                    t_poison_dmg = t_poison_dmg + 10
+                                                                
                                                             if oshield_value > 0:
                                                                 oshield_value = oshield_value -dmg['DMG']
                                                                 o_health = o_health 
@@ -13556,6 +13652,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             
                                                             previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                     elif oarm_shield_active and dmg['ELEMENT'] != dark_element:
+                                                        if dmg['ELEMENT'] == poison_element: #Poison Update
+                                                            if t_poison_dmg <= 150:
+                                                                t_poison_dmg = o_poison_dmg + 10
+                                                            
                                                         if oshield_value > 0:
                                                             oshield_value = oshield_value -dmg['DMG']
                                                             o_health = o_health 
@@ -15065,6 +15165,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 
                                                                 previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                         elif carm_shield_active and dmg['ELEMENT'] != dark_element:
+                                                            if dmg['ELEMENT'] == poison_element: #Poison Update
+                                                                if t_poison_dmg <= 150:
+                                                                    t_poison_dmg = o_poison_dmg + 10
+                                                                
                                                             if cshield_value > 0:
                                                                 cshield_value = cshield_value -dmg['DMG']
                                                                 c_health = c_health 
@@ -15386,6 +15490,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 
                                                                 previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                         elif oarm_shield_active and dmg['ELEMENT'] != dark_element:
+                                                            if dmg['ELEMENT'] == poison_element: #Poison Update
+                                                                if t_poison_dmg <= 150:
+                                                                    t_poison_dmg = o_poison_dmg + 10
+                                                              
                                                             if oshield_value > 0:
                                                                 oshield_value = oshield_value -dmg['DMG']
                                                                 o_health = o_health 
@@ -15712,6 +15820,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             
                                                             previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                     elif oarm_shield_active and dmg['ELEMENT'] != dark_element:
+                                                        if dmg['ELEMENT'] == poison_element: #Poison Update
+                                                            if t_poison_dmg <= 150:
+                                                                t_poison_dmg = o_poison_dmg + 10
+                                                            
                                                         if oshield_value > 0:
                                                             oshield_value = oshield_value -dmg['DMG']
                                                             o_health = o_health 
@@ -16083,7 +16195,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         t_defense = tempattack
                                     if c_card_passive_type == "BLINK":
                                         c_stamina = c_stamina - c_stam_for_passive
-                                        t_stamina = t_stamina + c_stam_for_passive
+                                        if t_stamina >= 10:
+                                            t_stamina = t_stamina + c_stam_for_passive
+
 
 
                                 # await asyncio.sleep(2)
@@ -17371,6 +17485,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             previous_moves.append(f"(**{turn_total}**) **{c_card}**'s 💠 Barrier Disabled!")
                                                         #await private_channel.send(embed=embedVar)
                                                     elif tarm_shield_active and dmg['ELEMENT'] != dark_element:
+                                                        
+                                                        if dmg['ELEMENT'] == poison_element: #Poison Update
+                                                            if c_poison_dmg <= 150:
+                                                                c_poison_dmg = c_poison_dmg + 10
+                                                            
+                                                        
                                                         if tshield_value > 0:
                                                             tshield_value = tshield_value -dmg['DMG']
                                                             t_health = t_health 
@@ -17762,12 +17882,16 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             tarm_message = f"🌐{tshield_value}"
                                         elif tarm_parry_active:
                                             tarm_message = f"🔄{tparry_count}"
+                                        elif tarm_passive_type == "SIPHON":
+                                            tarm_message = f"💉{tarm_passive_value}"
                                         if oarm_barrier_active:
                                             oarm_message = f"💠{obarrier_count}"
                                         elif oarm_shield_active:
                                             oarm_message = f"🌐{oshield_value}"
                                         elif oarm_parry_active:
                                             oarm_message = f"🔄{oparry_count}"
+                                        elif oarm_passive_type == "SIPHON":
+                                            oarm_message = f"💉{oarm_passive_value}"
                                         if carm_passive_type == "BARRIER":
                                             if carm_barrier_active:
                                                 carm_passive_value = f"{cbarrier_count}"
@@ -18717,6 +18841,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             #await private_channel.send(embed=embedVar)
                                                             await button_ctx.defer(ignore=True)
                                                         elif tarm_shield_active and dmg['ELEMENT'] != dark_element:
+                                                            if dmg['ELEMENT'] == poison_element: #Poison Update
+                                                                if c_poison_dmg <= 150:
+                                                                    c_poison_dmg = o_poison_dmg + 10
+                                                         
                                                             if tshield_value > 0:
                                                                 tshield_value = tshield_value -dmg['DMG']
                                                                 t_health = t_health 
@@ -19135,7 +19263,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         c_defense = tempattack
                                     if t_card_passive_type == "BLINK":
                                         t_stamina = t_stamina - t_stam_for_passive
-                                        c_stamina = c_stamina + t_stam_for_passive
+                                        if c_stmaina >=10:
+                                            c_stamina = c_stamina + t_stam_for_passive
+                                    if t_card_passive_type == "BLAST":
+                                        c_health = round(c_health - t_value_for_passive)
+                                    if t_card_passive_type == "WAVE":
+                                        if turn_total % 10 == 0:
+                                            c_health = round(c_health - 100)
                         
 
                                 # await asyncio.sleep(2)
@@ -20509,6 +20643,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                         #await private_channel.send(embed=embedVar)
                                                     elif oarm_shield_active and dmg['ELEMENT'] != dark_element:
+                                                        if dmg['ELEMENT'] == poison_element: #Poison Update
+                                                            if t_poison_dmg <= 150:
+                                                                t_poison_dmg = o_poison_dmg + 10
+                                                   
                                                         if oshield_value > 0:
                                                             oshield_value = oshield_value -dmg['DMG']
                                                             o_health = o_health 
@@ -20849,6 +20987,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                         #await private_channel.send(embed=embedVar)
                                                     elif carm_shield_active and dmg['ELEMENT'] != dark_element:
+                                                        if dmg['ELEMENT'] == poison_element: #Poison Update
+                                                            if t_poison_dmg <= 150:
+                                                                t_poison_dmg = o_poison_dmg + 10
+                                                            c_health = c_health - dmg['DMG']
                                                         if cshield_value > 0:
                                                             cshield_value = cshield_value -dmg['DMG']
                                                             c_health = c_health 

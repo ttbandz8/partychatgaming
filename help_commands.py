@@ -96,7 +96,7 @@ ELEMENTS = textwrap.dedent(f"""\
 
 ♠️ Dark- Penetrates shields & drains 10 stamina.
 
-🧪 Poison - Opponent takes additional 10 damage each turn stacking up to 150.
+🧪 Poison - Penetrades shields, Poison 10 damage stacking up to 150.
 
 🏹 Ranged - If ST greater than 50, Deals 1.7x Damage 
 

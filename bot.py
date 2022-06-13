@@ -522,7 +522,7 @@ async def animevs(ctx):
    **Coop Mechanics**
    Coop Adds two new mechanics to gameplayer
    **Defending** - Your **Block** becomes **Defend** You will gain the **Block** bonus and take damage for your **Companion**
-   **Assist** - Assist applies your enhancer to buff your **Companion**. *Damage dealing enahncers apply to enemy*
+   **Assist** - Assist applies your enhancer to buff your **Companion**. *Damage dealing enhancers apply to enemy*
 
    🤼 **PVP**
    **/pvp @player:** Select your Build and Challenge any Anime VS+ Player to a quick match!
