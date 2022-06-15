@@ -3605,6 +3605,7 @@ class Profile(commands.Cog):
             gems = 0
             all_universes = db.queryAllUniverse()
             user = db.queryUser({'DID': str(ctx.author.id)})
+            completed_dungeons = user['DUNGEONS']
             card_info = db.queryCard({"NAME": user['CARD']})
             destiny_alert_message = f"No Skins or Destinies available for {card_info['NAME']}"
             destiny_alert = False
@@ -3612,11 +3613,9 @@ class Profile(commands.Cog):
                 await ctx.send("🔓 Unlock Crafting by completeing Floor 8 of the 🌑 Abyss! Use /solo to enter the abyss.")
                 return
 
-            
-            
             #skin_alert_message = f"No Skins for {card_info['NAME']}"
             
-                #skin_alert_message = f"No Skins for {card_info['NAME']}"
+            #skin_alert_message = f"No Skins for {card_info['NAME']}"
             available_universes = []
             riftShopOpen = False
             shopName = ':shopping_cart: Shop'
@@ -3758,7 +3757,7 @@ class Profile(commands.Cog):
                     universe = str(button_ctx.origin_message.embeds[0].title)
                     if button_ctx.custom_id == "UNIVERSE_HEART":
                         price = 5000000
-                        response = await craft_adjuster(self, ctx, vault, universe, price, button_ctx.custom_id, None)
+                        response = await craft_adjuster(self, ctx, vault, universe, price, button_ctx.custom_id, completed_dungeons, None)
                         if response['SUCCESS']:
                             await button_ctx.send(f"{response['MESSAGE']}")
                             self.stop = True
@@ -3768,7 +3767,7 @@ class Profile(commands.Cog):
 
                     if button_ctx.custom_id == "UNIVERSE_SOUL":
                         price = 5000000
-                        response = await craft_adjuster(self, ctx, vault, universe, price, button_ctx.custom_id, None)
+                        response = await craft_adjuster(self, ctx, vault, universe, price, button_ctx.custom_id, None, completed_dungeons)
                         if response['SUCCESS']:
                             await button_ctx.send(f"{response['MESSAGE']}")
                             self.stop = True
@@ -3778,19 +3777,19 @@ class Profile(commands.Cog):
                     if button_ctx.custom_id == "Destiny":
                         await button_ctx.defer(ignore=True)
                         price = 1500000
-                        response = await craft_adjuster(self, ctx, vault, universe, price, card_info, None)
+                        response = await craft_adjuster(self, ctx, vault, universe, price, card_info, None, completed_dungeons)
                         await button_ctx.send(f"{response['MESSAGE']}")
                         self.stop = True
                     if button_ctx.custom_id == "Skin":
                         await button_ctx.defer(ignore=True)
                         price = 2000000
-                        response = await craft_adjuster(self, ctx, vault, universe, price, card_info, new_skin_list)
+                        response = await craft_adjuster(self, ctx, vault, universe, price, card_info, new_skin_list, completed_dungeons)
                         await button_ctx.send(f"{response['MESSAGE']}")
                         self.stop = True
                     if button_ctx.custom_id == "Card":
                         await button_ctx.defer(ignore=True)
                         price = 15000000
-                        response = await craft_adjuster(self, ctx, vault, universe, price, "Card", new_skin_list)
+                        response = await craft_adjuster(self, ctx, vault, universe, price, "Card", new_skin_list, completed_dungeons)
                         await button_ctx.send(f"{response['MESSAGE']}")
                         self.stop = True                       
                     
@@ -3818,7 +3817,7 @@ class Profile(commands.Cog):
             }))
 
 
-async def craft_adjuster(self, player, vault, universe, price, item, skin_list):
+async def craft_adjuster(self, player, vault, universe, price, item, skin_list, completed_dungeons):
     try:
         base_title = db.queryTitle({'TITLE':'Starter'})
         item_bools = [
@@ -3852,25 +3851,31 @@ async def craft_adjuster(self, player, vault, universe, price, item, skin_list):
         if has_gems_for:
             if gems >= price:
                 if item == "Card":
-                    acceptable = [4,5,6,7]
-                    list_of_cards = [x for x in db.queryAllCardsBasedOnUniverse({'UNIVERSE': str(universe), 'TIER': {'$in': acceptable}, 'HAS_COLLECTION': False, 'AVAILABLE': True})]
-                    selection_length = len(list(list_of_cards)) - 1
-                    if selection_length == 0:
-                        card = list_of_cards[0]
+                    if universe in completed_dungeons:
+                        acceptable = [4,5,6,7]
+                        list_of_cards = [x for x in db.queryAllCardsBasedOnUniverse({'UNIVERSE': str(universe), 'TIER': {'$in': acceptable}, 'HAS_COLLECTION': False, 'AVAILABLE': True})]
+                        selection_length = len(list(list_of_cards)) - 1
+                        if selection_length == 0:
+                            card = list_of_cards[0]
+                        else:
+                            selection = random.randint(1,selection_length)
+                            card = list_of_cards[selection]
+                        card_name = card['NAME']
+                        response = await crown_utilities.store_drop_card(str(player.author.id), card_name, universe, vault, owned_destinies, 0, 100000, "Purchase", False, 0)
+                        if response:
+                            query = {'DID': str(player.author.id)}
+                            update_query = {
+                                '$inc': {'GEMS.$[type].' + "GEMS": int(negPriceAmount)}
+                            }
+                            filter_query = [{'type.' + "UNIVERSE": universe}]
+                            res = db.updateVault(query, update_query, filter_query)
+                            rr = {"HAS_GEMS_FOR": True, "SUCCESS":  True, "MESSAGE": response}
+                            return rr
                     else:
-                        selection = random.randint(1,selection_length)
-                        card = list_of_cards[selection]
-                    card_name = card['NAME']
-                    response = await crown_utilities.store_drop_card(str(player.author.id), card_name, universe, vault, owned_destinies, 0, 100000, "Purchase", False, 0)
-                    if response:
-                        query = {'DID': str(player.author.id)}
-                        update_query = {
-                            '$inc': {'GEMS.$[type].' + "GEMS": int(negPriceAmount)}
-                        }
-                        filter_query = [{'type.' + "UNIVERSE": universe}]
-                        res = db.updateVault(query, update_query, filter_query)
-                        rr = {"HAS_GEMS_FOR": True, "SUCCESS":  True, "MESSAGE": response}
+                        response = "You need to completed the Tale for this universe to craft Dungeon cards!"
+                        rr = {"HAS_GEMS_FOR": True, "SUCCESS":  False, "MESSAGE": response}
                         return rr
+
 
 
                 if item not in item_bools:
