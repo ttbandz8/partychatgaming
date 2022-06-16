@@ -22838,6 +22838,10 @@ async def scenario_drop(self, ctx, scenario, difficulty):
         vault_query = {'DID': str(ctx.author.id)}
         vault = db.queryVault(vault_query)
         # player_info = db.queryUser({'DID': str(vault['DID'])})
+        
+        owned_destinies = []
+        for destiny in vault['DESTINY']:
+            owned_destinies.append(destiny['NAME'])
 
 
         owned_arms = []
@@ -22849,14 +22853,17 @@ async def scenario_drop(self, ctx, scenario, difficulty):
         hard = "HARD_DROPS"
         rewards = []
         rewarded = ""
+        mode = ""
 
         if difficulty == "EASY":
             rewards = scenario[easy]
+            mode = "TALES"
         if difficulty == "NORMAL":
             rewards = scenario[normal]
+            mode = "TALES"
         if difficulty == "HARD":
             rewards = scenario[hard]
-
+            mode = "DUNGEON"
         if len(rewards) > 1:
             num_of_potential_rewards = len(rewards)
             selection = round(random.randint(0, num_of_potential_rewards))
@@ -22866,22 +22873,32 @@ async def scenario_drop(self, ctx, scenario, difficulty):
         
         # Add Card Check
         arm = db.queryArm({"ARM": rewarded})
-        arm_name = arm['ARM']
-        element_emoji = crown_utilities.set_emoji(arm['ELEMENT'])
-        arm_passive = arm['ABILITIES'][0]
-        arm_passive_type = list(arm_passive.keys())[0]
-        arm_passive_value = list(arm_passive.values())[0]
-        reward = f"{element_emoji} {arm_passive_type.title()} **{arm_name}** Attack: **{arm_passive_value}** dmg"
+        if arm:
+            arm_name = arm['ARM']
+            element_emoji = crown_utilities.set_emoji(arm['ELEMENT'])
+            arm_passive = arm['ABILITIES'][0]
+            arm_passive_type = list(arm_passive.keys())[0]
+            arm_passive_value = list(arm_passive.values())[0]
+            reward = f"{element_emoji} {arm_passive_type.title()} **{arm_name}** Attack: **{arm_passive_value}** dmg"
 
-        if len(vault['ARMS']) >= 25:
-            await crown_utilities.bless(10000, ctx.author.id)
-            return f"You're maxed out on Arms! You earned :coin: 10,000 instead!"
-        elif rewarded in owned_arms:
-            await crown_utilities.bless(10000, ctx.author.id)
-            return f"You already own {reward}! You earn :coin: **10000**."
+            if len(vault['ARMS']) >= 25:
+                await crown_utilities.bless(10000, ctx.author.id)
+                return f"You're maxed out on Arms! You earned :coin: 10,000 instead!"
+            elif rewarded in owned_arms:
+                await crown_utilities.bless(10000, ctx.author.id)
+                return f"You already own {reward}! You earn :coin: **10000**."
+            else:
+                response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'ARMS': {'ARM': rewarded, 'DUR': 100}}})
+                return f"You earned _Arm:_ {reward} with ⚒️**{str(100)} Durability**!"
         else:
-            response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'ARMS': {'ARM': rewarded, 'DUR': 100}}})
-            return f"You earned _Arm:_ {reward} with ⚒️**{str(100)} Durability**!"
+            card = db.queryCard({"NAME": rewarded})
+            response = await crown_utilities.store_drop_card(str(ctx.author.id), card["NAME"], card["UNIVERSE"], vault, owned_destinies, 3000, 1000, mode, False, 0)
+            if not response:
+                bless_amount = (5000 + (2500 * matchcount)) * (1 + rebirth)
+                await crown_utilities.bless(bless_amount, str(ctx.author.id))
+                return f"You earned :coin: **{bless_amount}**!"
+            return response
+
     except Exception as ex:
         trace = []
         tb = ex.__traceback__
