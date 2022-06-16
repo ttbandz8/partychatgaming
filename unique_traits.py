@@ -91,4 +91,9 @@ traits = [{
     'NAME': 'YuYu Hakusho',
     'EFFECT': 'Spirit Energy',
     'TRAIT': 'Stamina + Turn Count added to each attack'
+},
+{
+    'NAME': 'One Piece',
+    'EFFECT': 'Haki',
+    'TRAIT': 'Activate varying forms of Haki based on Card Tier'
 }]
