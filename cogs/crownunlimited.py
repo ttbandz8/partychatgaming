@@ -1442,7 +1442,8 @@ class CrownUnlimited(commands.Cog):
             universe_embed_list = []
             for uni in universe_data:
                 available = ""
-                if len(uni['CROWN_TALES']) > 2:
+                # if len(uni['CROWN_TALES']) > 2:
+                if uni['CROWN_TALES']:
                     available = f"{Crest_dict[uni['TITLE']]}"
                     
                     tales_list = ", ".join(uni['CROWN_TALES'])
@@ -3692,6 +3693,15 @@ async def cardlist(self, ctx: SlashContext, universe: str):
     tales_card_details = []
     destiny_card_details = []
     for card in cards:
+        moveset = card['MOVESET']
+        move3 = moveset[2]
+        move2 = moveset[1]
+        move1 = moveset[0]
+        basic_attack_emoji = crown_utilities.set_emoji(list(move1.values())[2])
+        super_attack_emoji = crown_utilities.set_emoji(list(move2.values())[2])
+        ultimate_attack_emoji = crown_utilities.set_emoji(list(move3.values())[2])
+
+
         available = ""
         is_skin = ""
         if card['AVAILABLE'] and card['EXCLUSIVE']:
@@ -3706,13 +3716,13 @@ async def cardlist(self, ctx: SlashContext, universe: str):
             is_skin = ":white_circle:"
         if card['EXCLUSIVE'] and not card['HAS_COLLECTION']:
             dungeon_card_details.append(
-                f"{is_skin}{available}  :mahjong: {card['TIER']} **{card['NAME']}**\n:heart: {card['HLT']} :dagger: {card['ATK']}  🛡️ {card['DEF']}\n")
+                f"{is_skin}{available}  :mahjong: {card['TIER']} **{card['NAME']}** {basic_attack_emoji} {super_attack_emoji} {ultimate_attack_emoji}\n:heart: {card['HLT']} :dagger: {card['ATK']}  🛡️ {card['DEF']}\n")
         elif not card['HAS_COLLECTION']:
             tales_card_details.append(
-                f"{is_skin}{available} :mahjong: {card['TIER']} **{card['NAME']}**\n:heart: {card['HLT']} :dagger: {card['ATK']}  🛡️ {card['DEF']}\n")
+                f"{is_skin}{available} :mahjong: {card['TIER']} **{card['NAME']}** {basic_attack_emoji} {super_attack_emoji} {ultimate_attack_emoji}\n:heart: {card['HLT']} :dagger: {card['ATK']}  🛡️ {card['DEF']}\n")
         elif card['HAS_COLLECTION']:
             destiny_card_details.append(
-                f"{is_skin}{available} :mahjong: {card['TIER']} **{card['NAME']}**\n:heart: {card['HLT']} :dagger: {card['ATK']}  🛡️ {card['DEF']}\n")
+                f"{is_skin}{available} :mahjong: {card['TIER']} **{card['NAME']}** {basic_attack_emoji} {super_attack_emoji} {ultimate_attack_emoji}\n:heart: {card['HLT']} :dagger: {card['ATK']}  🛡️ {card['DEF']}\n")
 
     all_cards = []
     if tales_card_details:
