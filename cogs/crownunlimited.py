@@ -3617,14 +3617,25 @@ async def scenario(self, ctx: SlashContext, universe: str):
                 for reward in rewards:
                     # Add Check for Cards and make Cards available in Easy Drops
                     arm = db.queryArm({"ARM": reward})
-                    arm_name = arm['ARM']
-                    element_emoji = crown_utilities.set_emoji(arm['ELEMENT'])
-                    arm_passive = arm['ABILITIES'][0]
-                    arm_passive_type = list(arm_passive.keys())[0]
-                    arm_passive_value = list(arm_passive.values())[0]
-                    reward_list.append(f"{element_emoji} {arm_passive_type.title()} **{arm_name}** Attack: **{arm_passive_value}** dmg")
+                    if arm:
+                        arm_name = arm['ARM']
+                        element_emoji = crown_utilities.set_emoji(arm['ELEMENT'])
+                        arm_passive = arm['ABILITIES'][0]
+                        arm_passive_type = list(arm_passive.keys())[0]
+                        arm_passive_value = list(arm_passive.values())[0]
+                        reward_list.append(f"{element_emoji} {arm_passive_type.title()} **{arm_name}** Attack: **{arm_passive_value}** dmg")
+                    else:
+                        card = db.queryCard({"NAME": reward})
+                        moveset = card['MOVESET']
+                        move3 = moveset[2]
+                        move2 = moveset[1]
+                        move1 = moveset[0]
+                        basic_attack_emoji = crown_utilities.set_emoji(list(move1.values())[2])
+                        super_attack_emoji = crown_utilities.set_emoji(list(move2.values())[2])
+                        ultimate_attack_emoji = crown_utilities.set_emoji(list(move3.values())[2])
+                        reward_list.append(f":mahjong: {card['TIER']} **{card['NAME']}** {basic_attack_emoji} {super_attack_emoji} {ultimate_attack_emoji}\n:heart: {card['HLT']} :dagger: {card['ATK']}  🛡️ {card['DEF']}")
     
-                reward_message = "\n".join(reward_list)
+                reward_message = "\n\n".join(reward_list)
                 embedVar = discord.Embed(title= f"{title}", description=textwrap.dedent(f"""
                 📽️ **{universe} Scenario Battle!**
                 🔱 **Enemy Level:** {enemy_level}
