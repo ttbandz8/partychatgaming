@@ -2012,8 +2012,6 @@ def starting_position(o, t):
 
 def damage_cal(opponent_affinity, move_type, move_element, universe, card, ability, attack, defense, op_defense, stamina, enhancer, health, op_health, op_stamina,
                maxhealth, op_attack, special_description, turn, ap_buff, other):
-
-
     if op_defense <= 0:
         op_defense = 25
     if attack <= 0:
@@ -9413,14 +9411,15 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 )
                                             )
 
-                                    if not randomized_battle and difficulty == "NORMAL" and mode != "ABYSS" or mode !="ABYSS" and mode != "SCENARIO" and not tutorial:
-                                            util_buttons.append(             
-                                                manage_components.create_button(
-                                                style=ButtonStyle.red,
-                                                label=f"Save",
-                                                custom_id="s"
+                                    if not randomized_battle and difficulty == "NORMAL" and mode != "ABYSS" or mode !="ABYSS" and not tutorial:
+                                        if mode != "SCENARIO":
+                                                util_buttons.append(             
+                                                    manage_components.create_button(
+                                                    style=ButtonStyle.red,
+                                                    label=f"Save",
+                                                    custom_id="s"
+                                                )
                                             )
-                                        )
 
                                     if mode in ai_co_op_modes and o_stamina>=20:
                                         coop_util_buttons = [
