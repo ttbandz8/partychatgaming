@@ -965,11 +965,8 @@ async def player_check(ctx):
         await ctx.send(f"{ctx.author.mention}, you must register using /register to play Crown Unlimited.")
         return False
 
-level_sync = {
-    "HLT": 100,
-    "ATK_DEF": 1,
-    "AP": 1
-}
+
+
 
 def level_sync_stats(lvl, stat):
     stat_sync = 0
@@ -983,3 +980,39 @@ def level_sync_stats(lvl, stat):
     if stat == "AP":
         stat_sync = round((lvl / 3) * 1)
         return stat_sync
+
+level_sync = {
+    "HLT": 100,
+    "ATK_DEF": 1,
+    "AP": 1
+}
+
+crest_dict = {'Unbound': ':ideograph_advantage:',
+              'My Hero Academia': ':sparkle:',
+              'League Of Legends': ':u6307:',
+              'Kanto Region': ':chart:',
+              'Naruto': ':u7121:',
+              'Bleach': ':u6709:',
+              'God Of War': ':u7533:',
+              'Chainsawman': ':accept:',
+              'One Punch Man': ':u55b6:',
+              'Johto Region': ':u6708:',
+              'Black Clover': ':ophiuchus:',
+              'Demon Slayer': ':aries:',
+              'Attack On Titan': ':taurus:',
+              '7ds': ':capricorn:',
+              'Hoenn Region': ':leo:',
+              'Digimon': ':cancer:',
+              'Fate': ':u6e80:',
+              'Solo Leveling': ':u5408:',
+              'Souls': ':sos:',
+              'Dragon Ball Z': ':u5272:',
+              'Sinnoh Region': ':u7981:',
+              'Death Note': ':white_flower:',
+              'Crown Rift Awakening': ':u7a7a:',
+              'Crown Rift Slayers': ':sa:',
+              'Crown Rift Madness': ':m:',
+              'Persona': ':o:',
+              'YuYu Hakusho': ':wheel_of_dharma:',
+              'One Piece': ':sailboat:'
+              }

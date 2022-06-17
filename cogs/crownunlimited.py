@@ -1444,12 +1444,12 @@ class CrownUnlimited(commands.Cog):
                 available = ""
                 # if len(uni['CROWN_TALES']) > 2:
                 if uni['CROWN_TALES']:
-                    available = f"{Crest_dict[uni['TITLE']]}"
+                    available = f"{crown_utilities.crest_dict[uni['TITLE']]}"
                     
                     tales_list = ", ".join(uni['CROWN_TALES'])
 
                     embedVar = discord.Embed(title= f"{uni['TITLE']}", description=textwrap.dedent(f"""
-                    {Crest_dict[uni['TITLE']]} **Number of Fights**: :crossed_swords: **{len(uni['CROWN_TALES'])}**
+                    {crown_utilities.crest_dict[uni['TITLE']]} **Number of Fights**: :crossed_swords: **{len(uni['CROWN_TALES'])}**
                     🎗️ **Universe Title**: {uni['UTITLE']}
                     🦾 **Universe Arm**: {uni['UARM']}
                     🧬 **Universe Summon**: {uni['UPET']}
@@ -6225,7 +6225,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                             corruption_message = "👾 **Corrupted**"
 
                         embedVar = discord.Embed(title= f"{uni['TITLE']}", description=textwrap.dedent(f"""
-                        {Crest_dict[uni['TITLE']]} **Number of Fights**: :crossed_swords: **{len(uni['CROWN_TALES'])}**
+                        {crown_utilities.crest_dict[uni['TITLE']]} **Number of Fights**: :crossed_swords: **{len(uni['CROWN_TALES'])}**
                         🎗️ **Universe Title**: {uni['UTITLE']}
                         🦾 **Universe Arm**: {uni['UARM']}
                         🧬 **Universe Summon**: {uni['UPET']}
@@ -6249,7 +6249,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                             corruption_message = "👾 **Corrupted**"
 
                         embedVar = discord.Embed(title= f"{uni['TITLE']}", description=textwrap.dedent(f"""
-                        {Crest_dict[uni['TITLE']]} **Number of Fights**: :crossed_swords: **{len(uni['CROWN_TALES'])}**
+                        {crown_utilities.crest_dict[uni['TITLE']]} **Number of Fights**: :crossed_swords: **{len(uni['CROWN_TALES'])}**
                         🎗️ **Universe Title**: {uni['UTITLE']}
                         🦾 **Universe Arm**: {uni['UARM']}
                         🧬 **Universe Summon**: {uni['UPET']}
@@ -6277,7 +6277,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
 
 
                         embedVar = discord.Embed(title= f"{uni['TITLE']}", description=textwrap.dedent(f"""
-                        {Crest_dict[uni['TITLE']]} **Number of Fights**: :crossed_swords: **{len(uni['CROWN_TALES'])}**
+                        {crown_utilities.crest_dict[uni['TITLE']]} **Number of Fights**: :crossed_swords: **{len(uni['CROWN_TALES'])}**
                         🎗️ **Universe Title**: {uni['UTITLE']}
                         🦾 **Universe Arm**: {uni['UARM']}
                         🧬 **Universe Summon**: {uni['UPET']}
@@ -6301,7 +6301,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                             corruption_message = "👾 **Corrupted**"
 
                         embedVar = discord.Embed(title= f"{uni['TITLE']}", description=textwrap.dedent(f"""
-                        {Crest_dict[uni['TITLE']]} **Number of Fights**: :crossed_swords: **{len(uni['CROWN_TALES'])}**
+                        {crown_utilities.crest_dict[uni['TITLE']]} **Number of Fights**: :crossed_swords: **{len(uni['CROWN_TALES'])}**
                         🎗️ **Universe Title**: {uni['UTITLE']}
                         🦾 **Universe Arm**: {uni['UARM']}
                         🧬 **Universe Summon**: {uni['UPET']}
@@ -6362,7 +6362,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             #Universe Cost
             entrance_fee = 1000
             if selected_universe in crestlist:
-                await ctx.send(f"{Crest_dict[selected_universe]} | :flags: {guildname} {selected_universe} Crest Activated! No entrance fee!")
+                await ctx.send(f"{crown_utilities.crest_dict[selected_universe]} | :flags: {guildname} {selected_universe} Crest Activated! No entrance fee!")
             else:
                 if balance <= entrance_fee:
                     await ctx.send(f"Tales require an :coin: {'{:,}'.format(entrance_fee)} entrance fee!", delete_after=5)
@@ -6374,7 +6374,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                         crest_guild = db.queryGuildAlt({'GNAME' : universe_owner})
                         if crest_guild:
                             await crown_utilities.blessguild(entrance_fee, universe['GUILD'])
-                            await ctx.send(f"{Crest_dict[selected_universe]} | {crest_guild['GNAME']} Universe Toll Paid! :coin:{'{:,}'.format(entrance_fee)}")
+                            await ctx.send(f"{crown_utilities.crest_dict[selected_universe]} | {crest_guild['GNAME']} Universe Toll Paid! :coin:{'{:,}'.format(entrance_fee)}")
             
             # #Create Explore Category
             # categoryname = "Crown Unlimited"
@@ -6439,7 +6439,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                     completed = "🔴"
 
                 embedVar = discord.Embed(title= f"{uni}", description=textwrap.dedent(f"""
-                {Crest_dict[uni_option['TITLE']]} **Number of Fights**: :fire: **{len(uni_option['DUNGEONS'])}**
+                {crown_utilities.crest_dict[uni_option['TITLE']]} **Number of Fights**: :fire: **{len(uni_option['DUNGEONS'])}**
                 🎗️ **Dungeon Title**: {uni_option['DTITLE']}
                 🦾 **Dungeon Arm**: {uni_option['DARM']}
                 🧬 **Dungeon Summon**: {uni_option['DPET']}
@@ -6483,7 +6483,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             #Universe Cost
             entrance_fee = 5000
             if selected_universe in crestlist:
-                await ctx.send(f"{Crest_dict[selected_universe]} | :flags: {guildname} {selected_universe} Crest Activated! No entrance fee!")
+                await ctx.send(f"{crown_utilities.crest_dict[selected_universe]} | :flags: {guildname} {selected_universe} Crest Activated! No entrance fee!")
             else:
                 if balance <= entrance_fee:
                     await ctx.send(f"Tales require an :coin: {'{:,}'.format(entrance_fee)} entrance fee!", delete_after=5)
@@ -6495,7 +6495,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                         crest_guild = db.queryGuildAlt({'GNAME' : universe['GUILD']})
                         if crest_guild:
                             await crown_utilities.blessguild(entrance_fee, universe['GUILD'])
-                            await ctx.send(f"{Crest_dict[selected_universe]} | {crest_guild['GNAME']} Universe Toll Paid! :coin:{'{:,}'.format(entrance_fee)}")
+                            await ctx.send(f"{crown_utilities.crest_dict[selected_universe]} | {crest_guild['GNAME']} Universe Toll Paid! :coin:{'{:,}'.format(entrance_fee)}")
             categoryname = "Crown Unlimited"
             category = discord.utils.get(guild.categories, name=categoryname)
 
@@ -6540,7 +6540,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                     boss_info = db.queryBoss({"NAME": searchUni['UNIVERSE_BOSS']})
                     if boss_info:
                         embedVar = discord.Embed(title= f"{uni}", description=textwrap.dedent(f"""
-                        {Crest_dict[uni]} **Boss**: :japanese_ogre: **{boss_info['NAME']}**
+                        {crown_utilities.crest_dict[uni]} **Boss**: :japanese_ogre: **{boss_info['NAME']}**
                         🎗️ **Boss Title**: {boss_info['TITLE']}
                         🦾 **Boss Arm**: {boss_info['ARM']}
                         🧬 **Boss Summon**: {boss_info['PET']}
@@ -6577,7 +6577,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             #Universe Cost
             entrance_fee = 10000
             if selected_universe in crestlist:
-                await ctx.send(f"{Crest_dict[selected_universe]} | :flags: {guildname} {selected_universe} Crest Activated! No entrance fee!")
+                await ctx.send(f"{crown_utilities.crest_dict[selected_universe]} | :flags: {guildname} {selected_universe} Crest Activated! No entrance fee!")
             else:
                 if balance <= entrance_fee:
                     await ctx.send(f"Tales require an :coin: {'{:,}'.format(entrance_fee)} entrance fee!", delete_after=5)
@@ -6589,7 +6589,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                         crest_guild = db.queryGuildAlt({'GNAME' : universe['GUILD']})
                         if crest_guild:
                             await crown_utilities.blessguild(entrance_fee, universe['GUILD'])
-                            await ctx.send(f"{Crest_dict[selected_universe]} | {crest_guild['GNAME']} Universe Toll Paid! :coin:{'{:,}'.format(entrance_fee)}")
+                            await ctx.send(f"{crown_utilities.crest_dict[selected_universe]} | {crest_guild['GNAME']} Universe Toll Paid! :coin:{'{:,}'.format(entrance_fee)}")
             categoryname = "Crown Unlimited"
             category = discord.utils.get(guild.categories, name=categoryname)
 
@@ -23894,34 +23894,6 @@ Stamina_Enhancer_Check = ['STAM', 'DRAIN']
 Control_Enhancer_Check = ['SOULCHAIN']
 Damage_Enhancer_Check = ['DESTRUCTION', 'BLAST']
 Turn_Enhancer_Check = ['WAVE', 'CREATION']
-Crest_dict = {'Unbound': ':ideograph_advantage:',
-              'My Hero Academia': ':sparkle:',
-              'League Of Legends': ':u6307:',
-              'Kanto Region': ':chart:',
-              'Naruto': ':u7121:',
-              'Bleach': ':u6709:',
-              'God Of War': ':u7533:',
-              'Chainsawman': ':accept:',
-              'One Punch Man': ':u55b6:',
-              'Johto Region': ':u6708:',
-              'Black Clover': ':ophiuchus:',
-              'Demon Slayer': ':aries:',
-              'Attack On Titan': ':taurus:',
-              '7ds': ':capricorn:',
-              'Hoenn Region': ':leo:',
-              'Digimon': ':cancer:',
-              'Fate': ':u6e80:',
-              'Solo Leveling': ':u5408:',
-              'Souls': ':sos:',
-              'Dragon Ball Z': ':u5272:',
-              'Sinnoh Region': ':u7981:',
-              'Death Note': ':white_flower:',
-              'Crown Rift Awakening': ':u7a7a:',
-              'Crown Rift Slayers': ':sa:',
-              'Crown Rift Madness': ':m:',
-              'Persona': ':o:',
-              'YuYu Hakusho': ':wheel_of_dharma:'
-              }
 take_chances_messages = ['You lost immediately.', 'You got smoked!', 'You fainted before the fight even started.',
                          'That... was just sad. You got dropped with ease.', 'Too bad, so sad. You took the L.',
                          'Annnd another L. You lost.', 'Annnnnnnnnnnd another L! You lost.',

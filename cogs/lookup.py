@@ -664,7 +664,7 @@ class Lookup(commands.Cog):
                     sword_list.append(f"~ {swords} ~ W**{dubs}** / L**{els}**\n:man_detective: | **Owner: **{sword_team['OWNER']}\n:coin: | **Bank: **{'{:,}'.format(sword_bank)}\n:knife: | **Members: **{blade_count}\n_______________________")
                 crest_list = []
                 for c in crest:
-                    crest_list.append(f"{Crest_dict[c]} | {c}")
+                    crest_list.append(f"{crown_utilities.crest_dict[c]} | {c}")
 
 
 
@@ -905,30 +905,3 @@ async def apply(self, ctx, owner: User):
             await ctx.send(m.OWNER_ONLY_COMMAND, delete_after=5)
 
 
-
-Crest_dict = {'Unbound': ':ideograph_advantage:',
-              'My Hero Academia': ':sparkle:',
-              'League Of Legends': ':u6307:',
-              'Kanto Region': ':chart:',
-              'Naruto': ':u7121:',
-              'Bleach': ':u6709:',
-              'God Of War': ':u7533:',
-              'Chainsawman': ':accept:',
-              'One Punch Man': ':u55b6:',
-              'Johto Region': ':u6708:',
-              'Black Clover': ':ophiuchus:',
-              'Demon Slayer': ':aries:',
-              'Attack On Titan': ':taurus:',
-              '7ds': ':capricorn:',
-              'Hoenn Region': ':leo:',
-              'Digimon': ':cancer:',
-              'Fate': ':u6e80:',
-              'Solo Leveling': ':u5408:',
-              'Souls': ':sos:',
-              'Dragon Ball Z': ':u5272:',
-              'Sinnoh Region': ':u7981:',
-              'Death Note': ':white_flower:',
-              'Crown Rift Awakening': ':u7a7a:',
-              'Crown Rift Slayers': ':sa:',
-              'Crown Rift Madness': ':m:',
-              'Persona': ':o:'}

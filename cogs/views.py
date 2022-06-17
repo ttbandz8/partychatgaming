@@ -485,7 +485,7 @@ async def viewtitle(self, ctx, title: str):
                 typetext = "Health Regen "
                 message=f"{title_title} is a GAMBLE title" 
 
-            embedVar = discord.Embed(title=f"{Crest_dict[title_show]} {title_title}\n{price_message}".format(self), colour=000000)
+            embedVar = discord.Embed(title=f"{crown_utilities.crest_dict[title_show]} {title_title}\n{price_message}".format(self), colour=000000)
             if title_show != "Unbound":
                 embedVar.set_thumbnail(url=title_img)
             if o_title_passive_type == "ATK" or o_title_passive_type == "DEF" or o_title_passive_type == "HLT" or o_title_passive_type == "STAM":
@@ -585,7 +585,7 @@ async def viewarm(self, ctx, arm: str):
 
 
 
-            embedVar = discord.Embed(title=f"{Crest_dict[arm_show]} {arm_arm}\n{price_message}".format(self), colour=000000)
+            embedVar = discord.Embed(title=f"{crown_utilities.crest_dict[arm_show]} {arm_arm}\n{price_message}".format(self), colour=000000)
             if arm_show != "Unbound":
                 embedVar.set_thumbnail(url=arm_show_img)
             if o_arm_passive_type in element_available:
@@ -789,14 +789,14 @@ async def viewuniverse(self, ctx, universe: str):
         darm = "Reborn Stock"
         dpet = "Chick"
         boss = "Bossless"
-        crest = Crest_dict['Unbound']
+        crest = crown_utilities.crest_dict['Unbound']
         prerec = ""
         owner = "PCG"
         traits = ut.traits
         if universe:
             universe_title= universe['TITLE']
             fights = len(universe['CROWN_TALES'])
-            crest = Crest_dict[universe_title]
+            crest = crown_utilities.crest_dict[universe_title]
             universe_image = universe['PATH']
             ttitle = universe['UTITLE']
             tarm = universe['UARM']
@@ -1030,35 +1030,6 @@ async def viewboss(self, ctx, boss : str):
         }))
         await ctx.send(f"Error when viewing boss. Alert support. Thank you!")
         return
-
-
-
-Crest_dict = {'Unbound': ':ideograph_advantage:',
-              'My Hero Academia': ':sparkle:',
-              'League Of Legends': ':u6307:',
-              'Kanto Region': ':chart:',
-              'Naruto': ':u7121:',
-              'Bleach': ':u6709:',
-              'God Of War': ':u7533:',
-              'Chainsawman' : ':accept:',
-              'One Punch Man': ':u55b6:',
-              'Johto Region': ':u6708:',
-              'Black Clover': ':ophiuchus:',
-              'Demon Slayer': ':aries:',
-              'Attack On Titan': ':taurus:',
-              '7ds': ':capricorn:',
-              'Hoenn Region': ':leo:',
-              'Digimon': ':cancer:',
-              'Fate': ':u6e80:',
-              'Solo Leveling': ':u5408:',
-              'Souls': ':sos:',
-              'Dragon Ball Z': ':u5272:',
-              'Sinnoh Region': ':u7981:',
-              'Death Note': ':white_flower:',
-              'Crown Rift Awakening': ':u7a7a:',
-              'Crown Rift Slayers': ':sa:',
-              'Crown Rift Madness': ':m:',
-              'Persona': ':o:'}
 
 
 enhancer_mapping = {'ATK': 'Increase Attack %',
