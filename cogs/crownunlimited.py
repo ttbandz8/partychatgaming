@@ -2378,8 +2378,8 @@ def damage_cal(opponent_affinity, move_type, move_element, universe, card, abili
                 abilitypower = 25
 
             dmg = abilitypower
-            if dmg > (ap * 1.4):  # If DMG > ap -> Dmg = ap * 1.2
-                dmg = ap * 1.4
+            if dmg > (ap * 1.3):  # If DMG > ap -> Dmg = ap * 1.2
+                dmg = ap * 1.3
             elif dmg < (ap / 2):  # If you dmg is less than you base AP you do / of AP Damage
                 dmg = ap / 2
 
