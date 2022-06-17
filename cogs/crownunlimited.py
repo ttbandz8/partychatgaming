@@ -196,18 +196,18 @@ class CrownUnlimited(commands.Cog):
 
             if selected_mode == "Tales":
                 cardtitle = {'TITLE': 'Universe Title'}
-                card_lvl = 30
-                card_lvl_attack_buff = 15
-                card_lvl_defense_buff = 15
-                card_lvl_ap_buff = 10
-                card_lvl_hlt_buff = 25
+                card_lvl = 50
+                card_lvl_attack_buff = crown_utilities.level_sync_stats(50, "ATK_DEF")
+                card_lvl_defense_buff = crown_utilities.level_sync_stats(50, "ATK_DEF")
+                card_lvl_ap_buff = crown_utilities.level_sync_stats(50, "AP")
+                card_lvl_hlt_buff = crown_utilities.level_sync_stats(50, "HLT")
             else:
                 cardtitle = {'TITLE': 'Dungeon Title'}
-                card_lvl = 300
-                card_lvl_attack_buff = 150
-                card_lvl_defense_buff = 150
-                card_lvl_ap_buff = 100
-                card_lvl_hlt_buff = 375
+                card_lvl = 350
+                card_lvl_attack_buff = crown_utilities.level_sync_stats(350, "ATK_DEF")
+                card_lvl_defense_buff = crown_utilities.level_sync_stats(350, "ATK_DEF")
+                card_lvl_ap_buff = crown_utilities.level_sync_stats(350, "AP")
+                card_lvl_hlt_buff = crown_utilities.level_sync_stats(350, "HLT")
             
         
             o_card = cards[rand_card]['NAME']
@@ -4115,13 +4115,13 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         stat_debuff_from_difficulty = 150
 
     if difficulty == "HARD":
-        health_buff_from_difficulty = 1500
+        health_buff_from_difficulty = 2000
         stat_buff_from_difficulty = 50
-        ap_buff_from_difficulty = 50
+        ap_buff_from_difficulty = 100
         if mode in D_modes:
-            health_buff_from_difficulty = 3000
+            health_buff_from_difficulty = 3500
             stat_buff_from_difficulty = 50
-            ap_buff_from_difficulty = 100
+            ap_buff_from_difficulty = 125
         if mode in B_modes:
             health_buff_from_difficulty = 7000
             ap_buff_from_difficulty = 100
@@ -4251,10 +4251,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 ocard_lvl = x['LVL']
                 ocard_tier = x['TIER']
                 ocard_exp = x['EXP']
-                ocard_lvl_ap_buff = ocard_lvl_ap_buff + x['AP']
-                ocard_lvl_attack_buff = ocard_lvl_attack_buff + x['ATK']
-                ocard_lvl_defense_buff = ocard_lvl_defense_buff + x['DEF']
-                ocard_lvl_hlt_buff = ocard_lvl_hlt_buff + x['HLT']
+                ocard_lvl_ap_buff = crown_utilities.level_sync_stats(ocard_lvl, "AP")
+                ocard_lvl_attack_buff = crown_utilities.level_sync_stats(ocard_lvl, "ATK_DEF")
+                ocard_lvl_defense_buff = crown_utilities.level_sync_stats(ocard_lvl, "ATK_DEF")
+                ocard_lvl_hlt_buff = crown_utilities.level_sync_stats(ocard_lvl, "HLT")
 
         o_gif = o['GIF']
         o_destiny = o['HAS_COLLECTION']
@@ -4367,10 +4367,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                     ccard_lvl = x['LVL']
                     ccard_tier = x['TIER']
                     ccard_exp = x['EXP']
-                    ccard_lvl_ap_buff = ccard_lvl_ap_buff + x['AP']
-                    ccard_lvl_attack_buff = ccard_lvl_attack_buff + x['ATK']
-                    ccard_lvl_defense_buff = ccard_lvl_defense_buff + x['DEF']
-                    ccard_lvl_hlt_buff = ccard_lvl_hlt_buff + x['HLT']
+                    ccard_lvl_ap_buff = crown_utilities.level_sync_stats(ccard_lvl, "AP")
+                    ccard_lvl_attack_buff = crown_utilities.level_sync_stats(ccard_lvl, "ATK_DEF")
+                    ccard_lvl_defense_buff = crown_utilities.level_sync_stats(ccard_lvl, "ATK_DEF")
+                    ccard_lvl_hlt_buff = crown_utilities.level_sync_stats(ccard_lvl, "HLT")
 
             c_gif = c['GIF']
             c_destiny = c['HAS_COLLECTION']
@@ -4458,10 +4458,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                     tcard_lvl = x['LVL']
                     tcard_tier = x['TIER']
                     tcard_exp = x['EXP']
-                    tcard_lvl_ap_buff = x['AP']
-                    tcard_lvl_attack_buff = x['ATK']
-                    tcard_lvl_defense_buff = x['DEF']
-                    tcard_lvl_hlt_buff = x['HLT']
+                    tcard_lvl_ap_buff = crown_utilities.level_sync_stats(tcard_lvl, "AP")
+                    tcard_lvl_attack_buff = crown_utilities.level_sync_stats(tcard_lvl, "ATK_DEF")
+                    tcard_lvl_defense_buff = crown_utilities.level_sync_stats(tcard_lvl, "ATK_DEF")
+                    tcard_lvl_hlt_buff = crown_utilities.level_sync_stats(tcard_lvl, "HLT")
 
             t_gif = t['GIF']
             t_destiny = t['HAS_COLLECTION']
@@ -4540,16 +4540,16 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 tpet_lvl = 10
                 tpet_bond = 3
                 tcard_lvl = 350
-                tcard_lvl_ap_buff = 116 + ap_buff_from_difficulty
-                tcard_lvl_attack_defense_buff = 175
-                tcard_lvl_hlt_buff = 438
+                tcard_lvl_ap_buff = crown_utilities.level_sync_stats(350, "AP") + ap_buff_from_difficulty
+                tcard_lvl_attack_defense_buff = crown_utilities.level_sync_stats(350, "ATK_DEF")
+                tcard_lvl_hlt_buff = crown_utilities.level_sync_stats(350, "HLT")
             elif mode in B_modes:
                 tpet_lvl = 10
                 tpet_bond = 3
-                tcard_lvl = 500
-                tcard_lvl_ap_buff = 200 + ap_buff_from_difficulty
-                tcard_lvl_attack_defense_buff = 200
-                tcard_lvl_hlt_buff = 200
+                tcard_lvl = 999
+                tcard_lvl_ap_buff = crown_utilities.level_sync_stats(999, "AP") + ap_buff_from_difficulty
+                tcard_lvl_attack_defense_buff = crown_utilities.level_sync_stats(999, "ATK_DEF")
+                tcard_lvl_hlt_buff = crown_utilities.level_sync_stats(999, "HLT")
             else:
                 if mode in co_op_modes and mode in U_modes:
                         tpet_lvl = 6
@@ -4561,25 +4561,25 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 elif mode in co_op_modes and mode in D_modes:
                     tpet_lvl = 10
                     tpet_bond = 3
-                    tcard_lvl = 350
-                    tcard_lvl_ap_buff = 116 + ap_buff_from_difficulty
-                    tcard_lvl_attack_defense_buff = 175
-                    tcard_lvl_hlt_buff = 438
+                    tcard_lvl = 450
+                    tcard_lvl_ap_buff = crown_utilities.level_sync_stats(450, "AP") + ap_buff_from_difficulty
+                    tcard_lvl_attack_defense_buff = crown_utilities.level_sync_stats(450, "ATK_DEF")
+                    tcard_lvl_hlt_buff = crown_utilities.level_sync_stats(450, "HLT")
                 elif mode == "ABYSS" or mode == "SCENARIO":
                     tpet_lvl = 3
                     tpet_bond = 2
                     tcard_lvl = abyss_scaling
-                    tcard_lvl_ap_buff = round(abyss_scaling / 3)
-                    tcard_lvl_attack_defense_buff = round(abyss_scaling / 2)
-                    tcard_lvl_hlt_buff = round((abyss_scaling / 20) * 25)
+                    tcard_lvl_ap_buff = crown_utilities.level_sync_stats(abyss_scaling, "AP")
+                    tcard_lvl_attack_defense_buff = crown_utilities.level_sync_stats(abyss_scaling, "ATK_DEF")
+                    tcard_lvl_hlt_buff = crown_utilities.level_sync_stats(abyss_scaling, "HLT")
                 else:
                     if ocard_lvl >= 150:
                         tpet_lvl = 3
                         tpet_bond = 1
                         tcard_lvl = 150
-                        tcard_lvl_ap_buff = 50 + ap_buff_from_difficulty
-                        tcard_lvl_attack_defense_buff = 75
-                        tcard_lvl_hlt_buff = 187
+                        tcard_lvl_ap_buff = crown_utilities.level_sync_stats(150, "AP") + ap_buff_from_difficulty
+                        tcard_lvl_attack_defense_buff = crown_utilities.level_sync_stats(150, "ATK_DEF")
+                        tcard_lvl_hlt_buff = crown_utilities.level_sync_stats(150, "HLT")
                     else:
                         tpet_lvl = 3
                         tpet_bond = 2

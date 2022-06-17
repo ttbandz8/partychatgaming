@@ -263,10 +263,10 @@ class Profile(commands.Cog):
                         if x['CARD'] == card['NAME']:
                             card_lvl = x['LVL']
                             card_exp = x['EXP']
-                            card_lvl_ap_buff = x['AP']
-                            card_lvl_attack_buff = x['ATK']
-                            card_lvl_defense_buff = x['DEF']
-                            card_lvl_hlt_buff = x['HLT']
+                            card_lvl_ap_buff = crown_utilities.level_sync_stats(card_lvl, "AP")
+                            card_lvl_attack_buff = crown_utilities.level_sync_stats(card_lvl, "ATK_DEF")
+                            card_lvl_defense_buff = crown_utilities.level_sync_stats(card_lvl, "ATK_DEF")
+                            card_lvl_hlt_buff = crown_utilities.level_sync_stats(card_lvl, "HLT")
 
                     oarm_universe = arm['UNIVERSE']
                     o_title_universe = title['UNIVERSE']
@@ -661,10 +661,10 @@ class Profile(commands.Cog):
                             lvl = f"{licon} **{cl['LVL']}**"
                             card_lvl = cl['LVL']
                             card_exp = cl['EXP']
-                            card_lvl_ap_buff = cl['AP']
-                            card_lvl_attack_buff = cl['ATK']
-                            card_lvl_defense_buff = cl['DEF']
-                            card_lvl_hlt_buff = cl['HLT']
+                            card_lvl_ap_buff = crown_utilities.level_sync_stats(card_lvl, "AP")
+                            card_lvl_attack_buff = crown_utilities.level_sync_stats(card_lvl, "ATK_DEF")
+                            card_lvl_defense_buff = crown_utilities.level_sync_stats(card_lvl, "ATK_DEF")
+                            card_lvl_hlt_buff = crown_utilities.level_sync_stats(card_lvl, "HLT")
                             
                     
                     o_passive = resp['PASS'][0] 
@@ -4307,10 +4307,10 @@ async def menubuild(self, ctx):
                     if x['CARD'] == card['NAME']:
                         card_lvl = x['LVL']
                         card_exp = x['EXP']
-                        card_lvl_ap_buff = x['AP']
-                        card_lvl_attack_buff = x['ATK']
-                        card_lvl_defense_buff = x['DEF']
-                        card_lvl_hlt_buff = x['HLT']
+                        card_lvl_ap_buff = crown_utilities.level_sync_stats(card_lvl, "AP")
+                        card_lvl_attack_buff = crown_utilities.level_sync_stats(card_lvl, "ATK_DEF")
+                        card_lvl_defense_buff = crown_utilities.level_sync_stats(card_lvl, "ATK_DEF")
+                        card_lvl_hlt_buff = crown_utilities.level_sync_stats(card_lvl, "HLT")
 
                 oarm_universe = arm['UNIVERSE']
                 o_title_universe = title['UNIVERSE']
@@ -4677,10 +4677,10 @@ async def menucards(self, ctx):
                         lvl = f"{licon} **{cl['LVL']}**"
                         card_lvl = cl['LVL']
                         card_exp = cl['EXP']
-                        card_lvl_ap_buff = cl['AP']
-                        card_lvl_attack_buff = cl['ATK']
-                        card_lvl_defense_buff = cl['DEF']
-                        card_lvl_hlt_buff = cl['HLT']
+                        card_lvl_ap_buff = crown_utilities.level_sync_stats(card_lvl, "AP")
+                        card_lvl_attack_buff = crown_utilities.level_sync_stats(card_lvl, "ATK_DEF")
+                        card_lvl_defense_buff = crown_utilities.level_sync_stats(card_lvl, "ATK_DEF")
+                        card_lvl_hlt_buff = crown_utilities.level_sync_stats(card_lvl, "HLT")
                         
                 
                 o_passive = resp['PASS'][0] 
