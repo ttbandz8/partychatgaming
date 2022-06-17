@@ -2090,15 +2090,23 @@ def damage_cal(opponent_affinity, move_type, move_element, universe, card, abili
             drain = ap
         elif enh == 'FLOG':
             enh_type = "FLOG"
+            if op_attack >= 500:
+                op_attack = 500
             flog = round((ap / 100) * op_attack)
         elif enh == 'WITHER':
             enh_type = "WITHER"
+            if op_defense >= 500:
+                op_defense = 500
             wither = round((ap / 100) * op_defense)
         elif enh == 'RAGE':
             enh_type = "RAGE"
+            if defense >= 500:
+                defense = 500
             rage = round((ap / 100) * defense)
         elif enh == 'BRACE':
             enh_type = "BRACE"
+            if attack >= 500:
+                attack = 500
             brace = round((ap / 100) * attack)
         elif enh == 'BZRK':
             enh_type = "BZRK"
