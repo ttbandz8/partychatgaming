@@ -830,7 +830,7 @@ async def register(ctx):
                            mytrait = trait
                if mytrait:
                   traitmessage = f"**{mytrait['EFFECT']}:** {mytrait['TRAIT']}"
-               available = f"{Crest_dict[uni['TITLE']]}"
+               available = f"{crown_utilities.crest_dict[uni['TITLE']]}"
                
                tales_list = ", ".join(uni['CROWN_TALES'])
 
@@ -1338,7 +1338,7 @@ async def rebirth(ctx):
                                              mytrait = trait
                                  if mytrait:
                                     traitmessage = f"**{mytrait['EFFECT']}:** {mytrait['TRAIT']}"
-                                 available = f"{Crest_dict[uni['TITLE']]}"
+                                 available = f"{crown_utilities.crest_dict[uni['TITLE']]}"
                                  
                                  tales_list = ", ".join(uni['CROWN_TALES'])
 
@@ -2753,7 +2753,42 @@ async def code(ctx, code_input: str):
       await channel.send(f"'PLAYER': **{str(ctx.author)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
       return
 
-
+@slash.slash(description="Update Health of all characters by 1000", guild_ids=guild_ids)
+@commands.check(validate_user)
+async def updatehealth(ctx):
+   try:
+      all_cards = db.queryAllCards()
+      await ctx.send("Updating all card health by 1000...")
+      for card in all_cards:
+         card_name = card["NAME"]
+         card_hlt = int(card["HLT"])
+         new_hlt = int(card_hlt) + 1000
+         query = {
+            'NAME': card_name
+         }
+         update_query = {
+            '$set': {'HLT': int(new_hlt)}
+         }
+         db.updateCard(query, update_query)
+      await ctx.send("All Card Health has been increased.")
+      return
+   except Exception as ex:
+      trace = []
+      tb = ex.__traceback__
+      while tb is not None:
+         trace.append({
+               "filename": tb.tb_frame.f_code.co_filename,
+               "name": tb.tb_frame.f_code.co_name,
+               "lineno": tb.tb_lineno
+         })
+         tb = tb.tb_next
+      print(str({
+         'PLAYER': str(ctx.author),
+         'type': type(ex).__name__,
+         'message': str(ex),
+         'trace': trace
+      }))
+      return
 
 
 
@@ -2845,6 +2880,45 @@ async def code(ctx, code_input: str):
 #          db.updateCard(query, update_query3)
 #    except:
 #       print("errored out")
+
+
+# @bot.command()
+# @commands.check(validate_user)
+# async def updatehealth(ctx):
+#    try:
+#       all_cards = db.queryAllCards()
+#       await ctx.send("Updating all card health by 1000...")
+#       for card in all_cards:
+#          card_name = card["NAME"]
+#          card_hlt = int(card["HLT"])
+#          new_hlt = int(card_hlt) - 500
+#          query = {
+#             'NAME': card_name
+#          }
+#          update_query = {
+#             '$set': {'HLT': int(new_hlt)}
+#          }
+#          db.updateCard(query, update_query)
+#       await ctx.send("All Card Health has been increased.")
+#       return
+#    except Exception as ex:
+#       trace = []
+#       tb = ex.__traceback__
+#       while tb is not None:
+#          trace.append({
+#                "filename": tb.tb_frame.f_code.co_filename,
+#                "name": tb.tb_frame.f_code.co_name,
+#                "lineno": tb.tb_lineno
+#          })
+#          tb = tb.tb_next
+#       print(str({
+#          'PLAYER': str(ctx.author),
+#          'type': type(ex).__name__,
+#          'message': str(ex),
+#          'trace': trace
+#       }))
+#       return
+
 
 @bot.command()
 @commands.check(validate_user)
@@ -3325,35 +3399,6 @@ async def addfield(ctx, collection, new_field, field_type):
 
 #    except Exception as e:
 #       await ctx.send(f"Error has occurred: {e}")
-Crest_dict = {'Unbound': ':ideograph_advantage:',
-              'My Hero Academia': ':sparkle:',
-              'League Of Legends': ':u6307:',
-              'Kanto Region': ':chart:',
-              'Naruto': ':u7121:',
-              'Bleach': ':u6709:',
-              'God Of War': ':u7533:',
-              'Chainsawman': ':accept:',
-              'One Punch Man': ':u55b6:',
-              'Johto Region': ':u6708:',
-              'Black Clover': ':ophiuchus:',
-              'Demon Slayer': ':aries:',
-              'Attack On Titan': ':taurus:',
-              '7ds': ':capricorn:',
-              'Hoenn Region': ':leo:',
-              'Digimon': ':cancer:',
-              'Fate': ':u6e80:',
-              'Solo Leveling': ':u5408:',
-              'Souls': ':sos:',
-              'Dragon Ball Z': ':u5272:',
-              'Sinnoh Region': ':u7981:',
-              'Death Note': ':white_flower:',
-              'Crown Rift Awakening': ':u7a7a:',
-              'Crown Rift Slayers': ':sa:',
-              'Crown Rift Madness': ':m:',
-              'Persona': ':o:',
-              'YuYu Hakusho': ':wheel_of_dharma:'
-              }
-
 
 if config('ENV') == "production":
    DISCORD_TOKEN = config('DISCORD_TOKEN_TEST')

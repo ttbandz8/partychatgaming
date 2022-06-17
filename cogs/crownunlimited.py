@@ -196,18 +196,18 @@ class CrownUnlimited(commands.Cog):
 
             if selected_mode == "Tales":
                 cardtitle = {'TITLE': 'Universe Title'}
-                card_lvl = 30
-                card_lvl_attack_buff = 15
-                card_lvl_defense_buff = 15
-                card_lvl_ap_buff = 10
-                card_lvl_hlt_buff = 25
+                card_lvl = 50
+                card_lvl_attack_buff = crown_utilities.level_sync_stats(50, "ATK_DEF")
+                card_lvl_defense_buff = crown_utilities.level_sync_stats(50, "ATK_DEF")
+                card_lvl_ap_buff = crown_utilities.level_sync_stats(50, "AP")
+                card_lvl_hlt_buff = crown_utilities.level_sync_stats(50, "HLT")
             else:
                 cardtitle = {'TITLE': 'Dungeon Title'}
-                card_lvl = 300
-                card_lvl_attack_buff = 150
-                card_lvl_defense_buff = 150
-                card_lvl_ap_buff = 100
-                card_lvl_hlt_buff = 375
+                card_lvl = 350
+                card_lvl_attack_buff = crown_utilities.level_sync_stats(350, "ATK_DEF")
+                card_lvl_defense_buff = crown_utilities.level_sync_stats(350, "ATK_DEF")
+                card_lvl_ap_buff = crown_utilities.level_sync_stats(350, "AP")
+                card_lvl_hlt_buff = crown_utilities.level_sync_stats(350, "HLT")
             
         
             o_card = cards[rand_card]['NAME']
@@ -1442,13 +1442,14 @@ class CrownUnlimited(commands.Cog):
             universe_embed_list = []
             for uni in universe_data:
                 available = ""
-                if len(uni['CROWN_TALES']) > 2:
-                    available = f"{Crest_dict[uni['TITLE']]}"
+                # if len(uni['CROWN_TALES']) > 2:
+                if uni['CROWN_TALES']:
+                    available = f"{crown_utilities.crest_dict[uni['TITLE']]}"
                     
                     tales_list = ", ".join(uni['CROWN_TALES'])
 
                     embedVar = discord.Embed(title= f"{uni['TITLE']}", description=textwrap.dedent(f"""
-                    {Crest_dict[uni['TITLE']]} **Number of Fights**: :crossed_swords: **{len(uni['CROWN_TALES'])}**
+                    {crown_utilities.crest_dict[uni['TITLE']]} **Number of Fights**: :crossed_swords: **{len(uni['CROWN_TALES'])}**
                     🎗️ **Universe Title**: {uni['UTITLE']}
                     🦾 **Universe Arm**: {uni['UARM']}
                     🧬 **Universe Summon**: {uni['UPET']}
@@ -2012,8 +2013,6 @@ def starting_position(o, t):
 
 def damage_cal(opponent_affinity, move_type, move_element, universe, card, ability, attack, defense, op_defense, stamina, enhancer, health, op_health, op_stamina,
                maxhealth, op_attack, special_description, turn, ap_buff, other):
-
-
     if op_defense <= 0:
         op_defense = 25
     if attack <= 0:
@@ -2091,15 +2090,23 @@ def damage_cal(opponent_affinity, move_type, move_element, universe, card, abili
             drain = ap
         elif enh == 'FLOG':
             enh_type = "FLOG"
+            if op_attack >= 500:
+                op_attack = 500
             flog = round((ap / 100) * op_attack)
         elif enh == 'WITHER':
             enh_type = "WITHER"
+            if op_defense >= 500:
+                op_defense = 500
             wither = round((ap / 100) * op_defense)
         elif enh == 'RAGE':
             enh_type = "RAGE"
+            if defense >= 500:
+                defense = 500
             rage = round((ap / 100) * defense)
         elif enh == 'BRACE':
             enh_type = "BRACE"
+            if attack >= 500:
+                attack = 500
             brace = round((ap / 100) * attack)
         elif enh == 'BZRK':
             enh_type = "BZRK"
@@ -2128,7 +2135,7 @@ def damage_cal(opponent_affinity, move_type, move_element, universe, card, abili
             haste = ap
         elif enh == 'FEAR':
             enh_type = "FEAR"
-            fear = (ap / 100 * maxhealth)
+            fear = ap
         elif enh == 'SOULCHAIN':
             enh_type = "SOULCHAIN"
             soulchain = ap
@@ -2379,8 +2386,8 @@ def damage_cal(opponent_affinity, move_type, move_element, universe, card, abili
                 abilitypower = 25
 
             dmg = abilitypower
-            if dmg > (ap * 1.2):  # If DMG > ap -> Dmg = ap * 1.2
-                dmg = ap * 1.2
+            if dmg > (ap * 1.3):  # If DMG > ap -> Dmg = ap * 1.2
+                dmg = ap * 1.3
             elif dmg < (ap / 2):  # If you dmg is less than you base AP you do / of AP Damage
                 dmg = ap / 2
 
@@ -2445,13 +2452,13 @@ def damage_cal(opponent_affinity, move_type, move_element, universe, card, abili
                 true_dmg = round(true_dmg * .70)
                 message = f'{move_emoji} {move} used! Chips for **{true_dmg}**! :anger:'
             elif hit_roll <= med_hit and hit_roll > low_hit:
-                true_dmg = round(true_dmg * .85)
+                true_dmg = round(true_dmg)
                 message = f'{move_emoji} {move} used! Connects for **{true_dmg}**! :bangbang:'
             elif hit_roll <= standard_hit and hit_roll > med_hit:
-                true_dmg = round(true_dmg)
+                true_dmg = round(true_dmg * 1.2)
                 message = f'{move_emoji} {move} used! Hits for **{true_dmg}**! :anger_right:'
             elif hit_roll >= 20:
-                true_dmg = round(true_dmg * 2)
+                true_dmg = round(true_dmg * 2.5)
                 message = f"{move_emoji} {move} used! Critically Hits for **{true_dmg}**!! :boom:"
             else:
                 message = f"{move_emoji} {move} used! Dealt **{true_dmg}** dmg!"
@@ -3158,9 +3165,6 @@ def showcard(mode, d, arm, max_health, health, max_stamina, stamina, resolved, t
 
 
        
-   
-
-
 def showsummon(url, summon, message, lvl, bond):
     # Card Name can be 16 Characters before going off Card
     # Lower Card Name Font once after 16 characters
@@ -3619,15 +3623,27 @@ async def scenario(self, ctx: SlashContext, universe: str):
                     rewards = scenario['HARD_DROPS']
 
                 for reward in rewards:
+                    # Add Check for Cards and make Cards available in Easy Drops
                     arm = db.queryArm({"ARM": reward})
-                    arm_name = arm['ARM']
-                    element_emoji = crown_utilities.set_emoji(arm['ELEMENT'])
-                    arm_passive = arm['ABILITIES'][0]
-                    arm_passive_type = list(arm_passive.keys())[0]
-                    arm_passive_value = list(arm_passive.values())[0]
-                    reward_list.append(f"{element_emoji} {arm_passive_type.title()} **{arm_name}** Attack: **{arm_passive_value}** dmg")
+                    if arm:
+                        arm_name = arm['ARM']
+                        element_emoji = crown_utilities.set_emoji(arm['ELEMENT'])
+                        arm_passive = arm['ABILITIES'][0]
+                        arm_passive_type = list(arm_passive.keys())[0]
+                        arm_passive_value = list(arm_passive.values())[0]
+                        reward_list.append(f"{element_emoji} {arm_passive_type.title()} **{arm_name}** Attack: **{arm_passive_value}** dmg")
+                    else:
+                        card = db.queryCard({"NAME": reward})
+                        moveset = card['MOVESET']
+                        move3 = moveset[2]
+                        move2 = moveset[1]
+                        move1 = moveset[0]
+                        basic_attack_emoji = crown_utilities.set_emoji(list(move1.values())[2])
+                        super_attack_emoji = crown_utilities.set_emoji(list(move2.values())[2])
+                        ultimate_attack_emoji = crown_utilities.set_emoji(list(move3.values())[2])
+                        reward_list.append(f":mahjong: {card['TIER']} **{card['NAME']}** {basic_attack_emoji} {super_attack_emoji} {ultimate_attack_emoji}\n:heart: {card['HLT']} :dagger: {card['ATK']}  🛡️ {card['DEF']}")
     
-                reward_message = "\n".join(reward_list)
+                reward_message = "\n\n".join(reward_list)
                 embedVar = discord.Embed(title= f"{title}", description=textwrap.dedent(f"""
                 📽️ **{universe} Scenario Battle!**
                 🔱 **Enemy Level:** {enemy_level}
@@ -3696,6 +3712,15 @@ async def cardlist(self, ctx: SlashContext, universe: str):
     tales_card_details = []
     destiny_card_details = []
     for card in cards:
+        moveset = card['MOVESET']
+        move3 = moveset[2]
+        move2 = moveset[1]
+        move1 = moveset[0]
+        basic_attack_emoji = crown_utilities.set_emoji(list(move1.values())[2])
+        super_attack_emoji = crown_utilities.set_emoji(list(move2.values())[2])
+        ultimate_attack_emoji = crown_utilities.set_emoji(list(move3.values())[2])
+
+
         available = ""
         is_skin = ""
         if card['AVAILABLE'] and card['EXCLUSIVE']:
@@ -3710,13 +3735,13 @@ async def cardlist(self, ctx: SlashContext, universe: str):
             is_skin = ":white_circle:"
         if card['EXCLUSIVE'] and not card['HAS_COLLECTION']:
             dungeon_card_details.append(
-                f"{is_skin}{available}  :mahjong: {card['TIER']} **{card['NAME']}**\n:heart: {card['HLT']} :dagger: {card['ATK']}  🛡️ {card['DEF']}\n")
+                f"{is_skin}{available}  :mahjong: {card['TIER']} **{card['NAME']}** {basic_attack_emoji} {super_attack_emoji} {ultimate_attack_emoji}\n:heart: {card['HLT']} :dagger: {card['ATK']}  🛡️ {card['DEF']}\n")
         elif not card['HAS_COLLECTION']:
             tales_card_details.append(
-                f"{is_skin}{available} :mahjong: {card['TIER']} **{card['NAME']}**\n:heart: {card['HLT']} :dagger: {card['ATK']}  🛡️ {card['DEF']}\n")
+                f"{is_skin}{available} :mahjong: {card['TIER']} **{card['NAME']}** {basic_attack_emoji} {super_attack_emoji} {ultimate_attack_emoji}\n:heart: {card['HLT']} :dagger: {card['ATK']}  🛡️ {card['DEF']}\n")
         elif card['HAS_COLLECTION']:
             destiny_card_details.append(
-                f"{is_skin}{available} :mahjong: {card['TIER']} **{card['NAME']}**\n:heart: {card['HLT']} :dagger: {card['ATK']}  🛡️ {card['DEF']}\n")
+                f"{is_skin}{available} :mahjong: {card['TIER']} **{card['NAME']}** {basic_attack_emoji} {super_attack_emoji} {ultimate_attack_emoji}\n:heart: {card['HLT']} :dagger: {card['ATK']}  🛡️ {card['DEF']}\n")
 
     all_cards = []
     if tales_card_details:
@@ -4098,13 +4123,13 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         stat_debuff_from_difficulty = 150
 
     if difficulty == "HARD":
-        health_buff_from_difficulty = 1500
+        health_buff_from_difficulty = 2000
         stat_buff_from_difficulty = 50
         ap_buff_from_difficulty = 50
         if mode in D_modes:
-            health_buff_from_difficulty = 3000
+            health_buff_from_difficulty = 3500
             stat_buff_from_difficulty = 50
-            ap_buff_from_difficulty = 100
+            ap_buff_from_difficulty = 125
         if mode in B_modes:
             health_buff_from_difficulty = 7000
             ap_buff_from_difficulty = 100
@@ -4234,10 +4259,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 ocard_lvl = x['LVL']
                 ocard_tier = x['TIER']
                 ocard_exp = x['EXP']
-                ocard_lvl_ap_buff = ocard_lvl_ap_buff + x['AP']
-                ocard_lvl_attack_buff = ocard_lvl_attack_buff + x['ATK']
-                ocard_lvl_defense_buff = ocard_lvl_defense_buff + x['DEF']
-                ocard_lvl_hlt_buff = ocard_lvl_hlt_buff + x['HLT']
+                ocard_lvl_ap_buff = crown_utilities.level_sync_stats(ocard_lvl, "AP")
+                ocard_lvl_attack_buff = crown_utilities.level_sync_stats(ocard_lvl, "ATK_DEF")
+                ocard_lvl_defense_buff = crown_utilities.level_sync_stats(ocard_lvl, "ATK_DEF")
+                ocard_lvl_hlt_buff = crown_utilities.level_sync_stats(ocard_lvl, "HLT")
 
         o_gif = o['GIF']
         o_destiny = o['HAS_COLLECTION']
@@ -4350,10 +4375,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                     ccard_lvl = x['LVL']
                     ccard_tier = x['TIER']
                     ccard_exp = x['EXP']
-                    ccard_lvl_ap_buff = ccard_lvl_ap_buff + x['AP']
-                    ccard_lvl_attack_buff = ccard_lvl_attack_buff + x['ATK']
-                    ccard_lvl_defense_buff = ccard_lvl_defense_buff + x['DEF']
-                    ccard_lvl_hlt_buff = ccard_lvl_hlt_buff + x['HLT']
+                    ccard_lvl_ap_buff = crown_utilities.level_sync_stats(ccard_lvl, "AP")
+                    ccard_lvl_attack_buff = crown_utilities.level_sync_stats(ccard_lvl, "ATK_DEF")
+                    ccard_lvl_defense_buff = crown_utilities.level_sync_stats(ccard_lvl, "ATK_DEF")
+                    ccard_lvl_hlt_buff = crown_utilities.level_sync_stats(ccard_lvl, "HLT")
 
             c_gif = c['GIF']
             c_destiny = c['HAS_COLLECTION']
@@ -4441,10 +4466,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                     tcard_lvl = x['LVL']
                     tcard_tier = x['TIER']
                     tcard_exp = x['EXP']
-                    tcard_lvl_ap_buff = x['AP']
-                    tcard_lvl_attack_buff = x['ATK']
-                    tcard_lvl_defense_buff = x['DEF']
-                    tcard_lvl_hlt_buff = x['HLT']
+                    tcard_lvl_ap_buff = crown_utilities.level_sync_stats(tcard_lvl, "AP")
+                    tcard_lvl_attack_buff = crown_utilities.level_sync_stats(tcard_lvl, "ATK_DEF")
+                    tcard_lvl_defense_buff = crown_utilities.level_sync_stats(tcard_lvl, "ATK_DEF")
+                    tcard_lvl_hlt_buff = crown_utilities.level_sync_stats(tcard_lvl, "HLT")
 
             t_gif = t['GIF']
             t_destiny = t['HAS_COLLECTION']
@@ -4523,16 +4548,16 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 tpet_lvl = 10
                 tpet_bond = 3
                 tcard_lvl = 350
-                tcard_lvl_ap_buff = 116 + ap_buff_from_difficulty
-                tcard_lvl_attack_defense_buff = 175
-                tcard_lvl_hlt_buff = 438
+                tcard_lvl_ap_buff = crown_utilities.level_sync_stats(350, "AP") + ap_buff_from_difficulty
+                tcard_lvl_attack_defense_buff = crown_utilities.level_sync_stats(350, "ATK_DEF")
+                tcard_lvl_hlt_buff = crown_utilities.level_sync_stats(350, "HLT")
             elif mode in B_modes:
                 tpet_lvl = 10
                 tpet_bond = 3
-                tcard_lvl = 500
-                tcard_lvl_ap_buff = 200 + ap_buff_from_difficulty
-                tcard_lvl_attack_defense_buff = 200
-                tcard_lvl_hlt_buff = 200
+                tcard_lvl = 999
+                tcard_lvl_ap_buff = crown_utilities.level_sync_stats(999, "AP") + ap_buff_from_difficulty
+                tcard_lvl_attack_defense_buff = crown_utilities.level_sync_stats(999, "ATK_DEF")
+                tcard_lvl_hlt_buff = crown_utilities.level_sync_stats(999, "HLT")
             else:
                 if mode in co_op_modes and mode in U_modes:
                         tpet_lvl = 6
@@ -4544,25 +4569,25 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 elif mode in co_op_modes and mode in D_modes:
                     tpet_lvl = 10
                     tpet_bond = 3
-                    tcard_lvl = 350
-                    tcard_lvl_ap_buff = 116 + ap_buff_from_difficulty
-                    tcard_lvl_attack_defense_buff = 175
-                    tcard_lvl_hlt_buff = 438
+                    tcard_lvl = 450
+                    tcard_lvl_ap_buff = crown_utilities.level_sync_stats(450, "AP") + ap_buff_from_difficulty
+                    tcard_lvl_attack_defense_buff = crown_utilities.level_sync_stats(450, "ATK_DEF")
+                    tcard_lvl_hlt_buff = crown_utilities.level_sync_stats(450, "HLT")
                 elif mode == "ABYSS" or mode == "SCENARIO":
                     tpet_lvl = 3
                     tpet_bond = 2
                     tcard_lvl = abyss_scaling
-                    tcard_lvl_ap_buff = round(abyss_scaling / 3)
-                    tcard_lvl_attack_defense_buff = round(abyss_scaling / 2)
-                    tcard_lvl_hlt_buff = round((abyss_scaling / 20) * 25)
+                    tcard_lvl_ap_buff = crown_utilities.level_sync_stats(abyss_scaling, "AP")
+                    tcard_lvl_attack_defense_buff = crown_utilities.level_sync_stats(abyss_scaling, "ATK_DEF")
+                    tcard_lvl_hlt_buff = crown_utilities.level_sync_stats(abyss_scaling, "HLT")
                 else:
                     if ocard_lvl >= 150:
                         tpet_lvl = 3
                         tpet_bond = 1
                         tcard_lvl = 150
-                        tcard_lvl_ap_buff = 50 + ap_buff_from_difficulty
-                        tcard_lvl_attack_defense_buff = 75
-                        tcard_lvl_hlt_buff = 187
+                        tcard_lvl_ap_buff = crown_utilities.level_sync_stats(150, "AP") + ap_buff_from_difficulty
+                        tcard_lvl_attack_defense_buff = crown_utilities.level_sync_stats(150, "ATK_DEF")
+                        tcard_lvl_hlt_buff = crown_utilities.level_sync_stats(150, "HLT")
                     else:
                         tpet_lvl = 3
                         tpet_bond = 2
@@ -6208,7 +6233,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                             corruption_message = "👾 **Corrupted**"
 
                         embedVar = discord.Embed(title= f"{uni['TITLE']}", description=textwrap.dedent(f"""
-                        {Crest_dict[uni['TITLE']]} **Number of Fights**: :crossed_swords: **{len(uni['CROWN_TALES'])}**
+                        {crown_utilities.crest_dict[uni['TITLE']]} **Number of Fights**: :crossed_swords: **{len(uni['CROWN_TALES'])}**
                         🎗️ **Universe Title**: {uni['UTITLE']}
                         🦾 **Universe Arm**: {uni['UARM']}
                         🧬 **Universe Summon**: {uni['UPET']}
@@ -6232,7 +6257,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                             corruption_message = "👾 **Corrupted**"
 
                         embedVar = discord.Embed(title= f"{uni['TITLE']}", description=textwrap.dedent(f"""
-                        {Crest_dict[uni['TITLE']]} **Number of Fights**: :crossed_swords: **{len(uni['CROWN_TALES'])}**
+                        {crown_utilities.crest_dict[uni['TITLE']]} **Number of Fights**: :crossed_swords: **{len(uni['CROWN_TALES'])}**
                         🎗️ **Universe Title**: {uni['UTITLE']}
                         🦾 **Universe Arm**: {uni['UARM']}
                         🧬 **Universe Summon**: {uni['UPET']}
@@ -6260,7 +6285,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
 
 
                         embedVar = discord.Embed(title= f"{uni['TITLE']}", description=textwrap.dedent(f"""
-                        {Crest_dict[uni['TITLE']]} **Number of Fights**: :crossed_swords: **{len(uni['CROWN_TALES'])}**
+                        {crown_utilities.crest_dict[uni['TITLE']]} **Number of Fights**: :crossed_swords: **{len(uni['CROWN_TALES'])}**
                         🎗️ **Universe Title**: {uni['UTITLE']}
                         🦾 **Universe Arm**: {uni['UARM']}
                         🧬 **Universe Summon**: {uni['UPET']}
@@ -6284,7 +6309,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                             corruption_message = "👾 **Corrupted**"
 
                         embedVar = discord.Embed(title= f"{uni['TITLE']}", description=textwrap.dedent(f"""
-                        {Crest_dict[uni['TITLE']]} **Number of Fights**: :crossed_swords: **{len(uni['CROWN_TALES'])}**
+                        {crown_utilities.crest_dict[uni['TITLE']]} **Number of Fights**: :crossed_swords: **{len(uni['CROWN_TALES'])}**
                         🎗️ **Universe Title**: {uni['UTITLE']}
                         🦾 **Universe Arm**: {uni['UARM']}
                         🧬 **Universe Summon**: {uni['UPET']}
@@ -6345,7 +6370,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             #Universe Cost
             entrance_fee = 1000
             if selected_universe in crestlist:
-                await ctx.send(f"{Crest_dict[selected_universe]} | :flags: {guildname} {selected_universe} Crest Activated! No entrance fee!")
+                await ctx.send(f"{crown_utilities.crest_dict[selected_universe]} | :flags: {guildname} {selected_universe} Crest Activated! No entrance fee!")
             else:
                 if balance <= entrance_fee:
                     await ctx.send(f"Tales require an :coin: {'{:,}'.format(entrance_fee)} entrance fee!", delete_after=5)
@@ -6357,7 +6382,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                         crest_guild = db.queryGuildAlt({'GNAME' : universe_owner})
                         if crest_guild:
                             await crown_utilities.blessguild(entrance_fee, universe['GUILD'])
-                            await ctx.send(f"{Crest_dict[selected_universe]} | {crest_guild['GNAME']} Universe Toll Paid! :coin:{'{:,}'.format(entrance_fee)}")
+                            await ctx.send(f"{crown_utilities.crest_dict[selected_universe]} | {crest_guild['GNAME']} Universe Toll Paid! :coin:{'{:,}'.format(entrance_fee)}")
             
             # #Create Explore Category
             # categoryname = "Crown Unlimited"
@@ -6422,7 +6447,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                     completed = "🔴"
 
                 embedVar = discord.Embed(title= f"{uni}", description=textwrap.dedent(f"""
-                {Crest_dict[uni_option['TITLE']]} **Number of Fights**: :fire: **{len(uni_option['DUNGEONS'])}**
+                {crown_utilities.crest_dict[uni_option['TITLE']]} **Number of Fights**: :fire: **{len(uni_option['DUNGEONS'])}**
                 🎗️ **Dungeon Title**: {uni_option['DTITLE']}
                 🦾 **Dungeon Arm**: {uni_option['DARM']}
                 🧬 **Dungeon Summon**: {uni_option['DPET']}
@@ -6466,7 +6491,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             #Universe Cost
             entrance_fee = 5000
             if selected_universe in crestlist:
-                await ctx.send(f"{Crest_dict[selected_universe]} | :flags: {guildname} {selected_universe} Crest Activated! No entrance fee!")
+                await ctx.send(f"{crown_utilities.crest_dict[selected_universe]} | :flags: {guildname} {selected_universe} Crest Activated! No entrance fee!")
             else:
                 if balance <= entrance_fee:
                     await ctx.send(f"Tales require an :coin: {'{:,}'.format(entrance_fee)} entrance fee!", delete_after=5)
@@ -6478,7 +6503,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                         crest_guild = db.queryGuildAlt({'GNAME' : universe['GUILD']})
                         if crest_guild:
                             await crown_utilities.blessguild(entrance_fee, universe['GUILD'])
-                            await ctx.send(f"{Crest_dict[selected_universe]} | {crest_guild['GNAME']} Universe Toll Paid! :coin:{'{:,}'.format(entrance_fee)}")
+                            await ctx.send(f"{crown_utilities.crest_dict[selected_universe]} | {crest_guild['GNAME']} Universe Toll Paid! :coin:{'{:,}'.format(entrance_fee)}")
             categoryname = "Crown Unlimited"
             category = discord.utils.get(guild.categories, name=categoryname)
 
@@ -6523,7 +6548,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                     boss_info = db.queryBoss({"NAME": searchUni['UNIVERSE_BOSS']})
                     if boss_info:
                         embedVar = discord.Embed(title= f"{uni}", description=textwrap.dedent(f"""
-                        {Crest_dict[uni]} **Boss**: :japanese_ogre: **{boss_info['NAME']}**
+                        {crown_utilities.crest_dict[uni]} **Boss**: :japanese_ogre: **{boss_info['NAME']}**
                         🎗️ **Boss Title**: {boss_info['TITLE']}
                         🦾 **Boss Arm**: {boss_info['ARM']}
                         🧬 **Boss Summon**: {boss_info['PET']}
@@ -6560,7 +6585,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             #Universe Cost
             entrance_fee = 10000
             if selected_universe in crestlist:
-                await ctx.send(f"{Crest_dict[selected_universe]} | :flags: {guildname} {selected_universe} Crest Activated! No entrance fee!")
+                await ctx.send(f"{crown_utilities.crest_dict[selected_universe]} | :flags: {guildname} {selected_universe} Crest Activated! No entrance fee!")
             else:
                 if balance <= entrance_fee:
                     await ctx.send(f"Tales require an :coin: {'{:,}'.format(entrance_fee)} entrance fee!", delete_after=5)
@@ -6572,7 +6597,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                         crest_guild = db.queryGuildAlt({'GNAME' : universe['GUILD']})
                         if crest_guild:
                             await crown_utilities.blessguild(entrance_fee, universe['GUILD'])
-                            await ctx.send(f"{Crest_dict[selected_universe]} | {crest_guild['GNAME']} Universe Toll Paid! :coin:{'{:,}'.format(entrance_fee)}")
+                            await ctx.send(f"{crown_utilities.crest_dict[selected_universe]} | {crest_guild['GNAME']} Universe Toll Paid! :coin:{'{:,}'.format(entrance_fee)}")
             categoryname = "Crown Unlimited"
             category = discord.utils.get(guild.categories, name=categoryname)
 
@@ -6627,6 +6652,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
     basic_attack_name = "BASIC"
     special_attack_name = "SUPER"
     ultimate_attack_name = "ULTIMATE"
+
+    low_tier_cards = [1, 2, 3]
+    mid_tier_cards = [4, 5]
+    high_tier_cards = [6, 7]
 
     # mode = 'ATales'
     try:
@@ -7840,17 +7869,19 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     
                                     # await asyncio.sleep(2)
                                 # fortitude or luck is based on health
-                                fortitude = 0.0
-                                low = o_health - (o_health * .90)
-                                if low <=0:
-                                    low = 1
-                                high = o_health - (o_health * .80)
-                                fortitude = round(random.randint(int(low), int(high)))
+                                fortitude = round(o_health * .1)
+                                if fortitude <= 50:
+                                    fortitude = 50
 
                                 o_stamina = o_focus
-                                o_healthcalc = round(((o_focus * .40) + (fortitude * 1)) / 2)
-                                o_attackcalc = round(.20 * ((o_focus * .15) + round(fortitude * 1)))
-                                o_defensecalc = round(.20 * ((o_focus * .15) + round(fortitude * 1)))
+                                o_healthcalc = round(fortitude)
+                                o_attackcalc = round(fortitude * (o_card_tier / 10))
+                                o_defensecalc = round(fortitude * (o_card_tier / 10))
+                                
+                                if o_universe == "One Piece" and (o_card_tier in mid_tier_cards or o_card_tier in high_tier_cards):
+                                    o_attackcalc = o_attackcalc + o_attackcalc
+                                    o_defensecalc = o_defensecalc + o_defensecalc
+
                                 if o_title_passive_type:
                                     if o_title_passive_type == "GAMBLE":
                                         o_healthcalc = o_title_passive_value
@@ -8378,6 +8409,38 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 turn_total = turn_total + 1
                                                 turn = 0
 
+                                            if o_universe == "One Piece" and (o_card_tier in high_tier_cards):
+                                                # fortitude or luck is based on health
+                                                fortitude = 0.0
+                                                low = o_health - (o_health * .75)
+                                                high = o_health - (o_health * .66)
+                                                fortitude = round(random.randint(int(low), int(high)))
+                                                # Resolve Scaling
+                                                o_resolve_health = round(fortitude + (.5 * o_resolve))
+                                                o_resolve_attack = round(
+                                                    (.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                                o_resolve_defense = round(
+                                                    (.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+
+                                                t_ap_buff = t_ap_buff - 125
+
+                                                o_stamina = o_stamina + o_resolve
+                                                o_health = o_health + o_resolve_health
+                                                o_attack = round(o_attack + o_resolve_attack)
+                                                o_defense = round(o_defense - o_resolve_defense)
+                                                o_used_resolve = True
+                                                o_pet_used = False
+                                                if mode in B_modes:
+                                                    embedVar.add_field(name=f"{t_card}'s Rebuke", value=f"{t_rebuke}",
+                                                                    inline=False)
+                                                    embedVar.set_footer(text=f"{o_card} this is your chance!")
+                                                
+                                                previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Resolved: Conquerors Haki!")
+
+                                                turn_total = turn_total + 1
+                                                turn = 1
+
+
                                             elif o_universe == "Demon Slayer": 
                                                 # fortitude or luck is based on health
                                                 fortitude = 0.0
@@ -8436,9 +8499,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Resolved: Hashirama Cells heal you for **{o_naruto_heal_buff}**")
                                                 turn_total = turn_total + 1
                                                 turn = 1
-
-
-
 
                                             elif o_universe == "Attack On Titan":
                                                 # fortitude or luck is based on health
@@ -8512,6 +8572,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                 turn_total = turn_total + 1
                                                 turn = 1
+                                            
                                             elif o_universe == "God Of War":  # God Of War Trait
                                                 # fortitude or luck is based on health
                                                 fortitude = 0.0
@@ -8555,6 +8616,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 
                                                 turn_total = turn_total + 1
                                                 turn = 1
+                                            
                                             elif o_universe == "Fate":  # Fate Trait
                                                 # fortitude or luck is based on health
                                                 fortitude = 0.0
@@ -8602,6 +8664,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 o_pet_used = False
                                                 turn_total = turn_total + 1
                                                 turn = 1
+                                            
                                             elif o_universe == "Kanto Region" or o_universe == "Johto Region" or o_universe == "Hoenn Region" or o_universe == "Sinnoh Region" or o_universe == "Kalos Region" or o_universe == "Unova Region" or o_universe == "Alola Region" or o_universe == "Galar Region":  # Pokemon Resolves
                                                 # fortitude or luck is based on health
                                                 fortitude = 0.0
@@ -8830,6 +8893,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_attack, o_special_move_description, turn_total,
                                                                 ocard_lvl_ap_buff, None)
                                                 previous_moves.append(f"(**{turn_total}**) **{o_card}** Exerted their 🩸 Spiritual Pressure - {dmg['MESSAGE']}")
+                                                if o_universe == "One Piece" and (o_card_tier in low_tier_cards or o_card_tier in mid_tier_cards or o_card_tier in high_tier_cards):
+                                                    if o_focus_count == 0:
+                                                        dmg['DMG'] = dmg['DMG'] * .6
+                                                
                                                 if dmg['REPEL']:
                                                     o_health = o_health - dmg['DMG']
                                                 elif dmg['ABSORB']:
@@ -8842,8 +8909,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     if omove3_element == water_element:
                                                         o_ultimate_water_buff = o_ultimate_water_buff + 35
                                                     t_health = t_health - dmg['DMG']
-                                                    
-
                                                 elif dmg['ELEMENT'] == time_element:
                                                     if o_stamina <= 80:
                                                         o_stamina = 0
@@ -9144,6 +9209,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             previous_moves.append(f"(**{turn_total}**) **{o_card}**'s 💠 Barrier Disabled!")
                                                         tarm_parry_active = False
                                                 else:
+                                                    if o_universe == "One Piece" and (o_card_tier in low_tier_cards or o_card_tier in mid_tier_cards or o_card_tier in high_tier_cards):
+                                                        if o_focus_count == 0:
+                                                            dmg['DMG'] = dmg['DMG'] * .6
+
                                                     if dmg['REPEL']:
                                                         o_health = o_health - int(dmg['DMG'])
                                                     elif dmg['ABSORB']:
@@ -9414,14 +9483,15 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 )
                                             )
 
-                                    if not randomized_battle and difficulty == "NORMAL" and mode != "ABYSS" or mode !="ABYSS" and mode != "SCENARIO" and not tutorial:
-                                            util_buttons.append(             
-                                                manage_components.create_button(
-                                                style=ButtonStyle.red,
-                                                label=f"Save",
-                                                custom_id="s"
+                                    if not randomized_battle and difficulty == "NORMAL" and mode != "ABYSS" or mode !="ABYSS" and not tutorial:
+                                        if mode != "SCENARIO":
+                                                util_buttons.append(             
+                                                    manage_components.create_button(
+                                                    style=ButtonStyle.red,
+                                                    label=f"Save",
+                                                    custom_id="s"
+                                                )
                                             )
-                                        )
 
                                     if mode in ai_co_op_modes and o_stamina>=20:
                                         coop_util_buttons = [
@@ -9732,6 +9802,38 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                     turn_total = turn_total + 1
                                                     turn = 0
+
+                                                if o_universe == "One Piece" and (o_card_tier in high_tier_cards):
+                                                    # fortitude or luck is based on health
+                                                    fortitude = 0.0
+                                                    low = o_health - (o_health * .75)
+                                                    high = o_health - (o_health * .66)
+                                                    fortitude = round(random.randint(int(low), int(high)))
+                                                    # Resolve Scaling
+                                                    o_resolve_health = round(fortitude + (.5 * o_resolve))
+                                                    o_resolve_attack = round(
+                                                        (.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                                    o_resolve_defense = round(
+                                                        (.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+
+                                                    t_ap_buff = t_ap_buff - 125
+
+                                                    o_stamina = o_stamina + o_resolve
+                                                    o_health = o_health + o_resolve_health
+                                                    o_attack = round(o_attack + o_resolve_attack)
+                                                    o_defense = round(o_defense - o_resolve_defense)
+                                                    o_used_resolve = True
+                                                    o_pet_used = False
+                                                    if mode in B_modes:
+                                                        embedVar.add_field(name=f"{t_card}'s Rebuke", value=f"{t_rebuke}",
+                                                                        inline=False)
+                                                        embedVar.set_footer(text=f"{o_card} this is your chance!")
+                                                    
+                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Resolved: Conquerors Haki!")
+
+                                                    turn_total = turn_total + 1
+                                                    turn = 1
+
 
                                                 elif o_universe == "Demon Slayer": 
                                                     # fortitude or luck is based on health
@@ -10514,6 +10616,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     t_attack, o_special_move_description, turn_total,
                                                                     ocard_lvl_ap_buff, None)
                                                     previous_moves.append(f"(**{turn_total}**) **{o_card}** Exerted their 🩸 Spiritual Pressure - {dmg['MESSAGE']}")
+
+                                                    if o_universe == "One Piece" and (o_card_tier in low_tier_cards or o_card_tier in mid_tier_cards or o_card_tier in high_tier_cards):
+                                                        if o_focus_count == 0:
+                                                            dmg['DMG'] = dmg['DMG'] * .6
+
+                                                    
                                                     if dmg['REPEL']:
                                                         o_health = o_health - dmg['DMG']
                                                     elif dmg['ABSORB']:
@@ -10846,6 +10954,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 await button_ctx.defer(ignore=True)
                                                             tarm_parry_active = False
                                                     else:
+                                                        if o_universe == "One Piece" and (o_card_tier in low_tier_cards or o_card_tier in mid_tier_cards or o_card_tier in high_tier_cards):
+                                                            if o_focus_count == 0:
+                                                                dmg['DMG'] = dmg['DMG'] * .6
+
                                                         if dmg['REPEL']:
                                                             o_health = o_health - int(dmg['DMG'])
                                                         elif dmg['ABSORB']:
@@ -11272,20 +11384,22 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 t_focus_count = t_focus_count + 1
 
                                 # o_pet_used = True
-                                fortitude = 0.0
-                                low = t_health - (t_health * .90)
-                                if low <= 0:
-                                    low = 1
-                                high = t_health - (t_health * .80)
-                                fortitude = round(random.randint(int(low), int(high)))
+                                fortitude = round(t_health * .1)
+                                if fortitude <= 50:
+                                    fortitude = 50
 
                                 t_stamina = t_focus
-                                t_healthcalc = round(((t_focus * .40) + (fortitude * 1)) / 2)
-                                t_attackcalc = round(.20 * ((t_focus * .15) + round(fortitude * 1)))
-                                t_defensecalc = round(.20 * ((t_focus * .10) + round(fortitude * 1)))
+                                t_healthcalc = round(fortitude)
+                                t_attackcalc = round(fortitude * (t_card_tier / 10))
+                                t_defensecalc = round(fortitude * (t_card_tier / 10))
                                 t_newhealth = 0
                                 healmessage = ""
                                 messagenumber = 0
+
+                                if t_universe == "One Piece" and (t_card_tier in mid_tier_cards or t_card_tier in high_tier_cards):
+                                    t_attackcalc = t_attackcalc + t_attackcalc
+                                    t_defensecalc = t_defensecalc + t_defensecalc
+
 
                                 if t_title_passive_type:
                                     if t_title_passive_type == "GAMBLE":
@@ -11818,6 +11932,33 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         await button_ctx.defer(ignore=True)
                                                         turn_total = turn_total + 1
                                                         turn = 1
+
+                                                    if t_universe == "One Piece" and (t_card_tier in high_tier_cards):
+                                                        # fortitude or luck is based on health
+                                                        fortitude = 0.0
+                                                        low = t_health - (t_health * .75)
+                                                        high = t_health - (t_health * .66)
+                                                        fortitude = round(random.randint(int(low), int(high)))
+                                                        # Resolve Scaling
+                                                        t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                                        t_resolve_attack = round(
+                                                            (.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                                        t_resolve_defense = round(
+                                                            (.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                                        o_ap_buff = o_ap_buff - 125
+
+                                                        t_stamina = t_stamina + t_resolve
+                                                        t_health = t_health + t_resolve_health
+                                                        t_attack = round(t_attack + t_resolve_attack)
+                                                        t_defense = round(t_defense - t_resolve_defense)
+                                                        t_used_resolve = True
+                                                        t_pet_used = False
+
+                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Conquerors Haki!")
+                                                        await button_ctx.defer(ignore=True)
+                                                        turn_total = turn_total + 1
+                                                        turn = 1
+                                                    
                                                     elif t_universe == "Demon Slayer": 
                                                         # fortitude or luck is based on health
                                                         fortitude = 0.0
@@ -12265,6 +12406,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                         t_max_health, o_attack, t_special_move_description, turn_total,
                                                                         tcard_lvl_ap_buff, None)
                                                         previous_moves.append(f"(**{turn_total}**) **{t_card}** Exerted their 🩸 Spiritual Pressure - {dmg['MESSAGE']}")
+                                                        
+                                                        if t_universe == "One Piece" and (t_card_tier in low_tier_cards or t_card_tier in mid_tier_cards or t_card_tier in high_tier_cards):
+                                                            if t_focus_count == 0:
+                                                                dmg['DMG'] = dmg['DMG'] * .6
+
+
                                                         if dmg['REPEL']:
                                                             t_health = t_health - dmg['DMG']
                                                         elif dmg['ABSORB']:
@@ -12577,6 +12724,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 oarm_parry_active = False
                                                         
                                                         else:
+                                                            if t_universe == "One Piece" and (t_card_tier in low_tier_cards or t_card_tier in mid_tier_cards or t_card_tier in high_tier_cards):
+                                                                if t_focus_count == 0:
+                                                                    dmg['DMG'] = dmg['DMG'] * .6
+
+
                                                             if dmg['REPEL']:
                                                                 t_health = t_health - int(dmg['DMG'])
                                                             elif dmg['ABSORB']:
@@ -12995,6 +13147,35 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: PLUS ULTRA!")
                                                     turn_total = turn_total + 1
                                                     turn = 1
+
+                                                if t_universe == "One Piece" and (t_card_tier in high_tier_cards):
+                                                    # fortitude or luck is based on health
+                                                    fortitude = 0.0
+                                                    low = t_health - (t_health * .75)
+                                                    high = t_health - (t_health * .66)
+                                                    fortitude = round(random.randint(int(low), int(high)))
+                                                    # Resolve Scaling
+                                                    t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                                    t_resolve_attack = round(
+                                                        (.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                                    t_resolve_defense = round(
+                                                        (.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                                    
+                                                    o_ap_buff = o_ap_buff - 125
+                                                    
+                                                    t_stamina = t_stamina + t_resolve
+                                                    t_health = t_health + t_resolve_health
+                                                    t_attack = round(t_attack + t_resolve_attack)
+                                                    t_defense = round(t_defense - t_resolve_defense)
+                                                    t_used_resolve = True
+                                                    t_pet_used = False
+
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Conquerors Haki!")
+                                                    await button_ctx.defer(ignore=True)
+                                                    turn_total = turn_total + 1
+                                                    turn = 1
+
+
                                                 elif t_universe == "Demon Slayer": 
                                                     # fortitude or luck is based on health
                                                     fortitude = 0.0
@@ -13426,6 +13607,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     t_max_health, o_attack, t_special_move_description, turn_total,
                                                                     tcard_lvl_ap_buff, None)
                                                     previous_moves.append(f"(**{turn_total}**) **{t_card}** Exerted their 🩸 Spiritual Pressure - {dmg['MESSAGE']}")
+                                                    
+                                                    if t_universe == "One Piece" and (t_card_tier in low_tier_cards or t_card_tier in mid_tier_cards or t_card_tier in high_tier_cards):
+                                                        if t_focus_count == 0:
+                                                            dmg['DMG'] = dmg['DMG'] * .6
+                                                    
                                                     if dmg['REPEL']:
                                                         t_health = t_health - dmg['DMG']
                                                     elif dmg['ABSORB']:
@@ -13718,6 +13904,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                             oarm_parry_active = False
                                                     else:
+                                                        if t_universe == "One Piece" and (t_card_tier in low_tier_cards or t_card_tier in mid_tier_cards or t_card_tier in high_tier_cards):
+                                                            if t_focus_count == 0:
+                                                                dmg['DMG'] = dmg['DMG'] * .6
+
                                                         if dmg['REPEL']:
                                                             t_health = t_health - int(dmg['DMG'])
                                                         elif dmg['ABSORB']:
@@ -14198,6 +14388,33 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: PLUS ULTRA!")
                                                 turn_total = turn_total + 1
                                                 turn = 1
+
+                                            elif t_universe == "One Piece" and (t_card_tier in high_tier_cards):
+                                                # fortitude or luck is based on health
+                                                fortitude = 0.0
+                                                low = t_health - (t_health * .75)
+                                                high = t_health - (t_health * .66)
+                                                fortitude = round(random.randint(int(low), int(high)))
+                                                # Resolve Scaling
+                                                t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                                t_resolve_attack = round(
+                                                    (.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                                t_resolve_defense = round(
+                                                    (.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                                o_ap_buff = o_ap_buff - 125
+                                                
+                                                t_stamina = t_stamina + t_resolve
+                                                t_health = t_health + t_resolve_health
+                                                t_attack = round(t_attack + t_resolve_attack)
+                                                t_defense = round(t_defense - t_resolve_defense)
+                                                t_used_resolve = True
+                                                t_pet_used = False
+
+                                                previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Conquerors Haki!")
+                                                await button_ctx.defer(ignore=True)
+                                                turn_total = turn_total + 1
+                                                turn = 1
+
 
                                             elif t_universe == "Demon Slayer": 
                                                 # fortitude or luck is based on health
@@ -14932,6 +15149,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_max_health, o_attack, t_special_move_description, turn_total,
                                                                 tcard_lvl_ap_buff, None)
                                                 previous_moves.append(f"(**{turn_total}**) **{t_card}** Exerted their 🩸 Spiritual Pressure - {dmg['MESSAGE']}")
+                                                
+                                                if t_universe == "One Piece" and (t_card_tier in low_tier_cards or t_card_tier in mid_tier_cards or t_card_tier in high_tier_cards):
+                                                    if t_focus_count == 0:
+                                                        dmg['DMG'] = dmg['DMG'] * .6
+
+                                                
                                                 if dmg['REPEL']:
                                                     t_health = t_health - dmg['DMG']
                                                 elif dmg['ABSORB']:
@@ -15232,6 +15455,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                                 carm_parry_active = False
                                                         else:
+                                                            if t_universe == "One Piece" and (t_card_tier in low_tier_cards or t_card_tier in mid_tier_cards or t_card_tier in high_tier_cards):
+                                                                if t_focus_count == 0:
+                                                                    dmg['DMG'] = dmg['DMG'] * .6
+
+
                                                             if dmg['REPEL']:
                                                                 t_health = t_health - int(dmg['DMG'])
                                                             elif dmg['ABSORB']:
@@ -15555,6 +15783,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                                 oarm_parry_active = False
                                                         else:
+                                                            if t_universe == "One Piece" and (t_card_tier in low_tier_cards or t_card_tier in mid_tier_cards or t_card_tier in high_tier_cards):
+                                                                if t_focus_count == 0:
+                                                                    dmg['DMG'] = dmg['DMG'] * .6
+
                                                             if dmg['REPEL']:
                                                                 t_health = t_health - int(dmg['DMG'])
                                                             elif dmg['ABSORB']:
@@ -15886,6 +16118,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                             oarm_parry_active = False
                                                     else:
+                                                        if t_universe == "One Piece" and (t_card_tier in low_tier_cards or t_card_tier in mid_tier_cards or t_card_tier in high_tier_cards):
+                                                            if t_focus_count == 0:
+                                                                dmg['DMG'] = dmg['DMG'] * .6
+
                                                         if dmg['REPEL']:
                                                             t_health = t_health - int(dmg['DMG'])
                                                         elif dmg['ABSORB']:
@@ -16257,21 +16493,24 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     c_pet_used = False
                                     c_focus_count = c_focus_count + 1
                                     # fortitude or luck is based on health
-                                    fortitude = 0.0
-                                    low = c_health - (c_health * .90)
-                                    if low <=0:
-                                        low = 1
-                                    high = c_health - (c_health * .80)
-                                    fortitude = round(random.randint(int(low), int(high)))
+                                    fortitude = round(c_health * .1)
+                                    if fortitude <= 50:
+                                        fortitude = 50
 
                                     c_stamina = c_focus
-                                    c_healthcalc = round(((c_focus * .40) + (fortitude * 1)) / 2)
-                                    c_attackcalc = round(.20 * ((c_focus * .15) + round(fortitude * 1)))
-                                    c_defensecalc = round(.20 * ((c_focus * .15) + round(fortitude * 1)))
+                                    c_healthcalc = round(fortitude)
+                                    c_attackcalc = round(fortitude * (c_card_tier / 10))
+                                    c_defensecalc = round(fortitude * (c_card_tier / 10))
                                     # check if user is at max health and sets messages and focus health value
                                     c_newhealth = 0
                                     healmessage = ""
                                     messagenumber = 0
+
+                                    if c_universe == "One Piece" and (c_card_tier in low_tier_cards or c_card_tier in mid_tier_cards or c_card_tier in high_tier_cards):
+                                        c_attackcalc = c_attackcalc + c_attackcalc
+                                        c_defensecalc = c_defensecalc + c_defensecalc
+
+
                                     if c_title_passive_type:
                                         if c_title_passive_type == "GAMBLE":
                                             c_healthcalc = c_title_passive_value
@@ -16779,6 +17018,33 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     value="You do not lose a turn after you Resolve.")
                                                     #await private_channel.send(embed=embedVar)
                                                     previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 Resolved: PLUS ULTRA!")
+
+                                                    turn_total = turn_total + 1
+                                                    turn = 2
+
+                                                elif c_universe == "One Piece" and (c_card_tier in high_tier_cards):
+                                                    # fortitude or luck is based on health
+                                                    fortitude = 0.0
+                                                    low = c_health - (c_health * .75)
+                                                    high = c_health - (c_health * .66)
+                                                    fortitude = round(random.randint(int(low), int(high)))
+                                                    # Resolve Scaling
+                                                    c_resolve_health = round(fortitude + (.5 * c_resolve))
+                                                    c_resolve_attack = round(
+                                                        (.30 * c_defense) * (c_resolve / (.50 * c_defense)))
+                                                    c_resolve_defense = round(
+                                                        (.30 * c_defense) * (c_resolve / (.50 * c_defense)))
+                                                    
+                                                    t_ap_buff = t_ap_buff - 125
+
+                                                    c_stamina = c_stamina + c_resolve
+                                                    c_health = c_health + c_resolve_health
+                                                    c_attack = round(c_attack + c_resolve_attack)
+                                                    c_defense = round(c_defense - c_resolve_defense)
+                                                    c_used_resolve = True
+                                                    c_pet_used = False
+
+                                                    previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 Resolved: Conquerors Haki!")
 
                                                     turn_total = turn_total + 1
                                                     turn = 2
@@ -17562,6 +17828,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             #await private_channel.send(embed=embedVar)
                                                             tarm_parry_active = False
                                                     else:
+                                                        if c_universe == "One Piece" and (c_card_tier in low_tier_cards or c_card_tier in mid_tier_cards or c_card_tier in high_tier_cards):
+                                                            if c_focus_count == 0:
+                                                                dmg['DMG'] = dmg['DMG'] * .6
+
                                                         if dmg['REPEL']:
                                                             c_health = c_health - int(dmg['DMG'])
                                                         elif dmg['ABSORB']:
@@ -18017,7 +18287,35 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         await button_ctx.defer(ignore=True)
                                                         turn_total = turn_total + 1
                                                         turn = 2
-                                                    
+
+                                                    if c_universe == "One Piece" and (c_card_tier in high_tier_cards):
+                                                        # fortitude or luck is based on health
+                                                        fortitude = 0.0
+                                                        low = c_health - (c_health * .75)
+                                                        high = c_health - (c_health * .66)
+                                                        fortitude = round(random.randint(int(low), int(high)))
+                                                        # Resolve Scaling
+                                                        c_resolve_health = round(fortitude + (.5 * c_resolve))
+                                                        c_resolve_attack = round(
+                                                            (.30 * c_defense) * (c_resolve / (.50 * c_defense)))
+                                                        c_resolve_defense = round(
+                                                            (.30 * c_defense) * (c_resolve / (.50 * c_defense)))
+                                                        
+                                                        t_ap_buff = t_ap_buff - 125
+
+                                                        c_stamina = c_stamina + c_resolve
+                                                        c_health = c_health + c_resolve_health
+                                                        c_attack = round(c_attack + c_resolve_attack)
+                                                        c_defense = round(c_defense - c_resolve_defense)
+                                                        c_used_resolve = True
+                                                        c_pet_used = False
+
+                                                        previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 Resolved: Conquerors Haki!")
+
+                                                        turn_total = turn_total + 1
+                                                        turn = 2
+
+
                                                     elif c_universe == "Demon Slayer": 
                                                         # fortitude or luck is based on health
                                                         fortitude = 0.0
@@ -18593,6 +18891,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     c_max_health, t_attack, c_special_move_description,
                                                                     turn_total, ccard_lvl_ap_buff, None)
                                                         previous_moves.append(f"(**{turn_total}**) **{c_card}** Exerted their 🩸 Spiritual Pressure - {dmg['MESSAGE']}")
+                                                        
+                                                        if c_universe == "One Piece" and (c_card_tier in low_tier_cards or c_card_tier in mid_tier_cards or c_card_tier in high_tier_cards):
+                                                            if c_focus_count == 0:
+                                                                dmg['DMG'] = dmg['DMG'] * .6
+                                                        
                                                         if dmg['REPEL']:
                                                             c_health = c_health - dmg['DMG']
                                                         elif dmg['ABSORB']:
@@ -18922,6 +19225,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 tarm_parry_active = False
                                                                 # await button_ctx.defer(ignore=True)
                                                         else:
+
+                                                            if c_universe == "One Piece" and (c_card_tier in low_tier_cards or c_card_tier in mid_tier_cards or c_card_tier in high_tier_cards):
+                                                                if c_focus_count == 0:
+                                                                    dmg['DMG'] = dmg['DMG'] * .6
+
+
                                                             if dmg['REPEL']:
                                                                 c_health = c_health - int(dmg['DMG'])
                                                             elif dmg['ABSORB']:
@@ -19323,20 +19632,22 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 if t_stamina < 10:
                                     t_pet_used = False
                                     t_focus_count = t_focus_count + 1
-                                    fortitude = 0.0
-                                    low = t_health - (t_health * .90)
-                                    if low <=0:
-                                        low = 1
-                                    high = t_health - (t_health * .80)
-                                    fortitude = round(random.randint(int(low), int(high)))
+                                    fortitude = round(t_health * .1)
+                                    if fortitude <= 50:
+                                        fortitude = 50
 
                                     t_stamina = t_focus
-                                    t_healthcalc = round(((t_focus * .40) + (fortitude * 1)) / 2)
-                                    t_attackcalc = round(.20 * ((t_focus * .15) + round(fortitude * 1)))
-                                    t_defensecalc = round(.20 * ((t_focus * .10) + round(fortitude * 1)))
+                                    t_healthcalc = round(fortitude)
+                                    t_attackcalc = round(fortitude * (t_card_tier / 10))
+                                    t_defensecalc = round(fortitude * (t_card_tier / 10))
                                     t_newhealth = 0
                                     healmessage = ""
                                     messagenumber = 0
+
+                                    if t_universe == "One Piece" and (t_card_tier in mid_tier_cards or t_card_tier in high_tier_cards):
+                                        t_attackcalc = t_attackcalc + t_attackcalc
+                                        t_defensecalc = t_defensecalc + t_defensecalc
+
                                     if t_title_passive_type:
                                         if t_title_passive_type == "GAMBLE":
                                             t_healthcalc = t_title_passive_value
@@ -19811,7 +20122,33 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 #await private_channel.send(embed=embedVar)
                                                 turn_total = turn_total + 1
                                                 turn = 3
-                                            
+
+                                            elif t_universe == "One Piece" and (t_card_tier in high_tier_cards):
+                                                # fortitude or luck is based on health
+                                                fortitude = 0.0
+                                                low = t_health - (t_health * .75)
+                                                high = t_health - (t_health * .66)
+                                                fortitude = round(random.randint(int(low), int(high)))
+                                                # Resolve Scaling
+                                                t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                                t_resolve_attack = round(
+                                                    (.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                                t_resolve_defense = round(
+                                                    (.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                                o_ap_buff = o_ap_buff - 125
+                                                
+                                                t_stamina = t_stamina + t_resolve
+                                                t_health = t_health + t_resolve_health
+                                                t_attack = round(t_attack + t_resolve_attack)
+                                                t_defense = round(t_defense - t_resolve_defense)
+                                                t_used_resolve = True
+                                                t_pet_used = False
+
+                                                previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Conquerors Haki!")
+                                                await button_ctx.defer(ignore=True)
+                                                turn_total = turn_total + 1
+                                                turn = 3
+                                    
                                             elif t_universe == "Demon Slayer": 
                                                 # fortitude or luck is based on health
                                                 fortitude = 0.0
@@ -20408,6 +20745,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_max_health, o_attack, t_special_move_description, turn_total,
                                                                 tcard_lvl_ap_buff, None)
                                                 previous_moves.append(f"(**{turn_total}**) **{t_card}** Exerted their 🩸 Spiritual Pressure - {dmg['MESSAGE']}")
+                                                if c_universe == "One Piece" and (c_card_tier in low_tier_cards or c_card_tier in mid_tier_cards or c_card_tier in high_tier_cards):
+                                                    if c_focus_count == 0:
+                                                        dmg['DMG'] = dmg['DMG'] * .6
+
+                                                
                                                 if dmg['REPEL']:
                                                     t_health = t_health - dmg['DMG']
                                                 elif dmg['ABSORB']:
@@ -20717,6 +21059,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             #await private_channel.send(embed=embedVar)
                                                             oarm_parry_active = False
                                                     else:
+                                                        if t_universe == "One Piece" and (t_card_tier in low_tier_cards or t_card_tier in mid_tier_cards or t_card_tier in high_tier_cards):
+                                                            if t_focus_count == 0:
+                                                                dmg['DMG'] = dmg['DMG'] * .6
+
                                                         if dmg['REPEL']:
                                                             t_health = t_health - int(dmg['DMG'])
                                                         elif dmg['ABSORB']:
@@ -21063,6 +21409,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             #await private_channel.send(embed=embedVar)
                                                             carm_parry_active = False
                                                     else:
+                                                        if t_universe == "One Piece" and (t_card_tier in low_tier_cards or t_card_tier in mid_tier_cards or t_card_tier in high_tier_cards):
+                                                            if t_focus_count == 0:
+                                                                dmg['DMG'] = dmg['DMG'] * .6
+
                                                         if dmg['REPEL']:
                                                             t_health = t_health - int(dmg['DMG'])
                                                         elif dmg['ABSORB']:
@@ -22189,7 +22539,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 await channel.send(f"'PLAYER': **{str(ctx.author)}**, 'GUILD': **{str(ctx.author.guild)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
                 return
 
-
     except Exception as ex:
         trace = []
         tb = ex.__traceback__
@@ -22480,6 +22829,10 @@ async def scenario_drop(self, ctx, scenario, difficulty):
         vault_query = {'DID': str(ctx.author.id)}
         vault = db.queryVault(vault_query)
         # player_info = db.queryUser({'DID': str(vault['DID'])})
+        
+        owned_destinies = []
+        for destiny in vault['DESTINY']:
+            owned_destinies.append(destiny['NAME'])
 
 
         owned_arms = []
@@ -22491,38 +22844,52 @@ async def scenario_drop(self, ctx, scenario, difficulty):
         hard = "HARD_DROPS"
         rewards = []
         rewarded = ""
+        mode = ""
 
         if difficulty == "EASY":
             rewards = scenario[easy]
+            mode = "TALES"
         if difficulty == "NORMAL":
             rewards = scenario[normal]
+            mode = "TALES"
         if difficulty == "HARD":
             rewards = scenario[hard]
-
+            mode = "DUNGEON"
         if len(rewards) > 1:
             num_of_potential_rewards = len(rewards)
             selection = round(random.randint(0, num_of_potential_rewards))
             rewarded = rewards[selection]
         else:
             rewarded = rewards[0]
-
+        
+        # Add Card Check
         arm = db.queryArm({"ARM": rewarded})
-        arm_name = arm['ARM']
-        element_emoji = crown_utilities.set_emoji(arm['ELEMENT'])
-        arm_passive = arm['ABILITIES'][0]
-        arm_passive_type = list(arm_passive.keys())[0]
-        arm_passive_value = list(arm_passive.values())[0]
-        reward = f"{element_emoji} {arm_passive_type.title()} **{arm_name}** Attack: **{arm_passive_value}** dmg"
+        if arm:
+            arm_name = arm['ARM']
+            element_emoji = crown_utilities.set_emoji(arm['ELEMENT'])
+            arm_passive = arm['ABILITIES'][0]
+            arm_passive_type = list(arm_passive.keys())[0]
+            arm_passive_value = list(arm_passive.values())[0]
+            reward = f"{element_emoji} {arm_passive_type.title()} **{arm_name}** Attack: **{arm_passive_value}** dmg"
 
-        if len(vault['ARMS']) >= 25:
-            await crown_utilities.bless(10000, ctx.author.id)
-            return f"You're maxed out on Arms! You earned :coin: 10,000 instead!"
-        elif rewarded in owned_arms:
-            await crown_utilities.bless(10000, ctx.author.id)
-            return f"You already own {reward}! You earn :coin: **10000**."
+            if len(vault['ARMS']) >= 25:
+                await crown_utilities.bless(10000, ctx.author.id)
+                return f"You're maxed out on Arms! You earned :coin: 10,000 instead!"
+            elif rewarded in owned_arms:
+                await crown_utilities.bless(10000, ctx.author.id)
+                return f"You already own {reward}! You earn :coin: **10000**."
+            else:
+                response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'ARMS': {'ARM': rewarded, 'DUR': 100}}})
+                return f"You earned _Arm:_ {reward} with ⚒️**{str(100)} Durability**!"
         else:
-            response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'ARMS': {'ARM': rewarded, 'DUR': 100}}})
-            return f"You earned _Arm:_ {reward} with ⚒️**{str(100)} Durability**!"
+            card = db.queryCard({"NAME": rewarded})
+            response = await crown_utilities.store_drop_card(str(ctx.author.id), card["NAME"], card["UNIVERSE"], vault, owned_destinies, 3000, 1000, mode, False, 0)
+            if not response:
+                bless_amount = (5000 + (2500 * matchcount)) * (1 + rebirth)
+                await crown_utilities.bless(bless_amount, str(ctx.author.id))
+                return f"You earned :coin: **{bless_amount}**!"
+            return response
+
     except Exception as ex:
         trace = []
         tb = ex.__traceback__
@@ -23529,34 +23896,6 @@ Stamina_Enhancer_Check = ['STAM', 'DRAIN']
 Control_Enhancer_Check = ['SOULCHAIN']
 Damage_Enhancer_Check = ['DESTRUCTION', 'BLAST']
 Turn_Enhancer_Check = ['WAVE', 'CREATION']
-Crest_dict = {'Unbound': ':ideograph_advantage:',
-              'My Hero Academia': ':sparkle:',
-              'League Of Legends': ':u6307:',
-              'Kanto Region': ':chart:',
-              'Naruto': ':u7121:',
-              'Bleach': ':u6709:',
-              'God Of War': ':u7533:',
-              'Chainsawman': ':accept:',
-              'One Punch Man': ':u55b6:',
-              'Johto Region': ':u6708:',
-              'Black Clover': ':ophiuchus:',
-              'Demon Slayer': ':aries:',
-              'Attack On Titan': ':taurus:',
-              '7ds': ':capricorn:',
-              'Hoenn Region': ':leo:',
-              'Digimon': ':cancer:',
-              'Fate': ':u6e80:',
-              'Solo Leveling': ':u5408:',
-              'Souls': ':sos:',
-              'Dragon Ball Z': ':u5272:',
-              'Sinnoh Region': ':u7981:',
-              'Death Note': ':white_flower:',
-              'Crown Rift Awakening': ':u7a7a:',
-              'Crown Rift Slayers': ':sa:',
-              'Crown Rift Madness': ':m:',
-              'Persona': ':o:',
-              'YuYu Hakusho': ':wheel_of_dharma:'
-              }
 take_chances_messages = ['You lost immediately.', 'You got smoked!', 'You fainted before the fight even started.',
                          'That... was just sad. You got dropped with ease.', 'Too bad, so sad. You took the L.',
                          'Annnd another L. You lost.', 'Annnnnnnnnnnd another L! You lost.',

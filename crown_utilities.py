@@ -512,11 +512,11 @@ async def cardlevel(card: str, player, mode: str, universe: str):
             # Level Up Code
             if exp >= (lvl_req - exp_gain):
                 if (lvl + 1) % 2 == 0:
-                    atk_def_buff = 1
+                    atk_def_buff = level_sync["ATK_DEF"]
                 if (lvl + 1) % 3 == 0:
-                    ap_buff = 1
+                    ap_buff = level_sync["AP"]
                 if (lvl + 1) % 20 == 0:
-                    hlt_buff = 25
+                    hlt_buff = level_sync["HLT"]
                 query = {'DID': str(player)}
                 update_query = {'$set': {'CARD_LEVELS.$[type].' + "EXP": 0},
                                 '$inc': {'CARD_LEVELS.$[type].' + "LVL": 1, 'CARD_LEVELS.$[type].' + "ATK": atk_def_buff,
@@ -964,3 +964,55 @@ async def player_check(ctx):
     else:
         await ctx.send(f"{ctx.author.mention}, you must register using /register to play Crown Unlimited.")
         return False
+
+
+
+
+def level_sync_stats(lvl, stat):
+    stat_sync = 0
+
+    if stat == "HLT":
+        stat_sync = round((lvl / 20) * level_sync["HLT"])
+        return stat_sync
+    if stat == "ATK_DEF":
+        stat_sync = round(lvl * 2)
+        return stat_sync
+    if stat == "AP":
+        stat_sync = round((lvl / 3) * 1)
+        return stat_sync
+
+level_sync = {
+    "HLT": 100,
+    "ATK_DEF": 1,
+    "AP": 1
+}
+
+crest_dict = {'Unbound': ':ideograph_advantage:',
+              'My Hero Academia': ':sparkle:',
+              'League Of Legends': ':u6307:',
+              'Kanto Region': ':chart:',
+              'Naruto': ':u7121:',
+              'Bleach': ':u6709:',
+              'God Of War': ':u7533:',
+              'Chainsawman': ':accept:',
+              'One Punch Man': ':u55b6:',
+              'Johto Region': ':u6708:',
+              'Black Clover': ':ophiuchus:',
+              'Demon Slayer': ':aries:',
+              'Attack On Titan': ':taurus:',
+              '7ds': ':capricorn:',
+              'Hoenn Region': ':leo:',
+              'Digimon': ':cancer:',
+              'Fate': ':u6e80:',
+              'Solo Leveling': ':u5408:',
+              'Souls': ':sos:',
+              'Dragon Ball Z': ':u5272:',
+              'Sinnoh Region': ':u7981:',
+              'Death Note': ':white_flower:',
+              'Crown Rift Awakening': ':u7a7a:',
+              'Crown Rift Slayers': ':sa:',
+              'Crown Rift Madness': ':m:',
+              'Persona': ':o:',
+              'YuYu Hakusho': ':wheel_of_dharma:',
+              'One Piece': ':sailboat:'
+              }

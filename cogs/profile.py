@@ -21,7 +21,7 @@ from PIL import Image, ImageFont, ImageDraw
 import requests
 from collections import ChainMap
 import DiscordUtils
-from .crownunlimited import showcard, cardback, enhancer_mapping, title_enhancer_mapping, enhancer_suffix_mapping, title_enhancer_suffix_mapping, passive_enhancer_suffix_mapping, battle_commands, Crest_dict, destiny as update_destiny_call
+from .crownunlimited import showcard, cardback, enhancer_mapping, title_enhancer_mapping, enhancer_suffix_mapping, title_enhancer_suffix_mapping, passive_enhancer_suffix_mapping, battle_commands, destiny as update_destiny_call
 import random
 import textwrap
 from discord_slash import cog_ext, SlashContext
@@ -263,10 +263,10 @@ class Profile(commands.Cog):
                         if x['CARD'] == card['NAME']:
                             card_lvl = x['LVL']
                             card_exp = x['EXP']
-                            card_lvl_ap_buff = x['AP']
-                            card_lvl_attack_buff = x['ATK']
-                            card_lvl_defense_buff = x['DEF']
-                            card_lvl_hlt_buff = x['HLT']
+                            card_lvl_ap_buff = crown_utilities.level_sync_stats(card_lvl, "AP")
+                            card_lvl_attack_buff = crown_utilities.level_sync_stats(card_lvl, "ATK_DEF")
+                            card_lvl_defense_buff = crown_utilities.level_sync_stats(card_lvl, "ATK_DEF")
+                            card_lvl_hlt_buff = crown_utilities.level_sync_stats(card_lvl, "HLT")
 
                     oarm_universe = arm['UNIVERSE']
                     o_title_universe = title['UNIVERSE']
@@ -661,10 +661,10 @@ class Profile(commands.Cog):
                             lvl = f"{licon} **{cl['LVL']}**"
                             card_lvl = cl['LVL']
                             card_exp = cl['EXP']
-                            card_lvl_ap_buff = cl['AP']
-                            card_lvl_attack_buff = cl['ATK']
-                            card_lvl_defense_buff = cl['DEF']
-                            card_lvl_hlt_buff = cl['HLT']
+                            card_lvl_ap_buff = crown_utilities.level_sync_stats(card_lvl, "AP")
+                            card_lvl_attack_buff = crown_utilities.level_sync_stats(card_lvl, "ATK_DEF")
+                            card_lvl_defense_buff = crown_utilities.level_sync_stats(card_lvl, "ATK_DEF")
+                            card_lvl_hlt_buff = crown_utilities.level_sync_stats(card_lvl, "HLT")
                             
                     
                     o_passive = resp['PASS'][0] 
@@ -1159,6 +1159,14 @@ class Profile(commands.Cog):
             destiny_card_details = []
             
             for card in cards:
+                moveset = card['MOVESET']
+                move3 = moveset[2]
+                move2 = moveset[1]
+                move1 = moveset[0]
+                basic_attack_emoji = crown_utilities.set_emoji(list(move1.values())[2])
+                super_attack_emoji = crown_utilities.set_emoji(list(move2.values())[2])
+                ultimate_attack_emoji = crown_utilities.set_emoji(list(move3.values())[2])
+
                 index = vault['STORAGE'].index(card['NAME'])
                 level = ""
                 for c in vault['CARD_LEVELS']:
@@ -1167,13 +1175,13 @@ class Profile(commands.Cog):
                 available = ""
                 if card['EXCLUSIVE'] and not card['HAS_COLLECTION']:
                     dungeon_card_details.append(
-                        f"[{str(index)}] :mahjong: {card['TIER']} **{card['NAME']}**\n**🔱**: {str(level)} :heart: {card['HLT']} :dagger: {card['ATK']}  🛡️ {card['DEF']}\n")
+                        f"[{str(index)}] :mahjong: {card['TIER']} **{card['NAME']}** {basic_attack_emoji} {super_attack_emoji} {ultimate_attack_emoji}\n**🔱**: {str(level)} :heart: {card['HLT']} :dagger: {card['ATK']}  🛡️ {card['DEF']}\n")
                 elif not card['HAS_COLLECTION']:
                     tales_card_details.append(
-                        f"[{str(index)}] :mahjong: {card['TIER']} **{card['NAME']}**\n**🔱**: {str(level)} :heart: {card['HLT']} :dagger: {card['ATK']}  🛡️ {card['DEF']}\n")
+                        f"[{str(index)}] :mahjong: {card['TIER']} **{card['NAME']}** {basic_attack_emoji} {super_attack_emoji} {ultimate_attack_emoji}\n**🔱**: {str(level)} :heart: {card['HLT']} :dagger: {card['ATK']}  🛡️ {card['DEF']}\n")
                 elif card['HAS_COLLECTION']:
                     destiny_card_details.append(
-                        f"[{str(index)}] :mahjong: {card['TIER']} **{card['NAME']}**\n**🔱**: {str(level)} :heart: {card['HLT']} :dagger: {card['ATK']}  🛡️ {card['DEF']}\n")
+                        f"[{str(index)}] :mahjong: {card['TIER']} **{card['NAME']}** {basic_attack_emoji} {super_attack_emoji} {ultimate_attack_emoji}\n**🔱**: {str(level)} :heart: {card['HLT']} :dagger: {card['ATK']}  🛡️ {card['DEF']}\n")
 
             all_cards = []
             if tales_card_details:
@@ -2117,8 +2125,29 @@ class Profile(commands.Cog):
         for arms in vault['ARMS']:
             if arms['ARM'] == current_arm:
                 current_durability = arms['DUR']
-            
 
+        card_info = {}
+        for level in vault['CARD_LEVELS']:
+            if level['CARD'] == current_card:
+                card_info = level
+
+        lvl = card_info['LVL']
+
+        
+        hundred_levels = 650000
+
+        if lvl >= 200 and lvl < 299:
+            hundred_levels = 30000000
+        elif lvl >= 300 and lvl < 399:
+            hundred_levels = 70000000
+        elif lvl >= 400 and lvl < 499:
+            hundred_levels = 90000000
+        elif lvl >= 500 and lvl < 599:
+            hundred_levels = 150000000
+        elif lvl >= 600 and lvl < 699:
+            hundred_levels = 300000000
+        # if lvl >= 700 and lvl <= 800:
+        #     hundred_levels = hundred_levels * 2000
         sell_buttons = [
                 manage_components.create_button(
                     style=ButtonStyle.green,
@@ -2159,12 +2188,13 @@ class Profile(commands.Cog):
                     custom_id="6"
                 )
         ]
+        
         sell_buttons_action_row = manage_components.create_actionrow(*sell_buttons)
         util_sell_buttons_action_row = manage_components.create_actionrow(*util_sell_buttons)
         embedVar = discord.Embed(title=f"🔨 | **Blacksmith** - {icon}{'{:,}'.format(balance)} ", description=textwrap.dedent(f"""\
         Welcome {ctx.author.mention}!
         Purchase **Card XP** and **Arm Durability**!
-        🎴 Card:  **{current_card}**
+        🎴 Card:  **{current_card}** 🔱**{lvl}**
         🦾 Arm: **{current_arm}** *{boss_message}*
         
 
@@ -2172,7 +2202,7 @@ class Profile(commands.Cog):
         
         🔋 2️⃣ **30 Levels** for :dollar: **220,000**
 
-        🔋 3️⃣ **100 Levels** for :moneybag: **650,000**
+        🔋 3️⃣ **100 Levels** for :moneybag: **{'{:,}'.format(hundred_levels)}**
 
         ⚒️ 4️⃣ **50 Durability** for :dollar: **{durability_message}**
 
@@ -2198,14 +2228,20 @@ class Profile(commands.Cog):
             price = 0
             exp_boost_buttons = ["1", "2", "3"]
             if button_ctx.custom_id == "1":
+                if lvl >= 200:
+                    await button_ctx.send("You can only purchase option 3 when leveling past level 200.")
+                    return
                 levels_gained = 10
                 price = 80000
             if button_ctx.custom_id == "2":
+                if lvl >= 200:
+                    await button_ctx.send("You can only purchase option 3 when leveling past level 200.")
+                    return
                 levels_gained = 30
                 price = 220000
             if button_ctx.custom_id == "3":
                 levels_gained = 100
-                price=650000
+                price=hundred_levels
             if button_ctx.custom_id == "5":
                 levels_gained = 50
                 price=100000
@@ -2227,7 +2263,7 @@ class Profile(commands.Cog):
                         card_info = level
 
                 lvl = card_info['LVL']
-                max_lvl = 200
+                max_lvl = 700
                 if lvl >= max_lvl:
                     await button_ctx.send(f"**{current_card}** is already at max Smithing level. You may level up in **battle**, but you can no longer purchase levels for this card.", hidden=True)
                     await msg.edit(components=[])
@@ -3605,6 +3641,7 @@ class Profile(commands.Cog):
             gems = 0
             all_universes = db.queryAllUniverse()
             user = db.queryUser({'DID': str(ctx.author.id)})
+            completed_dungeons = user['DUNGEONS']
             card_info = db.queryCard({"NAME": user['CARD']})
             destiny_alert_message = f"No Skins or Destinies available for {card_info['NAME']}"
             destiny_alert = False
@@ -3612,11 +3649,9 @@ class Profile(commands.Cog):
                 await ctx.send("🔓 Unlock Crafting by completeing Floor 8 of the 🌑 Abyss! Use /solo to enter the abyss.")
                 return
 
-            
-            
             #skin_alert_message = f"No Skins for {card_info['NAME']}"
             
-                #skin_alert_message = f"No Skins for {card_info['NAME']}"
+            #skin_alert_message = f"No Skins for {card_info['NAME']}"
             available_universes = []
             riftShopOpen = False
             shopName = ':shopping_cart: Shop'
@@ -3758,7 +3793,7 @@ class Profile(commands.Cog):
                     universe = str(button_ctx.origin_message.embeds[0].title)
                     if button_ctx.custom_id == "UNIVERSE_HEART":
                         price = 5000000
-                        response = await craft_adjuster(self, ctx, vault, universe, price, button_ctx.custom_id, None)
+                        response = await craft_adjuster(self, ctx, vault, universe, price, button_ctx.custom_id, completed_dungeons, None)
                         if response['SUCCESS']:
                             await button_ctx.send(f"{response['MESSAGE']}")
                             self.stop = True
@@ -3768,7 +3803,7 @@ class Profile(commands.Cog):
 
                     if button_ctx.custom_id == "UNIVERSE_SOUL":
                         price = 5000000
-                        response = await craft_adjuster(self, ctx, vault, universe, price, button_ctx.custom_id, None)
+                        response = await craft_adjuster(self, ctx, vault, universe, price, button_ctx.custom_id, None, completed_dungeons)
                         if response['SUCCESS']:
                             await button_ctx.send(f"{response['MESSAGE']}")
                             self.stop = True
@@ -3778,19 +3813,19 @@ class Profile(commands.Cog):
                     if button_ctx.custom_id == "Destiny":
                         await button_ctx.defer(ignore=True)
                         price = 1500000
-                        response = await craft_adjuster(self, ctx, vault, universe, price, card_info, None)
+                        response = await craft_adjuster(self, ctx, vault, universe, price, card_info, None, completed_dungeons)
                         await button_ctx.send(f"{response['MESSAGE']}")
                         self.stop = True
                     if button_ctx.custom_id == "Skin":
                         await button_ctx.defer(ignore=True)
                         price = 2000000
-                        response = await craft_adjuster(self, ctx, vault, universe, price, card_info, new_skin_list)
+                        response = await craft_adjuster(self, ctx, vault, universe, price, card_info, new_skin_list, completed_dungeons)
                         await button_ctx.send(f"{response['MESSAGE']}")
                         self.stop = True
                     if button_ctx.custom_id == "Card":
                         await button_ctx.defer(ignore=True)
                         price = 15000000
-                        response = await craft_adjuster(self, ctx, vault, universe, price, "Card", new_skin_list)
+                        response = await craft_adjuster(self, ctx, vault, universe, price, "Card", new_skin_list, completed_dungeons)
                         await button_ctx.send(f"{response['MESSAGE']}")
                         self.stop = True                       
                     
@@ -3818,7 +3853,7 @@ class Profile(commands.Cog):
             }))
 
 
-async def craft_adjuster(self, player, vault, universe, price, item, skin_list):
+async def craft_adjuster(self, player, vault, universe, price, item, skin_list, completed_dungeons):
     try:
         base_title = db.queryTitle({'TITLE':'Starter'})
         item_bools = [
@@ -3852,25 +3887,31 @@ async def craft_adjuster(self, player, vault, universe, price, item, skin_list):
         if has_gems_for:
             if gems >= price:
                 if item == "Card":
-                    acceptable = [4,5,6,7]
-                    list_of_cards = [x for x in db.queryAllCardsBasedOnUniverse({'UNIVERSE': str(universe), 'TIER': {'$in': acceptable}, 'HAS_COLLECTION': False, 'AVAILABLE': True})]
-                    selection_length = len(list(list_of_cards)) - 1
-                    if selection_length == 0:
-                        card = list_of_cards[0]
+                    if universe in completed_dungeons:
+                        acceptable = [4,5,6,7]
+                        list_of_cards = [x for x in db.queryAllCardsBasedOnUniverse({'UNIVERSE': str(universe), 'TIER': {'$in': acceptable}, 'HAS_COLLECTION': False, 'AVAILABLE': True})]
+                        selection_length = len(list(list_of_cards)) - 1
+                        if selection_length == 0:
+                            card = list_of_cards[0]
+                        else:
+                            selection = random.randint(1,selection_length)
+                            card = list_of_cards[selection]
+                        card_name = card['NAME']
+                        response = await crown_utilities.store_drop_card(str(player.author.id), card_name, universe, vault, owned_destinies, 0, 100000, "Purchase", False, 0)
+                        if response:
+                            query = {'DID': str(player.author.id)}
+                            update_query = {
+                                '$inc': {'GEMS.$[type].' + "GEMS": int(negPriceAmount)}
+                            }
+                            filter_query = [{'type.' + "UNIVERSE": universe}]
+                            res = db.updateVault(query, update_query, filter_query)
+                            rr = {"HAS_GEMS_FOR": True, "SUCCESS":  True, "MESSAGE": response}
+                            return rr
                     else:
-                        selection = random.randint(1,selection_length)
-                        card = list_of_cards[selection]
-                    card_name = card['NAME']
-                    response = await crown_utilities.store_drop_card(str(player.author.id), card_name, universe, vault, owned_destinies, 0, 100000, "Purchase", False, 0)
-                    if response:
-                        query = {'DID': str(player.author.id)}
-                        update_query = {
-                            '$inc': {'GEMS.$[type].' + "GEMS": int(negPriceAmount)}
-                        }
-                        filter_query = [{'type.' + "UNIVERSE": universe}]
-                        res = db.updateVault(query, update_query, filter_query)
-                        rr = {"HAS_GEMS_FOR": True, "SUCCESS":  True, "MESSAGE": response}
+                        response = "You need to completed the Tale for this universe to craft Dungeon cards!"
+                        rr = {"HAS_GEMS_FOR": True, "SUCCESS":  False, "MESSAGE": response}
                         return rr
+
 
 
                 if item not in item_bools:
@@ -4294,10 +4335,10 @@ async def menubuild(self, ctx):
                     if x['CARD'] == card['NAME']:
                         card_lvl = x['LVL']
                         card_exp = x['EXP']
-                        card_lvl_ap_buff = x['AP']
-                        card_lvl_attack_buff = x['ATK']
-                        card_lvl_defense_buff = x['DEF']
-                        card_lvl_hlt_buff = x['HLT']
+                        card_lvl_ap_buff = crown_utilities.level_sync_stats(card_lvl, "AP")
+                        card_lvl_attack_buff = crown_utilities.level_sync_stats(card_lvl, "ATK_DEF")
+                        card_lvl_defense_buff = crown_utilities.level_sync_stats(card_lvl, "ATK_DEF")
+                        card_lvl_hlt_buff = crown_utilities.level_sync_stats(card_lvl, "HLT")
 
                 oarm_universe = arm['UNIVERSE']
                 o_title_universe = title['UNIVERSE']
@@ -4664,10 +4705,10 @@ async def menucards(self, ctx):
                         lvl = f"{licon} **{cl['LVL']}**"
                         card_lvl = cl['LVL']
                         card_exp = cl['EXP']
-                        card_lvl_ap_buff = cl['AP']
-                        card_lvl_attack_buff = cl['ATK']
-                        card_lvl_defense_buff = cl['DEF']
-                        card_lvl_hlt_buff = cl['HLT']
+                        card_lvl_ap_buff = crown_utilities.level_sync_stats(card_lvl, "AP")
+                        card_lvl_attack_buff = crown_utilities.level_sync_stats(card_lvl, "ATK_DEF")
+                        card_lvl_defense_buff = crown_utilities.level_sync_stats(card_lvl, "ATK_DEF")
+                        card_lvl_hlt_buff = crown_utilities.level_sync_stats(card_lvl, "HLT")
                         
                 
                 o_passive = resp['PASS'][0] 
@@ -7586,6 +7627,7 @@ async def menushop(self, ctx):
             'trace': trace
         }))
 
+
 async def menucraft(self, ctx):
     a_registered_player = await crown_utilities.player_check(ctx)
     if not a_registered_player:
@@ -7598,6 +7640,7 @@ async def menucraft(self, ctx):
         gems = 0
         all_universes = db.queryAllUniverse()
         user = db.queryUser({'DID': str(ctx.author.id)})
+        completed_dungeons = user['DUNGEONS']
         card_info = db.queryCard({"NAME": user['CARD']})
         destiny_alert_message = f"No Skins or Destinies available for {card_info['NAME']}"
         destiny_alert = False
@@ -7605,11 +7648,9 @@ async def menucraft(self, ctx):
             await ctx.send("🔓 Unlock Crafting by completeing Floor 8 of the 🌑 Abyss! Use /solo to enter the abyss.")
             return
 
-        
-        
         #skin_alert_message = f"No Skins for {card_info['NAME']}"
         
-            #skin_alert_message = f"No Skins for {card_info['NAME']}"
+        #skin_alert_message = f"No Skins for {card_info['NAME']}"
         available_universes = []
         riftShopOpen = False
         shopName = ':shopping_cart: Shop'
@@ -7696,11 +7737,11 @@ async def menucraft(self, ctx):
                 soul_message = "Owned"
             elif gems >= 500000:
                 soul_message = "Craftable"
-            if gems >= 800000 and universe_name == card_info['UNIVERSE'] and destiny_alert:
+            if gems >= 1500000 and universe_name == card_info['UNIVERSE'] and destiny_alert:
                 destiny_message = f"Destinies available"
-            elif gems >= 800000 and destiny_alert:
+            elif gems >= 1500000 and destiny_alert:
                 destiny_message = f"{universe_name} Destinies available"
-            elif gems >= 800000:
+            elif gems >= 1500000:
                 destiny_message = f"Affordable!"
             if gems >= 6000000:
                 craft_card_message = f"Affordable!"
@@ -7716,20 +7757,20 @@ async def menucraft(self, ctx):
             Equipped Card:  **{card_info['NAME']}** *{card_info['UNIVERSE']}*
             *{destiny_alert_message}*
             
-            💟 **Universe Heart:** 💎 1,000,000 *{heart_message}*
+            💟 **Universe Heart:** 💎 5,000,000 *{heart_message}*
             *Grants ability to level past 200*
 
-            🌹 **Universe Soul:** 💎 500,000 *{soul_message}*
+            🌹 **Universe Soul:** 💎 5,000,000 *{soul_message}*
             *Grants double exp in this Universe*
 
-            ✨ **Destiny Line:** 💎 800,000 *{destiny_message}*
+            ✨ **Destiny Line:** 💎 1,500,000 *{destiny_message}*
             *Grants win for a Destiny Line*
             
             🃏 **Card Skins:** 💎 2,000,000 *{card_skin_message}*
             *Grants Card Skin*
 
-            ✨🎴 **Craft Card:** 💎 8,000,000 *{craft_card_message}*
-            *Craft a card from this Universe*
+            ✨🎴 **Craft Card:** 💎 15,000,000 *{craft_card_message}*
+            *Craft a random dungeon card from this Universe*
 
             """), colour=0x7289da)
             embedVar.set_image(url=universe_image)
@@ -7750,8 +7791,8 @@ async def menucraft(self, ctx):
             if button_ctx.author == ctx.author:
                 universe = str(button_ctx.origin_message.embeds[0].title)
                 if button_ctx.custom_id == "UNIVERSE_HEART":
-                    price = 1000000
-                    response = await craft_adjuster(self, ctx, vault, universe, price, button_ctx.custom_id, None)
+                    price = 5000000
+                    response = await craft_adjuster(self, ctx, vault, universe, price, button_ctx.custom_id, completed_dungeons, None)
                     if response['SUCCESS']:
                         await button_ctx.send(f"{response['MESSAGE']}")
                         self.stop = True
@@ -7760,8 +7801,8 @@ async def menucraft(self, ctx):
                         self.stop = True                           
 
                 if button_ctx.custom_id == "UNIVERSE_SOUL":
-                    price = 500000
-                    response = await craft_adjuster(self, ctx, vault, universe, price, button_ctx.custom_id, None)
+                    price = 5000000
+                    response = await craft_adjuster(self, ctx, vault, universe, price, button_ctx.custom_id, None, completed_dungeons)
                     if response['SUCCESS']:
                         await button_ctx.send(f"{response['MESSAGE']}")
                         self.stop = True
@@ -7770,20 +7811,20 @@ async def menucraft(self, ctx):
                         self.stop = True
                 if button_ctx.custom_id == "Destiny":
                     await button_ctx.defer(ignore=True)
-                    price = 800000
-                    response = await craft_adjuster(self, ctx, vault, universe, price, card_info, None)
+                    price = 1500000
+                    response = await craft_adjuster(self, ctx, vault, universe, price, card_info, None, completed_dungeons)
                     await button_ctx.send(f"{response['MESSAGE']}")
                     self.stop = True
                 if button_ctx.custom_id == "Skin":
                     await button_ctx.defer(ignore=True)
                     price = 2000000
-                    response = await craft_adjuster(self, ctx, vault, universe, price, card_info, new_skin_list)
+                    response = await craft_adjuster(self, ctx, vault, universe, price, card_info, new_skin_list, completed_dungeons)
                     await button_ctx.send(f"{response['MESSAGE']}")
                     self.stop = True
                 if button_ctx.custom_id == "Card":
                     await button_ctx.defer(ignore=True)
-                    price = 8000000
-                    response = await craft_adjuster(self, ctx, vault, universe, price, "Card", new_skin_list)
+                    price = 15000000
+                    response = await craft_adjuster(self, ctx, vault, universe, price, "Card", new_skin_list, completed_dungeons)
                     await button_ctx.send(f"{response['MESSAGE']}")
                     self.stop = True                       
                 
@@ -7809,8 +7850,6 @@ async def menucraft(self, ctx):
             'message': str(ex),
             'trace': trace
         }))
-
-
 
 
 def setup(bot):
