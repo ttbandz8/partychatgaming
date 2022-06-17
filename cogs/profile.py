@@ -2136,7 +2136,7 @@ class Profile(commands.Cog):
         
         hundred_levels = 650000
 
-        if lvl > 200 and lvl < 299:
+        if lvl >= 200 and lvl < 299:
             hundred_levels = 30000000
         elif lvl >= 300 and lvl < 399:
             hundred_levels = 70000000
