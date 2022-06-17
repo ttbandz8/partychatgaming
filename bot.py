@@ -2882,42 +2882,42 @@ async def updatehealth(ctx):
 #       print("errored out")
 
 
-@bot.command()
-@commands.check(validate_user)
-async def updatehealth(ctx):
-   try:
-      all_cards = db.queryAllCards()
-      await ctx.send("Updating all card health by 1000...")
-      for card in all_cards:
-         card_name = card["NAME"]
-         card_hlt = int(card["HLT"])
-         new_hlt = int(card_hlt) - 500
-         query = {
-            'NAME': card_name
-         }
-         update_query = {
-            '$set': {'HLT': int(new_hlt)}
-         }
-         db.updateCard(query, update_query)
-      await ctx.send("All Card Health has been increased.")
-      return
-   except Exception as ex:
-      trace = []
-      tb = ex.__traceback__
-      while tb is not None:
-         trace.append({
-               "filename": tb.tb_frame.f_code.co_filename,
-               "name": tb.tb_frame.f_code.co_name,
-               "lineno": tb.tb_lineno
-         })
-         tb = tb.tb_next
-      print(str({
-         'PLAYER': str(ctx.author),
-         'type': type(ex).__name__,
-         'message': str(ex),
-         'trace': trace
-      }))
-      return
+# @bot.command()
+# @commands.check(validate_user)
+# async def updatehealth(ctx):
+#    try:
+#       all_cards = db.queryAllCards()
+#       await ctx.send("Updating all card health by 1000...")
+#       for card in all_cards:
+#          card_name = card["NAME"]
+#          card_hlt = int(card["HLT"])
+#          new_hlt = int(card_hlt) - 500
+#          query = {
+#             'NAME': card_name
+#          }
+#          update_query = {
+#             '$set': {'HLT': int(new_hlt)}
+#          }
+#          db.updateCard(query, update_query)
+#       await ctx.send("All Card Health has been increased.")
+#       return
+#    except Exception as ex:
+#       trace = []
+#       tb = ex.__traceback__
+#       while tb is not None:
+#          trace.append({
+#                "filename": tb.tb_frame.f_code.co_filename,
+#                "name": tb.tb_frame.f_code.co_name,
+#                "lineno": tb.tb_lineno
+#          })
+#          tb = tb.tb_next
+#       print(str({
+#          'PLAYER': str(ctx.author),
+#          'type': type(ex).__name__,
+#          'message': str(ex),
+#          'trace': trace
+#       }))
+#       return
 
 
 @bot.command()

@@ -2450,7 +2450,7 @@ def damage_cal(opponent_affinity, move_type, move_element, universe, card, abili
                 true_dmg = round(true_dmg * 1.2)
                 message = f'{move_emoji} {move} used! Hits for **{true_dmg}**! :anger_right:'
             elif hit_roll >= 20:
-                true_dmg = round(true_dmg * 2)
+                true_dmg = round(true_dmg * 2.5)
                 message = f"{move_emoji} {move} used! Critically Hits for **{true_dmg}**!! :boom:"
             else:
                 message = f"{move_emoji} {move} used! Dealt **{true_dmg}** dmg!"
@@ -7863,17 +7863,15 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     
                                     # await asyncio.sleep(2)
                                 # fortitude or luck is based on health
-                                fortitude = 0.0
-                                low = o_health - (o_health * .90)
-                                if low <=0:
-                                    low = 1
-                                high = o_health - (o_health * .80)
-                                fortitude = round(random.randint(int(low), int(high)))
+                                fortitude = round(o_health * .1)
+                                if fortitude <= 50:
+                                    fortitude = 50
 
                                 o_stamina = o_focus
-                                o_healthcalc = round(((o_focus * .40) + (fortitude * 1)) / 2)
-                                o_attackcalc = round(.20 * ((o_focus * .15) + round(fortitude * 1)))
-                                o_defensecalc = round(.20 * ((o_focus * .15) + round(fortitude * 1)))
+                                o_healthcalc = round(fortitude)
+                                o_attackcalc = round(fortitude * (o_card_tier / 10))
+                                o_defensecalc = round(fortitude * (o_card_tier / 10))
+                                
                                 if o_universe == "One Piece" and (o_card_tier in mid_tier_cards or o_card_tier in high_tier_cards):
                                     o_attackcalc = o_attackcalc + o_attackcalc
                                     o_defensecalc = o_defensecalc + o_defensecalc
@@ -11384,17 +11382,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 t_focus_count = t_focus_count + 1
 
                                 # o_pet_used = True
-                                fortitude = 0.0
-                                low = t_health - (t_health * .90)
-                                if low <= 0:
-                                    low = 1
-                                high = t_health - (t_health * .80)
-                                fortitude = round(random.randint(int(low), int(high)))
+                                fortitude = round(t_health * .1)
+                                if fortitude <= 50:
+                                    fortitude = 50
 
                                 t_stamina = t_focus
-                                t_healthcalc = round(((t_focus * .40) + (fortitude * 1)) / 2)
-                                t_attackcalc = round(.20 * ((t_focus * .15) + round(fortitude * 1)))
-                                t_defensecalc = round(.20 * ((t_focus * .10) + round(fortitude * 1)))
+                                t_healthcalc = round(fortitude)
+                                t_attackcalc = round(fortitude * (t_card_tier / 10))
+                                t_defensecalc = round(fortitude * (t_card_tier / 10))
                                 t_newhealth = 0
                                 healmessage = ""
                                 messagenumber = 0
@@ -16496,17 +16491,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     c_pet_used = False
                                     c_focus_count = c_focus_count + 1
                                     # fortitude or luck is based on health
-                                    fortitude = 0.0
-                                    low = c_health - (c_health * .90)
-                                    if low <=0:
-                                        low = 1
-                                    high = c_health - (c_health * .80)
-                                    fortitude = round(random.randint(int(low), int(high)))
+                                    fortitude = round(c_health * .1)
+                                    if fortitude <= 50:
+                                        fortitude = 50
 
                                     c_stamina = c_focus
-                                    c_healthcalc = round(((c_focus * .40) + (fortitude * 1)) / 2)
-                                    c_attackcalc = round(.20 * ((c_focus * .15) + round(fortitude * 1)))
-                                    c_defensecalc = round(.20 * ((c_focus * .15) + round(fortitude * 1)))
+                                    c_healthcalc = round(fortitude)
+                                    c_attackcalc = round(fortitude * (c_card_tier / 10))
+                                    c_defensecalc = round(fortitude * (c_card_tier / 10))
                                     # check if user is at max health and sets messages and focus health value
                                     c_newhealth = 0
                                     healmessage = ""
@@ -19638,17 +19630,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 if t_stamina < 10:
                                     t_pet_used = False
                                     t_focus_count = t_focus_count + 1
-                                    fortitude = 0.0
-                                    low = t_health - (t_health * .90)
-                                    if low <=0:
-                                        low = 1
-                                    high = t_health - (t_health * .80)
-                                    fortitude = round(random.randint(int(low), int(high)))
+                                    fortitude = round(t_health * .1)
+                                    if fortitude <= 50:
+                                        fortitude = 50
 
                                     t_stamina = t_focus
-                                    t_healthcalc = round(((t_focus * .40) + (fortitude * 1)) / 2)
-                                    t_attackcalc = round(.20 * ((t_focus * .15) + round(fortitude * 1)))
-                                    t_defensecalc = round(.20 * ((t_focus * .10) + round(fortitude * 1)))
+                                    t_healthcalc = round(fortitude)
+                                    t_attackcalc = round(fortitude * (t_card_tier / 10))
+                                    t_defensecalc = round(fortitude * (t_card_tier / 10))
                                     t_newhealth = 0
                                     healmessage = ""
                                     messagenumber = 0
