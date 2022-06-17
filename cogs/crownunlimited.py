@@ -7827,8 +7827,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             colour=0xe91e63)
                                     embedVar.add_field(name=":cyclone:**Focusing**",
                                                     value="Increase **ATK** (🟦) and **DEF** (🟥)!")
-                                    embedVar.add_field(name="⚡**Resolve Transformation**",
-                                                    value="⚡Resolve and 🧬Summon aid into battle!")
                                     embedVar.set_footer(
                                         text="Pay attention to your oppononets ST(Stamina). If they are entering Focus State, you will have the ability to strike twice!")
                                     await ctx.send(embed=embedVar)
@@ -9600,8 +9598,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 embedVar.add_field(
                                                     name=f"Your Basic Attack: {o_basic_emoji} {list(o_1.keys())[0]} inflicts {omove1_element}",
                                                     value=f"**{omove1_element}** : *{element_mapping[omove1_element]}*")
-                                                embedVar.add_field(name=f"Combos!",
-                                                                value="Chain your :boom:**Basic Attack** with :microbe:**Enhancers** To Maximize Damage!")
                                                 embedVar.set_footer(
                                                     text=f"Basic Attacks are great when you are low on stamina. Enter Focus State to Replenish!")
                                                 await button_ctx.send(embed=embedVar)
@@ -9625,8 +9621,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 embedVar.add_field(
                                                     name=f"Your Special Attack: {o_super_emoji} {list(o_2.keys())[0]} inflicts {omove2_element}",
                                                     value=f"**{omove2_element}** : *{element_mapping[omove2_element]}*")
-                                                embedVar.add_field(name=f"Strategy!",
-                                                                value=":comet:**Special Attacks** are the balance between **ST (Stamina)** cost and Damage Output when trying to build **Combos**!")
                                                 embedVar.set_footer(
                                                     text=f"Special Attacks are great when you need to control the Focus game! Use Them to Maximize your Focus and build stronger Combos!")
                                                 await button_ctx.send(embed=embedVar)
@@ -9693,12 +9687,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 if tutorial and tutorial_resolve == False:
                                                     tutorial_resolve = True
                                                     embedVar = discord.Embed(title=f"⚡**Resolve Transformation**!",
-                                                                            description=f"**Heal**, Boost **ATK**, and gain the ability to 🧬**Summon**!",
+                                                                            description=f"**Heal**, Boost **ATK**, and 🧬**Summon**!",
                                                                             colour=0xe91e63)
                                                     embedVar.add_field(name=f"Trade Offs!",
                                                                     value="Sacrifice **DEF** and **Focusing** will not increase **ATK** or **DEF**")
-                                                    embedVar.add_field(name=f"🧬 Summons",
-                                                                    value=f"🧬**Summons** will use their :microbe:**Enhancers** to assist you in battle! You're summon: 🧬 **{opet_name}**")
+                                                    embedVar.add_field(name=f"🧬Your Summon",
+                                                                    value=f"**{opet_name}**")
                                                     embedVar.set_footer(
                                                         text=f"You can only enter ⚡Resolve once per match! Use the Heal Wisely!!!")
                                                     await button_ctx.send(embed=embedVar)
