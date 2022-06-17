@@ -2127,7 +2127,7 @@ def damage_cal(opponent_affinity, move_type, move_element, universe, card, abili
             haste = ap
         elif enh == 'FEAR':
             enh_type = "FEAR"
-            fear = (ap / 100 * maxhealth)
+            fear = ap
         elif enh == 'SOULCHAIN':
             enh_type = "SOULCHAIN"
             soulchain = ap
