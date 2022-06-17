@@ -2378,8 +2378,8 @@ def damage_cal(opponent_affinity, move_type, move_element, universe, card, abili
                 abilitypower = 25
 
             dmg = abilitypower
-            if dmg > (ap * 1.2):  # If DMG > ap -> Dmg = ap * 1.2
-                dmg = ap * 1.2
+            if dmg > (ap * 1.4):  # If DMG > ap -> Dmg = ap * 1.2
+                dmg = ap * 1.4
             elif dmg < (ap / 2):  # If you dmg is less than you base AP you do / of AP Damage
                 dmg = ap / 2
 
@@ -2444,10 +2444,10 @@ def damage_cal(opponent_affinity, move_type, move_element, universe, card, abili
                 true_dmg = round(true_dmg * .70)
                 message = f'{move_emoji} {move} used! Chips for **{true_dmg}**! :anger:'
             elif hit_roll <= med_hit and hit_roll > low_hit:
-                true_dmg = round(true_dmg * .85)
+                true_dmg = round(true_dmg)
                 message = f'{move_emoji} {move} used! Connects for **{true_dmg}**! :bangbang:'
             elif hit_roll <= standard_hit and hit_roll > med_hit:
-                true_dmg = round(true_dmg)
+                true_dmg = round(true_dmg * 1.2)
                 message = f'{move_emoji} {move} used! Hits for **{true_dmg}**! :anger_right:'
             elif hit_roll >= 20:
                 true_dmg = round(true_dmg * 2)
@@ -4117,7 +4117,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
     if difficulty == "HARD":
         health_buff_from_difficulty = 2000
         stat_buff_from_difficulty = 50
-        ap_buff_from_difficulty = 100
+        ap_buff_from_difficulty = 50
         if mode in D_modes:
             health_buff_from_difficulty = 3500
             stat_buff_from_difficulty = 50
