@@ -2137,15 +2137,15 @@ class Profile(commands.Cog):
         hundred_levels = 650000
 
         if lvl >= 200 and lvl < 299:
-            hundred_levels = 30000000
+            hundred_levels = 50000000
         elif lvl >= 300 and lvl < 399:
-            hundred_levels = 70000000
+            hundred_levels = 100000000
         elif lvl >= 400 and lvl < 499:
-            hundred_levels = 90000000
-        elif lvl >= 500 and lvl < 599:
             hundred_levels = 150000000
+        elif lvl >= 500 and lvl < 599:
+            hundred_levels = 250000000
         elif lvl >= 600 and lvl < 699:
-            hundred_levels = 300000000
+            hundred_levels = 350000000
         # if lvl >= 700 and lvl <= 800:
         #     hundred_levels = hundred_levels * 2000
         sell_buttons = [
