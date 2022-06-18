@@ -3775,7 +3775,7 @@ async def cardlist(self, ctx: SlashContext, universe: str):
     if len(all_cards) < 10:
         embedVar = discord.Embed(title=f"{universe} Card List", description="\n".join(all_cards), colour=0x7289da)
         embedVar.set_footer(
-            text=f"{total_cards} Total Cards\n🟢 Tale Drop\n🟣 Dungeon Drop\n🔵 Destiny Line\n🟠 Soul Exchange\n⚪ Skin")
+            text=f"{total_cards} Total Cards\n🟢 Tale Drop\n🟣 Dungeon Drop\n🔵 Destiny Line\n🟠 Soul Exchange or Scenario Drop\n⚪ Skin")
         await ctx.send(embed=embedVar)
 
     embed_list = []
@@ -3784,7 +3784,7 @@ async def cardlist(self, ctx: SlashContext, universe: str):
             title=f":flower_playing_cards: {universe_data['TITLE']} Card List",
             description="\n".join(cards_broken_up[i]), colour=0x7289da)
         globals()['embedVar%s' % i].set_footer(
-            text=f"{total_cards} Total Cards\n🟢 Tale Drop\n🟣 Dungeon Drop\n🔵 Destiny Line\n🟠 Soul Exchange\n⚪ Skin")
+            text=f"{total_cards} Total Cards\n🟢 Tale Drop\n🟣 Dungeon Drop\n🔵 Destiny Line\n🟠 Soul Exchange or Scenario Drop\n⚪ Skin")
         embed_list.append(globals()['embedVar%s' % i])
 
     paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)

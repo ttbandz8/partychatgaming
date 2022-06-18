@@ -1592,7 +1592,7 @@ called_once_a_day.start()
 @commands.cooldown(1, 60*60*12, commands.BucketType.user)
 async def daily(ctx):
    try:
-      dailyamount = 250000
+      dailyamount = 1000000
       await crown_utilities.bless(dailyamount, ctx.author.id)
       query = {'DID': str(ctx.author.id)}
       user_data = db.queryUser(query)
@@ -1601,7 +1601,7 @@ async def daily(ctx):
 
       server_query = {'GNAME': str(ctx.author.guild)}
       update_server_query = {
-         '$inc': {'SERVER_BALANCE': 1000}
+         '$inc': {'SERVER_BALANCE': 50000}
       }
       updated_server = db.updateServer(server_query, update_server_query)
 
