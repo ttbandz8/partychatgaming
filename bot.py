@@ -2762,7 +2762,7 @@ async def updatehealth(ctx):
       for card in all_cards:
          card_name = card["NAME"]
          card_hlt = int(card["HLT"])
-         new_hlt = int(card_hlt) + 1000
+         new_hlt = int(card_hlt) - 4000
          query = {
             'NAME': card_name
          }
