@@ -3612,15 +3612,18 @@ async def scenario(self, ctx: SlashContext, universe: str):
                 enemies = scenario['ENEMIES']
                 number_of_fights = len(enemies)
                 enemy_level = scenario['ENEMY_LEVEL']
+                scenario_gold = crown_utilities.scenario_gold_drop(enemy_level)
                 universe = scenario['UNIVERSE']
                 scenario_image = scenario['IMAGE']
                 reward_list = []
                 if difficulty == easy:
                     rewards = scenario['EASY_DROPS']
+                    scenario_gold = round(scenario_gold / 3)
                 if difficulty == normal:
                     rewards = scenario['NORMAL_DROPS']
                 if difficulty == hard:
                     rewards = scenario['HARD_DROPS']
+                    scenario_gold = round(scenario_gold * 3)
 
                 for reward in rewards:
                     # Add Check for Cards and make Cards available in Easy Drops
@@ -3647,6 +3650,10 @@ async def scenario(self, ctx: SlashContext, universe: str):
                 embedVar = discord.Embed(title= f"{title}", description=textwrap.dedent(f"""
                 📽️ **{universe} Scenario Battle!**
                 🔱 **Enemy Level:** {enemy_level}
+                :coin: **Reward** {'{:,}'.format(scenario_gold)}
+
+                ⚙️ **Difficulty:** {difficulty.title()}
+
                 :crossed_swords: {str(number_of_fights)}
                 """), 
                 colour=0x7289da)
@@ -3775,7 +3782,7 @@ async def cardlist(self, ctx: SlashContext, universe: str):
     if len(all_cards) < 10:
         embedVar = discord.Embed(title=f"{universe} Card List", description="\n".join(all_cards), colour=0x7289da)
         embedVar.set_footer(
-            text=f"{total_cards} Total Cards\n🟢 Tale Drop\n🟣 Dungeon Drop\n🔵 Destiny Line\n🟠 Soul Exchange\n⚪ Skin")
+            text=f"{total_cards} Total Cards\n🟢 Tale Drop\n🟣 Dungeon Drop\n🔵 Destiny Line\n🟠 Scenario Drop\n⚪ Skin")
         await ctx.send(embed=embedVar)
 
     embed_list = []
@@ -3784,7 +3791,7 @@ async def cardlist(self, ctx: SlashContext, universe: str):
             title=f":flower_playing_cards: {universe_data['TITLE']} Card List",
             description="\n".join(cards_broken_up[i]), colour=0x7289da)
         globals()['embedVar%s' % i].set_footer(
-            text=f"{total_cards} Total Cards\n🟢 Tale Drop\n🟣 Dungeon Drop\n🔵 Destiny Line\n🟠 Soul Exchange\n⚪ Skin")
+            text=f"{total_cards} Total Cards\n🟢 Tale Drop\n🟣 Dungeon Drop\n🔵 Destiny Line\n🟠 Scenario Drop\n⚪ Skin")
         embed_list.append(globals()['embedVar%s' % i])
 
     paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
@@ -19435,8 +19442,41 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 c_burn_dmg = round(c_burn_dmg / 2)
                                 t_freeze_enh = False
                                 
+                                if o_bleed_hit:
+                                    o_bleed_hit = False
+                                    bleed_dmg = 4 * turn_total
+                                    t_health = t_health - bleed_dmg
+                                    previous_moves.append(f"🩸 **{t_card}** shredded for **{round(bleed_dmg)}** bleed dmg...")
+                                    if t_health <= 0:
+                                        continue
+
+                                if o_burn_dmg > 3:
+                                    t_health = t_health - o_burn_dmg
+                                    previous_moves.append(f"🔥 **{t_card}** burned for **{round(o_burn_dmg)}** dmg...")
+                                    if t_health <= 0:
+                                        continue
+
+                                if o_freeze_enh:
+                                    previous_moves.append(f"❄️ **{t_card}** has been frozen for a turn...")
+                                    turn_total = turn_total + 1
+                                    if mode in co_op_modes:
+                                        turn = 2
+                                        continue
+                                    else:
+                                        turn = 0
+                                        continue
+                                if o_poison_dmg:
+                                    t_health = t_health - o_poison_dmg
+                                    previous_moves.append(f"🧪 **{t_card}** poisoned for **{o_poison_dmg}** dmg...")
+                                    if t_health <= 0:
+                                        continue
+
                                 if t_gravity_hit:
                                     t_gravity_hit = False
+                      
+                                o_burn_dmg = round(o_burn_dmg / 2)
+                                t_freeze_enh = False
+
 
                                 if t_title_passive_type:
                                     if t_title_passive_type == "HLT":
@@ -22828,6 +22868,8 @@ async def scenario_drop(self, ctx, scenario, difficulty):
     try:
         vault_query = {'DID': str(ctx.author.id)}
         vault = db.queryVault(vault_query)
+        scenario_level = scenario["ENEMY_LEVEL"]
+        scenario_gold = crown_utilities.scenario_gold_drop(scenario_level)
         # player_info = db.queryUser({'DID': str(vault['DID'])})
         
         owned_destinies = []
@@ -22849,12 +22891,14 @@ async def scenario_drop(self, ctx, scenario, difficulty):
         if difficulty == "EASY":
             rewards = scenario[easy]
             mode = "TALES"
+            scenario_gold = round(scenario_gold / 3)
         if difficulty == "NORMAL":
             rewards = scenario[normal]
             mode = "TALES"
         if difficulty == "HARD":
             rewards = scenario[hard]
             mode = "DUNGEON"
+            scenario_gold = round(scenario_gold * 3)
         if len(rewards) > 1:
             num_of_potential_rewards = len(rewards)
             selection = round(random.randint(0, num_of_potential_rewards))
@@ -22862,6 +22906,7 @@ async def scenario_drop(self, ctx, scenario, difficulty):
         else:
             rewarded = rewards[0]
         
+        await crown_utilities.bless(scenario_gold, ctx.author.id)
         # Add Card Check
         arm = db.queryArm({"ARM": rewarded})
         if arm:
@@ -22873,21 +22918,20 @@ async def scenario_drop(self, ctx, scenario, difficulty):
             reward = f"{element_emoji} {arm_passive_type.title()} **{arm_name}** Attack: **{arm_passive_value}** dmg"
 
             if len(vault['ARMS']) >= 25:
-                await crown_utilities.bless(10000, ctx.author.id)
-                return f"You're maxed out on Arms! You earned :coin: 10,000 instead!"
+                return f"You're maxed out on Arms! You earned :coin:**{'{:,}'.format(scenario_gold)}** instead!"
             elif rewarded in owned_arms:
-                await crown_utilities.bless(10000, ctx.author.id)
-                return f"You already own {reward}! You earn :coin: **10000**."
+                return f"You already own {reward}! You earn :coin: **{'{:,}'.format(scenario_gold)}**."
             else:
                 response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'ARMS': {'ARM': rewarded, 'DUR': 100}}})
-                return f"You earned _Arm:_ {reward} with ⚒️**{str(100)} Durability**!"
+                return f"You earned _Arm:_ {reward} with ⚒️**{str(100)} Durability** and :coin: **{'{:,}'.format(scenario_gold)}**!"
         else:
             card = db.queryCard({"NAME": rewarded})
             response = await crown_utilities.store_drop_card(str(ctx.author.id), card["NAME"], card["UNIVERSE"], vault, owned_destinies, 3000, 1000, mode, False, 0)
+            response = f"{response}\nYou earned :coin: **{'{:,}'.format(scenario_gold)}**!"
             if not response:
                 bless_amount = (5000 + (2500 * matchcount)) * (1 + rebirth)
                 await crown_utilities.bless(bless_amount, str(ctx.author.id))
-                return f"You earned :coin: **{bless_amount}**!"
+                return f"You earned :coin: **{'{:,}'.format(scenario_gold)}**!"
             return response
 
     except Exception as ex:
@@ -23019,9 +23063,9 @@ async def drops(self,player, universe, matchcount):
         
     try:
         if drop_rate <= gold_drop:
-            bless_amount = (500 + (1000 * matchcount)) * (1 + rebirth)
+            bless_amount = (10000 + (1000 * matchcount)) * (1 + rebirth)
             if difficulty == "HARD":
-                bless_amount = (5000 + (2500 * matchcount)) * (1 + rebirth)
+                bless_amount = (30000 + (2500 * matchcount)) * (1 + rebirth)
             await crown_utilities.bless(bless_amount, player.id)
             return f"You earned :coin: **{bless_amount}**!"
         elif drop_rate <= rift_rate and drop_rate > gold_drop:
@@ -23267,9 +23311,9 @@ async def dungeondrops(self, player, universe, matchcount):
 
     try:
         if drop_rate <= gold_drop:
-            bless_amount = (3000 + (2000 * matchcount)) * (1 + rebirth)
+            bless_amount = (20000 + (2000 * matchcount)) * (1 + rebirth)
             if difficulty == "HARD":
-                bless_amount = (20000 + (5000 * matchcount)) * (1 + rebirth)
+                bless_amount = (60000 + (5000 * matchcount)) * (1 + rebirth)
             await crown_utilities.bless(bless_amount, player.id)
             return f"You earned :coin: **{bless_amount}**!"
         elif drop_rate <= rift_rate and drop_rate > gold_drop:
