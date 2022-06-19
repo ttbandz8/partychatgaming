@@ -3612,15 +3612,18 @@ async def scenario(self, ctx: SlashContext, universe: str):
                 enemies = scenario['ENEMIES']
                 number_of_fights = len(enemies)
                 enemy_level = scenario['ENEMY_LEVEL']
+                scenario_gold = crown_utilities.scenario_gold_drop(enemy_level)
                 universe = scenario['UNIVERSE']
                 scenario_image = scenario['IMAGE']
                 reward_list = []
                 if difficulty == easy:
                     rewards = scenario['EASY_DROPS']
+                    scenario_gold = round(scenario_gold / 4)
                 if difficulty == normal:
                     rewards = scenario['NORMAL_DROPS']
                 if difficulty == hard:
                     rewards = scenario['HARD_DROPS']
+                    scenario_gold = round(scenario_gold * 5)
 
                 for reward in rewards:
                     # Add Check for Cards and make Cards available in Easy Drops
@@ -3647,6 +3650,7 @@ async def scenario(self, ctx: SlashContext, universe: str):
                 embedVar = discord.Embed(title= f"{title}", description=textwrap.dedent(f"""
                 📽️ **{universe} Scenario Battle!**
                 🔱 **Enemy Level:** {enemy_level}
+                :coin: **Reward** {scenario_gold}
                 :crossed_swords: {str(number_of_fights)}
                 """), 
                 colour=0x7289da)
@@ -22867,6 +22871,8 @@ async def scenario_drop(self, ctx, scenario, difficulty):
     try:
         vault_query = {'DID': str(ctx.author.id)}
         vault = db.queryVault(vault_query)
+        scenario_level = scenario["ENEMY_LEVEL"]
+        scenario_gold = crown_utilities.scenario_gold_drop(scenario_level)
         # player_info = db.queryUser({'DID': str(vault['DID'])})
         
         owned_destinies = []
@@ -22888,12 +22894,14 @@ async def scenario_drop(self, ctx, scenario, difficulty):
         if difficulty == "EASY":
             rewards = scenario[easy]
             mode = "TALES"
+            scenario_gold = round(scenario_gold / 4)
         if difficulty == "NORMAL":
             rewards = scenario[normal]
             mode = "TALES"
         if difficulty == "HARD":
             rewards = scenario[hard]
             mode = "DUNGEON"
+            scenario_gold = round(scenario_gold * 5)
         if len(rewards) > 1:
             num_of_potential_rewards = len(rewards)
             selection = round(random.randint(0, num_of_potential_rewards))
@@ -22901,6 +22909,7 @@ async def scenario_drop(self, ctx, scenario, difficulty):
         else:
             rewarded = rewards[0]
         
+        await crown_utilities.bless(scenario_gold, ctx.author.id)
         # Add Card Check
         arm = db.queryArm({"ARM": rewarded})
         if arm:
@@ -22912,21 +22921,20 @@ async def scenario_drop(self, ctx, scenario, difficulty):
             reward = f"{element_emoji} {arm_passive_type.title()} **{arm_name}** Attack: **{arm_passive_value}** dmg"
 
             if len(vault['ARMS']) >= 25:
-                await crown_utilities.bless(10000, ctx.author.id)
-                return f"You're maxed out on Arms! You earned :coin: 10,000 instead!"
+                return f"You're maxed out on Arms! You earned :coin:**{'{:,}'.format(scenario_gold)}** instead!"
             elif rewarded in owned_arms:
-                await crown_utilities.bless(10000, ctx.author.id)
-                return f"You already own {reward}! You earn :coin: **10000**."
+                return f"You already own {reward}! You earn :coin: **{'{:,}'.format(scenario_gold)}**."
             else:
                 response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'ARMS': {'ARM': rewarded, 'DUR': 100}}})
-                return f"You earned _Arm:_ {reward} with ⚒️**{str(100)} Durability**!"
+                return f"You earned _Arm:_ {reward} with ⚒️**{str(100)} Durability** and :coin: **{'{:,}'.format(scenario_gold)}**!"
         else:
             card = db.queryCard({"NAME": rewarded})
             response = await crown_utilities.store_drop_card(str(ctx.author.id), card["NAME"], card["UNIVERSE"], vault, owned_destinies, 3000, 1000, mode, False, 0)
+            response = f"{response}\nYou earned :coin: **{'{:,}'.format(scenario_gold)}**!"
             if not response:
                 bless_amount = (5000 + (2500 * matchcount)) * (1 + rebirth)
                 await crown_utilities.bless(bless_amount, str(ctx.author.id))
-                return f"You earned :coin: **{bless_amount}**!"
+                return f"You earned :coin: **{'{:,}'.format(scenario_gold)}**!"
             return response
 
     except Exception as ex:

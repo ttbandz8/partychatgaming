@@ -966,6 +966,15 @@ async def player_check(ctx):
         return False
 
 
+def scenario_gold_drop(scenario_lvl):
+    gold = scenario_lvl * 2000
+    if scenario_lvl > 900:
+        gold = gold + 100000000
+    elif scenario_lvl > 500:
+        gold = gold + 1000000
+    
+    return gold
+
 
 
 def level_sync_stats(lvl, stat):
