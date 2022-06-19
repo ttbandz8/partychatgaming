@@ -21766,7 +21766,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 response = db.updateUserNoFilter({'DISNAME': str(o_user['DISNAME'])}, {'$set': {'RIFT': 0}})
                             
                             if randomized_battle:
-                                embedVar = discord.Embed(title=f":zap: **{t_card}** wins the match!\nThe game lasted {turn_total} rounds.\n**{t_card} says**\n`{t_win_description}`", description=textwrap.dedent(f"""
+                                embedVar = discord.Embed(title=f":zap: **{t_card}** wins the match!\nThe game lasted {turn_total} rounds.", description=textwrap.dedent(f"""
                                 {previous_moves_into_embed}
                                 
                                 """),colour=0x1abc9c)
@@ -21819,7 +21819,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             ]
                             play_again_buttons_action_row = manage_components.create_actionrow(*play_again_buttons)
                             if mode not in B_modes and mode not in co_op_modes:
-                                embedVar = discord.Embed(title=f":zap: **{t_card}** wins the match!\nThe game lasted {turn_total} rounds.\n**{t_card} says**\n`{t_win_description}`", description=textwrap.dedent(f"""
+                                embedVar = discord.Embed(title=f":zap: **{t_card}** wins the match!\nThe game lasted {turn_total} rounds.", description=textwrap.dedent(f"""
                                 {previous_moves_into_embed}
                                 
                                 """),colour=0x1abc9c)
@@ -21844,14 +21844,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 else:
                                     bonus_message = f"Join a Guild or Create a Family for Coop Bonuses!"
                                     
-                                embedVar = discord.Embed(title=f":zap: **{t_card}** wins the match!\n\n**{o_user['NAME']}** and **{c_user['NAME']}** will you play again?\nThe game lasted {turn_total} rounds.\n**{t_card} says**\n`{t_win_description}`", description=textwrap.dedent(f"""
+                                embedVar = discord.Embed(title=f":zap: **{t_card}** wins the match!\n\n**{o_user['NAME']}** and **{c_user['NAME']}** will you play again?\nThe game lasted {turn_total} rounds.", description=textwrap.dedent(f"""
                                 {previous_moves_into_embed}
                                 
                                 """),colour=0x1abc9c)
                                 embedVar.add_field(name="**Co-Op Bonus**",
                                                 value=f"{bonus_message}")
                             elif mode in co_op_modes and mode in ai_co_op_modes:
-                                embedVar = discord.Embed(title=f":zap: **{t_card}** wins the match!\n\n**{o_user['NAME']}** and **{c_card}** will you play again?\nThe game lasted {turn_total} rounds.\n**{t_card} says**\n`{t_win_description}`", description=textwrap.dedent(f"""
+                                embedVar = discord.Embed(title=f":zap: **{t_card}** wins the match!\n\n**{o_user['NAME']}** and **{c_card}** will you play again?\nThe game lasted {turn_total} rounds.", description=textwrap.dedent(f"""
                                 {previous_moves_into_embed}
                                 
                                 """),colour=0x1abc9c)
@@ -22002,7 +22002,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 
                                 if mode == "RAID":
                                     embedVar = discord.Embed(
-                                        title=f"{endmessage}\n**{o_card} says**\n{o_win_description}\n\n You have defeated the {oguild['GNAME']} SHIELD!\nMatch concluded in {turn_total} turns",
+                                        title=f"{endmessage}\n\n You have defeated the {oguild['GNAME']} SHIELD!\nMatch concluded in {turn_total} turns",
                                         description=textwrap.dedent(f"""
                                                                     {previous_moves_into_embed}
                                                                     
@@ -22031,7 +22031,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         victory_message = f":zap: TUTORIAL VICTORY"
                                         victory_description = f"Congratulations! remember to equip **Titles** and **Arms** to apply **Enhancers** in battle!\nMatch concluded in {turn_total} turns."
                                     
-                                    embedVar = discord.Embed(title=f"{victory_message}\n**{o_card} says**\n{o_win_description}\n{victory_description}", description=textwrap.dedent(f"""
+                                    embedVar = discord.Embed(title=f"{victory_message}\n{victory_description}", description=textwrap.dedent(f"""
                                     {previous_moves_into_embed}
                                     
                                     """),colour=0xe91e63)
@@ -22094,7 +22094,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 bounty = abyss_scaling
                                 drop_response = await specific_drops(self,str(o_user['DID']), t_card, t_universe)
                                 await crown_utilities.bless(bounty, str(o_user['DID']))
-                                embedVar = discord.Embed(title=f"VICTORY\n:coin: {bounty} Bounty Received!\n**{o_card} says**\n{o_win_description}\nThe game lasted {turn_total} rounds.\n\n{drop_response}",description=textwrap.dedent(f"""
+                                embedVar = discord.Embed(title=f"VICTORY\n:coin: {bounty} Bounty Received!\nThe game lasted {turn_total} rounds.\n\n{drop_response}",description=textwrap.dedent(f"""
                                 {previous_moves_into_embed}
                                 
                                 """),colour=0x1abc9c)
@@ -22212,7 +22212,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             
                             if mode == "ABYSS":
                                 if currentopponent != (total_legends):
-                                    embedVar = discord.Embed(title=f"VICTORY\n**{o_card} says**\n{o_win_description}\nThe game lasted {turn_total} rounds.",description=textwrap.dedent(f"""
+                                    embedVar = discord.Embed(title=f"VICTORY\nThe game lasted {turn_total} rounds.",description=textwrap.dedent(f"""
                                     {previous_moves_into_embed}
                                     
                                     """),colour=0x1abc9c)
@@ -22236,7 +22236,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     abyss_drop_message = "\n".join(abyss_message['DROP_MESSAGE'])
                                     bless_amount = 100000 + (10000 * floor)
                                     await crown_utilities.bless(bless_amount, ctx.author.id)
-                                    embedVar = discord.Embed(title=f"🌑 Floor **{floor}** Cleared\n**{o_card} says**\n{o_win_description}\nThe game lasted {turn_total} rounds.",description=textwrap.dedent(f"""
+                                    embedVar = discord.Embed(title=f"🌑 Floor **{floor}** Cleared\nThe game lasted {turn_total} rounds.",description=textwrap.dedent(f"""
                                     Counquer the **Abyss** to unlock **Abyssal Rewards** and **New Game Modes.**
                                     
                                     🎊**Abyss Floor Unlocks**
@@ -22276,7 +22276,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     ouser = await self.bot.fetch_user(uid)
                                     cardlogger = await crown_utilities.cardlevel(o_card, ouser.id, "Tales", universe['UNIVERSE'])
 
-                                    embedVar = discord.Embed(title=f"VICTORY\n**{o_card} says**\n{o_win_description}\nThe game lasted {turn_total} rounds.",description=textwrap.dedent(f"""
+                                    embedVar = discord.Embed(title=f"VICTORY\nThe game lasted {turn_total} rounds.",description=textwrap.dedent(f"""
                                     {previous_moves_into_embed}
                                     
                                     """),colour=0x1abc9c)
@@ -22295,7 +22295,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     response = await scenario_drop(self, ctx, universe, difficulty)
                                     bless_amount = 50000
                                     await crown_utilities.bless(bless_amount, ctx.author.id)
-                                    embedVar = discord.Embed(title=f"Scenario Battle Cleared!\n**{o_card} says**\n{o_win_description}\nThe game lasted {turn_total} rounds.",description=textwrap.dedent(f"""
+                                    embedVar = discord.Embed(title=f"Scenario Battle Cleared!\nThe game lasted {turn_total} rounds.",description=textwrap.dedent(f"""
                                     Good luck on your next adventure!
                                     """),colour=0xe91e63)
 
