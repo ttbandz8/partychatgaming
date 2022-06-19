@@ -3651,6 +3651,9 @@ async def scenario(self, ctx: SlashContext, universe: str):
                 📽️ **{universe} Scenario Battle!**
                 🔱 **Enemy Level:** {enemy_level}
                 :coin: **Reward** {'{:,}'.format(scenario_gold)}
+
+                ⚙️ **Difficulty:** {difficulty.title()}
+
                 :crossed_swords: {str(number_of_fights)}
                 """), 
                 colour=0x7289da)
