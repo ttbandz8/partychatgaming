@@ -547,7 +547,7 @@ destiny = [
         "USE_CARDS": ["Ash Ketchum"],
         "EARN": "Ho-Oh",
         "COMPLETED": False,
-        "UNIVERSE": "Kanto Region"
+        "UNIVERSE": "Johto Region"
     },
     {
         "NAME": "Viridian Forest Caterpie",
@@ -1127,7 +1127,7 @@ destiny = [
         "USE_CARDS": ["Ash Ketchum"],
         "EARN": "Lugia",
         "COMPLETED": False,
-        "UNIVERSE": "Johto Region"
+        "UNIVERSE": "Kanto Region"
     },
     {
         "NAME": "Misty's Baby",

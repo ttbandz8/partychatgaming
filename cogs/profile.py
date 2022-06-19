@@ -1,3 +1,4 @@
+from faulthandler import dump_traceback_later
 import discord
 from discord.ext import commands
 import emoji
@@ -2137,15 +2138,15 @@ class Profile(commands.Cog):
         hundred_levels = 650000
 
         if lvl >= 200 and lvl < 299:
-            hundred_levels = 50000000
+            hundred_levels = 30000000
         elif lvl >= 300 and lvl < 399:
-            hundred_levels = 100000000
+            hundred_levels = 70000000
         elif lvl >= 400 and lvl < 499:
-            hundred_levels = 150000000
+            hundred_levels = 90000000
         elif lvl >= 500 and lvl < 599:
-            hundred_levels = 250000000
+            hundred_levels = 150000000
         elif lvl >= 600 and lvl < 699:
-            hundred_levels = 350000000
+            hundred_levels = 300000000
         # if lvl >= 700 and lvl <= 800:
         #     hundred_levels = hundred_levels * 2000
         sell_buttons = [
@@ -3058,6 +3059,8 @@ class Profile(commands.Cog):
             cards = vault['CARDS']
             titles = vault['TITLES']
             deck = vault['DECK']
+            preset_length = len(deck)
+            
             
             preset1_card = list(deck[0].values())[0]
             preset1_title = list(deck[0].values())[1]
@@ -3073,6 +3076,8 @@ class Profile(commands.Cog):
             preset3_title = list(deck[2].values())[1]
             preset3_arm = list(deck[2].values())[2]
             preset3_pet = list(deck[2].values())[3]    
+            
+
 
             listed_options = [f"1️⃣ | {preset1_title} {preset1_card} and {preset1_pet}\n**Card**: {preset1_card}\n**Title**: {preset1_title}\n**Arm**: {preset1_arm}\n**Summon**: {preset1_pet}\n\n", 
             f"2️⃣ | {preset2_title} {preset2_card} and {preset2_pet}\n**Card**: {preset2_card}\n**Title**: {preset2_title}\n**Arm**: {preset2_arm}\n**Summon**: {preset2_pet}\n\n", 
@@ -3087,7 +3092,7 @@ class Profile(commands.Cog):
             # embedVar.add_field(name=f"Preset 3:{preset3_title} {preset3_card} and {preset3_pet}", value=f"Card: {preset3_card}\nTitle: {preset3_title}\nArm: {preset3_arm}\nSummon: {preset3_pet}", inline=False)
             util_buttons = [
                 manage_components.create_button(
-                    style=ButtonStyle.red,
+                    style=ButtonStyle.blue,
                     label="1️⃣",
                     custom_id = "1"
                 ),
@@ -3097,7 +3102,7 @@ class Profile(commands.Cog):
                     custom_id = "2"
                 ),
                 manage_components.create_button(
-                    style=ButtonStyle.green,
+                    style=ButtonStyle.blue,
                     label="3️⃣",
                     custom_id = "3"
                 ),
@@ -7059,7 +7064,9 @@ async def menupreset(self, ctx):
         cards = vault['CARDS']
         titles = vault['TITLES']
         deck = vault['DECK']
+        preset_total = len(deck)
         
+        print(preset_total)
         preset1_card = list(deck[0].values())[0]
         preset1_title = list(deck[0].values())[1]
         preset1_arm = list(deck[0].values())[2]
@@ -7074,6 +7081,7 @@ async def menupreset(self, ctx):
         preset3_title = list(deck[2].values())[1]
         preset3_arm = list(deck[2].values())[2]
         preset3_pet = list(deck[2].values())[3]    
+        
 
         listed_options = [f"1️⃣ | {preset1_title} {preset1_card} and {preset1_pet}\n**Card**: {preset1_card}\n**Title**: {preset1_title}\n**Arm**: {preset1_arm}\n**Summon**: {preset1_pet}\n\n", 
         f"2️⃣ | {preset2_title} {preset2_card} and {preset2_pet}\n**Card**: {preset2_card}\n**Title**: {preset2_title}\n**Arm**: {preset2_arm}\n**Summon**: {preset2_pet}\n\n", 
@@ -7088,7 +7096,7 @@ async def menupreset(self, ctx):
         # embedVar.add_field(name=f"Preset 3:{preset3_title} {preset3_card} and {preset3_pet}", value=f"Card: {preset3_card}\nTitle: {preset3_title}\nArm: {preset3_arm}\nSummon: {preset3_pet}", inline=False)
         util_buttons = [
             manage_components.create_button(
-                style=ButtonStyle.red,
+                style=ButtonStyle.blue,
                 label="1️⃣",
                 custom_id = "1"
             ),
@@ -7098,7 +7106,7 @@ async def menupreset(self, ctx):
                 custom_id = "2"
             ),
             manage_components.create_button(
-                style=ButtonStyle.green,
+                style=ButtonStyle.blue,
                 label="3️⃣",
                 custom_id = "3"
             ),
