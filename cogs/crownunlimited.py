@@ -3618,12 +3618,12 @@ async def scenario(self, ctx: SlashContext, universe: str):
                 reward_list = []
                 if difficulty == easy:
                     rewards = scenario['EASY_DROPS']
-                    scenario_gold = round(scenario_gold / 4)
+                    scenario_gold = round(scenario_gold / 3)
                 if difficulty == normal:
                     rewards = scenario['NORMAL_DROPS']
                 if difficulty == hard:
                     rewards = scenario['HARD_DROPS']
-                    scenario_gold = round(scenario_gold * 5)
+                    scenario_gold = round(scenario_gold * 3)
 
                 for reward in rewards:
                     # Add Check for Cards and make Cards available in Easy Drops
@@ -3650,7 +3650,7 @@ async def scenario(self, ctx: SlashContext, universe: str):
                 embedVar = discord.Embed(title= f"{title}", description=textwrap.dedent(f"""
                 📽️ **{universe} Scenario Battle!**
                 🔱 **Enemy Level:** {enemy_level}
-                :coin: **Reward** {scenario_gold}
+                :coin: **Reward** {'{:,}'.format(scenario_gold)}
                 :crossed_swords: {str(number_of_fights)}
                 """), 
                 colour=0x7289da)
@@ -22894,14 +22894,14 @@ async def scenario_drop(self, ctx, scenario, difficulty):
         if difficulty == "EASY":
             rewards = scenario[easy]
             mode = "TALES"
-            scenario_gold = round(scenario_gold / 4)
+            scenario_gold = round(scenario_gold / 3)
         if difficulty == "NORMAL":
             rewards = scenario[normal]
             mode = "TALES"
         if difficulty == "HARD":
             rewards = scenario[hard]
             mode = "DUNGEON"
-            scenario_gold = round(scenario_gold * 5)
+            scenario_gold = round(scenario_gold * 3)
         if len(rewards) > 1:
             num_of_potential_rewards = len(rewards)
             selection = round(random.randint(0, num_of_potential_rewards))
