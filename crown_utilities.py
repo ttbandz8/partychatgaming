@@ -981,7 +981,7 @@ def level_sync_stats(lvl, stat):
     stat_sync = 0
 
     if stat == "HLT":
-        stat_sync = round((lvl / 20) * level_sync["HLT"])
+        stat_sync = round(lvl * level_sync["HLT"])
         return stat_sync
     if stat == "ATK_DEF":
         stat_sync = round(lvl * 2)
@@ -991,7 +991,7 @@ def level_sync_stats(lvl, stat):
         return stat_sync
 
 level_sync = {
-    "HLT": 100,
+    "HLT": 10,
     "ATK_DEF": 1,
     "AP": 1
 }

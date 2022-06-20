@@ -3647,6 +3647,7 @@ class Profile(commands.Cog):
             all_universes = db.queryAllUniverse()
             user = db.queryUser({'DID': str(ctx.author.id)})
             completed_dungeons = user['DUNGEONS']
+            completed_tales = user['CROWN_TALES']
             card_info = db.queryCard({"NAME": user['CARD']})
             destiny_alert_message = f"No Skins or Destinies available for {card_info['NAME']}"
             destiny_alert = False
@@ -3798,7 +3799,7 @@ class Profile(commands.Cog):
                     universe = str(button_ctx.origin_message.embeds[0].title)
                     if button_ctx.custom_id == "UNIVERSE_HEART":
                         price = 5000000
-                        response = await craft_adjuster(self, ctx, vault, universe, price, button_ctx.custom_id, completed_dungeons, None)
+                        response = await craft_adjuster(self, ctx, vault, universe, price, button_ctx.custom_id, completed_tales, None)
                         if response['SUCCESS']:
                             await button_ctx.send(f"{response['MESSAGE']}")
                             self.stop = True
@@ -3808,7 +3809,7 @@ class Profile(commands.Cog):
 
                     if button_ctx.custom_id == "UNIVERSE_SOUL":
                         price = 5000000
-                        response = await craft_adjuster(self, ctx, vault, universe, price, button_ctx.custom_id, None, completed_dungeons)
+                        response = await craft_adjuster(self, ctx, vault, universe, price, button_ctx.custom_id, None, completed_tales)
                         if response['SUCCESS']:
                             await button_ctx.send(f"{response['MESSAGE']}")
                             self.stop = True
@@ -3818,19 +3819,19 @@ class Profile(commands.Cog):
                     if button_ctx.custom_id == "Destiny":
                         await button_ctx.defer(ignore=True)
                         price = 1500000
-                        response = await craft_adjuster(self, ctx, vault, universe, price, card_info, None, completed_dungeons)
+                        response = await craft_adjuster(self, ctx, vault, universe, price, card_info, None, completed_tales)
                         await button_ctx.send(f"{response['MESSAGE']}")
                         self.stop = True
                     if button_ctx.custom_id == "Skin":
                         await button_ctx.defer(ignore=True)
                         price = 2000000
-                        response = await craft_adjuster(self, ctx, vault, universe, price, card_info, new_skin_list, completed_dungeons)
+                        response = await craft_adjuster(self, ctx, vault, universe, price, card_info, new_skin_list, completed_tales)
                         await button_ctx.send(f"{response['MESSAGE']}")
                         self.stop = True
                     if button_ctx.custom_id == "Card":
                         await button_ctx.defer(ignore=True)
                         price = 15000000
-                        response = await craft_adjuster(self, ctx, vault, universe, price, "Card", new_skin_list, completed_dungeons)
+                        response = await craft_adjuster(self, ctx, vault, universe, price, "Card", new_skin_list, completed_tales)
                         await button_ctx.send(f"{response['MESSAGE']}")
                         self.stop = True                       
                     
@@ -3858,7 +3859,7 @@ class Profile(commands.Cog):
             }))
 
 
-async def craft_adjuster(self, player, vault, universe, price, item, skin_list, completed_dungeons):
+async def craft_adjuster(self, player, vault, universe, price, item, skin_list, completed_tales):
     try:
         base_title = db.queryTitle({'TITLE':'Starter'})
         item_bools = [
@@ -3892,7 +3893,7 @@ async def craft_adjuster(self, player, vault, universe, price, item, skin_list, 
         if has_gems_for:
             if gems >= price:
                 if item == "Card":
-                    if universe in completed_dungeons:
+                    if universe in completed_tales:
                         acceptable = [4,5,6,7]
                         list_of_cards = [x for x in db.queryAllCardsBasedOnUniverse({'UNIVERSE': str(universe), 'TIER': {'$in': acceptable}, 'HAS_COLLECTION': False, 'AVAILABLE': True})]
                         selection_length = len(list(list_of_cards)) - 1
@@ -3913,7 +3914,7 @@ async def craft_adjuster(self, player, vault, universe, price, item, skin_list, 
                             rr = {"HAS_GEMS_FOR": True, "SUCCESS":  True, "MESSAGE": response}
                             return rr
                     else:
-                        response = "You need to completed the Tale for this universe to craft Dungeon cards!"
+                        response = f"You need to complete the **Tale** for this universe to unlock **Dungeon Card Crafting**!"
                         rr = {"HAS_GEMS_FOR": True, "SUCCESS":  False, "MESSAGE": response}
                         return rr
 
@@ -7649,6 +7650,7 @@ async def menucraft(self, ctx):
         all_universes = db.queryAllUniverse()
         user = db.queryUser({'DID': str(ctx.author.id)})
         completed_dungeons = user['DUNGEONS']
+        completed_tales = user['CROWN_TALES']
         card_info = db.queryCard({"NAME": user['CARD']})
         destiny_alert_message = f"No Skins or Destinies available for {card_info['NAME']}"
         destiny_alert = False
@@ -7800,7 +7802,7 @@ async def menucraft(self, ctx):
                 universe = str(button_ctx.origin_message.embeds[0].title)
                 if button_ctx.custom_id == "UNIVERSE_HEART":
                     price = 5000000
-                    response = await craft_adjuster(self, ctx, vault, universe, price, button_ctx.custom_id, completed_dungeons, None)
+                    response = await craft_adjuster(self, ctx, vault, universe, price, button_ctx.custom_id, completed_tales, None)
                     if response['SUCCESS']:
                         await button_ctx.send(f"{response['MESSAGE']}")
                         self.stop = True
@@ -7810,7 +7812,7 @@ async def menucraft(self, ctx):
 
                 if button_ctx.custom_id == "UNIVERSE_SOUL":
                     price = 5000000
-                    response = await craft_adjuster(self, ctx, vault, universe, price, button_ctx.custom_id, None, completed_dungeons)
+                    response = await craft_adjuster(self, ctx, vault, universe, price, button_ctx.custom_id, None, completed_tales)
                     if response['SUCCESS']:
                         await button_ctx.send(f"{response['MESSAGE']}")
                         self.stop = True
@@ -7820,19 +7822,19 @@ async def menucraft(self, ctx):
                 if button_ctx.custom_id == "Destiny":
                     await button_ctx.defer(ignore=True)
                     price = 1500000
-                    response = await craft_adjuster(self, ctx, vault, universe, price, card_info, None, completed_dungeons)
+                    response = await craft_adjuster(self, ctx, vault, universe, price, card_info, None, completed_tales)
                     await button_ctx.send(f"{response['MESSAGE']}")
                     self.stop = True
                 if button_ctx.custom_id == "Skin":
                     await button_ctx.defer(ignore=True)
                     price = 2000000
-                    response = await craft_adjuster(self, ctx, vault, universe, price, card_info, new_skin_list, completed_dungeons)
+                    response = await craft_adjuster(self, ctx, vault, universe, price, card_info, new_skin_list, completed_tales)
                     await button_ctx.send(f"{response['MESSAGE']}")
                     self.stop = True
                 if button_ctx.custom_id == "Card":
                     await button_ctx.defer(ignore=True)
                     price = 15000000
-                    response = await craft_adjuster(self, ctx, vault, universe, price, "Card", new_skin_list, completed_dungeons)
+                    response = await craft_adjuster(self, ctx, vault, universe, price, "Card", new_skin_list, completed_tales)
                     await button_ctx.send(f"{response['MESSAGE']}")
                     self.stop = True                       
                 
