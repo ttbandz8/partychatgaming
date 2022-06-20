@@ -992,8 +992,8 @@ def level_sync_stats(lvl, stat):
 
 level_sync = {
     "HLT": 10,
-    "ATK_DEF": 1,
-    "AP": 1
+    "ATK_DEF": 2,
+    "AP": 2
 }
 
 crest_dict = {'Unbound': ':ideograph_advantage:',
