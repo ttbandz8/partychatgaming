@@ -7578,7 +7578,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         if turn == 0:
                             if t_bleed_hit:
                                 t_bleed_hit = False
-                                bleed_dmg = 4 * turn_total
+                                bleed_dmg = 8 * turn_total
                                 o_health = o_health - bleed_dmg
                                 if o_health <= 0:
                                     continue
@@ -8788,7 +8788,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         # Resolve Check and Calculation
                                         if o_used_resolve and o_used_focus and not o_pet_used:
                                             o_enhancer_used = True
-                                            dmg = damage_cal(t_opponent_affinities, basic_attack_name, omove1_element, o_universe, o_card, opet_move, o_attack, o_defense,
+                                            dmg = damage_cal(0, t_opponent_affinities, basic_attack_name, omove1_element, o_universe, o_card, opet_move, o_attack, o_defense,
                                                             t_defense, o_stamina, o_enhancer_used, o_health, t_health,
                                                             t_stamina, o_max_health, t_attack,
                                                             o_special_move_description, turn_total, ocard_lvl_ap_buff, None)
@@ -8984,8 +8984,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_health = t_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == poison_element:
-                                                    if o_poison_dmg <= 150:
-                                                        o_poison_dmg = o_poison_dmg + 10
+                                                    if o_poison_dmg <= 300:
+                                                        o_poison_dmg = o_poison_dmg + 20
                                                     t_health = t_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == ice_element:
@@ -9164,8 +9164,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 elif tarm_shield_active and dmg['ELEMENT'] != dark_element:
                                                     
                                                     if dmg['ELEMENT'] == poison_element: #Poison Update
-                                                        if o_poison_dmg <= 150:
-                                                            o_poison_dmg = o_poison_dmg + 10
+                                                        if o_poison_dmg <= 300:
+                                                            o_poison_dmg = o_poison_dmg + 20
                                                         
 
                                                     if tshield_value > 0:
@@ -9211,10 +9211,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = t_health
                                                         tparry_damage = round(dmg['DMG'])
                                                         t_health = round(t_health - (tparry_damage * .75))
-                                                        o_health = round(o_health - (tparry_damage * .35))
+                                                        o_health = round(o_health - (tparry_damage * .40))
                                                         tparry_count = tparry_count - 1
-                                                        embedVar = discord.Embed(title=f"{t_card} Activates **Parry** 🔄", description=f"{o_card} takes {round(tparry_damage * .35)}! DMG\n **{tparry_count} Parries** to go!!", colour=0xe91e63)
-                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}** Activates Parry 🔄  {o_card} takes {round(tparry_damage * .35)}! DMG\n **{tparry_count} Parries** to go!!")
+                                                        embedVar = discord.Embed(title=f"{t_card} Activates **Parry** 🔄", description=f"{o_card} takes {round(tparry_damage * .40)}! DMG\n **{tparry_count} Parries** to go!!", colour=0xe91e63)
+                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}** Activates Parry 🔄 after **{round(tparry_damage * .75)}** dmg dealt:  {o_card} takes {round(tparry_damage * .40)}! DMG\n **{tparry_count} Parries** to go!!")
                                                         if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                             oarm_barrier_active=False
                                                             embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -9224,9 +9224,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = t_health
                                                         tparry_damage = round(dmg['DMG'])
                                                         t_health = round(t_health - (tparry_damage * .75))
-                                                        o_health = round(o_health - (tparry_damage * .35))
-                                                        embedVar = discord.Embed(title=f"{t_card} **Parry** Penetrated!!", description=f"{o_card} takes {round(tparry_damage * .35)}! DMG and breaks the **Parry**", colour=0xe91e63)
-                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}** Parry Penetrated! **{o_card}** takes **{round(tparry_damage * .35)}**! DMG and breaks the **Parry**")
+                                                        o_health = round(o_health - (tparry_damage * .40))
+                                                        embedVar = discord.Embed(title=f"{t_card} **Parry** Penetrated!!", description=f"{o_card} takes {round(tparry_damage * .40)}! DMG and breaks the **Parry**", colour=0xe91e63)
+                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}** Parry Penetrated! **{o_card}** takes **{round(tparry_damage * .40)}**! DMG and breaks the **Parry**")
                                                         tparry_count = tparry_count - 1
                                                         if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                             oarm_barrier_active=False
@@ -9303,8 +9303,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = t_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == poison_element:
-                                                        if o_poison_dmg <= 150:
-                                                            o_poison_dmg = o_poison_dmg + 10
+                                                        if o_poison_dmg <= 300:
+                                                            o_poison_dmg = o_poison_dmg + 20
                                                         t_health = t_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == ice_element:
@@ -10222,7 +10222,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     await button_ctx.send(embed=embedVar)
                                                     await asyncio.sleep(2)
                                                 o_enhancer_used = True
-                                                dmg = damage_cal(t_opponent_affinities, basic_attack_name, omove1_element, o_universe, o_card, opet_move, o_attack, o_defense,
+                                                dmg = damage_cal(0, t_opponent_affinities, basic_attack_name, omove1_element, o_universe, o_card, opet_move, o_attack, o_defense,
                                                                 t_defense, o_stamina, o_enhancer_used, o_health, t_health,
                                                                 t_stamina, o_max_health, t_attack,
                                                                 o_special_move_description, turn_total, ocard_lvl_ap_buff, None)
@@ -10383,7 +10383,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         elif mode in co_op_modes:
                                             if button_ctx.custom_id == "7":
                                                 o_enhancer_used = True
-                                                dmg = damage_cal(t_for_c_opponent_affinities, basic_attack_name, omove1_element, o_universe, o_card, o_enhancer, o_attack, o_defense,
+                                                dmg = damage_cal(0, t_for_c_opponent_affinities, basic_attack_name, omove1_element, o_universe, o_card, o_enhancer, o_attack, o_defense,
                                                                 c_defense, o_stamina, o_enhancer_used, o_health, c_health,
                                                                 c_stamina, o_max_health, c_attack,
                                                                 o_special_move_description, turn_total, ocard_lvl_ap_buff, None)
@@ -10728,8 +10728,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = t_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == poison_element:
-                                                        if o_poison_dmg <= 150:
-                                                            o_poison_dmg = o_poison_dmg + 10
+                                                        if o_poison_dmg <= 300:
+                                                            o_poison_dmg = o_poison_dmg + 20
                                                         t_health = t_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == ice_element:
@@ -10914,8 +10914,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     elif tarm_shield_active and dmg['ELEMENT'] != dark_element:
                                                         
                                                         if dmg['ELEMENT'] == poison_element: #Poison Update
-                                                            if o_poison_dmg <= 150:
-                                                                o_poison_dmg = o_poison_dmg + 10
+                                                            if o_poison_dmg <= 300:
+                                                                o_poison_dmg = o_poison_dmg + 20
                                                            
 
                                                         if tshield_value > 0:
@@ -10969,10 +10969,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health
                                                             tparry_damage = round(dmg['DMG'])
                                                             t_health = round(t_health - (tparry_damage * .75))
-                                                            o_health = round(o_health - (tparry_damage * .35))
+                                                            o_health = round(o_health - (tparry_damage * .40))
                                                             tparry_count = tparry_count - 1
-                                                            embedVar = discord.Embed(title=f"{t_card} Activates **Parry** 🔄", description=f"{o_card} takes {round(tparry_damage * .35)}! DMG\n **{tparry_count} Parries** to go!!", colour=0xe91e63)
-                                                            previous_moves.append(f"(**{turn_total}**) **{t_card}** Activates Parry 🔄  {o_card} takes {round(tparry_damage * .35)}! DMG\n **{tparry_count} Parries** to go!!")
+                                                            embedVar = discord.Embed(title=f"{t_card} Activates **Parry** 🔄", description=f"{o_card} takes {round(tparry_damage * .40)}! DMG\n **{tparry_count} Parries** to go!!", colour=0xe91e63)
+                                                            previous_moves.append(f"(**{turn_total}**) **{t_card}** Activates Parry 🔄 after **{round(tparry_damage * .75)}** dmg dealt:  {o_card} takes {round(tparry_damage * .40)}! DMG\n **{tparry_count} Parries** to go!!")
                                                             if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                 oarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -10984,9 +10984,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health
                                                             tparry_damage = round(dmg['DMG'])
                                                             t_health = round(t_health - (tparry_damage * .75))
-                                                            o_health = round(o_health - (tparry_damage * .35))
-                                                            embedVar = discord.Embed(title=f"{t_card} **Parry** Penetrated!!", description=f"{o_card} takes {round(tparry_damage * .35)}! DMG and breaks the **Parry**", colour=0xe91e63)
-                                                            previous_moves.append(f"(**{turn_total}**) **{t_card}** Parry Penetrated! **{o_card}** takes **{round(tparry_damage * .35)}**! DMG and breaks the **Parry**")
+                                                            o_health = round(o_health - (tparry_damage * .40))
+                                                            embedVar = discord.Embed(title=f"{t_card} **Parry** Penetrated!!", description=f"{o_card} takes {round(tparry_damage * .40)}! DMG and breaks the **Parry**", colour=0xe91e63)
+                                                            previous_moves.append(f"(**{turn_total}**) **{t_card}** Parry Penetrated! **{o_card}** takes **{round(tparry_damage * .40)}**! DMG and breaks the **Parry**")
                                                             tparry_count = tparry_count - 1
                                                             if oarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                 oarm_barrier_active=False
@@ -11064,8 +11064,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == poison_element:
-                                                            if o_poison_dmg <= 150:
-                                                                o_poison_dmg = o_poison_dmg + 10
+                                                            if o_poison_dmg <= 300:
+                                                                o_poison_dmg = o_poison_dmg + 20
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == ice_element:
@@ -11183,7 +11183,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         elif turn == 1:
                             if o_bleed_hit:
                                 o_bleed_hit = False
-                                bleed_dmg = 4 * turn_total
+                                bleed_dmg = 8 * turn_total
                                 t_health = t_health - bleed_dmg
                                 previous_moves.append(f"🩸 **{t_card}** shredded for **{round(bleed_dmg)}** bleed dmg...")
                                 if t_health <= 0:
@@ -12535,8 +12535,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == poison_element:
-                                                            if t_poison_dmg <= 150:
-                                                                t_poison_dmg = t_poison_dmg + 10
+                                                            if t_poison_dmg <= 300:
+                                                                t_poison_dmg = t_poison_dmg + 20
                                                             o_health = o_health - dmg['DMG']
     
                                                         elif dmg['ELEMENT'] == ice_element:
@@ -12708,8 +12708,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                         elif oarm_shield_active and dmg['ELEMENT'] != dark_element:
                                                             if dmg['ELEMENT'] == poison_element: #Poison Update
-                                                                if t_poison_dmg <= 150:
-                                                                    t_poison_dmg = t_poison_dmg + 10
+                                                                if t_poison_dmg <= 300:
+                                                                    t_poison_dmg = t_poison_dmg + 20
                                                                 
                                                             if oshield_value > 0:
                                                                 oshield_value = oshield_value -dmg['DMG']
@@ -12759,10 +12759,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if oparry_count > 1:
                                                                 oparry_damage = round(dmg['DMG'])
                                                                 o_health = round(o_health - (oparry_damage * .75))
-                                                                t_health = round(t_health - (oparry_damage * .35))
+                                                                t_health = round(t_health - (oparry_damage * .40))
                                                                 oparry_count = oparry_count - 1
-                                                                embedVar = discord.Embed(title=f"{o_card} Activates **Parry** 🔄", description=f"{t_card} takes {round(oparry_damage * .35)}! DMG\n **{oparry_count} Parries** to go!!", colour=0xe91e63)
-                                                                previous_moves.append(f"(**{turn_total}**) **{o_card}** Activates Parry 🔄 {t_card} takes {round(oparry_damage * .35)}! DMG\n **{oparry_count}  Parries** to go!!")
+                                                                embedVar = discord.Embed(title=f"{o_card} Activates **Parry** 🔄", description=f"{t_card} takes {round(oparry_damage * .40)}! DMG\n **{oparry_count} Parries** to go!!", colour=0xe91e63)
+                                                                previous_moves.append(f"(**{turn_total}**) **{o_card}** Activates Parry 🔄 after **{round(tparry_damage * .75)}** dmg dealt: {t_card} takes {round(oparry_damage * .40)}! DMG\n **{oparry_count}  Parries** to go!!")
                                                                 if tarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                     tarm_barrier_active=False
                                                                     
@@ -12772,9 +12772,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             elif oparry_count==1:
                                                                 oparry_damage = round(dmg['DMG'])
                                                                 o_health = round(o_health - (oparry_damage * .75))
-                                                                t_health = round(t_health - (oparry_damage * .35))
-                                                                embedVar = discord.Embed(title=f"{o_card} **Parry** Penetrated!!", description=f"{t_card} takes {round(oparry_damage * .35)}! DMG and breaks the **Parry**", colour=0xe91e63)
-                                                                previous_moves.append(f"(**{turn_total}**) **{o_card}** Parry Penetrated! **{t_card}** takes **{round(oparry_damage * .35)}**! DMG and breaks the **Parry**")
+                                                                t_health = round(t_health - (oparry_damage * .40))
+                                                                embedVar = discord.Embed(title=f"{o_card} **Parry** Penetrated!!", description=f"{t_card} takes {round(oparry_damage * .40)}! DMG and breaks the **Parry**", colour=0xe91e63)
+                                                                previous_moves.append(f"(**{turn_total}**) **{o_card}** Parry Penetrated! **{t_card}** takes **{round(oparry_damage * .40)}**! DMG and breaks the **Parry**")
                                                                 oparry_count = oparry_count - 1
                                                                 if tarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                     tarm_barrier_active=False
@@ -12853,8 +12853,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_health = o_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == poison_element:
-                                                                if t_poison_dmg <= 150:
-                                                                    t_poison_dmg = t_poison_dmg + 10
+                                                                if t_poison_dmg <= 300:
+                                                                    t_poison_dmg = t_poison_dmg + 20
                                                                 o_health = o_health - dmg['DMG']
         
                                                             elif dmg['ELEMENT'] == ice_element:
@@ -13735,8 +13735,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_health = o_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == poison_element:
-                                                        if t_poison_dmg <= 150:
-                                                            t_poison_dmg = t_poison_dmg + 10
+                                                        if t_poison_dmg <= 300:
+                                                            t_poison_dmg = t_poison_dmg + 20
                                                         o_health = o_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == ice_element:
@@ -13897,8 +13897,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                     elif oarm_shield_active and dmg['ELEMENT'] != dark_element:
                                                         if dmg['ELEMENT'] == poison_element: #Poison Update
-                                                            if t_poison_dmg <= 150:
-                                                                t_poison_dmg = o_poison_dmg + 10
+                                                            if t_poison_dmg <= 300:
+                                                                t_poison_dmg = o_poison_dmg + 20
                                                             
                                                         if oshield_value > 0:
                                                             oshield_value = oshield_value -dmg['DMG']
@@ -13942,10 +13942,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if oparry_count > 1:
                                                             oparry_damage = round(dmg['DMG'])
                                                             o_health = round(o_health - (oparry_damage * .75))
-                                                            t_health = round(t_health - (oparry_damage * .35))
+                                                            t_health = round(t_health - (oparry_damage * .40))
                                                             oparry_count = oparry_count - 1
-                                                            embedVar = discord.Embed(title=f"{o_card} Activates **Parry** 🔄", description=f"{t_card} takes {round(oparry_damage * .35)}! DMG\n **{oparry_count} Parries** to go!!", colour=0xe91e63)
-                                                            previous_moves.append(f"(**{turn_total}**) **{o_card}** Activates Parry 🔄 {t_card} takes {round(oparry_damage * .35)}! DMG\n **{oparry_count}  Parries** to go!!")
+                                                            embedVar = discord.Embed(title=f"{o_card} Activates **Parry** 🔄", description=f"{t_card} takes {round(oparry_damage * .40)}! DMG\n **{oparry_count} Parries** to go!!", colour=0xe91e63)
+                                                            previous_moves.append(f"(**{turn_total}**) **{o_card}** Activates Parry 🔄 after **{round(tparry_damage * .75)}** dmg dealt: {t_card} takes {round(oparry_damage * .40)}! DMG\n **{oparry_count}  Parries** to go!!")
                                                             if tarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                 tarm_barrier_active=False
                                                                 
@@ -13954,10 +13954,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         elif oparry_count==1:
                                                             oparry_damage = round(dmg['DMG'])
                                                             o_health = round(o_health - (oparry_damage * .75))
-                                                            t_health = round(t_health - (oparry_damage * .35))
+                                                            t_health = round(t_health - (oparry_damage * .40))
                                                             oparry_count = oparry_count - 1
-                                                            embedVar = discord.Embed(title=f"{o_card} **Parry** Penetrated!!", description=f"{t_card} takes {round(oparry_damage * .35)}! DMG and breaks the **Parry**", colour=0xe91e63)
-                                                            previous_moves.append(f"(**{turn_total}**) **{o_card}** Parry Penetrated! **{t_card}** takes **{round(oparry_damage * .35)}**! DMG and breaks the **Parry**")
+                                                            embedVar = discord.Embed(title=f"{o_card} **Parry** Penetrated!!", description=f"{t_card} takes {round(oparry_damage * .40)}! DMG and breaks the **Parry**", colour=0xe91e63)
+                                                            previous_moves.append(f"(**{turn_total}**) **{o_card}** Parry Penetrated! **{t_card}** takes **{round(oparry_damage * .40)}**! DMG and breaks the **Parry**")
                                                             if tarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                 tarm_barrier_active=False
                                                                 
@@ -14032,8 +14032,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == poison_element:
-                                                            if t_poison_dmg <= 150:
-                                                                t_poison_dmg = t_poison_dmg + 10
+                                                            if t_poison_dmg <= 300:
+                                                                t_poison_dmg = t_poison_dmg + 20
                                                             o_health = o_health - dmg['DMG']
     
                                                         elif dmg['ELEMENT'] == ice_element:
@@ -15279,8 +15279,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     o_health = o_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == poison_element:
-                                                    if t_poison_dmg <= 150:
-                                                        t_poison_dmg = t_poison_dmg + 10
+                                                    if t_poison_dmg <= 300:
+                                                        t_poison_dmg = t_poison_dmg + 20
                                                     o_health = o_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == ice_element:
@@ -15447,8 +15447,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                         elif carm_shield_active and dmg['ELEMENT'] != dark_element:
                                                             if dmg['ELEMENT'] == poison_element: #Poison Update
-                                                                if t_poison_dmg <= 150:
-                                                                    t_poison_dmg = o_poison_dmg + 10
+                                                                if t_poison_dmg <= 300:
+                                                                    t_poison_dmg = o_poison_dmg + 20
                                                                 
                                                             if cshield_value > 0:
                                                                 cshield_value = cshield_value -dmg['DMG']
@@ -15492,10 +15492,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 c_health = c_health
                                                                 cparry_damage = round(dmg['DMG'])
                                                                 c_health = round(c_health - (cparry_damage * .75))
-                                                                t_health = round(t_health - (cparry_damage * .35))
+                                                                t_health = round(t_health - (cparry_damage * .40))
                                                                 cparry_count = cparry_count - 1
                                                                 
-                                                                previous_moves.append(f"(**{turn_total}**) {c_card} Activates Parry 🔄")
+                                                                previous_moves.append(f"(**{turn_total}**) {c_card} Activates Parry 🔄 after **{round(tparry_damage * .75)}** dmg dealt:")
                                                                 if tarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                     tarm_barrier_active=False
                                                                     
@@ -15505,9 +15505,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 c_health = c_health
                                                                 cparry_damage = round(dmg['DMG'])
                                                                 c_health = round(c_health - (cparry_damage * .75))
-                                                                t_health = round(t_health - (cparry_damage * .35))
-                                                                embedVar = discord.Embed(title=f"{c_card} **Parry** Penetrated!!", description=f"{t_card} takes {round(cparry_damage * .35)}! DMG and breaks the **Parry**", colour=0xe91e63)
-                                                                previous_moves.append(f"(**{turn_total}**) **{c_card}** Parry Penetrated! **{t_card}** takes **{round(cparry_damage * .35)}** ! DMG and breaks the **Parry**")
+                                                                t_health = round(t_health - (cparry_damage * .40))
+                                                                embedVar = discord.Embed(title=f"{c_card} **Parry** Penetrated!!", description=f"{t_card} takes {round(cparry_damage * .40)}! DMG and breaks the **Parry**", colour=0xe91e63)
+                                                                previous_moves.append(f"(**{turn_total}**) **{c_card}** Parry Penetrated! **{t_card}** takes **{round(cparry_damage * .40)}** ! DMG and breaks the **Parry**")
                                                                 cparry_count = cparry_count - 1
                                                                 if tarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                     tarm_barrier_active=False
@@ -15596,8 +15596,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 c_health = c_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == poison_element:
-                                                                if t_poison_dmg <= 150:
-                                                                    t_poison_dmg = t_poison_dmg + 10
+                                                                if t_poison_dmg <= 300:
+                                                                    t_poison_dmg = t_poison_dmg + 20
                                                                 c_health = c_health - dmg['DMG']
                                                                 
                                                             elif dmg['ELEMENT'] == gravity_element:
@@ -15777,8 +15777,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                         elif oarm_shield_active and dmg['ELEMENT'] != dark_element:
                                                             if dmg['ELEMENT'] == poison_element: #Poison Update
-                                                                if t_poison_dmg <= 150:
-                                                                    t_poison_dmg = o_poison_dmg + 10
+                                                                if t_poison_dmg <= 300:
+                                                                    t_poison_dmg = o_poison_dmg + 20
                                                               
                                                             if oshield_value > 0:
                                                                 oshield_value = oshield_value -dmg['DMG']
@@ -15821,10 +15821,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if oparry_count > 1:
                                                                 oparry_damage = round(dmg['DMG'])
                                                                 o_health = round(o_health - (oparry_damage * .75))
-                                                                t_health = round(t_health - (oparry_damage * .35))
+                                                                t_health = round(t_health - (oparry_damage * .40))
                                                                 oparry_count = oparry_count - 1
-                                                                embedVar = discord.Embed(title=f"{o_card} Activates **Parry** 🔄", description=f"{t_card} takes {round(oparry_damage * .35)}! DMG\n **{oparry_count} Parries** to go!!", colour=0xe91e63)
-                                                                previous_moves.append(f"(**{turn_total}**) **{o_card}** Activates Parry 🔄 {t_card} takes {round(oparry_damage * .35)}! DMG\n **{oparry_count}  Parries** to go!!")
+                                                                embedVar = discord.Embed(title=f"{o_card} Activates **Parry** 🔄", description=f"{t_card} takes {round(oparry_damage * .40)}! DMG\n **{oparry_count} Parries** to go!!", colour=0xe91e63)
+                                                                previous_moves.append(f"(**{turn_total}**) **{o_card}** Activates Parry 🔄 after **{round(tparry_damage * .75)}** dmg dealt: {t_card} takes {round(oparry_damage * .40)}! DMG\n **{oparry_count}  Parries** to go!!")
                                                                 if tarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                     tarm_barrier_active=False
                                                                     
@@ -15833,9 +15833,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             elif oparry_count==1:
                                                                 oparry_damage = round(dmg['DMG'])
                                                                 o_health = round(o_health - (oparry_damage * .75))
-                                                                t_health = round(t_health - (oparry_damage * .35))
-                                                                embedVar = discord.Embed(title=f"{o_card} **Parry** Penetrated!!", description=f"{t_card} takes {round(oparry_damage * .35)}! DMG and breaks the **Parry**", colour=0xe91e63)
-                                                                previous_moves.append(f"(**{turn_total}**) **{o_card}** Parry Penetrated! **{t_card}** takes **{round(oparry_damage * .35)}**! DMG and breaks the **Parry**")
+                                                                t_health = round(t_health - (oparry_damage * .40))
+                                                                embedVar = discord.Embed(title=f"{o_card} **Parry** Penetrated!!", description=f"{t_card} takes {round(oparry_damage * .40)}! DMG and breaks the **Parry**", colour=0xe91e63)
+                                                                previous_moves.append(f"(**{turn_total}**) **{o_card}** Parry Penetrated! **{t_card}** takes **{round(oparry_damage * .40)}**! DMG and breaks the **Parry**")
                                                                 oparry_count = oparry_count - 1
                                                                 if tarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                     tarm_barrier_active=False
@@ -15911,8 +15911,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_health = o_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == poison_element:
-                                                                if t_poison_dmg <= 150:
-                                                                    t_poison_dmg = t_poison_dmg + 10
+                                                                if t_poison_dmg <= 300:
+                                                                    t_poison_dmg = t_poison_dmg + 20
                                                                 o_health = o_health - dmg['DMG']
         
                                                             elif dmg['ELEMENT'] == ice_element:
@@ -16111,8 +16111,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                     elif oarm_shield_active and dmg['ELEMENT'] != dark_element:
                                                         if dmg['ELEMENT'] == poison_element: #Poison Update
-                                                            if t_poison_dmg <= 150:
-                                                                t_poison_dmg = o_poison_dmg + 10
+                                                            if t_poison_dmg <= 300:
+                                                                t_poison_dmg = o_poison_dmg + 20
                                                             
                                                         if oshield_value > 0:
                                                             oshield_value = oshield_value -dmg['DMG']
@@ -16156,10 +16156,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if oparry_count > 1:
                                                             oparry_damage = round(dmg['DMG'])
                                                             o_health = round(o_health - (oparry_damage * .75))
-                                                            t_health = round(t_health - (oparry_damage * .35))
+                                                            t_health = round(t_health - (oparry_damage * .40))
                                                             oparry_count = oparry_count - 1
-                                                            embedVar = discord.Embed(title=f"{o_card} Activates **Parry** 🔄", description=f"{t_card} takes {round(oparry_damage * .35)}! DMG\n **{oparry_count} Parries** to go!!", colour=0xe91e63)
-                                                            previous_moves.append(f"(**{turn_total}**) **{o_card}** Activates Parry 🔄 {t_card} takes {round(oparry_damage * .35)}! DMG\n **{oparry_count}  Parries** to go!!")
+                                                            embedVar = discord.Embed(title=f"{o_card} Activates **Parry** 🔄", description=f"{t_card} takes {round(oparry_damage * .40)}! DMG\n **{oparry_count} Parries** to go!!", colour=0xe91e63)
+                                                            previous_moves.append(f"(**{turn_total}**) **{o_card}** Activates Parry 🔄 after **{round(tparry_damage * .75)}** dmg dealt: {t_card} takes {round(oparry_damage * .40)}! DMG\n **{oparry_count}  Parries** to go!!")
                                                             if tarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                 tarm_barrier_active=False
                                                                 
@@ -16168,9 +16168,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         elif oparry_count==1:
                                                             oparry_damage = round(dmg['DMG'])
                                                             o_health = round(o_health - (oparry_damage * .75))
-                                                            t_health = round(t_health - (oparry_damage * .35))
-                                                            embedVar = discord.Embed(title=f"{o_card} **Parry** Penetrated!!", description=f"{t_card} takes {round(oparry_damage * .35)}! DMG and breaks the **Parry**", colour=0xe91e63)
-                                                            previous_moves.append(f"(**{turn_total}**) **{o_card}** Parry Penetrated! **{t_card}** takes **{round(oparry_damage * .35)}**! DMG and breaks the **Parry**")
+                                                            t_health = round(t_health - (oparry_damage * .40))
+                                                            embedVar = discord.Embed(title=f"{o_card} **Parry** Penetrated!!", description=f"{t_card} takes {round(oparry_damage * .40)}! DMG and breaks the **Parry**", colour=0xe91e63)
+                                                            previous_moves.append(f"(**{turn_total}**) **{o_card}** Parry Penetrated! **{t_card}** takes **{round(oparry_damage * .40)}**! DMG and breaks the **Parry**")
                                                             oparry_count = oparry_count - 1
                                                             if tarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                 tarm_barrier_active=False
@@ -16246,8 +16246,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == poison_element:
-                                                            if t_poison_dmg <= 150:
-                                                                t_poison_dmg = t_poison_dmg + 10
+                                                            if t_poison_dmg <= 300:
+                                                                t_poison_dmg = t_poison_dmg + 20
                                                             o_health = o_health - dmg['DMG']
     
                                                         elif dmg['ELEMENT'] == ice_element:
@@ -16328,7 +16328,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             if turn == 2:
                                 if t_bleed_hit:
                                     t_bleed_hit = False
-                                    bleed_dmg = 4 * turn_total
+                                    bleed_dmg = 8 * turn_total
                                     c_health = c_health - bleed_dmg
                                     previous_moves.append(f"🩸 **{c_card}** shredded for **{round(bleed_dmg)}** bleed dmg...")
                                     if c_health <= 0:
@@ -17812,8 +17812,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     elif tarm_shield_active and dmg['ELEMENT'] != dark_element:
                                                         
                                                         if dmg['ELEMENT'] == poison_element: #Poison Update
-                                                            if c_poison_dmg <= 150:
-                                                                c_poison_dmg = c_poison_dmg + 10
+                                                            if c_poison_dmg <= 300:
+                                                                c_poison_dmg = c_poison_dmg + 20
                                                             
                                                         
                                                         if tshield_value > 0:
@@ -17863,10 +17863,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health
                                                             tparry_damage = round(dmg['DMG'])
                                                             t_health = round(t_health - (tparry_damage * .75))
-                                                            c_health = round(c_health - (tparry_damage * .35))
+                                                            c_health = round(c_health - (tparry_damage * .40))
                                                             tparry_count = tparry_count - 1
-                                                            embedVar = discord.Embed(title=f"{t_card} Activates **Parry** 🔄", description=f"{c_card} takes {round(tparry_damage * .35)}! DMG\n **{tparry_count} Parries** to go!!", colour=0xe91e63)
-                                                            previous_moves.append(f"(**{turn_total}**) **{t_card}** Activates Parry 🔄 {c_card} takes {round(tparry_damage * .35)}! DMG\n **{tparry_count}  Parries** to go!!")
+                                                            embedVar = discord.Embed(title=f"{t_card} Activates **Parry** 🔄", description=f"{c_card} takes {round(tparry_damage * .40)}! DMG\n **{tparry_count} Parries** to go!!", colour=0xe91e63)
+                                                            previous_moves.append(f"(**{turn_total}**) **{t_card}** Activates Parry 🔄 after **{round(tparry_damage * .75)}** dmg dealt: {c_card} takes {round(tparry_damage * .40)}! DMG\n **{tparry_count}  Parries** to go!!")
                                                             if carm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                 carm_barrier_active=False
                                                                 embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -17877,9 +17877,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health
                                                             tparry_damage = round(dmg['DMG'])
                                                             t_health = round(t_health - (tparry_damage * .75))
-                                                            c_health = round(c_health - (tparry_damage * .35))
-                                                            embedVar = discord.Embed(title=f"{t_card} **Parry** Penetrated!!", description=f"{c_card} takes {round(tparry_damage * .35)}! DMG and breaks the **Parry**", colour=0xe91e63)
-                                                            previous_moves.append(f"(**{turn_total}**) **{t_card}** Parry Penetrated! **{c_card}** takes **{round(tparry_damage * .35)}**! DMG and breaks the **Parry**")
+                                                            c_health = round(c_health - (tparry_damage * .40))
+                                                            embedVar = discord.Embed(title=f"{t_card} **Parry** Penetrated!!", description=f"{c_card} takes {round(tparry_damage * .40)}! DMG and breaks the **Parry**", colour=0xe91e63)
+                                                            previous_moves.append(f"(**{turn_total}**) **{t_card}** Parry Penetrated! **{c_card}** takes **{round(tparry_damage * .40)}**! DMG and breaks the **Parry**")
                                                             tparry_count = tparry_count - 1
                                                             if carm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                 carm_barrier_active=False
@@ -17969,8 +17969,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == poison_element:
-                                                            if c_poison_dmg <= 150:
-                                                                c_poison_dmg = c_poison_dmg + 10
+                                                            if c_poison_dmg <= 300:
+                                                                c_poison_dmg = c_poison_dmg + 20
                                                             t_health = t_health - dmg['DMG']
                                                             
                                                         elif dmg['ELEMENT'] == gravity_element:
@@ -19050,8 +19050,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == poison_element:
-                                                            if c_poison_dmg <= 150:
-                                                                c_poison_dmg = c_poison_dmg + 10
+                                                            if c_poison_dmg <= 300:
+                                                                c_poison_dmg = c_poison_dmg + 20
                                                             t_health = t_health - dmg['DMG']
                                                             
                                                         elif dmg['ELEMENT'] == gravity_element:
@@ -19222,8 +19222,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             await button_ctx.defer(ignore=True)
                                                         elif tarm_shield_active and dmg['ELEMENT'] != dark_element:
                                                             if dmg['ELEMENT'] == poison_element: #Poison Update
-                                                                if c_poison_dmg <= 150:
-                                                                    c_poison_dmg = o_poison_dmg + 10
+                                                                if c_poison_dmg <= 300:
+                                                                    c_poison_dmg = o_poison_dmg + 20
                                                          
                                                             if tshield_value > 0:
                                                                 tshield_value = tshield_value -dmg['DMG']
@@ -19276,10 +19276,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = t_health
                                                                 tparry_damage = round(dmg['DMG'])
                                                                 t_health = round(t_health - (tparry_damage * .75))
-                                                                c_health = round(c_health - (tparry_damage * .35))
+                                                                c_health = round(c_health - (tparry_damage * .40))
                                                                 tparry_count = tparry_count - 1
-                                                                embedVar = discord.Embed(title=f"{t_card} Activates **Parry** 🔄", description=f"{c_card} takes {round(tparry_damage * .35)}! DMG\n **{tparry_count} Parries** to go!!", colour=0xe91e63)
-                                                                previous_moves.append(f"(**{turn_total}**) **{t_card}** Activates Parry 🔄 {c_card} takes {round(tparry_damage * .35)}! DMG\n **{tparry_count}  Parries** to go!!")
+                                                                embedVar = discord.Embed(title=f"{t_card} Activates **Parry** 🔄", description=f"{c_card} takes {round(tparry_damage * .40)}! DMG\n **{tparry_count} Parries** to go!!", colour=0xe91e63)
+                                                                previous_moves.append(f"(**{turn_total}**) **{t_card}** Activates Parry 🔄 after **{round(tparry_damage * .75)}** dmg dealt: {c_card} takes {round(tparry_damage * .40)}! DMG\n **{tparry_count}  Parries** to go!!")
                                                                 if carm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                     carm_barrier_active=False
                                                                     embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -19291,9 +19291,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = t_health
                                                                 tparry_damage = round(dmg['DMG'])
                                                                 t_health = round(t_health - (tparry_damage * .75))
-                                                                c_health = round(c_health - (tparry_damage * .35))
-                                                                embedVar = discord.Embed(title=f"{t_card} **Parry** Penetrated!!", description=f"{c_card} takes {round(tparry_damage * .35)}! DMG and breaks the **Parry**", colour=0xe91e63)
-                                                                previous_moves.append(f"(**{turn_total}**) **{t_card}** Parry Penetrated! **{c_card}** takes **{round(tparry_damage * .35)}**! DMG and breaks the **Parry**")
+                                                                c_health = round(c_health - (tparry_damage * .40))
+                                                                embedVar = discord.Embed(title=f"{t_card} **Parry** Penetrated!!", description=f"{c_card} takes {round(tparry_damage * .40)}! DMG and breaks the **Parry**", colour=0xe91e63)
+                                                                previous_moves.append(f"(**{turn_total}**) **{t_card}** Parry Penetrated! **{c_card}** takes **{round(tparry_damage * .40)}**! DMG and breaks the **Parry**")
                                                                 tparry_count = tparry_count - 1
                                                                 if carm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                     carm_barrier_active=False
@@ -19386,8 +19386,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = t_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == poison_element:
-                                                                if c_poison_dmg <= 150:
-                                                                    c_poison_dmg = c_poison_dmg + 10
+                                                                if c_poison_dmg <= 300:
+                                                                    c_poison_dmg = c_poison_dmg + 20
                                                                 t_health = t_health - dmg['DMG']
                                                                 
                                                             elif dmg['ELEMENT'] == gravity_element:
@@ -19487,7 +19487,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             elif turn == 3:
                                 if c_bleed_hit:
                                     c_bleed_hit = False
-                                    bleed_dmg = 4 * turn_total
+                                    bleed_dmg = 8 * turn_total
                                     t_health = t_health - bleed_dmg
                                     previous_moves.append(f"🩸 **{t_card}** shredded for **{round(bleed_dmg)}** bleed dmg...")
                                     if t_health <= 0:
@@ -19515,7 +19515,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 
                                 if o_bleed_hit:
                                     o_bleed_hit = False
-                                    bleed_dmg = 4 * turn_total
+                                    bleed_dmg = 8 * turn_total
                                     t_health = t_health - bleed_dmg
                                     previous_moves.append(f"🩸 **{t_card}** shredded for **{round(bleed_dmg)}** bleed dmg...")
                                     if t_health <= 0:
@@ -20191,7 +20191,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_max_health, o_attack, t_special_move_description, turn_total,
                                                             tcard_lvl_ap_buff, None)
                                         else:
-                                            dmg = damage_cal(t_for_c_opponent_affinities, basic_attack_name, tmove1_element, t_universe, t_card, t_enhancer, t_attack, t_defense, c_defense,
+                                            dmg = damage_cal(tap1, t_for_c_opponent_affinities, basic_attack_name, tmove1_element, t_universe, t_card, t_enhancer, t_attack, t_defense, c_defense,
                                                             t_stamina, t_enhancer_used, t_health, c_health, c_stamina,
                                                             t_max_health, c_attack, t_special_move_description, turn_total,
                                                             tcard_lvl_ap_buff, None)
@@ -20446,7 +20446,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     tcard_lvl_ap_buff, None)
                                                     o_health = o_health - int(dmg['DMG'])
                                                 else:
-                                                    dmg = damage_cal(t_for_c_opponent_affinities, ultimate_attack_name, tmove3_element, t_universe, t_card, t_3, t_attack, t_defense,
+                                                    dmg = damage_cal(tap3, t_for_c_opponent_affinities, ultimate_attack_name, tmove3_element, t_universe, t_card, t_3, t_attack, t_defense,
                                                                     c_defense, t_stamina, t_enhancer_used, t_health,
                                                                     c_health, c_stamina, t_max_health, c_attack,
                                                                     t_special_move_description, turn_total,
@@ -20937,8 +20937,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     c_health = c_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == poison_element:
-                                                    if t_poison_dmg <= 150:
-                                                        t_poison_dmg = t_poison_dmg + 10
+                                                    if t_poison_dmg <= 300:
+                                                        t_poison_dmg = t_poison_dmg + 20
                                                     c_health = c_health - dmg['DMG']
                                                     
                                                 elif dmg['ELEMENT'] == gravity_element:
@@ -21097,8 +21097,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         #await private_channel.send(embed=embedVar)
                                                     elif oarm_shield_active and dmg['ELEMENT'] != dark_element:
                                                         if dmg['ELEMENT'] == poison_element: #Poison Update
-                                                            if t_poison_dmg <= 150:
-                                                                t_poison_dmg = o_poison_dmg + 10
+                                                            if t_poison_dmg <= 300:
+                                                                t_poison_dmg = o_poison_dmg + 20
                                                    
                                                         if oshield_value > 0:
                                                             oshield_value = oshield_value -dmg['DMG']
@@ -21146,10 +21146,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if oparry_count > 1:
                                                             oparry_damage = round(dmg['DMG'])
                                                             o_health = round(o_health - (oparry_damage * .75))
-                                                            t_health = round(t_health - (oparry_damage * .35))
+                                                            t_health = round(t_health - (oparry_damage * .40))
                                                             oparry_count = oparry_count - 1
-                                                            embedVar = discord.Embed(title=f"{o_card} Activates **Parry** 🔄", description=f"{t_card} takes {round(oparry_damage * .35)}! DMG\n **{oparry_count} Parries** to go!!", colour=0xe91e63)
-                                                            previous_moves.append(f"(**{turn_total}**) **{o_card}** Activates Parry 🔄 {t_card} takes {round(oparry_damage * .35)}! DMG\n **{oparry_count}  Parries** to go!!")
+                                                            embedVar = discord.Embed(title=f"{o_card} Activates **Parry** 🔄", description=f"{t_card} takes {round(oparry_damage * .40)}! DMG\n **{oparry_count} Parries** to go!!", colour=0xe91e63)
+                                                            previous_moves.append(f"(**{turn_total}**) **{o_card}** Activates Parry 🔄 after **{round(tparry_damage * .75)}** dmg dealt: {t_card} takes {round(oparry_damage * .40)}! DMG\n **{oparry_count}  Parries** to go!!")
                                                             if tarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                 tarm_barrier_active=False
                                                                 
@@ -21159,9 +21159,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         elif oparry_count==1:
                                                             oparry_damage = round(dmg['DMG'])
                                                             o_health = round(o_health - (oparry_damage * .75))
-                                                            t_health = round(t_health - (oparry_damage * .35))
-                                                            embedVar = discord.Embed(title=f"{o_card} **Parry** Penetrated!!", description=f"{t_card} takes {round(oparry_damage * .35)}! DMG and breaks the **Parry**", colour=0xe91e63)
-                                                            previous_moves.append(f"(**{turn_total}**) **{o_card}** Parry Penetrated! **{t_card}** takes **{round(oparry_damage * .35)}**! DMG and breaks the **Parry**")
+                                                            t_health = round(t_health - (oparry_damage * .40))
+                                                            embedVar = discord.Embed(title=f"{o_card} **Parry** Penetrated!!", description=f"{t_card} takes {round(oparry_damage * .40)}! DMG and breaks the **Parry**", colour=0xe91e63)
+                                                            previous_moves.append(f"(**{turn_total}**) **{o_card}** Parry Penetrated! **{t_card}** takes **{round(oparry_damage * .40)}**! DMG and breaks the **Parry**")
                                                             oparry_count = oparry_count - 1
                                                             if tarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                 tarm_barrier_active=False
@@ -21238,8 +21238,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == poison_element:
-                                                            if t_poison_dmg <= 150:
-                                                                t_poison_dmg = t_poison_dmg + 10
+                                                            if t_poison_dmg <= 300:
+                                                                t_poison_dmg = t_poison_dmg + 20
                                                             o_health = o_health - dmg['DMG']
     
                                                         elif dmg['ELEMENT'] == ice_element:
@@ -21445,8 +21445,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         #await private_channel.send(embed=embedVar)
                                                     elif carm_shield_active and dmg['ELEMENT'] != dark_element:
                                                         if dmg['ELEMENT'] == poison_element: #Poison Update
-                                                            if t_poison_dmg <= 150:
-                                                                t_poison_dmg = o_poison_dmg + 10
+                                                            if t_poison_dmg <= 300:
+                                                                t_poison_dmg = o_poison_dmg + 20
                                                             c_health = c_health - dmg['DMG']
                                                         if cshield_value > 0:
                                                             cshield_value = cshield_value -dmg['DMG']
@@ -21495,10 +21495,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             c_health = c_health
                                                             cparry_damage = round(dmg['DMG'])
                                                             c_health = round(c_health - (cparry_damage * .75))
-                                                            t_health = round(t_health - (cparry_damage * .35))
+                                                            t_health = round(t_health - (cparry_damage * .40))
                                                             cparry_count = cparry_count - 1
                                                             
-                                                            previous_moves.append(f"(**{turn_total}**) **{c_card}** Activates Parry 🔄 {t_card} takes {round(cparry_damage * .35)}! DMG\n **{cparry_count}  Parries** to go!!")
+                                                            previous_moves.append(f"(**{turn_total}**) **{c_card}** Activates Parry 🔄 after **{round(tparry_damage * .75)}** dmg dealt: {t_card} takes {round(cparry_damage * .40)}! DMG\n **{cparry_count}  Parries** to go!!")
                                                             if tarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!**")
@@ -21509,9 +21509,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             c_health = c_health
                                                             cparry_damage = round(dmg['DMG'])
                                                             c_health = round(c_health - (cparry_damage * .75))
-                                                            t_health = round(t_health - (cparry_damage * .35))
-                                                            embedVar = discord.Embed(title=f"{c_card} **Parry** Penetrated!!", description=f"{t_card} takes {round(cparry_damage * .35)}! DMG and breaks the **Parry**", colour=0xe91e63)
-                                                            previous_moves.append(f"(**{turn_total}**) **{c_card}** Parry Penetrated! **{t_card}** takes **{round(cparry_damage * .35)}**! DMG and breaks the **Parry**")
+                                                            t_health = round(t_health - (cparry_damage * .40))
+                                                            embedVar = discord.Embed(title=f"{c_card} **Parry** Penetrated!!", description=f"{t_card} takes {round(cparry_damage * .40)}! DMG and breaks the **Parry**", colour=0xe91e63)
+                                                            previous_moves.append(f"(**{turn_total}**) **{c_card}** Parry Penetrated! **{t_card}** takes **{round(cparry_damage * .40)}**! DMG and breaks the **Parry**")
                                                             cparry_count = cparry_count - 1
                                                             if tarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                 tarm_barrier_active=False
@@ -21599,8 +21599,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             c_health = c_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == poison_element:
-                                                            if t_poison_dmg <= 150:
-                                                                t_poison_dmg = t_poison_dmg + 10
+                                                            if t_poison_dmg <= 300:
+                                                                t_poison_dmg = t_poison_dmg + 20
                                                             c_health = c_health - dmg['DMG']
                                                             
                                                         elif dmg['ELEMENT'] == gravity_element:
