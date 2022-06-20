@@ -8788,7 +8788,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         # Resolve Check and Calculation
                                         if o_used_resolve and o_used_focus and not o_pet_used:
                                             o_enhancer_used = True
-                                            dmg = damage_cal(t_opponent_affinities, basic_attack_name, omove1_element, o_universe, o_card, opet_move, o_attack, o_defense,
+                                            dmg = damage_cal(ap1, t_opponent_affinities, basic_attack_name, omove1_element, o_universe, o_card, opet_move, o_attack, o_defense,
                                                             t_defense, o_stamina, o_enhancer_used, o_health, t_health,
                                                             t_stamina, o_max_health, t_attack,
                                                             o_special_move_description, turn_total, ocard_lvl_ap_buff, None)
