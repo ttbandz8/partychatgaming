@@ -10222,7 +10222,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     await button_ctx.send(embed=embedVar)
                                                     await asyncio.sleep(2)
                                                 o_enhancer_used = True
-                                                dmg = damage_cal(t_opponent_affinities, basic_attack_name, omove1_element, o_universe, o_card, opet_move, o_attack, o_defense,
+                                                dmg = damage_cal(ap1, t_opponent_affinities, basic_attack_name, omove1_element, o_universe, o_card, opet_move, o_attack, o_defense,
                                                                 t_defense, o_stamina, o_enhancer_used, o_health, t_health,
                                                                 t_stamina, o_max_health, t_attack,
                                                                 o_special_move_description, turn_total, ocard_lvl_ap_buff, None)
@@ -10383,7 +10383,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         elif mode in co_op_modes:
                                             if button_ctx.custom_id == "7":
                                                 o_enhancer_used = True
-                                                dmg = damage_cal(t_for_c_opponent_affinities, basic_attack_name, omove1_element, o_universe, o_card, o_enhancer, o_attack, o_defense,
+                                                dmg = damage_cal(ap1,t_for_c_opponent_affinities, basic_attack_name, omove1_element, o_universe, o_card, o_enhancer, o_attack, o_defense,
                                                                 c_defense, o_stamina, o_enhancer_used, o_health, c_health,
                                                                 c_stamina, o_max_health, c_attack,
                                                                 o_special_move_description, turn_total, ocard_lvl_ap_buff, None)
