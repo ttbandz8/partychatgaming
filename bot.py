@@ -2599,7 +2599,7 @@ async def fund(ctx, amount):
          await ctx.send("You do not have that amount to fund.")
       else:
          await crown_utilities.curseteam(int(amount), team['TEAM_NAME'])
-         await crown_utilities.blessguild_Alt(int(amount), str(team_guild))
+         await blessguild_Alt(int(amount), str(team_guild))
          await ctx.send(f"{team_guild} has been funded :coin: {amount}.")
          return
    except Exception as ex:
