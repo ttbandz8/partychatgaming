@@ -2411,6 +2411,7 @@ def damage_cal(move_ap, opponent_affinity, move_type, move_element, universe, ca
             does_repel = False
             does_absorb = False
             is_wind_element = False
+            is_physical_element = False
             ranged_attack = False
             low = dmg - (dmg * .10)
             high = dmg + (dmg * .10)
@@ -2419,8 +2420,10 @@ def damage_cal(move_ap, opponent_affinity, move_type, move_element, universe, ca
             move_emoji = crown_utilities.set_emoji(move_element)
             if move_element == "WIND":
                 is_wind_element = True
-            if move_element == "RANGED" and stamina >= 50:
+            if move_element == "RANGED" and stamina >= 30:
                 ranged_attack = True
+            if move_element == "PHYSICAL" and stamina >= 80:
+                is_physical_element = True
             
 
             true_dmg = (round(random.randint(int(low), int(high)))) + 25
@@ -2435,7 +2438,7 @@ def damage_cal(move_ap, opponent_affinity, move_type, move_element, universe, ca
             hit_roll = round(random.randint(1, 21))
             # print(f"HIT ROLL: {str(hit_roll)}")
             if move_element == "SPIRIT" and hit_roll > 3:
-                hit_roll = hit_roll + 3
+                hit_roll = hit_roll + 4
 
             if ranged_attack:
                 true_dmg = round(true_dmg * 1.7)
@@ -2480,6 +2483,8 @@ def damage_cal(move_ap, opponent_affinity, move_type, move_element, universe, ca
                 additional_dmg = stamina + turn
                 true_dmg = round(true_dmg + additional_dmg)
 
+            if is_physical_element:
+                true_dmg = round(true_dmg * 2)
 
             if opponent_affinity[move_type] == "WEAKNESS" and not (hit_roll <= miss_hit):
                 true_dmg = round(true_dmg * 1.6)
@@ -7578,7 +7583,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         if turn == 0:
                             if t_bleed_hit:
                                 t_bleed_hit = False
-                                bleed_dmg = 8 * turn_total
+                                bleed_dmg = 10 * turn_total
                                 o_health = o_health - bleed_dmg
                                 if o_health <= 0:
                                     continue
@@ -7653,7 +7658,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     o_health = round(o_health - ((o_title_passive_value / 100) * o_health))
                                     o_defense = round(o_defense + ((o_title_passive_value / 100) * o_health))
                                 if o_title_passive_type == "FEAR":
-                                    o_max_health = o_max_health - (o_max_health * .03)
+                                    if o_universe != "Chainsawman":
+                                        o_max_health = o_max_health - (o_max_health * .03)
                                     t_defense = t_defense - o_title_passive_value
                                     t_attack = t_attack - o_title_passive_value
                                     t_ap_buff = t_ap_buff - o_title_passive_value
@@ -7727,7 +7733,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     o_health = round(o_health - ((o_value_for_passive / 100) * o_health))
                                     o_defense = round(o_defense + ((o_value_for_passive / 100) * o_health))
                                 if o_card_passive_type == "FEAR":
-                                    o_max_health = o_max_health - (o_max_health * .03)
+                                    if o_universe != "Chainsawman":
+                                        o_max_health = o_max_health - (o_max_health * .03)
                                     t_defense = t_defense - o_flat_for_passive
                                     t_attack = t_attack - o_flat_for_passive
                                     t_ap_buff = t_ap_buff - o_flat_for_passive
@@ -8862,7 +8869,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     o_health = round(dmg['DMG'])
                                                     t_health = o_health
                                                 elif opet_type == 'FEAR':
-                                                    o_max_health = round(o_max_health - (o_max_health * .10))
+                                                    if o_universe != "Chainsawman":
+                                                        o_max_health = round(o_max_health - (o_max_health * .10))
                                                     t_defense = round(t_defense - dmg['DMG'])
                                                     t_attack= round(t_attack - dmg['DMG'])
                                                     t_ap_buff = round(t_ap_buff - dmg['DMG'])
@@ -9104,7 +9112,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = round(dmg['DMG'])
                                                         o_health = round(dmg['DMG'])
                                                 elif enh_type == 'FEAR':
-                                                    o_max_health = round(o_max_health - (o_max_health * .10))
+                                                    if o_universe != "Chainsawman":
+                                                        o_max_health = round(o_max_health - (o_max_health * .10))
                                                     t_defense = round(t_defense - dmg['DMG'])
                                                     t_attack= round(t_attack - dmg['DMG'])
                                                     t_ap_buff = round(t_ap_buff - dmg['DMG'])
@@ -10296,7 +10305,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_health = round(dmg['DMG'])
                                                         t_health = o_health
                                                     elif opet_type == 'FEAR':
-                                                        o_max_health = round(o_max_health - (o_max_health * .10))
+                                                        if o_universe != "Chainsawman":
+                                                            o_max_health = round(o_max_health - (o_max_health * .10))
                                                         t_defense = round(t_defense - dmg['DMG'])
                                                         t_attack= round(t_attack - dmg['DMG'])
                                                         t_ap_buff = round(t_ap_buff - dmg['DMG'])
@@ -10456,7 +10466,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         c_health = round(dmg['DMG'])
                                                         o_health = c_health
                                                     elif comp_enh == 'FEAR':
-                                                        c_max_health = round(c_max_health - (c_max_health * .10))
+                                                        if c_universe != "Chainsawman":
+                                                            c_max_health = round(c_max_health - (c_max_health * .10))
                                                         t_defense = round(t_defense - dmg['DMG'])
                                                         t_attack= round(t_attack - dmg['DMG'])
                                                         t_ap_buff = round(t_ap_buff - dmg['DMG'])
@@ -10573,7 +10584,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_health = round(dmg['DMG'])
                                                         c_health = o_health
                                                     elif cenh_type == 'FEAR':
-                                                        o_max_health = round(o_max_health - (o_max_health * .10))
+                                                        if o_universe != "Chainsawman":
+                                                            o_max_health = round(o_max_health - (o_max_health * .10))
                                                         t_defense = round(t_defense - dmg['DMG'])
                                                         t_attack= round(t_attack - dmg['DMG'])
                                                         t_ap_buff = round(t_ap_buff - dmg['DMG'])
@@ -10851,7 +10863,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = round(dmg['DMG'])
                                                             o_health = round(dmg['DMG'])
                                                     elif enh_type == 'FEAR':
-                                                        o_max_health = round(o_max_health - (o_max_health * .10))
+                                                        if o_universe != "Chainsawman":
+                                                            o_max_health = round(o_max_health - (o_max_health * .10))
                                                         t_defense = round(t_defense - dmg['DMG'])
                                                         t_attack= round(t_attack - dmg['DMG'])
                                                         t_ap_buff = round(t_ap_buff - dmg['DMG'])
@@ -11183,7 +11196,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         elif turn == 1:
                             if o_bleed_hit:
                                 o_bleed_hit = False
-                                bleed_dmg = 8 * turn_total
+                                bleed_dmg = 10 * turn_total
                                 t_health = t_health - bleed_dmg
                                 previous_moves.append(f"🩸 **{t_card}** shredded for **{round(bleed_dmg)}** bleed dmg...")
                                 if t_health <= 0:
@@ -11254,7 +11267,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     t_health = round(t_health - ((t_title_passive_value / 100) * t_health))
                                     t_defense = round(t_defense + ((t_title_passive_value / 100) * t_health))
                                 if t_title_passive_type == "FEAR":
-                                    t_max_health = t_max_health - (t_max_health * .03)
+                                    if t_universe != "Chainsawman":
+                                        t_max_health = t_max_health - (t_max_health * .03)
                                     o_defense = o_defense - t_title_passive_value
                                     o_attack = o_attack - t_title_passive_value
                                     o_ap_buff = o_ap_buff - t_title_passive_value
@@ -11324,7 +11338,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     t_health = round(t_health - ((t_value_for_passive / 100) * t_health))
                                     t_defense = round(t_defense + ((t_value_for_passive / 100) * t_health))
                                 if t_card_passive_type == "FEAR":
-                                    t_max_health = t_max_health - (t_max_health * .03)
+                                    if t_universe != "Chainsawman":
+                                        t_max_health = t_max_health - (t_max_health * .03)
                                     o_defense = o_defense - t_title_passive_value
                                     o_attack = o_attack - t_title_passive_value
                                     o_ap_buff = o_ap_buff - t_title_passive_value
@@ -12380,7 +12395,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = round(dmg['DMG'])
                                                             o_health = t_health
                                                         elif tpet_type == 'FEAR':
-                                                            t_max_health = round(t_max_health - (t_max_health * .10))
+                                                            if t_universe != "Chainsawman":
+                                                                t_max_health = round(t_max_health - (t_max_health * .10))
                                                             o_defense = round(o_defense - dmg['DMG'])
                                                             o_attack= round(o_attack - dmg['DMG'])
                                                             o_ap_buff = round(o_ap_buff - dmg['DMG'])
@@ -12647,7 +12663,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = round(dmg['DMG'])
                                                             o_health = t_health
                                                         elif enh_type == 'FEAR':
-                                                            t_max_health = round(t_max_health - (t_max_health * .10))
+                                                            if t_universe != "Chainsawman":
+                                                                t_max_health = round(t_max_health - (t_max_health * .10))
                                                             o_defense = round(o_defense - dmg['DMG'])
                                                             o_attack= round(o_attack - dmg['DMG'])
                                                             o_ap_buff = round(o_ap_buff - dmg['DMG'])
@@ -13584,7 +13601,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = round(dmg['DMG'])
                                                         o_health = t_health
                                                     elif tpet_type == 'FEAR':
-                                                        t_max_health = round(t_max_health - (t_max_health * .10))
+                                                        if t_universe != "Chainsawman":
+                                                            t_max_health = round(t_max_health - (t_max_health * .10))
                                                         o_defense = round(o_defense - dmg['DMG'])
                                                         o_attack= round(o_attack - dmg['DMG'])
                                                         o_ap_buff = round(o_ap_buff - dmg['DMG'])
@@ -13842,7 +13860,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = round(dmg['DMG'])
                                                         o_health = t_health
                                                     elif enh_type == 'FEAR':
-                                                        t_max_health = round(t_max_health - (t_max_health * .10))
+                                                        if t_universe != "Chainsawman":
+                                                            t_max_health = round(t_max_health - (t_max_health * .10))
                                                         o_defense = round(o_defense - dmg['DMG'])
                                                         o_attack= round(o_attack - dmg['DMG'])
                                                         o_ap_buff = round(o_ap_buff - dmg['DMG'])
@@ -14803,7 +14822,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = round(dmg['DMG'])
                                                             c_health = t_health
                                                         elif tpet_type == 'FEAR':
-                                                            t_max_health = round(t_max_health - (t_max_health * .10))
+                                                            if t_universe != "Chainsawman":
+                                                                t_max_health = round(t_max_health - (t_max_health * .10))
                                                             c_defense = round(c_defense - dmg['DMG'])
                                                             c_attack = round(c_attack - dmg['DMG'])
                                                             c_ap_buff = round(c_ap_buff - dmg['DMG'])
@@ -14961,7 +14981,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = round(dmg['DMG'])
                                                             o_health = t_health
                                                         elif tpet_type == 'FEAR':
-                                                            t_max_health = round(t_max_health - (t_max_health * .10))
+                                                            if t_universe != "Chainsawman":
+                                                                t_max_health = round(t_max_health - (t_max_health * .10))
                                                             o_defense = round(o_defense - dmg['DMG'])
                                                             o_attack= round(o_attack - dmg['DMG'])
                                                             o_ap_buff = round(o_ap_buff - dmg['DMG'])
@@ -15121,7 +15142,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = round(dmg['DMG'])
                                                         o_health = t_health
                                                     elif tpet_type == 'FEAR':
-                                                        t_max_health = round(t_max_health - (t_max_health * .10))
+                                                        if t_universe != "Chainsawman":
+                                                            t_max_health = round(t_max_health - (t_max_health * .10))
                                                         o_defense = round(o_defense - dmg['DMG'])
                                                         o_attack= round(o_attack - dmg['DMG'])
                                                         o_ap_buff = round(o_ap_buff - dmg['DMG'])
@@ -15395,7 +15417,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = round(dmg['DMG'])
                                                                 _health = round(dmg['DMG'])
                                                         elif enh_type == 'FEAR':
-                                                            t_max_health = round(t_max_health - (t_max_health * .10))
+                                                            if t_universe != "Chainsawman":
+                                                                t_max_health = round(t_max_health - (t_max_health * .10))
                                                             c_attack = round(c_attack - dmg['DMG'])
                                                             c_defense = round(c_defense - dmg['DMG'])
                                                             c_ap_buff = round(c_ap_buff - dmg['DMG'])
@@ -15730,7 +15753,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = round(dmg['DMG'])
                                                                 o_health = round(dmg['DMG'])
                                                         elif enh_type == 'FEAR':
-                                                            t_max_health = round(t_max_health - (t_max_health * .10))
+                                                            if t_universe != "Chainsawman":
+                                                                t_max_health = round(t_max_health - (t_max_health * .10))
                                                             o_defense = round(o_defense - dmg['DMG'])
                                                             o_attack= round(o_attack - dmg['DMG'])
                                                             o_ap_buff = round(o_ap_buff - dmg['DMG'])
@@ -16059,7 +16083,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = round(dmg['DMG'])
                                                             o_health = round(dmg['DMG'])
                                                     elif enh_type == 'FEAR':
-                                                        t_max_health = round(t_max_health - (t_max_health * .10))
+                                                        if t_universe != "Chainsawman":
+                                                            t_max_health = round(t_max_health - (t_max_health * .10))
                                                         o_defense = round(o_defense - dmg['DMG'])
                                                         o_attack= round(o_attack - dmg['DMG'])
                                                         o_ap_buff = round(o_ap_buff - dmg['DMG'])
@@ -16328,7 +16353,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             if turn == 2:
                                 if t_bleed_hit:
                                     t_bleed_hit = False
-                                    bleed_dmg = 8 * turn_total
+                                    bleed_dmg = 10 * turn_total
                                     c_health = c_health - bleed_dmg
                                     previous_moves.append(f"🩸 **{c_card}** shredded for **{round(bleed_dmg)}** bleed dmg...")
                                     if c_health <= 0:
@@ -16395,7 +16420,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         c_health = c_health - c_title_passive_value
                                         c_defense = c_defense + c_title_passive_value
                                     if c_title_passive_type == "FEAR":
-                                        c_max_health = c_max_health - (c_max_health * .03)
+                                        if c_universe != "Chainsawman":
+                                            c_max_health = c_max_health - (c_max_health * .03)
                                         t_defense = t_defense - c_title_passive_value
                                         t_attack = t_attack - c_title_passive_value
                                         t_ap_buff = t_ap_buff - c_title_passive_value
@@ -16466,7 +16492,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         c_health = round(c_health - ((c_value_for_passive / 100) * c_health))
                                         c_defense = round(c_defense + ((c_value_for_passive / 100) * c_health))
                                     if c_card_passive_type == "FEAR":
-                                        c_max_health = c_max_health - (c_max_health * .05)
+                                        if c_universe != "Chainsawman":
+                                            c_max_health = c_max_health - (c_max_health * .05)
                                         t_defense = t_defense - c_flat_for_passive
                                         t_attack = t_attack - c_flat_for_passive
                                         t_ap_buff = t_ap_buff - c_flat_for_passive
@@ -17470,7 +17497,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         c_health = round(dmg['DMG'])
                                                         t_health = c_health
                                                     elif cpet_type == 'FEAR':
-                                                        c_max_health = round(c_max_health - (c_max_health * .10))
+                                                        if c_universe != "Chainsawman":
+                                                            c_max_health = round(c_max_health - (c_max_health * .10))
                                                         t_defense = round(t_defense - dmg['DMG'])
                                                         t_attack= round(t_attack - dmg['DMG'])
                                                         t_ap_buff = round(t_ap_buff - dmg['DMG'])
@@ -17614,7 +17642,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     o_health = round(dmg['DMG'])
                                                     c_health = o_health
                                                 elif cenh_type == 'FEAR':
-                                                    o_max_health = round(o_max_health - (o_max_health * .10))
+                                                    if o_universe != "Chainsawman":
+                                                        o_max_health = round(o_max_health - (o_max_health * .10))
                                                     t_defense = round(t_defense - dmg['DMG'])
                                                     t_attack= round(t_attack - dmg['DMG'])
                                                     t_ap_buff = round(t_ap_buff - dmg['DMG'])
@@ -17751,7 +17780,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = round(dmg['DMG'])
                                                             c_health = round(dmg['DMG'])
                                                     elif enh_type == 'FEAR':
-                                                        c_max_health = round(c_max_health - (c_max_health * .10))
+                                                        if t_universe != "Chainsawman":
+                                                            c_max_health = round(c_max_health - (c_max_health * .10))
                                                         t_defense = round(t_defense - dmg['DMG'])
                                                         t_attack= round(t_attack - dmg['DMG'])
                                                         t_ap_buff = round(t_ap_buff - dmg['DMG'])
@@ -18764,7 +18794,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             c_health = round(dmg['DMG'])
                                                             t_health = c_health
                                                         elif cpet_type == 'FEAR':
-                                                            c_max_health = round(c_max_health - (c_max_health * .10))
+                                                            if c_universe != "Chainsawman":
+                                                                c_max_health = round(c_max_health - (c_max_health * .10))
                                                             t_defense = round(t_defense - dmg['DMG'])
                                                             t_attack= round(t_attack - dmg['DMG'])
                                                             t_ap_buff = round(t_ap_buff - dmg['DMG'])
@@ -18914,7 +18945,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_health = round(dmg['DMG'])
                                                         c_health = o_health
                                                     elif cenh_type == 'FEAR':
-                                                        o_max_health = round(o_max_health - (o_max_health * .10))
+                                                        if o_universe != "Chainsawman":
+                                                            o_max_health = round(o_max_health - (o_max_health * .10))
                                                         c_defense = round(c_defense - dmg['DMG'])
                                                         c_attack = round(c_attack - dmg['DMG'])
                                                         c_ap_buff = round(c_ap_buff - dmg['DMG'])
@@ -19158,7 +19190,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = round(dmg['DMG'])
                                                                 c_health = round(dmg['DMG'])
                                                         elif enh_type == 'FEAR':
-                                                            c_max_health = round(c_max_health - (c_max_health * .10))
+                                                            if c_universe != "Chainsawman":
+                                                                c_max_health = round(c_max_health - (c_max_health * .10))
                                                             t_defense = round(t_defense - dmg['DMG'])
                                                             t_attack= round(t_attack - dmg['DMG'])
                                                             t_ap_buff = round(t_ap_buff - dmg['DMG'])
@@ -19487,7 +19520,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             elif turn == 3:
                                 if c_bleed_hit:
                                     c_bleed_hit = False
-                                    bleed_dmg = 8 * turn_total
+                                    bleed_dmg = 10 * turn_total
                                     t_health = t_health - bleed_dmg
                                     previous_moves.append(f"🩸 **{t_card}** shredded for **{round(bleed_dmg)}** bleed dmg...")
                                     if t_health <= 0:
@@ -19515,7 +19548,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 
                                 if o_bleed_hit:
                                     o_bleed_hit = False
-                                    bleed_dmg = 8 * turn_total
+                                    bleed_dmg = 10 * turn_total
                                     t_health = t_health - bleed_dmg
                                     previous_moves.append(f"🩸 **{t_card}** shredded for **{round(bleed_dmg)}** bleed dmg...")
                                     if t_health <= 0:
@@ -19587,7 +19620,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         t_health = round(t_health - ((t_title_passive_value / 100) * t_health))
                                         t_defense = round(t_defense + ((t_title_passive_value / 100) * t_health))
                                     if t_title_passive_type == "FEAR":
-                                        t_max_health = t_max_health - (t_max_health * .03)
+                                        if t_universe != "Chainsawman":
+                                            t_max_health = t_max_health - (t_max_health * .03)
                                         c_defense = c_defense - t_title_passive_value
                                         c_attack = c_attack - t_title_passive_value
                                         c_ap_buff = c_ap_buff - t_title_passive_value
@@ -19659,7 +19693,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         t_health = round(t_health - ((t_value_for_passive / 100) * t_health))
                                         t_defense = round(t_defense + ((t_value_for_passive / 100) * t_health))
                                     if t_card_passive_type == "FEAR":
-                                        t_max_health = t_max_health - (t_max_health * .03)
+                                        if t_universe != "Chainsawman":
+                                            t_max_health = t_max_health - (t_max_health * .03)
                                         c_defense = c_defense - t_flat_for_passive
                                         c_attack = c_attack - t_flat_for_passive
                                         c_ap_buff = c_ap_buff - t_flat_for_passive
@@ -20629,7 +20664,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = round(dmg['DMG'])
                                                         o_health = t_health
                                                     elif tpet_type == 'FEAR':
-                                                        t_max_health = round(t_max_health - (t_max_health * .10))
+                                                        if t_universe != "Chainsawman":
+                                                            t_max_health = round(t_max_health - (t_max_health * .10))
                                                         o_defense = round(o_defense - dmg['DMG'])
                                                         o_attack= round(o_attack - dmg['DMG'])
                                                         o_ap_buff = round(o_ap_buff - dmg['DMG'])
@@ -20774,7 +20810,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = round(dmg['DMG'])
                                                         c_health = t_health
                                                     elif tpet_type == 'FEAR':
-                                                        t_max_health = round(t_max_health - (t_max_health * .10))
+                                                        if t_universe != "Chainsawman":
+                                                            t_max_health = round(t_max_health - (t_max_health * .10))
                                                         c_attack = round(c_attack - dmg['DMG'])
                                                         c_defense = round(c_defense - dmg['DMG'])
                                                         c_ap_buff = round(c_ap_buff - dmg['DMG'])
@@ -21038,7 +21075,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = round(dmg['DMG']) * 2
                                                             o_health = round(dmg['DMG'])
                                                     elif enh_type == 'FEAR':
-                                                        t_max_health = round(t_max_health - (t_max_health * .10))
+                                                        if t_universe != "Chainsawman":
+                                                            t_max_health = round(t_max_health - (t_max_health * .10))
                                                         o_defense = round(o_defense - dmg['DMG'])
                                                         o_attack= round(o_attack - dmg['DMG'])
                                                         o_ap_buff = round(o_ap_buff - dmg['DMG'])
@@ -21387,7 +21425,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = round(dmg['DMG']) * 2
                                                             c_health = round(dmg['DMG'])
                                                     elif enh_type == 'FEAR':
-                                                        t_max_health = round(t_max_health - (t_max_health * .10))
+                                                        if t_universe != "Chainsawman":
+                                                            t_max_health = round(t_max_health - (t_max_health * .10))
                                                         c_attack = round(c_attack - dmg['DMG'])
                                                         c_defense = round(c_defense - dmg['DMG'])
                                                         c_ap_buff = round(c_ap_buff - dmg['DMG'])
