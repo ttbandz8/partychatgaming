@@ -7668,10 +7668,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     o_defense = o_defense + o_title_passive_value
                                     o_attack = o_attack + o_title_passive_value
                                     o_ap_buff = o_ap_buff + o_title_passive_value
-                                # if o_title_passive_type == "CREATION":
-                                #     o_max_health = round(o_max_health + ((o_max_health / 100) * o_max_health))
-                                # if o_title_passive_type == "DESTRUCTION":
-                                #     t_max_health = round(t_max_health + ((t_max_health / 100) * t_max_health))
                                 if o_title_passive_type == "SLOW":
                                     if turn_total != 0:
                                         turn_total = turn_total - 1
@@ -7689,6 +7685,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     o_stamina = o_stamina - o_title_passive_value
                                     if t_stamina >=10:
                                         t_stamina = t_stamina + o_title_passive_value
+                                if o_title_passive_type == "CREATION":
+                                    o_max_health = round(round(o_max_health + (o_title_passive_value * o_max_health)))
+                                if o_title_passive_type == "DESTRUCTION":
+                                    t_max_health = round(t_max_health - (o_title_passive_value * t_max_health))
+
                             if o_card_passive_type:
                                 o_value_for_passive = o_card_tier * .5
                                 o_flat_for_passive = 10 * (o_card_tier * .5)
@@ -11294,6 +11295,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     if o_stamina >=10:
                                         o_stamina = o_stamina + t_title_passive_value
                                     t_stamina = t_stamina - t_title_passive_value
+                                if t_title_passive_type == "CREATION":
+                                    t_max_health = round(round(t_max_health + (t_title_passive_value * t_max_health)))
+                                if t_title_passive_type == "DESTRUCTION":
+                                    o_max_health = round(o_max_health - (t_title_passive_value * o_max_health))
+
                             if t_card_passive_type:
                                 t_value_for_passive = t_card_tier * .5
                                 t_flat_for_passive = 10 * (t_card_tier * .5)
@@ -16447,6 +16453,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         c_stamina = c_stamina + c_title_passive_value
                                         if t_stamina >=10:
                                             t_stamina = t_stamina - c_title_passive_value
+                                    if c_title_passive_type == "CREATION":
+                                        c_max_health = round(round(c_max_health + (c_title_passive_value * c_max_health)))
+                                    if c_title_passive_type == "DESTRUCTION":
+                                        t_max_health = round(t_max_health - (c_title_passive_value * t_max_health))
+
 
                                 if c_card_passive_type:
                                     c_value_for_passive = c_card_tier * .5
@@ -19647,6 +19658,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         if c_stamina >= 10:
                                             c_stamina = c_stamina + t_title_passive_value
                                         t_stamina = t_stamina - t_title_passive_value
+                                    if t_title_passive_type == "CREATION":
+                                        t_max_health = round(round(t_max_health + (t_title_passive_value * t_max_health)))
+                                    if t_title_passive_type == "DESTRUCTION":
+                                        c_max_health = round(c_max_health - (t_title_passive_value * c_max_health))
+
 
                                 if t_card_passive_type:
                                     t_value_for_passive = t_card_tier * .5
