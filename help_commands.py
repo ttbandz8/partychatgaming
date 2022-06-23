@@ -72,7 +72,7 @@ LEGEND = textwrap.dedent(f"""\
 ELEMENTS = textwrap.dedent(f"""\
 **🔅 Elements**    
 
-👊 Physical - Normal Damage
+👊 Physical - If ST(stamina) greater than 80, Deals double Damage 
 
 🔥 Fire - Does 25% damage of previous attack over the next opponent turns, stacks.
 
@@ -88,7 +88,7 @@ ELEMENTS = textwrap.dedent(f"""\
 
 🔮 Psychic - Penetrates Barriers. Reduce opponent ATK & DEF by 8% AP.
 
-☠️ Death - Adds 20% opponent max health as damage.
+☠️ Death - Deals 20% opponent max health as damage.
 
 ❤️‍🔥 Life - Heal for 20% AP.
 
@@ -96,9 +96,9 @@ ELEMENTS = textwrap.dedent(f"""\
 
 ♠️ Dark- Penetrates shields & drains 10 stamina.
 
-🧪 Poison - Penetrades shields, Poison 10 damage stacking up to 150.
+🧪 Poison - Penetrades shields, Poison 20 damage stacking up to 300.
 
-🏹 Ranged - If ST greater than 50, Deals 1.7x Damage 
+🏹 Ranged - If ST(stamina) greater than 30, Deals 1.7x Damage 
 
 💙 Spirit - Has higher chance of Crit.
 
@@ -106,7 +106,7 @@ ELEMENTS = textwrap.dedent(f"""\
 
 ⌛ Time - If ST is less than 80, You Block and Focus for 1 Turn. 
 
-🅱️ Bleed - After 4 Attacks deal 5x turn count damage to opponent.
+🅱️ Bleed - After 4 Attacks deal 10x turn count damage to opponent.
 
 🪐 Gravity - Disables Opponent Block and Reduce opponent DEF by 15% AP.
 
