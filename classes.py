@@ -20,6 +20,7 @@ class USER():
     CARD: str = field(default_factory=lambda: "Ochaco Uraraka")
     DECK: list[str] = field(default_factory=lambda: [''])
     ARM: str = field(default_factory=lambda: "Stock")
+    TALISMAN: str = field(default_factory=lambda: 'NULL')
     PET: str = field(default_factory=lambda: "Chick")
     MATCHES: list = field(default_factory=lambda: [{'1V1': [0, 0]}, {'2V2': [0, 0]}, {'3V3': [0, 0]}, {'4V4': [0, 0]}, {'5V5': [0, 0]}])
     TOURNAMENT_WINS: int = field(default_factory=lambda: 0)
@@ -419,10 +420,31 @@ class GODS():
 class VAULT():
     OWNER: str
     DID: str
-    BALANCE: int = field(default_factory=lambda: 500000)
+    BALANCE: int = field(default_factory=lambda: 5000000)
     CARDS: list[str] = field(default_factory=lambda: ['Ochaco Uraraka', 'Eevee', 'Garen'])
     TITLES: list[str] = field(default_factory=lambda: ['Starter', 'Iron 4', 'UA 1st Year', 'Pokemon Trainer'])
     ARMS: list[str] = field(default_factory=lambda: [{'ARM':'Stock', 'DUR': 999999}, {'ARM': 'Poke Ball', 'DUR': 50}, {'ARM': 'Hyper-Density Seals', 'DUR': 50}, {'ARM': 'Dorans Shield', 'DUR': 50}])
+    ESSENCE: list[str] = field(default_factory=lambda: [
+        {"ELEMENT": "PHYSICAL", "ESSENCE": 5000},
+        {"ELEMENT": "FIRE", "ESSENCE": 5000},
+        {"ELEMENT": "ICE", "ESSENCE": 5000},
+        {"ELEMENT": "WATER", "ESSENCE": 5000},
+        {"ELEMENT": "EARTH", "ESSENCE": 5000},
+        {"ELEMENT": "ELECTRIC", "ESSENCE": 5000},
+        {"ELEMENT": "WIND", "ESSENCE": 5000},
+        {"ELEMENT": "PSYCHIC", "ESSENCE": 5000},
+        {"ELEMENT": "DEATH", "ESSENCE": 5000},
+        {"ELEMENT": "LIFE", "ESSENCE": 5000},
+        {"ELEMENT": "LIGHT", "ESSENCE": 5000},
+        {"ELEMENT": "DARK", "ESSENCE": 5000},
+        {"ELEMENT": "POISON", "ESSENCE": 5000},
+        {"ELEMENT": "RANGED", "ESSENCE": 5000},
+        {"ELEMENT": "SPIRIT", "ESSENCE": 5000},
+        {"ELEMENT": "RECOIL", "ESSENCE": 5000},
+        {"ELEMENT": "TIME", "ESSENCE": 5000},
+        {"ELEMENT": "BLEED", "ESSENCE": 5000},
+        {"ELEMENT": "GRAVITY", "ESSENCE": 5000}
+    ])
     PETS: list[str] = field(default_factory=lambda: [
         {'NAME': 'Chick', 'LVL': 1, 'EXP': 0, 'Heal': 5, 'TYPE': 'HLT', 'BOND': 0, 'BONDEXP': 0,
          'PATH': "https://res.cloudinary.com/dkcmq8o15/image/upload/v1638814575/Pets/CHICK.png"}])
@@ -439,6 +461,7 @@ class VAULT():
     DESTINY: list[str] = field(default_factory=lambda: [])
     GEMS: list[str] = field(default_factory=lambda: [])
     STORAGE: list[str] = field(default_factory=lambda: [])
+    TALISMANS: list[str] = field(default_factory=lambda: [])
 
 
 @dataclass(frozen=True, order=True)
