@@ -12779,7 +12779,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = round(t_health - (oparry_damage * .40))
                                                                 oparry_count = oparry_count - 1
                                                                 embedVar = discord.Embed(title=f"{o_card} Activates **Parry** 🔄", description=f"{t_card} takes {round(oparry_damage * .40)}! DMG\n **{oparry_count} Parries** to go!!", colour=0xe91e63)
-                                                                previous_moves.append(f"(**{turn_total}**) **{o_card}** Activates Parry 🔄 after **{round(tparry_damage * .75)}** dmg dealt: {t_card} takes {round(oparry_damage * .40)}! DMG\n **{oparry_count}  Parries** to go!!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{o_card}** Activates Parry 🔄 after **{round(oparry_damage * .75)}** dmg dealt: {t_card} takes {round(oparry_damage * .40)}! DMG\n **{oparry_count}  Parries** to go!!")
                                                                 if tarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                     tarm_barrier_active=False
                                                                     
@@ -13964,7 +13964,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = round(t_health - (oparry_damage * .40))
                                                             oparry_count = oparry_count - 1
                                                             embedVar = discord.Embed(title=f"{o_card} Activates **Parry** 🔄", description=f"{t_card} takes {round(oparry_damage * .40)}! DMG\n **{oparry_count} Parries** to go!!", colour=0xe91e63)
-                                                            previous_moves.append(f"(**{turn_total}**) **{o_card}** Activates Parry 🔄 after **{round(tparry_damage * .75)}** dmg dealt: {t_card} takes {round(oparry_damage * .40)}! DMG\n **{oparry_count}  Parries** to go!!")
+                                                            previous_moves.append(f"(**{turn_total}**) **{o_card}** Activates Parry 🔄 after **{round(oparry_damage * .75)}** dmg dealt: {t_card} takes {round(oparry_damage * .40)}! DMG\n **{oparry_count}  Parries** to go!!")
                                                             if tarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                 tarm_barrier_active=False
                                                                 
@@ -15518,7 +15518,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = round(t_health - (cparry_damage * .40))
                                                                 cparry_count = cparry_count - 1
                                                                 
-                                                                previous_moves.append(f"(**{turn_total}**) {c_card} Activates Parry 🔄 after **{round(tparry_damage * .75)}** dmg dealt:")
+                                                                previous_moves.append(f"(**{turn_total}**) {c_card} Activates Parry 🔄 after **{round(cparry_damage * .75)}** dmg dealt:")
                                                                 if tarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                     tarm_barrier_active=False
                                                                     
@@ -15848,7 +15848,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = round(t_health - (oparry_damage * .40))
                                                                 oparry_count = oparry_count - 1
                                                                 embedVar = discord.Embed(title=f"{o_card} Activates **Parry** 🔄", description=f"{t_card} takes {round(oparry_damage * .40)}! DMG\n **{oparry_count} Parries** to go!!", colour=0xe91e63)
-                                                                previous_moves.append(f"(**{turn_total}**) **{o_card}** Activates Parry 🔄 after **{round(tparry_damage * .75)}** dmg dealt: {t_card} takes {round(oparry_damage * .40)}! DMG\n **{oparry_count}  Parries** to go!!")
+                                                                previous_moves.append(f"(**{turn_total}**) **{o_card}** Activates Parry 🔄 after **{round(oparry_damage * .75)}** dmg dealt: {t_card} takes {round(oparry_damage * .40)}! DMG\n **{oparry_count}  Parries** to go!!")
                                                                 if tarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                     tarm_barrier_active=False
                                                                     
@@ -21187,7 +21187,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = round(t_health - (oparry_damage * .40))
                                                             oparry_count = oparry_count - 1
                                                             embedVar = discord.Embed(title=f"{o_card} Activates **Parry** 🔄", description=f"{t_card} takes {round(oparry_damage * .40)}! DMG\n **{oparry_count} Parries** to go!!", colour=0xe91e63)
-                                                            previous_moves.append(f"(**{turn_total}**) **{o_card}** Activates Parry 🔄 after **{round(tparry_damage * .75)}** dmg dealt: {t_card} takes {round(oparry_damage * .40)}! DMG\n **{oparry_count}  Parries** to go!!")
+                                                            previous_moves.append(f"(**{turn_total}**) **{o_card}** Activates Parry 🔄 after **{round(oparry_damage * .75)}** dmg dealt: {t_card} takes {round(oparry_damage * .40)}! DMG\n **{oparry_count}  Parries** to go!!")
                                                             if tarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                 tarm_barrier_active=False
                                                                 
@@ -21537,7 +21537,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = round(t_health - (cparry_damage * .40))
                                                             cparry_count = cparry_count - 1
                                                             
-                                                            previous_moves.append(f"(**{turn_total}**) **{c_card}** Activates Parry 🔄 after **{round(tparry_damage * .75)}** dmg dealt: {t_card} takes {round(cparry_damage * .40)}! DMG\n **{cparry_count}  Parries** to go!!")
+                                                            previous_moves.append(f"(**{turn_total}**) **{c_card}** Activates Parry 🔄 after **{round(cparry_damage * .75)}** dmg dealt: {t_card} takes {round(cparry_damage * .40)}! DMG\n **{cparry_count}  Parries** to go!!")
                                                             if tarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!**")
