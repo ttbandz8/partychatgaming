@@ -282,7 +282,7 @@ class Trade(commands.Cog):
                                 if m_fees > mvault['BALANCE']:
                                     await ctx.send(f"{ctx.author.mention} you need at least {'{:,}'.format(m_fees)} to cover your **Taxes** and **Trade**")
                                     return
-                                if b_fees > mvault['BALANCE']:
+                                if b_fees > bvault['BALANCE']:
                                     await ctx.send(f"{player.mention} you need at least {'{:,}'.format(b_fees)} to cover your **Taxes** and **Trade**")
                                     return
                                 

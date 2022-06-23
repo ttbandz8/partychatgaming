@@ -2171,17 +2171,17 @@ def damage_cal(move_ap, opponent_affinity, move_type, move_element, universe, ca
             if health >= maxhealth:
                 enhanced = 0
             elif newhealth >= maxhealth:
-                enhanced = maxhealth - health
+                enhanced = round(maxhealth - health)
             else:
-                enhanced = hlt
+                enhanced = round(hlt)
         elif enh_type == 'LIFE':
             newhealth = lifesteal + health
             if health >= maxhealth:
                 enhanced = 0
             elif newhealth >= maxhealth:
-                enhanced = maxhealth - health
+                enhanced = round(maxhealth - health)
             else:
-                enhanced = lifesteal
+                enhanced = round(lifesteal)
         elif enh_type == 'DRAIN':
             enhanced = drain
         elif enh_type == "FLOG":
@@ -16184,7 +16184,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = round(t_health - (oparry_damage * .40))
                                                             oparry_count = oparry_count - 1
                                                             embedVar = discord.Embed(title=f"{o_card} Activates **Parry** 🔄", description=f"{t_card} takes {round(oparry_damage * .40)}! DMG\n **{oparry_count} Parries** to go!!", colour=0xe91e63)
-                                                            previous_moves.append(f"(**{turn_total}**) **{o_card}** Activates Parry 🔄 after **{round(tparry_damage * .75)}** dmg dealt: {t_card} takes {round(oparry_damage * .40)}! DMG\n **{oparry_count}  Parries** to go!!")
+                                                            previous_moves.append(f"(**{turn_total}**) **{o_card}** Activates Parry 🔄 after **{round(oparry_damage * .75)}** dmg dealt: {t_card} takes {round(oparry_damage * .40)}! DMG\n **{oparry_count}  Parries** to go!!")
                                                             if tarm_barrier_active and dmg['ELEMENT'] != psychic_element:
                                                                 tarm_barrier_active=False
                                                                 

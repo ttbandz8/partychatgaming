@@ -882,6 +882,9 @@ async def register(ctx):
                      title_message = []
                      arm_message = []
                      card_message = []
+                     gem_message = []
+                     gem_info = {'UNIVERSE': str(universe), 'GEMS' : 1000, 'UNIVERSE_HEART' : False, 'UNIVERSE_SOUL' : False}
+                     response = db.updateVaultNoFilter(vault_query, {'$addToSet' : {'GEMS' :gem_info }})
                      while count < 3:
                         selectable_titles = list(range(0, len(list(list_of_titles))))
                         for selected in selected_titles:
