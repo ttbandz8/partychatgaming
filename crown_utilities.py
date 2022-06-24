@@ -976,6 +976,7 @@ def scenario_gold_drop(scenario_lvl):
     return gold
 
 
+
 def inc_essence(did, element, essence):
     try:
         emoji = set_emoji(element)
@@ -987,6 +988,64 @@ def inc_essence(did, element, essence):
     except Exception as e:
         return False
 
+def does_exist(data):
+    if data:
+        return True
+    else:
+        return False
+
+def is_maxed_out(list):
+    if len(list) >= 25:
+        return True
+    else:
+        return False
+
+
+def essence_cost(vault, element, did):
+    try:
+        essence_list = vault["ESSENCE"]
+        msg = ""
+        for e in essence_list:
+            if e["ELEMENT"] == element:
+                essence = e["ESSENCE"]
+
+        if essence < 500:
+            msg = f"You do not have enough {element} essence to attune at this time."
+            return msg
+
+
+        curseAmount = int(essence)
+        negCurseAmount = 0 - abs(int(curseAmount))
+        query = {'DID': str(did)}
+        update_query = {'$inc': {'ESSENCE.$[type].' + "ESSENCE": negCurseAmount}}
+        filter_query = [{'type.' + "ELEMENT": element}]
+        response = db.updateVault(query, update_query, filter_query)
+        talisman_query = {
+                '$addToSet': {
+                    "TALISMANS": {
+                        "TYPE": element.upper(),
+                        "DUR": 25
+                    }
+                }
+            }
+        tresponse = db.updateVaultNoFilter(query, talisman_query)
+        msg = f"You have successfully attuned a **{element.title()} Talisman!**"
+        return msg
+    except Exception as ex:
+        trace = []
+        tb = ex.__traceback__
+        while tb is not None:
+                trace.append({
+                "filename": tb.tb_frame.f_code.co_filename,
+                "name": tb.tb_frame.f_code.co_name,
+                "lineno": tb.tb_lineno
+                })
+                tb = tb.tb_next
+        print(str({
+                'type': type(ex).__name__,
+                'message': str(ex),
+                'trace': trace
+        }))
 
 
 def level_sync_stats(lvl, stat):
