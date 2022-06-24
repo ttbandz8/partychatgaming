@@ -976,6 +976,18 @@ def scenario_gold_drop(scenario_lvl):
     return gold
 
 
+def inc_essence(did, element, essence):
+    try:
+        emoji = set_emoji(element)
+        query = {'DID': str(did)}
+        update_query = {'$inc': {'ESSENCE.$[type].' + "ESSENCE": essence}}
+        filter_query = [{'type.' + "ELEMENT": element}]
+        response = db.updateVault(query, update_query, filter_query)
+        return emoji
+    except Exception as e:
+        return False
+
+
 
 def level_sync_stats(lvl, stat):
     stat_sync = 0
@@ -990,11 +1002,47 @@ def level_sync_stats(lvl, stat):
         stat_sync = round((lvl / 3) * 1)
         return stat_sync
 
+def select_random_element(difficulty, mode):
+    dungeon_modes = ["DUNGEON", "CDUNGEON"]
+    essence = 100
+    if difficulty == "EASY":
+        essence = 10
+    if difficulty == "HARD":
+        essence = 500
+    if mode in dungeon_modes:
+        essense = essence + 500
+
+    element = random.choice(elements)
+    return {"ELEMENT": element, "ESSENCE": essence}
+
+
 level_sync = {
     "HLT": 10,
     "ATK_DEF": 2,
     "AP": 2
 }
+
+elements = [
+    "PHYSICAL",
+    "FIRE",
+    "ICE",
+    "WATER",
+    "EARTH",
+    "ELECTRIC",
+    "WIND",
+    "PSYCHIC",
+    "DEATH",
+    "LIFE",
+    "LIGHT",
+    "DARK",
+    "POISON",
+    "RANGED",
+    "SPIRIT",
+    "RECOIL",
+    "TIME",
+    "BLEED",
+    "GRAVITY"
+]
 
 crest_dict = {'Unbound': ':ideograph_advantage:',
               'My Hero Academia': ':sparkle:',

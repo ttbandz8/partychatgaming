@@ -22072,8 +22072,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 
                                 
                                 # response = await score(sownerctx, ouser)
-                                await crown_utilities.bless(8, str(ctx.author.id))
-                                await crown_utilities.curse(3, str(tuser.id))
+                                await crown_utilities.bless(10000, str(ctx.author.id))
+                                # await crown_utilities.curse(3000, str(tuser.id))
                                 if oguild:
                                     await crown_utilities.bless(15, str(ctx.author.id))
                                     await crown_utilities.blessteam(25, oteam)
@@ -22216,6 +22216,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 tale_or_dungeon_only = "Tales"
                             if mode in D_modes:
                                 tale_or_dungeon_only = "Dungeon"
+                            
 
                             if randomized_battle:
                                 bounty = abyss_scaling
@@ -22478,6 +22479,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']),
                                                         str(oarm['ARM']), str(selected_universe), tale_or_dungeon_only,
                                                         o['EXCLUSIVE'])
+                                ran_element = crown_utilities.select_random_element(difficulty, mode)
+                                essence = crown_utilities.inc_essence(ouser.id, ran_element["ELEMENT"], ran_element["ESSENCE"])
+
                                 if difficulty != "EASY":
                                     questlogger = await quest(ouser, t_card, tale_or_dungeon_only)
                                     destinylogger = await destiny(ouser, t_card, tale_or_dungeon_only)
@@ -22533,10 +22537,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     cpetlogger = await summonlevel(cpet_name, user2)
                                     ccardlogger = await crown_utilities.cardlevel(c_card, user2.id, tale_or_dungeon_only, selected_universe)
                                     await crown_utilities.bless(5000, str(user2.id))
-
+                                    cessence = crown_utilities.inc_essence(cuser.id, ran_element["ELEMENT"], ran_element["ESSENCE"])
                                 if currentopponent != (total_legends):
                                     if mode not in co_op_modes:
-                                        embedVar = discord.Embed(title=f"🎊 VICTORY\nThe game lasted {turn_total} rounds.\n\n{drop_response}\n{corrupted_message}",description=textwrap.dedent(f"""
+                                        embedVar = discord.Embed(title=f"🎊 VICTORY\nThe game lasted {turn_total} rounds.\n\n{drop_response}\nEarned {essence} {ran_element['ESSENCE']} Essence\n{corrupted_message}",description=textwrap.dedent(f"""
                                         {previous_moves_into_embed}
                                         
                                         """),colour=0x1abc9c)
@@ -22548,7 +22552,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 embedVar.add_field(name="**Destiny Progress**",
                                                     value=f"{destinylogger}")
                                     elif mode in co_op_modes and mode not in ai_co_op_modes:
-                                        embedVar = discord.Embed(title=f"👥 CO-OP VICTORY\nThe game lasted {turn_total} rounds.\n\n👤**{o_user['NAME']}:** {drop_response}\n👥**{c_user['NAME']}:** {cdrop_response} ",description=textwrap.dedent(f"""
+                                        embedVar = discord.Embed(title=f"👥 CO-OP VICTORY\nThe game lasted {turn_total} rounds.\n\n👤**{o_user['NAME']}:** {drop_response}\nEarned {essence} {ran_element['ESSENCE']} Essence\n👥**{c_user['NAME']}:** {cdrop_response}\nEarned {cessence} {ran_element['ESSENCE']} Essence",description=textwrap.dedent(f"""
                                         {previous_moves_into_embed}
                                         
                                         """),colour=0x1abc9c)
@@ -23924,7 +23928,7 @@ title_enhancer_mapping = {'ATK': 'Increase Attack ',
 'PARRY': 'Returns 25% Damage, until broken',
 'SIPHON': 'Heal for 10% DMG inflicted + AP'
 }
-element_mapping = {'PHYSICAL': 'Normal Damage ',
+element_mapping = {'PHYSICAL': 'If ST(stamina) greater than 80, Deals double Damage ',
 'FIRE': 'Does 25% damage of previous attack over the next opponent turns, stacks ',
 'ICE': 'After 3 uses opponent freezes and loses 1 turn',
 'WATER': 'Increases all water attack dmg by 35 Flat',

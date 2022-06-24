@@ -358,7 +358,8 @@ class UNIVERSE():
     TIER: int = field(default_factory=lambda: 0)
     GUILD: str = field(default_factory=lambda: "PCG")
     CORRUPTED: bool = field(default_factory=lambda: False)
-    CORRUPTION_LEVEL: int = field(default_factory=lambda: 0)  
+    CORRUPTION_LEVEL: int = field(default_factory=lambda: 0)
+    ESSENCE: str = field(default_factory=lambda: "NULL")
 
 @dataclass(frozen=True, order=True)
 class SCENARIO():

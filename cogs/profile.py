@@ -30,7 +30,7 @@ from dinteractions_Paginator import Paginator
 from discord_slash.utils.manage_commands import create_option, create_choice
 
 import destiny as d
-
+import random
 
 
 emojis = ['👍', '👎']
@@ -171,6 +171,10 @@ class Profile(commands.Cog):
                                     value="gems"
                                 ),
                                 create_choice(
+                                    name="🪔 Essence",
+                                    value="essence",
+                                ),
+                                create_choice(
                                     name="📤 Load Presets",
                                     value="presets",
                                 ),
@@ -226,7 +230,9 @@ class Profile(commands.Cog):
             await menugems(self, ctx)
         if selection == "blacksmith":
             await menublacksmith(self, ctx)
-
+        if selection == "essence":
+            await menuessence(self, ctx)
+            
     @cog_ext.cog_slash(description="View your current build", guild_ids=main.guild_ids)
     async def build(self, ctx):
         try:
@@ -876,6 +882,12 @@ class Profile(commands.Cog):
                             card_health = card_data['HLT']
                             card_name = card_data['NAME']
                             selected_universe = card_data['UNIVERSE']
+                            o_moveset = card_data['MOVESET']
+                            o_3 = o_moveset[2]
+                            element = list(o_3.values())[2]
+                            essence_amount = (200 * card_tier)
+                            o_enhancer = o_moveset[3]
+
                             dismantle_amount = (10000 * card_tier) + card_health
                             if card_name == current_card:
                                 await button_ctx.send("You cannot dismantle equipped cards.")
@@ -913,11 +925,12 @@ class Profile(commands.Cog):
                                         else:
                                             response = db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$addToSet':{'GEMS': {'UNIVERSE': selected_universe, 'GEMS': dismantle_amount, 'UNIVERSE_HEART': False, 'UNIVERSE_SOUL': False}}})
 
+                                        em = crown_utilities.inc_essence(str(ctx.author.id), element, essence_amount)
                                         db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'CARDS': card_name}})
                                         db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'CARD_LEVELS': {'CARD': card_name}}})
                                         #await crown_utilities.bless(sell_price, ctx.author.id)
                                         await msg.delete()
-                                        await button_ctx.send(f"**{card_name}** has been dismantled.")
+                                        await button_ctx.send(f"**{card_name}** has been dismantled. Acquired **{'{:,}'.format(essence_amount)}** {em} {element.title()} Essence.")
                                         
                                 except Exception as ex:
                                     trace = []
@@ -1787,6 +1800,14 @@ class Profile(commands.Cog):
                         elif button_ctx.custom_id == "Dismantle":
                             arm_data = db.queryArm({'ARM': selected_arm})
                             arm_name = arm_data['ARM']
+                            element = arm_data['ELEMENT']
+                            essence_amount = 100
+                            arm_passive = arm_data['ABILITIES'][0]
+                            arm_passive_type = list(arm_passive.keys())[0]
+                            arm_passive_value = list(arm_passive.values())[0]
+                            move_types = ["BASIC", "SPECIAL", "ULTIMATE"]
+                            if arm_data["EXCLUSIVE"]:
+                                essence_amount = 250
                             selected_universe = arm_data['UNIVERSE']
                             dismantle_amount = 10000
                             if arm_name == current_arm:
@@ -1826,11 +1847,14 @@ class Profile(commands.Cog):
                                             response = db.updateVault(query, update_query, filter_query)
                                         else:
                                             response = db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$addToSet':{'GEMS': {'UNIVERSE': selected_universe, 'GEMS': dismantle_amount, 'UNIVERSE_HEART': False, 'UNIVERSE_SOUL': False}}})
-
+                                        mess = ""
+                                        if arm_passive_type in move_types:
+                                            em = crown_utilities.inc_essence(str(ctx.author.id), element, essence_amount)
+                                            mess = f" Acquired **{'{:,}'.format(essence_amount)}** {em} {element.title()} Essence."
                                         db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'ARMS': {'ARM': str(arm_name)}}})
                                         await crown_utilities.bless(sell_price, ctx.author.id)
                                         await msg.delete()
-                                        await button_ctx.send(f"**{arm_name}** has been dismantled.")
+                                        await button_ctx.send(f"**{arm_name}** has been dismantled.{mess}")
                                 except Exception as ex:
                                     trace = []
                                     tb = ex.__traceback__
@@ -2025,7 +2049,6 @@ class Profile(commands.Cog):
         if not a_registered_player:
             return
 
-
         vault = db.queryVault({'DID': str(ctx.author.id)})
         current_gems = vault['GEMS']
         if current_gems:
@@ -2082,6 +2105,62 @@ class Profile(commands.Cog):
             await paginator.run(embeds)
         else:
             await ctx.send("You currently own no 💎.")
+
+    @cog_ext.cog_slash(description="View all of your collected essence", guild_ids=main.guild_ids)
+    async def essence(self, ctx: SlashContext):
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+
+        vault = db.queryVault({'DID': str(ctx.author.id)})
+        current_essence = vault['ESSENCE']
+        if current_essence:
+            # number_of_gems_universes = len(current_essence)
+
+            essence_details = []
+            for ed in current_essence:
+                element = ed["ELEMENT"]
+                essence = ed["ESSENCE"]
+                element_emoji = crown_utilities.set_emoji(element)
+                essence_details.append(
+                    f"{element_emoji} **{element.title()} Essence: ** {essence}\n")
+
+            # Adding to array until divisible by 10
+            while len(essence_details) % 10 != 0:
+                essence_details.append("")
+            # Check if divisible by 10, then start to split evenly
+
+            if len(essence_details) % 10 == 0:
+                first_digit = int(str(len(essence_details))[:1])
+                if len(essence_details) >= 89:
+                    if first_digit == 1:
+                        first_digit = 10
+                essence_broken_up = np.array_split(essence_details, first_digit)
+
+            # If it's not an array greater than 10, show paginationless embed
+            if len(essence_details) < 10:
+                embedVar = discord.Embed(title=f"🪔 Essence", description="\n".join(essence_details),
+                                        colour=0x7289da)
+                await ctx.send(embed=embedVar)
+
+            embed_list = []
+            for i in range(0, len(essence_broken_up)):
+                globals()['embedVar%s' % i] = discord.Embed(title=f"🪔 Essence",
+                                                            description="\n".join(essence_broken_up[i]), colour=0x7289da)
+                embed_list.append(globals()['embedVar%s' % i])
+
+            paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+            paginator.add_reaction('⏮️', "first")
+            paginator.add_reaction('⬅️', "back")
+            paginator.add_reaction('🔐', "lock")
+            paginator.add_reaction('➡️', "next")
+            paginator.add_reaction('⏭️', "last")
+            embeds = embed_list
+            await paginator.run(embeds)
+        else:
+            await ctx.send("You currently own no 💎.")
+
+
 
     @cog_ext.cog_slash(description="Open the blacksmith", guild_ids=main.guild_ids)
     async def blacksmith(self, ctx):
@@ -4642,6 +4721,60 @@ async def menubuild(self, ctx):
             'trace': trace
         }))
 
+
+async def menuessence(self, ctx: SlashContext):
+    a_registered_player = await crown_utilities.player_check(ctx)
+    if not a_registered_player:
+        return
+
+    vault = db.queryVault({'DID': str(ctx.author.id)})
+    current_essence = vault['ESSENCE']
+    if current_essence:
+        # number_of_gems_universes = len(current_essence)
+
+        essence_details = []
+        for ed in current_essence:
+            element = ed["ELEMENT"]
+            essence = ed["ESSENCE"]
+            element_emoji = crown_utilities.set_emoji(element)
+            essence_details.append(
+                f"{element_emoji} **{element.title()} Essence: ** {essence}\n")
+
+        # Adding to array until divisible by 10
+        while len(essence_details) % 10 != 0:
+            essence_details.append("")
+        # Check if divisible by 10, then start to split evenly
+
+        if len(essence_details) % 10 == 0:
+            first_digit = int(str(len(essence_details))[:1])
+            if len(essence_details) >= 89:
+                if first_digit == 1:
+                    first_digit = 10
+            essence_broken_up = np.array_split(essence_details, first_digit)
+
+        # If it's not an array greater than 10, show paginationless embed
+        if len(essence_details) < 10:
+            embedVar = discord.Embed(title=f"🪔 Essence", description="\n".join(essence_details),
+                                    colour=0x7289da)
+            await ctx.send(embed=embedVar)
+
+        embed_list = []
+        for i in range(0, len(essence_broken_up)):
+            globals()['embedVar%s' % i] = discord.Embed(title=f"🪔 Essence",
+                                                        description="\n".join(essence_broken_up[i]), colour=0x7289da)
+            embed_list.append(globals()['embedVar%s' % i])
+
+        paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+        paginator.add_reaction('⏮️', "first")
+        paginator.add_reaction('⬅️', "back")
+        paginator.add_reaction('🔐', "lock")
+        paginator.add_reaction('➡️', "next")
+        paginator.add_reaction('⏭️', "last")
+        embeds = embed_list
+        await paginator.run(embeds)
+    else:
+        await ctx.send("You currently own no 💎.")
+
 async def menucards(self, ctx):
     await ctx.defer()
     a_registered_player = await crown_utilities.player_check(ctx)
@@ -4756,8 +4889,7 @@ async def menucards(self, ctx):
                 passive_name = list(o_passive.keys())[0]
                 passive_num = list(o_passive.values())[0]
                 passive_type = list(o_passive.values())[1]
-
-               
+            
                 if passive_type:
                     value_for_passive = resp['TIER'] * .5
                     flat_for_passive = round(10 * (resp['TIER'] * .5))
@@ -4805,8 +4937,6 @@ async def menucards(self, ctx):
                     if passive_type == "BLINK":
                         passive_num = stam_for_passive
 
-
-
                 traits = ut.traits
                 mytrait = {}
                 traitmessage = ''
@@ -4830,7 +4960,7 @@ async def menucards(self, ctx):
                 {move3_emoji} **{move3}:** {move3ap}
                 🦠 **{move4}:** {move4enh} {move4ap}{enhancer_suffix_mapping[move4enh]}
 
-                🩸 **{passive_name}:** {passive_type} {passive_num}{passive_enhancer_suffix_mapping[passive_type]}
+                🩸 **{passive_name}:** {passive_type.title()} {passive_num}{passive_enhancer_suffix_mapping[passive_type]}
                 ♾️ {traitmessage}
                 """), colour=0x7289da)
                 embedVar.add_field(name="__Affinities__", value=f"{affinity_message}")
@@ -4928,6 +5058,12 @@ async def menucards(self, ctx):
                         card_health = card_data['HLT']
                         card_name = card_data['NAME']
                         selected_universe = card_data['UNIVERSE']
+                        o_moveset = card_data['MOVESET']
+                        o_3 = o_moveset[2]
+                        element = list(o_3.values())[2]
+                        essence_amount = (200 * card_tier)
+                        o_enhancer = o_moveset[3]
+
                         dismantle_amount = (10000 * card_tier) + card_health
                         if card_name == current_card:
                             await button_ctx.send("You cannot dismantle equipped cards.")
@@ -4965,11 +5101,12 @@ async def menucards(self, ctx):
                                     else:
                                         response = db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$addToSet':{'GEMS': {'UNIVERSE': selected_universe, 'GEMS': dismantle_amount, 'UNIVERSE_HEART': False, 'UNIVERSE_SOUL': False}}})
 
+                                    em = crown_utilities.inc_essence(str(ctx.author.id), element, essence_amount)
                                     db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'CARDS': card_name}})
                                     db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'CARD_LEVELS': {'CARD': card_name}}})
                                     #await crown_utilities.bless(sell_price, ctx.author.id)
                                     await msg.delete()
-                                    await button_ctx.send(f"**{card_name}** has been dismantled.")
+                                    await button_ctx.send(f"**{card_name}** has been dismantled. Acquired **{'{:,}'.format(essence_amount)}** {em} {element.title()} Essence.")
                                     
                             except Exception as ex:
                                 trace = []
@@ -5828,6 +5965,14 @@ async def menuarms(self, ctx):
                     elif button_ctx.custom_id == "Dismantle":
                         arm_data = db.queryArm({'ARM': selected_arm})
                         arm_name = arm_data['ARM']
+                        element = arm_data['ELEMENT']
+                        essence_amount = 100
+                        arm_passive = arm_data['ABILITIES'][0]
+                        arm_passive_type = list(arm_passive.keys())[0]
+                        arm_passive_value = list(arm_passive.values())[0]
+                        move_types = ["BASIC", "SPECIAL", "ULTIMATE"]
+                        if arm_data["EXCLUSIVE"]:
+                            essence_amount = 250
                         selected_universe = arm_data['UNIVERSE']
                         dismantle_amount = 10000
                         if arm_name == current_arm:
@@ -5867,11 +6012,14 @@ async def menuarms(self, ctx):
                                         response = db.updateVault(query, update_query, filter_query)
                                     else:
                                         response = db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$addToSet':{'GEMS': {'UNIVERSE': selected_universe, 'GEMS': dismantle_amount, 'UNIVERSE_HEART': False, 'UNIVERSE_SOUL': False}}})
-
+                                    mess = ""
+                                    if arm_passive_type in move_types:
+                                        em = crown_utilities.inc_essence(str(ctx.author.id), element, essence_amount)
+                                        mess = f" Acquired **{'{:,}'.format(essence_amount)}** {em} {element.title()} Essence."
                                     db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'ARMS': {'ARM': str(arm_name)}}})
                                     await crown_utilities.bless(sell_price, ctx.author.id)
                                     await msg.delete()
-                                    await button_ctx.send(f"**{arm_name}** has been dismantled.")
+                                    await button_ctx.send(f"**{arm_name}** has been dismantled.{mess}")
                             except Exception as ex:
                                 trace = []
                                 tb = ex.__traceback__
