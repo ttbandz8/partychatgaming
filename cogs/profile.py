@@ -719,15 +719,74 @@ class Profile(commands.Cog):
 
 
     @cog_ext.cog_slash(description="View your talismen that are in storage", guild_ids=main.guild_ids)
-    async def talisman(self, ctx):
+    async def talismans(self, ctx):
         a_registered_player = await crown_utilities.player_check(ctx)
         if not a_registered_player:
             return
 
-        # try:
-        #     vault = db.queryVault({'DID': str(ctx.author.id)})
-        #     talismans = vault["TALISMANS"]
-        #     if crown_utilities.does_exist(talismans):
+        try:
+            vault = db.queryVault({'DID': str(ctx.author.id)})
+            talismans = vault["TALISMANS"]
+            if crown_utilities.does_exist(talismans):
+                embed_list = []
+
+                for t in talismans:
+                    emoji = crown_utilities.set_emoji(t["TYPE"])
+                    durability = t["DUR"]
+                    name = t["TYPE"].title()
+                    embedVar = discord.Embed(title= f"{name}", description=textwrap.dedent(f"""\
+                    Element: {emoji} **{name.title()}**
+                    Durability: {durability}
+                    """), colour=0x7289da)
+                    # embedVar.add_field(name="__Affinities__", value=f"{affinity_message}")
+                    # embedVar.set_thumbnail(url=show_img)
+                    # embedVar.set_footer(text=f"/enhancers - 🩸 Enhancer Menu")
+                    embed_list.append(embedVar)
+
+
+                buttons = [
+                    manage_components.create_button(style=3, label="Equip", custom_id="Equip"),
+                    manage_components.create_button(style=1, label="Dismantle", custom_id="Dismantle"),
+                    manage_components.create_button(style=1, label="Trade", custom_id="Trade"),
+                ]
+                custom_action_row = manage_components.create_actionrow(*buttons)
+
+
+                async def custom_function(self, button_ctx):
+                    if button_ctx.author == ctx.author:
+                        updated_vault = db.queryVault({'DID': str(ctx.author.id)})
+                        selected_talisman = str(button_ctx.origin_message.embeds[0].title)
+
+                        if button_ctx.custom_id == "Equip":
+                            user_query = {'DID': str(ctx.author.id)}
+                            response = db.updateUserNoFilter(user_query, {'$set': {'TALISMAN': selected_talisman.upper()}})
+                            await button_ctx.send(f"**{selected_talisman} Talisman** equipped.")
+                            self.stop = True
+
+                    else:
+                        await ctx.send("This is not your card list.")
+
+
+
+                await Paginator(bot=self.bot, disableAfterTimeout=True, useQuitButton=True, ctx=ctx, pages=embed_list, timeout=60, customActionRow=[
+                    custom_action_row,
+                    custom_function,
+                ]).run()
+        except Exception as ex:
+            trace = []
+            tb = ex.__traceback__
+            while tb is not None:
+                trace.append({
+                    "filename": tb.tb_frame.f_code.co_filename,
+                    "name": tb.tb_frame.f_code.co_name,
+                    "lineno": tb.tb_lineno
+                })
+                tb = tb.tb_next
+            print(str({
+                'type': type(ex).__name__,
+                'message': str(ex),
+                'trace': trace
+            }))
 
 
 
@@ -3517,6 +3576,562 @@ class Profile(commands.Cog):
                 'message': str(ex),
                 'trace': trace
             }))
+
+
+    @cog_ext.cog_slash(description="View all of your cards", guild_ids=main.guild_ids)
+    async def cards(self, ctx):
+        await ctx.defer()
+        a_registered_player = await crown_utilities.player_check(ctx)
+        if not a_registered_player:
+            return
+        query = {'DID': str(ctx.author.id)}
+        d = db.queryUser(query)
+        vault = db.queryVault({'DID': d['DID']})
+        try: 
+            if vault:
+                name = d['DISNAME'].split("#",1)[0]
+                avatar = d['AVATAR']
+                card_levels = vault['CARD_LEVELS']
+                current_gems = []
+                for gems in vault['GEMS']:
+                    current_gems.append(gems['UNIVERSE'])
+                balance = vault['BALANCE']
+                cards_list = vault['CARDS']
+                total_cards = len(cards_list)
+                current_card = d['CARD']
+                storage = vault['STORAGE']
+                cards=[]
+                icon = ":coin:"
+                if balance >= 150000:
+                    icon = ":money_with_wings:"
+                elif balance >=100000:
+                    icon = ":moneybag:"
+                elif balance >= 50000:
+                    icon = ":dollar:"
+                
+                embed_list = []
+
+                for card in cards_list:
+                    index = cards_list.index(card)
+                    resp = db.queryCard({"NAME": str(card)})
+                    card_tier = 0
+                    lvl = ""
+                    tier = ""
+                    speed = 0
+                    card_tier = f":mahjong: {resp['TIER']}"
+                    card_available = resp['AVAILABLE']
+                    card_exclusive = resp['EXCLUSIVE']
+                    card_collection = resp['HAS_COLLECTION']
+                    show_img = db.queryUniverse({'TITLE': resp['UNIVERSE']})['PATH']
+                    affinity_message = crown_utilities.set_affinities(resp)
+                    o_show = resp['UNIVERSE']
+                    icon = ":flower_playing_cards:"
+                    if card_available and card_exclusive:
+                        icon = ":fire:"
+                    elif card_available == False and card_exclusive ==False:
+                        if card_collection:
+                            icon =":sparkles:"
+                        else:
+                            icon = ":japanese_ogre:"
+                    card_lvl = 0
+                    card_exp = 0
+                    card_lvl_attack_buff = 0
+                    card_lvl_defense_buff = 0
+                    card_lvl_ap_buff = 0
+                    card_lvl_hlt_buff = 0
+
+                    for cl in card_levels:
+                        if card == cl['CARD']:
+                            licon = "🔱"
+                            if cl['LVL'] == 200:
+                                licon ="⚜️"
+                            lvl = f"{licon} **{cl['LVL']}**"
+                            card_lvl = cl['LVL']
+                            card_exp = cl['EXP']
+                            card_lvl_ap_buff = crown_utilities.level_sync_stats(card_lvl, "AP")
+                            card_lvl_attack_buff = crown_utilities.level_sync_stats(card_lvl, "ATK_DEF")
+                            card_lvl_defense_buff = crown_utilities.level_sync_stats(card_lvl, "ATK_DEF")
+                            card_lvl_hlt_buff = crown_utilities.level_sync_stats(card_lvl, "HLT")
+                            
+                    
+                    o_passive = resp['PASS'][0] 
+                    o_moveset = resp['MOVESET']
+                    o_1 = o_moveset[0]
+                    o_2 = o_moveset[1]
+                    o_3 = o_moveset[2]
+                    o_enhancer = o_moveset[3]
+                    
+                    # Move 1
+                    move1 = list(o_1.keys())[0]
+                    move1ap = list(o_1.values())[0] + card_lvl_ap_buff
+                    move1_stamina = list(o_1.values())[1]
+                    move1_element = list(o_1.values())[2]
+                    move1_emoji = crown_utilities.set_emoji(move1_element)
+                    
+                    # Move 2
+                    move2 = list(o_2.keys())[0]
+                    move2ap = list(o_2.values())[0] + card_lvl_ap_buff
+                    move2_stamina = list(o_2.values())[1]
+                    move2_element = list(o_2.values())[2]
+                    move2_emoji = crown_utilities.set_emoji(move2_element)
+
+
+                    # Move 3
+                    move3 = list(o_3.keys())[0]
+                    move3ap = list(o_3.values())[0] + card_lvl_ap_buff
+                    move3_stamina = list(o_3.values())[1]
+                    move3_element = list(o_3.values())[2]
+                    move3_emoji = crown_utilities.set_emoji(move3_element)
+
+
+                    # Move Enhancer
+                    move4 = list(o_enhancer.keys())[0]
+                    move4ap = list(o_enhancer.values())[0]
+                    move4_stamina = list(o_enhancer.values())[1]
+                    move4enh = list(o_enhancer.values())[2]
+
+                    passive_name = list(o_passive.keys())[0]
+                    passive_num = list(o_passive.values())[0]
+                    passive_type = list(o_passive.values())[1]
+                
+                    if passive_type:
+                        value_for_passive = resp['TIER'] * .5
+                        flat_for_passive = round(10 * (resp['TIER'] * .5))
+                        stam_for_passive = 5 * (resp['TIER'] * .5)
+                        if passive_type == "HLT":
+                            passive_num = value_for_passive
+                        if passive_type == "LIFE":
+                            passive_num = value_for_passive
+                        if passive_type == "ATK":
+                            passive_num = flat_for_passive
+                        if passive_type == "DEF":
+                            passive_num = flat_for_passive
+                        if passive_type == "STAM":
+                            passive_num = stam_for_passive
+                        if passive_type == "DRAIN":
+                            passive_num = stam_for_passive
+                        if passive_type == "FLOG":
+                            passive_num = value_for_passive
+                        if passive_type == "WITHER":
+                            passive_num = value_for_passive
+                        if passive_type == "RAGE":
+                            passive_num = value_for_passive
+                        if passive_type == "BRACE":
+                            passive_num = value_for_passive
+                        if passive_type == "BZRK":
+                            passive_num = value_for_passive
+                        if passive_type == "CRYSTAL":
+                            passive_num = value_for_passive
+                        if passive_type == "FEAR":
+                            passive_num = flat_for_passive
+                        if passive_type == "GROWTH":
+                            passive_num = flat_for_passive
+                        if passive_type == "CREATION":
+                            passive_num = value_for_passive
+                        if passive_type == "DESTRUCTION":
+                            passive_num = value_for_passive
+                        if passive_type == "SLOW":
+                            passive_num = "1"
+                        if passive_type == "HASTE":
+                            passive_num = "1"
+                        if passive_type == "STANCE":
+                            passive_num = flat_for_passive
+                        if passive_type == "CONFUSE":
+                            passive_num = flat_for_passive
+                        if passive_type == "BLINK":
+                            passive_num = stam_for_passive
+
+                    traits = ut.traits
+                    mytrait = {}
+                    traitmessage = ''
+                    for trait in traits:
+                        if trait['NAME'] == o_show:
+                            mytrait = trait
+                        if o_show == 'Kanto Region' or o_show == 'Johto Region' or o_show == 'Kalos Region' or o_show == 'Unova Region' or o_show == 'Sinnoh Region' or o_show == 'Hoenn Region' or o_show == 'Galar Region' or o_show == 'Alola Region':
+                            if trait['NAME'] == 'Pokemon':
+                                mytrait = trait
+                    if mytrait:
+                        traitmessage = f"**{mytrait['EFFECT']}:** {mytrait['TRAIT']}"
+
+
+                    embedVar = discord.Embed(title= f"{resp['NAME']}", description=textwrap.dedent(f"""\
+                    {icon} **[{index}]** 
+                    {card_tier}: {lvl}
+                    :heart: **{resp['HLT']}** :dagger: **{resp['ATK']}** :shield: **{resp['DEF']}** 🏃 **{resp['SPD']}**
+
+                    {move1_emoji} **{move1}:** {move1ap}
+                    {move2_emoji} **{move2}:** {move2ap}
+                    {move3_emoji} **{move3}:** {move3ap}
+                    🦠 **{move4}:** {move4enh} {move4ap}{enhancer_suffix_mapping[move4enh]}
+
+                    🩸 **{passive_name}:** {passive_type.title()} {passive_num}{passive_enhancer_suffix_mapping[passive_type]}
+                    ♾️ {traitmessage}
+                    """), colour=0x7289da)
+                    embedVar.add_field(name="__Affinities__", value=f"{affinity_message}")
+                    embedVar.set_thumbnail(url=show_img)
+                    embedVar.set_footer(text=f"/enhancers - 🩸 Enhancer Menu")
+                    embed_list.append(embedVar)
+
+                buttons = [
+                    manage_components.create_button(style=3, label="Equip", custom_id="Equip"),
+                    manage_components.create_button(style=1, label="Resell", custom_id="Resell"),
+                    manage_components.create_button(style=1, label="Dismantle", custom_id="Dismantle"),
+                    manage_components.create_button(style=1, label="Trade", custom_id="Trade"),
+                    manage_components.create_button(style=2, label="Swap", custom_id="Swap")
+                ]
+                custom_action_row = manage_components.create_actionrow(*buttons)
+                # custom_button = manage_components.create_button(style=3, label="Equip")
+
+                async def custom_function(self, button_ctx):
+                    if button_ctx.author == ctx.author:
+                        updated_vault = db.queryVault({'DID': d['DID']})
+                        sell_price = 0
+                        selected_card = str(button_ctx.origin_message.embeds[0].title)
+                        if button_ctx.custom_id == "Equip":
+                            if selected_card in updated_vault['CARDS']:
+                                selected_universe = custom_function
+                                custom_function.selected_universe = selected_card
+                                user_query = {'DID': str(ctx.author.id)}
+                                response = db.updateUserNoFilter(user_query, {'$set': {'CARD': selected_card}})
+                                await button_ctx.send(f":flower_playing_cards: **{selected_card}** equipped.")
+                                self.stop = True
+                            else:
+                                await button_ctx.send(f"**{selected_card}** is no longer in your vault.")
+                        
+                        elif button_ctx.custom_id == "Resell":
+                            card_data = db.queryCard({'NAME': selected_card})
+                            card_name = card_data['NAME']
+                            sell_price = sell_price + (card_data['PRICE'] * .15)
+                            if card_name == current_card:
+                                await button_ctx.send("You cannot resell equipped cards.")
+                            elif card_name in updated_vault['CARDS']:
+                                sell_buttons = [
+                                    manage_components.create_button(
+                                        style=ButtonStyle.green,
+                                        label="Yes",
+                                        custom_id="yes"
+                                    ),
+                                    manage_components.create_button(
+                                        style=ButtonStyle.blue,
+                                        label="No",
+                                        custom_id="no"
+                                    )
+                                ]
+                                sell_buttons_action_row = manage_components.create_actionrow(*sell_buttons)
+                                msg = await button_ctx.send(f"Are you sure you want to sell **{card_name}** for :coin:{round(sell_price)}?", components=[sell_buttons_action_row])
+                                
+                                def check(button_ctx):
+                                    return button_ctx.author == ctx.author
+
+                                
+                                try:
+                                    button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[sell_buttons_action_row], timeout=120, check=check)
+
+                                    if button_ctx.custom_id == "no":
+                                        await button_ctx.send("Sell cancelled. ")
+                                    if button_ctx.custom_id == "yes":
+                                        db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'CARDS': card_name}})
+                                        db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'CARD_LEVELS': {'CARD': card_name}}})
+                                        await crown_utilities.bless(sell_price, ctx.author.id)
+                                        await msg.delete()
+                                        await button_ctx.send(f"**{card_name}** has been sold.")
+                                except Exception as ex:
+                                    trace = []
+                                    tb = ex.__traceback__
+                                    while tb is not None:
+                                        trace.append({
+                                            "filename": tb.tb_frame.f_code.co_filename,
+                                            "name": tb.tb_frame.f_code.co_name,
+                                            "lineno": tb.tb_lineno
+                                        })
+                                        tb = tb.tb_next
+                                    print(str({
+                                        'PLAYER': str(ctx.author),
+                                        'type': type(ex).__name__,
+                                        'message': str(ex),
+                                        'trace': trace
+                                    }))
+                                    await ctx.send("There's an issue with selling one or all of your items.")
+                                    return
+                            else:
+                                await button_ctx.send(f"**{card_name}** is no longer in your vault.")
+                        
+                        elif button_ctx.custom_id == "Dismantle":
+                            card_data = db.queryCard({'NAME': selected_card})
+                            card_tier =  card_data['TIER']
+                            card_health = card_data['HLT']
+                            card_name = card_data['NAME']
+                            selected_universe = card_data['UNIVERSE']
+                            o_moveset = card_data['MOVESET']
+                            o_3 = o_moveset[2]
+                            element = list(o_3.values())[2]
+                            essence_amount = (200 * card_tier)
+                            o_enhancer = o_moveset[3]
+
+                            dismantle_amount = (10000 * card_tier) + card_health
+                            if card_name == current_card:
+                                await button_ctx.send("You cannot dismantle equipped cards.")
+                            elif card_name in updated_vault['CARDS']:
+                                dismantle_buttons = [
+                                    manage_components.create_button(
+                                        style=ButtonStyle.green,
+                                        label="Yes",
+                                        custom_id="yes"
+                                    ),
+                                    manage_components.create_button(
+                                        style=ButtonStyle.blue,
+                                        label="No",
+                                        custom_id="no"
+                                    )
+                                ]
+                                dismantle_buttons_action_row = manage_components.create_actionrow(*dismantle_buttons)
+                                msg = await button_ctx.send(f"Are you sure you want to dismantle **{card_name}** for 💎 {round(dismantle_amount)}?", components=[dismantle_buttons_action_row])
+                                
+                                def check(button_ctx):
+                                    return button_ctx.author == ctx.author
+
+                                
+                                try:
+                                    button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[dismantle_buttons_action_row], timeout=120, check=check)
+
+                                    if button_ctx.custom_id == "no":
+                                        await button_ctx.send("Dismantle cancelled. ")
+                                    if button_ctx.custom_id == "yes":
+                                        if selected_universe in current_gems:
+                                            query = {'DID': str(ctx.author.id)}
+                                            update_query = {'$inc': {'GEMS.$[type].' + "GEMS": dismantle_amount}}
+                                            filter_query = [{'type.' + "UNIVERSE": selected_universe}]
+                                            response = db.updateVault(query, update_query, filter_query)
+                                        else:
+                                            response = db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$addToSet':{'GEMS': {'UNIVERSE': selected_universe, 'GEMS': dismantle_amount, 'UNIVERSE_HEART': False, 'UNIVERSE_SOUL': False}}})
+
+                                        em = crown_utilities.inc_essence(str(ctx.author.id), element, essence_amount)
+                                        db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'CARDS': card_name}})
+                                        db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'CARD_LEVELS': {'CARD': card_name}}})
+                                        #await crown_utilities.bless(sell_price, ctx.author.id)
+                                        await msg.delete()
+                                        await button_ctx.send(f"**{card_name}** has been dismantled. Acquired **{'{:,}'.format(essence_amount)}** {em} {element.title()} Essence.")
+                                        
+                                except Exception as ex:
+                                    trace = []
+                                    tb = ex.__traceback__
+                                    while tb is not None:
+                                        trace.append({
+                                            "filename": tb.tb_frame.f_code.co_filename,
+                                            "name": tb.tb_frame.f_code.co_name,
+                                            "lineno": tb.tb_lineno
+                                        })
+                                        tb = tb.tb_next
+                                    print(str({
+                                        'PLAYER': str(ctx.author),
+                                        'type': type(ex).__name__,
+                                        'message': str(ex),
+                                        'trace': trace
+                                    }))
+                                    await ctx.send("There's an issue with selling one or all of your items.")
+                                    return
+                            else:
+                                await button_ctx.send(f"**{card_name}** is no longer in your vault.")
+
+                        elif button_ctx.custom_id == "Trade":
+                            
+                            card_data = db.queryCard({'NAME' : selected_card})
+                            card_name= card_data['NAME']
+                            sell_price = card_data['PRICE'] * .10
+                            mtrade = db.queryTrade({'MDID' : str(ctx.author.id), 'OPEN' : True})
+                            mvalidation=False
+                            bvalidation=False
+                            item_already_in_trade=False
+                            if card_name == current_card:
+                                await button_ctx.send("You cannot trade equipped cards.")
+                            else:
+                                if mtrade:
+                                    if selected_card in mtrade['MCARDS']:
+                                        await ctx.send(f"{ctx.author.mention} card already in **Trade**")
+                                        item_already_in_trade=True
+                                    mvalidation=True
+                                else:
+                                    btrade = db.queryTrade({'BDID' : str(ctx.author.id), 'OPEN' : True})
+                                    if btrade:
+                                        if selected_card in btrade['BCARDS']:
+                                            await ctx.send(f"{ctx.author.mention} card already in **Trade**")
+                                            item_already_in_trade=True
+                                        bvalidation=True
+                                    else:
+                                        await ctx.send(f"{ctx.author.mention} use **/trade** to open a **trade**")
+                                        return
+                                if item_already_in_trade:
+                                    trade_buttons = [
+                                        manage_components.create_button(
+                                            style=ButtonStyle.green,
+                                            label="Yes",
+                                            custom_id="yes"
+                                        ),
+                                        manage_components.create_button(
+                                            style=ButtonStyle.blue,
+                                            label="No",
+                                            custom_id="no"
+                                        )
+                                    ]
+                                    trade_buttons_action_row = manage_components.create_actionrow(*trade_buttons)
+                                    await button_ctx.send(f"Would you like to remove **{selected_card}** from the **Trade**?", components=[trade_buttons_action_row])
+                                    
+                                    def check(button_ctx):
+                                        return button_ctx.author == ctx.author
+
+                                    
+                                    try:
+                                        button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[trade_buttons_action_row], timeout=120, check=check)
+                                        if button_ctx.custom_id == "no":
+                                                await button_ctx.send("Happy Trading")
+                                                self.stop = True
+                                        if button_ctx.custom_id == "yes":
+                                            neg_sell_price = 0 - abs(int(sell_price))
+                                            if mvalidation:
+                                                trade_query = {'MDID' : str(button_ctx.author.id), 'BDID' : str(mtrade['BDID']), 'OPEN' : True}
+                                                update_query = {"$pull" : {'MCARDS': selected_card}, "$inc" : {'TAX' : int(neg_sell_price)}}
+                                                resp = db.updateTrade(trade_query, update_query)
+                                                await button_ctx.send("Returned.")
+                                                self.stop = True
+                                            elif bvalidation:
+                                                trade_query = {'MDID' : str(btrade['MDID']),'BDID' : str(button_ctx.author.id), 'OPEN' : True}
+                                                update_query = {"$pull" : {'BCARDS': selected_card}, "$inc" : {'TAX' : int(neg_sell_price)}}
+                                                resp = db.updateTrade(trade_query, update_query)
+                                                await button_ctx.send("Returned.")
+                                                self.stop = True
+                                    except Exception as ex:
+                                        trace = []
+                                        tb = ex.__traceback__
+                                        while tb is not None:
+                                            trace.append({
+                                                "filename": tb.tb_frame.f_code.co_filename,
+                                                "name": tb.tb_frame.f_code.co_name,
+                                                "lineno": tb.tb_lineno
+                                            })
+                                            tb = tb.tb_next
+                                        print(str({
+                                            'PLAYER': str(ctx.author),
+                                            'type': type(ex).__name__,
+                                            'message': str(ex),
+                                            'trace': trace
+                                        }))
+                                        await ctx.send("There's an issue with trading one or all of your items.")
+                                        return   
+                                elif mvalidation == True or bvalidation ==True:    #If user is valid
+                                    sell_price = card_data['PRICE'] * .10
+                                    trade_buttons = [
+                                        manage_components.create_button(
+                                            style=ButtonStyle.green,
+                                            label="Yes",
+                                            custom_id="yes"
+                                        ),
+                                        manage_components.create_button(
+                                            style=ButtonStyle.blue,
+                                            label="No",
+                                            custom_id="no"
+                                        )
+                                    ]
+                                    trade_buttons_action_row = manage_components.create_actionrow(*trade_buttons)
+                                    await button_ctx.send(f"Are you sure you want to trade **{selected_card}**", components=[trade_buttons_action_row])
+                                    try:
+                                        button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[trade_buttons_action_row], timeout=120)
+                                        if button_ctx.custom_id == "no":
+                                                await button_ctx.send("Not this time. ")
+                                                self.stop = True
+                                        if button_ctx.custom_id == "yes":
+                                            if mvalidation:
+                                                trade_query = {'MDID' : str(ctx.author.id), 'BDID' : str(mtrade['BDID']), 'OPEN' : True}
+                                                update_query = {"$push" : {'MCARDS': selected_card}, "$inc" : {'TAX' : int(sell_price)}}
+                                                resp = db.updateTrade(trade_query, update_query)
+                                                await button_ctx.send("Trade staged.")
+                                                self.stop = True
+                                            elif bvalidation:
+                                                trade_query = {'MDID' : str(btrade['MDID']),'BDID' : str(ctx.author.id), 'OPEN' : True}
+                                                update_query = {"$push" : {'BCARDS': selected_card}, "$inc" : {'TAX' : int(sell_price)}}
+                                                resp = db.updateTrade(trade_query, update_query)
+                                                await button_ctx.send("Trade staged.")
+                                                self.stop = True
+                                    except Exception as ex:
+                                        trace = []
+                                        tb = ex.__traceback__
+                                        while tb is not None:
+                                            trace.append({
+                                                "filename": tb.tb_frame.f_code.co_filename,
+                                                "name": tb.tb_frame.f_code.co_name,
+                                                "lineno": tb.tb_lineno
+                                            })
+                                            tb = tb.tb_next
+                                        print(str({
+                                            'PLAYER': str(ctx.author),
+                                            'type': type(ex).__name__,
+                                            'message': str(ex),
+                                            'trace': trace
+                                        }))
+                                        await ctx.send("There's an issue with trading one or all of your items.")
+                                        return   
+                            
+                        elif button_ctx.custom_id == "Swap":
+                            await button_ctx.defer(ignore=True)
+
+                            await ctx.send(f"{ctx.author.mention}, Which card number would you like to swap with in storage?")
+                            def check(msg):
+                                return msg.author == ctx.author
+
+                            try:
+                                msg = await self.bot.wait_for('message', check=check, timeout=30)
+                                if storage[int(msg.content)]:
+                                    swap_with = storage[int(msg.content)]
+                                    query = {'DID': str(msg.author.id)}
+                                    update_storage_query = {
+                                        '$pull': {'CARDS': selected_card},
+                                        '$addToSet': {'STORAGE': selected_card},
+                                    }
+                                    response = db.updateVaultNoFilter(query, update_storage_query)
+
+                                    update_storage_query = {
+                                        '$pull': {'STORAGE': swap_with},
+                                        '$addToSet': {'CARDS': swap_with}
+                                    }
+                                    response = db.updateVaultNoFilter(query, update_storage_query)
+
+
+                                    await ctx.send(f"**{selected_card}** has been swapped with **{swap_with}**")
+                                    return
+                                else:
+                                    await ctx.send("The card number you want to swap with does not exist.")
+                                    return
+
+                            except Exception as e:
+                                return False
+
+
+                            self.stop = True
+                    else:
+                        await ctx.send("This is not your card list.")
+                await Paginator(bot=self.bot, disableAfterTimeout=True, useQuitButton=True, ctx=ctx, pages=embed_list, timeout=60, customActionRow=[
+                    custom_action_row,
+                    custom_function,
+                ]).run()
+            else:
+                newVault = db.createVault({'OWNER': d['DISNAME'], 'DID' : d['DID']})
+        except Exception as ex:
+            trace = []
+            tb = ex.__traceback__
+            while tb is not None:
+                trace.append({
+                    "filename": tb.tb_frame.f_code.co_filename,
+                    "name": tb.tb_frame.f_code.co_name,
+                    "lineno": tb.tb_lineno
+                })
+                tb = tb.tb_next
+            print(str({
+                'type': type(ex).__name__,
+                'message': str(ex),
+                'trace': trace
+            }))
+            await ctx.send("There's an issue with loading your cards. Check with support.", hidden=True)
+            return
+
 
 
 async def craft_adjuster(self, player, vault, universe, price, item, skin_list, completed_tales):

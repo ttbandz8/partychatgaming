@@ -1010,7 +1010,7 @@ def essence_cost(vault, element, did):
                 essence = e["ESSENCE"]
 
         if essence < 500:
-            msg = f"You do not have enough {element} essence to attune at this time."
+            msg = f"You do not have enough {element} essence to transfuse at this time."
             return msg
 
 
@@ -1029,7 +1029,7 @@ def essence_cost(vault, element, did):
                 }
             }
         tresponse = db.updateVaultNoFilter(query, talisman_query)
-        msg = f"You have successfully attuned a **{element.title()} Talisman!**"
+        msg = f"You have successfully transfused a **{element.title()} Talisman!**"
         return msg
     except Exception as ex:
         trace = []
