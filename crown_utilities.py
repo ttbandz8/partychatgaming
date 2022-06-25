@@ -1097,12 +1097,12 @@ def essence_cost(vault, element, did):
             msg = f"You already have a **{element} Talisman**."
             return msg       
 
-        if essence < 500:
+        if essence < 1500:
             msg = f"You do not have enough {element} essence to transfuse at this time."
             return msg
 
 
-        curseAmount = int(500)
+        curseAmount = int(1500)
         negCurseAmount = 0 - abs(int(curseAmount))
         query = {'DID': str(did)}
         update_query = {'$inc': {'ESSENCE.$[type].' + "ESSENCE": negCurseAmount}}
@@ -1112,7 +1112,7 @@ def essence_cost(vault, element, did):
                 '$addToSet': {
                     "TALISMANS": {
                         "TYPE": element.upper(),
-                        "DUR": 25
+                        "DUR": 30
                     }
                 }
             }
