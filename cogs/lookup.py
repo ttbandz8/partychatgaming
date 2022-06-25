@@ -120,11 +120,11 @@ class Lookup(commands.Cog):
                 if talisman == "NULL":
                     talisman_message = "No Talisman Equipped"
                 else:
-                    for t in vault["TALISMANS"]:
+                    for t in v["TALISMANS"]:
                         if t["TYPE"].upper() == talisman.upper():
                             talisman_emoji = crown_utilities.set_emoji(talisman.upper())
                             talisman_durability = t["DUR"]
-                    talisman_message = f"{talisman_emoji} {talisman.title()} Talisman Equipped ⚒️ {talisman_durability}"
+                    talisman_message = f"**{talisman_emoji} {talisman.title()} Talisman Equipped** ⚒️ {talisman_durability}"
 
                 pvp_matches = []
                 boss_matches = []

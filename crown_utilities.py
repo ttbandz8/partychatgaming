@@ -23,6 +23,7 @@ import logging
 import textwrap
 import unique_traits as ut
 now = time.asctime()
+import random
 
 
 print("Crown Utilities initiated")
@@ -987,6 +988,55 @@ def inc_essence(did, element, essence):
         return emoji
     except Exception as e:
         return False
+
+def does_exist(data):
+    if data:
+        return True
+    else:
+        return False
+
+def is_maxed_out(list):
+    if len(list) >= 25:
+        return True
+    else:
+        return False
+
+
+def inc_talisman(did, element):
+    try:
+        emoji = set_emoji(element)
+        query = {'DID': str(did)}
+        vault = db.queryVault(query)
+        current_durability = 0
+        for t in vault["TALISMANS"]:
+            if t["TYPE"] == element.upper():
+                current_durability = t["DUR"]
+
+        if current_durability <= 1:
+            response = dismantle_talisman(element, did)
+            return response
+        else:
+            update_query = {'$inc': {'TALISMANS.$[type].' + "DUR": -1}}
+            filter_query = [{'type.' + "TYPE": element.upper()}]
+            r = db.updateVault(query, update_query, filter_query)
+            response = f"{emoji} {element.title()} Talisman now has {current_durability - 1} durability."
+            return response
+    except Exception as ex:
+        trace = []
+        tb = ex.__traceback__
+        while tb is not None:
+                trace.append({
+                "filename": tb.tb_frame.f_code.co_filename,
+                "name": tb.tb_frame.f_code.co_name,
+                "lineno": tb.tb_lineno
+                })
+                tb = tb.tb_next
+        print(str({
+                'type': type(ex).__name__,
+                'message': str(ex),
+                'trace': trace
+        }))
+
 
 def does_exist(data):
     if data:

@@ -765,6 +765,7 @@ class Profile(commands.Cog):
 
                 buttons = [
                     manage_components.create_button(style=3, label="Equip", custom_id="Equip"),
+                    manage_components.create_button(style=3, label="Unequip", custom_id="Unequip"),
                     manage_components.create_button(style=1, label="Dismantle", custom_id="Dismantle"),
                 ]
                 custom_action_row = manage_components.create_actionrow(*buttons)
@@ -786,6 +787,15 @@ class Profile(commands.Cog):
                             else:
                                 response = crown_utilities.dismantle_talisman(selected_talisman.upper(), ctx.author.id)
                                 await button_ctx.send(response)
+                        if button_ctx.custom_id == "Unequip":
+                            if selected_talisman.upper() == equipped_talisman.upper():
+                                query = {'DID': str(ctx.author.id)}
+                                user_update_query = {'$set': {'TALISMAN': 'NULL'}}
+                                db.updateUserNoFilter(query, user_update_query)
+                                await button_ctx.send(f"Your Talisman has been unequipped.")
+                            else:
+                                await button_ctx.send(f"You cannot unequip a Talisman that isn't equipped.")
+
                     else:
                         await ctx.send("This is not your card list.")
 
