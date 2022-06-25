@@ -115,6 +115,17 @@ class Lookup(commands.Cog):
                 elif rebirth == 5:
                     icon = ':heart_on_fire::heart_on_fire::heart_on_fire::heart_on_fire::heart_on_fire:'
 
+                talisman = d['TALISMAN']
+                talisman_message = "No Talisman Equipped"
+                if talisman == "NULL":
+                    talisman_message = "No Talisman Equipped"
+                else:
+                    for t in vault["TALISMANS"]:
+                        if t["TYPE"].upper() == talisman.upper():
+                            talisman_emoji = crown_utilities.set_emoji(talisman.upper())
+                            talisman_durability = t["DUR"]
+                    talisman_message = f"{talisman_emoji} {talisman.title()} Talisman Equipped ⚒️ {talisman_durability}"
+
                 pvp_matches = []
                 boss_matches = []
                 dungeon_matches = []
@@ -177,6 +188,7 @@ class Lookup(commands.Cog):
                 :reminder_ribbon:** | Title: **{titles}
                 :mechanical_arm: | **Arm: **{arm}
                 🧬 | **Summon: **{pet}
+                {talisman_message}
 
                 :military_medal: | {most_played_card_message}
                 **Tales Played: **{'{:,}'.format(int(len(tales_matches)))}

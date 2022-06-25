@@ -296,6 +296,16 @@ class Profile(commands.Cog):
                     performance_mode = d['PERFORMANCE']
                     card_tier = card['TIER']
                     affinity_message = crown_utilities.set_affinities(card)
+                    talisman = d['TALISMAN']
+                    talisman_message = "No Talisman Equipped"
+                    if talisman == "NULL":
+                        talisman_message = "No Talisman Equipped"
+                    else:
+                        for t in vault["TALISMANS"]:
+                            if t["TYPE"].upper() == talisman.upper():
+                                talisman_emoji = crown_utilities.set_emoji(talisman.upper())
+                                talisman_durability = t["DUR"]
+                        talisman_message = f"{talisman_emoji} {talisman.title()} Talisman Equipped ⚒️ {talisman_durability}"
             
                     rebirthBonus = o_rebirth * 10
                     traits = ut.traits
@@ -505,6 +515,7 @@ class Profile(commands.Cog):
                         
 
                     cardtitle = {'TITLE': title_name}
+                    
 
                     #<:PCG:769471288083218432>
                     if performance_mode:
@@ -515,8 +526,10 @@ class Profile(commands.Cog):
                         🛡️ **{o_defense}**
                         🏃 **{o_speed}**
 
+
                         **{titlemessage}**
                         **{armmessage}**
+                        **{talisman_message}**
                         🧬 **{active_pet['NAME']}: {active_pet['TYPE']}: {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]}
                         🧬 Bond {bond} {bond_message} & Level {lvl} {lvl_message}
 
@@ -538,7 +551,6 @@ class Profile(commands.Cog):
                         embedVar.set_author(name=f"{ctx.author}", icon_url=user_info['AVATAR'])
                         
                         await ctx.send(embed=embedVar)
-                        return
                     
                     else:
                         card_file = showcard("non-battle", card, arm, o_max_health, o_health, o_max_stamina, o_stamina, resolved, title, focused, o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, card_lvl, None)
@@ -551,6 +563,8 @@ class Profile(commands.Cog):
                         🧬 Bond {bond} {bond_message} & Level {lvl} {lvl_message}
                         {titlemessage}
                         {armmessage}
+                        {talisman_message}
+
                         🩸 {passive_name}      
                         🏃 {o_speed}
                         """))
@@ -561,7 +575,6 @@ class Profile(commands.Cog):
                             embedVar.set_footer(text=f"Max Level")
                         
                         await ctx.send(file=card_file, embed=embedVar)
-                        return
                 except Exception as ex:
                     trace = []
                     tb = ex.__traceback__
@@ -725,18 +738,24 @@ class Profile(commands.Cog):
             return
 
         try:
+            user = db.queryUser({"DID": str(ctx.author.id)})
             vault = db.queryVault({'DID': str(ctx.author.id)})
             talismans = vault["TALISMANS"]
             if crown_utilities.does_exist(talismans):
                 embed_list = []
+                equipped_talisman = user["TALISMAN"]
 
                 for t in talismans:
+                    m = ""
                     emoji = crown_utilities.set_emoji(t["TYPE"])
                     durability = t["DUR"]
                     name = t["TYPE"].title()
+                    if equipped_talisman.upper() == name.upper():
+                        m = "**Equipped**"
                     embedVar = discord.Embed(title= f"{name}", description=textwrap.dedent(f"""\
                     Element: {emoji} **{name.title()}**
                     Durability: {durability}
+                    {m}
                     """), colour=0x7289da)
                     # embedVar.add_field(name="__Affinities__", value=f"{affinity_message}")
                     # embedVar.set_thumbnail(url=show_img)
@@ -747,7 +766,6 @@ class Profile(commands.Cog):
                 buttons = [
                     manage_components.create_button(style=3, label="Equip", custom_id="Equip"),
                     manage_components.create_button(style=1, label="Dismantle", custom_id="Dismantle"),
-                    manage_components.create_button(style=1, label="Trade", custom_id="Trade"),
                 ]
                 custom_action_row = manage_components.create_actionrow(*buttons)
 
@@ -762,11 +780,14 @@ class Profile(commands.Cog):
                             response = db.updateUserNoFilter(user_query, {'$set': {'TALISMAN': selected_talisman.upper()}})
                             await button_ctx.send(f"**{selected_talisman} Talisman** equipped.")
                             self.stop = True
-
+                        if button_ctx.custom_id == "Dismantle":
+                            if selected_talisman.upper() == equipped_talisman.upper():
+                                await button_ctx.send(f"You cannot dismantle an equipped Talisman.")
+                            else:
+                                response = crown_utilities.dismantle_talisman(selected_talisman.upper(), ctx.author.id)
+                                await button_ctx.send(response)
                     else:
                         await ctx.send("This is not your card list.")
-
-
 
                 await Paginator(bot=self.bot, disableAfterTimeout=True, useQuitButton=True, ctx=ctx, pages=embed_list, timeout=60, customActionRow=[
                     custom_action_row,
@@ -4642,6 +4663,16 @@ async def menubuild(self, ctx):
                 performance_mode = d['PERFORMANCE']
                 card_tier = card['TIER']
                 affinity_message = crown_utilities.set_affinities(card)
+                talisman = d['TALISMAN']
+                talisman_message = "No Talisman Equipped"
+                if talisman == "NULL":
+                    talisman_message = "No Talisman Equipped"
+                else:
+                    for t in vault["TALISMANS"]:
+                        if t["TYPE"].upper() == talisman.upper():
+                            talisman_emoji = crown_utilities.set_emoji(talisman.upper())
+                            talisman_durability = t["DUR"]
+                    talisman_message = f"{talisman_emoji} {talisman.title()} Talisman Equipped ⚒️ {talisman_durability}"
         
                 rebirthBonus = o_rebirth * 10
                 traits = ut.traits
@@ -4683,6 +4714,9 @@ async def menubuild(self, ctx):
                 arm_name = arm['ARM']
                 arm_passive = arm['ABILITIES'][0]
                 arm_passive_type = list(arm_passive.keys())[0]
+                arm_moves_type_list = ['BASIC', 'SPECIAL', 'ULTIMATE']
+                if arm_passive_type in arm_moves_type_list:
+                    arm_element = arm['ELEMENT']
                 arm_passive_value = list(arm_passive.values())[0]
                 title_name= title['TITLE']
                 title_passive = title['ABILITIES'][0]
@@ -4734,7 +4768,7 @@ async def menubuild(self, ctx):
                 passive_num = list(o_passive.values())[0]
                 passive_type = list(o_passive.values())[1]
 
-               
+            
                 if passive_type:
                     value_for_passive = card_tier * .5
                     flat_for_passive = round(10 * (card_tier * .5))
@@ -4803,30 +4837,52 @@ async def menubuild(self, ctx):
                 titled =False
                 titleicon="⚠️"
                 licon = "🔱"
-                armicon = "☢️"
+                armicon = "⚠️"
                 if card_lvl == 200:
                     licon ="⚜️"
-                titlemessage = f"{titleicon} {title_name} ~ INEFFECTIVE"
-                armmessage = f'☢️ {arm_name}: {arm_passive_type} {arm_passive_value}{enhancer_suffix_mapping[arm_passive_type]} {durability}'
+                titlemessage = f"{titleicon} ⚠️ {title_name} ~ INEFFECTIVE"
+                armmessage = f"🦾 ⚠️ {arm_name}: {durability}"
+                if arm_passive_type in arm_moves_type_list:
+                    arm_emoji = crown_utilities.set_emoji(arm_element)
+                    if performance_mode:
+                        armmessage = f'☢️ {arm_name}: {arm_emoji} {arm_passive_type.title()} Attack: {arm_passive_value} | {durability}'
+                    else:
+                        armmessage = f'☢️ {arm_name}'
                 warningmessage = f"Use {o_show} or Unbound Titles on this card"
                 if o_title_universe == "Unbound":
                     titled =True
                     titleicon = "👑"
-                    titlemessage = f"👑 {title_name}: {title_passive_type} {title_passive_value}{title_enhancer_suffix_mapping[title_passive_type]}"
+                    if performance_mode:
+                        titlemessage = f"👑 {title_name}: {title_passive_type} {title_passive_value}{title_enhancer_suffix_mapping[title_passive_type]}"
+                    else:
+                        titlemessage = f"👑 {title_name}" 
                     warningmessage= f""
                 elif o_title_universe == o_show:
                     titled =True
                     titleicon = "🎗️"
-                    titlemessage = f"🎗️ {title_name}: {title_passive_type} {title_passive_value}{title_enhancer_suffix_mapping[title_passive_type]}"
+                    if performance_mode:
+                        titlemessage = f"🎗️ {title_name}: {title_passive_type} {title_passive_value}{title_enhancer_suffix_mapping[title_passive_type]}"
+                    else:
+                        titlemessage = f"🎗️ {title_name}"
                     warningmessage= f""
                 
                 if oarm_universe == "Unbound":
                     armicon = "💪"
-                    armmessage = f'💪 {arm_name}: {arm_passive_type} {arm_passive_value}{enhancer_suffix_mapping[arm_passive_type]} {durability}'
+                    if performance_mode:
+                        armmessage = f'💪 {arm_name}: {arm_passive_type} {arm_passive_value}{enhancer_suffix_mapping[arm_passive_type]} {durability}'
+                    else:
+                        armmessage = f'💪 {arm_name}'
+
                 elif oarm_universe == o_show:
                     armicon = "🦾"
-                    armmessage = f'🦾 {arm_name}: {arm_passive_type} {arm_passive_value}{enhancer_suffix_mapping[arm_passive_type]} {durability}'
+                    if performance_mode:
+                        armmessage = f'🦾 {arm_name}: {arm_passive_type} {arm_passive_value}{enhancer_suffix_mapping[arm_passive_type]} {durability}'
+                    else:
+                        armmessage = f'🦾 {arm_name}: {durability}'
+                    
+
                 cardtitle = {'TITLE': title_name}
+                
 
                 #<:PCG:769471288083218432>
                 if performance_mode:
@@ -4837,9 +4893,13 @@ async def menubuild(self, ctx):
                     🛡️ **{o_defense}**
                     🏃 **{o_speed}**
 
+                    **{talisman_message}**
+
                     **{titlemessage}**
                     **{armmessage}**
-                    🧬 **{active_pet['NAME']}: {active_pet['TYPE']}: {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]}| Bond {bond} {bond_message} / Level {lvl} {lvl_message}**
+                    🧬 **{active_pet['NAME']}: {active_pet['TYPE']}: {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]}
+                    🧬 Bond {bond} {bond_message} & Level {lvl} {lvl_message}
+
                     🩸 **{passive_name}:** {passive_type} {passive_num}{passive_enhancer_suffix_mapping[passive_type]}                
                     
                     {move1_emoji} **{move1}:** {move1ap}
@@ -4858,7 +4918,6 @@ async def menubuild(self, ctx):
                     embedVar.set_author(name=f"{ctx.author}", icon_url=user_info['AVATAR'])
                     
                     await ctx.send(embed=embedVar)
-                    return
                 
                 else:
                     card_file = showcard("non-battle", card, arm, o_max_health, o_health, o_max_stamina, o_stamina, resolved, title, focused, o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, card_lvl, None)
@@ -4867,10 +4926,13 @@ async def menubuild(self, ctx):
                     embedVar.add_field(name="__Affinities__", value=f"{affinity_message}")
                     embedVar.set_image(url="attachment://image.png")
                     embedVar.set_author(name=textwrap.dedent(f"""\
+                    🧬 {active_pet['NAME']}: {active_pet['TYPE'].title()}: {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]} 
+                    🧬 Bond {bond} {bond_message} & Level {lvl} {lvl_message}
                     {titlemessage}
                     {armmessage}
-                    🧬 {active_pet['NAME']}: {active_pet['TYPE']}: {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]}| Bond {bond} {bond_message} / Level {lvl} {lvl_message}
-                    🩸 {passive_name}: {passive_type} {passive_num}{passive_enhancer_suffix_mapping[passive_type]}                
+                    {talisman_message}
+
+                    🩸 {passive_name}      
                     🏃 {o_speed}
                     """))
                     embedVar.set_thumbnail(url=ctx.author.avatar_url)
@@ -4880,7 +4942,6 @@ async def menubuild(self, ctx):
                         embedVar.set_footer(text=f"Max Level")
                     
                     await ctx.send(file=card_file, embed=embedVar)
-                    return
             except Exception as ex:
                 trace = []
                 tb = ex.__traceback__

@@ -1001,20 +1001,58 @@ def is_maxed_out(list):
         return False
 
 
+def dismantle_talisman(element, did):
+    try:
+        query = {'DID': str(did)}
+        update_query = {'$pull': {'TALISMANS': {'TYPE': str(element.upper())}}}
+        resp = db.updateVaultNoFilter(query, update_query)
+        user_update_query = {'$set': {'TALISMAN': 'NULL'}}
+        db.updateUserNoFilter(query, user_update_query)
+        response = inc_essence(did, element, 150)
+        msg = f"{response} **{element.title()} Talisman** has been dismantled into **150 {response} {element.title()} Essence**"
+        return msg
+    except Exception as ex:
+        trace = []
+        tb = ex.__traceback__
+        while tb is not None:
+                trace.append({
+                "filename": tb.tb_frame.f_code.co_filename,
+                "name": tb.tb_frame.f_code.co_name,
+                "lineno": tb.tb_lineno
+                })
+                tb = tb.tb_next
+        print(str({
+                'type': type(ex).__name__,
+                'message': str(ex),
+                'trace': trace
+        }))
+
+
 def essence_cost(vault, element, did):
     try:
         essence_list = vault["ESSENCE"]
+        talisman_list = vault["TALISMANS"]
+        talisman_exists = False
         msg = ""
         for e in essence_list:
             if e["ELEMENT"] == element:
                 essence = e["ESSENCE"]
+
+        for t in talisman_list:
+            if t["TYPE"] == element.upper():
+                talisman_exists = True
+
+        
+        if talisman_exists:
+            msg = f"You already have a **{element} Talisman**."
+            return msg       
 
         if essence < 500:
             msg = f"You do not have enough {element} essence to transfuse at this time."
             return msg
 
 
-        curseAmount = int(essence)
+        curseAmount = int(500)
         negCurseAmount = 0 - abs(int(curseAmount))
         query = {'DID': str(did)}
         update_query = {'$inc': {'ESSENCE.$[type].' + "ESSENCE": negCurseAmount}}
