@@ -803,6 +803,9 @@ class Profile(commands.Cog):
                     custom_action_row,
                     custom_function,
                 ]).run()
+            else:
+                await ctx.send("You currently have no Talismans. Attune Talismans using /attune")
+                return
         except Exception as ex:
             trace = []
             tb = ex.__traceback__
