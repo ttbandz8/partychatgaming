@@ -7633,10 +7633,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             
                             previous_moves_into_embed = "\n\n".join(previous_moves)
 
-                        if o_ap_buff > 200:
-                            o_ap_buff = 200
-                        if t_ap_buff > 200:
-                            t_ap_buff = 200
+                        if o_ap_buff > 500:
+                            o_ap_buff = 500
+                        if t_ap_buff > 500:
+                            t_ap_buff = 500
 
                         if turn == 0:
                             if o_universe == "YuYu Hakusho":
@@ -16405,8 +16405,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
 
                         elif mode in co_op_modes and turn != (0 or 1):
-                            if c_ap_buff > 200:
-                                c_ap_buff = 200
+                            if c_ap_buff > 500:
+                                c_ap_buff = 500
 
                             # Companion Turn Start
                             if turn == 2:
