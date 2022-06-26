@@ -4906,9 +4906,9 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             tarm_passive_value = list(tarm_passive.values())[0]
             if tarm_passive_type == 'BASIC':
                 t_1 = {tarm_name: tarm_passive_value, "STAM": 10, "ELEMENT": tarm_element}
-            elif oarm_passive_type == 'SPECIAL':
+            elif tarm_passive_type == 'SPECIAL':
                 t_2 = {tarm_name: tarm_passive_value, "STAM": 30, "ELEMENT": tarm_element}
-            elif oarm_passive_type == 'ULTIMATE':
+            elif tarm_passive_type == 'ULTIMATE':
                 t_3 = {tarm_name: tarm_passive_value, "STAM": 80, "ELEMENT": tarm_element}
 
 
@@ -4934,9 +4934,9 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             tarm_passive_value = list(tarm_passive.values())[0]
             if tarm_passive_type == 'BASIC':
                 t_1 = {tarm_name: tarm_passive_value, "STAM": 10, "ELEMENT": tarm_element}
-            elif oarm_passive_type == 'SPECIAL':
+            elif tarm_passive_type == 'SPECIAL':
                 t_2 = {tarm_name: tarm_passive_value, "STAM": 30, "ELEMENT": tarm_element}
-            elif oarm_passive_type == 'ULTIMATE':
+            elif tarm_passive_type == 'ULTIMATE':
                 t_3 = {tarm_name: tarm_passive_value, "STAM": 80, "ELEMENT": tarm_element}
 
             tmove1_text = list(t_1.keys())[0]
