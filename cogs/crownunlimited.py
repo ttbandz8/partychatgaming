@@ -3134,7 +3134,7 @@ def showcard(mode, d, arm, max_health, health, max_stamina, stamina, resolved, t
             # attack_stat = f"🗡️{round(attack)}"
             # defense_stat = f"🛡️{round(defense)}"
             if 'ABILITIES' in title:
-                title_suffix = enhancer_suffix_mapping[title_passive_type]
+                title_suffix = title_enhancer_suffix_mapping[title_passive_type]
                 if mode == "battle":
                     title_message_on_card = f"🎗️ {title_message}{title_suffix}"
                 else:
