@@ -76,7 +76,7 @@ ELEMENTS = textwrap.dedent(f"""\
 
 🔥 Fire - Does 25% damage of previous attack over the next opponent turns, stacks.
 
-❄️ Ice - After 3 uses opponent freezes and loses 1 turn.
+❄️ Ice - After 2 uses opponent freezes and loses 1 turn.
 
 💧 Water - Increases all water attack dmg by 35 Flat.
 
@@ -86,7 +86,7 @@ ELEMENTS = textwrap.dedent(f"""\
 
 🌪️ Wind - Cannot Miss, boosts all wind damage by 15% of damage dealt.
 
-🔮 Psychic - Penetrates Barriers. Reduce opponent ATK & DEF by 8% AP.
+🔮 Psychic - Penetrates Barriers. Reduce opponent ATK & DEF by 15% AP.
 
 ☠️ Death - Deals 20% opponent max health as damage.
 
@@ -96,19 +96,19 @@ ELEMENTS = textwrap.dedent(f"""\
 
 ♠️ Dark- Penetrates shields & drains 10 stamina.
 
-🧪 Poison - Penetrades shields, Poison 20 damage stacking up to 300.
+🧪 Poison - Penetrades shields, Poison 20 damage stacking up to 500.
 
 🏹 Ranged - If ST(stamina) greater than 30, Deals 1.7x Damage 
 
 💙 Spirit - Has higher chance of Crit.
 
-♻️ Recoil - Deals 25% damage back to you while dealing more damage to opponent.
+♻️ Recoil - Deals 60% damage back to you while dealing significantly more damage to opponent.
 
 ⌛ Time - If ST is less than 80, You Block and Focus for 1 Turn. 
 
-🅱️ Bleed - After 4 Attacks deal 10x turn count damage to opponent.
+🅱️ Bleed - After 3 Attacks deal 10x turn count damage to opponent.
 
-🪐 Gravity - Disables Opponent Block and Reduce opponent DEF by 15% AP.
+🪐 Gravity - Disables Opponent Block and Reduce opponent DEF by 25% AP.
 
 [Join the Anime VS+ Support Server](https://discord.gg/2JkCqcN3hB)
 """)

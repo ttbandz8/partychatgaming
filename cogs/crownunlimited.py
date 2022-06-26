@@ -2234,8 +2234,8 @@ def damage_cal(talisman_dict, move_ap, opponent_affinity, move_type, move_elemen
                 enhanced = ap
             else:
                 enhanced = round(ap * turn)
-                if enhanced >= 200:
-                    enhanced = 200
+                if enhanced >= 600:
+                    enhanced = 600
         elif enh_type == 'CREATION':
             if turn == 0:
                 enhanced = ap
@@ -2256,8 +2256,8 @@ def damage_cal(talisman_dict, move_ap, opponent_affinity, move_type, move_elemen
                 enhanced = ap
             else:
                 enhanced = round(ap * turn)
-                if enhanced >= 300:
-                    enhanced = 300
+                if enhanced >= 500:
+                    enhanced = 500
             if enhanced > op_health:
                 message = f'Opponent has been reduced.'
                 enhanced = op_health - 1
@@ -2469,7 +2469,7 @@ def damage_cal(talisman_dict, move_ap, opponent_affinity, move_type, move_elemen
                 message = f"{move_emoji} {move} used! Dealt **{true_dmg}** dmg!"
 
             if move_element == "RECOIL" and hit_roll > miss_hit:
-                true_dmg = round(true_dmg + 200)
+                true_dmg = round(true_dmg * 2.9)
 
             if is_wind_element and hit_roll > miss_hit:
                 wind_buff = round(wind_buff + round(true_dmg * .15))
@@ -2994,11 +2994,11 @@ def showcard(mode, d, arm, max_health, health, max_stamina, stamina, resolved, t
             elif enhname in Damage_Enhancer_Check:
                 if turn_total > 0:
                     move_enhanced_ap = round(enh1 * turn_total)
-                    if move_enhanced_ap >= 200:
+                    if move_enhanced_ap >= 600:
                         if move_enhanced_name == "BLAST":
-                            move_enhanced_ap = 200
+                            move_enhanced_ap = 600
                         else:
-                            move_enhanced_ap = 300
+                            move_enhanced_ap = 500
                         turn_crit = True
                 else:
                     move_enhanced_ap = enh1
@@ -9026,8 +9026,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_health = t_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == dark_element:
-                                                    o_stamina = o_stamina + 10
-                                                    t_stamina = t_stamina - 10
+                                                    o_stamina = o_stamina + 15
+                                                    t_stamina = t_stamina - 15
                                                     t_health = t_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == life_element:
@@ -9035,13 +9035,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_health = t_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == recoil_element:
-                                                    o_health = o_health - (dmg['DMG'] * .25)
+                                                    o_health = o_health - (dmg['DMG'] * .60)
                                                     t_health = t_health - dmg['DMG']
 
 
                                                 elif dmg['ELEMENT'] == psychic_element:
-                                                    t_defense = t_defense - (dmg['DMG'] * .08)
-                                                    t_attack = t_attack - (dmg['DMG'] * .08)
+                                                    t_defense = t_defense - (dmg['DMG'] * .15)
+                                                    t_attack = t_attack - (dmg['DMG'] * .15)
                                                     t_health = t_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == fire_element:
@@ -9054,20 +9054,20 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_health = t_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == poison_element:
-                                                    if o_poison_dmg <= 300:
+                                                    if o_poison_dmg <= 500:
                                                         o_poison_dmg = o_poison_dmg + 20
                                                     t_health = t_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == ice_element:
                                                     o_ice_counter = o_ice_counter + 1
-                                                    if o_ice_counter == 3:
+                                                    if o_ice_counter == 2:
                                                         o_freeze_enh = True
                                                         o_ice_counter = 0
                                                     t_health = t_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == bleed_element:
                                                     o_bleed_counter = o_bleed_counter + 1
-                                                    if o_bleed_counter == 5:
+                                                    if o_bleed_counter == 3:
                                                         o_bleed_hit = True
                                                         o_bleed_counter = 0
                                                     t_health = t_health - dmg['DMG']
@@ -9075,7 +9075,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 elif dmg['ELEMENT'] == gravity_element:
                                                     o_gravity_hit = True
                                                     t_health = t_health - dmg['DMG']
-                                                    t_defense = t_defense - (dmg['DMG'] * .15)
+                                                    t_defense = t_defense - (dmg['DMG'] * .25)
                                                 
                                                 else:
                                                     t_health = t_health - dmg['DMG']
@@ -9235,7 +9235,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 elif tarm_shield_active and dmg['ELEMENT'] != dark_element:
                                                     
                                                     if dmg['ELEMENT'] == poison_element: #Poison Update
-                                                        if o_poison_dmg <= 300:
+                                                        if o_poison_dmg <= 500:
                                                             o_poison_dmg = o_poison_dmg + 20
                                                         
 
@@ -9346,8 +9346,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = t_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == dark_element:
-                                                        o_stamina = o_stamina + 10
-                                                        t_stamina = t_stamina - 10
+                                                        o_stamina = o_stamina + 15
+                                                        t_stamina = t_stamina - 15
                                                         t_health = t_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == life_element:
@@ -9355,13 +9355,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = t_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == recoil_element:
-                                                        o_health = o_health - (dmg['DMG'] * .25)
+                                                        o_health = o_health - (dmg['DMG'] * .60)
                                                         t_health = t_health - dmg['DMG']
 
 
                                                     elif dmg['ELEMENT'] == psychic_element:
-                                                        t_defense = t_defense - (dmg['DMG'] * .08)
-                                                        t_attack = t_attack - (dmg['DMG'] * .08)
+                                                        t_defense = t_defense - (dmg['DMG'] * .15)
+                                                        t_attack = t_attack - (dmg['DMG'] * .15)
                                                         t_health = t_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == fire_element:
@@ -9374,20 +9374,20 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = t_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == poison_element:
-                                                        if o_poison_dmg <= 300:
+                                                        if o_poison_dmg <= 500:
                                                             o_poison_dmg = o_poison_dmg + 20
                                                         t_health = t_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == ice_element:
                                                         o_ice_counter = o_ice_counter + 1
-                                                        if o_ice_counter == 3:
+                                                        if o_ice_counter == 2:
                                                             o_freeze_enh = True
                                                             o_ice_counter = 0
                                                         t_health = t_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == bleed_element:
                                                         o_bleed_counter = o_bleed_counter + 1
-                                                        if o_bleed_counter == 5:
+                                                        if o_bleed_counter == 3:
                                                             o_bleed_hit = True
                                                             o_bleed_counter = 0
                                                         t_health = t_health - dmg['DMG']
@@ -9395,7 +9395,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     elif dmg['ELEMENT'] == gravity_element:
                                                         o_gravity_hit = True
                                                         t_health = t_health - dmg['DMG']
-                                                        t_defense = t_defense - (dmg['DMG'] * .15)
+                                                        t_defense = t_defense - (dmg['DMG'] * .25)
                                                     
                                                     else:
                                                         t_health = t_health - dmg['DMG']
@@ -10774,8 +10774,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = t_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == dark_element:
-                                                        o_stamina = o_stamina + 10
-                                                        t_stamina = t_stamina - 10
+                                                        o_stamina = o_stamina + 15
+                                                        t_stamina = t_stamina - 15
                                                         t_health = t_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == life_element:
@@ -10783,13 +10783,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = t_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == recoil_element:
-                                                        o_health = o_health - (dmg['DMG'] * .25)
+                                                        o_health = o_health - (dmg['DMG'] * .60)
                                                         t_health = t_health - dmg['DMG']
 
 
                                                     elif dmg['ELEMENT'] == psychic_element:
-                                                        t_defense = t_defense - (dmg['DMG'] * .08)
-                                                        t_attack = t_attack - (dmg['DMG'] * .08)
+                                                        t_defense = t_defense - (dmg['DMG'] * .15)
+                                                        t_attack = t_attack - (dmg['DMG'] * .15)
                                                         t_health = t_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == fire_element:
@@ -10802,20 +10802,20 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = t_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == poison_element:
-                                                        if o_poison_dmg <= 300:
+                                                        if o_poison_dmg <= 500:
                                                             o_poison_dmg = o_poison_dmg + 20
                                                         t_health = t_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == ice_element:
                                                         o_ice_counter = o_ice_counter + 1
-                                                        if o_ice_counter == 3:
+                                                        if o_ice_counter == 2:
                                                             o_freeze_enh = True
                                                             o_ice_counter = 0
                                                         t_health = t_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == bleed_element:
                                                         o_bleed_counter = o_bleed_counter + 1
-                                                        if o_bleed_counter == 5:
+                                                        if o_bleed_counter == 3:
                                                             o_bleed_hit = True
                                                             o_bleed_counter = 0
                                                         t_health = t_health - dmg['DMG']
@@ -10823,7 +10823,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     elif dmg['ELEMENT'] == gravity_element:
                                                         o_gravity_hit = True
                                                         t_health = t_health - dmg['DMG']
-                                                        t_defense = t_defense - (dmg['DMG'] * .15)
+                                                        t_defense = t_defense - (dmg['DMG'] * .25)
                                                     
                                                     else:
                                                         t_health = t_health - dmg['DMG']
@@ -10989,7 +10989,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     elif tarm_shield_active and dmg['ELEMENT'] != dark_element:
                                                         
                                                         if dmg['ELEMENT'] == poison_element: #Poison Update
-                                                            if o_poison_dmg <= 300:
+                                                            if o_poison_dmg <= 500:
                                                                 o_poison_dmg = o_poison_dmg + 20
                                                            
 
@@ -11111,8 +11111,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == dark_element:
-                                                            o_stamina = o_stamina + 10
-                                                            t_stamina = t_stamina - 10
+                                                            o_stamina = o_stamina + 15
+                                                            t_stamina = t_stamina - 15
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == life_element:
@@ -11120,13 +11120,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == recoil_element:
-                                                            o_health = o_health - (dmg['DMG'] * .25)
+                                                            o_health = o_health - (dmg['DMG'] * .60)
                                                             t_health = t_health - dmg['DMG']
 
 
                                                         elif dmg['ELEMENT'] == psychic_element:
-                                                            t_defense = t_defense - (dmg['DMG'] * .08)
-                                                            t_attack = t_attack - (dmg['DMG'] * .08)
+                                                            t_defense = t_defense - (dmg['DMG'] * .15)
+                                                            t_attack = t_attack - (dmg['DMG'] * .15)
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == fire_element:
@@ -11139,20 +11139,20 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == poison_element:
-                                                            if o_poison_dmg <= 300:
+                                                            if o_poison_dmg <= 500:
                                                                 o_poison_dmg = o_poison_dmg + 20
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == ice_element:
                                                             o_ice_counter = o_ice_counter + 1
-                                                            if o_ice_counter == 3:
+                                                            if o_ice_counter == 2:
                                                                 o_freeze_enh = True
                                                                 o_ice_counter = 0
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == bleed_element:
                                                             o_bleed_counter = o_bleed_counter + 1
-                                                            if o_bleed_counter == 5:
+                                                            if o_bleed_counter == 3:
                                                                 o_bleed_hit = True
                                                                 o_bleed_counter = 0
                                                             t_health = t_health - dmg['DMG']
@@ -11160,7 +11160,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         elif dmg['ELEMENT'] == gravity_element:
                                                             o_gravity_hit = True
                                                             t_health = t_health - dmg['DMG']
-                                                            t_defense = t_defense - (dmg['DMG'] * .15)
+                                                            t_defense = t_defense - (dmg['DMG'] * .25)
                                                         
                                                         else:
                                                             t_health = t_health - dmg['DMG']
@@ -12576,7 +12576,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == recoil_element:
-                                                            t_health = t_health - (dmg['DMG'] * .25)
+                                                            t_health = t_health - (dmg['DMG'] * .60)
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == time_element:
@@ -12598,8 +12598,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == dark_element:
-                                                            t_stamina = t_stamina + 10
-                                                            o_stamina = o_stamina - 10
+                                                            t_stamina = t_stamina + 15
+                                                            o_stamina = o_stamina - 15
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == life_element:
@@ -12607,8 +12607,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == psychic_element:
-                                                            o_defense = o_defense - (dmg['DMG'] * .08)
-                                                            o_attack = o_attack - (dmg['DMG'] * .08)
+                                                            o_defense = o_defense - (dmg['DMG'] * .15)
+                                                            o_attack = o_attack - (dmg['DMG'] * .15)
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == fire_element:
@@ -12621,20 +12621,20 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == poison_element:
-                                                            if t_poison_dmg <= 300:
+                                                            if t_poison_dmg <= 500:
                                                                 t_poison_dmg = t_poison_dmg + 20
                                                             o_health = o_health - dmg['DMG']
     
                                                         elif dmg['ELEMENT'] == ice_element:
                                                             t_ice_counter = t_ice_counter + 1
-                                                            if t_ice_counter == 3:
+                                                            if t_ice_counter == 2:
                                                                 t_freeze_enh = True
                                                                 t_ice_counter = 0
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == bleed_element:
                                                             t_bleed_counter = t_bleed_counter + 1
-                                                            if t_bleed_counter == 5:
+                                                            if t_bleed_counter == 3:
                                                                 t_bleed_hit = True
                                                                 t_bleed_counter = 0
                                                             o_health = o_health - dmg['DMG']
@@ -12642,7 +12642,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         elif dmg['ELEMENT'] == gravity_element:
                                                             t_gravity_hit = True
                                                             o_health = o_health - dmg['DMG']
-                                                            o_defense = o_defense - (dmg['DMG'] * .15)
+                                                            o_defense = o_defense - (dmg['DMG'] * .25)
                                                         
                                                         else:
                                                             o_health = o_health - dmg['DMG']
@@ -12795,7 +12795,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                         elif oarm_shield_active and dmg['ELEMENT'] != dark_element:
                                                             if dmg['ELEMENT'] == poison_element: #Poison Update
-                                                                if t_poison_dmg <= 300:
+                                                                if t_poison_dmg <= 500:
                                                                     t_poison_dmg = t_poison_dmg + 20
                                                                 
                                                             if oshield_value > 0:
@@ -12894,7 +12894,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_health = o_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == recoil_element:
-                                                                t_health = t_health - (dmg['DMG'] * .25)
+                                                                t_health = t_health - (dmg['DMG'] * .60)
                                                                 o_health = o_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == time_element:
@@ -12917,8 +12917,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_health = o_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == dark_element:
-                                                                t_stamina = t_stamina + 10
-                                                                o_stamina = o_stamina - 10
+                                                                t_stamina = t_stamina + 15
+                                                                o_stamina = o_stamina - 15
                                                                 o_health = o_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == life_element:
@@ -12926,8 +12926,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_health = o_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == psychic_element:
-                                                                o_defense = o_defense - (dmg['DMG'] * .08)
-                                                                o_attack = o_attack - (dmg['DMG'] * .08)
+                                                                o_defense = o_defense - (dmg['DMG'] * .15)
+                                                                o_attack = o_attack - (dmg['DMG'] * .15)
                                                                 o_health = o_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == fire_element:
@@ -12940,20 +12940,20 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_health = o_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == poison_element:
-                                                                if t_poison_dmg <= 300:
+                                                                if t_poison_dmg <= 500:
                                                                     t_poison_dmg = t_poison_dmg + 20
                                                                 o_health = o_health - dmg['DMG']
         
                                                             elif dmg['ELEMENT'] == ice_element:
                                                                 t_ice_counter = t_ice_counter + 1
-                                                                if t_ice_counter == 3:
+                                                                if t_ice_counter == 2:
                                                                     t_freeze_enh = True
                                                                     t_ice_counter = 0
                                                                 o_health = o_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == bleed_element:
                                                                 t_bleed_counter = t_bleed_counter + 1
-                                                                if t_bleed_counter == 5:
+                                                                if t_bleed_counter == 3:
                                                                     t_bleed_hit = True
                                                                     t_bleed_counter = 0
                                                                 o_health = o_health - dmg['DMG']
@@ -12961,7 +12961,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             elif dmg['ELEMENT'] == gravity_element:
                                                                 t_gravity_hit = True
                                                                 o_health = o_health - dmg['DMG']
-                                                                o_defense = o_defense - (dmg['DMG'] * .15)
+                                                                o_defense = o_defense - (dmg['DMG'] * .25)
                                                             
                                                             else:
                                                                 o_health = o_health - dmg['DMG']
@@ -13778,7 +13778,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_health = o_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == recoil_element:
-                                                        t_health = t_health - (dmg['DMG'] * .25)
+                                                        t_health = t_health - (dmg['DMG'] * .60)
                                                         o_health = o_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == time_element:
@@ -13800,8 +13800,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_health = o_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == dark_element:
-                                                        t_stamina = t_stamina + 10
-                                                        o_stamina = o_stamina - 10
+                                                        t_stamina = t_stamina + 15
+                                                        o_stamina = o_stamina - 15
                                                         o_health = o_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == life_element:
@@ -13809,8 +13809,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_health = o_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == psychic_element:
-                                                        o_defense = o_defense - (dmg['DMG'] * .08)
-                                                        o_attack = o_attack - (dmg['DMG'] * .08)
+                                                        o_defense = o_defense - (dmg['DMG'] * .15)
+                                                        o_attack = o_attack - (dmg['DMG'] * .15)
                                                         o_health = o_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == fire_element:
@@ -13823,20 +13823,20 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_health = o_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == poison_element:
-                                                        if t_poison_dmg <= 300:
+                                                        if t_poison_dmg <= 500:
                                                             t_poison_dmg = t_poison_dmg + 20
                                                         o_health = o_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == ice_element:
                                                         t_ice_counter = t_ice_counter + 1
-                                                        if t_ice_counter == 3:
+                                                        if t_ice_counter == 2:
                                                             t_freeze_enh = True
                                                             t_ice_counter = 0
                                                         o_health = o_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == bleed_element:
                                                         t_bleed_counter = t_bleed_counter + 1
-                                                        if t_bleed_counter == 5:
+                                                        if t_bleed_counter == 3:
                                                             t_bleed_hit = True
                                                             t_bleed_counter = 0
                                                         o_health = o_health - dmg['DMG']
@@ -13844,7 +13844,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     elif dmg['ELEMENT'] == gravity_element:
                                                         t_gravity_hit = True
                                                         o_health = o_health - dmg['DMG']
-                                                        o_defense = o_defense - (dmg['DMG'] * .15)
+                                                        o_defense = o_defense - (dmg['DMG'] * .25)
                                                     
                                                     else:
                                                         o_health = o_health - dmg['DMG']
@@ -13986,7 +13986,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                     elif oarm_shield_active and dmg['ELEMENT'] != dark_element:
                                                         if dmg['ELEMENT'] == poison_element: #Poison Update
-                                                            if t_poison_dmg <= 300:
+                                                            if t_poison_dmg <= 500:
                                                                 t_poison_dmg = o_poison_dmg + 20
                                                             
                                                         if oshield_value > 0:
@@ -14075,7 +14075,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == recoil_element:
-                                                            t_health = t_health - (dmg['DMG'] * .25)
+                                                            t_health = t_health - (dmg['DMG'] * .60)
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == time_element:
@@ -14098,8 +14098,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == dark_element:
-                                                            t_stamina = t_stamina + 10
-                                                            o_stamina = o_stamina - 10
+                                                            t_stamina = t_stamina + 15
+                                                            o_stamina = o_stamina - 15
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == life_element:
@@ -14107,8 +14107,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == psychic_element:
-                                                            o_defense = o_defense - (dmg['DMG'] * .08)
-                                                            o_attack = o_attack - (dmg['DMG'] * .08)
+                                                            o_defense = o_defense - (dmg['DMG'] * .15)
+                                                            o_attack = o_attack - (dmg['DMG'] * .15)
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == fire_element:
@@ -14121,20 +14121,20 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == poison_element:
-                                                            if t_poison_dmg <= 300:
+                                                            if t_poison_dmg <= 500:
                                                                 t_poison_dmg = t_poison_dmg + 20
                                                             o_health = o_health - dmg['DMG']
     
                                                         elif dmg['ELEMENT'] == ice_element:
                                                             t_ice_counter = t_ice_counter + 1
-                                                            if t_ice_counter == 3:
+                                                            if t_ice_counter == 2:
                                                                 t_freeze_enh = True
                                                                 t_ice_counter = 0
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == bleed_element:
                                                             t_bleed_counter = t_bleed_counter + 1
-                                                            if t_bleed_counter == 5:
+                                                            if t_bleed_counter == 3:
                                                                 t_bleed_hit = True
                                                                 t_bleed_counter = 0
                                                             o_health = o_health - dmg['DMG']
@@ -14142,7 +14142,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         elif dmg['ELEMENT'] == gravity_element:
                                                             t_gravity_hit = True
                                                             o_health = o_health - dmg['DMG']
-                                                            o_defense = o_defense - (dmg['DMG'] * .15)
+                                                            o_defense = o_defense - (dmg['DMG'] * .25)
                                                         
                                                         else:
                                                             o_health = o_health - dmg['DMG']
@@ -15325,7 +15325,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     o_health = o_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == recoil_element:
-                                                    t_health = t_health - (dmg['DMG'] * .25)
+                                                    t_health = t_health - (dmg['DMG'] * .60)
                                                     o_health = o_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == time_element:
@@ -15348,8 +15348,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     o_health = o_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == dark_element:
-                                                    t_stamina = t_stamina + 10
-                                                    o_stamina = o_stamina - 10
+                                                    t_stamina = t_stamina + 15
+                                                    o_stamina = o_stamina - 15
                                                     o_health = o_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == life_element:
@@ -15357,8 +15357,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     o_health = o_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == psychic_element:
-                                                    o_defense = o_defense - (dmg['DMG'] * .08)
-                                                    o_attack = o_attack - (dmg['DMG'] * .08)
+                                                    o_defense = o_defense - (dmg['DMG'] * .15)
+                                                    o_attack = o_attack - (dmg['DMG'] * .15)
                                                     o_health = o_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == fire_element:
@@ -15371,20 +15371,20 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     o_health = o_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == poison_element:
-                                                    if t_poison_dmg <= 300:
+                                                    if t_poison_dmg <= 500:
                                                         t_poison_dmg = t_poison_dmg + 20
                                                     o_health = o_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == ice_element:
                                                     t_ice_counter = t_ice_counter + 1
-                                                    if t_ice_counter == 3:
+                                                    if t_ice_counter == 2:
                                                         t_freeze_enh = True
                                                         t_ice_counter = 0
                                                     o_health = o_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == bleed_element:
                                                     t_bleed_counter = t_bleed_counter + 1
-                                                    if t_bleed_counter == 5:
+                                                    if t_bleed_counter == 3:
                                                         t_bleed_hit = True
                                                         t_bleed_counter = 0
                                                     o_health = o_health - dmg['DMG']
@@ -15392,7 +15392,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 elif dmg['ELEMENT'] == gravity_element:
                                                     t_gravity_hit = True
                                                     o_health = o_health - dmg['DMG']
-                                                    o_defense = o_defense - (dmg['DMG'] * .15)
+                                                    o_defense = o_defense - (dmg['DMG'] * .25)
                                                 
                                                 else:
                                                     o_health = o_health - dmg['DMG']
@@ -15540,7 +15540,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                         elif carm_shield_active and dmg['ELEMENT'] != dark_element:
                                                             if dmg['ELEMENT'] == poison_element: #Poison Update
-                                                                if t_poison_dmg <= 300:
+                                                                if t_poison_dmg <= 500:
                                                                     t_poison_dmg = o_poison_dmg + 20
                                                                 
                                                             if cshield_value > 0:
@@ -15628,7 +15628,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                             elif dmg['ELEMENT'] == ice_element:
                                                                 t_ice_counter = t_ice_counter + 1
-                                                                if t_ice_counter == 3:
+                                                                if t_ice_counter == 2:
                                                                     t_freeze_enh = True
                                                                     t_ice_counter = 0
                                                                 c_health = c_health - dmg['DMG']
@@ -15644,13 +15644,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                             elif dmg['ELEMENT'] == bleed_element:
                                                                 t_bleed_counter = t_bleed_counter + 1
-                                                                if t_bleed_counter == 5:
+                                                                if t_bleed_counter == 3:
                                                                     t_bleed_hit = True
                                                                     t_bleed_counter = 0
                                                                 c_health = c_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == recoil_element:
-                                                                t_health = t_health - (dmg['DMG'] * .25)
+                                                                t_health = t_health - (dmg['DMG'] * .60)
                                                                 c_health = c_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == earth_element:
@@ -15667,8 +15667,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 c_health = c_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == dark_element:
-                                                                t_stamina = t_stamina + 10
-                                                                c_stamina = c_stamina - 10
+                                                                t_stamina = t_stamina + 15
+                                                                c_stamina = c_stamina - 15
                                                                 c_health = c_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == life_element:
@@ -15676,8 +15676,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 c_health = c_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == psychic_element:
-                                                                c_defense = c_defense - (dmg['DMG'] * .08)
-                                                                c_attack = c_attack - (dmg['DMG'] * .08)
+                                                                c_defense = c_defense - (dmg['DMG'] * .15)
+                                                                c_attack = c_attack - (dmg['DMG'] * .15)
                                                                 c_health = c_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == fire_element:
@@ -15689,14 +15689,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 c_health = c_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == poison_element:
-                                                                if t_poison_dmg <= 300:
+                                                                if t_poison_dmg <= 500:
                                                                     t_poison_dmg = t_poison_dmg + 20
                                                                 c_health = c_health - dmg['DMG']
                                                                 
                                                             elif dmg['ELEMENT'] == gravity_element:
                                                                 t_gravity_hit = True
                                                                 c_health = c_health - dmg['DMG']
-                                                                c_defense = c_defense - (dmg['DMG'] * .15)
+                                                                c_defense = c_defense - (dmg['DMG'] * .25)
                                                             
                                                             else:
                                                                 c_health = c_health - dmg['DMG']
@@ -15871,7 +15871,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                         elif oarm_shield_active and dmg['ELEMENT'] != dark_element:
                                                             if dmg['ELEMENT'] == poison_element: #Poison Update
-                                                                if t_poison_dmg <= 300:
+                                                                if t_poison_dmg <= 500:
                                                                     t_poison_dmg = o_poison_dmg + 20
                                                               
                                                             if oshield_value > 0:
@@ -15959,7 +15959,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_health = o_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == recoil_element:
-                                                                t_health = t_health - (dmg['DMG'] * .25)
+                                                                t_health = t_health - (dmg['DMG'] * .60)
                                                                 o_health = o_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == time_element:
@@ -15982,8 +15982,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_health = o_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == dark_element:
-                                                                t_stamina = t_stamina + 10
-                                                                o_stamina = o_stamina - 10
+                                                                t_stamina = t_stamina + 15
+                                                                o_stamina = o_stamina - 15
                                                                 o_health = o_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == life_element:
@@ -15991,8 +15991,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_health = o_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == psychic_element:
-                                                                o_defense = o_defense - (dmg['DMG'] * .08)
-                                                                o_attack = o_attack - (dmg['DMG'] * .08)
+                                                                o_defense = o_defense - (dmg['DMG'] * .15)
+                                                                o_attack = o_attack - (dmg['DMG'] * .15)
                                                                 o_health = o_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == fire_element:
@@ -16005,20 +16005,20 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_health = o_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == poison_element:
-                                                                if t_poison_dmg <= 300:
+                                                                if t_poison_dmg <= 500:
                                                                     t_poison_dmg = t_poison_dmg + 20
                                                                 o_health = o_health - dmg['DMG']
         
                                                             elif dmg['ELEMENT'] == ice_element:
                                                                 t_ice_counter = t_ice_counter + 1
-                                                                if t_ice_counter == 3:
+                                                                if t_ice_counter == 2:
                                                                     t_freeze_enh = True
                                                                     t_ice_counter = 0
                                                                 o_health = o_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == bleed_element:
                                                                 t_bleed_counter = t_bleed_counter + 1
-                                                                if t_bleed_counter == 5:
+                                                                if t_bleed_counter == 3:
                                                                     t_bleed_hit = True
                                                                     t_bleed_counter = 0
                                                                 o_health = o_health - dmg['DMG']
@@ -16026,7 +16026,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             elif dmg['ELEMENT'] == gravity_element:
                                                                 t_gravity_hit = True
                                                                 o_health = o_health - dmg['DMG']
-                                                                o_defense = o_defense - (dmg['DMG'] * .15)
+                                                                o_defense = o_defense - (dmg['DMG'] * .25)
                                                             
                                                             else:
                                                                 o_health = o_health - dmg['DMG']
@@ -16206,7 +16206,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             previous_moves.append(f"(**{turn_total}**) **{t_card}**'s 💠 Barrier Disabled!")
                                                     elif oarm_shield_active and dmg['ELEMENT'] != dark_element:
                                                         if dmg['ELEMENT'] == poison_element: #Poison Update
-                                                            if t_poison_dmg <= 300:
+                                                            if t_poison_dmg <= 500:
                                                                 t_poison_dmg = o_poison_dmg + 20
                                                             
                                                         if oshield_value > 0:
@@ -16295,7 +16295,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == recoil_element:
-                                                            t_health = t_health - (dmg['DMG'] * .25)
+                                                            t_health = t_health - (dmg['DMG'] * .60)
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == time_element:
@@ -16318,8 +16318,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == dark_element:
-                                                            t_stamina = t_stamina + 10
-                                                            o_stamina = o_stamina - 10
+                                                            t_stamina = t_stamina + 15
+                                                            o_stamina = o_stamina - 15
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == life_element:
@@ -16327,8 +16327,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == psychic_element:
-                                                            o_defense = o_defense - (dmg['DMG'] * .08)
-                                                            o_attack = o_attack - (dmg['DMG'] * .08)
+                                                            o_defense = o_defense - (dmg['DMG'] * .15)
+                                                            o_attack = o_attack - (dmg['DMG'] * .15)
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == fire_element:
@@ -16341,20 +16341,20 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == poison_element:
-                                                            if t_poison_dmg <= 300:
+                                                            if t_poison_dmg <= 500:
                                                                 t_poison_dmg = t_poison_dmg + 20
                                                             o_health = o_health - dmg['DMG']
     
                                                         elif dmg['ELEMENT'] == ice_element:
                                                             t_ice_counter = t_ice_counter + 1
-                                                            if t_ice_counter == 3:
+                                                            if t_ice_counter == 2:
                                                                 t_freeze_enh = True
                                                                 t_ice_counter = 0
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == bleed_element:
                                                             t_bleed_counter = t_bleed_counter + 1
-                                                            if t_bleed_counter == 5:
+                                                            if t_bleed_counter == 3:
                                                                 t_bleed_hit = True
                                                                 t_bleed_counter = 0
                                                             o_health = o_health - dmg['DMG']
@@ -16362,7 +16362,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         elif dmg['ELEMENT'] == gravity_element:
                                                             t_gravity_hit = True
                                                             o_health = o_health - dmg['DMG']
-                                                            o_defense = o_defense - (dmg['DMG'] * .15)
+                                                            o_defense = o_defense - (dmg['DMG'] * .25)
                                                         
                                                         else:
                                                             o_health = o_health - dmg['DMG']
@@ -17920,7 +17920,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     elif tarm_shield_active and dmg['ELEMENT'] != dark_element:
                                                         
                                                         if dmg['ELEMENT'] == poison_element: #Poison Update
-                                                            if c_poison_dmg <= 300:
+                                                            if c_poison_dmg <= 500:
                                                                 c_poison_dmg = c_poison_dmg + 20
                                                             
                                                         
@@ -18015,7 +18015,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                         elif dmg['ELEMENT'] == ice_element:
                                                             c_ice_counter = c_ice_counter + 1
-                                                            if c_ice_counter == 3:
+                                                            if c_ice_counter == 2:
                                                                 c_freeze_enh = True
                                                                 c_ice_counter = 0
                                                             t_health = t_health - dmg['DMG']
@@ -18031,13 +18031,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                         elif dmg['ELEMENT'] == bleed_element:
                                                             c_bleed_counter = c_bleed_counter + 1
-                                                            if c_bleed_counter == 5:
+                                                            if c_bleed_counter == 3:
                                                                 c_bleed_hit = True
                                                                 c_bleed_counter = 0
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == recoil_element:
-                                                            c_health = c_health - (dmg['DMG'] * .25)
+                                                            c_health = c_health - (dmg['DMG'] * .60)
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == earth_element:
@@ -18054,8 +18054,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == dark_element:
-                                                            c_stamina = c_stamina + 10
-                                                            t_stamina = t_stamina - 10
+                                                            c_stamina = c_stamina + 15
+                                                            t_stamina = t_stamina - 15
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == life_element:
@@ -18063,8 +18063,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == psychic_element:
-                                                            t_defense = t_defense - (dmg['DMG'] * .08)
-                                                            t_attack = t_attack - (dmg['DMG'] * .08)
+                                                            t_defense = t_defense - (dmg['DMG'] * .15)
+                                                            t_attack = t_attack - (dmg['DMG'] * .15)
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == fire_element:
@@ -18077,14 +18077,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == poison_element:
-                                                            if c_poison_dmg <= 300:
+                                                            if c_poison_dmg <= 500:
                                                                 c_poison_dmg = c_poison_dmg + 20
                                                             t_health = t_health - dmg['DMG']
                                                             
                                                         elif dmg['ELEMENT'] == gravity_element:
                                                             c_gravity_hit = True
                                                             t_health = t_health - dmg['DMG']
-                                                            t_defense = t_defense - (dmg['DMG'] * .15)
+                                                            t_defense = t_defense - (dmg['DMG'] * .25)
                                                         else:
                                                             t_health = t_health - dmg['DMG']
 
@@ -19099,7 +19099,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                         elif dmg['ELEMENT'] == ice_element:
                                                             c_ice_counter = c_ice_counter + 1
-                                                            if c_ice_counter == 3:
+                                                            if c_ice_counter == 2:
                                                                 c_freeze_enh = True
                                                                 c_ice_counter = 0
                                                             t_health = t_health - dmg['DMG']
@@ -19114,13 +19114,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                         elif dmg['ELEMENT'] == bleed_element:
                                                             c_bleed_counter = c_bleed_counter + 1
-                                                            if c_bleed_counter == 5:
+                                                            if c_bleed_counter == 3:
                                                                 c_bleed_hit = True
                                                                 c_bleed_counter = 0
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == recoil_element:
-                                                            c_health = c_health - (dmg['DMG'] * .25)
+                                                            c_health = c_health - (dmg['DMG'] * .60)
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == earth_element:
@@ -19137,8 +19137,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == dark_element:
-                                                            c_stamina = c_stamina + 10
-                                                            t_stamina = t_stamina - 10
+                                                            c_stamina = c_stamina + 15
+                                                            t_stamina = t_stamina - 15
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == life_element:
@@ -19146,8 +19146,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == psychic_element:
-                                                            t_defense = t_defense - (dmg['DMG'] * .08)
-                                                            t_attack = t_attack - (dmg['DMG'] * .08)
+                                                            t_defense = t_defense - (dmg['DMG'] * .15)
+                                                            t_attack = t_attack - (dmg['DMG'] * .15)
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == fire_element:
@@ -19160,14 +19160,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == poison_element:
-                                                            if c_poison_dmg <= 300:
+                                                            if c_poison_dmg <= 500:
                                                                 c_poison_dmg = c_poison_dmg + 20
                                                             t_health = t_health - dmg['DMG']
                                                             
                                                         elif dmg['ELEMENT'] == gravity_element:
                                                             c_gravity_hit = True
                                                             t_health = t_health - dmg['DMG']
-                                                            t_defense = t_defense - (dmg['DMG'] * .15)
+                                                            t_defense = t_defense - (dmg['DMG'] * .25)
                                                             
                                                         else:
                                                             t_health = t_health - dmg['DMG']
@@ -19333,7 +19333,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             await button_ctx.defer(ignore=True)
                                                         elif tarm_shield_active and dmg['ELEMENT'] != dark_element:
                                                             if dmg['ELEMENT'] == poison_element: #Poison Update
-                                                                if c_poison_dmg <= 300:
+                                                                if c_poison_dmg <= 500:
                                                                     c_poison_dmg = o_poison_dmg + 20
                                                          
                                                             if tshield_value > 0:
@@ -19435,7 +19435,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                             elif dmg['ELEMENT'] == ice_element:
                                                                 c_ice_counter = c_ice_counter + 1
-                                                                if c_ice_counter == 3:
+                                                                if c_ice_counter == 2:
                                                                     c_freeze_enh = True
                                                                     c_ice_counter = 0
                                                                 t_health = t_health - dmg['DMG']
@@ -19451,13 +19451,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                             elif dmg['ELEMENT'] == bleed_element:
                                                                 c_bleed_counter = c_bleed_counter + 1
-                                                                if c_bleed_counter == 5:
+                                                                if c_bleed_counter == 3:
                                                                     c_bleed_hit = True
                                                                     c_bleed_counter = 0
                                                                 t_health = t_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == recoil_element:
-                                                                c_health = c_health - (dmg['DMG'] * .25)
+                                                                c_health = c_health - (dmg['DMG'] * .60)
                                                                 t_health = t_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == earth_element:
@@ -19474,8 +19474,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = t_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == dark_element:
-                                                                c_stamina = c_stamina + 10
-                                                                t_stamina = t_stamina - 10
+                                                                c_stamina = c_stamina + 15
+                                                                t_stamina = t_stamina - 15
                                                                 t_health = t_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == life_element:
@@ -19483,8 +19483,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = t_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == psychic_element:
-                                                                t_defense = t_defense - (dmg['DMG'] * .08)
-                                                                t_attack = t_attack - (dmg['DMG'] * .08)
+                                                                t_defense = t_defense - (dmg['DMG'] * .15)
+                                                                t_attack = t_attack - (dmg['DMG'] * .15)
                                                                 t_health = t_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == fire_element:
@@ -19497,14 +19497,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = t_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == poison_element:
-                                                                if c_poison_dmg <= 300:
+                                                                if c_poison_dmg <= 500:
                                                                     c_poison_dmg = c_poison_dmg + 20
                                                                 t_health = t_health - dmg['DMG']
                                                                 
                                                             elif dmg['ELEMENT'] == gravity_element:
                                                                 c_gravity_hit = True
                                                                 t_health = t_health - dmg['DMG']
-                                                                t_defense = t_defense - (dmg['DMG'] * .15)
+                                                                t_defense = t_defense - (dmg['DMG'] * .25)
                                                         
                                                             else:
                                                                 t_health = t_health - dmg['DMG']
@@ -20999,7 +20999,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                 elif dmg['ELEMENT'] == ice_element:
                                                     t_ice_counter = t_ice_counter + 1
-                                                    if t_ice_counter == 3:
+                                                    if t_ice_counter == 2:
                                                         t_freeze_enh = True
                                                         t_ice_counter = 0
                                                     c_health = c_health - dmg['DMG']
@@ -21015,13 +21015,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                 elif dmg['ELEMENT'] == bleed_element:
                                                     t_bleed_counter = t_bleed_counter + 1
-                                                    if t_bleed_counter == 5:
+                                                    if t_bleed_counter == 3:
                                                         t_bleed_hit = True
                                                         t_bleed_counter = 0
                                                     c_health = c_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == recoil_element:
-                                                    t_health = t_health - (dmg['DMG'] * .25)
+                                                    t_health = t_health - (dmg['DMG'] * .60)
                                                     c_health = c_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == earth_element:
@@ -21038,8 +21038,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     c_health = c_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == dark_element:
-                                                    t_stamina = t_stamina + 10
-                                                    c_stamina = c_stamina - 10
+                                                    t_stamina = t_stamina + 15
+                                                    c_stamina = c_stamina - 15
                                                     c_health = c_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == life_element:
@@ -21047,8 +21047,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     c_health = c_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == psychic_element:
-                                                    c_defense = c_defense - (dmg['DMG'] * .08)
-                                                    c_attack = c_attack - (dmg['DMG'] * .08)
+                                                    c_defense = c_defense - (dmg['DMG'] * .15)
+                                                    c_attack = c_attack - (dmg['DMG'] * .15)
                                                     c_health = c_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == fire_element:
@@ -21060,14 +21060,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     c_health = c_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == poison_element:
-                                                    if t_poison_dmg <= 300:
+                                                    if t_poison_dmg <= 500:
                                                         t_poison_dmg = t_poison_dmg + 20
                                                     c_health = c_health - dmg['DMG']
                                                     
                                                 elif dmg['ELEMENT'] == gravity_element:
                                                     t_gravity_hit = True
                                                     c_health = c_health - dmg['DMG']
-                                                    c_defense = c_defense - (dmg['DMG'] * .15)
+                                                    c_defense = c_defense - (dmg['DMG'] * .25)
                                                 
                                                 else:
                                                     c_health = c_health - dmg['DMG']
@@ -21221,7 +21221,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         #await private_channel.send(embed=embedVar)
                                                     elif oarm_shield_active and dmg['ELEMENT'] != dark_element:
                                                         if dmg['ELEMENT'] == poison_element: #Poison Update
-                                                            if t_poison_dmg <= 300:
+                                                            if t_poison_dmg <= 500:
                                                                 t_poison_dmg = o_poison_dmg + 20
                                                    
                                                         if oshield_value > 0:
@@ -21316,7 +21316,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == recoil_element:
-                                                            t_health = t_health - (dmg['DMG'] * .25)
+                                                            t_health = t_health - (dmg['DMG'] * .60)
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == time_element:
@@ -21339,8 +21339,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == dark_element:
-                                                            t_stamina = t_stamina + 10
-                                                            o_stamina = o_stamina - 10
+                                                            t_stamina = t_stamina + 15
+                                                            o_stamina = o_stamina - 15
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == life_element:
@@ -21348,8 +21348,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == psychic_element:
-                                                            o_defense = o_defense - (dmg['DMG'] * .08)
-                                                            o_attack = o_attack - (dmg['DMG'] * .08)
+                                                            o_defense = o_defense - (dmg['DMG'] * .15)
+                                                            o_attack = o_attack - (dmg['DMG'] * .15)
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == fire_element:
@@ -21362,20 +21362,20 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == poison_element:
-                                                            if t_poison_dmg <= 300:
+                                                            if t_poison_dmg <= 500:
                                                                 t_poison_dmg = t_poison_dmg + 20
                                                             o_health = o_health - dmg['DMG']
     
                                                         elif dmg['ELEMENT'] == ice_element:
                                                             t_ice_counter = t_ice_counter + 1
-                                                            if t_ice_counter == 3:
+                                                            if t_ice_counter == 2:
                                                                 t_freeze_enh = True
                                                                 t_ice_counter = 0
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == bleed_element:
                                                             t_bleed_counter = t_bleed_counter + 1
-                                                            if t_bleed_counter == 5:
+                                                            if t_bleed_counter == 3:
                                                                 t_bleed_hit = True
                                                                 t_bleed_counter = 0
                                                             o_health = o_health - dmg['DMG']
@@ -21383,7 +21383,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         elif dmg['ELEMENT'] == gravity_element:
                                                             t_gravity_hit = True
                                                             o_health = o_health - dmg['DMG']
-                                                            o_defense = o_defense - (dmg['DMG'] * .15)
+                                                            o_defense = o_defense - (dmg['DMG'] * .25)
                                                         
                                                         else:
                                                             o_health = o_health - dmg['DMG']
@@ -21570,7 +21570,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         #await private_channel.send(embed=embedVar)
                                                     elif carm_shield_active and dmg['ELEMENT'] != dark_element:
                                                         if dmg['ELEMENT'] == poison_element: #Poison Update
-                                                            if t_poison_dmg <= 300:
+                                                            if t_poison_dmg <= 500:
                                                                 t_poison_dmg = o_poison_dmg + 20
                                                             c_health = c_health - dmg['DMG']
                                                         if cshield_value > 0:
@@ -21664,7 +21664,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                         elif dmg['ELEMENT'] == ice_element:
                                                             t_ice_counter = t_ice_counter + 1
-                                                            if t_ice_counter == 3:
+                                                            if t_ice_counter == 2:
                                                                 t_freeze_enh = True
                                                                 t_ice_counter = 0
                                                             c_health = c_health - dmg['DMG']
@@ -21679,13 +21679,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                         elif dmg['ELEMENT'] == bleed_element:
                                                             t_bleed_counter = t_bleed_counter + 1
-                                                            if t_bleed_counter == 5:
+                                                            if t_bleed_counter == 3:
                                                                 t_bleed_hit = True
                                                                 t_bleed_counter = 0
                                                             c_health = c_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == recoil_element:
-                                                            t_health = t_health - (dmg['DMG'] * .25)
+                                                            t_health = t_health - (dmg['DMG'] * .60)
                                                             c_health = c_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == earth_element:
@@ -21702,8 +21702,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             c_health = c_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == dark_element:
-                                                            t_stamina = t_stamina + 10
-                                                            c_stamina = c_stamina - 10
+                                                            t_stamina = t_stamina + 15
+                                                            c_stamina = c_stamina - 15
                                                             c_health = c_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == life_element:
@@ -21711,8 +21711,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             c_health = c_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == psychic_element:
-                                                            c_defense = c_defense - (dmg['DMG'] * .08)
-                                                            c_attack = c_attack - (dmg['DMG'] * .08)
+                                                            c_defense = c_defense - (dmg['DMG'] * .15)
+                                                            c_attack = c_attack - (dmg['DMG'] * .15)
                                                             c_health = c_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == fire_element:
@@ -21724,14 +21724,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             c_health = c_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == poison_element:
-                                                            if t_poison_dmg <= 300:
+                                                            if t_poison_dmg <= 500:
                                                                 t_poison_dmg = t_poison_dmg + 20
                                                             c_health = c_health - dmg['DMG']
                                                             
                                                         elif dmg['ELEMENT'] == gravity_element:
                                                             t_gravity_hit = True
                                                             c_health = c_health - dmg['DMG']
-                                                            c_defense = c_defense - (dmg['DMG'] * .15)
+                                                            c_defense = c_defense - (dmg['DMG'] * .25)
                                                         
                                                         else:
                                                             c_health = c_health - dmg['DMG']

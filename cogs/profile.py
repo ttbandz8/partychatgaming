@@ -1120,7 +1120,7 @@ class Profile(commands.Cog):
                                         db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'TITLES': title_name}})
                                         await crown_utilities.bless(sell_price, ctx.author.id)
                                         await msg.delete()
-                                        await button_ctx.send(f"**{title_name}** has been dismantled.")
+                                        await button_ctx.send(f"**{title_name}** has been dismantled for 💎 {'{:,}'.format(dismantle_amount)}.")
                                 except Exception as ex:
                                     trace = []
                                     tb = ex.__traceback__
@@ -1528,7 +1528,7 @@ class Profile(commands.Cog):
                                         db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'ARMS': {'ARM': str(arm_name)}}})
                                         await crown_utilities.bless(sell_price, ctx.author.id)
                                         await msg.delete()
-                                        await button_ctx.send(f"**{arm_name}** has been dismantled.{mess}")
+                                        await button_ctx.send(f"**{arm_name}** has been dismantled for 💎 {'{:,}'.format(dismantle_amount)}.{mess}")
                                 except Exception as ex:
                                     trace = []
                                     tb = ex.__traceback__
@@ -1797,7 +1797,7 @@ class Profile(commands.Cog):
                 essence = ed["ESSENCE"]
                 element_emoji = crown_utilities.set_emoji(element)
                 essence_details.append(
-                    f"{element_emoji} **{element.title()} Essence: ** {essence}\n")
+                    f"{element_emoji} **{element.title()} Essence: ** {'{:,}'.format(essence)}\n")
 
             # Adding to array until divisible by 10
             while len(essence_details) % 10 != 0:
@@ -2405,7 +2405,7 @@ class Profile(commands.Cog):
                                     db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'PETS': {"NAME": str(summon_name)}}})
                                     #await crown_utilities.bless(sell_price, ctx.author.id)
                                     await msg.delete()
-                                    await button_ctx.send(f"**{summon_name}** has been dismantled.")
+                                    await button_ctx.send(f"**{summon_name}** has been dismantled for 💎 {'{:,}'.format(dismantle_amount)}.")
                                     self.stop = True
                             except Exception as ex:
                                 trace = []
@@ -3944,7 +3944,7 @@ class Profile(commands.Cog):
                                         db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'CARD_LEVELS': {'CARD': card_name}}})
                                         #await crown_utilities.bless(sell_price, ctx.author.id)
                                         await msg.delete()
-                                        await button_ctx.send(f"**{card_name}** has been dismantled. Acquired **{'{:,}'.format(essence_amount)}** {em} {element.title()} Essence.")
+                                        await button_ctx.send(f"**{card_name}** has been dismantled for 💎 {'{:,}'.format(dismantle_amount)}. Acquired **{'{:,}'.format(essence_amount)}** {em} {element.title()} Essence.")
                                         
                                 except Exception as ex:
                                     trace = []
@@ -5376,7 +5376,7 @@ async def menucards(self, ctx):
                                     db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'CARD_LEVELS': {'CARD': card_name}}})
                                     #await crown_utilities.bless(sell_price, ctx.author.id)
                                     await msg.delete()
-                                    await button_ctx.send(f"**{card_name}** has been dismantled. Acquired **{'{:,}'.format(essence_amount)}** {em} {element.title()} Essence.")
+                                    await button_ctx.send(f"**{card_name}** has been dismantled for 💎 {'{:,}'.format(dismantle_amount)}. Acquired **{'{:,}'.format(essence_amount)}** {em} {element.title()} Essence.")
                                     
                             except Exception as ex:
                                 trace = []
@@ -5882,7 +5882,7 @@ async def menutitles(self, ctx):
                                     db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'TITLES': title_name}})
                                     await crown_utilities.bless(sell_price, ctx.author.id)
                                     await msg.delete()
-                                    await button_ctx.send(f"**{title_name}** has been dismantled.")
+                                    await button_ctx.send(f"**{title_name}** has been dismantled for 💎 {'{:,}'.format(dismantle_amount)}.")
                             except Exception as ex:
                                 trace = []
                                 tb = ex.__traceback__
@@ -6289,7 +6289,7 @@ async def menuarms(self, ctx):
                                     db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'ARMS': {'ARM': str(arm_name)}}})
                                     await crown_utilities.bless(sell_price, ctx.author.id)
                                     await msg.delete()
-                                    await button_ctx.send(f"**{arm_name}** has been dismantled.{mess}")
+                                    await button_ctx.send(f"**{arm_name}** has been dismantled for 💎 {'{:,}'.format(dismantle_amount)}.{mess}")
                             except Exception as ex:
                                 trace = []
                                 tb = ex.__traceback__
@@ -7108,7 +7108,7 @@ async def menusummons(self, ctx):
                                 db.updateVaultNoFilter({'DID': str(ctx.author.id)},{'$pull':{'PETS': {"NAME": str(summon_name)}}})
                                 #await crown_utilities.bless(sell_price, ctx.author.id)
                                 await msg.delete()
-                                await button_ctx.send(f"**{summon_name}** has been dismantled.")
+                                await button_ctx.send(f"**{summon_name}** has been dismantled for 💎 {'{:,}'.format(dismantle_amount)}.")
                                 self.stop = True
                         except Exception as ex:
                             trace = []

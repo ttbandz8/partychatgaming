@@ -1117,7 +1117,7 @@ def essence_cost(vault, element, did):
                 }
             }
         tresponse = db.updateVaultNoFilter(query, talisman_query)
-        msg = f"You have successfully transfused a **{element.title()} Talisman!**"
+        msg = f"You have successfully attuned a **{element.title()} Talisman!**"
         return msg
     except Exception as ex:
         trace = []
