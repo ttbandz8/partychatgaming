@@ -2234,8 +2234,8 @@ def damage_cal(talisman_dict, move_ap, opponent_affinity, move_type, move_elemen
                 enhanced = ap
             else:
                 enhanced = round(ap * turn)
-                if enhanced >= 600:
-                    enhanced = 600
+                if enhanced >= 300:
+                    enhanced = 300
         elif enh_type == 'CREATION':
             if turn == 0:
                 enhanced = ap
@@ -2256,8 +2256,8 @@ def damage_cal(talisman_dict, move_ap, opponent_affinity, move_type, move_elemen
                 enhanced = ap
             else:
                 enhanced = round(ap * turn)
-                if enhanced >= 500:
-                    enhanced = 500
+                if enhanced >= 300:
+                    enhanced = 300
             if enhanced > op_health:
                 message = f'Opponent has been reduced.'
                 enhanced = op_health - 1
@@ -2994,11 +2994,11 @@ def showcard(mode, d, arm, max_health, health, max_stamina, stamina, resolved, t
             elif enhname in Damage_Enhancer_Check:
                 if turn_total > 0:
                     move_enhanced_ap = round(enh1 * turn_total)
-                    if move_enhanced_ap >= 600:
+                    if move_enhanced_ap >= 300:
                         if move_enhanced_name == "BLAST":
-                            move_enhanced_ap = 600
+                            move_enhanced_ap = 300
                         else:
-                            move_enhanced_ap = 500
+                            move_enhanced_ap = 300
                         turn_crit = True
                 else:
                     move_enhanced_ap = enh1
