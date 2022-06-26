@@ -2234,8 +2234,8 @@ def damage_cal(talisman_dict, move_ap, opponent_affinity, move_type, move_elemen
                 enhanced = ap
             else:
                 enhanced = round(ap * turn)
-                if enhanced >= 600:
-                    enhanced = 600
+                if enhanced >= 300:
+                    enhanced = 300
         elif enh_type == 'CREATION':
             if turn == 0:
                 enhanced = ap
@@ -2256,8 +2256,8 @@ def damage_cal(talisman_dict, move_ap, opponent_affinity, move_type, move_elemen
                 enhanced = ap
             else:
                 enhanced = round(ap * turn)
-                if enhanced >= 500:
-                    enhanced = 500
+                if enhanced >= 300:
+                    enhanced = 300
             if enhanced > op_health:
                 message = f'Opponent has been reduced.'
                 enhanced = op_health - 1
@@ -2994,11 +2994,11 @@ def showcard(mode, d, arm, max_health, health, max_stamina, stamina, resolved, t
             elif enhname in Damage_Enhancer_Check:
                 if turn_total > 0:
                     move_enhanced_ap = round(enh1 * turn_total)
-                    if move_enhanced_ap >= 600:
+                    if move_enhanced_ap >= 300:
                         if move_enhanced_name == "BLAST":
-                            move_enhanced_ap = 600
+                            move_enhanced_ap = 300
                         else:
-                            move_enhanced_ap = 500
+                            move_enhanced_ap = 300
                         turn_crit = True
                 else:
                     move_enhanced_ap = enh1
@@ -3134,7 +3134,7 @@ def showcard(mode, d, arm, max_health, health, max_stamina, stamina, resolved, t
             # attack_stat = f"🗡️{round(attack)}"
             # defense_stat = f"🛡️{round(defense)}"
             if 'ABILITIES' in title:
-                title_suffix = enhancer_suffix_mapping[title_passive_type]
+                title_suffix = title_enhancer_suffix_mapping[title_passive_type]
                 if mode == "battle":
                     title_message_on_card = f"🎗️ {title_message}{title_suffix}"
                 else:
@@ -9026,7 +9026,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_health = t_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == dark_element:
-                                                    o_stamina = o_stamina + 15
                                                     t_stamina = t_stamina - 15
                                                     t_health = t_health - dmg['DMG']
 
@@ -9346,7 +9345,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = t_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == dark_element:
-                                                        o_stamina = o_stamina + 15
                                                         t_stamina = t_stamina - 15
                                                         t_health = t_health - dmg['DMG']
 
@@ -10774,7 +10772,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = t_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == dark_element:
-                                                        o_stamina = o_stamina + 15
                                                         t_stamina = t_stamina - 15
                                                         t_health = t_health - dmg['DMG']
 
@@ -11111,7 +11108,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == dark_element:
-                                                            o_stamina = o_stamina + 15
                                                             t_stamina = t_stamina - 15
                                                             t_health = t_health - dmg['DMG']
 
@@ -12598,7 +12594,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == dark_element:
-                                                            t_stamina = t_stamina + 15
                                                             o_stamina = o_stamina - 15
                                                             o_health = o_health - dmg['DMG']
 
@@ -12917,7 +12912,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_health = o_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == dark_element:
-                                                                t_stamina = t_stamina + 15
                                                                 o_stamina = o_stamina - 15
                                                                 o_health = o_health - dmg['DMG']
 
@@ -13800,7 +13794,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_health = o_health - dmg['DMG']
 
                                                     elif dmg['ELEMENT'] == dark_element:
-                                                        t_stamina = t_stamina + 15
                                                         o_stamina = o_stamina - 15
                                                         o_health = o_health - dmg['DMG']
 
@@ -15348,7 +15341,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     o_health = o_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == dark_element:
-                                                    t_stamina = t_stamina + 15
                                                     o_stamina = o_stamina - 15
                                                     o_health = o_health - dmg['DMG']
 
@@ -15667,7 +15659,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 c_health = c_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == dark_element:
-                                                                t_stamina = t_stamina + 15
                                                                 c_stamina = c_stamina - 15
                                                                 c_health = c_health - dmg['DMG']
 
@@ -15982,7 +15973,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 o_health = o_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == dark_element:
-                                                                t_stamina = t_stamina + 15
                                                                 o_stamina = o_stamina - 15
                                                                 o_health = o_health - dmg['DMG']
 
@@ -16318,7 +16308,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == dark_element:
-                                                            t_stamina = t_stamina + 15
                                                             o_stamina = o_stamina - 15
                                                             o_health = o_health - dmg['DMG']
 
@@ -18054,7 +18043,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == dark_element:
-                                                            c_stamina = c_stamina + 15
                                                             t_stamina = t_stamina - 15
                                                             t_health = t_health - dmg['DMG']
 
@@ -19137,7 +19125,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = t_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == dark_element:
-                                                            c_stamina = c_stamina + 15
                                                             t_stamina = t_stamina - 15
                                                             t_health = t_health - dmg['DMG']
 
@@ -19474,7 +19461,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 t_health = t_health - dmg['DMG']
 
                                                             elif dmg['ELEMENT'] == dark_element:
-                                                                c_stamina = c_stamina + 15
                                                                 t_stamina = t_stamina - 15
                                                                 t_health = t_health - dmg['DMG']
 
@@ -21038,7 +21024,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     c_health = c_health - dmg['DMG']
 
                                                 elif dmg['ELEMENT'] == dark_element:
-                                                    t_stamina = t_stamina + 15
                                                     c_stamina = c_stamina - 15
                                                     c_health = c_health - dmg['DMG']
 
@@ -21339,7 +21324,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             o_health = o_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == dark_element:
-                                                            t_stamina = t_stamina + 15
                                                             o_stamina = o_stamina - 15
                                                             o_health = o_health - dmg['DMG']
 
@@ -21702,7 +21686,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             c_health = c_health - dmg['DMG']
 
                                                         elif dmg['ELEMENT'] == dark_element:
-                                                            t_stamina = t_stamina + 15
                                                             c_stamina = c_stamina - 15
                                                             c_health = c_health - dmg['DMG']
 
@@ -24011,7 +23994,7 @@ element_mapping = {'PHYSICAL': 'If ST(stamina) greater than 80, Deals double Dam
 'DEATH': 'Adds 20% opponent max health as damage',
 'LIFE': 'Heal for 20% AP',
 'LIGHT': 'Regain 50% Stamina Cost, Increase ATK by 20% DMG',
-'DARK': 'Penetrates shields & opponent loses 15 stamina ',
+'DARK': 'Penetrates shields & decrease opponent stamina by 15 ',
 'POISON': 'Penetrates shields, Opponent takes additional 20 damage each turn stacking up to 500',
 'RANGED': 'If ST(Stamina) > 30 deals 1.7x Damage',
 'SPIRIT': 'Has higher chance of Crit',
