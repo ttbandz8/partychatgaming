@@ -90,7 +90,7 @@ traits = [{
 },{
     'NAME': 'YuYu Hakusho',
     'EFFECT': 'Spirit Energy',
-    'TRAIT': 'Stamina + Turn Count added to each attack'
+    'TRAIT': 'Stamina + Turn Count added to each attack | Attack increased by Stamina each turn.'
 },
 {
     'NAME': 'One Piece',

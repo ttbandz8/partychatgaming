@@ -7639,6 +7639,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             t_ap_buff = 200
 
                         if turn == 0:
+                            if o_universe == "YuYu Hakusho":
+                                o_attack = o_attack + o_stamina
+
                             if t_bleed_hit:
                                 t_bleed_hit = False
                                 bleed_dmg = 10 * turn_total
@@ -11253,6 +11256,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         await channel.send(f"'PLAYER': **{str(ctx.author)}**, 'GUILD': **{str(ctx.author.guild)}**, TYPE: {type(ex).__name__}, MESSAGE: {str(ex)}, TRACE: {trace}")
 
                         elif turn == 1:
+                            if t_universe == "YuYu Hakusho":
+                                t_attack = t_attack + t_stamina
+
                             if o_bleed_hit:
                                 o_bleed_hit = False
                                 bleed_dmg = 10 * turn_total
@@ -16415,6 +16421,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                             # Companion Turn Start
                             if turn == 2:
+                                if c_universe == "YuYu Hakusho":
+                                    c_attack = c_attack + c_stamina
+
                                 if t_bleed_hit:
                                     t_bleed_hit = False
                                     bleed_dmg = 10 * turn_total
@@ -19587,6 +19596,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                             # Opponent Turn Start
                             elif turn == 3:
+                                if t_universe == "YuYu Hakusho":
+                                    t_attack = t_attack + t_stamina
+
                                 if c_bleed_hit:
                                     c_bleed_hit = False
                                     bleed_dmg = 10 * turn_total
