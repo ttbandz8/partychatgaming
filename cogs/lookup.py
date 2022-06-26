@@ -124,7 +124,7 @@ class Lookup(commands.Cog):
                         if t["TYPE"].upper() == talisman.upper():
                             talisman_emoji = crown_utilities.set_emoji(talisman.upper())
                             talisman_durability = t["DUR"]
-                    talisman_message = f"**{talisman_emoji} {talisman.title()} Talisman Equipped** ⚒️ {talisman_durability}"
+                    talisman_message = f"📿| **{talisman_emoji} {talisman.title()}** ⚒️ {talisman_durability}"
 
                 pvp_matches = []
                 boss_matches = []

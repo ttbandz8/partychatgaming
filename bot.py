@@ -254,7 +254,7 @@ async def enhancers(ctx):
       
       embedVar10 = discord.Embed(title= f"Arm Enhancer Type: Offensive",colour=0x7289da)
       embedVar10.set_thumbnail(url=avatar)
-      embedVar10.add_field(name="`OFFENSE`", value="**BASIC** - Increase 💥 Basic Attack Ability Power by Value \n\n**SPECIAL** - Increase ☄️ Special Attack Ability Power by Value \n\n**ULTIMATE** - Increase 🏵️ Ultimate Attack Ability Power by Value \n\n**ULTIMAX** - Increase **ALL** Attack Move Ability Power by Value \n\n**MANA** - Increase 🦠 Enhancer Ability Power by Percentage \n\n💉 **SIPHON** - Heal for 10% DMG + AP\n\n")
+      embedVar10.add_field(name="`OFFENSE`", value="**BASIC** - Equip a new Basic Attack and Element \n\n**SPECIAL** - Equip a new Special Attack and Element \n\n**ULTIMATE** - Equip a new Ultimate Attack and Element \n\n**ULTIMAX** - Increase **ALL** Attack Move Ability Power by Value \n\n**MANA** - Increase 🦠 Enhancer Ability Power by Percentage \n\n💉 **SIPHON** - Heal for 10% DMG + AP\n\n")
       embedVar10.set_footer(text=f"/help - Bot Help")
       
       embedVar11 = discord.Embed(title= f"Arm Enhancer Type: Defensive",colour=0x7289da)
@@ -402,8 +402,8 @@ async def animevs(ctx):
    
    🦾 **Arm Durability**
    Arms are effective across the Multiverse, however they do break! Turning into **Gems**
-   ☢️ Arms from a different universe will break at a faster rate!
-   Stock up on **Arms** and repair **Durability** in the **/blacksmith**
+   ⚠️ Arms from a different universe will break at a faster rate!
+   Stock up on **Asrms** and repair **Durability** in the **/blacksmith**
 
    👑 **Universe Buff** :Match Your Titles and Arms to your **Card Universe**.
    **Buff**: **Base Stats** + 100 **HLT** , 20 **ATK** & 20 **DEF**.

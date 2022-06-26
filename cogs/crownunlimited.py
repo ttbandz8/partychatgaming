@@ -8625,7 +8625,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                     inline=False)
                                                     embedVar.set_footer(text=f"{o_card} this is your chance!")
 
-                                                previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Resolved: Titan Mode")
+                                                previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Resolved: Titan Mode! Health increased by **{health_boost}**!")
 
                                                 turn_total = turn_total + 1
                                                 turn = 1
@@ -10043,7 +10043,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                         inline=False)
                                                         embedVar.set_footer(text=f"{o_card} this is your chance!")
 
-                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Resolved: Titan Mode")
+                                                    previous_moves.append(f"(**{turn_total}**) **{o_card}** 🩸 Resolved: Titan Mode! Health increased by **{health_boost}**!")
                                                     await button_ctx.defer(ignore=True)
 
                                                     turn_total = turn_total + 1
@@ -12190,7 +12190,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                                 colour=0xe91e63)
                                                         embedVar.add_field(name=f"Transformation Complete",
                                                                         value=f"Health increased by **{health_boost}**!")
-                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Titan Mode")
+                                                        previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Titan Mode! Health increased by **{health_boost}**!")
                                                         await button_ctx.defer(ignore=True)
 
                                                         turn_total = turn_total + 1
@@ -13409,7 +13409,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                             colour=0xe91e63)
                                                     embedVar.add_field(name=f"Transformation Complete",
                                                                     value=f"Health increased by **{health_boost}**!")
-                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Titan Mode")
+                                                    previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Titan Mode! Health increased by **{health_boost}**!")
 
                                                     turn_total = turn_total + 1
                                                     turn = 0
@@ -14640,7 +14640,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 t_pet_used = False
                                                 health_boost = 100 * t_focus_count
                                                 t_health = t_health + health_boost
-                                                previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Titan Mode")
+                                                previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Titan Mode! Health increased by **{health_boost}**!")
 
                                                 turn_total = turn_total + 1
                                                 turn = turn_selector
@@ -16902,7 +16902,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             if t_stamina >=20:
                                                 aiMove =4
                                         elif carm_barrier_active: #Ai Barrier Checks
-                                            if t_stamina >=20: #Stamina Check For Enhancer
+                                            if c_stamina >=20: #Stamina Check For Enhancer
                                                 aiMove = await ai_enhancer_moves(turn_total,c_used_focus,c_used_resolve,c_pet_used,c_stamina,
                                                                         c_enhancer['TYPE'],c_health,c_max_health,c_attack,
                                                                         c_defense,t_stamina,t_attack,t_defense, o_health)
@@ -17304,7 +17304,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     embedVar.add_field(name=f"Transformation Complete",
                                                                     value=f"Health increased by **{health_boost}**!")
                                                     #await private_channel.send(embed=embedVar)
-                                                    previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 Resolved: Titan Mode")
+                                                    previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 Resolved: Titan Mode! Health increased by **{health_boost}**!")
 
                                                     turn_total = turn_total + 1
                                                     turn = 3
@@ -18593,7 +18593,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         embedVar.add_field(name=f"Transformation Complete",
                                                                         value=f"Health increased by **{health_boost}**!")
                                                         #await button_ctx.send(embed=embedVar)
-                                                        previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 Resolved: Titan Mode")
+                                                        previous_moves.append(f"(**{turn_total}**) **{c_card}** 🩸 Resolved: Titan Mode! Health increased by **{health_boost}**!")
                                                         await button_ctx.defer(ignore=True)
                                                         turn_total = turn_total + 1
                                                         turn = 3
@@ -19804,7 +19804,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         c_defense = tempattack
                                     if t_card_passive_type == "BLINK":
                                         t_stamina = t_stamina - t_stam_for_passive
-                                        if c_stmaina >=10:
+                                        if c_stamina >=10:
                                             c_stamina = c_stamina + t_stam_for_passive
                                     if t_card_passive_type == "BLAST":
                                         c_health = round(c_health - t_value_for_passive)
@@ -20468,7 +20468,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                         colour=0xe91e63)
                                                 embedVar.add_field(name=f"Transformation Complete",
                                                                 value=f"Health increased by **{health_boost}**!")
-                                                previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Titan Mode")
+                                                previous_moves.append(f"(**{turn_total}**) **{t_card}** 🩸 Resolved: Titan Mode! Health increased by **{health_boost}**!")
                                                 #await private_channel.send(embed=embedVar)
                                                 turn_total = turn_total + 1
                                                 turn = 0
@@ -24002,23 +24002,23 @@ title_enhancer_mapping = {'ATK': 'Increase Attack ',
 }
 element_mapping = {'PHYSICAL': 'If ST(stamina) greater than 80, Deals double Damage ',
 'FIRE': 'Does 25% damage of previous attack over the next opponent turns, stacks ',
-'ICE': 'After 3 uses opponent freezes and loses 1 turn',
+'ICE': 'After 2 uses opponent freezes and loses 1 turn',
 'WATER': 'Increases all water attack dmg by 35 Flat',
-'EARTH': 'Cannot be Parried. Increases Def by 50% AP',
+'EARTH': 'Cannot be Parried. Increases Def by 25% AP',
 'ELECTRIC': 'Add 15% to Shock damage, added to each attack',
 'WIND': 'Cannot Miss, boost all wind damage by 15% DMG',
-'PSYCHIC': 'Penetrates Barriers. Reduce opponent ATK & DEF by 8% AP ',
+'PSYCHIC': 'Penetrates Barriers. Reduce opponent ATK & DEF by 15% AP ',
 'DEATH': 'Adds 20% opponent max health as damage',
 'LIFE': 'Heal for 20% AP',
 'LIGHT': 'Regain 50% Stamina Cost, Increase ATK by 20% DMG',
-'DARK': 'Penetrates shields & drains 10 stamina ',
-'POISON': 'Opponent takes additional 10 damage each turn stacking up to 150',
-'RANGED': 'If ST > 50 deals 1.7x Damage',
+'DARK': 'Penetrates shields & opponent loses 15 stamina ',
+'POISON': 'Penetrates shields, Opponent takes additional 20 damage each turn stacking up to 500',
+'RANGED': 'If ST(Stamina) > 30 deals 1.7x Damage',
 'SPIRIT': 'Has higher chance of Crit',
-'RECOIL': 'Deals 25% damage back to you',
-'TIME': 'IF ST < 80 you Focus after attacking, You Block during your Focus',
-'BLEED': 'After 5 Attacks deal 5x turn count damage to opponent',
-'GRAVITY': 'Disables Opponent Block, Reduce Opponent DEF by 15% AP'
+'RECOIL': 'Deals 60% damage back to you, w',
+'TIME': 'IF ST(Stamina) < 80 you Focus after attacking, You Block during your Focus',
+'BLEED': 'After 3 Attacks deal 10x turn count damage to opponent',
+'GRAVITY': 'Disables Opponent Block and Reduce opponent DEF by 25% AP'
 }
 passive_enhancer_suffix_mapping = {'ATK': ' Flat',
 'DEF': ' Flat',

@@ -478,9 +478,9 @@ class Profile(commands.Cog):
                     if arm_passive_type in arm_moves_type_list:
                         arm_emoji = crown_utilities.set_emoji(arm_element)
                         if performance_mode:
-                            armmessage = f'☢️ {arm_name}: {arm_emoji} {arm_passive_type.title()} Attack: {arm_passive_value} | {durability}'
+                            armmessage = f'⚠️ {arm_name}: {arm_emoji} {arm_passive_type.title()} Attack: {arm_passive_value} | {durability}'
                         else:
-                            armmessage = f'☢️ {arm_name}'
+                            armmessage = f'⚠️ {arm_name}'
                     warningmessage = f"Use {o_show} or Unbound Titles on this card"
                     if o_title_universe == "Unbound":
                         titled =True
@@ -753,8 +753,9 @@ class Profile(commands.Cog):
                     if equipped_talisman.upper() == name.upper():
                         m = "**Equipped**"
                     embedVar = discord.Embed(title= f"{name}", description=textwrap.dedent(f"""\
-                    Element: {emoji} **{name.title()}**
-                    Durability: {durability}
+                    🔅 Element: {emoji} **{name.title()}**
+                    ⚒️ {durability}
+                    *{name} damage will ignore enemy Affinities.*
                     {m}
                     """), colour=0x7289da)
                     # embedVar.add_field(name="__Affinities__", value=f"{affinity_message}")
@@ -3677,8 +3678,10 @@ class Profile(commands.Cog):
                     for cl in card_levels:
                         if card == cl['CARD']:
                             licon = "🔱"
-                            if cl['LVL'] == 200:
+                            if cl['LVL'] >= 200:
                                 licon ="⚜️"
+                            if cl['LVL'] >= 999:
+                                licon = "🏅"
                             lvl = f"{licon} **{cl['LVL']}**"
                             card_lvl = cl['LVL']
                             card_exp = cl['EXP']
@@ -5109,8 +5112,10 @@ async def menucards(self, ctx):
                 for cl in card_levels:
                     if card == cl['CARD']:
                         licon = "🔱"
-                        if cl['LVL'] == 200:
+                        if cl['LVL'] >= 200:
                             licon ="⚜️"
+                        if cl['LVL'] >= 999:
+                            licon = "🏅"
                         lvl = f"{licon} **{cl['LVL']}**"
                         card_lvl = cl['LVL']
                         card_exp = cl['EXP']
