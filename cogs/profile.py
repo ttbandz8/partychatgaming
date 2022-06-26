@@ -665,7 +665,7 @@ class Profile(commands.Cog):
                                 ),
                                 create_choice(
                                     name="🌑 Dark",
-                                    value="presets",
+                                    value="DARK",
                                 ),
                                 create_choice(
                                     name="🧪 Poison",
