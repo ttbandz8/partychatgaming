@@ -94,7 +94,7 @@ ELEMENTS = textwrap.dedent(f"""\
 
 🌕 Light - Regain 50% Stamina Cost, Increases ATK by 20% of DMG.
 
-♠️ Dark- Penetrates shields & drains 10 stamina.
+♠️ Dark- Penetrates shields & decreases opponent stamina by 15.
 
 🧪 Poison - Penetrades shields, Poison 20 damage stacking up to 500.
 
