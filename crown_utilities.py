@@ -963,7 +963,7 @@ async def player_check(ctx):
     if valid:
         return True
     else:
-        await ctx.send(f"{ctx.author.mention}, you must register using /register to play Crown Unlimited.")
+        await ctx.send(f"{ctx.author.mention}, you must register using /register to play Anime VS+.")
         return False
 
 
