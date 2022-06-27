@@ -7490,12 +7490,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             tenh1 = list(t_enhancer.values())[0]
             tenh_name = list(t_enhancer.values())[2]
 
-            if tap1 < 25:
-                tap1 = 25
-            if tap2 < 25:
-                tap2 = 25            
-            if tap3 < 25:
-                tap3 = 25
+            if tap1 < 150:
+                tap1 = 150
+            if tap2 < 150:
+                tap2 = 150            
+            if tap3 < 150:
+                tap3 = 150
             
 
             # UNIVERSE CARD
@@ -8163,12 +8163,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     pet_enh_name = list(opet_move.values())[2]
                                     pet_msg_on_resolve = ""
 
-                                    if ap1 < 25:
-                                        ap1 = 25
-                                    if ap2 < 25:
-                                        ap2 = 25            
-                                    if ap3 < 25:
-                                        ap3 = 25
+                                    if ap1 < 150:
+                                        ap1 = 150
+                                    if ap2 < 150:
+                                        ap2 = 150            
+                                    if ap3 < 150:
+                                        ap3 = 150
 
                                     # UNIVERSE CARD
                                     if o_universe == "Souls" and o_used_resolve:
@@ -9450,12 +9450,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     pet_enh_name = list(opet_move.values())[2]
                                     pet_msg_on_resolve = ""
 
-                                    if ap1 < 25:
-                                        ap1 = 25
-                                    if ap2 < 25:
-                                        ap2 = 25            
-                                    if ap3 < 25:
-                                        ap3 = 25
+                                    if ap1 < 150:
+                                        ap1 = 150
+                                    if ap2 < 150:
+                                        ap2 = 150            
+                                    if ap3 < 150:
+                                        ap3 = 150
 
 
                                     # UNIVERSE CARD
@@ -11783,12 +11783,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         tpet_enh_name = list(tpet_move.values())[2]
                                         tpet_msg_on_resolve = ""
 
-                                        if tap1 < 25:
-                                            tap1 = 25
-                                        if tap2 < 25:
-                                            tap2 = 25            
-                                        if tap3 < 25:
-                                            tap3 = 25
+                                        if tap1 < 150:
+                                            tap1 = 150
+                                        if tap2 < 150:
+                                            tap2 = 150            
+                                        if tap3 < 150:
+                                            tap3 = 150
 
                                         # UNIVERSE CARD
                                         if t_universe == "Souls" and t_used_resolve:
@@ -13050,12 +13050,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         tpet_enh_name = list(tpet_move.values())[2]
                                         tpet_msg_on_resolve = ""
 
-                                        if tap1 < 25:
-                                            tap1 = 25
-                                        if tap2 < 25:
-                                            tap2 = 25            
-                                        if tap3 < 25:
-                                            tap3 = 25
+                                        if tap1 < 150:
+                                            tap1 = 150
+                                        if tap2 < 150:
+                                            tap2 = 150            
+                                        if tap3 < 150:
+                                            tap3 = 150
 
                                         # UNIVERSE CARD
                                         if t_universe == "Souls" and t_used_resolve:
@@ -14200,12 +14200,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         tpet_enh_name = list(tpet_move.values())[2]
                                         tpet_msg_on_resolve = ""
 
-                                        if tap1 < 25:
-                                            tap1 = 25
-                                        if tap2 < 25:
-                                            tap2 = 25            
-                                        if tap3 < 25:
-                                            tap3 = 25
+                                        if tap1 < 150:
+                                            tap1 = 150
+                                        if tap2 < 150:
+                                            tap2 = 150            
+                                        if tap3 < 150:
+                                            tap3 = 150
 
                                         # UNIVERSE CARD
 
@@ -16827,12 +16827,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         cpet_enh_name = list(cpet_move.values())[2]
                                         cpet_msg_on_resolve = ""
 
-                                        if cap1 < 25:
-                                            cap1 = 25
-                                        if cap2 < 25:
-                                            cap2 = 25            
-                                        if cap3 < 25:
-                                            cap3 = 25
+                                        if cap1 < 150:
+                                            cap1 = 150
+                                        if cap2 < 150:
+                                            cap2 = 150            
+                                        if cap3 < 150:
+                                            cap3 = 150
 
                                         if c_universe == "Souls" and c_used_resolve:
                                             companion_card = showcard("battle", c, carm,c_max_health, c_health, c_max_stamina, c_stamina,
@@ -18137,12 +18137,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         cpet_enh_name = list(cpet_move.values())[2]
                                         cpet_msg_on_resolve = ""
 
-                                        if cap1 < 25:
-                                            cap1 = 25
-                                        if cap2 < 25:
-                                            cap2 = 25            
-                                        if cap3 < 25:
-                                            cap3 = 25
+                                        if cap1 < 150:
+                                            cap1 = 150
+                                        if cap2 < 150:
+                                            cap2 = 150            
+                                        if cap3 < 150:
+                                            cap3 = 150
 
 
                                         if c_universe == "Souls" and c_used_resolve:
@@ -18309,12 +18309,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         tarm_message = " "
                                         oarm_message = " "
 
-                                        if cap1 < 25:
-                                            cap1 = 25
-                                        if cap2 < 25:
-                                            cap2 = 25            
-                                        if cap3 < 25:
-                                            cap3 = 25
+                                        if cap1 < 150:
+                                            cap1 = 150
+                                        if cap2 < 150:
+                                            cap2 = 150            
+                                        if cap3 < 150:
+                                            cap3 = 150
 
 
                                         if c_used_resolve:
@@ -20032,12 +20032,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     tpet_enh_name = list(tpet_move.values())[2]
                                     tpet_msg_on_resolve = ""
 
-                                    if tap1 < 25:
-                                        tap1 = 25
-                                    if tap2 < 25:
-                                        tap2 = 25            
-                                    if tap3 < 25:
-                                        tap3 = 25
+                                    if tap1 < 150:
+                                        tap1 = 150
+                                    if tap2 < 150:
+                                        tap2 = 150            
+                                    if tap3 < 150:
+                                        tap3 = 150
 
                                     # UNIVERSE CARD
                                     if t_universe == "Souls" and t_used_resolve:
