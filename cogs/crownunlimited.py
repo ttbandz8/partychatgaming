@@ -8482,7 +8482,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     (.30 * o_defense) * (o_resolve / (.50 * o_defense)))
                                                 ocard_lvl_ap_buff = ocard_lvl_ap_buff + 80 + turn_total
 
-                                                o_stamina = o_stamina + o_resolve
+                                                o_stamina = 160
                                                 o_health = o_health + o_resolve_health
                                                 o_attack = round(o_attack + o_resolve_attack)
                                                 o_defense = round(o_defense - o_resolve_defense)
@@ -9892,7 +9892,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         (.30 * o_defense) * (o_resolve / (.50 * o_defense)))
                                                     ocard_lvl_ap_buff = ocard_lvl_ap_buff + 80 + turn_total
 
-                                                    o_stamina = o_stamina + o_resolve
+                                                    o_stamina = 160
                                                     o_health = o_health + o_resolve_health
                                                     o_attack = round(o_attack + o_resolve_attack)
                                                     o_defense = round(o_defense - o_resolve_defense)
@@ -12057,7 +12057,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             (.30 * t_defense) * (t_resolve / (.50 * t_defense)))
                                                         tcard_lvl_ap_buff = tcard_lvl_ap_buff + 80 + turn_total
 
-                                                        t_stamina = t_stamina + t_resolve
+                                                        t_stamina = 160
                                                         t_health = t_health + t_resolve_health
                                                         t_attack = round(t_attack + t_resolve_attack)
                                                         t_defense = round(t_defense - t_resolve_defense)
@@ -13274,7 +13274,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         (.30 * t_defense) * (t_resolve / (.50 * t_defense)))
                                                     tcard_lvl_ap_buff = tcard_lvl_ap_buff + 80 + turn_total
 
-                                                    t_stamina = t_stamina + t_resolve
+                                                    t_stamina = 160
                                                     t_health = t_health + t_resolve_health
                                                     t_attack = round(t_attack + t_resolve_attack)
                                                     t_defense = round(t_defense - t_resolve_defense)
@@ -14521,7 +14521,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
                                                 tcard_lvl_ap_buff = tcard_lvl_ap_buff + 80 + turn_total
 
-                                                t_stamina = t_stamina + t_resolve
+                                                t_stamina = 160
                                                 t_health = t_health + t_resolve_health
                                                 t_attack = round(t_attack + t_resolve_attack)
                                                 t_defense = round(t_defense - t_resolve_defense)
@@ -17159,7 +17159,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         (.30 * c_defense) * (c_resolve / (.50 * c_defense)))
                                                     ccard_lvl_ap_buff = ccard_lvl_ap_buff + 80 + turn_total
 
-                                                    c_stamina = c_stamina + c_resolve
+                                                    c_stamina = 160
                                                     c_health = c_health + c_resolve_health
                                                     c_attack = round(c_attack + c_resolve_attack)
                                                     c_defense = round(c_defense - c_resolve_defense)
@@ -18445,7 +18445,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             (.30 * c_defense) * (c_resolve / (.50 * c_defense)))
                                                         ccard_lvl_ap_buff = ccard_lvl_ap_buff + 80 + turn_total
 
-                                                        c_stamina = c_stamina + c_resolve
+                                                        c_stamina = 160
                                                         c_health = c_health + c_resolve_health
                                                         c_attack = round(c_attack + c_resolve_attack)
                                                         c_defense = round(c_defense - c_resolve_defense)
@@ -20324,7 +20324,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     (.30 * t_defense) * (t_resolve / (.50 * t_defense)))
                                                 tcard_lvl_ap_buff = tcard_lvl_ap_buff + 80 + turn_total
 
-                                                t_stamina = t_stamina + t_resolve
+                                                t_stamina = 160
                                                 t_health = t_health + t_resolve_health
                                                 t_attack = round(t_attack + t_resolve_attack)
                                                 t_defense = round(t_defense - t_resolve_defense)

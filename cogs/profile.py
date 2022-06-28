@@ -544,7 +544,7 @@ class Profile(commands.Cog):
                         """),colour=000000)
                         embedVar.add_field(name="__Affinities__", value=f"{affinity_message}")
                         embedVar.set_image(url="attachment://image.png")
-                        if card_lvl != 500:
+                        if card_lvl != 999:
                             embedVar.set_footer(text=f"EXP Until Next Level: {150 - card_exp}\nRebirth Buff: +{rebirthBonus}\n{warningmessage}")
                         else:
                             embedVar.set_footer(text=f"Max Level\nRebirth Buff: +{rebirthBonus}\n{warningmessage}")
@@ -569,7 +569,7 @@ class Profile(commands.Cog):
                         🏃 {o_speed}
                         """))
                         embedVar.set_thumbnail(url=ctx.author.avatar_url)
-                        if card_lvl != 500:
+                        if card_lvl != 999:
                             embedVar.set_footer(text=f"EXP Until Next Level: {150 - card_exp}\nRebirth Buff: +{rebirthBonus}\n♾️ {traitmessage}\n{warningmessage}")
                         else:
                             embedVar.set_footer(text=f"Max Level")
@@ -4927,7 +4927,7 @@ async def menubuild(self, ctx):
                     """),colour=000000)
                     embedVar.add_field(name="__Affinities__", value=f"{affinity_message}")
                     embedVar.set_image(url="attachment://image.png")
-                    if card_lvl != 500:
+                    if card_lvl != 999:
                         embedVar.set_footer(text=f"EXP Until Next Level: {150 - card_exp}\nRebirth Buff: +{rebirthBonus}\n{warningmessage}")
                     else:
                         embedVar.set_footer(text=f"Max Level\nRebirth Buff: +{rebirthBonus}\n{warningmessage}")
@@ -4952,7 +4952,7 @@ async def menubuild(self, ctx):
                     🏃 {o_speed}
                     """))
                     embedVar.set_thumbnail(url=ctx.author.avatar_url)
-                    if card_lvl != 500:
+                    if card_lvl != 999:
                         embedVar.set_footer(text=f"EXP Until Next Level: {150 - card_exp}\nRebirth Buff: +{rebirthBonus}\n♾️ {traitmessage}\n{warningmessage}")
                     else:
                         embedVar.set_footer(text=f"Max Level")
