@@ -4352,6 +4352,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 carm_name = carm['ARM']
                 carm_price = carm['PRICE']
                 carm_element = carm['ELEMENT']
+                c_talisman = "N/A"
             else:
                 cperformance = c_user['PERFORMANCE']
                 c_talisman = c_user['TALISMAN']
