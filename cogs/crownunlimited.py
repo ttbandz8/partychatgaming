@@ -21891,7 +21891,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     if botActive:
                                         victory_message = f":zap: TRY AGAIN"
                                         victory_description = f"Remember to equip **Titles** and **Arms** to apply **Enhancers** in battle!\nMatch concluded in {turn_total} turns."
-                                    embedVar = discord.Embed(title=f"{victory_message}\n**{t_card} says**\n{t_win_description}",
+                                    embedVar = discord.Embed(title=f"{victory_message}",
                                                             description=f"{victory_description}\n{previous_moves_into_embed}",
                                                             colour=0x1abc9c)
                                     embedVar.set_author(name=f"{o_card} says:\n{o_lose_description}")
