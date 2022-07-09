@@ -7049,11 +7049,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 t_final_stand = stats['t_final_stand']
                 t_card_tier = t_full_card_info['TIER']
             else:
-                t_talisman = stats['t_talisman']
                 t_card_passive_type = stats['t_card_passive_type']
                 tmove1_element = stats['tmove1_element']
                 tmove2_element = stats['tmove2_element']
                 tmove3_element = stats['tmove3_element']
+                t_talisman = "N/A"
+                if difficulty == "HARD":
+                    t_talisman = tmove3_element
                 t_basic_emoji = crown_utilities.set_emoji(tmove1_element)
                 t_super_emoji = crown_utilities.set_emoji(tmove2_element)
                 t_ultimate_emoji = crown_utilities.set_emoji(tmove3_element)
@@ -23433,7 +23435,7 @@ async def dungeondrops(self, player, universe, matchcount):
     if matchcount <= 3:
         bless_amount = (8000 + (2000 * matchcount)) * (1 + rebirth)
         if difficulty == "HARD":
-            bless_amount = (20000 + (5000 * matchcount)) * (1 + rebirth)
+            bless_amount = (30000 + (20000 * matchcount)) * (1 + rebirth)
         await crown_utilities.bless(bless_amount, player.id)
         return f"You earned :coin: **{bless_amount}**!"
 
