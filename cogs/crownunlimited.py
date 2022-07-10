@@ -24006,8 +24006,8 @@ element_mapping = {'PHYSICAL': 'If ST(stamina) greater than 80, Deals double Dam
 'BLEED': 'After 3 Attacks deal 10x turn count damage to opponent',
 'GRAVITY': 'Disables Opponent Block and Reduce opponent DEF by 25% AP'
 }
-passive_enhancer_suffix_mapping = {'ATK': ' Flat',
-'DEF': ' Flat',
+passive_enhancer_suffix_mapping = {'ATK': ' %',
+'DEF': ' %',
 'STAM': ' Flat',
 'HLT': ' %',
 'LIFE': '%',
