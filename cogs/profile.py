@@ -411,9 +411,9 @@ class Profile(commands.Cog):
                         if passive_type == "LIFE":
                             passive_num = value_for_passive
                         if passive_type == "ATK":
-                            passive_num = flat_for_passive
+                            passive_num = value_for_passive
                         if passive_type == "DEF":
-                            passive_num = flat_for_passive
+                            passive_num = value_for_passive
                         if passive_type == "STAM":
                             passive_num = stam_for_passive
                         if passive_type == "DRAIN":
@@ -3740,9 +3740,9 @@ class Profile(commands.Cog):
                         if passive_type == "LIFE":
                             passive_num = value_for_passive
                         if passive_type == "ATK":
-                            passive_num = flat_for_passive
+                            passive_num = value_for_passive
                         if passive_type == "DEF":
-                            passive_num = flat_for_passive
+                            passive_num = value_for_passive
                         if passive_type == "STAM":
                             passive_num = stam_for_passive
                         if passive_type == "DRAIN":
@@ -4406,9 +4406,9 @@ async def craft_adjuster(self, player, vault, universe, price, item, skin_list, 
                                     if passive_type == "LIFE":
                                         passive_num = value_for_passive
                                     if passive_type == "ATK":
-                                        passive_num = flat_for_passive
+                                        passive_num = value_for_passive
                                     if passive_type == "DEF":
-                                        passive_num = flat_for_passive
+                                        passive_num = value_for_passive
                                     if passive_type == "STAM":
                                         passive_num = stam_for_passive
                                     if passive_type == "DRAIN":
@@ -4794,9 +4794,9 @@ async def menubuild(self, ctx):
                     if passive_type == "LIFE":
                         passive_num = value_for_passive
                     if passive_type == "ATK":
-                        passive_num = flat_for_passive
+                        passive_num = value_for_passive
                     if passive_type == "DEF":
-                        passive_num = flat_for_passive
+                        passive_num = value_for_passive
                     if passive_type == "STAM":
                         passive_num = stam_for_passive
                     if passive_type == "DRAIN":
@@ -5174,9 +5174,9 @@ async def menucards(self, ctx):
                     if passive_type == "LIFE":
                         passive_num = value_for_passive
                     if passive_type == "ATK":
-                        passive_num = flat_for_passive
+                        passive_num = value_for_passive
                     if passive_type == "DEF":
-                        passive_num = flat_for_passive
+                        passive_num = value_for_passive
                     if passive_type == "STAM":
                         passive_num = stam_for_passive
                     if passive_type == "DRAIN":

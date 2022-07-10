@@ -2816,9 +2816,9 @@ def showcard(mode, d, arm, max_health, health, max_stamina, stamina, resolved, t
                 if card_passive_type == "LIFE":
                     passive_num = value_for_passive
                 if card_passive_type == "ATK":
-                    passive_num = flat_for_passive
+                    passive_num = value_for_passive
                 if card_passive_type == "DEF":
-                    passive_num = flat_for_passive
+                    passive_num = value_for_passive
                 if card_passive_type == "STAM":
                     passive_num = stam_for_passive
                 if card_passive_type == "DRAIN":
@@ -7769,9 +7769,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         t_health = round(t_health - ((o_value_for_passive / 100) * t_health))
                                         o_health = round(o_health + ((o_value_for_passive / 100) * t_health))
                                 if o_card_passive_type == "ATK":
-                                    o_attack = o_attack + o_flat_for_passive
+                                    o_attack = round(o_attack + ((o_value_for_passive / 100) * o_attack))
                                 if o_card_passive_type == "DEF":
-                                    o_defense = o_defense + o_flat_for_passive
+                                    o_defense = round(o_defense + ((o_value_for_passive / 100) * o_defense))
                                 if o_card_passive_type == "STAM":
                                     if o_stamina > 15:
                                         o_stamina = o_stamina + o_stam_for_passive
@@ -11378,9 +11378,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         o_health = round(o_health - ((t_value_for_passive / 100) * o_health))
                                         t_health = round(t_health + ((t_value_for_passive / 100) * o_health))
                                 if t_card_passive_type == "ATK":
-                                    t_attack = t_attack + t_flat_for_passive
+                                    t_attack = round(t_attack + ((t_value_for_passive / 100) * t_attack))
                                 if t_card_passive_type == "DEF":
-                                    t_defense = t_defense + t_flat_for_passive
+                                    t_defense = round(t_defense + ((t_value_for_passive / 100) * t_defense))
                                 if t_card_passive_type == "STAM":
                                     if t_stamina > 15:
                                         t_stamina = t_stamina + t_stam_for_passive
@@ -16533,9 +16533,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             t_health = round(t_health - ((c_value_for_passive / 100) * t_health))
                                             c_health = round(c_health + ((c_value_for_passive / 100) * t_health))
                                     if c_card_passive_type == "ATK":
-                                        c_attack = c_attack + c_flat_for_passive
+                                        c_attack = round(c_attack + ((c_value_for_passive / 100) * c_attack))
                                     if c_card_passive_type == "DEF":
-                                        c_defense = c_defense + c_flat_for_passive
+                                        c_defense = round(c_defense + ((c_value_for_passive / 100) * c_defense))
                                     if c_card_passive_type == "STAM":
                                         if c_stamina > 15:
                                             c_stamina = c_stamina + c_stam_for_passive
@@ -19739,9 +19739,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             c_health = round(c_health - ((t_value_for_passive / 100) * c_health))
                                             t_health = round(t_health + ((t_value_for_passive / 100) * c_health))
                                     if t_card_passive_type == "ATK":
-                                        t_attack = t_attack + t_flat_for_passive
+                                        t_attack = round(t_attack + ((t_value_for_passive / 100) * t_attack))
                                     if t_card_passive_type == "DEF":
-                                        t_defense = t_defense + t_flat_for_passive
+                                        t_defense = round(t_defense + ((t_value_for_passive / 100) * t_defense))
                                     if t_card_passive_type == "STAM":
                                         if t_stamina > 15:
                                             t_stamina = t_stamina + t_stam_for_passive
