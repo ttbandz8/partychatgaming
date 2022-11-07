@@ -3432,7 +3432,7 @@ async def code(ctx, code_input: str):
 #       await ctx.send(f"Error has occurred: {e}")
 
 if config('ENV') == "production":
-   DISCORD_TOKEN = config('DISCORD_TOKEN_TEST')
+   DISCORD_TOKEN = config('DISCORD_TOKEN')
 else:
    DISCORD_TOKEN = config('NEW_TEST_DISCORD_TOKEN')
 
