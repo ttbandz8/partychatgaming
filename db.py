@@ -819,6 +819,7 @@ def updateManyVaults(new_value):
 def createVault(vault):
     try:
         vault_col.insert_one(vault)
+        return True
     except:
         return "Cannot create vault."
 
