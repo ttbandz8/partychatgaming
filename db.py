@@ -1111,6 +1111,13 @@ def queryShopTitles():
     data = titles_col.find({'EXCLUSIVE': False, 'AVAILABLE': True})
     return data 
 
+def querySpecificTitles(args):
+    try:
+        data = titles_col.find({'TITLES': {'$in': args}})
+        return data 
+    except Exception as e:
+        return False
+
 
 
 ''' ARM '''

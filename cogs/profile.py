@@ -940,6 +940,7 @@ class Profile(commands.Cog):
                 'message': str(ex),
                 'trace': trace
             }))
+            
 
     @cog_ext.cog_slash(description="View all of your titles", guild_ids=main.guild_ids)
     async def titles(self, ctx):
@@ -3140,6 +3141,25 @@ class Profile(commands.Cog):
             owned_destinies = []
             for destiny in vault['DESTINY']:
                 owned_destinies.append(destiny['NAME'])
+                
+            card_message = ""
+            title_message = ""
+            arm_message = ""
+            
+            if len(current_cards) >= 25:
+                card_message = "🎴 *25 Full*"
+            else:
+                card_message = f"🎴 {len(current_cards)}"
+                
+            if len(current_titles) >= 25:
+                title_message = "🎗️ *25 Full*"
+            else:
+                title_message = f"🎗️ {len(current_titles)}"
+                
+            if len(current_arms) >= 25:
+                arm_message = "🦾 *25 Full*"
+            else:
+                arm_message = f"🦾 {len(current_arms)}"
 
 
             balance = vault['BALANCE']
@@ -3160,6 +3180,7 @@ class Profile(commands.Cog):
                 embedVar = discord.Embed(title= f"{universe_name}", description=textwrap.dedent(f"""
                 *Welcome {ctx.author.mention}! {adjusted_prices['MESSAGE']}
                 You have {icon}{'{:,}'.format(balance)} coins!*
+                {card_message} | {title_message} | {arm_message}
                 
                 🎗️ **Title:** Title Purchase for 💵 {'{:,}'.format(adjusted_prices['TITLE_PRICE'])}
                 🦾 **Arm:** Arm Purchase for 💵 {'{:,}'.format(adjusted_prices['ARM_PRICE'])}
