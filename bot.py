@@ -1627,35 +1627,35 @@ async def on_command_error(ctx, error):
       await ctx.send(f"Anime VS+ has been Rate Limited")
 
 
-@tasks.loop(minutes=30)
+@tasks.loop(hours=1)
 async def called_once_a_day():
    guild = bot.get_guild(guild_id)
    channel = guild.get_channel(966810770987966484)
 
    message_channel = channel
 
-   corrupted_universe = db.queryCorruptedUniverse()
+   universes = db.queryAllUniverse()
+   corruption = False
 
-   if corrupted_universe:
-      c_response = db.updateUniverse({'TITLE': corrupted_universe['TITLE']}, {'$set': {'CORRUPTED': False, 'CORRUPTION_LEVEL': 0}})
-   
-   universe = [x for x in db.queryExploreUniverses()]
-   universe_list_length = len(universe)
-   universe_selection = round(random.randint(0, (int(universe_list_length) - 1)))
-   print(f"UNIVERSE SELECTION #: {str(universe_selection)}")
-   selected_universe = universe[int(universe_selection)]
-   universe_image = selected_universe['PATH']
-   universe_name = selected_universe['TITLE']
-   
-   r_response = db.updateUniverse({'TITLE': universe_name}, {'$set': {'CORRUPTED': True}})
-   embedVar = discord.Embed(title= f"👾 {universe_name} has been corrupted!", description=textwrap.dedent(f"""
-   Cards in corrupted universes are empowered!
+   for u in universes:
+      if u['CORRUPTED']:
+         corruption = True
 
-   🗡️ **Your Goal**
-   Defeat cards in corrupted universes to earn 💎150,000 Craftable Gems!
+   if corruption:
+      update_query = {'$set': {'CORRUPTED': False, 'CORRUPTION_LEVEL': 0}}
+      db.updateManyUniverses(update_query)
+      message = "Corruption Hour has ended..."
+   else:
+      update_query = {'$set': {'CORRUPTED': True, 'CORRUPTION_LEVEL': 1}}
+      db.updateManyUniverses(update_query)
+      message = "Corruption Hour has started!"
+   
+   embedVar = discord.Embed(title= f"👾 {message}", description=textwrap.dedent(f"""
+   👾 Corruption Hour
+
+   During Corruption Hour defeat cards in solo, duo, or coop battle to earn 💎150,000 Craftable Gems!
    Earn 💎300,000 when playing on Hard difficulty!
    """))
-   embedVar.set_image(url=universe_image)
 
    await message_channel.send(embed=embedVar)
 
@@ -3509,7 +3509,7 @@ async def code(ctx, code_input: str):
 #       await ctx.send(f"Error has occurred: {e}")
 
 if config('ENV') == "production":
-   DISCORD_TOKEN = config('DISCORD_TOKEN_TEST')
+   DISCORD_TOKEN = config('DISCORD_TOKEN')
 else:
    DISCORD_TOKEN = config('NEW_TEST_DISCORD_TOKEN')
 

@@ -411,9 +411,9 @@ class Profile(commands.Cog):
                         if passive_type == "LIFE":
                             passive_num = value_for_passive
                         if passive_type == "ATK":
-                            passive_num = flat_for_passive
+                            passive_num = value_for_passive
                         if passive_type == "DEF":
-                            passive_num = flat_for_passive
+                            passive_num = value_for_passive
                         if passive_type == "STAM":
                             passive_num = stam_for_passive
                         if passive_type == "DRAIN":
@@ -2785,7 +2785,7 @@ class Profile(commands.Cog):
                 'trace': trace
             }))
             
-    @cog_ext.cog_slash(description="Load your presets", guild_ids=main.guild_ids)
+    @cog_ext.cog_slash(description="Load a saved preset", guild_ids=main.guild_ids)
     async def preset(self, ctx):
         a_registered_player = await crown_utilities.player_check(ctx)
         if not a_registered_player:
@@ -2970,7 +2970,7 @@ class Profile(commands.Cog):
         else:
             newVault = db.createVault({'OWNER': d['DISNAME'], 'DID' : d['DID']})
 
-    @cog_ext.cog_slash(description="Save your preset", guild_ids=main.guild_ids)
+    @cog_ext.cog_slash(description="Save your current build as a preset", guild_ids=main.guild_ids)
     async def savepreset(self, ctx):
         a_registered_player = await crown_utilities.player_check(ctx)
         if not a_registered_player:
@@ -3762,9 +3762,9 @@ class Profile(commands.Cog):
                         if passive_type == "LIFE":
                             passive_num = value_for_passive
                         if passive_type == "ATK":
-                            passive_num = flat_for_passive
+                            passive_num = value_for_passive
                         if passive_type == "DEF":
-                            passive_num = flat_for_passive
+                            passive_num = value_for_passive
                         if passive_type == "STAM":
                             passive_num = stam_for_passive
                         if passive_type == "DRAIN":
@@ -4528,9 +4528,9 @@ async def craft_adjuster(self, player, vault, universe, price, item, skin_list, 
                                     if passive_type == "LIFE":
                                         passive_num = value_for_passive
                                     if passive_type == "ATK":
-                                        passive_num = flat_for_passive
+                                        passive_num = value_for_passive
                                     if passive_type == "DEF":
-                                        passive_num = flat_for_passive
+                                        passive_num = value_for_passive
                                     if passive_type == "STAM":
                                         passive_num = stam_for_passive
                                     if passive_type == "DRAIN":
@@ -4916,9 +4916,9 @@ async def menubuild(self, ctx):
                     if passive_type == "LIFE":
                         passive_num = value_for_passive
                     if passive_type == "ATK":
-                        passive_num = flat_for_passive
+                        passive_num = value_for_passive
                     if passive_type == "DEF":
-                        passive_num = flat_for_passive
+                        passive_num = value_for_passive
                     if passive_type == "STAM":
                         passive_num = stam_for_passive
                     if passive_type == "DRAIN":
@@ -5296,9 +5296,9 @@ async def menucards(self, ctx):
                     if passive_type == "LIFE":
                         passive_num = value_for_passive
                     if passive_type == "ATK":
-                        passive_num = flat_for_passive
+                        passive_num = value_for_passive
                     if passive_type == "DEF":
-                        passive_num = flat_for_passive
+                        passive_num = value_for_passive
                     if passive_type == "STAM":
                         passive_num = stam_for_passive
                     if passive_type == "DRAIN":
